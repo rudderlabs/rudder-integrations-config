@@ -1,0 +1,113 @@
+{
+  "name": "APPCENTER",
+  "displayName": "App Center",
+  "config": {
+    "transformAt": "processor",
+    "transformAtV1": "processor",
+    "saveDestinationResponse": true,
+    "includeKeys": [
+      "appSecret",
+      "eventPriorityMap",
+      "transmissionLevel"
+    ],
+    "excludeKeys": [],
+    "supportedSourceTypes": [
+      "android",
+      "ios",
+      "reactnative",
+      "flutter",
+      "cordova"
+    ],
+    "supportedMessageTypes": [
+      "track"
+    ],
+    "destConfig": {
+      "defaultConfig": [
+        "appSecret",
+        "eventPriorityMap",
+        "transmissionLevel"
+      ],
+      "android": [
+        "useNativeSDK"
+      ],
+      "ios": [
+        "useNativeSDK"
+      ],
+      "reactnative": [
+        "useNativeSDK"
+      ],
+      "flutter": [
+        "useNativeSDK"
+      ],
+      "cordova": [
+        "useNativeSDK"
+      ]
+    },
+    "secretKeys": [
+      "appSecret"
+    ]
+  },
+  "uiConfig": [
+    {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "AppCenter App Secret Key",
+          "value": "appSecret",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid AppCenter App Secret Key",
+          "required": true,
+          "placeholder": "e.g: \u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u20225c0d",
+          "secret": true
+        }
+      ]
+    },
+    {
+      "title": "Other Settings",
+      "fields": [
+        {
+          "type": "dynamicSelectForm",
+          "label": "Map your Events Name with Priority",
+          "labelLeft": "Event Name",
+          "labelRight": "Priority",
+          "value": "eventPriorityMap",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "required": false,
+          "placeholderLeft": "your event",
+          "options": [
+            {
+              "name": "Normal",
+              "value": "Normal"
+            },
+            {
+              "name": "Critical",
+              "value": "Critical"
+            }
+          ]
+        },
+        {
+          "type": "textInput",
+          "label": "Set the transmission interval in minutes",
+          "value": "transmissionLevel",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Transmission Level",
+          "required": false,
+          "placeholder": "10"
+        }
+      ]
+    },
+    {
+      "title": "Native SDK",
+      "fields": [
+        {
+          "type": "defaultCheckbox",
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": true
+        }
+      ]
+    }
+  ]
+}
