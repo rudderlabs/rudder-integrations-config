@@ -1,0 +1,68 @@
+[
+  {
+    "title": "Connection Settings",
+    "fields": [
+      {
+        "type": "textInput",
+        "label": "API Token",
+        "value": "apiToken",
+        "regex": ".*",
+        "required": true,
+        "placeholder": "e.g: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwian..",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "title": "Destination Settings",
+    "fields": [
+      {
+        "type": "textInput",
+        "label": "Channel Id",
+        "value": "channelId",
+        "regex": ".*",
+        "required": true,
+        "placeholder": "e.g: 89002"
+      },
+      {
+        "type": "singleSelect",
+        "label": "Channel Identifier",
+        "value": "channelIdentifier",
+        "options": [
+          {
+            "name": "Email",
+            "value": "email"
+          },
+          {
+            "name": "Phone",
+            "value": "phone"
+          }
+        ],
+        "defaultOption": {
+          "name": "Email",
+          "value": "email"
+        },
+        "required": true
+      },
+      {
+        "type": "checkbox",
+        "label": "Enable deduplication for Contacts",
+        "value": "enableDedup",
+        "default": true,
+        "footerNote":"Note: Disabling  this field will create a possibility to create duplicate contacts, before disabling it view the destination docs to understand the full implications"
+      },
+      {
+        "type": "dynamicForm",
+        "label": "Map events with template",
+        "labelLeft": "Event Name",
+        "labelRight": "Event Template",
+        "keyLeft": "from",
+        "keyRight": "to",
+        "placeholderLeft": "e.g: Product Purchased",
+        "placeholderRight": "e.g: {{event}} Triggered",
+        "value": "eventTemplateMap",
+        "footerNote": "You can map specific events with custom templates. Note:To track events to Trengo adding event name in the key is mandatory. For details please view destination docs."
+      }
+    ]
+  }
+]

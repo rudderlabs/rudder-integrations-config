@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [
+    "host",
+    "port",
+    "database",
+    "user",
+    "password",
+    "syncFrequency",
+    "useRudderStorage"
+  ],
+  "properties": {
+    "host": {
+      "type": "string",
+      "pattern": "(^env[.].*)|^(.{0,128})$"
+    },
+    "port": {
+      "type": "string",
+      "pattern": "(^env[.].*)|^(.{0,100})$"
+    },
+    "database": {
+      "type": "string",
+      "pattern": "(^env[.].*)|^(.{0,100})$"
+    },
+    "user": {
+      "type": "string",
+      "pattern": "(^env[.].*)|^(.{0,100})$"
+    },
+    "password": {
+      "type": "string",
+      "pattern": "(^env[.].*)|.*"
+    },
+    "namespace": {
+      "type": "string",
+      "pattern": "(^env[.].*)|^(?!pg_|PG_|pG_|Pg_).*"
+    },
+    "syncFrequency": {
+      "type": "string",
+      "pattern": "^(30|60|180|360|720|1440)$",
+      "default": "30"
+    },
+    "syncStartAt": {
+      "type": "string"
+    },
+    "excludeWindow": {
+      "type": "object",
+      "required": [
+        "excludeWindowStartTime",
+        "excludeWindowEndTime"
+      ],
+      "properties": {
+        "excludeWindowStartTime": {
+          "type": "string"
+        },
+        "excludeWindowEndTime": {
+          "type": "string"
+        }
+      }
+    },
+    "useRudderStorage": {
+      "type": "boolean",
+      "default": false
+    },
+    "bucketName": {
+      "type": "string",
+      "pattern": "(^env[.].*)|^(.{0,100})$"
+    },
+    "prefix": {
+      "type": "string",
+      "pattern": "(^env[.].*)|^(.{0,100})$"
+    },
+    "accessKeyID": {
+      "type": "string",
+      "pattern": "(^env[.].*)|^(.{0,100})$"
+    },
+    "accessKey": {
+      "type": "string",
+      "pattern": "(^env[.].*)|^(.{0,100})$"
+    },
+    "enableSSE": {
+      "type": "boolean"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "useRudderStorage": {
+            "const": false
+          }
+        },
+        "required": [
+          "useRudderStorage"
+        ]
+      },
+      "then": {
+        "required": [
+          "bucketName"
+        ]
+      }
+    }
+  ],
+  "additionalProperties": true
+}
