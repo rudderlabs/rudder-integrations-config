@@ -1,0 +1,123 @@
+[
+    {
+      "title": "Connection Credentials",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "S3 Storage Bucket Name",
+          "labelNote": "S3 Bucket to store your event data",
+          "value": "bucketName",
+          "regex": ".*",
+          "required": true,
+          "footerNote": "Please make sure the bucket exists in your S3"
+        },
+        {
+          "type": "checkbox",
+          "label": "Register schema on AWS Glue",
+          "value": "useGlue",
+          "default": false,
+          "footerNote": "We register the schema on AWS Glue's Data Catalog if this option is enabled"
+        },
+        {
+          "type": "textInput",
+          "label": "AWS Glue Region",
+          "labelNote": "Your AWS Glue region.Ex-For N.Virginia, this field's value would be 'us-east-1'",
+          "value": "region",
+          "regex": ".*",
+          "required": true,
+          "preRequisiteField": {
+            "name": "useGlue",
+            "selectedValue": true
+          }
+        },
+        {
+          "type": "textInput",
+          "label": "S3 Prefix",
+          "labelNote": "If configured, all data pushed by rudderstack will be at s3://<bucketName>/<prefix>/",
+          "value": "prefix",
+          "regex": ".*",
+          "required": false,
+          "placeholder": ""
+        },
+        {
+          "type": "textInput",
+          "label": "Namespace",
+          "value": "namespace",
+          "labelNote": "Defaults to source name.",
+          "regex": ".*",
+          "required": false,
+          "footerNote": "All data for the destination would be pushed to s3://<bucketName>/<prefix>/rudder-datalake/<namespace>.If glue is enabled, all table definitions are created in a database with name set to namespace."
+        },
+        {
+          "type": "textInput",
+          "label": "AWS Access Key ID",
+          "value": "accessKeyID",
+          "regex": ".*",
+          "required": false,
+          "placeholder": "e.g: access-key-id",
+          "secret": true
+        },
+        {
+          "type": "textInput",
+          "label": "AWS Secret Access Key",
+          "value": "accessKey",
+          "regex": ".*",
+          "required": false,
+          "placeholder": "e.g: secret-access-key",
+          "secret": true
+        },
+        {
+          "type": "checkbox",
+          "label": "Enable Server Side Encryption For S3?",
+          "value": "enableSSE",
+          "default": false
+        },
+        {
+          "type": "singleSelect",
+          "label": "Sync Frequency",
+          "value": "syncFrequency",
+          "options": [
+            {
+              "name": "Every 30 minutes",
+              "value": "30"
+            },
+            {
+              "name": "Every 1 hour",
+              "value": "60"
+            },
+            {
+              "name": "Every 3 hours",
+              "value": "180"
+            },
+            {
+              "name": "Every 6 hours",
+              "value": "360"
+            },
+            {
+              "name": "Every 12 hours",
+              "value": "720"
+            },
+            {
+              "name": "Every 24 hours",
+              "value": "1440"
+            }
+          ],
+          "defaultOption": {
+            "name": "Every 30 minutes",
+            "value": "30"
+          },
+          "required": false
+        },
+        {
+          "type": "timePicker",
+          "label": "Sync Starting At (Optional)",
+          "value": "syncStartAt",
+          "options": {
+            "omitSeconds": true
+          },
+          "required": false,
+          "footerNote": "Note: Please specify time in UTC"
+        }
+      ]
+    }
+  ]
