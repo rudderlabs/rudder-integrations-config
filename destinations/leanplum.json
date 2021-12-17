@@ -1,0 +1,106 @@
+{
+  "name": "LEANPLUM",
+  "displayName": "Leanplum",
+  "config": {
+    "transformAt": "processor",
+    "transformAtV1": "processor",
+    "saveDestinationResponse": true,
+    "includeKeys": [
+      "applicationId",
+      "clientKey",
+      "isDevelop",
+      "useNativeSDKToSend"
+    ],
+    "excludeKeys": [],
+    "supportedSourceTypes": [
+      "android",
+      "ios",
+      "web",
+      "unity",
+      "amp",
+      "cloud",
+      "warehouse",
+      "reactnative",
+      "flutter",
+      "cordova"
+    ],
+    "supportedMessageTypes": [
+      "identify",
+      "page",
+      "screen",
+      "track"
+    ],
+    "destConfig": {
+      "defaultConfig": [
+        "applicationId",
+        "clientKey",
+        "isDevelop"
+      ],
+      "android": [
+        "useNativeSDK",
+        "useNativeSDKToSend"
+      ],
+      "ios": [
+        "useNativeSDK",
+        "useNativeSDKToSend"
+      ]
+    },
+    "secretKeys": [
+      "clientKey"
+    ]
+  },
+  "uiConfig": [
+    {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Application ID",
+          "value": "applicationId",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Application ID",
+          "required": true,
+          "placeholder": "e.g: ABCDEFG"
+        },
+        {
+          "type": "textInput",
+          "label": "Client Key",
+          "value": "clientKey",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Client Key",
+          "required": true,
+          "placeholder": "e.g: ABCDEFG",
+          "secret": true
+        }
+      ]
+    },
+    {
+      "title": "Native SDK",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Initialize Native SDK to send automated events",
+          "value": "useNativeSDK",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "label": "Use device-mode to send user generated events",
+          "value": "useNativeSDKToSend",
+          "default": false
+        }
+      ]
+    },
+    {
+      "title": "Development Mode",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Use in Development Environment",
+          "value": "isDevelop",
+          "default": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,220 @@
+{
+  "name": "MARKETO",
+  "displayName": "Marketo",
+  "config": {
+    "transformAt": "router",
+    "transformAtV1": "router",
+    "saveDestinationResponse": true,
+    "includeKeys": [],
+    "excludeKeys": [],
+    "supportedSourceTypes": [
+      "android",
+      "ios",
+      "web",
+      "unity",
+      "amp",
+      "cloud",
+      "warehouse",
+      "reactnative",
+      "flutter",
+      "cordova"
+    ],
+    "supportedMessageTypes": [
+      "identify",
+      "track"
+    ],
+    "destConfig": {
+      "defaultConfig": [
+        "accountId",
+        "clientId",
+        "clientSecret",
+        "trackAnonymousEvents",
+        "createIfNotExist",
+        "customActivityEventMap",
+        "customActivityPropertyMap",
+        "customActivityPrimaryKeyMap",
+        "leadTraitMapping"
+      ]
+    },
+    "secretKeys": [
+      "clientSecret"
+    ]
+  },
+  "responseRules": {
+    "responseType": "JSON",
+    "rules": {
+      "retryable": [
+        {
+          "success": "false",
+          "errors.0.code": 600
+        },
+        {
+          "success": "false",
+          "errors.0.code": 601
+        },
+        {
+          "success": "false",
+          "errors.0.code": 602
+        },
+        {
+          "success": "false",
+          "errors.0.code": 604
+        },
+        {
+          "success": "false",
+          "errors.0.code": 611
+        }
+      ],
+      "abortable": [
+        {
+          "success": "false",
+          "errors.0.code": 603
+        },
+        {
+          "success": "false",
+          "errors.0.code": 605
+        },
+        {
+          "success": "false",
+          "errors.0.code": 609
+        },
+        {
+          "success": "false",
+          "errors.0.code": 610
+        }
+      ],
+      "throttled": [
+        {
+          "success": "false",
+          "errors.0.code": 502
+        },
+        {
+          "success": "false",
+          "errors.0.code": 606
+        },
+        {
+          "success": "false",
+          "errors.0.code": 607
+        },
+        {
+          "success": "false",
+          "errors.0.code": 608
+        },
+        {
+          "success": "false",
+          "errors.0.code": 615
+        }
+      ]
+    }
+  },
+  "uiConfig": [
+    {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Munchkin Account Id",
+          "value": "accountId",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Munchkin Account Id",
+          "required": true,
+          "footerNote": "Your Marketo Accound ID from Admin settings section",
+          "placeholder": "e.g: 585-AXP-446"
+        },
+        {
+          "type": "textInput",
+          "label": "Client ID",
+          "value": "clientId",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Client ID",
+          "required": true,
+          "placeholder": "e.g: 53b1934e-51dd-4599-b24b-92612c71515f",
+          "footerNote": "Your REST API Client ID"
+        },
+        {
+          "type": "textInput",
+          "label": "Client Secret",
+          "value": "clientSecret",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Client Secret",
+          "required": true,
+          "placeholder": "e.g: oxzXtNhcuw9YGsdhplKUeEMi8765dsfw",
+          "secret": true,
+          "footerNote": "Your REST API Client Secret"
+        }
+      ]
+    },
+    {
+      "title": "Custom Activity Settings",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Track anonymous events",
+          "value": "trackAnonymousEvents",
+          "default": false,
+          "footerNote": "If turned on, you need to send userId with every track call"
+        },
+        {
+          "type": "checkbox",
+          "label": "Create Lead if it does not exist",
+          "value": "createIfNotExist",
+          "default": true,
+          "footerNote": "If turned on, we will create a new lead if the user is not present"
+        },
+        {
+          "type": "dynamicForm",
+          "label": "Map events to Marketo Activity ID",
+          "labelLeft": "Event Name",
+          "labelRight": "Activity ID",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "placeholderLeft": "e.g: Product Clicked",
+          "placeholderRight": "e.g: 100001",
+          "value": "customActivityEventMap",
+          "footerNote": "You can find the Activity ID in your Admin section under Custom Activity on your Marketo dashboard"
+        },
+        {
+          "type": "dynamicForm",
+          "label": "Map event properties to Marketo property name",
+          "labelLeft": "Event Property name",
+          "labelRight": "Marketo Property name",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "placeholderLeft": "e.g: name",
+          "placeholderRight": "e.g: productName",
+          "value": "customActivityPropertyMap",
+          "footerNote": "We'll convert the data type based on the property value"
+        },
+        {
+          "type": "dynamicForm",
+          "label": "Map event name to Marketo primary key",
+          "labelLeft": "Event name",
+          "labelRight": "Marketo Property name",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "placeholderLeft": "e.g: Product Clicked",
+          "placeholderRight": "e.g: name",
+          "value": "customActivityPrimaryKeyMap",
+          "footerNote": "Create a map between your event name and your event proerty names where the property on the right hand side is your primary key in Marketo"
+        }
+      ]
+    },
+    {
+      "title": "Lead Mapping",
+      "fields": [
+        {
+          "type": "dynamicForm",
+          "label": "Map your traits to Marketo custom fields",
+          "labelLeft": "Traits name",
+          "labelRight": "Custom field name",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "placeholderLeft": "e.g: leadScore",
+          "placeholderRight": "e.g: customLeadScore",
+          "value": "leadTraitMapping",
+          "footerNote": "We map spec'd traits for you. Add the extra fields here"
+        }
+      ]
+    }
+  ]
+}

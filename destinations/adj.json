@@ -1,0 +1,108 @@
+{
+  "name": "ADJ",
+  "displayName": "Adjust",
+  "config": {
+    "transformAt": "processor",
+    "transformAtV1": "processor",
+    "saveDestinationResponse": true,
+    "includeKeys": [
+      "appToken",
+      "customMappings",
+      "delay"
+    ],
+    "excludeKeys": [],
+    "supportedSourceTypes": [
+      "android",
+      "ios",
+      "unity",
+      "cloud",
+      "warehouse",
+      "reactnative",
+      "flutter",
+      "cordova"
+    ],
+    "supportedMessageTypes": [
+      "track"
+    ],
+    "destConfig": {
+      "defaultConfig": [
+        "appToken",
+        "customMappings",
+        "delay",
+        "environment"
+      ],
+      "android": [
+        "useNativeSDK"
+      ],
+      "ios": [
+        "useNativeSDK"
+      ],
+      "unity": [
+        "useNativeSDK"
+      ]
+    },
+    "secretKeys": []
+  },
+  "uiConfig": [
+    {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "APP Token",
+          "value": "appToken",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid App Token",
+          "required": true,
+          "placeholder": "e.g: bSjsdGYsOo9sasdjw23Shj"
+        },
+        {
+          "type": "checkbox",
+          "label": "Send to Production Environment on Adjust",
+          "value": "environment",
+          "default": false
+        }
+      ]
+    },
+    {
+      "title": "Native SDK",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": false
+        }
+      ]
+    },
+    {
+      "title": "Map Events to Adjust Event Tokens",
+      "fields": [
+        {
+          "type": "dynamicForm",
+          "labelLeft": "Event Name",
+          "labelRight": "Event Token",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "placeholderLeft": "e.g: product_purchased",
+          "placeholderRight": "e.g: xcdrf5",
+          "value": "customMappings"
+        }
+      ]
+    },
+    {
+      "title": "Delay Time before SDK initialization",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Delay Time (in seconds)",
+          "value": "delay",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "required": false,
+          "placeholder": "7"
+        }
+      ]
+    }
+  ]
+}

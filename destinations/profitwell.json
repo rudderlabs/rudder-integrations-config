@@ -1,0 +1,106 @@
+{
+  "name": "PROFITWELL",
+  "displayName": "ProfitWell",
+  "config": {
+    "transformAt": "router",
+    "transformAtV1": "router",
+    "saveDestinationResponse": true,
+    "includeKeys": [
+      "publicApiKey",
+      "siteType",
+      "blackListedEvents",
+      "whiteListedEvents"
+    ],
+    "excludeKeys": [],
+    "supportedSourceTypes": [
+      "android",
+      "ios",
+      "web",
+      "unity",
+      "amp",
+      "cloud",
+      "reactnative",
+      "flutter",
+      "cordova"
+    ],
+    "supportedMessageTypes": [
+      "identify"
+    ],
+    "destConfig": {
+      "defaultConfig": [
+        "privateApiKey"
+      ],
+      "web": [
+        "useNativeSDK",
+        "publicApiKey",
+        "siteType",
+        "blackListedEvents",
+        "whiteListedEvents"
+      ]
+    },
+    "secretKeys": [
+      "privateApiKey",
+      "publicApiKey"
+    ]
+  },
+  "uiConfig": [
+    {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Private API Key",
+          "value": "privateApiKey",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Api Key",
+          "required": false,
+          "placeholder": "e.g: 242745889a5gff99ab8cd82d25b4986g",
+          "secret": true,
+          "footerNote": "Your Private API Key"
+        },
+        {
+          "type": "textInput",
+          "label": "Public API Key",
+          "value": "publicApiKey",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Api Key",
+          "required": false,
+          "placeholder": "e.g: 9270682a8e5uygg0e56efddfd9drcb42",
+          "secret": true,
+          "footerNote": "Your Public API Key"
+        },
+        {
+          "type": "singleSelect",
+          "label": "Site Type",
+          "value": "siteType",
+          "placeholder": "Web App",
+          "options": [
+            {
+              "name": "Web App",
+              "value": "webapp"
+            },
+            {
+              "name": "Marketing",
+              "value": "marketing"
+            }
+          ],
+          "defaultOption": {
+            "name": "Web App",
+            "value": "webapp"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Native SDK",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": false
+        }
+      ]
+    }
+  ]
+}

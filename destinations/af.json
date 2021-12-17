@@ -1,0 +1,121 @@
+{
+  "name": "AF",
+  "displayName": "AppsFlyer",
+  "config": {
+    "transformAt": "processor",
+    "transformAtV1": "processor",
+    "saveDestinationResponse": true,
+    "includeKeys": [
+      "devKey",
+      "appleAppId",
+      "useRichEventName"
+    ],
+    "excludeKeys": [],
+    "supportedSourceTypes": [
+      "android",
+      "ios",
+      "web",
+      "unity",
+      "amp",
+      "cloud",
+      "warehouse",
+      "reactnative",
+      "flutter",
+      "cordova"
+    ],
+    "supportedMessageTypes": [
+      "track",
+      "screen",
+      "page"
+    ],
+    "destConfig": {
+      "defaultConfig": [
+        "devKey",
+        "sharingFilter",
+        "useRichEventName"
+      ],
+      "android": [
+        "useNativeSDK",
+        "androidAppId"
+      ],
+      "ios": [
+        "useNativeSDK",
+        "appleAppId"
+      ],
+      "reactnative": [
+        "useNativeSDK",
+        "androidAppId",
+        "appleAppId"
+      ],
+      "cordova": [
+        "useNativeSDK",
+        "androidAppId",
+        "appleAppId"
+      ]
+    },
+    "secretKeys": []
+  },
+  "uiConfig": [
+    {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "AppsFlyer Dev Key",
+          "value": "devKey",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid AppsFlyer Dev Key",
+          "required": true,
+          "placeholder": "e.g: bSjsdGYsOo9sjw23Shj"
+        },
+        {
+          "type": "textInput",
+          "label": "Android App ID",
+          "value": "androidAppId",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Android App ID",
+          "required": true,
+          "placeholder": "com.mypackage.example"
+        },
+        {
+          "type": "textInput",
+          "label": "Apple App ID",
+          "value": "appleAppId",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Apple App ID",
+          "required": true,
+          "placeholder": "123456789"
+        },
+        {
+          "type": "checkbox",
+          "label": "Use Rich Event Names",
+          "value": "useRichEventName",
+          "footerNote": "To include screen/page name in Screen/Page event names (ex: Viewed Contacts Page)",
+          "default": false
+        },
+        {
+          "type": "textInput",
+          "label": "Sharing Filter",
+          "value": "sharingFilter",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid sharing filter. Default value is used",
+          "required": false,
+          "placeholder": "['googleadwords_int', 'adcolony_int']",
+          "default": "all",
+          "footerNote": "Use the filter to fulfill regulatory requirements like GDPR and CCPA, to comply with user opt-out mechanisms, and for other business logic reasons. "
+        }
+      ]
+    },
+    {
+      "title": "Native SDK",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": true
+        }
+      ]
+    }
+  ]
+}
