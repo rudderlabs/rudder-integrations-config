@@ -1,0 +1,68 @@
+{
+  "auth": {
+    "type": "OAuth"
+  },
+  "config": [
+    {
+      "title": "Source Settings",
+      "fields": [
+        {
+          "type": "singleSelect",
+          "label": "Report Type",
+          "value": "report.type",
+          "required": true,
+          "options": [
+            {
+              "name": "Analytics",
+              "value": "analytics"
+            },
+            {
+              "name": "Statistics",
+              "value": "statistics"
+            }
+          ],
+          "defaultOption": {
+            "name": "Analytics",
+            "value": "analytics"
+          }
+        },
+        {
+          "mode":"multiple",
+          "preRequisiteField": {
+            "name": "report.type",
+            "includeValue": true
+          },
+          "type": "singleSelect",
+          "label": "Pivots",
+          "value": "report.pivots",
+          "required": true,
+          "options": {
+            "case":{
+                "analytics":[
+                    "MEMBER_COMPANY_SIZE",
+                    "MEMBER_INDUSTRY",
+                    "MEMBER_SENIORITY",
+                    "MEMBER_JOB_TITLE",
+                    "MEMBER_JOB_FUNCTION",
+                    "MEMBER_COUNTRY",
+                    "MEMBER_REGION",
+                    "MEMBER_COMPANY"
+                  ],
+                "statistics":[
+                    "COMPANY",
+                    "ACCOUNT",
+                    "SHARE",
+                    "CAMPAIGN",
+                    "CREATIVE",
+                    "CAMPAIGN_GROUP",
+                    "CONVERSION",
+                    "SERVING_LOCATION",
+                    "CARD_INDEX"
+                ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
