@@ -1,0 +1,64 @@
+{
+  "auth": {
+    "type": "OAuth"
+  },
+  "config": [
+    {
+      "title": "Source Settings",
+      "fields": [
+        {
+          "type": "dynamicSelect",
+          "method": "post",
+          "url": "/cloudSources/info/roles/google_sheets/info/sheets",
+          "label": "SpreadSheet",
+          "labelKey": "filename",
+          "valueKey": "id",
+          "responseKey": "sheets",
+          "value": "spreadsheet",
+          "showSearch": true,
+          "required": true
+        },
+        {
+          "type": "dynamicSelect",
+          "label": "Worksheet",
+          "value": "worksheet",
+          "responseKey": "sheets",
+          "showSearch": true,
+          "valueKey": "properties.title",
+          "labelKey": "properties.title",
+          "method": "post",
+          "url": "/cloudSources/info/roles/google_sheets/info/sheets/${preRequisiteValue}",
+          "required": true,
+          "preRequisiteField": {
+            "name": "spreadsheet",
+            "includeValue": true
+          }
+        },
+        {
+          "type": "textInput",
+          "label": "Header row",
+          "inputFieldType": "number",
+          "value": "header_offset",
+          "default": 1,
+          "min": 1,
+          "required": true,
+          "disabledNormalMode": true,
+          "preRequisiteField": {
+            "name": "spreadsheet"
+          }
+        },
+        {
+          "type": "textInput",
+          "inputFieldType": "number",
+          "min": 1,
+          "label": "First data row",
+          "value": "top_row_offset",
+          "disabledNormalMode": true,
+          "preRequisiteField": {
+            "name": "spreadsheet"
+          }
+        }
+      ]
+    }
+  ]
+}
