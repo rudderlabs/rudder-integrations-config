@@ -24,13 +24,23 @@ import time
 # staging https://sources-api.dev.rudderlabs.com
 # dev https://api.dev.rudderlabs.com
 
-BASE_URL = "http://localhost:5050"
-  
-USER_NAME = sys.argv[1]
-PASSWORD = sys.argv[2]
-TASK = sys.argv[3]
-TYPE = sys.argv[4]
-NAMES = sys.argv[5:]
+#########################
+# ENV VARIABLES
+CONTROL_PLANE_URL=sys.argv[1]
+print(CONTROL_PLANE_URL)
+USERNAME=sys.argv[2]
+print(USERNAME)
+PASSWORD=sys.argv[3]
+print(PASSWORD)
+#########################
+
+# BASE_URL = "http://localhost:5000"
+#
+# USER_NAME = sys.argv[1]
+# PASSWORD = sys.argv[2]
+# TASK = sys.argv[3]
+# TYPE = sys.argv[4]
+# NAMES = sys.argv[5:]
 
 INDEX = 0
 COUNT = 0
@@ -65,7 +75,7 @@ def validateSchema(schema):
 
 def createUpdateDestination(file, task):
   try:
-    f = open(f'destinationConfigs/{file}',)
+    f = open(f'destinations/{file}',)
     data = json.load(f)
     f.close()
     display_name = data["displayName"]
@@ -87,13 +97,13 @@ def createUpdateDestination(file, task):
       resp = requests.post(url=f'{BASE_URL}/destination-definitions/{name}', headers={"Content-Type": "application/json"}, data=json.dumps(data), auth=(USER_NAME, PASSWORD))
       print(parse_response(resp, name))
       print()
-    
+
   except Exception as e:
     print(e)
 
 def createUpdateSource(file, task):
   try:
-    f = open(f'sourceConfigs/{file}',)
+    f = open(f'sources/{file}',)
     data = json.load(f)
     f.close()
     display_name = data["displayName"]
@@ -104,7 +114,7 @@ def createUpdateSource(file, task):
       resp = requests.post(url=f'{BASE_URL}/source-definitions', headers={"Content-Type": "application/json"}, data=json.dumps(data), auth=(USER_NAME, PASSWORD))
       print(parse_response(resp, name))
       print()
-    
+
     elif task == "update":
       print(f'Updating source "{display_name}" ({INDEX + 1}/{COUNT})')
       resp = requests.post(url=f'{BASE_URL}/source-definitions/{name}', headers={"Content-Type": "application/json"}, data=json.dumps(data), auth=(USER_NAME, PASSWORD))
@@ -125,13 +135,13 @@ def main():
   if len(NAMES) == 0:
     print("Please specify correct source/destination name(s) to create or update - specific source/destination name(s) or \"all\" for bulk creation/updation")
     return
-  
+
   global COUNT
   global INDEX
 
   if TYPE == "destination":
     if "all" in NAMES:
-      filenames = os.listdir('destinationConfigs')
+      filenames = os.listdir('destinations')
       COUNT = len(filenames)
       for INDEX, file in enumerate(filenames):
         createUpdateDestination(file, TASK)
@@ -142,7 +152,7 @@ def main():
 
   elif TYPE == "source":
     if "all" in NAMES:
-      filenames = os.listdir('sourceConfigs')
+      filenames = os.listdir('sources')
       COUNT = len(filenames)
       for INDEX, file in enumerate(filenames):
         createUpdateSource(file, TASK)
@@ -150,7 +160,7 @@ def main():
       COUNT = len(NAMES)
       for INDEX, name in enumerate(NAMES):
         createUpdateSource(f'{name}.json', TASK)
-  
+
   if len(failed_configs) > 0:
     print(f"Failed configs: {len(failed_configs)}/{COUNT}")
     print("Retry using the following command: ")

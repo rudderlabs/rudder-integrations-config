@@ -1,7 +1,4 @@
 {
-  "name": "S3_DATALAKE",
-  "displayName": "S3 DATALAKE",
-  "category": "warehouse",
   "config": {
     "transformAt": "processor",
     "transformAtV1": "processor",
@@ -41,6 +38,81 @@
       "accessKey"
     ]
   },
+  "configSchema": {
+    "type": "object",
+    "allOf": [
+      {
+        "if": {
+          "required": [
+            "useGlue"
+          ],
+          "properties": {
+            "useGlue": {
+              "const": true
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "region"
+          ],
+          "properties": {
+            "region": {
+              "type": "string",
+              "pattern": "(^env[.].*)|.*"
+            }
+          }
+        }
+      }
+    ],
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "required": [
+      "bucketName",
+      "useGlue",
+      "syncFrequency"
+    ],
+    "properties": {
+      "prefix": {
+        "type": "string",
+        "pattern": "(^env[.].*)|.*"
+      },
+      "useGlue": {
+        "type": "boolean"
+      },
+      "accessKey": {
+        "type": "string",
+        "pattern": "(^env[.].*)|.*"
+      },
+      "enableSSE": {
+        "type": "boolean"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "(^env[.].*)|.*"
+      },
+      "bucketName": {
+        "type": "string",
+        "pattern": "(^env[.].*)|.*"
+      },
+      "accessKeyID": {
+        "type": "string",
+        "pattern": "(^env[.].*)|.*"
+      },
+      "syncStartAt": {
+        "type": "string"
+      },
+      "syncFrequency": {
+        "type": "string",
+        "default": "30",
+        "pattern": "^(30|60|180|360|720|1440)$"
+      }
+    },
+    "additionalProperties": true
+  },
+  "responseRules": {},
+  "name": "S3_DATALAKE",
+  "displayName": "S3 DATALAKE",
+  "category": "warehouse",
   "uiConfig": [
     {
       "title": "Connection Credentials",

@@ -1,7 +1,4 @@
 {
-  "name": "CLICKHOUSE",
-  "displayName": "ClickHouse",
-  "category": "warehouse",
   "config": {
     "transformAt": "processor",
     "transformAtV1": "processor",
@@ -59,6 +56,280 @@
       "credentials"
     ]
   },
+  "configSchema": {
+    "type": "object",
+    "allOf": [
+      {
+        "if": {
+          "required": [
+            "secure"
+          ],
+          "properties": {
+            "secure": {
+              "const": true
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "skipVerify"
+          ]
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "useRudderStorage"
+          ],
+          "properties": {
+            "useRudderStorage": {
+              "const": false
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "bucketProvider"
+          ]
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "bucketProvider",
+            "useRudderStorage"
+          ],
+          "properties": {
+            "bucketProvider": {
+              "const": "S3"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "bucketName",
+            "accessKeyID",
+            "accessKey"
+          ],
+          "properties": {
+            "accessKey": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{0,100})$"
+            },
+            "bucketName": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{0,100})$"
+            },
+            "accessKeyID": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "bucketProvider",
+            "useRudderStorage"
+          ],
+          "properties": {
+            "bucketProvider": {
+              "const": "GCS"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "bucketName",
+            "credentials"
+          ],
+          "properties": {
+            "bucketName": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{0,100})$"
+            },
+            "credentials": {
+              "type": "string",
+              "pattern": "(^env[.].*)|.*"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "bucketProvider",
+            "useRudderStorage"
+          ],
+          "properties": {
+            "bucketProvider": {
+              "const": "AZURE_BLOB"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "containerName",
+            "accountName",
+            "accountKey"
+          ],
+          "properties": {
+            "accountKey": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{0,100})$"
+            },
+            "accountName": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{0,100})$"
+            },
+            "containerName": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "bucketProvider",
+            "useRudderStorage"
+          ],
+          "properties": {
+            "bucketProvider": {
+              "const": "MINIO"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "bucketName",
+            "endPoint",
+            "accessKeyID",
+            "secretAccessKey",
+            "useSSL"
+          ],
+          "properties": {
+            "useSSL": {
+              "type": "boolean"
+            },
+            "endPoint": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{0,100})$"
+            },
+            "bucketName": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{0,100})$"
+            },
+            "accessKeyID": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{0,100})$"
+            },
+            "secretAccessKey": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{0,100})$"
+            }
+          }
+        }
+      }
+    ],
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "required": [
+      "host",
+      "port",
+      "database",
+      "user",
+      "secure",
+      "syncFrequency",
+      "useRudderStorage"
+    ],
+    "properties": {
+      "host": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "port": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "user": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "secure": {
+        "type": "boolean",
+        "default": false
+      },
+      "cluster": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "database": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "password": {
+        "type": "string",
+        "pattern": "(^env[.].*)|.*"
+      },
+      "skipVerify": {
+        "type": "boolean"
+      },
+      "syncStartAt": {
+        "type": "string"
+      },
+      "caCertificate": {
+        "type": "string",
+        "pattern": "(^env[.].*)|.*"
+      },
+      "excludeWindow": {
+        "type": "object",
+        "required": [
+          "excludeWindowStartTime",
+          "excludeWindowEndTime"
+        ],
+        "properties": {
+          "excludeWindowEndTime": {
+            "type": "string"
+          },
+          "excludeWindowStartTime": {
+            "type": "string"
+          }
+        }
+      },
+      "syncFrequency": {
+        "type": "string",
+        "default": "30",
+        "pattern": "^(30|60|180|360|720|1440)$"
+      },
+      "bucketProvider": {
+        "type": "string",
+        "pattern": "^(S3|GCS|AZURE_BLOB|MINIO)$"
+      },
+      "useRudderStorage": {
+        "type": "boolean",
+        "default": false
+      }
+    },
+    "additionalProperties": true
+  },
+  "responseRules": null,
+  "name": "CLICKHOUSE",
+  "displayName": "ClickHouse",
+  "category": "warehouse",
   "uiConfig": [
     {
       "title": "Connection Credentials",

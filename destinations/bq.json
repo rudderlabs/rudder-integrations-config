@@ -1,7 +1,4 @@
 {
-  "name": "BQ",
-  "displayName": "BigQuery",
-  "category": "warehouse",
   "config": {
     "transformAt": "processor",
     "transformAtV1": "processor",
@@ -37,6 +34,70 @@
       "credentials"
     ]
   },
+  "configSchema": {
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "required": [
+      "project",
+      "bucketName",
+      "credentials",
+      "syncFrequency"
+    ],
+    "properties": {
+      "prefix": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "project": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "location": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "bucketName": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "credentials": {
+        "type": "string",
+        "pattern": "(^env[.].*)|.*"
+      },
+      "syncStartAt": {
+        "type": "string"
+      },
+      "excludeWindow": {
+        "type": "object",
+        "required": [
+          "excludeWindowStartTime",
+          "excludeWindowEndTime"
+        ],
+        "properties": {
+          "excludeWindowEndTime": {
+            "type": "string"
+          },
+          "excludeWindowStartTime": {
+            "type": "string"
+          }
+        }
+      },
+      "syncFrequency": {
+        "type": "string",
+        "default": "30",
+        "pattern": "^(30|60|180|360|720|1440)$"
+      }
+    },
+    "additionalProperties": true
+  },
+  "responseRules": null,
+  "name": "BQ",
+  "displayName": "BigQuery",
+  "category": "warehouse",
   "uiConfig": [
     {
       "title": "Connection Credentials",

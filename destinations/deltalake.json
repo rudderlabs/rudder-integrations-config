@@ -1,0 +1,242 @@
+{
+  "config": {
+    "destConfig": {
+      "defaultConfig": [
+        "host",
+        "port",
+        "path",
+        "token",
+        "namespace",
+        "bucketProvider",
+        "bucketName",
+        "containerName",
+        "prefix",
+        "useSTSTokens",
+        "accessKeyID",
+        "accessKey",
+        "enableSSE",
+        "accountName",
+        "accountKey",
+        "credentials",
+        "syncFrequency",
+        "syncStartAt",
+        "excludeWindow"
+      ]
+    },
+    "secretKeys": [
+      "accessKeyID",
+      "accessKey",
+      "accountName",
+      "accountKey",
+      "credentials"
+    ],
+    "excludeKeys": [],
+    "includeKeys": [],
+    "transformAt": "processor",
+    "transformAtV1": "processor",
+    "supportedSourceTypes": [
+      "android",
+      "ios",
+      "web",
+      "unity",
+      "amp",
+      "cloud",
+      "warehouse",
+      "reactnative",
+      "cloudSource",
+      "flutter",
+      "cordova"
+    ],
+    "saveDestinationResponse": true
+  },
+  "configSchema": {
+    "type": "object",
+    "allOf": [
+      {
+        "if": {
+          "required": [
+            "bucketProvider"
+          ],
+          "properties": {
+            "bucketProvider": {
+              "const": "S3"
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "bucketName",
+            "enableSSE",
+            "useSTSTokens"
+          ],
+          "properties": {
+            "enableSSE": {
+              "type": "boolean"
+            },
+            "bucketName": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{1,100})$"
+            },
+            "useSTSTokens": {
+              "type": "boolean"
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "required": [
+                "useSTSTokens"
+              ],
+              "properties": {
+                "useSTSTokens": {
+                  "const": true
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "accessKeyID",
+                "accessKey"
+              ],
+              "properties": {
+                "accessKey": {
+                  "type": "string",
+                  "pattern": "(^env[.].*)|^(.{1,100})$"
+                },
+                "accessKeyID": {
+                  "type": "string",
+                  "pattern": "(^env[.].*)|^(.{1,100})$"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "if": {
+          "required": [
+            "bucketProvider"
+          ],
+          "properties": {
+            "bucketProvider": {
+              "const": "GCS"
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "bucketName",
+            "credentials"
+          ],
+          "properties": {
+            "bucketName": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{1,100})$"
+            },
+            "credentials": {
+              "type": "string",
+              "pattern": "(^env[.].*)|.*"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "bucketProvider"
+          ],
+          "properties": {
+            "bucketProvider": {
+              "const": "AZURE_BLOB"
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "containerName",
+            "accountName",
+            "accountKey"
+          ],
+          "properties": {
+            "accountKey": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{1,100})$"
+            },
+            "accountName": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{1,100})$"
+            },
+            "containerName": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{1,100})$"
+            }
+          }
+        }
+      }
+    ],
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "required": [
+      "host",
+      "port",
+      "path",
+      "token",
+      "syncFrequency",
+      "bucketProvider"
+    ],
+    "properties": {
+      "host": {
+        "type": "string",
+        "pattern": "(^env[.].+)|(^(.{1,100}).cloud.databricks.com$)"
+      },
+      "path": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "port": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "token": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "prefix": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(?!pg_|PG_|pG_|Pg_).*"
+      },
+      "syncStartAt": {
+        "type": "string"
+      },
+      "excludeWindow": {
+        "type": "object",
+        "required": [
+          "excludeWindowStartTime",
+          "excludeWindowEndTime"
+        ],
+        "properties": {
+          "excludeWindowEndTime": {
+            "type": "string"
+          },
+          "excludeWindowStartTime": {
+            "type": "string"
+          }
+        }
+      },
+      "syncFrequency": {
+        "type": "string",
+        "default": "30",
+        "pattern": "^(30|60|180|360|720|1440)$"
+      }
+    },
+    "additionalProperties": true
+  },
+  "responseRules": {},
+  "name": "DELTALAKE",
+  "displayName": "Databricks (Delta Lake)",
+  "category": "warehouse"
+}
