@@ -2,6 +2,7 @@ import requests
 import json
 import os
 import sys
+import jsondiff
 
 #########################
 # ENV VARIABLES
@@ -12,59 +13,75 @@ print(USERNAME)
 PASSWORD=sys.argv[3]
 print(PASSWORD)
 #########################
+# CONSTANTS
+HEADER = {"Content-Type": "application/json"}
+AUTH = (USERNAME, PASSWORD)
+#########################
+
+
+#########################
+# UTIL METHODS
+def parse_response(resp):
+  if resp.status_code >= 200 and resp.status_code <= 300:
+    return resp.status_code, resp.json()
+  else:
+    return resp.status_code, str(resp.content)
 
 def get_persisted_store(base_url, selector):
     request_url = f'{base_url}/{selector}-definitions'
     response = requests.get(request_url)
     return json.loads(response.text)
 
-def calculate_diff(persisted_data, selector):
-    for data in persisted_data:
-        name = data["name"].lower()
+def get_file_content(name, selector):
+     updated_file_path = f'./{selector}s/{name}.json'
+     f = open(updated_file_path, 'r')
+     data = json.loads(f.read())
+     f.close()
+     return data
+#########################
 
-        updated_file_path = f'./{selector}s/{name}.json'
-        f = open(updated_file_path, 'r')
-        updated_config = json.loads(f.read())
-        f.close()
+def calculate_diff(persisted_data_set, selector):
+    final_report = []
 
-        print(json.dumps(data))
-        print(json.dumps(updated_config))
+    ## check for updates
+    for persisted_data in persisted_data_set:
+        name = persisted_data["name"].lower()
+        updated_data = get_file_content(name, selector)
 
-        print("---------------")
+        diff = jsondiff.diff(persisted_data, updated_data, marshal=True)
+        # ignore the id, createdAt, updatedAt keys
+        if diff['$delete'] == ['id', 'createdAt', 'updatedAt']:
+            del diff['$delete']
 
-        break
-    pass
+        if len(diff.keys()) > 0: # no changes
+            final_report.append({"name": name, "diff": diff, "action": "update"})
+
+    ## check for new items
+    current_items = [item[:-5] for item in os.listdir(f'./{selector}s')]
+    persisted_items = [item['name'].lower() for item in persisted_data_set]
+    new_items = [item for item in current_items if item not in persisted_items]
+    for item in new_items:
+        final_report.append({"name": item, "diff": None, "action": "create"})
+
+    return final_report
 
 def update_config(data_diff, selector):
-    return "WIP"
+    results = []
+    for diff in data_diff:
+        name = diff['name']
+        data = get_file_content(name, selector)
 
-def prepare_data(persisted_data_set, selector):
-    ignored_keys = ['id', 'createdAt', 'updatedAt']
-    for persisted_data in persisted_data_set:
-        name = persisted_data['name'].lower()
-        updated_file_path = f'./{selector}s/{name}.json'
-        f = open(updated_file_path, 'r')
-        current_data = json.loads(f.read())
-        f.close()
+        if diff['action'] == 'create':
+            url = f'{CONTROL_PLANE_URL}/{selector}-definitions'
+        else:
+            url = f'{CONTROL_PLANE_URL}/{selector}-definitions/{name.upper()}'
 
-        p_key_set = list(persisted_data.keys())
-        c_key_set = list(current_data.keys())
+        resp = requests.post(url=url, headers=HEADER, data=json.dumps(data), auth=AUTH)
+        status, response = parse_response(resp)
+        diff['update'] = {"status": status, "response": response}
+        results.append(diff)
 
-        final_key_set = p_key_set + c_key_set
-        final_object = {}
-
-        for key in final_key_set:
-            if key not in ignored_keys:
-                if key in p_key_set and key not in c_key_set:
-                    final_object[key] = persisted_data[key]
-                else:
-                    final_object[key] = current_data[key]
-
-        print (final_object)
-
-        f = open(updated_file_path, 'w')
-        f.write(json.dumps(final_object, indent=2))
-        f.close()
+    return json.dumps(results, indent=2)
 
 if __name__ == '__main__':
     ##################
@@ -72,29 +89,20 @@ if __name__ == '__main__':
     ##################
     # get persisted storage
     destinations = get_persisted_store(CONTROL_PLANE_URL, 'destination')
-    ## ONE TIME
-    prepare_data(destinations, 'destination')
-    ##
-    # # calculate the diff and populate the list for update
-    # dest_diffs = calculate_diff(destinations, 'destination')
-    # # make API calls to update
-    # dest_updates = update_config(dest_diffs, 'destination')
-    # print(dest_updates)
+    # calculate the diff and populate the list for update
+    dest_diffs = calculate_diff(destinations, 'destination')
+    # make API calls to update
+    dest_updates = update_config(dest_diffs, 'destination')
+    print(dest_updates)
 
     ##################
     ## SOURCES
     ##################
     # get persisted storage
     sources = get_persisted_store(CONTROL_PLANE_URL, 'source')
-    ## ONE TIME
-    prepare_data(sources, 'source')
-    ##
-    # # calculate the diff and populate the list for update
-    # source_diffs = calculate_diff(sources, 'source')
-    # # make API calls to update
-    # source_updates = update_config(source_diffs, 'source')
-    # print(source_updates)
-
-
-
+    # calculate the diff and populate the list for update
+    source_diffs = calculate_diff(sources, 'source')
+    # make API calls to update
+    source_updates = update_config(source_diffs, 'source')
+    print(source_updates)
 

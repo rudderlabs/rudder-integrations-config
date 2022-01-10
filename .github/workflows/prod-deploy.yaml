@@ -14,9 +14,8 @@ jobs:
     - name: Install python
       uses: actions/setup-python@v2
     - name: Setup Python
-      run: chmod +x scripts/setup-python.sh | ./scripts/setup-python.sh
+      run: chmod +x scripts/setup-python.sh;./scripts/setup-python.sh
     - name: Execute script
-      run: |
-        python3 scripts/createUpdateConfig.py ${{secrets.PROD_CONTROL_PLANE_URL}} ${{secrets.PROD_USERNAME}} ${{secrets.PROD_PASSWORD}}
+      run: python3 scripts/action.py ${{secrets.PROD_CONTROL_PLANE_URL}} ${{secrets.PROD_USERNAME}} ${{secrets.PROD_PASSWORD}}
     - name: Update status
       run: echo "Success"
