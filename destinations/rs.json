@@ -1,7 +1,4 @@
 {
-  "name": "RS",
-  "displayName": "Redshift",
-  "category": "warehouse",
   "config": {
     "transformAt": "processor",
     "transformAtV1": "processor",
@@ -45,6 +42,115 @@
       "accessKey"
     ]
   },
+  "configSchema": {
+    "type": "object",
+    "allOf": [
+      {
+        "if": {
+          "required": [
+            "useRudderStorage"
+          ],
+          "properties": {
+            "useRudderStorage": {
+              "const": false
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "bucketName"
+          ]
+        }
+      }
+    ],
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "required": [
+      "host",
+      "port",
+      "database",
+      "user",
+      "password",
+      "syncFrequency",
+      "useRudderStorage"
+    ],
+    "properties": {
+      "host": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,128})$"
+      },
+      "port": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "user": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "prefix": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "database": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "password": {
+        "type": "string",
+        "pattern": "(^env[.].*)|.*"
+      },
+      "accessKey": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "enableSSE": {
+        "type": "boolean"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(?!pg_|PG_|pG_|Pg_).*"
+      },
+      "bucketName": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "accessKeyID": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "syncStartAt": {
+        "type": "string"
+      },
+      "excludeWindow": {
+        "type": "object",
+        "required": [
+          "excludeWindowStartTime",
+          "excludeWindowEndTime"
+        ],
+        "properties": {
+          "excludeWindowEndTime": {
+            "type": "string"
+          },
+          "excludeWindowStartTime": {
+            "type": "string"
+          }
+        }
+      },
+      "syncFrequency": {
+        "type": "string",
+        "default": "30",
+        "pattern": "^(30|60|180|360|720|1440)$"
+      },
+      "useRudderStorage": {
+        "type": "boolean",
+        "default": false
+      }
+    },
+    "additionalProperties": true
+  },
+  "responseRules": null,
+  "name": "RS",
+  "displayName": "Redshift",
+  "category": "warehouse",
   "uiConfig": [
     {
       "title": "Connection Credentials",
