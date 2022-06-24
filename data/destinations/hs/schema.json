@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "apiKey": {
+      "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+      "type": "string"
+    },
+    "blacklistedEvents": {
+      "items": {
+        "properties": {
+          "eventName": {
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "eventFilteringOption": {
+      "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$",
+      "type": "string"
+    },
+    "hubID": {
+      "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+      "type": "string"
+    },
+    "oneTrustCookieCategories": {
+      "properties": {
+        "web": {
+          "items": {
+            "properties": {
+              "oneTrustCookieCategory": {
+                "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "useNativeSDK": {
+      "properties": {
+        "web": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "whitelistedEvents": {
+      "items": {
+        "properties": {
+          "eventName": {
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "hubID",
+    "apiKey"
+  ],
+  "type": "object"
+}
