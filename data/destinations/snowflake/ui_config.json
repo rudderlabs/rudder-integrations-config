@@ -1,0 +1,426 @@
+[
+  {
+    "fields": [
+      {
+        "label": "Account",
+        "placeholder": "e.g: qya54180.us-east-1",
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid Account",
+        "required": true,
+        "type": "textInput",
+        "value": "account"
+      },
+      {
+        "label": "Database",
+        "placeholder": "e.g: RUDDER_EVENTS",
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid Database",
+        "required": true,
+        "type": "textInput",
+        "value": "database"
+      },
+      {
+        "label": "Warehouse",
+        "placeholder": "e.g: RUDDER_WAREHOUSE",
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid Database",
+        "required": true,
+        "type": "textInput",
+        "value": "warehouse"
+      },
+      {
+        "label": "User",
+        "placeholder": "e.g: RUDDER_USER",
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid User",
+        "required": true,
+        "type": "textInput",
+        "value": "user"
+      },
+      {
+        "label": "Password",
+        "placeholder": "e.g: RUDDER_PASSWORD",
+        "regex": ".*",
+        "required": true,
+        "secret": true,
+        "type": "textInput",
+        "value": "password"
+      },
+      {
+        "footerNote": "Default will be the source name",
+        "label": "Namespace",
+        "labelNote": "Schema name for the warehouse where the tables are created",
+        "placeholder": "e.g: RUDDER_NAMESPACE",
+        "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+        "regexErrorMessage": "Invalid Namespace",
+        "required": false,
+        "type": "textInput",
+        "value": "namespace"
+      },
+      {
+        "defaultOption": {
+          "name": "Every 30 minutes",
+          "value": "30"
+        },
+        "label": "Sync Frequency",
+        "options": [
+          {
+            "name": "Every 30 minutes",
+            "value": "30"
+          },
+          {
+            "name": "Every 1 hour",
+            "value": "60"
+          },
+          {
+            "name": "Every 3 hours",
+            "value": "180"
+          },
+          {
+            "name": "Every 6 hours",
+            "value": "360"
+          },
+          {
+            "name": "Every 12 hours",
+            "value": "720"
+          },
+          {
+            "name": "Every 24 hours",
+            "value": "1440"
+          }
+        ],
+        "required": false,
+        "type": "singleSelect",
+        "value": "syncFrequency"
+      },
+      {
+        "footerNote": "Note: Please specify time in UTC",
+        "label": "Sync Starting At (Optional)",
+        "options": {
+          "minuteStep": 15,
+          "omitSeconds": true
+        },
+        "required": false,
+        "type": "timePicker",
+        "value": "syncStartAt"
+      },
+      {
+        "endTime": {
+          "label": "end time",
+          "value": "excludeWindowEndTime"
+        },
+        "footerNote": "Note: Please specify time in UTC",
+        "label": "Exclude window (Optional)",
+        "options": {
+          "minuteStep": 1,
+          "omitSeconds": true
+        },
+        "required": false,
+        "startTime": {
+          "label": "start time",
+          "value": "excludeWindowStartTime"
+        },
+        "type": "timeRangePicker",
+        "value": "excludeWindow"
+      }
+    ],
+    "title": "1. Connection Credentials"
+  },
+  {
+    "fields": [
+      {
+        "default": false,
+        "footerNote": "Note: Only available for RudderStack managed data planes",
+        "label": "Use RudderStack managed object storage",
+        "type": "checkbox",
+        "value": "useRudderStorage"
+      },
+      {
+        "defaultOption": {
+          "name": "Amazon Web Services",
+          "value": "AWS"
+        },
+        "label": "Choose your Cloud",
+        "options": [
+          {
+            "name": "Amazon Web Services",
+            "value": "AWS"
+          },
+          {
+            "name": "Google Cloud Platform",
+            "value": "GCP"
+          },
+          {
+            "name": "Microsoft Azure",
+            "value": "AZURE"
+          }
+        ],
+        "preRequisiteField": {
+          "name": "useRudderStorage",
+          "selectedValue": false
+        },
+        "required": true,
+        "type": "singleSelect",
+        "value": "cloudProvider"
+      },
+      {
+        "footerNote": "Please make sure the bucket exists in your S3",
+        "label": "Staging S3 Storage Bucket Name",
+        "labelNote": "S3 Bucket to store data before loading into Snowflake",
+        "placeholder": "e.g: s3-event-logs",
+        "preRequisiteField": [
+          {
+            "name": "cloudProvider",
+            "selectedValue": "AWS"
+          },
+          {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
+        ],
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid Staging S3 Storage Bucket Name",
+        "required": true,
+        "type": "textInput",
+        "value": "bucketName"
+      },
+      {
+        "footerNote": "Please make sure the bucket exists in your GCS",
+        "label": "Staging GCS Object Storage Bucket Name",
+        "labelNote": "GCS Bucket to store data before loading into Snowflake",
+        "placeholder": "e.g: gcs-event-logs",
+        "preRequisiteField": [
+          {
+            "name": "cloudProvider",
+            "selectedValue": "GCP"
+          },
+          {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
+        ],
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid Staging GCS Object Storage Bucket Name",
+        "required": true,
+        "type": "textInput",
+        "value": "bucketName"
+      },
+      {
+        "footerNote": "Please make sure the container exists in your Azure Blob Storage",
+        "label": "Staging Azure Blob Storage Container Name",
+        "labelNote": "Container to store data before loading into Snowflake",
+        "placeholder": "e.g: azure-event-logs",
+        "preRequisiteField": [
+          {
+            "name": "cloudProvider",
+            "selectedValue": "AZURE"
+          },
+          {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
+        ],
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid Staging Azure Blob Storage Container Name",
+        "required": true,
+        "type": "textInput",
+        "value": "containerName"
+      },
+      {
+        "label": "Prefix",
+        "placeholder": "e.g: rudder",
+        "preRequisiteField": {
+          "name": "useRudderStorage",
+          "selectedValue": false
+        },
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid Prefix",
+        "required": false,
+        "type": "textInput",
+        "value": "prefix"
+      },
+      {
+        "footerURL": {
+          "link": "https://docs.snowflake.com/en/user-guide/data-load-s3-config.html#option-1-configuring-a-snowflake-storage-integration",
+          "text": "Instructions for setting up the integration"
+        },
+        "label": "Storage Integration",
+        "placeholder": "e.g: aws_int",
+        "preRequisiteField": [
+          {
+            "name": "cloudProvider",
+            "selectedValue": "AWS"
+          },
+          {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
+        ],
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid Storage Integration",
+        "type": "textInput",
+        "value": "storageIntegration"
+      },
+      {
+        "footerURL": {
+          "link": "https://docs.snowflake.com/en/user-guide/data-load-gcs-config.html",
+          "text": "Instructions for setting up the integration"
+        },
+        "label": "Storage Integration",
+        "placeholder": "e.g: gcs_int",
+        "preRequisiteField": [
+          {
+            "name": "cloudProvider",
+            "selectedValue": "GCP"
+          },
+          {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
+        ],
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid Storage Integration",
+        "required": true,
+        "type": "textInput",
+        "value": "storageIntegration"
+      },
+      {
+        "footerURL": {
+          "link": "https://docs.snowflake.com/en/user-guide/data-load-azure-config.html#option-1-configuring-a-snowflake-storage-integration",
+          "text": "Instructions for setting up the integration"
+        },
+        "label": "Storage Integration",
+        "placeholder": "e.g: azure_int",
+        "preRequisiteField": [
+          {
+            "name": "cloudProvider",
+            "selectedValue": "AZURE"
+          },
+          {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
+        ],
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid Storage Integration",
+        "required": true,
+        "type": "textInput",
+        "value": "storageIntegration"
+      },
+      {
+        "label": "AWS Access Key ID",
+        "placeholder": "e.g: access-key-id",
+        "preRequisiteField": [
+          {
+            "name": "cloudProvider",
+            "selectedValue": "AWS"
+          },
+          {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
+        ],
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid AWS Access Key ID",
+        "required": true,
+        "secret": true,
+        "type": "textInput",
+        "value": "accessKeyID"
+      },
+      {
+        "label": "AWS Secret Access Key",
+        "placeholder": "e.g: secret-access-key",
+        "preRequisiteField": [
+          {
+            "name": "cloudProvider",
+            "selectedValue": "AWS"
+          },
+          {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
+        ],
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid AWS Secret Access Key",
+        "required": true,
+        "secret": true,
+        "type": "textInput",
+        "value": "accessKey"
+      },
+      {
+        "default": false,
+        "label": "Enable Server Side Encryption For S3?",
+        "preRequisiteField": [
+          {
+            "name": "cloudProvider",
+            "selectedValue": "AWS"
+          },
+          {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
+        ],
+        "type": "checkbox",
+        "value": "enableSSE"
+      },
+      {
+        "label": "Azure Blob Storage Account Name",
+        "placeholder": "e.g: account-name",
+        "preRequisiteField": [
+          {
+            "name": "cloudProvider",
+            "selectedValue": "AZURE"
+          },
+          {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
+        ],
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid Azure Blob Storage Account Name",
+        "required": true,
+        "type": "textInput",
+        "value": "accountName"
+      },
+      {
+        "label": "Azure Blob Storage Account Key",
+        "placeholder": "e.g: account-key",
+        "preRequisiteField": [
+          {
+            "name": "cloudProvider",
+            "selectedValue": "AZURE"
+          },
+          {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
+        ],
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid Azure Blob Storage Account Key",
+        "required": true,
+        "type": "textInput",
+        "value": "accountKey"
+      },
+      {
+        "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'storage.objectCreator'",
+        "label": "Credentials",
+        "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your Google Cloud Storage",
+        "preRequisiteField": [
+          {
+            "name": "cloudProvider",
+            "selectedValue": "GCP"
+          },
+          {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
+        ],
+        "regex": ".*",
+        "required": true,
+        "type": "textareaInput",
+        "value": "credentials"
+      }
+    ],
+    "title": "Object Storage Configuration"
+  }
+]

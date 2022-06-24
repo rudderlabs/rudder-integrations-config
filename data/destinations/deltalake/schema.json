@@ -1,0 +1,217 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": true,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "enableExternalLocation": {
+            "const": "true"
+          }
+        },
+        "required": [
+          "enableExternalLocation"
+        ]
+      },
+      "then": {
+        "properties": {
+          "externalLocation": {
+            "pattern": "(^env[.].*)|.*",
+            "type": "string"
+          }
+        },
+        "required": [
+          "externalLocation"
+        ]
+      }
+    },
+    {
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "useSTSTokens": {
+                "const": true
+              }
+            },
+            "required": [
+              "useSTSTokens"
+            ]
+          },
+          "then": {
+            "properties": {
+              "accessKey": {
+                "pattern": "(^env[.].*)|^(.{1,100})$",
+                "type": "string"
+              },
+              "accessKeyID": {
+                "pattern": "(^env[.].*)|^(.{1,100})$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "accessKeyID",
+              "accessKey"
+            ]
+          }
+        }
+      ],
+      "if": {
+        "properties": {
+          "bucketProvider": {
+            "const": "S3"
+          }
+        },
+        "required": [
+          "bucketProvider"
+        ]
+      },
+      "then": {
+        "properties": {
+          "bucketName": {
+            "pattern": "(^env[.].*)|^(.{1,100})$",
+            "type": "string"
+          },
+          "enableSSE": {
+            "type": "boolean"
+          },
+          "useSTSTokens": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "bucketName",
+          "enableSSE",
+          "useSTSTokens"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "bucketProvider": {
+            "const": "GCS"
+          }
+        },
+        "required": [
+          "bucketProvider"
+        ]
+      },
+      "then": {
+        "properties": {
+          "bucketName": {
+            "pattern": "(^env[.].*)|^(.{1,100})$",
+            "type": "string"
+          },
+          "credentials": {
+            "pattern": "(^env[.].+)|.+",
+            "type": "string"
+          }
+        },
+        "required": [
+          "bucketName",
+          "credentials"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "bucketProvider": {
+            "const": "AZURE_BLOB"
+          }
+        },
+        "required": [
+          "bucketProvider"
+        ]
+      },
+      "then": {
+        "properties": {
+          "accountKey": {
+            "pattern": "(^env[.].*)|^(.{1,100})$",
+            "type": "string"
+          },
+          "accountName": {
+            "pattern": "(^env[.].*)|^(.{1,100})$",
+            "type": "string"
+          },
+          "containerName": {
+            "pattern": "(^env[.].*)|^(.{1,100})$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "containerName",
+          "accountName",
+          "accountKey"
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "bucketProvider": {
+      "pattern": "^(S3|GCS|AZURE_BLOB)$",
+      "type": "string"
+    },
+    "enableExternalLocation": {
+      "default": false,
+      "type": "boolean"
+    },
+    "excludeWindow": {
+      "properties": {
+        "excludeWindowEndTime": {
+          "type": "string"
+        },
+        "excludeWindowStartTime": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "excludeWindowStartTime",
+        "excludeWindowEndTime"
+      ],
+      "type": "object"
+    },
+    "host": {
+      "pattern": "(^env[.].+)|^(.{1,100})$",
+      "type": "string"
+    },
+    "namespace": {
+      "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+      "type": "string"
+    },
+    "path": {
+      "pattern": "(^env[.].+)|^(.{1,100})$",
+      "type": "string"
+    },
+    "port": {
+      "pattern": "(^env[.].+)|^(.{1,100})$",
+      "type": "string"
+    },
+    "prefix": {
+      "pattern": "(^env[.].*)|^(.{0,100})$",
+      "type": "string"
+    },
+    "syncFrequency": {
+      "default": "30",
+      "pattern": "^(30|60|180|360|720|1440)$",
+      "type": "string"
+    },
+    "syncStartAt": {
+      "type": "string"
+    },
+    "token": {
+      "pattern": "(^env[.].+)|^(.{1,100})$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "host",
+    "port",
+    "path",
+    "token",
+    "syncFrequency",
+    "bucketProvider"
+  ],
+  "type": "object"
+}

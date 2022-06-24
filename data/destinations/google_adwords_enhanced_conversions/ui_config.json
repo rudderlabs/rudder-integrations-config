@@ -1,0 +1,62 @@
+[
+  {
+    "fields": [
+      {
+        "label": "Customer ID",
+        "placeholder": "e.g: 9693429833",
+        "regex": "^(.{1,100})$",
+        "regexErrorMessage": "Invalid Customer Id",
+        "required": true,
+        "type": "textInput",
+        "value": "customerId"
+      },
+      {
+        "default": false,
+        "label": "Sub Account",
+        "required": false,
+        "type": "checkbox",
+        "value": "subAccount"
+      },
+      {
+        "footerNote": "If Customer-Id is from a sub account then provide customerId of manager account",
+        "label": "Login Customer ID",
+        "preRequisiteField": [
+          {
+            "name": "subAccount",
+            "selectedValue": true
+          }
+        ],
+        "regex": "^(.{1,100})$",
+        "required": true,
+        "type": "textInput",
+        "value": "loginCustomerId"
+      }
+    ],
+    "title": "Connection Settings"
+  },
+  {
+    "fields": [
+      {
+        "customFields": [
+          {
+            "placeholder": "e.g: Credit Card Added",
+            "required": false,
+            "type": "textInput",
+            "value": "conversions"
+          }
+        ],
+        "label": "List of Conversion",
+        "type": "dynamicCustomForm",
+        "value": "listOfConversions"
+      },
+      {
+        "default": true,
+        "footerNote": "If this option is set to on we will encrypt mail, phoneNumber, firstName, lastName and streetAddress",
+        "label": "Hashing required",
+        "type": "checkbox",
+        "value": "requireHash"
+      }
+    ],
+    "title": "Event Settings"
+  }
+]
