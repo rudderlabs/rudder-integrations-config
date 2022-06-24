@@ -57,7 +57,7 @@ def calculate_diff(persisted_data_set, selector):
             final_report.append({"name": name, "diff": diff, "action": "update"})
 
     ## check for new items
-    current_items = [item[:-5] for item in os.listdir(f'./{selector}s')]
+    current_items = [item.replace('.json', '') for item in os.listdir(f'./{selector}s')]
     persisted_items = [item['name'].lower() for item in persisted_data_set]
     new_items = [item for item in current_items if item not in persisted_items]
     for item in new_items:
