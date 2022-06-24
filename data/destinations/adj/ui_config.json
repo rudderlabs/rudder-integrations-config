@@ -1,0 +1,117 @@
+[
+  {
+    "fields": [
+      {
+        "label": "APP Token",
+        "placeholder": "e.g: bSjsdGYsOo9sasdjw23Shj",
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid App Token",
+        "required": true,
+        "type": "textInput",
+        "value": "appToken"
+      },
+      {
+        "default": false,
+        "label": "Send to Production Environment on Adjust",
+        "type": "checkbox",
+        "value": "environment"
+      }
+    ],
+    "title": "Connection Settings"
+  },
+  {
+    "fields": [
+      {
+        "default": false,
+        "label": "Use device-mode to send events",
+        "type": "checkbox",
+        "value": "useNativeSDK"
+      }
+    ],
+    "title": "Native SDK"
+  },
+  {
+    "fields": [
+      {
+        "defaultOption": {
+          "name": "Disable",
+          "value": "disable"
+        },
+        "options": [
+          {
+            "name": "Disable",
+            "value": "disable"
+          },
+          {
+            "name": "Allowlist",
+            "value": "whitelistedEvents"
+          },
+          {
+            "name": "Denylist",
+            "value": "blacklistedEvents"
+          }
+        ],
+        "required": false,
+        "type": "singleSelect",
+        "value": "eventFilteringOption"
+      },
+      {
+        "customFields": [
+          {
+            "placeholder": "e.g: Anonymous Page Visit",
+            "required": false,
+            "type": "textInput",
+            "value": "eventName"
+          }
+        ],
+        "label": "Allowlist",
+        "type": "dynamicCustomForm",
+        "value": "whitelistedEvents"
+      },
+      {
+        "customFields": [
+          {
+            "placeholder": "e.g: Credit Card Added",
+            "required": false,
+            "type": "textInput",
+            "value": "eventName"
+          }
+        ],
+        "label": "Denylist",
+        "type": "dynamicCustomForm",
+        "value": "blacklistedEvents"
+      }
+    ],
+    "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
+    "title": "Client-side Events Filtering"
+  },
+  {
+    "fields": [
+      {
+        "keyLeft": "from",
+        "keyRight": "to",
+        "labelLeft": "Event Name",
+        "labelRight": "Event Token",
+        "placeholderLeft": "e.g: product_purchased",
+        "placeholderRight": "e.g: xcdrf5",
+        "type": "dynamicForm",
+        "value": "customMappings"
+      }
+    ],
+    "title": "Map Events to Adjust Event Tokens"
+  },
+  {
+    "fields": [
+      {
+        "label": "Delay Time (in seconds)",
+        "placeholder": "7",
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid Value",
+        "required": false,
+        "type": "textInput",
+        "value": "delay"
+      }
+    ],
+    "title": "Delay Time before SDK initialization"
+  }
+]

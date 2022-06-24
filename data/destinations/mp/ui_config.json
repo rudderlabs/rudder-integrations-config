@@ -1,0 +1,313 @@
+[
+  {
+    "fields": [
+      {
+        "label": "API Token",
+        "placeholder": "c24f56ed817221606de5a5f0befe8b92",
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid API Token",
+        "required": true,
+        "secret": true,
+        "type": "textInput",
+        "value": "token"
+      },
+      {
+        "label": "API Secret",
+        "placeholder": "f8a911adfbb6546cc43cdfe29e912a90",
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid API Secret",
+        "required": false,
+        "secret": true,
+        "type": "textInput",
+        "value": "apiSecret"
+      },
+      {
+        "defaultOption": {
+          "name": "US",
+          "value": "us"
+        },
+        "label": "Data Residency",
+        "options": [
+          {
+            "name": "US",
+            "value": "us"
+          },
+          {
+            "name": "EU",
+            "value": "eu"
+          }
+        ],
+        "required": false,
+        "type": "singleSelect",
+        "value": "dataResidency"
+      }
+    ],
+    "title": "Connection Settings"
+  },
+  {
+    "fields": [
+      {
+        "default": false,
+        "footerNote": "This will send all of your identify calls to Mixpanel's People feature.",
+        "label": "Use Mixpanel People",
+        "type": "checkbox",
+        "value": "people"
+      },
+      {
+        "default": false,
+        "footerNote": "While this is checked, our integration automatically sets all traits on identify calls as super properties and people properties if Mixpanel People is checked as well.",
+        "label": "Automatically set all Traits as Super Properties and People Properties",
+        "type": "checkbox",
+        "value": "setAllTraitsByDefault"
+      },
+      {
+        "customFields": [
+          {
+            "label": "Property to send as super Properties",
+            "placeholder": "e.g: residence",
+            "regex": "^(.{0,100})$",
+            "regexErrorMessage": "Invalid Property Name",
+            "required": false,
+            "type": "textInput",
+            "value": "property"
+          }
+        ],
+        "type": "dynamicCustomForm",
+        "value": "superProperties"
+      },
+      {
+        "customFields": [
+          {
+            "label": "Traits to set as People Properties",
+            "placeholder": "e.g: address",
+            "regex": "^(.{0,100})$",
+            "regexErrorMessage": "Invalid Property Name",
+            "required": false,
+            "type": "textInput",
+            "value": "property"
+          }
+        ],
+        "type": "dynamicCustomForm",
+        "value": "peopleProperties"
+      },
+      {
+        "customFields": [
+          {
+            "label": "Events to increment in People",
+            "placeholder": "e.g: Added-to-cart",
+            "regex": "^(.{0,100})$",
+            "regexErrorMessage": "Invalid Property Name",
+            "required": false,
+            "type": "textInput",
+            "value": "property"
+          }
+        ],
+        "type": "dynamicCustomForm",
+        "value": "eventIncrements"
+      },
+      {
+        "customFields": [
+          {
+            "label": "Properties to increment in People",
+            "placeholder": "e.g: Cart-Value",
+            "regex": "^(.{0,100})$",
+            "regexErrorMessage": "Invalid Property Name",
+            "required": false,
+            "type": "textInput",
+            "value": "property"
+          }
+        ],
+        "type": "dynamicCustomForm",
+        "value": "propIncrements"
+      },
+      {
+        "default": true,
+        "footerNote": "This will track Loaded a Page events to Mixpanel for all page method calls. We enable this by default as it's how Mixpanel suggests sending these calls.",
+        "label": "Track All Pages to Mixpanel with a Consolidated Event Name",
+        "type": "checkbox",
+        "value": "consolidatedPageCalls"
+      },
+      {
+        "default": false,
+        "footerNote": "This will track events to Mixpanel for page method calls that have a category associated with them. For example page('Docs', 'Index') would translate to Viewed Docs Index Page.",
+        "label": "Track Categorized Pages to Mixpanel",
+        "type": "checkbox",
+        "value": "trackCategorizedPages"
+      },
+      {
+        "default": false,
+        "footerNote": "This will track events to Mixpanel for page method calls that have a name associated with them. For example page('Signup') would translate to Viewed Signup Page.",
+        "label": "Track Named Pages to Mixpanel",
+        "type": "checkbox",
+        "value": "trackNamedPages"
+      },
+      {
+        "footerNote": "This value, if it's not blank, will be sent as rudderstack_source_name to Mixpanel for every event/page/screen call.",
+        "label": "Source Name",
+        "placeholder": "e.g: Rudder-JS",
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid Source Name",
+        "required": false,
+        "type": "textInput",
+        "value": "sourceName"
+      },
+      {
+        "default": false,
+        "footerNote": "This will allow the Mixpanel cookie to persist between different pages of your application.",
+        "label": "Cross Subdomain Cookie",
+        "type": "checkbox",
+        "value": "crossSubdomainCookie"
+      },
+      {
+        "defaultOption": {
+          "name": "None",
+          "value": "none"
+        },
+        "footerNote": "Choose persistence for Mixpanel SDK",
+        "label": "Persistence Type",
+        "options": [
+          {
+            "name": "None",
+            "value": "none"
+          },
+          {
+            "name": "Cookie",
+            "value": "cookie"
+          },
+          {
+            "name": "Local Storage",
+            "value": "localStorage"
+          }
+        ],
+        "type": "singleSelect",
+        "value": "persistence"
+      },
+      {
+        "default": false,
+        "footerNote": "This will mark the Mixpanel cookie as secure, meaning it will only be transmitted over https",
+        "label": "Secure Cookie",
+        "type": "checkbox",
+        "value": "secureCookie"
+      }
+    ],
+    "title": "Device Mode Settings"
+  },
+  {
+    "fields": [
+      {
+        "customFields": [
+          {
+            "label": "Group Key",
+            "placeholder": "company",
+            "regex": "^(.{0,100})$",
+            "regexErrorMessage": "Invalid Group Key",
+            "required": false,
+            "type": "textInput",
+            "value": "groupKey"
+          }
+        ],
+        "label": "Group Keys",
+        "type": "dynamicCustomForm",
+        "value": "groupKeySettings"
+      }
+    ],
+    "title": "Group Key Settings"
+  },
+  {
+    "fields": [
+      {
+        "default": false,
+        "label": "Use device-mode to send events",
+        "type": "checkbox",
+        "value": "useNativeSDK"
+      }
+    ],
+    "title": "Native SDK"
+  },
+  {
+    "fields": [
+      {
+        "default": false,
+        "footerNote": "It is recomended to set this to on as we are deprecating support for the old mapping soon.",
+        "label": "Use New Mapping",
+        "type": "checkbox",
+        "value": "useNewMapping"
+      }
+    ],
+    "title": "Event Map Setting"
+  },
+  {
+    "fields": [
+      {
+        "defaultOption": {
+          "name": "Disable",
+          "value": "disable"
+        },
+        "options": [
+          {
+            "name": "Disable",
+            "value": "disable"
+          },
+          {
+            "name": "Allowlist",
+            "value": "whitelistedEvents"
+          },
+          {
+            "name": "Denylist",
+            "value": "blacklistedEvents"
+          }
+        ],
+        "required": false,
+        "type": "singleSelect",
+        "value": "eventFilteringOption"
+      },
+      {
+        "customFields": [
+          {
+            "placeholder": "e.g: Anonymous Page Visit",
+            "required": false,
+            "type": "textInput",
+            "value": "eventName"
+          }
+        ],
+        "label": "Allowlist",
+        "type": "dynamicCustomForm",
+        "value": "whitelistedEvents"
+      },
+      {
+        "customFields": [
+          {
+            "placeholder": "e.g: Credit Card Added",
+            "required": false,
+            "type": "textInput",
+            "value": "eventName"
+          }
+        ],
+        "label": "Denylist",
+        "type": "dynamicCustomForm",
+        "value": "blacklistedEvents"
+      }
+    ],
+    "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
+    "title": "Client-side Events Filtering"
+  },
+  {
+    "fields": [
+      {
+        "customFields": [
+          {
+            "label": "Category Name",
+            "placeholder": "Marketing",
+            "required": false,
+            "type": "textInput",
+            "value": "oneTrustCookieCategory"
+          }
+        ],
+        "label": "OneTrust Cookie Categories",
+        "type": "dynamicCustomForm",
+        "value": "oneTrustCookieCategories"
+      }
+    ],
+    "title": "Consent Settings"
+  }
+]
