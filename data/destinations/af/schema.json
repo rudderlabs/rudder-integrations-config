@@ -1,73 +1,75 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "properties": {
-    "androidAppId": {
-      "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-      "type": "string"
-    },
-    "appleAppId": {
-      "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-      "type": "string"
-    },
-    "blacklistedEvents": {
-      "items": {
+  "schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "properties": {
+      "androidAppId": {
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+        "type": "string"
+      },
+      "appleAppId": {
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+        "type": "string"
+      },
+      "blacklistedEvents": {
+        "items": {
+          "properties": {
+            "eventName": {
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "devKey": {
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+        "type": "string"
+      },
+      "eventFilteringOption": {
+        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$",
+        "type": "string"
+      },
+      "sharingFilter": {
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+        "type": "string"
+      },
+      "useNativeSDK": {
         "properties": {
-          "eventName": {
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-            "type": "string"
+          "android": {
+            "type": "boolean"
+          },
+          "cordova": {
+            "type": "boolean"
+          },
+          "ios": {
+            "type": "boolean"
+          },
+          "reactnative": {
+            "type": "boolean"
           }
         },
         "type": "object"
       },
-      "type": "array"
-    },
-    "devKey": {
-      "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-      "type": "string"
-    },
-    "eventFilteringOption": {
-      "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$",
-      "type": "string"
-    },
-    "sharingFilter": {
-      "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-      "type": "string"
-    },
-    "useNativeSDK": {
-      "properties": {
-        "android": {
-          "type": "boolean"
-        },
-        "cordova": {
-          "type": "boolean"
-        },
-        "ios": {
-          "type": "boolean"
-        },
-        "reactnative": {
-          "type": "boolean"
-        }
+      "useRichEventName": {
+        "type": "boolean"
       },
-      "type": "object"
-    },
-    "useRichEventName": {
-      "type": "boolean"
-    },
-    "whitelistedEvents": {
-      "items": {
-        "properties": {
-          "eventName": {
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-            "type": "string"
-          }
+      "whitelistedEvents": {
+        "items": {
+          "properties": {
+            "eventName": {
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "type": "string"
+            }
+          },
+          "type": "object"
         },
-        "type": "object"
-      },
-      "type": "array"
-    }
-  },
-  "required": [
-    "devKey"
-  ],
-  "type": "object"
+        "type": "array"
+      }
+    },
+    "required": [
+      "devKey"
+    ],
+    "type": "object"
+  }
 }

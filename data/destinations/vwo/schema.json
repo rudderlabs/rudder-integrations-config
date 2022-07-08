@@ -1,69 +1,71 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "properties": {
-    "accountId": {
-      "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-      "type": "string"
-    },
-    "blacklistedEvents": {
-      "items": {
+  "schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "properties": {
+      "accountId": {
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+        "type": "string"
+      },
+      "blacklistedEvents": {
+        "items": {
+          "properties": {
+            "eventName": {
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "eventFilteringOption": {
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^(disable|whitelistedEvents|blacklistedEvents)$)",
+        "type": "string"
+      },
+      "isSPA": {
+        "type": "boolean"
+      },
+      "libraryTolerance": {
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+        "type": "string"
+      },
+      "sendExperimentIdentify": {
+        "type": "boolean"
+      },
+      "sendExperimentTrack": {
+        "type": "boolean"
+      },
+      "settingsTolerance": {
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+        "type": "string"
+      },
+      "useExistingJquery": {
+        "type": "boolean"
+      },
+      "useNativeSDK": {
         "properties": {
-          "eventName": {
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-            "type": "string"
+          "web": {
+            "type": "boolean"
           }
         },
         "type": "object"
       },
-      "type": "array"
-    },
-    "eventFilteringOption": {
-      "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^(disable|whitelistedEvents|blacklistedEvents)$)",
-      "type": "string"
-    },
-    "isSPA": {
-      "type": "boolean"
-    },
-    "libraryTolerance": {
-      "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-      "type": "string"
-    },
-    "sendExperimentIdentify": {
-      "type": "boolean"
-    },
-    "sendExperimentTrack": {
-      "type": "boolean"
-    },
-    "settingsTolerance": {
-      "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-      "type": "string"
-    },
-    "useExistingJquery": {
-      "type": "boolean"
-    },
-    "useNativeSDK": {
-      "properties": {
-        "web": {
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "whitelistedEvents": {
-      "items": {
-        "properties": {
-          "eventName": {
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-            "type": "string"
-          }
+      "whitelistedEvents": {
+        "items": {
+          "properties": {
+            "eventName": {
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "type": "string"
+            }
+          },
+          "type": "object"
         },
-        "type": "object"
-      },
-      "type": "array"
-    }
-  },
-  "required": [
-    "accountId"
-  ],
-  "type": "object"
+        "type": "array"
+      }
+    },
+    "required": [
+      "accountId"
+    ],
+    "type": "object"
+  }
 }

@@ -5,6 +5,16 @@ import sys
 import jsondiff
 
 #########################
+# ENV VARIABLES FOT TESTING
+# CONTROL_PLANE_URL="https://api.rudderstack.com"
+# print(CONTROL_PLANE_URL)
+# USERNAME="cbadmin"
+# print(USERNAME)
+# PASSWORD="testpassword"
+# print(PASSWORD)
+#########################
+
+#########################
 # ENV VARIABLES
 CONTROL_PLANE_URL=sys.argv[1]
 print(CONTROL_PLANE_URL)
@@ -33,32 +43,43 @@ def get_persisted_store(base_url, selector):
     return json.loads(response.text)
 
 def get_file_content(name, selector):
-     updated_file_path = f'./{selector}s/{name}.json'
-     f = open(updated_file_path, 'r')
-     data = json.loads(f.read())
-     f.close()
-     return data
+    file_selectors = ['db_config.json', 'ui_config.json', 'schema.json', 'metadata.json']
+
+    directory = f'./data/{selector}s/{name}'
+    available_files = os.listdir(directory)
+
+    file_content = {}
+
+    for file_selector in file_selectors:
+        if file_selector in available_files:
+            with open (f'{directory}/{file_selector}', 'r') as f:
+                file_content.update(json.loads(f.read()))
+
+    return file_content
 #########################
 
 def calculate_diff(persisted_data_set, selector):
     final_report = []
 
+    ## data set
+    current_items = [item.replace('.json', '') for item in os.listdir(f'./data/{selector}s')]
+    persisted_items = [item['name'].lower() for item in persisted_data_set]
+
     ## check for updates
     for persisted_data in persisted_data_set:
         name = persisted_data["name"].lower()
-        updated_data = get_file_content(name, selector)
+        if name in current_items:
+            updated_data = get_file_content(name, selector)
 
-        diff = jsondiff.diff(persisted_data, updated_data, marshal=True)
-        # ignore the id, createdAt, updatedAt keys
-        if diff['$delete'] == ['id', 'createdAt', 'updatedAt']:
-            del diff['$delete']
+            diff = jsondiff.diff(persisted_data, updated_data, marshal=True)
+            # ignore the id, createdAt, updatedAt keys
+            if diff['$delete'] == ['id', 'createdAt', 'updatedAt']:
+                del diff['$delete']
 
-        if len(diff.keys()) > 0: # no changes
-            final_report.append({"name": name, "diff": diff, "action": "update"})
+            if len(diff.keys()) > 0: # no changes
+                final_report.append({"name": name, "diff": diff, "action": "update"})
 
     ## check for new items
-    current_items = [item.replace('.json', '') for item in os.listdir(f'./{selector}s')]
-    persisted_items = [item['name'].lower() for item in persisted_data_set]
     new_items = [item for item in current_items if item not in persisted_items]
     for item in new_items:
         final_report.append({"name": item, "diff": None, "action": "create"})

@@ -1,71 +1,73 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "properties": {
-    "advId": {
-      "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-      "type": "string"
-    },
-    "blacklistedEvents": {
-      "items": {
-        "properties": {
-          "eventName": {
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-            "type": "string"
-          }
-        },
-        "type": "object"
+  "schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "properties": {
+      "advId": {
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+        "type": "string"
       },
-      "type": "array"
-    },
-    "eventFilteringOption": {
-      "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$",
-      "type": "string"
-    },
-    "oneTrustCookieCategories": {
-      "properties": {
-        "web": {
-          "items": {
-            "properties": {
-              "oneTrustCookieCategory": {
-                "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                "type": "string"
-              }
-            },
-            "type": "object"
+      "blacklistedEvents": {
+        "items": {
+          "properties": {
+            "eventName": {
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "type": "string"
+            }
           },
-          "type": "array"
-        }
+          "type": "object"
+        },
+        "type": "array"
       },
-      "type": "object"
-    },
-    "pixId": {
-      "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-      "type": "string"
-    },
-    "useNativeSDK": {
-      "properties": {
-        "web": {
-          "type": "boolean"
-        }
+      "eventFilteringOption": {
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$",
+        "type": "string"
       },
-      "type": "object"
-    },
-    "whitelistedEvents": {
-      "items": {
+      "oneTrustCookieCategories": {
         "properties": {
-          "eventName": {
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-            "type": "string"
+          "web": {
+            "items": {
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
           }
         },
         "type": "object"
       },
-      "type": "array"
-    }
-  },
-  "required": [
-    "advId",
-    "pixId"
-  ],
-  "type": "object"
+      "pixId": {
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+        "type": "string"
+      },
+      "useNativeSDK": {
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "whitelistedEvents": {
+        "items": {
+          "properties": {
+            "eventName": {
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "type": "array"
+      }
+    },
+    "required": [
+      "advId",
+      "pixId"
+    ],
+    "type": "object"
+  }
 }
