@@ -1,323 +1,325 @@
-[
-  {
-    "fields": [
-      {
-        "label": "Host",
-        "placeholder": "xxx.cloud.databricks.com",
-        "regex": "^(.{1,100})$",
-        "regexErrorMessage": "Invalid Host",
-        "required": true,
-        "type": "textInput",
-        "value": "host"
-      },
-      {
-        "label": "Port",
-        "placeholder": "443",
-        "regex": "^(.{1,100})$",
-        "regexErrorMessage": "Invalid Port",
-        "required": true,
-        "type": "textInput",
-        "value": "port"
-      },
-      {
-        "label": "HTTP Path",
-        "placeholder": "sql/protocolv1/o/<ordId>/<clusterId> or /sql/1.0/endpoints/<endpointId>",
-        "regex": "^(.{1,100})$",
-        "regexErrorMessage": "Invalid HTTP Path",
-        "required": true,
-        "type": "textInput",
-        "value": "path"
-      },
-      {
-        "label": "Personal Access Token",
-        "placeholder": "e.g: <personal-access-token>",
-        "regex": "^(.{1,100})$",
-        "regexErrorMessage": "Invalid Access Token",
-        "required": true,
-        "secret": true,
-        "type": "textInput",
-        "value": "token"
-      },
-      {
-        "footerNote": "Default will be the source name",
-        "label": "Namespace",
-        "labelNote": "Schema name for the warehouse where the tables are created",
-        "placeholder": "e.g: iosSource",
-        "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
-        "regexErrorMessage": "Invalid Namespace",
-        "required": false,
-        "type": "textInput",
-        "value": "namespace"
-      },
-      {
-        "defaultOption": {
-          "name": "Every 30 minutes",
-          "value": "30"
+{
+  "uiConfig": [
+    {
+      "fields": [
+        {
+          "label": "Host",
+          "placeholder": "xxx.cloud.databricks.com",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Host",
+          "required": true,
+          "type": "textInput",
+          "value": "host"
         },
-        "label": "Sync Frequency",
-        "options": [
-          {
+        {
+          "label": "Port",
+          "placeholder": "443",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Port",
+          "required": true,
+          "type": "textInput",
+          "value": "port"
+        },
+        {
+          "label": "HTTP Path",
+          "placeholder": "sql/protocolv1/o/<ordId>/<clusterId> or /sql/1.0/endpoints/<endpointId>",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid HTTP Path",
+          "required": true,
+          "type": "textInput",
+          "value": "path"
+        },
+        {
+          "label": "Personal Access Token",
+          "placeholder": "e.g: <personal-access-token>",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Access Token",
+          "required": true,
+          "secret": true,
+          "type": "textInput",
+          "value": "token"
+        },
+        {
+          "footerNote": "Default will be the source name",
+          "label": "Namespace",
+          "labelNote": "Schema name for the warehouse where the tables are created",
+          "placeholder": "e.g: iosSource",
+          "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+          "regexErrorMessage": "Invalid Namespace",
+          "required": false,
+          "type": "textInput",
+          "value": "namespace"
+        },
+        {
+          "defaultOption": {
             "name": "Every 30 minutes",
             "value": "30"
           },
-          {
-            "name": "Every 1 hour",
-            "value": "60"
+          "label": "Sync Frequency",
+          "options": [
+            {
+              "name": "Every 30 minutes",
+              "value": "30"
+            },
+            {
+              "name": "Every 1 hour",
+              "value": "60"
+            },
+            {
+              "name": "Every 3 hours",
+              "value": "180"
+            },
+            {
+              "name": "Every 6 hours",
+              "value": "360"
+            },
+            {
+              "name": "Every 12 hours",
+              "value": "720"
+            },
+            {
+              "name": "Every 24 hours",
+              "value": "1440"
+            }
+          ],
+          "required": false,
+          "type": "singleSelect",
+          "value": "syncFrequency"
+        },
+        {
+          "footerNote": "Note: Please specify time in UTC",
+          "label": "Sync Starting At (Optional)",
+          "options": {
+            "minuteStep": 15,
+            "omitSeconds": true
           },
-          {
-            "name": "Every 3 hours",
-            "value": "180"
+          "required": false,
+          "type": "timePicker",
+          "value": "syncStartAt"
+        },
+        {
+          "endTime": {
+            "label": "end time",
+            "value": "excludeWindowEndTime"
           },
-          {
-            "name": "Every 6 hours",
-            "value": "360"
+          "footerNote": "Note: Please specify time in UTC",
+          "label": "Exclude window (Optional)",
+          "options": {
+            "minuteStep": 1,
+            "omitSeconds": true
           },
-          {
-            "name": "Every 12 hours",
-            "value": "720"
+          "required": false,
+          "startTime": {
+            "label": "start time",
+            "value": "excludeWindowStartTime"
           },
-          {
-            "name": "Every 24 hours",
-            "value": "1440"
-          }
-        ],
-        "required": false,
-        "type": "singleSelect",
-        "value": "syncFrequency"
-      },
-      {
-        "footerNote": "Note: Please specify time in UTC",
-        "label": "Sync Starting At (Optional)",
-        "options": {
-          "minuteStep": 15,
-          "omitSeconds": true
-        },
-        "required": false,
-        "type": "timePicker",
-        "value": "syncStartAt"
-      },
-      {
-        "endTime": {
-          "label": "end time",
-          "value": "excludeWindowEndTime"
-        },
-        "footerNote": "Note: Please specify time in UTC",
-        "label": "Exclude window (Optional)",
-        "options": {
-          "minuteStep": 1,
-          "omitSeconds": true
-        },
-        "required": false,
-        "startTime": {
-          "label": "start time",
-          "value": "excludeWindowStartTime"
-        },
-        "type": "timeRangePicker",
-        "value": "excludeWindow"
-      }
-    ],
-    "title": "Connection Credentials"
-  },
-  {
-    "fields": [
-      {
-        "defaultOption": {
-          "name": "S3",
-          "value": "S3"
-        },
-        "label": "Choose your Storage Provider",
-        "options": [
-          {
+          "type": "timeRangePicker",
+          "value": "excludeWindow"
+        }
+      ],
+      "title": "Connection Credentials"
+    },
+    {
+      "fields": [
+        {
+          "defaultOption": {
             "name": "S3",
             "value": "S3"
           },
-          {
-            "name": "GCS",
-            "value": "GCS"
-          },
-          {
-            "name": "AZURE_BLOB",
-            "value": "AZURE_BLOB"
-          }
-        ],
-        "required": true,
-        "type": "singleSelect",
-        "value": "bucketProvider"
-      },
-      {
-        "footerNote": "Please make sure the bucket exists in your S3",
-        "label": "Staging S3 Storage Bucket Name",
-        "labelNote": "S3 Bucket to store data before loading into DeltaLake",
-        "placeholder": "e.g: s3-event-logs",
-        "preRequisiteField": [
-          {
-            "name": "bucketProvider",
-            "selectedValue": "S3"
-          }
-        ],
-        "regex": "^(.{1,100})$",
-        "regexErrorMessage": "Invalid Staging S3 Storage Bucket Name",
-        "required": true,
-        "type": "textInput",
-        "value": "bucketName"
-      },
-      {
-        "footerNote": "Please make sure the bucket exists in your GCS",
-        "label": "Staging GCS Object Storage Bucket Name",
-        "labelNote": "GCS Bucket to store data before loading into DeltaLake",
-        "placeholder": "e.g: gcs-event-logs",
-        "preRequisiteField": [
-          {
-            "name": "bucketProvider",
-            "selectedValue": "GCS"
-          }
-        ],
-        "regex": "^(.{1,100})$",
-        "regexErrorMessage": "Invalid Staging GCS Object Storage Bucket Name",
-        "required": true,
-        "type": "textInput",
-        "value": "bucketName"
-      },
-      {
-        "footerNote": "Please make sure the container exists in your Azure Blob Storage",
-        "label": "Staging Azure Blob Storage Container Name",
-        "labelNote": "Container to store data before loading into DeltaLake",
-        "placeholder": "e.g: azure-event-logs",
-        "preRequisiteField": [
-          {
-            "name": "bucketProvider",
-            "selectedValue": "AZURE_BLOB"
-          }
-        ],
-        "regex": "^(.{1,100})$",
-        "regexErrorMessage": "Invalid Staging Azure Blob Storage Container Name",
-        "required": true,
-        "type": "textInput",
-        "value": "containerName"
-      },
-      {
-        "label": "Prefix",
-        "placeholder": "e.g: rudder",
-        "regex": "^(.{0,100})$",
-        "regexErrorMessage": "Invalid Prefix",
-        "required": false,
-        "type": "textInput",
-        "value": "prefix"
-      },
-      {
-        "default": false,
-        "footerNote": "Note: This feature is only supported with databricks S3A client.",
-        "label": "Use STS Tokens to copy staging files",
-        "preRequisiteField": [
-          {
-            "name": "bucketProvider",
-            "selectedValue": "S3"
-          }
-        ],
-        "type": "checkbox",
-        "value": "useSTSTokens"
-      },
-      {
-        "label": "AWS Access Key ID",
-        "placeholder": "e.g: access-key-id",
-        "preRequisiteField": [
-          {
-            "name": "bucketProvider",
-            "selectedValue": "S3"
-          },
-          {
-            "name": "useSTSTokens",
-            "selectedValue": true
-          }
-        ],
-        "regex": "^(.{0,100})$",
-        "regexErrorMessage": "Invalid AWS Access Key ID",
-        "required": true,
-        "secret": true,
-        "type": "textInput",
-        "value": "accessKeyID"
-      },
-      {
-        "label": "AWS Secret Access Key",
-        "placeholder": "e.g: secret-access-key",
-        "preRequisiteField": [
-          {
-            "name": "bucketProvider",
-            "selectedValue": "S3"
-          },
-          {
-            "name": "useSTSTokens",
-            "selectedValue": true
-          }
-        ],
-        "regex": "^(.{0,100})$",
-        "regexErrorMessage": "Invalid AWS Secret Access Key",
-        "required": true,
-        "secret": true,
-        "type": "textInput",
-        "value": "accessKey"
-      },
-      {
-        "default": false,
-        "label": "Enable Server Side Encryption For S3?",
-        "preRequisiteField": [
-          {
-            "name": "bucketProvider",
-            "selectedValue": "S3"
-          }
-        ],
-        "type": "checkbox",
-        "value": "enableSSE"
-      },
-      {
-        "label": "Azure Blob Storage Account Name",
-        "placeholder": "e.g: account-name",
-        "preRequisiteField": [
-          {
-            "name": "bucketProvider",
-            "selectedValue": "AZURE_BLOB"
-          }
-        ],
-        "regex": "^(.{1,100})$",
-        "regexErrorMessage": "Invalid Azure Blob Storage Account Name",
-        "required": true,
-        "secret": true,
-        "type": "textInput",
-        "value": "accountName"
-      },
-      {
-        "label": "Azure Blob Storage Account Key",
-        "placeholder": "e.g: account-key",
-        "preRequisiteField": [
-          {
-            "name": "bucketProvider",
-            "selectedValue": "AZURE_BLOB"
-          }
-        ],
-        "regex": "^(.{1,100})$",
-        "regexErrorMessage": "Invalid Azure Blob Storage Account Key",
-        "required": true,
-        "secret": true,
-        "type": "textInput",
-        "value": "accountKey"
-      },
-      {
-        "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'storage.objectCreator'",
-        "label": "Credentials",
-        "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your Google Cloud Storage",
-        "preRequisiteField": [
-          {
-            "name": "bucketProvider",
-            "selectedValue": "GCS"
-          }
-        ],
-        "regex": ".*",
-        "required": true,
-        "secret": true,
-        "type": "textareaInput",
-        "value": "credentials"
-      }
-    ],
-    "title": "Object Storage Configuration"
-  }
-]
+          "label": "Choose your Storage Provider",
+          "options": [
+            {
+              "name": "S3",
+              "value": "S3"
+            },
+            {
+              "name": "GCS",
+              "value": "GCS"
+            },
+            {
+              "name": "AZURE_BLOB",
+              "value": "AZURE_BLOB"
+            }
+          ],
+          "required": true,
+          "type": "singleSelect",
+          "value": "bucketProvider"
+        },
+        {
+          "footerNote": "Please make sure the bucket exists in your S3",
+          "label": "Staging S3 Storage Bucket Name",
+          "labelNote": "S3 Bucket to store data before loading into DeltaLake",
+          "placeholder": "e.g: s3-event-logs",
+          "preRequisiteField": [
+            {
+              "name": "bucketProvider",
+              "selectedValue": "S3"
+            }
+          ],
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Staging S3 Storage Bucket Name",
+          "required": true,
+          "type": "textInput",
+          "value": "bucketName"
+        },
+        {
+          "footerNote": "Please make sure the bucket exists in your GCS",
+          "label": "Staging GCS Object Storage Bucket Name",
+          "labelNote": "GCS Bucket to store data before loading into DeltaLake",
+          "placeholder": "e.g: gcs-event-logs",
+          "preRequisiteField": [
+            {
+              "name": "bucketProvider",
+              "selectedValue": "GCS"
+            }
+          ],
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Staging GCS Object Storage Bucket Name",
+          "required": true,
+          "type": "textInput",
+          "value": "bucketName"
+        },
+        {
+          "footerNote": "Please make sure the container exists in your Azure Blob Storage",
+          "label": "Staging Azure Blob Storage Container Name",
+          "labelNote": "Container to store data before loading into DeltaLake",
+          "placeholder": "e.g: azure-event-logs",
+          "preRequisiteField": [
+            {
+              "name": "bucketProvider",
+              "selectedValue": "AZURE_BLOB"
+            }
+          ],
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Staging Azure Blob Storage Container Name",
+          "required": true,
+          "type": "textInput",
+          "value": "containerName"
+        },
+        {
+          "label": "Prefix",
+          "placeholder": "e.g: rudder",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Prefix",
+          "required": false,
+          "type": "textInput",
+          "value": "prefix"
+        },
+        {
+          "default": false,
+          "footerNote": "Note: This feature is only supported with databricks S3A client.",
+          "label": "Use STS Tokens to copy staging files",
+          "preRequisiteField": [
+            {
+              "name": "bucketProvider",
+              "selectedValue": "S3"
+            }
+          ],
+          "type": "checkbox",
+          "value": "useSTSTokens"
+        },
+        {
+          "label": "AWS Access Key ID",
+          "placeholder": "e.g: access-key-id",
+          "preRequisiteField": [
+            {
+              "name": "bucketProvider",
+              "selectedValue": "S3"
+            },
+            {
+              "name": "useSTSTokens",
+              "selectedValue": true
+            }
+          ],
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid AWS Access Key ID",
+          "required": true,
+          "secret": true,
+          "type": "textInput",
+          "value": "accessKeyID"
+        },
+        {
+          "label": "AWS Secret Access Key",
+          "placeholder": "e.g: secret-access-key",
+          "preRequisiteField": [
+            {
+              "name": "bucketProvider",
+              "selectedValue": "S3"
+            },
+            {
+              "name": "useSTSTokens",
+              "selectedValue": true
+            }
+          ],
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid AWS Secret Access Key",
+          "required": true,
+          "secret": true,
+          "type": "textInput",
+          "value": "accessKey"
+        },
+        {
+          "default": false,
+          "label": "Enable Server Side Encryption For S3?",
+          "preRequisiteField": [
+            {
+              "name": "bucketProvider",
+              "selectedValue": "S3"
+            }
+          ],
+          "type": "checkbox",
+          "value": "enableSSE"
+        },
+        {
+          "label": "Azure Blob Storage Account Name",
+          "placeholder": "e.g: account-name",
+          "preRequisiteField": [
+            {
+              "name": "bucketProvider",
+              "selectedValue": "AZURE_BLOB"
+            }
+          ],
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Azure Blob Storage Account Name",
+          "required": true,
+          "secret": true,
+          "type": "textInput",
+          "value": "accountName"
+        },
+        {
+          "label": "Azure Blob Storage Account Key",
+          "placeholder": "e.g: account-key",
+          "preRequisiteField": [
+            {
+              "name": "bucketProvider",
+              "selectedValue": "AZURE_BLOB"
+            }
+          ],
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Azure Blob Storage Account Key",
+          "required": true,
+          "secret": true,
+          "type": "textInput",
+          "value": "accountKey"
+        },
+        {
+          "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'storage.objectCreator'",
+          "label": "Credentials",
+          "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your Google Cloud Storage",
+          "preRequisiteField": [
+            {
+              "name": "bucketProvider",
+              "selectedValue": "GCS"
+            }
+          ],
+          "regex": ".*",
+          "required": true,
+          "secret": true,
+          "type": "textareaInput",
+          "value": "credentials"
+        }
+      ],
+      "title": "Object Storage Configuration"
+    }
+  ]
+}

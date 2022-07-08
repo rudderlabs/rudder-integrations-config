@@ -1,66 +1,68 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "properties": {
-    "apiKey": {
-      "type": "string"
-    },
-    "apiSecret": {
-      "type": "string"
-    },
-    "blacklistedEvents": {
-      "items": {
+  "schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "properties": {
+      "apiKey": {
+        "type": "string"
+      },
+      "apiSecret": {
+        "type": "string"
+      },
+      "blacklistedEvents": {
+        "items": {
+          "properties": {
+            "eventName": {
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "eventFilteringOption": {
+        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$",
+        "type": "string"
+      },
+      "sessionEventList": {
+        "items": {
+          "properties": {
+            "eventName": {
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "useNativeSDK": {
         "properties": {
-          "eventName": {
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-            "type": "string"
+          "android": {
+            "type": "boolean"
+          },
+          "ios": {
+            "type": "boolean"
           }
         },
         "type": "object"
       },
-      "type": "array"
-    },
-    "eventFilteringOption": {
-      "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$",
-      "type": "string"
-    },
-    "sessionEventList": {
-      "items": {
-        "properties": {
-          "eventName": {
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-            "type": "string"
-          }
+      "whitelistedEvents": {
+        "items": {
+          "properties": {
+            "eventName": {
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "type": "string"
+            }
+          },
+          "type": "object"
         },
-        "type": "object"
-      },
-      "type": "array"
+        "type": "array"
+      }
     },
-    "useNativeSDK": {
-      "properties": {
-        "android": {
-          "type": "boolean"
-        },
-        "ios": {
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "whitelistedEvents": {
-      "items": {
-        "properties": {
-          "eventName": {
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "type": "array"
-    }
-  },
-  "required": [
-    "apiKey"
-  ],
-  "type": "object"
+    "required": [
+      "apiKey"
+    ],
+    "type": "object"
+  }
 }
