@@ -1,0 +1,138 @@
+{
+  "uiConfig": [
+    {
+      "fields": [
+        {
+          "label": "Project",
+          "labelNote": "GCP Project ID where your BigQuery database is located",
+          "placeholder": "my-sample-project-191923",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Project",
+          "required": true,
+          "type": "textInput",
+          "value": "project"
+        },
+        {
+          "footerNote": "Examples: US, EU, asia-south1",
+          "label": "Location",
+          "labelNote": "GCP region for your BigQuery datasets",
+          "placeholder": "US, EU, asia-southeast1",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Location",
+          "required": false,
+          "type": "textInput",
+          "value": "location"
+        },
+        {
+          "footerNote": "Please make sure the bucket exists in your GCP Project in the same region as bigquery dataset",
+          "label": "Staging GCS Storage Bucket Name",
+          "labelNote": "GCS Bucket to store data before loading into BigQuery",
+          "placeholder": "e.g: gcs-event-logs",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Staging GCS Storage Bucket Name",
+          "required": true,
+          "type": "textInput",
+          "value": "bucketName"
+        },
+        {
+          "label": "Prefix",
+          "placeholder": "e.g: ruddder",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Prefix",
+          "required": false,
+          "type": "textInput",
+          "value": "prefix"
+        },
+        {
+          "footerNote": "Default will be the source name",
+          "label": "Namespace",
+          "labelNote": "Schema name for the warehouse where the tables are created",
+          "placeholder": "eg: dataset name",
+          "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+          "regexErrorMessage": "Invalid Namespace",
+          "required": false,
+          "type": "textInput",
+          "value": "namespace"
+        },
+        {
+          "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'BigQuery User'",
+          "label": "Credentials",
+          "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your BigQuery database",
+          "regex": ".*",
+          "required": true,
+          "secret": true,
+          "subType": "JSON",
+          "type": "textareaInput",
+          "value": "credentials"
+        },
+        {
+          "defaultOption": {
+            "name": "Every 30 minutes",
+            "value": "30"
+          },
+          "label": "Sync Frequency",
+          "options": [
+            {
+              "name": "Every 30 minutes",
+              "value": "30"
+            },
+            {
+              "name": "Every 1 hour",
+              "value": "60"
+            },
+            {
+              "name": "Every 3 hours",
+              "value": "180"
+            },
+            {
+              "name": "Every 6 hours",
+              "value": "360"
+            },
+            {
+              "name": "Every 12 hours",
+              "value": "720"
+            },
+            {
+              "name": "Every 24 hours",
+              "value": "1440"
+            }
+          ],
+          "required": false,
+          "type": "singleSelect",
+          "value": "syncFrequency"
+        },
+        {
+          "footerNote": "Note: Please specify time in UTC",
+          "label": "Sync Starting At (Optional)",
+          "options": {
+            "minuteStep": 15,
+            "omitSeconds": true
+          },
+          "required": false,
+          "type": "timePicker",
+          "value": "syncStartAt"
+        },
+        {
+          "endTime": {
+            "label": "end time",
+            "value": "excludeWindowEndTime"
+          },
+          "footerNote": "Note: Please specify time in UTC",
+          "label": "Exclude window (Optional)",
+          "options": {
+            "minuteStep": 1,
+            "omitSeconds": true
+          },
+          "required": false,
+          "startTime": {
+            "label": "start time",
+            "value": "excludeWindowStartTime"
+          },
+          "type": "timeRangePicker",
+          "value": "excludeWindow"
+        }
+      ],
+      "title": "Connection Credentials"
+    }
+  ]
+}
