@@ -1,0 +1,58 @@
+[
+  {
+    "docLinks": {
+      "grantPermissions": "https://docs.rudderstack.com/reverse-etl/google-bigquery/#granting-permissions",
+      "jsonMapperUseInstructions": "https://docs.rudderstack.com/reverse-etl/google-bigquery/#specifying-the-data-to-import",
+      "setupInstructions": "https://docs.rudderstack.com/reverse-etl/google-bigquery",
+      "verifyingCredentials": "https://docs.rudderstack.com/reverse-etl/google-bigquery/#what-do-the-three-validations-under-verifying-credentials-imply"
+    },
+    "fields": [
+      {
+        "label": "Credentials",
+        "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your BigQuery database",
+        "regex": ".*",
+        "required": true,
+        "secret": true,
+        "subType": "JSON",
+        "type": "textareaInput",
+        "value": "credentials"
+      },
+      {
+        "addInAccountSummary": true,
+        "infoTooltip": "Inferred from project_id field in the credentials settings.",
+        "label": "Project ID",
+        "labelNote": "GCP Project ID where your BigQuery database is located.",
+        "obtainValueFromField": {
+          "key": "project_id",
+          "name": "credentials"
+        },
+        "readOnly": true,
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid Value",
+        "required": true,
+        "type": "textInput",
+        "value": "project"
+      },
+      {
+        "addInAccountSummary": true,
+        "infoTooltip": "Inferred from client_email field in the credentials settings.",
+        "label": "Service account",
+        "obtainValueFromField": {
+          "key": "client_email",
+          "name": "credentials"
+        },
+        "readOnly": true,
+        "regex": "^(.{0,100})$",
+        "regexErrorMessage": "Invalid Email Address",
+        "required": true,
+        "type": "textInput",
+        "value": "serviceAccount"
+      }
+    ],
+    "nameField": "project",
+    "secretFields": [
+      "credentials"
+    ],
+    "title": "Connection Credentials"
+  }
+]

@@ -1,0 +1,249 @@
+{
+  "schema": {
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "additionalProperties": true,
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "useRudderStorage": {
+              "const": false
+            }
+          },
+          "required": [
+            "useRudderStorage"
+          ]
+        },
+        "then": {
+          "required": [
+            "bucketProvider"
+          ]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "bucketProvider": {
+              "const": "S3"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
+          },
+          "required": [
+            "bucketProvider",
+            "useRudderStorage"
+          ]
+        },
+        "then": {
+          "properties": {
+            "accessKey": {
+              "pattern": "(^env[.].+)|^(.{1,100})$",
+              "type": "string"
+            },
+            "accessKeyID": {
+              "pattern": "(^env[.].+)|^(.{1,100})$",
+              "type": "string"
+            },
+            "bucketName": {
+              "pattern": "(^env[.].+)|^(.{1,100})$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "bucketName",
+            "accessKeyID",
+            "accessKey"
+          ]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "bucketProvider": {
+              "const": "GCS"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
+          },
+          "required": [
+            "bucketProvider",
+            "useRudderStorage"
+          ]
+        },
+        "then": {
+          "properties": {
+            "bucketName": {
+              "pattern": "(^env[.].+)|^(.{1,100})$",
+              "type": "string"
+            },
+            "credentials": {
+              "pattern": "(^env[.].+)|.+",
+              "type": "string"
+            }
+          },
+          "required": [
+            "bucketName",
+            "credentials"
+          ]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "bucketProvider": {
+              "const": "AZURE_BLOB"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
+          },
+          "required": [
+            "bucketProvider",
+            "useRudderStorage"
+          ]
+        },
+        "then": {
+          "properties": {
+            "accountKey": {
+              "pattern": "(^env[.].+)|^(.{1,100})$",
+              "type": "string"
+            },
+            "accountName": {
+              "pattern": "(^env[.].+)|^(.{1,100})$",
+              "type": "string"
+            },
+            "containerName": {
+              "pattern": "(^env[.].+)|^(.{1,100})$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "containerName",
+            "accountName",
+            "accountKey"
+          ]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "bucketProvider": {
+              "const": "MINIO"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
+          },
+          "required": [
+            "bucketProvider",
+            "useRudderStorage"
+          ]
+        },
+        "then": {
+          "properties": {
+            "accessKeyID": {
+              "pattern": "(^env[.].+)|^(.{1,100})$",
+              "type": "string"
+            },
+            "bucketName": {
+              "pattern": "(^env[.].+)|^(.{1,100})$",
+              "type": "string"
+            },
+            "endPoint": {
+              "pattern": "(^env[.].+)|^(.{1,100})$",
+              "type": "string"
+            },
+            "secretAccessKey": {
+              "pattern": "(^env[.].+)|^(.{1,100})$",
+              "type": "string"
+            },
+            "useSSL": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "bucketName",
+            "endPoint",
+            "accessKeyID",
+            "secretAccessKey",
+            "useSSL"
+          ]
+        }
+      }
+    ],
+    "properties": {
+      "bucketProvider": {
+        "pattern": "^(S3|GCS|AZURE_BLOB|MINIO)$",
+        "type": "string"
+      },
+      "database": {
+        "pattern": "(^env[.].+)|^(.{1,100})$",
+        "type": "string"
+      },
+      "excludeWindow": {
+        "properties": {
+          "excludeWindowEndTime": {
+            "type": "string"
+          },
+          "excludeWindowStartTime": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "excludeWindowStartTime",
+          "excludeWindowEndTime"
+        ],
+        "type": "object"
+      },
+      "host": {
+        "pattern": "(^env[.].+)|^(.{1,100})$",
+        "type": "string"
+      },
+      "namespace": {
+        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+        "type": "string"
+      },
+      "password": {
+        "pattern": "(^env[.].+)|.+",
+        "type": "string"
+      },
+      "port": {
+        "pattern": "(^env[.].+)|^(.{1,100})$",
+        "type": "string"
+      },
+      "sslMode": {
+        "pattern": "^(disable|true|false)$",
+        "type": "string"
+      },
+      "syncFrequency": {
+        "default": "30",
+        "pattern": "^(30|60|180|360|720|1440)$",
+        "type": "string"
+      },
+      "syncStartAt": {
+        "type": "string"
+      },
+      "useRudderStorage": {
+        "default": false,
+        "type": "boolean"
+      },
+      "user": {
+        "pattern": "(^env[.].+)|^(.{1,100})$",
+        "type": "string"
+      }
+    },
+    "required": [
+      "host",
+      "database",
+      "user",
+      "password",
+      "port",
+      "sslMode",
+      "syncFrequency",
+      "useRudderStorage"
+    ],
+    "type": "object"
+  }
+}

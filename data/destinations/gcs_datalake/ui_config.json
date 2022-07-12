@@ -1,0 +1,97 @@
+{
+  "uiConfig": [
+    {
+      "fields": [
+        {
+          "footerNote": "Please make sure the bucket exists in your GCS",
+          "label": "GCS Storage Bucket Name",
+          "labelNote": "GCS Bucket to store your event data",
+          "placeholder": "e.g: gcs-event-logs",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Staging GCS Object Storage Bucket Name",
+          "required": true,
+          "type": "textInput",
+          "value": "bucketName"
+        },
+        {
+          "label": "Prefix",
+          "labelNote": "If configured, all data pushed by rudderstack will be at https://storage.googleapis.com/<bucketName>/<prefix>/",
+          "placeholder": "e.g: rudder",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Prefix",
+          "required": false,
+          "type": "textInput",
+          "value": "prefix"
+        },
+        {
+          "footerNote": "All data for the destination would be pushed to https://storage.googleapis.com/<bucketName>/<prefix>/rudder-datalake/<namespace>.",
+          "label": "Namespace",
+          "labelNote": "Schema name for the warehouse where the tables are created",
+          "placeholder": "e.g: RUDDER_NAMESPACE",
+          "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+          "regexErrorMessage": "Invalid Namespace",
+          "required": false,
+          "type": "textInput",
+          "value": "namespace"
+        },
+        {
+          "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'storage.objectCreator'",
+          "label": "Credentials",
+          "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your Google Cloud Storage",
+          "regex": ".*",
+          "required": true,
+          "type": "textareaInput",
+          "value": "credentials"
+        },
+        {
+          "defaultOption": {
+            "name": "Every 30 minutes",
+            "value": "30"
+          },
+          "label": "Sync Frequency",
+          "options": [
+            {
+              "name": "Every 30 minutes",
+              "value": "30"
+            },
+            {
+              "name": "Every 1 hour",
+              "value": "60"
+            },
+            {
+              "name": "Every 3 hours",
+              "value": "180"
+            },
+            {
+              "name": "Every 6 hours",
+              "value": "360"
+            },
+            {
+              "name": "Every 12 hours",
+              "value": "720"
+            },
+            {
+              "name": "Every 24 hours",
+              "value": "1440"
+            }
+          ],
+          "required": false,
+          "type": "singleSelect",
+          "value": "syncFrequency"
+        },
+        {
+          "footerNote": "Note: Please specify time in UTC",
+          "label": "Sync Starting At (Optional)",
+          "options": {
+            "minuteStep": 15,
+            "omitSeconds": true
+          },
+          "required": false,
+          "type": "timePicker",
+          "value": "syncStartAt"
+        }
+      ],
+      "title": "1. Connection Credentials"
+    }
+  ]
+}
