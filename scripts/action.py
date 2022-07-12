@@ -100,7 +100,9 @@ def update_config(data_diff, selector):
         resp = requests.post(url=url, headers=HEADER, data=json.dumps(data), auth=AUTH)
         status, response = parse_response(resp)
         diff['update'] = {"status": status, "response": response}
-        results.append(diff)
+        # results.append(diff)
+        results.append(name)
+
 
     return json.dumps(results, indent=2)
 
