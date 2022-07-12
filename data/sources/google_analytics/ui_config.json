@@ -1,72 +1,74 @@
 {
-  "auth": {
-    "type": "OAuth"
-  },
-  "config": [
-    {
-      "fields": [
-        {
-          "label": "View",
-          "labelKey": "name",
-          "method": "post",
-          "required": true,
-          "responseKey": "views",
-          "type": "dynamicSelect",
-          "url": "/cloudSources/info/roles/google_analytics/info/views",
-          "value": "viewId",
-          "valueKey": "id"
-        },
-        {
-          "label": "Dimensions",
-          "labelKey": "name",
-          "method": "post",
-          "mode": "multiple",
-          "preRequisiteField": {
-            "includeToRequest": {
-              "transformKey": "id"
+  "ui_config": {
+    "auth": {
+      "type": "OAuth"
+    },
+    "config": [
+      {
+        "fields": [
+          {
+            "label": "View",
+            "labelKey": "name",
+            "method": "post",
+            "required": true,
+            "responseKey": "views",
+            "type": "dynamicSelect",
+            "url": "/cloudSources/info/roles/google_analytics/info/views",
+            "value": "viewId",
+            "valueKey": "id"
+          },
+          {
+            "label": "Dimensions",
+            "labelKey": "name",
+            "method": "post",
+            "mode": "multiple",
+            "preRequisiteField": {
+              "includeToRequest": {
+                "transformKey": "id"
+              },
+              "includeValue": true,
+              "name": "viewId"
             },
-            "includeValue": true,
-            "name": "viewId"
+            "required": true,
+            "responseKey": "dimensions",
+            "type": "dynamicSelect",
+            "url": "/cloudSources/info/roles/google_analytics/info/columns",
+            "value": "dimensions",
+            "valueKey": "id"
           },
-          "required": true,
-          "responseKey": "dimensions",
-          "type": "dynamicSelect",
-          "url": "/cloudSources/info/roles/google_analytics/info/columns",
-          "value": "dimensions",
-          "valueKey": "id"
-        },
-        {
-          "label": "Metrics",
-          "labelKey": "name",
-          "method": "post",
-          "mode": "multiple",
-          "preRequisiteField": {
-            "includeToRequest": {
-              "transformKey": "id"
+          {
+            "label": "Metrics",
+            "labelKey": "name",
+            "method": "post",
+            "mode": "multiple",
+            "preRequisiteField": {
+              "includeToRequest": {
+                "transformKey": "id"
+              },
+              "includeValue": true,
+              "name": "viewId"
             },
-            "includeValue": true,
-            "name": "viewId"
+            "required": true,
+            "responseKey": "metrics",
+            "type": "dynamicSelect",
+            "url": "/cloudSources/info/roles/google_analytics/info/columns",
+            "value": "metrics",
+            "valueKey": "id"
           },
-          "required": true,
-          "responseKey": "metrics",
-          "type": "dynamicSelect",
-          "url": "/cloudSources/info/roles/google_analytics/info/columns",
-          "value": "metrics",
-          "valueKey": "id"
-        },
-        {
-          "description": "Earliest report date",
-          "format": "YYYY-MM-DD",
-          "label": "Start from date",
-          "preRequisiteField": {
-            "name": "viewId"
-          },
-          "required": true,
-          "type": "datePicker",
-          "value": "dateSince"
-        }
-      ],
-      "title": "Source Settings"
-    }
-  ]
+          {
+            "description": "Earliest report date",
+            "format": "YYYY-MM-DD",
+            "label": "Start from date",
+            "preRequisiteField": {
+              "name": "viewId"
+            },
+            "required": true,
+            "type": "datePicker",
+            "value": "dateSince"
+          }
+        ],
+        "title": "Source Settings"
+      }
+    ]
+  }
 }
