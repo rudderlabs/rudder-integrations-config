@@ -16,6 +16,9 @@ jobs:
     - name: Setup Python
       run: chmod +x scripts/setup-python.sh;./scripts/setup-python.sh
     - name: Execute script
-      run: python3 scripts/action.py ${{secrets.DEV_CONTROL_PLANE_URL}} ${{secrets.DEV_USERNAME}} ${{secrets.DEV_PASSWORD}}
+      env:
+          API_USER: ${{secrets.DEV_USERNAME}}
+          API_PASSWORD: ${{secrets.DEV_USERNAME}}
+      run: python3 scripts/action.py ${{secrets.DEV_CONTROL_PLANE_URL}}
     - name: Update status
       run: echo "Success"
