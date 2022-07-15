@@ -1,64 +1,66 @@
 {
-  "auth": {
-    "type": "OAuth"
-  },
-  "config": [
-    {
-      "fields": [
-        {
-          "label": "SpreadSheet",
-          "labelKey": "filename",
-          "method": "post",
-          "required": true,
-          "responseKey": "sheets",
-          "showSearch": true,
-          "type": "dynamicSelect",
-          "url": "/cloudSources/info/roles/google_sheets/info/sheets",
-          "value": "spreadsheet",
-          "valueKey": "id"
-        },
-        {
-          "label": "Worksheet",
-          "labelKey": "properties.title",
-          "method": "post",
-          "preRequisiteField": {
-            "includeValue": true,
-            "name": "spreadsheet"
+  "ui_config": {
+    "auth": {
+      "type": "OAuth"
+    },
+    "config": [
+      {
+        "fields": [
+          {
+            "label": "SpreadSheet",
+            "labelKey": "filename",
+            "method": "post",
+            "required": true,
+            "responseKey": "sheets",
+            "showSearch": true,
+            "type": "dynamicSelect",
+            "url": "/cloudSources/info/roles/google_sheets/info/sheets",
+            "value": "spreadsheet",
+            "valueKey": "id"
           },
-          "required": true,
-          "responseKey": "sheets",
-          "showSearch": true,
-          "type": "dynamicSelect",
-          "url": "/cloudSources/info/roles/google_sheets/info/sheets/${preRequisiteValue}",
-          "value": "worksheet",
-          "valueKey": "properties.title"
-        },
-        {
-          "default": 1,
-          "disabledNormalMode": true,
-          "inputFieldType": "number",
-          "label": "Header row",
-          "min": 1,
-          "preRequisiteField": {
-            "name": "spreadsheet"
+          {
+            "label": "Worksheet",
+            "labelKey": "properties.title",
+            "method": "post",
+            "preRequisiteField": {
+              "includeValue": true,
+              "name": "spreadsheet"
+            },
+            "required": true,
+            "responseKey": "sheets",
+            "showSearch": true,
+            "type": "dynamicSelect",
+            "url": "/cloudSources/info/roles/google_sheets/info/sheets/${preRequisiteValue}",
+            "value": "worksheet",
+            "valueKey": "properties.title"
           },
-          "required": true,
-          "type": "textInput",
-          "value": "header_offset"
-        },
-        {
-          "disabledNormalMode": true,
-          "inputFieldType": "number",
-          "label": "First data row",
-          "min": 1,
-          "preRequisiteField": {
-            "name": "spreadsheet"
+          {
+            "default": 1,
+            "disabledNormalMode": true,
+            "inputFieldType": "number",
+            "label": "Header row",
+            "min": 1,
+            "preRequisiteField": {
+              "name": "spreadsheet"
+            },
+            "required": true,
+            "type": "textInput",
+            "value": "header_offset"
           },
-          "type": "textInput",
-          "value": "top_row_offset"
-        }
-      ],
-      "title": "Source Settings"
-    }
-  ]
+          {
+            "disabledNormalMode": true,
+            "inputFieldType": "number",
+            "label": "First data row",
+            "min": 1,
+            "preRequisiteField": {
+              "name": "spreadsheet"
+            },
+            "type": "textInput",
+            "value": "top_row_offset"
+          }
+        ],
+        "title": "Source Settings"
+      }
+    ]
+  }
 }
