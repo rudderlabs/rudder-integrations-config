@@ -18,10 +18,10 @@ import jsondiff
 # ENV VARIABLES
 CONTROL_PLANE_URL=sys.argv[1]
 print(CONTROL_PLANE_URL)
-USERNAME=sys.argv[2]
+USERNAME=os.environ['API_USER'] #sys.argv[2]
 print(USERNAME)
-PASSWORD=sys.argv[3]
-print(PASSWORD)
+PASSWORD=os.environ['API_PASSWORD'] #sys.argv[3]
+#print(PASSWORD)
 #########################
 # CONSTANTS
 HEADER = {"Content-Type": "application/json"}
@@ -43,7 +43,7 @@ def get_persisted_store(base_url, selector):
     return json.loads(response.text)
 
 def get_file_content(name, selector):
-    file_selectors = ['db_config.json', 'ui_config.json', 'schema.json', 'metadata.json']
+    file_selectors = ['db_config.json', 'ui_config.json', 'schema.json']
 
     directory = f'./data/{selector}s/{name}'
     available_files = os.listdir(directory)
@@ -53,7 +53,7 @@ def get_file_content(name, selector):
     for file_selector in file_selectors:
         if file_selector in available_files:
             with open (f'{directory}/{file_selector}', 'r') as f:
-                file_content.update(json.loads(f.read()))
+                file_content.update(json.loads(f.read()))   
 
     return file_content
 #########################
@@ -72,9 +72,10 @@ def calculate_diff(persisted_data_set, selector):
             updated_data = get_file_content(name, selector)
 
             diff = jsondiff.diff(persisted_data, updated_data, marshal=True)
-            # ignore the id, createdAt, updatedAt keys
-            if diff['$delete'] == ['id', 'createdAt', 'updatedAt']:
-                del diff['$delete']
+            # ignore the $delete - values present in DB but missing in files. Anyways this doesn't get reflected in DB as keys are missing in files itself.
+            # Best practice is to make sure all keys are maintained in the config files.
+            #if diff['$delete'] == ['id', 'createdAt', 'updatedAt']:
+            del diff['$delete']
 
             if len(diff.keys()) > 0: # no changes
                 final_report.append({"name": name, "diff": diff, "action": "update"})
@@ -90,14 +91,15 @@ def update_config(data_diff, selector):
     results = []
     for diff in data_diff:
         name = diff['name']
-        data = get_file_content(name, selector)
-
+        fileData = get_file_content(name, selector)
+        nameInConfig = fileData["name"]
+        
         if diff['action'] == 'create':
             url = f'{CONTROL_PLANE_URL}/{selector}-definitions'
         else:
-            url = f'{CONTROL_PLANE_URL}/{selector}-definitions/{name.upper()}'
+            url = f'{CONTROL_PLANE_URL}/{selector}-definitions/{nameInConfig}'
 
-        resp = requests.post(url=url, headers=HEADER, data=json.dumps(data), auth=AUTH)
+        resp = requests.post(url=url, headers=HEADER, data=json.dumps(fileData), auth=AUTH)
         status, response = parse_response(resp)
         diff['update'] = {"status": status, "response": response}
         # results.append(diff)
@@ -114,6 +116,7 @@ if __name__ == '__main__':
     destinations = get_persisted_store(CONTROL_PLANE_URL, 'destination')
     # calculate the diff and populate the list for update
     dest_diffs = calculate_diff(destinations, 'destination')
+    print(dest_diffs)
     # make API calls to update
     dest_updates = update_config(dest_diffs, 'destination')
     print(dest_updates)
@@ -125,6 +128,7 @@ if __name__ == '__main__':
     sources = get_persisted_store(CONTROL_PLANE_URL, 'source')
     # calculate the diff and populate the list for update
     source_diffs = calculate_diff(sources, 'source')
+    print(source_diffs)
     # make API calls to update
     source_updates = update_config(source_diffs, 'source')
     print(source_updates)
