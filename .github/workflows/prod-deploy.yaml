@@ -20,5 +20,8 @@ jobs:
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
       - name: Execute script
+        env:
+          API_USER: ${{secrets.PROD_USERNAME}}
+          API_PASSWORD: ${{secrets.PROD_PASSWORD}}
         run: |
          python scripts/action.py ${{secrets.PROD_CONTROL_PLANE_URL}} ${{secrets.PROD_USERNAME}} ${{secrets.PROD_PASSWORD}}
