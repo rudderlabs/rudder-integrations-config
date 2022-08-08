@@ -42,7 +42,7 @@ def get_persisted_store(base_url, selector):
     response = requests.get(request_url)
     return json.loads(response.text)
 
-def get_persisted_definition(base_url, selector, name):
+def get_config_definition(base_url, selector, name):
     request_url = f'{base_url}/{selector}-definitions/{name}'
     response = requests.get(request_url)
     return response
@@ -131,12 +131,12 @@ def update_diff_db(selector):
 
     for item in current_items:
         updated_data = get_file_content(item, selector)
-        persisted_data = get_persisted_definition(CONTROL_PLANE_URL, selector, updated_data["name"])
+        persisted_data = get_config_definition(CONTROL_PLANE_URL, selector, updated_data["name"])
 
         if persisted_data.status_code == 200:
             diff = jsondiff.diff(json.loads(persisted_data.text), updated_data, marshal=True)
             # ignore the $delete - values present in DB but missing in files. Anyways this doesn't get reflected in DB as keys are missing in files itself.
-            # Best practice is to make sure all keys are maintained in the config files.
+            # Best practice is to make sure all keys are maintained in the config files irrespective of them being null.
             del diff['$delete']
 
             if len(diff.keys()) > 0: # changes exist
