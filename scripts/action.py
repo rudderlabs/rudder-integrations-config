@@ -203,4 +203,3 @@ if __name__ == '__main__':
     # make API calls to update
     #source_updates = update_config(source_diffs, 'source')
     #print(source_updates)
-
