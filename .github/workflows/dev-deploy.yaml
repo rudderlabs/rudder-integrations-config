@@ -26,10 +26,9 @@ jobs:
          echo current directory
          ls -a
          pwd
-         which python
       - name: Execute script
         env:
           API_USER: ${{secrets.DEV_USERNAME}}
           API_PASSWORD: ${{secrets.DEV_PASSWORD}}
         run: |
-         python scripts/test.py
+         python scripts/test.py ${{secrets.DEV_CONTROL_PLANE_URL}} ${{secrets.DEV_USERNAME}} ${{secrets.DEV_PASSWORD}}
