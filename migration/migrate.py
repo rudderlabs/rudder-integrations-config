@@ -111,5 +111,5 @@ def update_source():
 
 
 if __name__ == "__main__":
-    # update_destination()
+    update_destination()
     update_source()
