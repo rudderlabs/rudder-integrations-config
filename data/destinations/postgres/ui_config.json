@@ -1,68 +1,67 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Credentials",
       "fields": [
         {
+          "type": "textInput",
           "label": "Host",
-          "placeholder": "e.g: psql.mydomain.com",
+          "value": "host",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Host",
-          "required": true,
-          "type": "textInput",
-          "value": "host"
+          "placeholder": "e.g: psql.mydomain.com",
+          "required": true
         },
         {
+          "type": "textInput",
           "label": "Database",
-          "placeholder": "e.g: rudderdb",
+          "value": "database",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Database",
-          "required": true,
-          "type": "textInput",
-          "value": "database"
+          "placeholder": "e.g: rudderdb",
+          "required": true
         },
         {
+          "type": "textInput",
           "label": "User",
-          "placeholder": "e.g: rudder",
+          "value": "user",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid User",
-          "required": true,
-          "type": "textInput",
-          "value": "user"
+          "placeholder": "e.g: rudder",
+          "required": true
         },
         {
+          "type": "textInput",
           "label": "Password",
+          "value": "password",
           "placeholder": "e.g: rudder-password",
           "regex": ".*",
-          "required": true,
-          "type": "textInput",
-          "value": "password"
+          "required": true
         },
         {
+          "type": "textInput",
           "label": "Port",
-          "placeholder": "5432",
+          "value": "port",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Port",
-          "required": true,
-          "type": "textInput",
-          "value": "port"
+          "placeholder": "5432",
+          "required": true
         },
         {
-          "footerNote": "Default will be the source name",
+          "type": "textInput",
           "label": "Namespace",
           "labelNote": "Schema name for the warehouse where the tables are created",
-          "placeholder": "e.g: rudder-schema",
+          "value": "namespace",
           "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
           "regexErrorMessage": "Invalid Namespace",
           "required": false,
-          "type": "textInput",
-          "value": "namespace"
+          "placeholder": "e.g: rudder-schema",
+          "footerNote": "Default will be the source name"
         },
         {
-          "defaultOption": {
-            "name": "disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
           "label": "SSL Mode",
+          "value": "sslMode",
           "options": [
             {
               "name": "disable",
@@ -77,46 +76,49 @@
               "value": "verify-ca"
             }
           ],
-          "required": true,
-          "type": "singleSelect",
-          "value": "sslMode"
+          "defaultOption": {
+            "name": "disable",
+            "value": "disable"
+          },
+          "required": true
         },
         {
-          "label": "Client Key Pem File",
+          "type": "textInput",
+          "required": true,
+          "regex": "-----BEGIN RSA PRIVATE KEY-----.*-----END RSA PRIVATE KEY-----",
           "preRequisiteField": {
             "name": "sslMode",
             "selectedValue": "verify-ca"
           },
-          "required": true,
-          "type": "textInput",
+          "label": "Client Key Pem File",
           "value": "clientKey"
         },
         {
-          "label": "Client Cert Pem File",
+          "type": "textInput",
+          "required": true,
+          "regex": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
           "preRequisiteField": {
             "name": "sslMode",
             "selectedValue": "verify-ca"
           },
-          "required": true,
-          "type": "textInput",
+          "label": "Client Cert Pem File",
           "value": "clientCert"
         },
         {
-          "label": "Server CA Pem File",
+          "type": "textInput",
+          "required": true,
+          "regex": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
           "preRequisiteField": {
             "name": "sslMode",
             "selectedValue": "verify-ca"
           },
-          "required": true,
-          "type": "textInput",
+          "label": "Server CA Pem File",
           "value": "serverCA"
         },
         {
-          "defaultOption": {
-            "name": "Every 30 minutes",
-            "value": "30"
-          },
+          "type": "singleSelect",
           "label": "Sync Frequency",
+          "value": "syncFrequency",
           "options": [
             {
               "name": "Every 30 minutes",
@@ -143,58 +145,71 @@
               "value": "1440"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "syncFrequency"
+          "defaultOption": {
+            "name": "Every 30 minutes",
+            "value": "30"
+          },
+          "required": false
         },
         {
-          "footerNote": "Note: Please specify time in UTC",
-          "label": "Sync Starting At (Optional)",
-          "options": {
-            "minuteStep": 15,
-            "omitSeconds": true
-          },
-          "required": false,
           "type": "timePicker",
-          "value": "syncStartAt"
-        },
-        {
-          "endTime": {
-            "label": "end time",
-            "value": "excludeWindowEndTime"
-          },
-          "footerNote": "Note: Please specify time in UTC",
-          "label": "Exclude window (Optional)",
+          "label": "Sync Starting At (Optional)",
+          "value": "syncStartAt",
           "options": {
-            "minuteStep": 1,
-            "omitSeconds": true
+            "omitSeconds": true,
+            "minuteStep": 15
           },
           "required": false,
+          "footerNote": "Note: Please specify time in UTC"
+        },
+        {
+          "type": "timeRangePicker",
+          "label": "Exclude window (Optional)",
+          "value": "excludeWindow",
           "startTime": {
             "label": "start time",
             "value": "excludeWindowStartTime"
           },
-          "type": "timeRangePicker",
-          "value": "excludeWindow"
-        }
-      ],
-      "title": "Connection Credentials"
-    },
-    {
-      "fields": [
-        {
-          "default": false,
-          "footerNote": "Note: Only available for RudderStack managed data planes",
-          "label": "Use RudderStack managed object storage",
-          "type": "checkbox",
-          "value": "useRudderStorage"
+          "endTime": {
+            "label": "end time",
+            "value": "excludeWindowEndTime"
+          },
+          "options": {
+            "omitSeconds": true,
+            "minuteStep": 1
+          },
+          "required": false,
+          "footerNote": "Note: Please specify time in UTC"
         },
         {
-          "defaultOption": {
-            "name": "MINIO",
-            "value": "MINIO"
-          },
+          "type": "textInput",
+          "label": "Json columns (Optional)",
+          "labelNote": "Specify required json properties in dot notation separated by commas",
+          "value": "jsonPaths",
+          "regex": "^(.*)$",
+          "placeholder": "e.g: testMap.nestedMap, testArray",
+          "required": false,
+          "footerURL": {
+            "link": "https://www.rudderstack.com/docs/data-warehouse-integrations/postgresql/#configuring-postgresql-destination-in-rudderstack",
+            "text": "Instructions for setting up the json columns"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Object Storage Configuration",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Use RudderStack managed object storage",
+          "value": "useRudderStorage",
+          "default": false,
+          "footerNote": "Note: Only available for RudderStack managed data planes"
+        },
+        {
+          "type": "singleSelect",
           "label": "Choose your Storage Provider",
+          "value": "bucketProvider",
           "options": [
             {
               "name": "S3",
@@ -213,19 +228,18 @@
               "value": "MINIO"
             }
           ],
+          "defaultOption": {
+            "name": "MINIO",
+            "value": "MINIO"
+          },
+          "required": true,
           "preRequisiteField": {
             "name": "useRudderStorage",
             "selectedValue": false
-          },
-          "required": true,
-          "type": "singleSelect",
-          "value": "bucketProvider"
+          }
         },
         {
-          "footerNote": "Please make sure the bucket exists in your S3",
-          "label": "Staging S3 Storage Bucket Name",
-          "labelNote": "S3 Bucket to store data before loading into Postgres",
-          "placeholder": "e.g: s3-event-logs",
+          "type": "textInput",
           "preRequisiteField": [
             {
               "name": "bucketProvider",
@@ -236,17 +250,17 @@
               "selectedValue": false
             }
           ],
-          "regex": "^(.{0,100})$",
+          "label": "Staging S3 Storage Bucket Name",
+          "labelNote": "S3 Bucket to store data before loading into Postgres",
+          "value": "bucketName",
+          "regex": "^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
           "regexErrorMessage": "Invalid Staging S3 Storage Bucket Name",
+          "placeholder": "e.g: s3-event-logs",
           "required": true,
-          "type": "textInput",
-          "value": "bucketName"
+          "footerNote": "Please make sure the bucket exists in your S3"
         },
         {
-          "footerNote": "Please make sure the bucket exists in your GCS",
-          "label": "Staging GCS Object Storage Bucket Name",
-          "labelNote": "GCS Bucket to store data before loading into Postgres",
-          "placeholder": "e.g: gcs-event-logs",
+          "type": "textInput",
           "preRequisiteField": [
             {
               "name": "bucketProvider",
@@ -257,17 +271,17 @@
               "selectedValue": false
             }
           ],
-          "regex": "^(.{0,100})$",
+          "label": "Staging GCS Object Storage Bucket Name",
+          "labelNote": "GCS Bucket to store data before loading into Postgres",
+          "value": "bucketName",
+          "regex": "^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$",
           "regexErrorMessage": "Invalid Staging GCS Object Storage Bucket Name",
+          "placeholder": "e.g: gcs-event-logs",
           "required": true,
-          "type": "textInput",
-          "value": "bucketName"
+          "footerNote": "Please make sure the bucket exists in your GCS"
         },
         {
-          "footerNote": "Please make sure the container exists in your Azure Blob Storage",
-          "label": "Staging Azure Blob Storage Container Name",
-          "labelNote": "Container to store data before loading into Postgres",
-          "placeholder": "e.g: azure-event-logs",
+          "type": "textInput",
           "preRequisiteField": [
             {
               "name": "bucketProvider",
@@ -278,17 +292,17 @@
               "selectedValue": false
             }
           ],
-          "regex": "^(.{0,100})$",
+          "label": "Staging Azure Blob Storage Container Name",
+          "labelNote": "Container to store data before loading into Postgres",
+          "value": "containerName",
+          "regex": "^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$",
           "regexErrorMessage": "Invalid Staging Azure Blob Storage Container Name",
           "required": true,
-          "type": "textInput",
-          "value": "containerName"
+          "placeholder": "e.g: azure-event-logs",
+          "footerNote": "Please make sure the container exists in your Azure Blob Storage"
         },
         {
-          "footerNote": "Please make sure the bucket exists in your MINIO",
-          "label": "Staging MINIO Storage Bucket Name",
-          "labelNote": "MINIO Bucket to store data before loading into Postgres",
-          "placeholder": "e.g: minio-event-logs",
+          "type": "textInput",
           "preRequisiteField": [
             {
               "name": "bucketProvider",
@@ -299,15 +313,17 @@
               "selectedValue": false
             }
           ],
-          "regex": "^(.{0,100})$",
+          "label": "Staging MINIO Storage Bucket Name",
+          "labelNote": "MINIO Bucket to store data before loading into Postgres",
+          "value": "bucketName",
+          "regex": "^((?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
           "regexErrorMessage": "Invalid Staging MINIO Storage Bucket Name",
           "required": true,
-          "type": "textInput",
-          "value": "bucketName"
+          "placeholder": "e.g: minio-event-logs",
+          "footerNote": "Please make sure the bucket exists in your MINIO"
         },
         {
-          "label": "AWS Access Key ID",
-          "placeholder": "e.g: access-key-id",
+          "type": "textInput",
           "preRequisiteField": [
             {
               "name": "bucketProvider",
@@ -318,15 +334,15 @@
               "selectedValue": false
             }
           ],
+          "label": "AWS Access Key ID",
+          "value": "accessKeyID",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid AWS Access Key ID",
           "required": true,
-          "type": "textInput",
-          "value": "accessKeyID"
+          "placeholder": "e.g: access-key-id"
         },
         {
-          "label": "AWS Secret Access Key",
-          "placeholder": "e.g: secret-access-key",
+          "type": "textInput",
           "preRequisiteField": [
             {
               "name": "bucketProvider",
@@ -337,15 +353,15 @@
               "selectedValue": false
             }
           ],
+          "label": "AWS Secret Access Key",
+          "value": "accessKey",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid AWS Secret Access Key",
           "required": true,
-          "type": "textInput",
-          "value": "accessKey"
+          "placeholder": "e.g: secret-access-key"
         },
         {
-          "label": "Azure Blob Storage Account Name",
-          "placeholder": "e.g: account-name",
+          "type": "textInput",
           "preRequisiteField": [
             {
               "name": "bucketProvider",
@@ -356,15 +372,15 @@
               "selectedValue": false
             }
           ],
+          "label": "Azure Blob Storage Account Name",
+          "value": "accountName",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Azure Blob Storage Account Name",
           "required": true,
-          "type": "textInput",
-          "value": "accountName"
+          "placeholder": "e.g: account-name"
         },
         {
-          "label": "Azure Blob Storage Account Key",
-          "placeholder": "e.g: account-key",
+          "type": "textInput",
           "preRequisiteField": [
             {
               "name": "bucketProvider",
@@ -375,16 +391,15 @@
               "selectedValue": false
             }
           ],
+          "label": "Azure Blob Storage Account Key",
+          "value": "accountKey",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Azure Blob Storage Account Key",
           "required": true,
-          "type": "textInput",
-          "value": "accountKey"
+          "placeholder": "e.g: account-key"
         },
         {
-          "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'storage.objectCreator'",
-          "label": "Credentials",
-          "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your Google Cloud Storage",
+          "type": "textareaInput",
           "preRequisiteField": [
             {
               "name": "bucketProvider",
@@ -395,14 +410,15 @@
               "selectedValue": false
             }
           ],
+          "label": "Credentials",
+          "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your Google Cloud Storage",
+          "value": "credentials",
           "regex": ".*",
           "required": true,
-          "type": "textareaInput",
-          "value": "credentials"
+          "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'storage.objectCreator'"
         },
         {
-          "label": "MinIO Endpoint",
-          "placeholder": "e.g: play.min.io:9000",
+          "type": "textInput",
           "preRequisiteField": [
             {
               "name": "bucketProvider",
@@ -413,15 +429,15 @@
               "selectedValue": false
             }
           ],
+          "label": "MinIO Endpoint",
+          "value": "endPoint",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid MinIO Endpoint",
           "required": true,
-          "type": "textInput",
-          "value": "endPoint"
+          "placeholder": "e.g: play.min.io:9000"
         },
         {
-          "label": "MINIO Access Key ID",
-          "placeholder": "e.g: access-key-id",
+          "type": "textInput",
           "preRequisiteField": [
             {
               "name": "bucketProvider",
@@ -432,15 +448,15 @@
               "selectedValue": false
             }
           ],
+          "label": "MINIO Access Key ID",
+          "value": "accessKeyID",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid MinIO Access Key ID",
           "required": true,
-          "type": "textInput",
-          "value": "accessKeyID"
+          "placeholder": "e.g: access-key-id"
         },
         {
-          "label": "MINIO Secret Access Key",
-          "placeholder": "e.g: secret-access-key",
+          "type": "textInput",
           "preRequisiteField": [
             {
               "name": "bucketProvider",
@@ -451,15 +467,15 @@
               "selectedValue": false
             }
           ],
+          "label": "MINIO Secret Access Key",
+          "value": "secretAccessKey",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid MinIO Secret Access Key",
           "required": true,
-          "type": "textInput",
-          "value": "secretAccessKey"
+          "placeholder": "e.g: secret-access-key"
         },
         {
-          "default": true,
-          "label": "Use SSL for connection",
+          "type": "checkbox",
           "preRequisiteField": [
             {
               "name": "bucketProvider",
@@ -470,11 +486,11 @@
               "selectedValue": false
             }
           ],
-          "type": "checkbox",
-          "value": "useSSL"
+          "label": "Use SSL for connection",
+          "value": "useSSL",
+          "default": true
         }
-      ],
-      "title": "Object Storage Configuration"
+      ]
     }
   ]
 }

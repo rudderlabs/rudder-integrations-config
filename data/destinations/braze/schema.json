@@ -1,53 +1,27 @@
 {
-  "schema": {
+  "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": [
+      "appKey",
+      "restApiKey",
+      "dataCenter"
+    ],
+    "type": "object",
     "properties": {
       "appKey": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-        "type": "string"
-      },
-      "blacklistedEvents": {
-        "items": {
-          "properties": {
-            "eventName": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,300})$",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
-      },
-      "dataCenter": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-        "type": "string"
-      },
-      "eventFilteringOption": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$",
-        "type": "string"
-      },
-      "oneTrustCookieCategories": {
-        "properties": {
-          "web": {
-            "items": {
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
       "restApiKey": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-        "type": "string"
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "dataCenter": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
       "useNativeSDK": {
+        "type": "object",
         "properties": {
           "android": {
             "type": "boolean"
@@ -61,27 +35,53 @@
           "web": {
             "type": "boolean"
           }
-        },
-        "type": "object"
+        }
+      },
+      "eventFilteringOption": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
       },
       "whitelistedEvents": {
+        "type": "array",
         "items": {
+          "type": "object",
           "properties": {
             "eventName": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
-          },
-          "type": "object"
-        },
-        "type": "array"
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,300})$"
+            }
+          }
+        }
+      },
+      "oneTrustCookieCategories": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
+        }
       }
-    },
-    "required": [
-      "appKey",
-      "restApiKey",
-      "dataCenter"
-    ],
-    "type": "object"
+    }
   }
 }

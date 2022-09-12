@@ -1,21 +1,21 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
-          "label": "Webhook URL",
-          "placeholder": "http://www.abcd.com",
-          "regex": "^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
-          "required": true,
           "type": "textInput",
-          "value": "webhookUrl"
+          "label": "Webhook URL",
+          "value": "webhookUrl",
+          "required": true,
+          "placeholder": "http://www.abcd.com",
+          "regex": "^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
         },
         {
-          "defaultOption": {
-            "name": "POST",
-            "value": "POST"
-          },
+          "type": "singleSelect",
           "label": "URL Method",
+          "value": "webhookMethod",
+          "placeholder": "POST",
           "options": [
             {
               "name": "POST",
@@ -26,6 +26,10 @@
               "value": "PUT"
             },
             {
+              "name": "PATCH",
+              "value": "PATCH"
+            },
+            {
               "name": "GET",
               "value": "GET"
             },
@@ -34,23 +38,23 @@
               "value": "DELETE"
             }
           ],
-          "placeholder": "POST",
-          "type": "singleSelect",
-          "value": "webhookMethod"
+          "defaultOption": {
+            "name": "POST",
+            "value": "POST"
+          }
         },
         {
-          "keyLeft": "from",
-          "keyRight": "to",
+          "type": "dynamicForm",
           "label": "Headers",
           "labelLeft": "Key",
           "labelRight": "Value",
+          "keyLeft": "from",
+          "keyRight": "to",
           "placeholderLeft": "content-type",
           "placeholderRight": "application/json",
-          "type": "dynamicForm",
           "value": "headers"
         }
-      ],
-      "title": "Connection Settings"
+      ]
     }
   ]
 }

@@ -1,57 +1,62 @@
 {
   "uiConfig": [
     {
+      "title": "1. Connection Settings",
       "fields": [
         {
-          "footerNote": "Your Pixel ID, from the snippet created on the Facebook Pixel creation page.",
+          "type": "textInput",
           "label": "Pixel ID",
-          "placeholder": "e.g: 1234567898765",
+          "value": "pixelId",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Pixel ID",
           "required": true,
-          "type": "textInput",
-          "value": "pixelId"
+          "placeholder": "e.g: 1234567898765",
+          "footerNote": "Your Pixel ID, from the snippet created on the Facebook Pixel creation page."
         },
         {
-          "footerNote": "Your Businssed Access token from your Business Account. Required for cloud-mode.",
+          "type": "textInput",
           "label": "Business Access Token",
-          "placeholder": "e.g: EAALPFdyOVl4BAKEXmVR...",
+          "value": "accessToken",
           "regex": "^(.{0,208})$",
           "regexErrorMessage": "Invalid Business Access Token",
           "required": false,
           "secret": true,
-          "type": "textInput",
-          "value": "accessToken"
+          "placeholder": "e.g: EAALPFdyOVl4BAKEXmVR...",
+          "footerNote": "Your Businssed Access token from your Business Account. Required for cloud-mode."
         }
-      ],
-      "title": "1. Connection Settings"
+      ]
     },
     {
+      "title": "2. Event Settings",
       "fields": [
         {
-          "keyLeft": "from",
-          "keyRight": "to",
+          "type": "dynamicForm",
           "label": "Map Categories to Facebook Content Types",
-          "labelLeft": "category",
-          "labelRight": "Facebook content type",
+          "required": false,
           "placeholderLeft": "e.g. Product Searched",
           "placeholderRight": "Product",
-          "required": false,
-          "type": "dynamicForm",
+          "labelLeft": "category",
+          "labelRight": "Facebook content type",
+          "keyLeft": "from",
+          "keyRight": "to",
           "value": "categoryToContent"
         },
         {
-          "default": false,
-          "label": "Enable Standard Event (PageView) for all Page and Screen Calls",
           "type": "checkbox",
-          "value": "standardPageCall"
+          "label": "Enable Standard Event (PageView) for all Page and Screen Calls",
+          "value": "standardPageCall",
+          "default": false
         },
         {
-          "keyLeft": "from",
-          "keyRight": "to",
+          "type": "dynamicSelectForm",
           "label": "Map your events with Facebook Standard Events",
           "labelLeft": "Event Name",
           "labelRight": "Standard Event Name",
+          "value": "eventsToEvents",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "required": false,
+          "placeholderLeft": "e.g. Product Searched",
           "options": [
             {
               "name": "ViewContent",
@@ -125,33 +130,28 @@
               "name": "Subscribe",
               "value": "Subscribe"
             }
-          ],
-          "placeholderLeft": "e.g. Product Searched",
-          "required": false,
-          "type": "dynamicSelectForm",
-          "value": "eventsToEvents"
+          ]
         },
         {
+          "type": "dynamicCustomForm",
+          "value": "eventCustomProperties",
           "customFields": [
             {
-              "label": "Standard Events custom properties",
+              "type": "textInput",
               "placeholder": "e.g. product_id",
+              "value": "eventCustomProperties",
+              "label": "Standard Events custom properties",
               "regex": "^(.{0,100})$",
               "regexErrorMessage": "Invalid Standard Events custom properties",
-              "required": false,
-              "type": "textInput",
-              "value": "eventCustomProperties"
+              "required": false
             }
-          ],
-          "type": "dynamicCustomForm",
-          "value": "eventCustomProperties"
+          ]
         },
         {
-          "defaultOption": {
-            "name": "properties.price",
-            "value": "properties.price"
-          },
+          "type": "singleSelect",
           "label": "Value Field Identifier",
+          "value": "valueFieldIdentifier",
+          "required": false,
           "options": [
             {
               "name": "properties.value",
@@ -162,121 +162,122 @@
               "value": "properties.price"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "valueFieldIdentifier"
+          "defaultOption": {
+            "name": "properties.price",
+            "value": "properties.price"
+          }
         },
         {
-          "label": "Enable Advanced Matching",
           "type": "checkbox",
+          "label": "Enable Advanced Matching",
           "value": "advancedMapping"
         }
-      ],
-      "title": "2. Event Settings"
+      ]
     },
     {
+      "title": "3. PII Properties Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "blacklistPiiProperties",
           "customFields": [
             {
+              "type": "textInput",
+              "value": "blacklistPiiProperties",
               "label": "Blacklist PII Properties",
-              "placeholder": "e.g. phone",
               "regex": "^(.{0,100})$",
               "regexErrorMessage": "Invalid Blacklist PII Properties",
-              "required": false,
-              "type": "textInput",
-              "value": "blacklistPiiProperties"
+              "placeholder": "e.g. phone",
+              "required": false
             },
             {
-              "label": "Blacklist PII Hash Property",
-              "required": false,
               "type": "checkbox",
-              "value": "blacklistPiiHash"
+              "value": "blacklistPiiHash",
+              "label": "Blacklist PII Hash Property",
+              "required": false
             }
-          ],
-          "type": "dynamicCustomForm",
-          "value": "blacklistPiiProperties"
+          ]
         },
         {
+          "type": "dynamicCustomForm",
+          "value": "whitelistPiiProperties",
           "customFields": [
             {
-              "label": "Whitelist PII Properties",
-              "placeholder": "e.g. email",
-              "regex": "^(.{0,100})$",
-              "regexErrorMessage": "Invalid Whitelist PII Properties",
-              "required": false,
               "type": "textInput",
-              "value": "whitelistPiiProperties"
+              "placeholder": "e.g. email",
+              "value": "whitelistPiiProperties",
+              "label": "Whitelist PII Properties",
+              "required": false,
+              "regex": "^(.{0,100})$",
+              "regexErrorMessage": "Invalid Whitelist PII Properties"
             }
-          ],
-          "type": "dynamicCustomForm",
-          "value": "whitelistPiiProperties"
+          ]
         }
-      ],
-      "title": "3. PII Properties Settings"
+      ]
     },
     {
+      "title": "4. Other Settings",
       "fields": [
         {
+          "type": "dynamicForm",
+          "label": "Legacy Conversion Pixel IDs",
+          "value": "legacyConversionPixelId",
+          "required": false,
           "keyLeft": "from",
           "keyRight": "to",
-          "label": "Legacy Conversion Pixel IDs",
-          "labelLeft": "Event Name",
-          "labelRight": "Pixel Id",
           "placeholderLeft": "e.g. Product Searched",
           "placeholderRight": "e.g 12345678987654",
-          "required": false,
-          "type": "dynamicForm",
-          "value": "legacyConversionPixelId"
+          "labelLeft": "Event Name",
+          "labelRight": "Pixel Id"
         },
         {
-          "label": "Limited Data Usage",
           "type": "checkbox",
+          "label": "Limited Data Usage",
           "value": "limitedDataUSage"
         },
         {
-          "default": false,
-          "label": "Use as Test Destination",
           "type": "checkbox",
-          "value": "testDestination"
+          "label": "Use as Test Destination",
+          "value": "testDestination",
+          "default": false
         },
         {
-          "footerNote": "Your test event code from your Facebook Pixel dashboard. Required if Test Destination flag is turned ON",
+          "type": "textInput",
           "label": "Test Event Code",
-          "placeholder": "e.g: TEST80569",
+          "value": "testEventCode",
           "regex": "^(.{0,100})$",
           "required": false,
-          "type": "textInput",
-          "value": "testEventCode"
+          "placeholder": "e.g: TEST80569",
+          "footerNote": "Your test event code from your Facebook Pixel dashboard. Required if Test Destination flag is turned ON"
         }
-      ],
-      "title": "4. Other Settings"
+      ]
     },
     {
+      "title": "5. Native SDK",
       "fields": [
         {
-          "default": false,
-          "label": "Use device-mode to send events",
           "type": "checkbox",
-          "value": "useNativeSDK"
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": false
         },
         {
-          "default": false,
-          "footerNote": "It is recomended to set this to on as we are deprecating support for the old mapping soon.",
-          "label": "Use Updated Mapping",
           "type": "checkbox",
-          "value": "useUpdatedMapping"
+          "label": "Use Updated Mapping",
+          "value": "useUpdatedMapping",
+          "default": false,
+          "footerNote": "It is recomended to set this to on as we are deprecating support for the old mapping soon."
         }
-      ],
-      "title": "5. Native SDK"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -291,58 +292,57 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Consent Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
     }
   ]
 }

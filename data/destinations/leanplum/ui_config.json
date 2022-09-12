@@ -1,64 +1,65 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "Application ID",
-          "placeholder": "e.g: ABCDEFG",
+          "value": "applicationId",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Application ID",
           "required": true,
-          "type": "textInput",
-          "value": "applicationId"
+          "placeholder": "e.g: ABCDEFG"
         },
         {
+          "type": "textInput",
           "label": "Client Key",
-          "placeholder": "e.g: ABCDEFG",
+          "value": "clientKey",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Client Key",
           "required": true,
-          "secret": true,
-          "type": "textInput",
-          "value": "clientKey"
+          "placeholder": "e.g: ABCDEFG",
+          "secret": true
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Native SDK",
       "fields": [
         {
-          "default": true,
-          "label": "Initialize Native SDK to send automated events",
           "type": "checkbox",
-          "value": "useNativeSDK"
+          "label": "Initialize Native SDK to send automated events",
+          "value": "useNativeSDK",
+          "default": true
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Use device-mode to send user generated events",
-          "type": "checkbox",
-          "value": "useNativeSDKToSend"
+          "value": "useNativeSDKToSend",
+          "default": false
         }
-      ],
-      "title": "Native SDK"
+      ]
     },
     {
+      "title": "Development Mode",
       "fields": [
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Use in Development Environment",
-          "type": "checkbox",
-          "value": "isDevelop"
+          "value": "isDevelop",
+          "default": false
         }
-      ],
-      "title": "Development Mode"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -73,39 +74,38 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     }
   ]
 }

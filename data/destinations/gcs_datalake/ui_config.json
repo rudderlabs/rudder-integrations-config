@@ -1,54 +1,99 @@
 {
   "uiConfig": [
     {
+      "title": "1. Connection Credentials",
       "fields": [
         {
-          "footerNote": "Please make sure the bucket exists in your GCS",
+          "type": "textInput",
           "label": "GCS Storage Bucket Name",
           "labelNote": "GCS Bucket to store your event data",
-          "placeholder": "e.g: gcs-event-logs",
-          "regex": "^(.{1,100})$",
+          "value": "bucketName",
+          "regex": "^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$",
           "regexErrorMessage": "Invalid Staging GCS Object Storage Bucket Name",
           "required": true,
-          "type": "textInput",
-          "value": "bucketName"
+          "placeholder": "e.g: gcs-event-logs",
+          "footerNote": "Please make sure the bucket exists in your GCS"
         },
         {
+          "type": "textInput",
           "label": "Prefix",
+          "value": "prefix",
           "labelNote": "If configured, all data pushed by rudderstack will be at https://storage.googleapis.com/<bucketName>/<prefix>/",
-          "placeholder": "e.g: rudder",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Prefix",
           "required": false,
-          "type": "textInput",
-          "value": "prefix"
+          "placeholder": "e.g: rudder"
         },
         {
-          "footerNote": "All data for the destination would be pushed to https://storage.googleapis.com/<bucketName>/<prefix>/rudder-datalake/<namespace>.",
+          "type": "textInput",
           "label": "Namespace",
           "labelNote": "Schema name for the warehouse where the tables are created",
-          "placeholder": "e.g: RUDDER_NAMESPACE",
+          "value": "namespace",
           "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
           "regexErrorMessage": "Invalid Namespace",
           "required": false,
-          "type": "textInput",
-          "value": "namespace"
+          "placeholder": "e.g: RUDDER_NAMESPACE",
+          "footerNote": "All data for the destination would be pushed to https://storage.googleapis.com/<bucketName>/<prefix>/rudder-datalake/<namespace>."
         },
         {
-          "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'storage.objectCreator'",
+          "type": "textInput",
+          "label": "Table suffix (optional)",
+          "labelNote": "If configured, table data would be pushed to <table-name>/<table-suffix>",
+          "value": "tableSuffix",
+          "regex": ".*",
+          "regexErrorMessage": "Invalid Table suffix path",
+          "required": false,
+          "placeholder": "e.g: TABLE_SUFFIX_PATH"
+        },
+        {
+          "type": "singleSelect",
+          "label": "Choose time window layout",
+          "value": "timeWindowLayout",
+          "options": [
+            {
+              "name": "Default (YYYY/MM/DD/HH)",
+              "value": "2006/01/02/15"
+            },
+            {
+              "name": "Upto Date (dt=YYYY-MM-DD)",
+              "value": "dt=2006-01-02"
+            },
+            {
+              "name": "Upto Year (year=YYYY)",
+              "value": "year=2006"
+            },
+            {
+              "name": "Upto Month (year=YYYY/month=MM)",
+              "value": "year=2006/month=01"
+            },
+            {
+              "name": "Upto Day (year=YYYY/month=MM/day=DD)",
+              "value": "year=2006/month=01/day=02"
+            },
+            {
+              "name": "Upto Hour (year=YYYY/month=MM/day=DD/hour=HH)",
+              "value": "year=2006/month=01/day=02/hour=15"
+            }
+          ],
+          "defaultOption": {
+            "name": "Default (YYYY/MM/DD/HH)",
+            "value": "2006/01/02/15"
+          },
+          "required": false
+        },
+        {
+          "type": "textareaInput",
           "label": "Credentials",
           "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your Google Cloud Storage",
+          "value": "credentials",
           "regex": ".*",
           "required": true,
-          "type": "textareaInput",
-          "value": "credentials"
+          "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'storage.objectCreator'"
         },
         {
-          "defaultOption": {
-            "name": "Every 30 minutes",
-            "value": "30"
-          },
+          "type": "singleSelect",
           "label": "Sync Frequency",
+          "value": "syncFrequency",
           "options": [
             {
               "name": "Every 30 minutes",
@@ -75,23 +120,24 @@
               "value": "1440"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "syncFrequency"
+          "defaultOption": {
+            "name": "Every 30 minutes",
+            "value": "30"
+          },
+          "required": false
         },
         {
-          "footerNote": "Note: Please specify time in UTC",
+          "type": "timePicker",
           "label": "Sync Starting At (Optional)",
+          "value": "syncStartAt",
           "options": {
-            "minuteStep": 15,
-            "omitSeconds": true
+            "omitSeconds": true,
+            "minuteStep": 15
           },
           "required": false,
-          "type": "timePicker",
-          "value": "syncStartAt"
+          "footerNote": "Note: Please specify time in UTC"
         }
-      ],
-      "title": "1. Connection Credentials"
+      ]
     }
   ]
 }

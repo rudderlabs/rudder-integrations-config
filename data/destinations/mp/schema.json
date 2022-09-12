@@ -1,130 +1,31 @@
 {
-  "schema": {
+  "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+      "token"
+    ],
     "properties": {
+      "token": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
       "apiSecret": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-        "type": "string"
-      },
-      "blacklistedEvents": {
-        "items": {
-          "properties": {
-            "eventName": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
-      },
-      "consolidatedPageCalls": {
-        "type": "boolean"
-      },
-      "crossSubdomainCookie": {
-        "type": "boolean"
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "dataResidency": {
-        "pattern": "^(us|eu)$",
-        "type": "string"
-      },
-      "eventIncrements": {
-        "items": {
-          "properties": {
-            "property": {
-              "pattern": "(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
-      },
-      "groupKeySettings": {
-        "items": {
-          "properties": {
-            "groupKey": {
-              "pattern": "(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
-      },
-      "oneTrustCookieCategories": {
-        "properties": {
-          "web": {
-            "items": {
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
+        "type": "string",
+        "pattern": "^(us|eu)$"
       },
       "people": {
-        "type": "boolean"
-      },
-      "peopleProperties": {
-        "items": {
-          "properties": {
-            "property": {
-              "pattern": "(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
-      },
-      "persistence": {
-        "pattern": "^(none|cookie|localStorage)$",
-        "type": "string"
-      },
-      "propIncrements": {
-        "items": {
-          "properties": {
-            "property": {
-              "pattern": "(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
-      },
-      "secureCookie": {
         "type": "boolean"
       },
       "setAllTraitsByDefault": {
         "type": "boolean"
       },
-      "sourceName": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-        "type": "string"
-      },
-      "superProperties": {
-        "items": {
-          "properties": {
-            "property": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
-      },
-      "token": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-        "type": "string"
+      "consolidatedPageCalls": {
+        "type": "boolean"
       },
       "trackCategorizedPages": {
         "type": "boolean"
@@ -132,30 +33,129 @@
       "trackNamedPages": {
         "type": "boolean"
       },
+      "sourceName": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "crossSubdomainCookie": {
+        "type": "boolean"
+      },
+      "persistence": {
+        "type": "string",
+        "pattern": "^(none|cookie|localStorage)$"
+      },
+      "secureCookie": {
+        "type": "boolean"
+      },
+      "superProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "property": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "peopleProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "property": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "eventIncrements": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "property": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "propIncrements": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "property": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "groupKeySettings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "groupKey": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
       "useNativeSDK": {
+        "type": "object",
         "properties": {
           "web": {
             "type": "boolean"
           }
-        },
-        "type": "object"
+        }
       },
       "whitelistedEvents": {
+        "type": "array",
         "items": {
+          "type": "object",
           "properties": {
             "eventName": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
-          },
-          "type": "object"
-        },
-        "type": "array"
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "oneTrustCookieCategories": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
+        }
       }
-    },
-    "required": [
-      "token"
-    ],
-    "type": "object"
+    }
   }
 }

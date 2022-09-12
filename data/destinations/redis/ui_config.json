@@ -1,85 +1,85 @@
 {
   "uiConfig": [
     {
+      "title": "1. Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "Address",
-          "placeholder": "e.g: localhost:6379",
+          "value": "address",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Address",
           "required": true,
-          "type": "textInput",
-          "value": "address"
+          "placeholder": "e.g: localhost:6379"
         },
         {
+          "type": "textInput",
           "label": "Password",
-          "placeholder": "",
+          "value": "password",
           "regex": ".*",
           "required": false,
-          "secret": true,
-          "type": "textInput",
-          "value": "password"
+          "placeholder": "",
+          "secret": true
         },
         {
+          "type": "textInput",
           "label": "Database",
+          "value": "database",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Database",
+          "required": false,
           "placeholder": "",
           "preRequisiteField": {
             "name": "clusterMode",
             "selectedValue": false
-          },
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Database",
-          "required": false,
-          "type": "textInput",
-          "value": "database"
+          }
         },
         {
-          "default": true,
+          "type": "checkbox",
           "label": "Cluster Mode",
-          "type": "checkbox",
-          "value": "clusterMode"
+          "value": "clusterMode",
+          "default": true
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Secure",
-          "type": "checkbox",
-          "value": "secure"
+          "value": "secure",
+          "default": false
         },
         {
-          "default": false,
-          "footerNote": "if you are using self signed certificates make this field true",
+          "type": "checkbox",
+          "preRequisiteField": {
+            "name": "secure",
+            "selectedValue": true
+          },
           "label": "Skip verify",
-          "preRequisiteField": {
-            "name": "secure",
-            "selectedValue": true
-          },
-          "type": "checkbox",
-          "value": "skipVerify"
+          "value": "skipVerify",
+          "default": false,
+          "footerNote": "if you are using self signed certificates make this field true"
         },
         {
-          "footerNote": "Can be skipped for CA's that can be verified with any client (eg. Elasticache)",
-          "label": "CA certificate",
-          "placeholder": "CA Certificate",
+          "type": "textareaInput",
           "preRequisiteField": {
             "name": "secure",
             "selectedValue": true
           },
+          "label": "CA certificate",
+          "value": "caCertificate",
           "regex": ".*",
           "required": false,
-          "type": "textareaInput",
-          "value": "caCertificate"
+          "placeholder": "CA Certificate",
+          "footerNote": "Can be skipped for CA's that can be verified with any client (eg. Elasticache)"
         },
         {
+          "type": "textInput",
           "label": "Prefix",
-          "placeholder": "",
+          "value": "prefix",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Prefix",
           "required": false,
-          "type": "textInput",
-          "value": "prefix"
+          "placeholder": ""
         }
-      ],
-      "title": "1. Connection Settings"
+      ]
     }
   ]
 }

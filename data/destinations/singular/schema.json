@@ -1,6 +1,10 @@
 {
-  "schema": {
+  "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+      "apiKey"
+    ],
     "properties": {
       "apiKey": {
         "type": "string"
@@ -8,35 +12,48 @@
       "apiSecret": {
         "type": "string"
       },
-      "blacklistedEvents": {
+      "sessionEventList": {
+        "type": "array",
         "items": {
+          "type": "object",
           "properties": {
             "eventName": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
-          },
-          "type": "object"
-        },
-        "type": "array"
+          }
+        }
       },
       "eventFilteringOption": {
-        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$",
-        "type": "string"
+        "type": "string",
+        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
       },
-      "sessionEventList": {
+      "whitelistedEvents": {
+        "type": "array",
         "items": {
+          "type": "object",
           "properties": {
             "eventName": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
-          },
-          "type": "object"
-        },
-        "type": "array"
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
       },
       "useNativeSDK": {
+        "type": "object",
         "properties": {
           "android": {
             "type": "boolean"
@@ -44,25 +61,8 @@
           "ios": {
             "type": "boolean"
           }
-        },
-        "type": "object"
-      },
-      "whitelistedEvents": {
-        "items": {
-          "properties": {
-            "eventName": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
+        }
       }
-    },
-    "required": [
-      "apiKey"
-    ],
-    "type": "object"
+    }
   }
 }

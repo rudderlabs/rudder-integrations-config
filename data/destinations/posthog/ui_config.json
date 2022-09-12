@@ -1,107 +1,108 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "Team API KEY",
-          "placeholder": "e.g: K_HlRyO3IE73-Tz4ch7LNDs0JGdwbknNGolFc3MdoAF",
+          "value": "teamApiKey",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Team API KEY",
           "required": true,
-          "secret": true,
-          "type": "textInput",
-          "value": "teamApiKey"
+          "placeholder": "e.g: K_HlRyO3IE73-Tz4ch7LNDs0JGdwbknNGolFc3MdoAF",
+          "secret": true
         },
         {
+          "type": "textInput",
           "label": "Instance URL",
-          "placeholder": "e.g: https://app.posthog.com",
+          "value": "yourInstance",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Instance URL",
-          "secret": true,
-          "type": "textInput",
-          "value": "yourInstance"
+          "placeholder": "e.g: https://app.posthog.com",
+          "secret": true
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Native SDK",
       "fields": [
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
           "required": false,
-          "type": "checkbox",
-          "value": "useNativeSDK"
+          "default": false
         },
         {
-          "default": false,
-          "footerNote": "Enabling this will reduce the amount of data stored in cookies by storing it in local storage instead.",
+          "type": "checkbox",
           "label": "Enable Local Storage for Persistence",
+          "value": "enableLocalStoragePersistence",
           "required": false,
-          "type": "checkbox",
-          "value": "enableLocalStoragePersistence"
+          "default": false,
+          "footerNote": "Enabling this will reduce the amount of data stored in cookies by storing it in local storage instead."
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Enable autocapture with PostHog",
+          "value": "autocapture",
           "required": false,
-          "type": "checkbox",
-          "value": "autocapture"
+          "default": false
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Allow PostHog to automatically capture pageview events",
+          "value": "capturePageView",
           "required": false,
-          "type": "checkbox",
-          "value": "capturePageView"
+          "default": false
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Disable session recoding",
+          "value": "disableSessionRecording",
           "required": false,
-          "type": "checkbox",
-          "value": "disableSessionRecording"
+          "default": false
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Disable PostHog cookie",
+          "value": "disableCookie",
           "required": false,
-          "type": "checkbox",
-          "value": "disableCookie"
+          "default": false
         },
         {
-          "keyLeft": "key",
-          "keyRight": "value",
+          "type": "dynamicForm",
           "label": "Additional headers to pass with XHR requests to PostHog API",
           "labelLeft": "Key",
           "labelRight": "Value",
-          "type": "dynamicForm",
+          "keyLeft": "key",
+          "keyRight": "value",
           "value": "xhrHeaders"
         },
         {
+          "type": "dynamicCustomForm",
+          "value": "propertyBlackList",
+          "label": "Property black list",
           "customFields": [
             {
-              "label": "Property",
-              "regex": ".*",
-              "required": false,
               "type": "textInput",
-              "value": "property"
+              "label": "Property",
+              "value": "property",
+              "regex": ".*",
+              "required": false
             }
-          ],
-          "label": "Property black list",
-          "type": "dynamicCustomForm",
-          "value": "propertyBlackList"
+          ]
         }
-      ],
-      "title": "Native SDK"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -116,67 +117,66 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
+            }
+          ]
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "blacklistedEvents",
           "label": "Denylist",
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
-        }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
-    },
-    {
-      "fields": [
-        {
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
+            }
+          ]
+        }
+      ]
     },
     {
       "fields": [
         {
-          "default": false,
-          "footerNote": "It is recomended to set this to on as we are deprecating support for the old mapping soon.",
-          "label": "Use Updated Mapping for Group calls",
           "type": "checkbox",
-          "value": "useV2Group"
+          "label": "Use Updated Mapping for Group calls",
+          "value": "useV2Group",
+          "default": false,
+          "footerNote": "It is recomended to set this to on as we are deprecating support for the old mapping soon."
         }
       ]
     }

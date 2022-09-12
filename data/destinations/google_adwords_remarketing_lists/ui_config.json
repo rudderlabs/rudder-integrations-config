@@ -1,0 +1,114 @@
+{
+  "uiConfig": [
+    {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "List ID",
+          "value": "listId",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Google remarketing list ID",
+          "required": true,
+          "placeholder": "e.g: 7692349833"
+        },
+        {
+          "type": "textInput",
+          "label": "Customer ID",
+          "value": "customerId",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Customer ID",
+          "required": true,
+          "placeholder": "e.g: 9693429833"
+        },
+        {
+          "type": "checkbox",
+          "label": "Sub Account",
+          "value": "subAccount",
+          "required": false,
+          "default": false
+        },
+        {
+          "type": "textInput",
+          "label": "Login Customer ID",
+          "preRequisiteField": [
+            {
+              "name": "subAccount",
+              "selectedValue": true
+            }
+          ],
+          "value": "loginCustomerId",
+          "regex": "^(.{0,100})$",
+          "required": true,
+          "footerNote": "If customer ID is from a sub account, then provide the customer ID of manager account"
+        }
+      ]
+    },
+    {
+      "title": "Event Settings",
+      "fields": [
+        {
+          "type": "singleSelect",
+          "label": "List Type",
+          "value": "typeOfList",
+          "mode": "single",
+          "options": [
+            {
+              "name": "General",
+              "value": "General"
+            },
+            {
+              "name": "User ID",
+              "value": "userID"
+            },
+            {
+              "name": "Mobile Device ID",
+              "value": "mobileDeviceID"
+            }
+          ],
+          "defaultOption": {
+            "value": "General"
+          }
+        },
+        {
+          "type": "checkbox",
+          "label": "Hash Required",
+          "value": "isHashRequired",
+          "default": true
+        },
+        {
+          "type": "singleSelect",
+          "label": "Schema Fields",
+          "preRequisiteField": [
+            {
+              "name": "typeOfList",
+              "selectedValue": "General"
+            }
+          ],
+          "value": "userSchema",
+          "mode": "multiple",
+          "options": [
+            {
+              "name": "Email",
+              "value": "email"
+            },
+            {
+              "name": "Phone Number",
+              "value": "phone"
+            },
+            {
+              "name": "Address Info",
+              "value": "addressInfo"
+            }
+          ],
+          "defaultOption": {
+            "name": "Email",
+            "value": [
+              "email"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
