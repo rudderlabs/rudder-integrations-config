@@ -1,0 +1,65 @@
+[
+  {
+    "config": {
+      "zapUrl": "abc.zap.com",
+      "trackEventsToZap": [{}],
+      "pageScreenEventsToZap": [{}]
+    },
+    "result": false
+  },
+  {
+    "config": {
+      "zapUrl": "",
+      "trackEventsToZap": [{}],
+      "pageScreenEventsToZap": [
+        {
+          "from": "First",
+          "to": "def.zap.com"
+        },
+        {
+          "from": "second",
+          "to": "def.zap.com"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "zapUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
+    ]
+  },
+  {
+    "config": {
+      "zapUrl": "abc.zap.com",
+      "trackEventsToZap": [
+        {
+          "from": "First",
+          "to": "def.zap.com"
+        },
+        {
+          "from": "second",
+          "to": "def.zap.com"
+        }
+      ],
+      "pageScreenEventsToZap": [{}]
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "trackEventsToZap": [
+        {
+          "from": "First",
+          "to": "def.zap.com"
+        }
+      ],
+      "pageScreenEventsToZap": [
+        {
+          "from": "First",
+          "to": "def.zap.com"
+        }
+      ]
+    },
+    "result": false,
+    "err": [" must have required property 'zapUrl'"]
+  }
+]
