@@ -205,16 +205,36 @@
             "storageIntegration": {
               "type": "string",
               "pattern": "(^env[.].+)|^(.{1,100})$"
-            },
-            "accountKey": {
-              "type": "string",
-              "pattern": "(^env[.].+)|^(.{1,100})$"
-            },
-            "sasToken": {
-              "type": "string",
-              "pattern": "(^env[.].+)|^(.+)$"
             }
-          }
+          },
+          "oneOf": [
+            {
+              "properties": {
+                "accountKey": {
+                  "type": "string",
+                  "pattern": "(^env[.].+)|^(.{1,100})$"
+                }
+              },
+              "required": [
+                "accountKey"
+              ]
+            },
+            {
+              "properties": {
+                "sasToken": {
+                  "type": "string",
+                  "pattern": "(^env[.].+)|^(.+)$"
+                },
+                "useSASTokens": {
+                  "const": true
+                }
+              },
+              "required": [
+                "sasToken",
+                "useSASTokens"
+              ]
+            }
+          ]
         }
       }
     ],
