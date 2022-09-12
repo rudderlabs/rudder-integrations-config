@@ -1,66 +1,69 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Credentials",
+      "secretFields": [
+        "password"
+      ],
       "docLinks": {
         "grantPermissions": "https://docs.rudderstack.com/reverse-etl/amazon-redshift/#granting-permissions",
+        "verifyingCredentials": "https://docs.rudderstack.com/reverse-etl/amazon-redshift/#what-do-the-three-validations-under-verifying-credentials-imply",
         "jsonMapperUseInstructions": "https://docs.rudderstack.com/reverse-etl/amazon-redshift/#specifying-the-data-to-import",
-        "setupInstructions": "https://docs.rudderstack.com/reverse-etl/amazon-redshift",
-        "verifyingCredentials": "https://docs.rudderstack.com/reverse-etl/amazon-redshift/#what-do-the-three-validations-under-verifying-credentials-imply"
+        "setupInstructions": "https://docs.rudderstack.com/reverse-etl/amazon-redshift"
       },
+      "nameField": "user",
       "fields": [
         {
-          "addInAccountSummary": true,
+          "type": "textInput",
           "label": "Host",
+          "value": "host",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Value",
           "required": true,
-          "trim": true,
-          "type": "textInput",
-          "value": "host"
-        },
-        {
-          "inputFieldType": "number",
-          "label": "Port",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Value",
-          "required": true,
-          "type": "textInput",
-          "value": "port"
-        },
-        {
           "addInAccountSummary": true,
+          "trim": true
+        },
+        {
+          "type": "textInput",
+          "label": "Port",
+          "inputFieldType": "number",
+          "value": "port",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "required": true
+        },
+        {
+          "type": "textInput",
           "label": "Database",
+          "value": "dbname",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Value",
           "required": true,
-          "trim": true,
-          "type": "textInput",
-          "value": "dbname"
+          "addInAccountSummary": true,
+          "trim": true
         },
         {
+          "type": "textInput",
           "label": "User",
+          "value": "user",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Value",
           "required": true,
-          "trim": true,
-          "type": "textInput",
-          "value": "user"
+          "trim": true
         },
         {
-          "inputFieldType": "password",
+          "type": "textInput",
           "label": "Password",
+          "value": "password",
+          "inputFieldType": "password",
           "regex": ".*",
           "required": true,
-          "secret": true,
-          "type": "textInput",
-          "value": "password"
+          "secret": true
         },
         {
-          "defaultOption": {
-            "name": "disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
           "label": "SSL Mode",
+          "value": "sslMode",
           "options": [
             {
               "name": "disable",
@@ -71,16 +74,13 @@
               "value": "require"
             }
           ],
-          "required": true,
-          "type": "singleSelect",
-          "value": "sslMode"
+          "defaultOption": {
+            "name": "disable",
+            "value": "disable"
+          },
+          "required": true
         }
-      ],
-      "nameField": "user",
-      "secretFields": [
-        "password"
-      ],
-      "title": "Connection Credentials"
+      ]
     }
   ]
 }

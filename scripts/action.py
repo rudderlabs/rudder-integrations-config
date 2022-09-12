@@ -59,11 +59,11 @@ def get_file_content(name, selector):
     for file_selector in file_selectors:
         if file_selector in available_files:
             with open (f'{directory}/{file_selector}', 'r') as f:
-                file_content.update(json.loads(f.read()))   
+                file_content.update(json.loads(f.read()))
 
     return file_content
 
-def update_config_defintion(selector, name, fileData):
+def update_config_definition(selector, name, fileData):
     url = f'{CONTROL_PLANE_URL}/{selector}-definitions/{name}'
     resp = requests.post(url=url, headers=HEADER, data=json.dumps(fileData), auth=AUTH)
     return parse_response(resp)
@@ -74,34 +74,34 @@ def create_config_definition(selector, fileData):
     return parse_response(resp)
 #########################
 
-def calculate_diff(persisted_data_set, selector):
-    final_report = []
-
-    ## data set
-    current_items = [item.replace('.json', '') for item in os.listdir(f'./data/{selector}s')]
-    persisted_items = [item['name'].lower() for item in persisted_data_set]
-
-    ## check for updates
-    for persisted_data in persisted_data_set:
-        name = persisted_data["name"].lower()
-        if name in current_items:
-            updated_data = get_file_content(name, selector)
-
-            diff = jsondiff.diff(persisted_data, updated_data, marshal=True)
-            # ignore the $delete - values present in DB but missing in files. Anyways this doesn't get reflected in DB as keys are missing in files itself.
-            # Best practice is to make sure all keys are maintained in the config files.
-            #if diff['$delete'] == ['id', 'createdAt', 'updatedAt']:
-            del diff['$delete']
-
-            if len(diff.keys()) > 0: # no changes
-                final_report.append({"name": name, "diff": diff, "action": "update"})
-
-    ## check for new items
-    new_items = [item for item in current_items if item not in persisted_items]
-    for item in new_items:
-        final_report.append({"name": item, "diff": None, "action": "create"})
-
-    return final_report
+# def calculate_diff(persisted_data_set, selector):
+#     final_report = []
+#
+#     ## data set
+#     current_items = [item.replace('.json', '') for item in os.listdir(f'./data/{selector}s')]
+#     persisted_items = [item['name'].lower() for item in persisted_data_set]
+#
+#     ## check for updates
+#     for persisted_data in persisted_data_set:
+#         name = persisted_data["name"].lower()
+#         if name in current_items:
+#             updated_data = get_file_content(name, selector)
+#
+#             diff = jsondiff.diff(persisted_data, updated_data, marshal=True)
+#             # ignore the $delete - values present in DB but missing in files. Anyways this doesn't get reflected in DB as keys are missing in files itself.
+#             # Best practice is to make sure all keys are maintained in the config files.
+#             #if diff['$delete'] == ['id', 'createdAt', 'updatedAt']:
+#             del diff['$delete']
+#
+#             if len(diff.keys()) > 0: # no changes
+#                 final_report.append({"name": name, "diff": diff, "action": "update"})
+#
+#     ## check for new items
+#     new_items = [item for item in current_items if item not in persisted_items]
+#     for item in new_items:
+#         final_report.append({"name": item, "diff": None, "action": "create"})
+#
+#     return final_report
 
 def update_config(data_diff, selector):
     results = []
@@ -109,7 +109,7 @@ def update_config(data_diff, selector):
         name = diff['name']
         fileData = get_file_content(name, selector)
         nameInConfig = fileData["name"]
-        
+
         if diff['action'] == 'create':
             url = f'{CONTROL_PLANE_URL}/{selector}-definitions'
         else:
@@ -142,7 +142,7 @@ def update_diff_db(selector):
 
             if len(diff.keys()) > 0: # changes exist
                 #print(diff)
-                status, response = update_config_defintion(selector, updated_data["name"], updated_data)
+                status, response = update_config_definition(selector, updated_data["name"], updated_data)
                 final_report.append({"name": updated_data["name"], "action":"update", "status": status})
             else:
                 final_report.append({"name": updated_data["name"], "action":"na", "status": ""})
@@ -150,7 +150,7 @@ def update_diff_db(selector):
         else:
             status, response = create_config_definition(selector, updated_data)
             final_report.append({"name": updated_data["name"], "action":"create", "status": status})
-    
+
     return final_report
 
 def get_stale_data(selector, report):
@@ -162,7 +162,7 @@ def get_stale_data(selector, report):
     for item in persisted_items:
         if item not in file_items:
            stale_config_report.append({item})
-    
+
     return stale_config_report
 
 if __name__ == '__main__':
@@ -175,10 +175,10 @@ if __name__ == '__main__':
 
     print("Running Source Definitions Updates")
     src_final_report = update_diff_db('source')
-    print("Source Definition Update Report")    
+    print("Source Definition Update Report")
     print(src_final_report)
     print("Source Stale Config Report")
-    print(get_stale_data('source', src_final_report))    
+    print(get_stale_data('source', src_final_report))
 
     ##################
     ## DESTINATIONS

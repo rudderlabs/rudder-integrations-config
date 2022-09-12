@@ -1,33 +1,32 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "API Key",
-          "placeholder": "e.g: bSjsdGYsOo9sjw23Shj",
+          "value": "apiKey",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Api Key",
           "required": true,
-          "secret": true,
-          "type": "textInput",
-          "value": "apiKey"
+          "placeholder": "e.g: bSjsdGYsOo9sjw23Shj",
+          "secret": true
         },
         {
+          "type": "textInput",
           "label": "API Secret Key Required for deletion of users",
-          "placeholder": "e.g: bSjsdGYsOo9sjw23Shj",
+          "value": "apiSecret",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Api Key",
           "required": false,
-          "secret": true,
-          "type": "textInput",
-          "value": "apiSecret"
+          "placeholder": "e.g: bSjsdGYsOo9sjw23Shj",
+          "secret": true
         },
         {
-          "defaultOption": {
-            "name": "Standard Server",
-            "value": "standard"
-          },
+          "type": "singleSelect",
           "label": "Residency Server",
+          "value": "residencyServer",
           "mode": "single",
           "options": [
             {
@@ -39,297 +38,299 @@
               "value": "EU"
             }
           ],
-          "type": "singleSelect",
-          "value": "residencyServer"
+          "defaultOption": {
+            "name": "Standard Server",
+            "value": "standard"
+          }
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Group Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "Group Name Trait",
+          "value": "groupTypeTrait",
+          "required": false,
           "placeholder": "e.g: company_id",
           "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Group Name Trait",
-          "required": false,
-          "type": "textInput",
-          "value": "groupTypeTrait"
+          "regexErrorMessage": "Invalid Group Name Trait"
         },
         {
+          "type": "textInput",
           "label": "Group Value Trait",
+          "value": "groupValueTrait",
+          "required": false,
           "placeholder": "e.g: company_name",
           "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Group Name Trait",
-          "required": false,
-          "type": "textInput",
-          "value": "groupValueTrait"
+          "regexErrorMessage": "Invalid Group Name Trait"
         }
-      ],
-      "title": "Group Settings"
+      ]
     },
     {
-      "fields": [
-        {
-          "default": false,
-          "label": "Track all pages",
-          "type": "checkbox",
-          "value": "trackAllPages"
-        },
-        {
-          "default": true,
-          "label": "Track Categorized Pages",
-          "type": "checkbox",
-          "value": "trackCategorizedPages"
-        },
-        {
-          "default": true,
-          "label": "Track Named Pages",
-          "type": "checkbox",
-          "value": "trackNamedPages"
-        }
-      ],
+      "title": "Track Pages",
       "sectionNote": "(Note: These settings are only applicable for web and mobile device mode)",
-      "title": "Track Pages"
-    },
-    {
       "fields": [
         {
-          "customFields": [
-            {
-              "label": "Traits to increment",
-              "regex": "^(.{0,100})$",
-              "regexErrorMessage": "Invalid Traits",
-              "required": false,
-              "type": "textInput",
-              "value": "traits"
-            }
-          ],
-          "label": "Traits to increment",
-          "type": "dynamicCustomForm",
-          "value": "traitsToIncrement"
+          "type": "checkbox",
+          "label": "Track all pages",
+          "value": "trackAllPages",
+          "default": false
         },
         {
-          "customFields": [
-            {
-              "label": "Traits to set once",
-              "regex": "^(.{0,100})$",
-              "regexErrorMessage": "Invalid Traits",
-              "required": false,
-              "type": "textInput",
-              "value": "traits"
-            }
-          ],
-          "label": "Traits to set once",
-          "type": "dynamicCustomForm",
-          "value": "traitsToSetOnce"
+          "type": "checkbox",
+          "label": "Track Categorized Pages",
+          "value": "trackCategorizedPages",
+          "default": true
         },
         {
-          "customFields": [
-            {
-              "label": "Traits to Append",
-              "regex": "^(.{0,100})$",
-              "regexErrorMessage": "Invalid Traits",
-              "required": false,
-              "type": "textInput",
-              "value": "traits"
-            }
-          ],
-          "footerNote": "Not applicable for web device mode integrations",
-          "label": "Traits to Append",
-          "type": "dynamicCustomForm",
-          "value": "traitsToAppend"
-        },
-        {
-          "customFields": [
-            {
-              "label": "Traits to Prepend",
-              "regex": "^(.{0,100})$",
-              "regexErrorMessage": "Invalid Traits",
-              "required": false,
-              "type": "textInput",
-              "value": "traits"
-            }
-          ],
-          "footerNote": "Not applicable for web device mode integrations",
-          "label": "Traits to Prepend",
-          "type": "dynamicCustomForm",
-          "value": "traitsToPrepend"
+          "type": "checkbox",
+          "label": "Track Named Pages",
+          "value": "trackNamedPages",
+          "default": true
         }
-      ],
-      "title": "Traits Settings"
+      ]
     },
     {
+      "title": "Traits Settings",
       "fields": [
         {
-          "default": false,
+          "type": "dynamicCustomForm",
+          "value": "traitsToIncrement",
+          "label": "Traits to increment",
+          "customFields": [
+            {
+              "type": "textInput",
+              "label": "Trait",
+              "value": "traits",
+              "regex": "^(.{0,100})$",
+              "regexErrorMessage": "Invalid Traits",
+              "required": false
+            }
+          ]
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "traitsToSetOnce",
+          "label": "Traits to set once",
+          "customFields": [
+            {
+              "type": "textInput",
+              "label": "Trait",
+              "value": "traits",
+              "regex": "^(.{0,100})$",
+              "regexErrorMessage": "Invalid Traits",
+              "required": false
+            }
+          ]
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "traitsToAppend",
+          "label": "Traits to Append",
+          "customFields": [
+            {
+              "type": "textInput",
+              "label": "Traits",
+              "value": "traits",
+              "regex": "^(.{0,100})$",
+              "regexErrorMessage": "Invalid Traits",
+              "required": false
+            }
+          ],
+          "footerNote": "Not applicable for web device mode integrations"
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "traitsToPrepend",
+          "label": "Traits to Prepend",
+          "customFields": [
+            {
+              "type": "textInput",
+              "label": "Traits",
+              "value": "traits",
+              "regex": "^(.{0,100})$",
+              "regexErrorMessage": "Invalid Traits",
+              "required": false
+            }
+          ],
+          "footerNote": "Not applicable for web device mode integrations"
+        }
+      ]
+    },
+    {
+      "title": "Other Settings",
+      "fields": [
+        {
+          "type": "checkbox",
           "label": "Track products once",
+          "value": "trackProductsOnce",
           "required": false,
-          "type": "checkbox",
-          "value": "trackProductsOnce"
+          "default": false
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Track Revenue per product",
+          "value": "trackRevenuePerProduct",
           "required": false,
-          "type": "checkbox",
-          "value": "trackRevenuePerProduct"
+          "default": false
         },
         {
-          "footerNote": "Applicable only for web device mode integrations",
+          "type": "textInput",
           "label": "Version Name",
-          "placeholder": "e.g: 1.12.3",
+          "value": "versionName",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Version Name",
           "required": false,
+          "placeholder": "e.g: 1.12.3",
           "secret": false,
-          "type": "textInput",
-          "value": "versionName"
+          "footerNote": "Applicable only for web device mode integrations"
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Map device brand",
+          "value": "mapDeviceBrand",
           "required": false,
-          "type": "checkbox",
-          "value": "mapDeviceBrand"
+          "default": false
         }
-      ],
-      "title": "Other Settings"
+      ]
     },
     {
+      "title": "Batching Events",
       "fields": [
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Batch Events",
-          "type": "checkbox",
-          "value": "batchEvents"
+          "value": "batchEvents",
+          "default": false
         },
         {
-          "default": "30000",
+          "type": "textInput",
           "label": "Event Upload Period Millis",
-          "placeholder": "30000",
+          "value": "eventUploadPeriodMillis",
+          "required": false,
+          "default": "30000",
           "regex": "^([0-9]{0,100})$",
           "regexErrorMessage": "Invalid Value",
-          "required": false,
-          "type": "textInput",
-          "value": "eventUploadPeriodMillis"
+          "placeholder": "30000"
         },
         {
-          "default": "30",
+          "type": "textInput",
           "label": "Event Upload Threshold",
-          "placeholder": "30",
+          "value": "eventUploadThreshold",
+          "required": false,
           "regex": "^([0-9]{0,100})$",
           "regexErrorMessage": "Invalid Value",
-          "required": false,
-          "type": "textInput",
-          "value": "eventUploadThreshold"
+          "default": "30",
+          "placeholder": "30"
         }
-      ],
-      "title": "Batching Events"
+      ]
     },
     {
+      "title": "Native SDK",
       "fields": [
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
           "required": false,
-          "type": "checkbox",
-          "value": "useNativeSDK"
+          "default": false
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Prefer Anonymous ID for Device ID",
+          "value": "preferAnonymousIdForDeviceId",
           "required": false,
-          "type": "checkbox",
-          "value": "preferAnonymousIdForDeviceId"
+          "default": false
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Set Device ID From URL Parameter amp_device_id",
+          "value": "deviceIdFromUrlParam",
           "required": false,
-          "type": "checkbox",
-          "value": "deviceIdFromUrlParam"
+          "default": false
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Force HTTPS",
+          "value": "forceHttps",
           "required": false,
-          "type": "checkbox",
-          "value": "forceHttps"
+          "default": false
         },
         {
-          "default": true,
+          "type": "checkbox",
           "label": "Track GCLID",
+          "value": "trackGclid",
           "required": false,
-          "type": "checkbox",
-          "value": "trackGclid"
+          "default": true
         },
         {
-          "default": true,
+          "type": "checkbox",
           "label": "Track Referrer",
+          "value": "trackReferrer",
           "required": false,
-          "type": "checkbox",
-          "value": "trackReferrer"
+          "default": true
         },
         {
-          "default": true,
+          "type": "checkbox",
           "label": "Save Referrer, URL Params, GCLID Once Per Session",
+          "value": "saveParamsReferrerOncePerSession",
           "required": false,
-          "type": "checkbox",
-          "value": "saveParamsReferrerOncePerSession"
+          "default": true
         },
         {
-          "default": true,
+          "type": "checkbox",
           "label": "Track UTM properties",
+          "value": "trackUtmProperties",
           "required": false,
-          "type": "checkbox",
-          "value": "trackUtmProperties"
+          "default": true
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Unset Params Referrer On New Session",
+          "value": "unsetParamsReferrerOnNewSession",
           "required": false,
-          "type": "checkbox",
-          "value": "unsetParamsReferrerOnNewSession"
+          "default": false
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Enable Location Listening",
+          "value": "enableLocationListening",
           "required": false,
-          "type": "checkbox",
-          "value": "enableLocationListening"
+          "default": false
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Track Session Events",
+          "value": "trackSessionEvents",
           "required": false,
-          "type": "checkbox",
-          "value": "trackSessionEvents"
+          "default": false
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Use Advertising ID for Device ID",
+          "value": "useAdvertisingIdForDeviceId",
           "required": false,
-          "type": "checkbox",
-          "value": "useAdvertisingIdForDeviceId"
+          "default": false
         },
         {
-          "default": false,
-          "label": "Use IDFA as device Id",
-          "required": false,
           "type": "checkbox",
-          "value": "useIdfaAsDeviceId"
+          "label": "Use IDFA as device Id",
+          "value": "useIdfaAsDeviceId",
+          "required": false,
+          "default": false
         }
-      ],
-      "title": "Native SDK"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -344,58 +345,57 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Consent Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
     }
   ]
 }

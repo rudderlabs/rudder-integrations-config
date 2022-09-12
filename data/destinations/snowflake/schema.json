@@ -1,7 +1,77 @@
 {
-  "schema": {
+  "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "additionalProperties": true,
+    "type": "object",
+    "required": [
+      "account",
+      "database",
+      "warehouse",
+      "user",
+      "password",
+      "syncFrequency",
+      "useRudderStorage"
+    ],
+    "properties": {
+      "account": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "database": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "warehouse": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "user": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "password": {
+        "type": "string",
+        "pattern": "(^env[.].+)|.+"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
+      },
+      "syncFrequency": {
+        "type": "string",
+        "pattern": "^(30|60|180|360|720|1440)$",
+        "default": "30"
+      },
+      "syncStartAt": {
+        "type": "string"
+      },
+      "excludeWindow": {
+        "type": "object",
+        "required": [
+          "excludeWindowStartTime",
+          "excludeWindowEndTime"
+        ],
+        "properties": {
+          "excludeWindowStartTime": {
+            "type": "string"
+          },
+          "excludeWindowEndTime": {
+            "type": "string"
+          }
+        }
+      },
+      "jsonPaths": {
+        "type": "string",
+        "pattern": "(^env[.].*)|.*"
+      },
+      "useRudderStorage": {
+        "type": "boolean",
+        "default": false
+      },
+      "cloudProvider": {
+        "type": "string",
+        "pattern": "^(AWS|GCP|AZURE)$"
+      }
+    },
     "allOf": [
       {
         "if": {
@@ -23,6 +93,26 @@
       {
         "if": {
           "properties": {
+            "useRudderStorage": {
+              "const": false
+            }
+          },
+          "required": [
+            "useRudderStorage"
+          ]
+        },
+        "then": {
+          "properties": {
+            "prefix": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
             "cloudProvider": {
               "const": "AWS"
             },
@@ -37,17 +127,17 @@
         },
         "then": {
           "properties": {
-            "accessKey": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
+            "bucketName": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
             },
             "accessKeyID": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
             },
-            "bucketName": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
+            "accessKey": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
             },
             "enableSSE": {
               "type": "boolean"
@@ -73,16 +163,16 @@
         "then": {
           "properties": {
             "bucketName": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$"
             },
             "credentials": {
-              "pattern": "(^env[.].+)|.+",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^env[.].+)|.+"
             },
             "storageIntegration": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
             }
           }
         }
@@ -104,92 +194,50 @@
         },
         "then": {
           "properties": {
-            "accountKey": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
+            "containerName": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$"
             },
             "accountName": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
-            },
-            "containerName": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
             },
             "storageIntegration": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
             }
-          }
+          },
+          "oneOf": [
+            {
+              "properties": {
+                "accountKey": {
+                  "type": "string",
+                  "pattern": "(^env[.].+)|^(.{1,100})$"
+                }
+              },
+              "required": [
+                "accountKey"
+              ]
+            },
+            {
+              "properties": {
+                "sasToken": {
+                  "type": "string",
+                  "pattern": "(^env[.].+)|^(.+)$"
+                },
+                "useSASTokens": {
+                  "const": true
+                }
+              },
+              "required": [
+                "sasToken",
+                "useSASTokens"
+              ]
+            }
+          ]
         }
       }
     ],
-    "properties": {
-      "account": {
-        "pattern": "(^env[.].+)|^(.{1,100})$",
-        "type": "string"
-      },
-      "cloudProvider": {
-        "pattern": "^(AWS|GCP|AZURE)$",
-        "type": "string"
-      },
-      "database": {
-        "pattern": "(^env[.].+)|^(.{1,100})$",
-        "type": "string"
-      },
-      "excludeWindow": {
-        "properties": {
-          "excludeWindowEndTime": {
-            "type": "string"
-          },
-          "excludeWindowStartTime": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "excludeWindowStartTime",
-          "excludeWindowEndTime"
-        ],
-        "type": "object"
-      },
-      "namespace": {
-        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
-        "type": "string"
-      },
-      "password": {
-        "pattern": "(^env[.].+)|.+",
-        "type": "string"
-      },
-      "syncFrequency": {
-        "default": "30",
-        "pattern": "^(30|60|180|360|720|1440)$",
-        "type": "string"
-      },
-      "syncStartAt": {
-        "type": "string"
-      },
-      "useRudderStorage": {
-        "default": false,
-        "type": "boolean"
-      },
-      "user": {
-        "pattern": "(^env[.].+)|^(.{1,100})$",
-        "type": "string"
-      },
-      "warehouse": {
-        "pattern": "(^env[.].+)|^(.{1,100})$",
-        "type": "string"
-      }
-    },
-    "required": [
-      "account",
-      "database",
-      "warehouse",
-      "user",
-      "password",
-      "syncFrequency",
-      "useRudderStorage"
-    ],
-    "type": "object"
+    "additionalProperties": true
   }
 }

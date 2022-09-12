@@ -1,7 +1,82 @@
 {
-  "schema": {
+  "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "additionalProperties": true,
+    "type": "object",
+    "required": [
+      "host",
+      "database",
+      "user",
+      "password",
+      "port",
+      "sslMode",
+      "syncFrequency",
+      "useRudderStorage"
+    ],
+    "properties": {
+      "host": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "database": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "user": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "password": {
+        "type": "string",
+        "pattern": "(^env[.].+)|.+"
+      },
+      "port": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
+      },
+      "sslMode": {
+        "type": "string",
+        "pattern": "^(disable|require|verify-ca)$"
+      },
+      "syncFrequency": {
+        "type": "string",
+        "pattern": "^(30|60|180|360|720|1440)$",
+        "default": "30"
+      },
+      "syncStartAt": {
+        "type": "string"
+      },
+      "excludeWindow": {
+        "type": "object",
+        "required": [
+          "excludeWindowStartTime",
+          "excludeWindowEndTime"
+        ],
+        "properties": {
+          "excludeWindowStartTime": {
+            "type": "string"
+          },
+          "excludeWindowEndTime": {
+            "type": "string"
+          }
+        }
+      },
+      "jsonPaths": {
+        "type": "string",
+        "pattern": "(^env[.].*)|.*"
+      },
+      "useRudderStorage": {
+        "type": "boolean",
+        "default": false
+      },
+      "bucketProvider": {
+        "type": "string",
+        "pattern": "^(S3|GCS|AZURE_BLOB|MINIO)$"
+      }
+    },
     "allOf": [
       {
         "if": {
@@ -37,17 +112,17 @@
         },
         "then": {
           "properties": {
-            "accessKey": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
+            "bucketName": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
             },
             "accessKeyID": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
             },
-            "bucketName": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
+            "accessKey": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
             }
           },
           "required": [
@@ -75,12 +150,12 @@
         "then": {
           "properties": {
             "bucketName": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$"
             },
             "credentials": {
-              "pattern": "(^env[.].+)|.+",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^env[.].+)|.+"
             }
           },
           "required": [
@@ -106,23 +181,46 @@
         },
         "then": {
           "properties": {
-            "accountKey": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
+            "containerName": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$"
             },
             "accountName": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
-            },
-            "containerName": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
             }
           },
           "required": [
             "containerName",
-            "accountName",
-            "accountKey"
+            "accountName"
+          ],
+          "oneOf": [
+            {
+              "properties": {
+                "accountKey": {
+                  "type": "string",
+                  "pattern": "(^env[.].+)|^(.{1,100})$"
+                }
+              },
+              "required": [
+                "accountKey"
+              ]
+            },
+            {
+              "properties": {
+                "sasToken": {
+                  "type": "string",
+                  "pattern": "(^env[.].+)|^(.+)$"
+                },
+                "useSASTokens": {
+                  "const": true
+                }
+              },
+              "required": [
+                "useSASTokens",
+                "sasToken"
+              ]
+            }
           ]
         }
       },
@@ -143,21 +241,21 @@
         },
         "then": {
           "properties": {
-            "accessKeyID": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
-            },
             "bucketName": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^env[.].+)|^((?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
+            },
+            "accessKeyID": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
             },
             "endPoint": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
             },
             "secretAccessKey": {
-              "pattern": "(^env[.].+)|^(.{1,100})$",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
             },
             "useSSL": {
               "type": "boolean"
@@ -171,89 +269,31 @@
             "useSSL"
           ]
         }
-      }
-    ],
-    "properties": {
-      "bucketProvider": {
-        "pattern": "^(S3|GCS|AZURE_BLOB|MINIO)$",
-        "type": "string"
       },
-      "database": {
-        "pattern": "(^env[.].+)|^(.{1,100})$",
-        "type": "string"
-      },
-      "excludeWindow": {
-        "properties": {
-          "excludeWindowEndTime": {
-            "type": "string"
-          },
-          "excludeWindowStartTime": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "excludeWindowStartTime",
-          "excludeWindowEndTime"
-        ],
-        "type": "object"
-      },
-      "host": {
-        "pattern": "(^env[.].+)|^(.{1,100})$",
-        "type": "string"
-      },
-      "namespace": {
-        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
-        "type": "string"
-      },
-      "password": {
-        "pattern": "(^env[.].+)|.+",
-        "type": "string"
-      },
-      "port": {
-        "pattern": "(^env[.].+)|^(.{1,100})$",
-        "type": "string"
-      },
-      "sslMode": {
-        "pattern": "^(disable|require|verify-ca)$",
-        "type": "string"
-      },
-      "syncFrequency": {
-        "default": "30",
-        "pattern": "^(30|60|180|360|720|1440)$",
-        "type": "string"
-      },
-      "syncStartAt": {
-        "type": "string"
-      },
-      "useRudderStorage": {
-        "default": false,
-        "type": "boolean"
-      },
-      "user": {
-        "pattern": "(^env[.].+)|^(.{1,100})$",
-        "type": "string"
-      },
-      "verifyCAProperties": {
+      {
         "if": {
           "properties": {
             "sslMode": {
               "const": "verify-ca"
             }
-          }
+          },
+          "required": [
+            "sslMode"
+          ]
         },
         "then": {
           "properties": {
-            "clientCert": {
-              "pattern": "-----BEGIN RSA PRIVATE KEY-----.*-----END CERTIFICATE-----",
-              "type": "string"
-            },
             "clientKey": {
-              "pattern": "-----BEGIN RSA PRIVATE KEY-----.*-----END CERTIFICATE-----",
-              "type": "string"
+              "type": "string",
+              "pattern": "-----BEGIN RSA PRIVATE KEY-----.*-----END RSA PRIVATE KEY-----"
+            },
+            "clientCert": {
+              "type": "string",
+              "pattern": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----"
             },
             "serverCA": {
-              "pattern": "-----BEGIN RSA PRIVATE KEY-----.*-----END CERTIFICATE-----",
-              "type": "string"
+              "type": "string",
+              "pattern": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----"
             }
           },
           "required": [
@@ -261,20 +301,9 @@
             "clientCert",
             "serverCA"
           ]
-        },
-        "type": "object"
+        }
       }
-    },
-    "required": [
-      "host",
-      "database",
-      "user",
-      "password",
-      "port",
-      "sslMode",
-      "syncFrequency",
-      "useRudderStorage"
     ],
-    "type": "object"
+    "additionalProperties": true
   }
 }

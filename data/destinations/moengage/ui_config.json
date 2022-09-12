@@ -1,31 +1,30 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "API ID",
-          "placeholder": "e.g: W0ZHNMPI204KHJ84ZILZACRB",
+          "value": "apiId",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid API ID",
-          "required": true,
-          "type": "textInput",
-          "value": "apiId"
+          "placeholder": "e.g: W0ZHNMPI204KHJ84ZILZACRB",
+          "required": true
         },
         {
+          "type": "textInput",
           "label": "API Key",
+          "value": "apiKey",
           "placeholder": "e.g: uUIHmnX66ctEDjD__bjlSCOOO",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid API Key",
           "required": true,
-          "type": "textInput",
-          "value": "apiKey"
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid API Key"
         },
         {
-          "defaultOption": {
-            "name": "US",
-            "value": "US"
-          },
+          "type": "singleSelect",
           "label": "Region",
+          "value": "region",
           "options": [
             {
               "name": "US",
@@ -40,32 +39,34 @@
               "value": "IND"
             }
           ],
-          "required": true,
-          "type": "singleSelect",
-          "value": "region"
+          "defaultOption": {
+            "name": "US",
+            "value": "US"
+          },
+          "required": true
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Use device-mode to send events",
-          "type": "checkbox",
-          "value": "useNativeSDK"
+          "value": "useNativeSDK",
+          "default": false
         },
         {
-          "default": false,
-          "label": "Debug Mode",
           "type": "checkbox",
-          "value": "debug"
+          "label": "Debug Mode",
+          "value": "debug",
+          "default": false
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -80,58 +81,57 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Consent Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
     }
   ]
 }

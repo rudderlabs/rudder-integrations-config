@@ -1,23 +1,24 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
-          "footerNote": "Your API Key",
+          "type": "textInput",
           "label": "API Key",
-          "placeholder": "e.g. tZrPAgHyn2jMWOVGKrS6gBGLYT8v9kJE",
+          "value": "apiKey",
           "regex": ".*",
           "required": true,
+          "placeholder": "e.g. tZrPAgHyn2jMWOVGKrS6gBGLYT8v9kJE",
           "secret": true,
-          "type": "textInput",
-          "value": "apiKey"
+          "footerNote": "Your API Key"
         },
         {
-          "defaultOption": {
-            "name": "Email",
-            "value": "email"
-          },
+          "type": "singleSelect",
           "label": "Channel",
+          "value": "channel",
+          "required": true,
+          "placeholder": "Email",
           "options": [
             {
               "name": "Email",
@@ -28,40 +29,39 @@
               "value": "sms"
             }
           ],
-          "placeholder": "Email",
-          "required": true,
-          "type": "singleSelect",
-          "value": "channel"
+          "defaultOption": {
+            "name": "Email",
+            "value": "email"
+          }
         },
         {
-          "default": "0",
-          "footerNote": "The amount of seconds to wait before sending the survey email.",
-          "label": "Delay",
-          "placeholder": "e.g. 60",
-          "required": false,
           "type": "textInput",
-          "value": "delay"
+          "label": "Delay",
+          "value": "delay",
+          "required": false,
+          "placeholder": "e.g. 60",
+          "default": "0",
+          "footerNote": "The amount of seconds to wait before sending the survey email."
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Event Names",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "eventNamesSettings",
           "customFields": [
             {
-              "label": "Event",
-              "placeholder": "e.g: Product Reviewed",
-              "required": false,
               "type": "textInput",
-              "value": "event"
+              "label": "Event",
+              "value": "event",
+              "required": false,
+              "placeholder": "e.g: Product Reviewed"
             }
-          ],
-          "type": "dynamicCustomForm",
-          "value": "eventNamesSettings"
+          ]
         }
-      ],
-      "title": "Event Names"
+      ]
     }
   ]
 }

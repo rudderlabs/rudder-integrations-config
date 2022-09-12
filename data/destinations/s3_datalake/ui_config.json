@@ -1,83 +1,82 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Credentials",
       "fields": [
         {
-          "footerNote": "Please make sure the bucket exists in your S3",
+          "type": "textInput",
           "label": "S3 Storage Bucket Name",
           "labelNote": "S3 Bucket to store your event data",
-          "regex": ".*",
+          "value": "bucketName",
+          "regex": "^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
           "required": true,
-          "type": "textInput",
-          "value": "bucketName"
+          "footerNote": "Please make sure the bucket exists in your S3"
         },
         {
-          "default": false,
-          "footerNote": "We register the schema on AWS Glue's Data Catalog if this option is enabled",
-          "label": "Register schema on AWS Glue",
           "type": "checkbox",
-          "value": "useGlue"
+          "label": "Register schema on AWS Glue",
+          "value": "useGlue",
+          "default": false,
+          "footerNote": "We register the schema on AWS Glue's Data Catalog if this option is enabled"
         },
         {
+          "type": "textInput",
           "label": "AWS Glue Region",
           "labelNote": "Your AWS Glue region.Ex-For N.Virginia, this field's value would be 'us-east-1'",
+          "value": "region",
+          "regex": ".*",
+          "required": true,
           "preRequisiteField": {
             "name": "useGlue",
             "selectedValue": true
-          },
-          "regex": ".*",
-          "required": true,
-          "type": "textInput",
-          "value": "region"
+          }
         },
         {
+          "type": "textInput",
           "label": "S3 Prefix",
           "labelNote": "If configured, all data pushed by rudderstack will be at s3://<bucketName>/<prefix>/",
-          "placeholder": "",
+          "value": "prefix",
           "regex": ".*",
           "required": false,
-          "type": "textInput",
-          "value": "prefix"
+          "placeholder": ""
         },
         {
-          "footerNote": "All data for the destination would be pushed to s3://<bucketName>/<prefix>/rudder-datalake/<namespace>.If glue is enabled, all table definitions are created in a database with name set to namespace.",
+          "type": "textInput",
           "label": "Namespace",
+          "value": "namespace",
           "labelNote": "Defaults to source name.",
           "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
           "required": false,
-          "type": "textInput",
-          "value": "namespace"
+          "footerNote": "All data for the destination would be pushed to s3://<bucketName>/<prefix>/rudder-datalake/<namespace>.If glue is enabled, all table definitions are created in a database with name set to namespace."
         },
         {
+          "type": "textInput",
           "label": "AWS Access Key ID",
+          "value": "accessKeyID",
+          "regex": ".*",
+          "required": false,
           "placeholder": "e.g: access-key-id",
-          "regex": ".*",
-          "required": false,
-          "secret": true,
-          "type": "textInput",
-          "value": "accessKeyID"
+          "secret": true
         },
         {
+          "type": "textInput",
           "label": "AWS Secret Access Key",
-          "placeholder": "e.g: secret-access-key",
+          "value": "accessKey",
           "regex": ".*",
           "required": false,
-          "secret": true,
-          "type": "textInput",
-          "value": "accessKey"
+          "placeholder": "e.g: secret-access-key",
+          "secret": true
         },
         {
-          "default": false,
-          "label": "Enable Server Side Encryption For S3?",
           "type": "checkbox",
-          "value": "enableSSE"
+          "label": "Enable Server Side Encryption For S3?",
+          "value": "enableSSE",
+          "default": false
         },
         {
-          "defaultOption": {
-            "name": "Every 30 minutes",
-            "value": "30"
-          },
+          "type": "singleSelect",
           "label": "Sync Frequency",
+          "value": "syncFrequency",
           "options": [
             {
               "name": "Every 30 minutes",
@@ -104,22 +103,23 @@
               "value": "1440"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "syncFrequency"
+          "defaultOption": {
+            "name": "Every 30 minutes",
+            "value": "30"
+          },
+          "required": false
         },
         {
-          "footerNote": "Note: Please specify time in UTC",
+          "type": "timePicker",
           "label": "Sync Starting At (Optional)",
+          "value": "syncStartAt",
           "options": {
             "omitSeconds": true
           },
           "required": false,
-          "type": "timePicker",
-          "value": "syncStartAt"
+          "footerNote": "Note: Please specify time in UTC"
         }
-      ],
-      "title": "Connection Credentials"
+      ]
     }
   ]
 }

@@ -1,81 +1,82 @@
 {
   "uiConfig": [
     {
+      "title": "1. Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "Access Token",
-          "placeholder": "e.g: FGHrOjU4ZDc0MjEyXzhjYmNfNDZmYl85ODUxX2RjZDk0Mzk1M2VlMDoxOjA=",
+          "value": "apiKey",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Access Token",
           "required": true,
-          "type": "textInput",
-          "value": "apiKey"
+          "placeholder": "e.g: FGHrOjU4ZDc0MjEyXzhjYmNfNDZmYl85ODUxX2RjZDk0Mzk1M2VlMDoxOjA="
         },
         {
+          "type": "textInput",
           "label": "App Id",
-          "placeholder": "e.g: fll5vd90",
+          "value": "appId",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid App Id",
           "required": true,
-          "type": "textInput",
-          "value": "appId"
+          "placeholder": "e.g: fll5vd90"
         },
         {
+          "type": "textInput",
           "label": "Android API Key",
-          "placeholder": "e.g: android_sdk-67f114561f2267e242466e6687bc7a9ba455cf90",
+          "value": "mobileApiKeyAndroid",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Android API Key",
           "required": false,
-          "type": "textInput",
-          "value": "mobileApiKeyAndroid"
+          "placeholder": "e.g: android_sdk-67f114561f2267e242466e6687bc7a9ba455cf90"
         },
         {
+          "type": "textInput",
           "label": "iOS API Key",
-          "placeholder": "e.g: ios_sdk-5fe73e0bb7fcae17a1a75fdbad227191a69f6c00",
+          "value": "mobileApiKeyIOS",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid iOS API Key",
           "required": false,
-          "type": "textInput",
-          "value": "mobileApiKeyIOS"
+          "placeholder": "e.g: ios_sdk-5fe73e0bb7fcae17a1a75fdbad227191a69f6c00"
         }
-      ],
-      "title": "1. Connection Settings"
+      ]
     },
     {
+      "title": "2. Native SDK",
       "fields": [
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Use device-mode to send events",
-          "type": "checkbox",
-          "value": "useNativeSDK"
+          "value": "useNativeSDK",
+          "default": false
         }
-      ],
-      "title": "2. Native SDK"
+      ]
     },
     {
+      "title": "3. Other Setttings",
       "fields": [
         {
-          "label": "Include Context with Identify Calls",
-          "required": false,
           "type": "checkbox",
-          "value": "collectContext"
+          "label": "Include Context with Identify Calls",
+          "value": "collectContext",
+          "required": false
         },
         {
-          "default": false,
-          "label": "Send AnonymousId as Secondary UserId",
           "type": "checkbox",
-          "value": "sendAnonymousId"
+          "label": "Send AnonymousId as Secondary UserId",
+          "value": "sendAnonymousId",
+          "default": false
         }
-      ],
-      "title": "3. Other Setttings"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -90,58 +91,57 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Consent Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
     }
   ]
 }

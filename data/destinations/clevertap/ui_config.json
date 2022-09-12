@@ -1,55 +1,54 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
-          "footerNote": "Your AccountId",
+          "type": "textInput",
           "label": "Account ID",
+          "value": "accountId",
+          "regex": ".*",
+          "required": true,
           "placeholder": "e.g. 6Z2-RRZ-KZ6Z",
-          "regex": ".*",
-          "required": true,
-          "type": "textInput",
-          "value": "accountId"
+          "footerNote": "Your AccountId"
         },
         {
-          "footerNote": "Your Passcode",
+          "type": "textInput",
           "label": "Passcode",
-          "placeholder": "e.g. WXE-ISD-GHUL",
+          "value": "passcode",
           "regex": ".*",
           "required": true,
+          "placeholder": "e.g. WXE-ISD-GHUL",
           "secret": true,
-          "type": "textInput",
-          "value": "passcode"
+          "footerNote": "Your Passcode"
         },
         {
-          "footerNote": "(Note: Currently this setting is applicable only for Mobile SDK's in device mode)",
+          "type": "textInput",
           "label": "Account Token",
-          "placeholder": "e.g. 1XX-bX6",
+          "value": "accountToken",
           "regex": ".*",
+          "placeholder": "e.g. 1XX-bX6",
           "secret": true,
-          "type": "textInput",
-          "value": "accountToken"
+          "footerNote": "(Note: Currently this setting is applicable only for Mobile SDK's in device mode)"
         },
         {
-          "default": false,
-          "footerNote": "Enable this option to track anonymous users",
+          "type": "checkbox",
           "label": "Enable tracking for anonymous users",
-          "type": "checkbox",
-          "value": "trackAnonymous"
-        },
-        {
+          "value": "trackAnonymous",
           "default": false,
-          "footerNote": "Enable this option to use Clevertap objectId for mapping, please refer to docs for further info",
-          "label": "Use Clevertap ObjectId for Mapping",
-          "type": "checkbox",
-          "value": "enableObjectIdMapping"
+          "footerNote": "Enable this option to track anonymous users"
         },
         {
-          "defaultOption": {
-            "name": "None",
-            "value": "none"
-          },
+          "type": "checkbox",
+          "label": "Use Clevertap ObjectId for Mapping",
+          "value": "enableObjectIdMapping",
+          "default": false,
+          "footerNote": "Enable this option to use Clevertap objectId for mapping, please refer to docs for further info"
+        },
+        {
+          "type": "singleSelect",
           "label": "Region",
+          "value": "region",
           "options": [
             {
               "name": "None",
@@ -72,31 +71,33 @@
               "value": "sk1"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "region"
-        }
-      ],
-      "title": "Connection Settings"
-    },
-    {
-      "fields": [
-        {
-          "default": false,
-          "label": "Use device-mode to send events",
-          "type": "checkbox",
-          "value": "useNativeSDK"
-        }
-      ],
-      "title": "Native SDK"
-    },
-    {
-      "fields": [
-        {
           "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
+            "name": "None",
+            "value": "none"
           },
+          "required": false
+        }
+      ]
+    },
+    {
+      "title": "Native SDK",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": false
+        }
+      ]
+    },
+    {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+      "fields": [
+        {
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -111,58 +112,57 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Consent Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
     }
   ]
 }

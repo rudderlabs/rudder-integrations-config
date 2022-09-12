@@ -1,28 +1,28 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "Criteo Account ID",
-          "placeholder": "1234",
+          "value": "accountId",
           "required": true,
-          "secret": true,
-          "type": "textInput",
-          "value": "accountId"
+          "placeholder": "1234",
+          "secret": true
         },
         {
+          "type": "textInput",
           "label": "Home Page URL",
-          "placeholder": "https://www.example.com",
+          "value": "homePageUrl",
           "required": false,
-          "type": "textInput",
-          "value": "homePageUrl"
+          "placeholder": "https://www.example.com"
         },
         {
-          "defaultOption": {
-            "name": "NONE",
-            "value": "none"
-          },
+          "type": "singleSelect",
           "label": "Email Hashing Method",
+          "value": "hashMethod",
+          "placeholder": "NONE",
           "options": [
             {
               "name": "NONE",
@@ -33,46 +33,47 @@
               "value": "md5"
             }
           ],
-          "placeholder": "NONE",
-          "type": "singleSelect",
-          "value": "hashMethod"
+          "defaultOption": {
+            "name": "NONE",
+            "value": "none"
+          }
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Map specific fields to criteo fields: ",
       "fields": [
         {
-          "keyLeft": "from",
-          "keyRight": "to",
+          "type": "dynamicForm",
           "labelLeft": "Payload Field",
           "labelRight": "Mapped Field",
+          "keyLeft": "from",
+          "keyRight": "to",
           "placeholderLeft": "e.g: userEmail",
           "placeholderRight": "e.g: email",
-          "type": "dynamicForm",
           "value": "fieldMapping"
         }
-      ],
-      "title": "Map specific fields to criteo fields: "
+      ]
     },
     {
+      "title": "Native SDK",
       "fields": [
         {
-          "default": true,
-          "label": "Use device-mode to send events",
           "type": "defaultCheckbox",
-          "value": "useNativeSDK"
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": true
         }
-      ],
-      "title": "Native SDK"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -87,58 +88,92 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Consent Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
+    },
+    {
+      "title": "Event Settings",
+      "fields": [
+        {
+          "type": "dynamicSelectForm",
+          "label": "Mapping RudderStack events to the Criteo standard events",
+          "labelLeft": "Event Name",
+          "labelRight": "Standard Events",
+          "value": "eventsToStandard",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "required": false,
+          "placeholderLeft": "e.g: Sign up completed",
+          "footerNote": "You can specify multiple Standard Events for one Event name and vice versa",
+          "options": [
+            {
+              "name": "product viewed",
+              "value": "product viewed"
+            },
+            {
+              "name": "cart viewed",
+              "value": "cart viewed"
+            },
+            {
+              "name": "order completed",
+              "value": "order completed"
+            },
+            {
+              "name": "product list viewed",
+              "value": "product list viewed"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

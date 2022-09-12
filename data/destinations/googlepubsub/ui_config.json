@@ -1,52 +1,52 @@
 {
   "uiConfig": [
     {
+      "title": "1. Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "Project ID",
-          "placeholder": "",
+          "value": "projectId",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Project ID",
           "required": true,
-          "type": "textInput",
-          "value": "projectId"
+          "placeholder": ""
         },
         {
-          "footerNote": "The credentials JSON is used by the client library to access the Pub/Sub API",
+          "type": "textareaInput",
           "label": "Credentials",
           "labelNote": "GCP Service Account credentials JSON for RudderStack to use in publishing data into your Google Pub/Sub",
+          "value": "credentials",
           "regex": ".*",
           "required": true,
-          "secret": true,
-          "type": "textareaInput",
-          "value": "credentials"
+          "footerNote": "The credentials JSON is used by the client library to access the Pub/Sub API",
+          "secret": true
         },
         {
-          "footerNote": "Use asterics (*) to send all events to the particular topic.",
-          "keyLeft": "from",
-          "keyRight": "to",
+          "type": "dynamicForm",
           "label": "Send RudderStack events to Google pub/sub topics",
+          "footerNote": "Use asterics (*) to send all events to the particular topic.",
           "labelLeft": "Event",
           "labelRight": "Topic ID",
+          "keyLeft": "from",
+          "keyRight": "to",
           "placeholderLeft": "e.g: page",
           "placeholderRight": "e.g: topic_id",
-          "type": "dynamicForm",
           "value": "eventToTopicMap"
         },
         {
-          "footerNote": "Use asterics (*) to map for all events.",
-          "keyLeft": "from",
-          "keyRight": "to",
+          "type": "dynamicForm",
           "label": "Map message properties to Google pub/sub message Attribute Key",
+          "footerNote": "Use asterics (*) to map for all events.",
           "labelLeft": "Event",
           "labelRight": "Field",
+          "keyLeft": "from",
+          "keyRight": "to",
           "placeholderLeft": "e.g: event",
           "placeholderRight": "e.g: key",
-          "type": "dynamicForm",
           "value": "eventToAttributesMap"
         }
-      ],
-      "title": "1. Connection Settings"
+      ]
     }
   ]
 }
