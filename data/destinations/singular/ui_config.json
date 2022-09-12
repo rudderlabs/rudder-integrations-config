@@ -1,62 +1,63 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "API Key",
-          "placeholder": "e.g: abcd_456e5678",
+          "value": "apiKey",
           "regex": "^[a-zA-Z0-9_]*$",
           "regexErrorMessage": "Invalid API Key",
           "required": true,
-          "secret": true,
-          "type": "textInput",
-          "value": "apiKey"
+          "placeholder": "e.g: abcd_456e5678",
+          "secret": true
         },
         {
+          "type": "textInput",
           "label": "Secret",
-          "placeholder": "e.g: r344c6e48c0r87y6iio567b67ad61324",
+          "value": "apiSecret",
           "regex": "^[a-zA-Z0-9]*$",
           "regexErrorMessage": "Invalid Secret Key",
           "required": false,
-          "secret": true,
-          "type": "textInput",
-          "value": "apiSecret"
+          "placeholder": "e.g: r344c6e48c0r87y6iio567b67ad61324",
+          "secret": true
         },
         {
+          "type": "dynamicCustomForm",
+          "value": "sessionEventList",
+          "label": "Session Event Name",
+          "footerNote": "The event name to use as a Session event",
           "customFields": [
             {
-              "placeholder": "e.g: Session Event Name",
-              "required": false,
               "type": "textInput",
-              "value": "sessionEventName"
+              "value": "sessionEventName",
+              "required": false,
+              "placeholder": "e.g: Session Event Name"
             }
-          ],
-          "footerNote": "The event name to use as a Session event",
-          "label": "Session Event Name",
-          "type": "dynamicCustomForm",
-          "value": "sessionEventList"
+          ]
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Native SDK",
       "fields": [
         {
-          "default": true,
-          "label": "Use device-mode to send events",
           "type": "checkbox",
-          "value": "useNativeSDK"
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": true
         }
-      ],
-      "title": "Native SDK"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -71,39 +72,38 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     }
   ]
 }

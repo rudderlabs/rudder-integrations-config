@@ -1,93 +1,94 @@
 {
   "uiConfig": [
     {
+      "title": "Brand Id",
       "fields": [
         {
+          "type": "textInput",
           "label": "Brand Id",
-          "placeholder": "TV-54xxxx18-1",
+          "value": "brandId",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Brand Id",
           "required": true,
-          "type": "textInput",
-          "value": "brandId"
+          "placeholder": "TV-54xxxx18-1"
         }
-      ],
-      "title": "Brand Id"
+      ]
     },
     {
+      "title": "Client Id",
       "fields": [
         {
+          "type": "textInput",
           "label": "Client ID",
-          "placeholder": "4659",
+          "value": "clientId",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Client ID",
           "required": true,
-          "type": "textInput",
-          "value": "clientId"
+          "placeholder": "4659"
         }
-      ],
-      "title": "Client Id"
+      ]
     },
     {
+      "title": "Event Whitelist",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "eventWhiteList",
+          "labelNote": "Add the events you want to pass to TVSquared",
           "customFields": [
             {
+              "type": "textInput",
               "label": "Event Name",
-              "placeholder": "e.g: Order Completed",
+              "value": "event",
               "regex": "^(.{0,100})$",
               "regexErrorMessage": "Invalid Event Name",
               "required": false,
-              "type": "textInput",
-              "value": "event"
+              "placeholder": "e.g: Order Completed"
             }
-          ],
-          "labelNote": "Add the events you want to pass to TVSquared",
-          "type": "dynamicCustomForm",
-          "value": "eventWhiteList"
+          ]
         }
-      ],
-      "title": "Event Whitelist"
+      ]
     },
     {
+      "title": "Custom Metrics",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "customMetrics",
+          "labelNote": "List of Properties you want to pass with the event. Default properties are already sent.",
           "customFields": [
             {
+              "type": "textInput",
               "label": "Property Name",
-              "placeholder": "e.g: browser",
+              "value": "propertyName",
               "regex": "^(.{0,100})$",
               "regexErrorMessage": "Invalid Property Name",
               "required": false,
-              "type": "textInput",
-              "value": "propertyName"
+              "placeholder": "e.g: browser"
             }
-          ],
-          "labelNote": "List of Properties you want to pass with the event. Default properties are already sent.",
-          "type": "dynamicCustomForm",
-          "value": "customMetrics"
+          ]
         }
-      ],
-      "title": "Custom Metrics"
+      ]
     },
     {
+      "title": "Native SDK",
       "fields": [
         {
-          "default": true,
-          "label": "Use device-mode to send events",
           "type": "defaultCheckbox",
-          "value": "useNativeSDK"
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": true
         }
-      ],
-      "title": "Native SDK"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -102,58 +103,57 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Consent Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
     }
   ]
 }

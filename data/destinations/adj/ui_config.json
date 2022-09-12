@@ -1,43 +1,44 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "APP Token",
-          "placeholder": "e.g: bSjsdGYsOo9sasdjw23Shj",
+          "value": "appToken",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid App Token",
           "required": true,
-          "type": "textInput",
-          "value": "appToken"
+          "placeholder": "e.g: bSjsdGYsOo9sasdjw23Shj"
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Send to Production Environment on Adjust",
-          "type": "checkbox",
-          "value": "environment"
+          "value": "environment",
+          "default": false
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Native SDK",
       "fields": [
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Use device-mode to send events",
-          "type": "checkbox",
-          "value": "useNativeSDK"
+          "value": "useNativeSDK",
+          "default": false
         }
-      ],
-      "title": "Native SDK"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -52,68 +53,83 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Map Events to Adjust Event Tokens",
       "fields": [
         {
-          "keyLeft": "from",
-          "keyRight": "to",
+          "type": "dynamicForm",
           "labelLeft": "Event Name",
           "labelRight": "Event Token",
+          "keyLeft": "from",
+          "keyRight": "to",
           "placeholderLeft": "e.g: product_purchased",
           "placeholderRight": "e.g: xcdrf5",
-          "type": "dynamicForm",
           "value": "customMappings"
         }
-      ],
-      "title": "Map Events to Adjust Event Tokens"
+      ]
     },
     {
+      "title": "Rudderstack Parameters to Partner Parameters",
       "fields": [
         {
+          "type": "dynamicForm",
+          "labelLeft": "Rudderstack Properties",
+          "labelRight": "Adjust Partner Parameters",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "placeholderLeft": "e.g: revenue",
+          "placeholderRight": "e.g: value",
+          "value": "partnerParamsKeys",
+          "footerNote": "RudderStack will take the values for these properties from the track call and map them to the corresponding Adjust Partner Parameter keys."
+        }
+      ]
+    },
+    {
+      "title": "Delay Time before SDK initialization",
+      "fields": [
+        {
+          "type": "textInput",
           "label": "Delay Time (in seconds)",
-          "placeholder": "7",
+          "value": "delay",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Value",
           "required": false,
-          "type": "textInput",
-          "value": "delay"
+          "placeholder": "7"
         }
-      ],
-      "title": "Delay Time before SDK initialization"
+      ]
     }
   ]
 }

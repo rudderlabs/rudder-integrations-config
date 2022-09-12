@@ -1,41 +1,46 @@
 {
   "schema": {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "additionalProperties": true,
-    "properties": {
-      "bucketName": {
-        "pattern": "(^env[.].+)|^(.{1,100})$",
-        "type": "string"
-      },
-      "credentials": {
-        "pattern": "(^env[.].+)|.+",
-        "type": "string"
-      },
-      "namespace": {
-        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
-        "type": "string"
-      },
-      "prefix": {
-        "pattern": "(^env[.].*)|^(.{0,100})$",
-        "type": "string"
-      },
-      "syncFrequency": {
-        "default": "30",
-        "pattern": "^(30|60|180|360|720|1440)$",
-        "type": "string"
-      },
-      "syncStartAt": {
-        "type": "string"
-      },
-      "tableSuffix": {
-        "pattern": "(^env[.].+)|.+",
-        "type": "string"
-      }
-    },
+    "type": "object",
     "required": [
       "bucketName",
       "credentials"
     ],
-    "type": "object"
+    "properties": {
+      "bucketName": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$"
+      },
+      "prefix": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
+      },
+      "tableSuffix": {
+        "type": "string",
+        "pattern": "(^env[.].*)|.*"
+      },
+      "timeWindowLayout": {
+        "type": "string",
+        "pattern": "^(2006/01/02/15|dt=2006-01-02|year=2006|year=2006/month=01|year=2006/month=01/day=02|year=2006/month=01/day=02/hour=15)$",
+        "default": "2006/01/02/15"
+      },
+      "credentials": {
+        "type": "string",
+        "pattern": "(^env[.].+)|.+"
+      },
+      "syncFrequency": {
+        "type": "string",
+        "pattern": "^(30|60|180|360|720|1440)$",
+        "default": "30"
+      },
+      "syncStartAt": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": true
   }
 }

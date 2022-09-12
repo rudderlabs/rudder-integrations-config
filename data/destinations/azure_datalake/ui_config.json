@@ -1,63 +1,62 @@
 {
   "uiConfig": [
     {
+      "title": "1. Connection Credentials",
       "fields": [
         {
-          "footerNote": "Please make sure the container exists in your Azure Blob Storage",
+          "type": "textInput",
           "label": "Azure Blob Storage Container Name",
           "labelNote": "Container to store your event data",
-          "placeholder": "e.g: azure-event-logs",
-          "regex": "^(.{1,100})$",
+          "value": "containerName",
+          "regex": "^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$",
           "regexErrorMessage": "Invalid Staging Azure Blob Storage Container Name",
           "required": true,
-          "type": "textInput",
-          "value": "containerName"
+          "placeholder": "e.g: azure-event-logs",
+          "footerNote": "Please make sure the container exists in your Azure Blob Storage"
         },
         {
+          "type": "textInput",
           "label": "Prefix",
+          "value": "prefix",
           "labelNote": "If configured, all data pushed by rudderstack will be at https://<account_name>.blob.core.windows.net/<container_name>/<prefix>/",
-          "placeholder": "e.g: rudder",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Prefix",
           "required": false,
-          "type": "textInput",
-          "value": "prefix"
+          "placeholder": "e.g: rudder"
         },
         {
-          "footerNote": "All data for the destination would be pushed to https://<account_name>.blob.core.windows.net/<container_name>/<prefix>/rudder-datalake/<namespace>.",
+          "type": "textInput",
           "label": "Namespace",
           "labelNote": "Schema name for the warehouse where the tables are created",
-          "placeholder": "e.g: RUDDER_NAMESPACE",
+          "value": "namespace",
           "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
           "regexErrorMessage": "Invalid Namespace",
           "required": false,
-          "type": "textInput",
-          "value": "namespace"
+          "placeholder": "e.g: RUDDER_NAMESPACE",
+          "footerNote": "All data for the destination would be pushed to https://<account_name>.blob.core.windows.net/<container_name>/<prefix>/rudder-datalake/<namespace>."
         },
         {
+          "type": "textInput",
           "label": "Azure Blob Storage Account Name",
-          "placeholder": "e.g: account-name",
+          "value": "accountName",
           "regex": "^(.{1,100})$",
           "regexErrorMessage": "Invalid Azure Blob Storage Account Name",
           "required": true,
-          "type": "textInput",
-          "value": "accountName"
+          "placeholder": "e.g: account-name"
         },
         {
+          "type": "textInput",
           "label": "Azure Blob Storage Account Key",
-          "placeholder": "e.g: account-key",
+          "value": "accountKey",
           "regex": "^(.{1,100})$",
           "regexErrorMessage": "Invalid Azure Blob Storage Account Key",
           "required": true,
-          "type": "textInput",
-          "value": "accountKey"
+          "placeholder": "e.g: account-key"
         },
         {
-          "defaultOption": {
-            "name": "Every 30 minutes",
-            "value": "30"
-          },
+          "type": "singleSelect",
           "label": "Sync Frequency",
+          "value": "syncFrequency",
           "options": [
             {
               "name": "Every 30 minutes",
@@ -84,23 +83,24 @@
               "value": "1440"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "syncFrequency"
+          "defaultOption": {
+            "name": "Every 30 minutes",
+            "value": "30"
+          },
+          "required": false
         },
         {
-          "footerNote": "Note: Please specify time in UTC",
+          "type": "timePicker",
           "label": "Sync Starting At (Optional)",
+          "value": "syncStartAt",
           "options": {
-            "minuteStep": 15,
-            "omitSeconds": true
+            "omitSeconds": true,
+            "minuteStep": 15
           },
           "required": false,
-          "type": "timePicker",
-          "value": "syncStartAt"
+          "footerNote": "Note: Please specify time in UTC"
         }
-      ],
-      "title": "1. Connection Credentials"
+      ]
     }
   ]
 }

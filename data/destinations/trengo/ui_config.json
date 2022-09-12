@@ -1,35 +1,34 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "API Token",
-          "placeholder": "e.g: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwian..",
+          "value": "apiToken",
           "regex": ".*",
           "required": true,
-          "secret": true,
-          "type": "textInput",
-          "value": "apiToken"
+          "placeholder": "e.g: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwian..",
+          "secret": true
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Destination Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "Channel Id",
-          "placeholder": "e.g: 89002",
+          "value": "channelId",
           "regex": ".*",
           "required": true,
-          "type": "textInput",
-          "value": "channelId"
+          "placeholder": "e.g: 89002"
         },
         {
-          "defaultOption": {
-            "name": "Email",
-            "value": "email"
-          },
+          "type": "singleSelect",
           "label": "Channel Identifier",
+          "value": "channelIdentifier",
           "options": [
             {
               "name": "Email",
@@ -40,31 +39,32 @@
               "value": "phone"
             }
           ],
-          "required": true,
-          "type": "singleSelect",
-          "value": "channelIdentifier"
+          "defaultOption": {
+            "name": "Email",
+            "value": "email"
+          },
+          "required": true
         },
         {
-          "default": true,
-          "footerNote": "Note: Disabling  this field will create a possibility to create duplicate contacts, before disabling it view the destination docs to understand the full implications",
-          "label": "Enable deduplication for Contacts",
           "type": "checkbox",
-          "value": "enableDedup"
+          "label": "Enable deduplication for Contacts",
+          "value": "enableDedup",
+          "default": true,
+          "footerNote": "Note: Disabling  this field will create a possibility to create duplicate contacts, before disabling it view the destination docs to understand the full implications"
         },
         {
-          "footerNote": "You can map specific events with custom templates. Note:To track events to Trengo adding event name in the key is mandatory. For details please view destination docs.",
-          "keyLeft": "from",
-          "keyRight": "to",
+          "type": "dynamicForm",
           "label": "Map events with template",
           "labelLeft": "Event Name",
           "labelRight": "Event Template",
+          "keyLeft": "from",
+          "keyRight": "to",
           "placeholderLeft": "e.g: Product Purchased",
           "placeholderRight": "e.g: {{event}} Triggered",
-          "type": "dynamicForm",
-          "value": "eventTemplateMap"
+          "value": "eventTemplateMap",
+          "footerNote": "You can map specific events with custom templates. Note:To track events to Trengo adding event name in the key is mandatory. For details please view destination docs."
         }
-      ],
-      "title": "Destination Settings"
+      ]
     }
   ]
 }

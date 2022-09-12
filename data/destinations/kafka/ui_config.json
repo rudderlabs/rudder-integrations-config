@@ -1,70 +1,73 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
-          "footerNote": "For multiple host names, provide them in comma separated string format",
+          "type": "textInput",
           "label": "Host Name(s)",
-          "placeholder": "e.g: localhost",
+          "value": "hostName",
           "regex": "^((,|^)[^\\s]*)*$",
           "regexErrorMessage": "Invalid Host Name(s)",
           "required": true,
-          "type": "textInput",
-          "value": "hostName"
+          "placeholder": "e.g: localhost",
+          "footerNote": "For multiple host names, provide them in comma separated string format"
         },
         {
+          "type": "textInput",
           "label": "Port",
-          "placeholder": "e.g: 9092",
+          "value": "port",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Port",
           "required": true,
-          "type": "textInput",
-          "value": "port"
+          "placeholder": "e.g: 9092"
         },
         {
+          "type": "textInput",
           "label": "Topic Name",
-          "placeholder": "e.g: test-topic",
+          "value": "topic",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Topic Name",
           "required": true,
-          "type": "textInput",
-          "value": "topic"
+          "placeholder": "e.g: test-topic"
         },
         {
-          "default": true,
-          "label": "SSL Enabled",
           "type": "checkbox",
-          "value": "sslEnabled"
+          "label": "SSL Enabled",
+          "value": "sslEnabled",
+          "default": true
         },
         {
-          "label": "CA certificate",
-          "placeholder": "CA Certificate",
+          "type": "textareaInput",
           "preRequisiteField": {
             "name": "sslEnabled",
             "selectedValue": true
           },
+          "label": "CA certificate",
+          "value": "caCertificate",
           "regex": ".*",
           "required": false,
-          "type": "textareaInput",
-          "value": "caCertificate"
+          "placeholder": "CA Certificate"
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "SASL Authentication",
       "fields": [
         {
-          "default": false,
-          "label": "Enable SASL with SSL",
           "type": "checkbox",
-          "value": "useSASL"
+          "label": "Enable SASL with SSL",
+          "value": "useSASL",
+          "default": false
         },
         {
-          "defaultOption": {
-            "name": "Plain",
-            "value": "plain"
+          "type": "singleSelect",
+          "preRequisiteField": {
+            "name": "useSASL",
+            "selectedValue": true
           },
           "label": "SASL Type",
+          "value": "saslType",
           "options": [
             {
               "name": "Plain",
@@ -79,43 +82,78 @@
               "value": "sha256"
             }
           ],
-          "preRequisiteField": {
-            "name": "useSASL",
-            "selectedValue": true
+          "defaultOption": {
+            "name": "Plain",
+            "value": "plain"
           },
-          "required": true,
-          "type": "singleSelect",
-          "value": "saslType"
+          "required": true
         },
         {
-          "label": "Username",
-          "placeholder": "e.g: userjohn",
+          "type": "textInput",
           "preRequisiteField": {
             "name": "useSASL",
             "selectedValue": true
           },
+          "label": "Username",
+          "value": "username",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid User Name",
           "required": true,
-          "type": "textInput",
-          "value": "username"
+          "placeholder": "e.g: userjohn"
         },
         {
-          "label": "Password",
-          "placeholder": "e.g: 1jdu234nasfa",
+          "type": "textInput",
           "preRequisiteField": {
             "name": "useSASL",
             "selectedValue": true
           },
+          "label": "Password",
+          "value": "password",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Password",
           "required": true,
-          "secret": true,
-          "type": "textInput",
-          "value": "password"
+          "placeholder": "e.g: 1jdu234nasfa",
+          "secret": true
         }
-      ],
-      "title": "SASL Authentication"
+      ]
+    },
+    {
+      "title": "Event Settings",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Convert Data to AVRO format",
+          "value": "convertToAvro",
+          "default": false,
+          "footerNote": "If this option is turned on we will convert the data to avro"
+        },
+        {
+          "preRequisiteField": {
+            "name": "convertToAvro",
+            "selectedValue": true
+          },
+          "label": "AVRO Schema Lists",
+          "value": "avroSchemas",
+          "required": true,
+          "type": "dynamicCustomForm",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "schemaId",
+              "required": true,
+              "label": "Schema Id",
+              "placeholder": "e.g: schema-id"
+            },
+            {
+              "type": "textareaInput",
+              "value": "schema",
+              "label": "Schema",
+              "required": true,
+              "placeholder": "schema object"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

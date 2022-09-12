@@ -1,53 +1,52 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
-          "footerNote": "Your Marketo Accound ID from Admin settings section",
+          "type": "textInput",
           "label": "Munchkin Account Id",
-          "placeholder": "e.g: 585-AXP-446",
+          "value": "munchkinId",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Munchkin Account Id",
           "required": true,
-          "type": "textInput",
-          "value": "munchkinId"
+          "footerNote": "Your Marketo Accound ID from Admin settings section",
+          "placeholder": "e.g: 585-AXP-446"
         },
         {
-          "footerNote": "Your REST API Client ID",
+          "type": "textInput",
           "label": "Client ID",
-          "placeholder": "e.g: 53b1934e-51dd-4599-b24b-92612c71515f",
+          "value": "clientId",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Client ID",
           "required": true,
-          "type": "textInput",
-          "value": "clientId"
+          "placeholder": "e.g: 53b1934e-51dd-4599-b24b-92612c71515f",
+          "footerNote": "Your REST API Client ID"
         },
         {
-          "footerNote": "Your REST API Client Secret",
+          "type": "textInput",
           "label": "Client Secret",
-          "placeholder": "e.g: oxzXtNhcuw9YGsdhplKUeEMi8765dsfw",
+          "value": "clientSecret",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Client Secret",
           "required": true,
+          "placeholder": "e.g: oxzXtNhcuw9YGsdhplKUeEMi8765dsfw",
           "secret": true,
-          "type": "textInput",
-          "value": "clientSecret"
+          "footerNote": "Your REST API Client Secret"
         },
         {
-          "footerNote": "RudderStack will use this Marketo field name for de-duplication & this field should be present in column field mapping.",
+          "type": "textInput",
           "label": "De-duplication Field",
-          "placeholder": "e.g: email",
+          "value": "deDuplicationField",
           "required": false,
+          "placeholder": "e.g: email",
           "secret": false,
-          "type": "textInput",
-          "value": "deDuplicationField"
+          "footerNote": "RudderStack will use this Marketo field name for de-duplication & this field should be present in column field mapping."
         },
         {
-          "defaultOption": {
-            "name": "Every 10 minutes",
-            "value": "10"
-          },
+          "type": "singleSelect",
           "label": "Upload Interval",
+          "value": "uploadInterval",
           "options": [
             {
               "name": "Every 10 minutes",
@@ -62,27 +61,28 @@
               "value": "30"
             }
           ],
-          "type": "singleSelect",
-          "value": "uploadInterval"
+          "defaultOption": {
+            "name": "Every 10 minutes",
+            "value": "10"
+          }
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Column Fields Mapping",
       "fields": [
         {
+          "type": "dynamicForm",
+          "label": "Map your traits to Marketo column fields",
+          "labelRight": "Marketo field name",
+          "labelLeft": "RudderStack trait name",
           "keyLeft": "from",
           "keyRight": "to",
-          "label": "Map your traits to Marketo column fields",
-          "labelLeft": "RudderStack trait name",
-          "labelRight": "Marketo field name",
           "placeholderLeft": "e.g: leadScore",
           "placeholderRight": "e.g: customLeadScore",
-          "type": "dynamicForm",
           "value": "columnFieldsMapping"
         }
-      ],
-      "title": "Column Fields Mapping"
+      ]
     }
   ]
 }
