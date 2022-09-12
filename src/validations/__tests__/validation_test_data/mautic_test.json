@@ -1,0 +1,59 @@
+[
+  {
+    "config": {
+      "userName": "abc@work.com",
+      "password": "1234yui",
+      "subDomainName": "work",
+      "lookUpField": "email"
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "userName": "abc@test.com",
+      "password": "1234yui",
+      "subDomainName": "work",
+      "lookUpField": ""
+    },
+    "result": false,
+    "err": [
+      "lookUpField must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
+    ]
+  },
+  {
+    "config": {
+      "userName": "abc@work.com",
+      "password": "",
+      "subDomainName": "work",
+      "lookUpField": "email"
+    },
+    "result": false,
+    "err": [
+      "password must match pattern \"(^env[.].+)|.+\""
+    ]
+  },
+  {
+    "config": {
+      "userName": "abc@work.com",
+      "password": "1234yui",
+      "subDomainName": "",
+      "lookUpField": "email"
+    },
+    "result": false,
+    "err": [
+      "subDomainName must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
+    ]
+  },
+  {
+    "config": {
+      "userName": "",
+      "password": "1234yui",
+      "subDomainName": "work",
+      "lookUpField": "email"
+    },
+    "result": false,
+    "err": [
+      "userName must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
+    ]
+  }
+]
