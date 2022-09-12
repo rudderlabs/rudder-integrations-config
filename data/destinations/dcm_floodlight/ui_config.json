@@ -1,134 +1,135 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
-          "footerNote": "Enter your Floodlight advertiser ID by going to the Campaigns or Activities tab in your dashboard.",
+          "type": "textInput",
           "label": "DoubleClick Advertiser ID",
-          "placeholder": "e.g. 22114552",
+          "value": "advertiserId",
           "regex": "^([0-9]{0,100})$",
           "required": true,
+          "placeholder": "e.g. 22114552",
           "secret": true,
-          "type": "textInput",
-          "value": "advertiserId"
+          "footerNote": "Enter your Floodlight advertiser ID by going to the Campaigns or Activities tab in your dashboard."
         },
         {
-          "footerNote": "Use this setting to define the same parameter value across all the conversion events. Alternatively, you can define this value for each conversion event mapping in the Floodlight Activity Tag field below.",
+          "type": "textInput",
           "label": "Activity Tag",
+          "value": "activityTag",
+          "regex": ".*",
+          "required": false,
           "placeholder": "e.g. signu0",
-          "regex": ".*",
-          "required": false,
           "secret": false,
-          "type": "textInput",
-          "value": "activityTag"
+          "footerNote": "Use this setting to define the same parameter value across all the conversion events. Alternatively, you can define this value for each conversion event mapping in the Floodlight Activity Tag field below."
         },
         {
-          "footerNote": "Use this setting to define the same parameter value across all the conversion events. Alternatively, you can define this value for each conversion event in the Floodlight Group Tag field below.",
+          "type": "textInput",
           "label": "Group Tag",
-          "placeholder": "e.g. conv01",
+          "value": "groupTag",
           "regex": ".*",
           "required": false,
+          "placeholder": "e.g. conv01",
           "secret": false,
-          "type": "textInput",
-          "value": "groupTag"
+          "footerNote": "Use this setting to define the same parameter value across all the conversion events. Alternatively, you can define this value for each conversion event in the Floodlight Group Tag field below."
         },
         {
+          "type": "dynamicCustomForm",
+          "label": "Conversion events",
+          "value": "conversionEvents",
           "customFields": [
             {
-              "footerNote": "This integration lets you map the RudderStack event name to the Floodlight tags.",
+              "type": "textInput",
               "label": "Rudderstack Event Name",
+              "value": "eventName",
+              "required": false,
               "placeholder": "e.g: Product Viewed",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
+              "footerNote": "This integration lets you map the RudderStack event name to the Floodlight tags."
             },
             {
-              "footerNote": "This should be the (cat) of your tag string. If left blank, RudderStack will pick the value defined in the Activity Tag field above.",
+              "type": "textInput",
               "label": "Floodlight Activity Tag",
+              "value": "floodlightActivityTag",
+              "required": false,
               "placeholder": "e.g: signu0",
-              "required": false,
-              "type": "textInput",
-              "value": "floodlightActivityTag"
+              "footerNote": "This should be the (cat) of your tag string. If left blank, RudderStack will pick the value defined in the Activity Tag field above."
             },
             {
-              "footerNote": "This should be the (type) of your tag string. If left blank, RudderStack will pick the value defined in the Group Tag field above.",
+              "type": "textInput",
               "label": "Floodlight Group Tag",
-              "placeholder": "e.g: conv01",
+              "value": "floodlightGroupTag",
               "required": false,
-              "type": "textInput",
-              "value": "floodlightGroupTag"
+              "placeholder": "e.g: conv01",
+              "footerNote": "This should be the (type) of your tag string. If left blank, RudderStack will pick the value defined in the Group Tag field above."
             },
             {
-              "default": false,
-              "footerNote": "Enable this toggle if the tag is a Sales tag. Keep it disabled if the tag is a Counter tag.",
-              "label": "Fire as Sales Tag",
               "type": "checkbox",
-              "value": "salesTag"
+              "label": "Fire as Sales Tag",
+              "value": "salesTag",
+              "default": false,
+              "footerNote": "Enable this toggle if the tag is a Sales tag. Keep it disabled if the tag is a Counter tag."
             },
             {
-              "footerNote": "Rudderstack properties (on the left) and Floodlight Custom Variables like 1, 2, 3, 4, etc. (on the right)",
-              "keyLeft": "from",
-              "keyRight": "to",
+              "type": "dynamicForm",
               "label": "Use this section to map the RudderStack event properties to custom Floodlight variables.",
               "labelLeft": "Rudderstack properties",
               "labelRight": "Floodlight Custom Variables",
+              "keyLeft": "from",
+              "keyRight": "to",
               "placeholderLeft": "e.g. Rudderstack property",
               "placeholderRight": "eg: 1",
-              "type": "dynamicForm",
-              "value": "customVariables"
+              "value": "customVariables",
+              "footerNote": "Rudderstack properties (on the left) and Floodlight Custom Variables like 1, 2, 3, 4, etc. (on the right)"
             }
-          ],
-          "label": "Conversion events",
-          "type": "dynamicCustomForm",
-          "value": "conversionEvents"
+          ]
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Native SDK",
       "fields": [
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Use device-mode to send events",
-          "type": "checkbox",
-          "value": "useNativeSDK"
+          "value": "useNativeSDK",
+          "default": false
         },
         {
-          "default": true,
+          "type": "checkbox",
           "label": "Conversion Linker",
-          "type": "checkbox",
-          "value": "conversionLinker"
+          "value": "conversionLinker",
+          "default": true
         },
         {
-          "default": true,
+          "type": "checkbox",
           "label": "Allow ad personalization signals",
-          "type": "checkbox",
-          "value": "allowAdPersonalizationSignals"
+          "value": "allowAdPersonalizationSignals",
+          "default": true
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "DoubleClick Id",
-          "type": "checkbox",
-          "value": "doubleclickId"
+          "value": "doubleclickId",
+          "default": false
         },
         {
-          "footerNote": "Network ID (NID) for the bidder account",
+          "type": "textInput",
           "label": "Google Network Id",
+          "value": "googleNetworkId",
           "regex": ".*",
           "required": false,
-          "type": "textInput",
-          "value": "googleNetworkId"
+          "footerNote": "Network ID (NID) for the bidder account"
         }
-      ],
-      "title": "Native SDK"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -143,58 +144,57 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Consent Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
     }
   ]
 }

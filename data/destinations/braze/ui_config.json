@@ -1,73 +1,74 @@
 {
   "uiConfig": [
     {
+      "title": "1. Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "App Key",
-          "placeholder": "e.g: f2c7c97a-48d1-11ea-8e07-faffc22c7c7f",
+          "value": "appKey",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid App Key",
           "required": true,
-          "type": "textInput",
-          "value": "appKey"
+          "placeholder": "e.g: f2c7c97a-48d1-11ea-8e07-faffc22c7c7f"
         },
         {
+          "type": "textInput",
           "label": "Rest Api Key",
-          "placeholder": "e.g: 06c19c59-48d2-11ea-b27a-faffc22c7c7f",
+          "value": "restApiKey",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Rest Api Key",
           "required": true,
-          "secret": true,
-          "type": "textInput",
-          "value": "restApiKey"
+          "placeholder": "e.g: 06c19c59-48d2-11ea-b27a-faffc22c7c7f",
+          "secret": true
         },
         {
+          "type": "textInput",
           "label": "Data Center",
-          "placeholder": "e.g: EU-01",
+          "value": "dataCenter",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Data Center",
           "required": true,
-          "type": "textInput",
-          "value": "dataCenter"
+          "placeholder": "e.g: EU-01"
         }
-      ],
-      "title": "1. Connection Settings"
+      ]
     },
     {
+      "title": "2. Custom html settings",
       "fields": [
         {
-          "default": false,
-          "label": "Enable html in app messages",
           "type": "checkbox",
-          "value": "enableHtmlInAppMessages"
+          "label": "Enable html in app messages",
+          "value": "enableHtmlInAppMessages",
+          "default": false
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Allow User Supplied Javascript",
-          "type": "checkbox",
-          "value": "allowUserSuppliedJavascript"
+          "value": "allowUserSuppliedJavascript",
+          "default": false
         }
-      ],
-      "title": "2. Custom html settings"
+      ]
     },
     {
+      "title": "3. Native SDK",
       "fields": [
         {
-          "default": true,
+          "type": "checkbox",
           "label": "Use device-mode to send events",
-          "type": "checkbox",
-          "value": "useNativeSDK"
+          "value": "useNativeSDK",
+          "default": true
         }
-      ],
-      "title": "3. Native SDK"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -82,58 +83,57 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Consent Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
     }
   ]
 }

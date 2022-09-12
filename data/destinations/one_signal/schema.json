@@ -1,0 +1,36 @@
+{
+  "schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+      "appId"
+    ],
+    "properties": {
+      "apiKey": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "emailDeviceType": {
+        "type": "boolean"
+      },
+      "smsDeviceType": {
+        "type": "boolean"
+      },
+      "eventAsTags": {
+        "type": "boolean"
+      },
+      "allowedProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "propertyName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,50 +1,49 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
-          "footerNote": "Your Public API Key",
-          "inputFieldType": "text",
+          "type": "textInput",
           "label": "Public API Key",
-          "placeholder": "e.g. WPqij9",
+          "value": "publicApiKey",
+          "inputFieldType": "text",
           "regex": ".*",
           "required": true,
-          "secret": false,
-          "type": "textInput",
-          "value": "publicApiKey"
+          "placeholder": "e.g. WPqij9",
+          "footerNote": "Your Public API Key",
+          "secret": false
         },
         {
-          "footerNote": "Your Private API Key",
+          "type": "textInput",
           "label": "Private API Key",
-          "placeholder": "e.g. c59e3838",
+          "value": "privateApiKey",
           "regex": ".*",
           "required": false,
+          "placeholder": "e.g. c59e3838",
           "secret": true,
-          "type": "textInput",
-          "value": "privateApiKey"
+          "footerNote": "Your Private API Key"
         },
         {
-          "footerNote": "The default list that you'd like to subscribe and add users to when you call .identify()",
+          "type": "textInput",
           "label": "List Id",
-          "placeholder": "e.g. c59e3838",
+          "value": "listId",
           "regex": ".*",
           "required": false,
+          "placeholder": "e.g. c59e3838",
           "secret": true,
-          "type": "textInput",
-          "value": "listId"
+          "footerNote": "The default list that you'd like to subscribe and add users to when you call .identify()"
         },
         {
-          "default": false,
-          "label": "Enable this option to make email as primary identifier",
           "type": "checkbox",
-          "value": "enforceEmailAsPrimary"
+          "label": "Enable this option to make email as primary identifier",
+          "value": "enforceEmailAsPrimary",
+          "default": false
         },
         {
-          "defaultOption": {
-            "name": "E-Mail",
-            "value": "email"
-          },
+          "type": "singleSelect",
           "label": "Consent",
+          "value": "consent",
           "options": [
             {
               "name": "E-mail",
@@ -67,49 +66,51 @@
               "value": "mobile"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "consent"
-        },
-        {
-          "default": true,
-          "label": "SMS Consent",
-          "type": "checkbox",
-          "value": "smsConsent"
-        },
-        {
-          "default": false,
-          "label": "Send Page As Track",
-          "type": "checkbox",
-          "value": "sendPageAsTrack"
-        },
-        {
-          "default": false,
-          "label": "Additional Page info",
-          "type": "checkbox",
-          "value": "additionalPageInfo"
-        }
-      ],
-      "title": "Connection Settings"
-    },
-    {
-      "fields": [
-        {
-          "default": false,
-          "label": "Use device-mode to send events",
-          "type": "checkbox",
-          "value": "useNativeSDK"
-        }
-      ],
-      "title": "Native SDK"
-    },
-    {
-      "fields": [
-        {
           "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
+            "name": "E-Mail",
+            "value": "email"
           },
+          "required": false
+        },
+        {
+          "type": "checkbox",
+          "label": "SMS Consent",
+          "value": "smsConsent",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "label": "Send Page As Track",
+          "value": "sendPageAsTrack",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "Additional Page info",
+          "value": "additionalPageInfo",
+          "default": false
+        }
+      ]
+    },
+    {
+      "title": "Native SDK",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": false
+        }
+      ]
+    },
+    {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+      "fields": [
+        {
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -124,58 +125,57 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Consent Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
     }
   ]
 }

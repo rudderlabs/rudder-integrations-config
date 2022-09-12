@@ -1,114 +1,117 @@
 {
   "schema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+      "measurementId"
+    ],
     "properties": {
       "apiSecret": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-        "type": "string"
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "blacklistedEvents": {
-        "items": {
-          "properties": {
-            "eventName": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
+      "typesOfClient": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(gtag|firebase)$"
       },
-      "blockPageViewEvent": {
-        "type": "boolean"
+      "measurementId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(G-.{1,100})$|^$"
+      },
+      "firebaseAppId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "enableServerSideIdentify": {
         "type": "boolean"
       },
-      "eventFilteringOption": {
-        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$",
-        "type": "string"
+      "newOrExistingUserTrait": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "extendPageViewParams": {
+      "sendLoginSignup": {
         "type": "boolean"
       },
-      "firebaseAppId": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-        "type": "string"
+      "loginSignupMethod": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "generateLead": {
         "type": "boolean"
       },
-      "generateLeadCurrencyTrait": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-        "type": "string"
-      },
       "generateLeadValueTrait": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-        "type": "string"
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "loginSignupMethod": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-        "type": "string"
+      "generateLeadCurrencyTrait": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "measurementId": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(G-.{1,100})$|^$",
-        "type": "string"
+      "eventFilteringOption": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
       },
-      "newOrExistingUserTrait": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-        "type": "string"
+      "blockPageViewEvent": {
+        "type": "boolean"
       },
-      "oneTrustCookieCategories": {
-        "properties": {
-          "web": {
-            "items": {
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
-      "sendLoginSignup": {
+      "extendPageViewParams": {
         "type": "boolean"
       },
       "sendUserId": {
         "type": "boolean"
       },
-      "typesOfClient": {
-        "pattern": "(^env[.].+)|^(gtag|firebase)$",
-        "type": "string"
+      "debugMode": {
+        "type": "boolean"
+      },
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
       },
       "useNativeSDK": {
+        "type": "object",
         "properties": {
           "web": {
             "type": "boolean"
           }
-        },
-        "type": "object"
+        }
       },
-      "whitelistedEvents": {
-        "items": {
-          "properties": {
-            "eventName": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
+      "oneTrustCookieCategories": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
             }
-          },
-          "type": "object"
-        },
-        "type": "array"
+          }
+        }
       }
-    },
-    "required": [
-      "measurementId"
-    ],
-    "type": "object"
+    }
   }
 }

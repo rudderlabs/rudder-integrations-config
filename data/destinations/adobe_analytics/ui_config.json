@@ -1,68 +1,73 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
-          "label": "Tracking Server URL",
           "type": "textInput",
+          "label": "Tracking Server URL",
           "value": "trackingServerUrl"
         },
         {
-          "label": "Tracking Server Secure URL",
           "type": "textInput",
+          "label": "Tracking Server Secure URL",
           "value": "trackingServerSecureUrl"
         },
         {
-          "footerNote": "You can add multiple report suite ids by separated by commas.",
+          "type": "textInput",
           "label": "Report Suite ID(s)",
+          "value": "reportSuiteIds",
           "required": true,
-          "type": "textInput",
-          "value": "reportSuiteIds"
+          "footerNote": "You can add multiple report suite ids by separated by commas."
         },
         {
-          "default": true,
-          "label": "Check for Heartbeat calls to be made over https",
           "type": "checkbox",
-          "value": "sslHeartbeat"
+          "label": "Check for Heartbeat calls to be made over https",
+          "value": "sslHeartbeat",
+          "default": true
         },
         {
-          "label": "Heartbeat Tracking Server URL",
           "type": "textInput",
+          "label": "Heartbeat Tracking Server URL",
           "value": "heartbeatTrackingServerUrl"
         },
         {
-          "default": true,
+          "type": "checkbox",
           "label": "Use UTF-8 charset",
-          "type": "checkbox",
-          "value": "useUtf8Charset"
+          "value": "useUtf8Charset",
+          "default": true
         },
         {
-          "default": true,
+          "type": "checkbox",
           "label": "Use Secure URL for Server-side",
-          "type": "checkbox",
-          "value": "useSecureServerSide"
+          "value": "useSecureServerSide",
+          "default": true
         },
         {
-          "label": "Adobe Analytics Javascript SDK URL",
           "type": "textInput",
+          "label": "Adobe Analytics Javascript SDK URL",
           "value": "proxyNormalUrl"
         },
         {
-          "label": "Adobe Analytics Hearbeat SDK URL",
           "type": "textInput",
+          "label": "Adobe Analytics Hearbeat SDK URL",
           "value": "proxyHeartbeatUrl"
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Adobe Heartbeat Settings",
       "fields": [
         {
-          "keyLeft": "from",
-          "keyRight": "to",
+          "type": "dynamicSelectForm",
           "label": "Map your Rudder video events with types of Video Events",
           "labelLeft": "Video Event Name",
           "labelRight": "Type of Video Event",
+          "value": "eventsToTypes",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "required": false,
+          "placeholderLeft": "e.g. video playback started",
           "options": [
             {
               "name": "Initialise Heartbeat",
@@ -140,39 +145,34 @@
               "name": "Heartbeat Playhead Update",
               "value": "heartbeatUpdatePlayhead"
             }
-          ],
-          "placeholderLeft": "e.g. video playback started",
-          "required": false,
-          "type": "dynamicSelectForm",
-          "value": "eventsToTypes"
+          ]
         }
-      ],
-      "title": "Adobe Heartbeat Settings"
+      ]
     },
     {
+      "title": "Identity Resolution",
       "fields": [
         {
-          "label": "Marketing Cloud Organization Id",
           "type": "textInput",
+          "label": "Marketing Cloud Organization Id",
           "value": "marketingCloudOrgId"
         },
         {
-          "default": true,
-          "label": "Drop Visitor Id",
           "type": "checkbox",
-          "value": "dropVisitorId"
+          "label": "Drop Visitor Id",
+          "value": "dropVisitorId",
+          "default": true
         }
-      ],
-      "title": "Identity Resolution"
+      ]
     },
     {
+      "title": "Timestamps",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Timestamp Disabled",
-            "value": "disabled"
-          },
+          "type": "singleSelect",
           "label": "Timestamp Option",
+          "value": "timestampOption",
+          "required": false,
           "options": [
             {
               "name": "Timestamp Hybrid",
@@ -191,152 +191,153 @@
               "value": "disabled"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "timestampOption"
+          "defaultOption": {
+            "name": "Timestamp Disabled",
+            "value": "disabled"
+          }
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Send Both Timestamp and VisitorID for Timestamp Optional Reporting Suites",
-          "type": "checkbox",
-          "value": "timestampOptionalReporting"
+          "value": "timestampOptionalReporting",
+          "default": false
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "No Fallbacks for Visitor ID",
-          "type": "checkbox",
-          "value": "noFallbackVisitorId"
+          "value": "noFallbackVisitorId",
+          "default": false
         },
         {
-          "default": false,
-          "label": "Prefer Visitor Id",
           "type": "checkbox",
-          "value": "preferVisitorId"
+          "label": "Prefer Visitor Id",
+          "value": "preferVisitorId",
+          "default": false
         }
-      ],
-      "title": "Timestamps"
+      ]
     },
     {
+      "title": "Event and Property Mappings",
       "fields": [
         {
-          "footerNote": "Add one event or many events for adobe custom events separated by comma",
+          "type": "dynamicForm",
+          "label": "Map Rudder Events to Adobe Custom Events",
+          "value": "rudderEventsToAdobeEvents",
+          "required": false,
           "keyLeft": "from",
           "keyRight": "to",
-          "label": "Map Rudder Events to Adobe Custom Events",
-          "labelLeft": "Event Name",
-          "labelRight": "Adobe Custom Event",
           "placeholderLeft": "e.g. Product Searched",
           "placeholderRight": "event1,event2",
-          "required": false,
-          "type": "dynamicForm",
-          "value": "rudderEventsToAdobeEvents"
+          "labelLeft": "Event Name",
+          "labelRight": "Adobe Custom Event",
+          "footerNote": "Add one event or many events for adobe custom events separated by comma"
         },
         {
-          "default": true,
+          "type": "checkbox",
           "label": "Enable pageName for Track Events",
-          "type": "checkbox",
-          "value": "trackPageName"
+          "value": "trackPageName",
+          "default": true
         },
         {
-          "footerNote": "Add properties under context key in rudder payload",
-          "keyLeft": "from",
-          "keyRight": "to",
+          "type": "dynamicForm",
           "label": "Map Rudder Context data to Adobe Context Data",
-          "labelLeft": "Context Data path",
-          "labelRight": "Adobe Context Data property name",
+          "value": "contextDataMapping",
+          "required": false,
+          "keyLeft": "from",
+          "keyRight": "to",
           "placeholderLeft": "e.g. page.name",
           "placeholderRight": "pName",
-          "required": false,
-          "type": "dynamicForm",
-          "value": "contextDataMapping"
+          "labelLeft": "Context Data path",
+          "labelRight": "Adobe Context Data property name",
+          "footerNote": "Add properties under context key in rudder payload"
         },
         {
-          "label": "Prefix to add before all contextData property.",
-          "placeholder": "eg: rudder-",
-          "required": false,
           "type": "textInput",
-          "value": "contextDataPrefix"
+          "placeholder": "eg: rudder-",
+          "value": "contextDataPrefix",
+          "label": "Prefix to add before all contextData property.",
+          "required": false
         },
         {
-          "default": true,
+          "type": "checkbox",
           "label": "Use Legacy LinkName",
-          "type": "checkbox",
-          "value": "useLegacyLinkName"
+          "value": "useLegacyLinkName",
+          "default": true
         },
         {
-          "default": true,
+          "type": "checkbox",
           "label": "Page Name Fallback to Screen",
-          "type": "checkbox",
-          "value": "pageNameFallbackTostring"
+          "value": "pageNameFallbackTostring",
+          "default": true
         },
         {
-          "footerNote": "Add properties under context key in rudder payload",
+          "type": "dynamicForm",
+          "label": "Map Rudder Mobile events",
+          "value": "mobileEventMapping",
+          "required": false,
           "keyLeft": "from",
           "keyRight": "to",
-          "label": "Map Rudder Mobile events",
-          "labelLeft": "Context Data path",
-          "labelRight": "Adobe Context Data property name",
           "placeholderLeft": "e.g. page.name",
           "placeholderRight": "pName",
-          "required": false,
-          "type": "dynamicForm",
-          "value": "mobileEventMapping"
+          "labelLeft": "Context Data path",
+          "labelRight": "Adobe Context Data property name",
+          "footerNote": "Add properties under context key in rudder payload"
         },
         {
-          "default": true,
-          "label": "Send false value from properties ",
           "type": "checkbox",
-          "value": "sendFalseValues"
+          "label": "Send false value from properties ",
+          "value": "sendFalseValues",
+          "default": true
         },
         {
-          "footerNote": "Only give the index of the eVar",
+          "type": "dynamicForm",
+          "label": "Map Rudder Properties to Adobe eVars",
+          "value": "eVarMapping",
+          "required": false,
           "keyLeft": "from",
           "keyRight": "to",
-          "label": "Map Rudder Properties to Adobe eVars",
+          "placeholderLeft": "e.g. phone",
+          "placeholderRight": "2",
           "labelLeft": "Rudder Property",
           "labelRight": "eVar Index",
-          "placeholderLeft": "e.g. phone",
-          "placeholderRight": "2",
-          "required": false,
-          "type": "dynamicForm",
-          "value": "eVarMapping"
+          "footerNote": "Only give the index of the eVar"
         },
         {
-          "footerNote": "Only give the index of the hier",
+          "type": "dynamicForm",
+          "label": "Map Rudder Properties to Adobe Hierarchy properties",
+          "value": "hierMapping",
+          "required": false,
           "keyLeft": "from",
           "keyRight": "to",
-          "label": "Map Rudder Properties to Adobe Hierarchy properties",
+          "placeholderLeft": "e.g. phone",
+          "placeholderRight": "2",
           "labelLeft": "Rudder Property",
           "labelRight": "hier Index",
-          "placeholderLeft": "e.g. phone",
-          "placeholderRight": "2",
-          "required": false,
-          "type": "dynamicForm",
-          "value": "hierMapping"
+          "footerNote": "Only give the index of the hier"
         },
         {
-          "footerNote": "The list properties should be an array/string separated by commas",
+          "type": "dynamicForm",
+          "label": "Map Rudder Properties to Adobe list properties",
+          "value": "listMapping",
+          "required": false,
           "keyLeft": "from",
           "keyRight": "to",
-          "label": "Map Rudder Properties to Adobe list properties",
-          "labelLeft": "Rudder Property",
-          "labelRight": "list Index",
           "placeholderLeft": "e.g. listProp",
           "placeholderRight": "2",
-          "required": false,
-          "type": "dynamicForm",
-          "value": "listMapping"
+          "labelLeft": "Rudder Property",
+          "labelRight": "list Index",
+          "footerNote": "The list properties should be an array/string separated by commas"
         },
         {
-          "defaultOption": {
-            "name": ",",
-            "value": ","
-          },
-          "keyLeft": "from",
-          "keyRight": "to",
+          "type": "dynamicSelectForm",
           "label": "Map your Rudder Property with Delimiters for list properties",
           "labelLeft": "Rudder Property",
           "labelRight": "List Delimiter",
+          "value": "listDelimiter",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "required": false,
+          "placeholderLeft": "e.g. prop",
           "options": [
             {
               "name": "|",
@@ -359,34 +360,34 @@
               "value": "/"
             }
           ],
-          "placeholderLeft": "e.g. prop",
-          "required": false,
-          "type": "dynamicSelectForm",
-          "value": "listDelimiter"
-        },
-        {
-          "footerNote": "Only give the index of the prop",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "label": "Map Rudder Properties to Adobe Custom properties",
-          "labelLeft": "Rudder Property",
-          "labelRight": "prop Index",
-          "placeholderLeft": "e.g phone",
-          "placeholderRight": "2",
-          "required": false,
-          "type": "dynamicForm",
-          "value": "customPropsMapping"
-        },
-        {
           "defaultOption": {
             "name": ",",
             "value": ","
-          },
+          }
+        },
+        {
+          "type": "dynamicForm",
+          "label": "Map Rudder Properties to Adobe Custom properties",
+          "value": "customPropsMapping",
+          "required": false,
           "keyLeft": "from",
           "keyRight": "to",
+          "placeholderLeft": "e.g phone",
+          "placeholderRight": "2",
+          "labelLeft": "Rudder Property",
+          "labelRight": "prop Index",
+          "footerNote": "Only give the index of the prop"
+        },
+        {
+          "type": "dynamicSelectForm",
           "label": "Map your Rudder Property with Delimiters for Adobe Custom properties",
           "labelLeft": "Rudder Property",
           "labelRight": "List Delimiter",
+          "value": "propsDelimiter",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "required": false,
+          "placeholderLeft": "e.g. phone",
           "options": [
             {
               "name": "|",
@@ -409,90 +410,89 @@
               "value": "/"
             }
           ],
-          "placeholderLeft": "e.g. phone",
-          "required": false,
-          "type": "dynamicSelectForm",
-          "value": "propsDelimiter"
+          "defaultOption": {
+            "name": ",",
+            "value": ","
+          }
         }
-      ],
-      "title": "Event and Property Mappings"
+      ]
     },
     {
+      "title": "Merchandise Event Level Settings",
       "fields": [
         {
+          "type": "dynamicForm",
+          "label": "Map Rudder Events to Adobe Merchandise events",
+          "value": "eventMerchEventToAdobeEvent",
+          "required": false,
           "keyLeft": "from",
           "keyRight": "to",
-          "label": "Map Rudder Events to Adobe Merchandise events",
-          "labelLeft": "Rudder Event",
-          "labelRight": "Adobe Event",
           "placeholderLeft": "e.g Order Completed",
           "placeholderRight": "event1",
-          "required": false,
-          "type": "dynamicForm",
-          "value": "eventMerchEventToAdobeEvent"
+          "labelLeft": "Rudder Event",
+          "labelRight": "Adobe Event"
         },
         {
+          "type": "dynamicCustomForm",
+          "value": "eventMerchProperties",
           "customFields": [
             {
+              "type": "textInput",
+              "placeholder": "e.g. currency",
+              "value": "eventMerchProperties",
               "label": "Currency/Incremental properties to add to merchandise events at event level",
-              "placeholder": "e.g. currency",
-              "required": false,
-              "type": "textInput",
-              "value": "eventMerchProperties"
+              "required": false
             }
-          ],
-          "type": "dynamicCustomForm",
-          "value": "eventMerchProperties"
+          ]
         }
-      ],
-      "title": "Merchandise Event Level Settings"
+      ]
     },
     {
+      "title": "Merchandise Product Level Settings",
       "fields": [
         {
+          "type": "dynamicForm",
+          "label": "Map Rudder Events to Adobe Merchandise events",
+          "value": "productMerchEventToAdobeEvent",
+          "required": false,
           "keyLeft": "from",
           "keyRight": "to",
-          "label": "Map Rudder Events to Adobe Merchandise events",
-          "labelLeft": "Rudder Event",
-          "labelRight": "Adobe Event",
           "placeholderLeft": "e.g Order Completed",
           "placeholderRight": "event1",
-          "required": false,
-          "type": "dynamicForm",
-          "value": "productMerchEventToAdobeEvent"
+          "labelLeft": "Rudder Event",
+          "labelRight": "Adobe Event"
         },
         {
+          "type": "dynamicCustomForm",
+          "value": "productMerchProperties",
           "customFields": [
             {
-              "label": "Currency/Incremental properties to add to merchandise events at product level",
-              "placeholder": "e.g. currency",
-              "required": false,
               "type": "textInput",
-              "value": "productMerchProperties"
+              "placeholder": "e.g. currency",
+              "value": "productMerchProperties",
+              "label": "Currency/Incremental properties to add to merchandise events at product level",
+              "required": false
             }
-          ],
-          "type": "dynamicCustomForm",
-          "value": "productMerchProperties"
+          ]
         },
         {
+          "type": "dynamicForm",
+          "label": "Map Rudder Properties to eVars at product level",
+          "value": "productMerchEvarsMap",
+          "required": false,
           "keyLeft": "from",
           "keyRight": "to",
-          "label": "Map Rudder Properties to eVars at product level",
-          "labelLeft": "Rudder Property",
-          "labelRight": "eVar Index",
           "placeholderLeft": "e.g. product_id",
           "placeholderRight": "2",
-          "required": false,
-          "type": "dynamicForm",
-          "value": "productMerchEvarsMap"
+          "labelLeft": "Rudder Property",
+          "labelRight": "eVar Index"
         },
         {
-          "defaultOption": {
-            "name": "Product Name",
-            "value": "name"
-          },
-          "footerNote": "Adobe Analytics only accepts a single product identifier. Use this option to choose whether we send product name, id, or sku.",
+          "type": "singleSelect",
           "label": "Product Identifier",
+          "value": "productIdentifier",
+          "required": false,
+          "footerNote": "Adobe Analytics only accepts a single product identifier. Use this option to choose whether we send product name, id, or sku.",
           "options": [
             {
               "name": "Product Name",
@@ -507,31 +507,32 @@
               "value": "sku"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "productIdentifier"
-        }
-      ],
-      "title": "Merchandise Product Level Settings"
-    },
-    {
-      "fields": [
-        {
-          "default": true,
-          "label": "Use device-mode to send events",
-          "type": "checkbox",
-          "value": "useNativeSDK"
-        }
-      ],
-      "title": "Native SDK"
-    },
-    {
-      "fields": [
-        {
           "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+            "name": "Product Name",
+            "value": "name"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Native SDK",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": true
+        }
+      ]
+    },
+    {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+      "fields": [
+        {
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -546,58 +547,57 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Consent Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
     }
   ]
 }

@@ -1,7 +1,48 @@
 {
   "schema": {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "additionalProperties": true,
+    "type": "object",
+    "required": [
+      "bucketName",
+      "useGlue",
+      "syncFrequency"
+    ],
+    "properties": {
+      "bucketName": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
+      },
+      "useGlue": {
+        "type": "boolean"
+      },
+      "prefix": {
+        "type": "string",
+        "pattern": "(^env[.].*)|.*"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
+      },
+      "accessKeyID": {
+        "type": "string",
+        "pattern": "(^env[.].*)|.*"
+      },
+      "accessKey": {
+        "type": "string",
+        "pattern": "(^env[.].*)|.*"
+      },
+      "enableSSE": {
+        "type": "boolean"
+      },
+      "syncFrequency": {
+        "type": "string",
+        "pattern": "^(30|60|180|360|720|1440)$",
+        "default": "30"
+      },
+      "syncStartAt": {
+        "type": "string"
+      }
+    },
     "allOf": [
       {
         "if": {
@@ -17,8 +58,8 @@
         "then": {
           "properties": {
             "region": {
-              "pattern": "(^env[.].+)|.+",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^env[.].+)|.+"
             }
           },
           "required": [
@@ -27,47 +68,6 @@
         }
       }
     ],
-    "properties": {
-      "accessKey": {
-        "pattern": "(^env[.].*)|.*",
-        "type": "string"
-      },
-      "accessKeyID": {
-        "pattern": "(^env[.].*)|.*",
-        "type": "string"
-      },
-      "bucketName": {
-        "pattern": "(^env[.].+)|.+",
-        "type": "string"
-      },
-      "enableSSE": {
-        "type": "boolean"
-      },
-      "namespace": {
-        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
-        "type": "string"
-      },
-      "prefix": {
-        "pattern": "(^env[.].*)|.*",
-        "type": "string"
-      },
-      "syncFrequency": {
-        "default": "30",
-        "pattern": "^(30|60|180|360|720|1440)$",
-        "type": "string"
-      },
-      "syncStartAt": {
-        "type": "string"
-      },
-      "useGlue": {
-        "type": "boolean"
-      }
-    },
-    "required": [
-      "bucketName",
-      "useGlue",
-      "syncFrequency"
-    ],
-    "type": "object"
+    "additionalProperties": true
   }
 }

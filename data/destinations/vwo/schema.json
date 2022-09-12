@@ -1,71 +1,71 @@
 {
   "schema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+      "accountId"
+    ],
     "properties": {
       "accountId": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-        "type": "string"
-      },
-      "blacklistedEvents": {
-        "items": {
-          "properties": {
-            "eventName": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
-      },
-      "eventFilteringOption": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^(disable|whitelistedEvents|blacklistedEvents)$)",
-        "type": "string"
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
       "isSPA": {
-        "type": "boolean"
-      },
-      "libraryTolerance": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-        "type": "string"
-      },
-      "sendExperimentIdentify": {
         "type": "boolean"
       },
       "sendExperimentTrack": {
         "type": "boolean"
       },
+      "sendExperimentIdentify": {
+        "type": "boolean"
+      },
+      "libraryTolerance": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
       "settingsTolerance": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-        "type": "string"
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "useExistingJquery": {
         "type": "boolean"
       },
+      "eventFilteringOption": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^(disable|whitelistedEvents|blacklistedEvents)$)"
+      },
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
       "useNativeSDK": {
+        "type": "object",
         "properties": {
           "web": {
             "type": "boolean"
           }
-        },
-        "type": "object"
-      },
-      "whitelistedEvents": {
-        "items": {
-          "properties": {
-            "eventName": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
+        }
       }
-    },
-    "required": [
-      "accountId"
-    ],
-    "type": "object"
+    }
   }
 }

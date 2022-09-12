@@ -1,75 +1,76 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "AppsFlyer Dev Key",
-          "placeholder": "e.g: bSjsdGYsOo9sjw23Shj",
+          "value": "devKey",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid AppsFlyer Dev Key",
           "required": true,
-          "type": "textInput",
-          "value": "devKey"
+          "placeholder": "e.g: bSjsdGYsOo9sjw23Shj"
         },
         {
-          "footerNote": "Field is required if os.name is set to android",
+          "type": "textInput",
           "label": "Android App ID",
-          "placeholder": "com.mypackage.example",
+          "value": "androidAppId",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Android App ID",
           "required": false,
-          "type": "textInput",
-          "value": "androidAppId"
+          "placeholder": "com.mypackage.example",
+          "footerNote": "Field is required if os.name is set to android"
         },
         {
-          "footerNote": "Field is required if os.name is set to any of the Apple OS names (ios, ipados, watchos, tvos etc.)",
+          "type": "textInput",
           "label": "Apple App ID",
-          "placeholder": "123456789",
+          "value": "appleAppId",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Apple App ID",
           "required": false,
-          "type": "textInput",
-          "value": "appleAppId"
+          "placeholder": "123456789",
+          "footerNote": "Field is required if os.name is set to any of the Apple OS names (ios, ipados, watchos, tvos etc.)"
         },
         {
-          "default": false,
-          "footerNote": "To include screen/page name in Screen/Page event names (ex: Viewed Contacts Page)",
-          "label": "Use Rich Event Names",
           "type": "checkbox",
-          "value": "useRichEventName"
+          "label": "Use Rich Event Names",
+          "value": "useRichEventName",
+          "footerNote": "To include screen/page name in Screen/Page event names (ex: Viewed Contacts Page)",
+          "default": false
         },
         {
-          "default": "all",
-          "footerNote": "Use the filter to fulfill regulatory requirements like GDPR and CCPA, to comply with user opt-out mechanisms, and for other business logic reasons. ",
+          "type": "textInput",
           "label": "Sharing Filter",
-          "placeholder": "['googleadwords_int', 'adcolony_int']",
+          "value": "sharingFilter",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid sharing filter. Default value is used",
           "required": false,
-          "type": "textInput",
-          "value": "sharingFilter"
+          "placeholder": "['googleadwords_int', 'adcolony_int']",
+          "default": "all",
+          "footerNote": "Use the filter to fulfill regulatory requirements like GDPR and CCPA, to comply with user opt-out mechanisms, and for other business logic reasons. "
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Native SDK",
       "fields": [
         {
-          "default": true,
-          "label": "Use device-mode to send events",
           "type": "checkbox",
-          "value": "useNativeSDK"
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": true
         }
-      ],
-      "title": "Native SDK"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -84,39 +85,38 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     }
   ]
 }

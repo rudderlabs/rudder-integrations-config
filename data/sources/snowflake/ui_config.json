@@ -1,67 +1,70 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Credentials",
+      "secretFields": [
+        "password"
+      ],
       "docLinks": {
         "grantPermissions": "https://docs.rudderstack.com/reverse-etl/snowflake/#granting-permissions",
+        "verifyingCredentials": "https://docs.rudderstack.com/reverse-etl/snowflake/#what-do-the-three-validations-under-verifying-credentials-imply",
         "jsonMapperUseInstructions": "https://docs.rudderstack.com/reverse-etl/snowflake/#specifying-the-data-to-import",
-        "setupInstructions": "https://docs.rudderstack.com/reverse-etl/snowflake",
-        "verifyingCredentials": "https://docs.rudderstack.com/reverse-etl/snowflake/#what-do-the-three-validations-under-verifying-credentials-imply"
+        "setupInstructions": "https://docs.rudderstack.com/reverse-etl/snowflake"
       },
+      "nameField": "account",
       "fields": [
         {
-          "addInAccountSummary": true,
+          "type": "textInput",
           "label": "Account",
+          "value": "account",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Value",
           "required": true,
-          "trim": true,
-          "type": "textInput",
-          "value": "account"
+          "addInAccountSummary": true,
+          "trim": true
         },
         {
-          "addInAccountSummary": true,
+          "type": "textInput",
           "label": "Database",
+          "value": "dbname",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Value",
           "required": true,
-          "trim": true,
-          "type": "textInput",
-          "value": "dbname"
-        },
-        {
           "addInAccountSummary": true,
+          "trim": true
+        },
+        {
+          "type": "textInput",
           "label": "Warehouse",
+          "value": "warehouse",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Value",
           "required": true,
-          "trim": true,
-          "type": "textInput",
-          "value": "warehouse"
+          "addInAccountSummary": true,
+          "trim": true
         },
         {
+          "type": "textInput",
           "label": "User",
+          "value": "user",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Value",
           "required": true,
-          "trim": true,
-          "type": "textInput",
-          "value": "user"
+          "trim": true
         },
         {
-          "inputFieldType": "password",
+          "type": "textInput",
           "label": "Password",
+          "value": "password",
+          "inputFieldType": "password",
           "regex": ".*",
           "required": true,
-          "secret": true,
-          "type": "textInput",
-          "value": "password"
+          "secret": true
         },
         {
-          "defaultOption": {
-            "name": "Amazon Web Services",
-            "value": "AWS"
-          },
+          "type": "singleSelect",
           "label": "Choose your Cloud",
+          "value": "cloudProvider",
           "options": [
             {
               "name": "Amazon Web Services",
@@ -76,16 +79,13 @@
               "value": "AZURE"
             }
           ],
-          "required": true,
-          "type": "singleSelect",
-          "value": "cloudProvider"
+          "defaultOption": {
+            "name": "Amazon Web Services",
+            "value": "AWS"
+          },
+          "required": true
         }
-      ],
-      "nameField": "account",
-      "secretFields": [
-        "password"
-      ],
-      "title": "Connection Credentials"
+      ]
     }
   ]
 }

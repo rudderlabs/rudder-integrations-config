@@ -1,56 +1,57 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
-          "footerNote": "Put your Client Id here, it will be used for generating access token.",
+          "type": "textInput",
           "label": "Client Id",
-          "placeholder": "e.g. b05ebeb8-a223-3cd6-z4c5-9512d3d66d431",
+          "value": "clientId",
           "regex": "^(.{1,100})$",
           "regexErrorMessage": "Invalid Client Id",
           "required": true,
+          "placeholder": "e.g. b05ebeb8-a223-3cd6-z4c5-9512d3d66d431",
           "secret": true,
-          "type": "textInput",
-          "value": "clientId"
+          "footerNote": "Put your Client Id here, it will be used for generating access token."
         },
         {
-          "footerNote": "Put your Client Secret here, it will be used for generating access token.",
+          "type": "textInput",
           "label": "Client Secret",
-          "placeholder": "e.g: XpewiPsz3yc9LrADR43f9h53jADLccXTykHCcA6eEoFR4rXQ",
+          "value": "clientSecret",
           "regex": "^(.{1,100})$",
           "regexErrorMessage": "Invalid Client Secret",
           "required": true,
+          "placeholder": "e.g: XpewiPsz3yc9LrADR43f9h53jADLccXTykHCcA6eEoFR4rXQ",
           "secret": true,
-          "type": "textInput",
-          "value": "clientSecret"
+          "footerNote": "Put your Client Secret here, it will be used for generating access token."
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Account Setting",
       "fields": [
         {
-          "footerNote": "Your Account Id",
+          "type": "textInput",
           "label": "Account Id",
-          "placeholder": "e.g. 84223",
+          "value": "accountId",
           "regex": "^[0-9]+$",
           "regexErrorMessage": "Invalid Account Id",
           "required": true,
+          "placeholder": "e.g. 84223",
           "secret": false,
-          "type": "textInput",
-          "value": "accountId"
+          "footerNote": "Your Account Id"
         }
-      ],
-      "title": "Account Setting"
+      ]
     },
     {
+      "title": "Audience Settings",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Email",
-            "value": "EMAIL"
-          },
+          "type": "singleSelect",
           "label": "Audience Type",
+          "value": "audienceType",
+          "required": true,
+          "placeholder": "Email",
           "options": [
             {
               "name": "Email",
@@ -65,18 +66,17 @@
               "value": "IP_ADDRESS"
             }
           ],
-          "placeholder": "Email",
-          "required": true,
-          "type": "singleSelect",
-          "value": "audienceType"
+          "defaultOption": {
+            "name": "Email",
+            "value": "EMAIL"
+          }
         },
         {
-          "defaultOption": {
-            "name": "Google (GPADVID)",
-            "value": "GPADVID"
-          },
-          "footerNote": "Your device type",
+          "type": "singleSelect",
           "label": "Seed List Type",
+          "value": "seedListType",
+          "required": true,
+          "placeholder": "Google (GPADVID)",
           "options": [
             {
               "name": "Google (GPADVID)",
@@ -87,40 +87,40 @@
               "value": "IDFA"
             }
           ],
-          "placeholder": "Google (GPADVID)",
+          "defaultOption": {
+            "name": "Google (GPADVID)",
+            "value": "GPADVID"
+          },
           "preRequisiteField": {
             "name": "audienceType",
             "selectedValue": "DEVICE_ID"
           },
-          "required": true,
-          "type": "singleSelect",
-          "value": "seedListType"
+          "footerNote": "Your device type"
         },
         {
-          "footerNote": "The audience id of the audience to which you want to sync the data",
+          "type": "textInput",
           "label": "Audience Id",
-          "placeholder": "e.g. 53213445",
+          "value": "audienceId",
           "regex": "^[0-9]+$",
           "regexErrorMessage": "Invalid Audience Id",
           "required": true,
+          "placeholder": "e.g. 53213445",
           "secret": false,
-          "type": "textInput",
-          "value": "audienceId"
+          "footerNote": "The audience id of the audience to which you want to sync the data"
         }
-      ],
-      "title": "Audience Settings"
+      ]
     },
     {
+      "title": "Event Setting",
       "fields": [
         {
-          "default": true,
-          "footerNote": "Toggle it off if hashing is not required",
-          "label": "Hash Required",
           "type": "checkbox",
-          "value": "hashRequired"
+          "label": "Hash Required",
+          "value": "hashRequired",
+          "default": true,
+          "footerNote": "Toggle it off if hashing is not required"
         }
-      ],
-      "title": "Event Setting"
+      ]
     }
   ]
 }

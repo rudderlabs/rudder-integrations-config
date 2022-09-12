@@ -1,62 +1,66 @@
 {
   "schema": {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "additionalProperties": true,
-    "properties": {
-      "bucketName": {
-        "pattern": "(^env[.].+)|^(.{1,100})$",
-        "type": "string"
-      },
-      "credentials": {
-        "pattern": "(^env[.].+)|.+",
-        "type": "string"
-      },
-      "excludeWindow": {
-        "properties": {
-          "excludeWindowEndTime": {
-            "type": "string"
-          },
-          "excludeWindowStartTime": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "excludeWindowStartTime",
-          "excludeWindowEndTime"
-        ],
-        "type": "object"
-      },
-      "location": {
-        "pattern": "(^env[.].*)|^(.{0,100})$",
-        "type": "string"
-      },
-      "namespace": {
-        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
-        "type": "string"
-      },
-      "prefix": {
-        "pattern": "(^env[.].*)|^(.{0,100})$",
-        "type": "string"
-      },
-      "project": {
-        "pattern": "(^env[.].+)|^(.{1,100})$",
-        "type": "string"
-      },
-      "syncFrequency": {
-        "default": "30",
-        "pattern": "^(30|60|180|360|720|1440)$",
-        "type": "string"
-      },
-      "syncStartAt": {
-        "type": "string"
-      }
-    },
+    "type": "object",
     "required": [
       "project",
       "bucketName",
       "credentials",
       "syncFrequency"
     ],
-    "type": "object"
+    "properties": {
+      "project": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "location": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "bucketName": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$"
+      },
+      "prefix": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
+      },
+      "credentials": {
+        "type": "string",
+        "pattern": "(^env[.].+)|.+"
+      },
+      "syncFrequency": {
+        "type": "string",
+        "pattern": "^(30|60|180|360|720|1440)$",
+        "default": "30"
+      },
+      "syncStartAt": {
+        "type": "string"
+      },
+      "excludeWindow": {
+        "type": "object",
+        "required": [
+          "excludeWindowStartTime",
+          "excludeWindowEndTime"
+        ],
+        "properties": {
+          "excludeWindowStartTime": {
+            "type": "string"
+          },
+          "excludeWindowEndTime": {
+            "type": "string"
+          }
+        }
+      },
+      "jsonPaths": {
+        "type": "string",
+        "pattern": "(^env[.].*)|.*"
+      }
+    },
+    "additionalProperties": true
   }
 }
