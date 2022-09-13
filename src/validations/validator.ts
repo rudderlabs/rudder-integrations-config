@@ -32,7 +32,7 @@ async function initAjvValidators() {
 
   files.forEach((file, i) => {
     const filename = path.basename(path.dirname(file));
-    validators[filename] = ajv.compile(contents[i]);
+    validators[filename] = ajv.compile(contents[i]["configSchema"]);
   });
 }
 
@@ -47,7 +47,7 @@ export function validateConfig(definitionName: string, config: any,
     throw new Error(`No validation method found for definition ${definitionName}`);
   }
 
-  console.log(definitionName, validationMethod, !validationMethod(config), " -- ", (validationMethod && !validationMethod(config)));
+  // console.log(definitionName, validationMethod, !validationMethod(config), " -- ", (validationMethod && !validationMethod(config)));
 
   if (validationMethod && !validationMethod(config)) {
     let errorMessages: string[] = [];
