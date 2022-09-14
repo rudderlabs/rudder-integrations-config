@@ -11,6 +11,13 @@ jobs:
     steps:
       - name: Checkout current master
         uses: actions/checkout@v3
+      - name: npm install
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+        run: npm install
+      - name: Jest
+        run: npm run test
       - name: Install python
         uses: actions/setup-python@v4
         with:
@@ -25,10 +32,3 @@ jobs:
           API_PASSWORD: ${{secrets.PROD_PASSWORD}}
         run: |
          python scripts/action.py ${{secrets.PROD_CONTROL_PLANE_URL}} ${{secrets.PROD_USERNAME}} ${{secrets.PROD_PASSWORD}}
-      - name: npm install
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
-        run: npm install
-      - name: Jest
-        run: npm run test
