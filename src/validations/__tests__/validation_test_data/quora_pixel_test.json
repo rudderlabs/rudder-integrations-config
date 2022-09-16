@@ -1,0 +1,97 @@
+[
+  {
+    "config": {
+      "pixelId": "d2bnp1ubi9x6zq1p89h5hyx2hf5q1k3v",
+      "eventsToQPEvents": [
+        {
+          "from": "Order Completed",
+          "to": "Initiate Checkout"
+        }
+      ],
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [{ "eventName": "" }],
+      "blacklistedEvents": [{ "eventName": "" }]
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "pixelId": "d2bnp1ubi9x6zq1p89h5hyx2hf5q1k3v",
+      "eventsToQPEvents": [{ "from": "", "to": "" }],
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [{ "eventName": "" }],
+      "blacklistedEvents": [{ "eventName": "" }]
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "pixelId": "d2bnp1ubi9x6zq1p89h5hyx2hf5q1k3v",
+      "eventsToQPEvents": [
+        {
+          "from": "Order Completed",
+          "to": "Initiate Checkout"
+        },
+        {
+          "from": "Anonymous Page Visit",
+          "to": "Generic"
+        },
+        {
+          "from": "Credit Card Added",
+          "to": "Add Payment Info"
+        }
+      ],
+      "eventFilteringOption": "whitelistedEvents",
+      "whitelistedEvents": [{ "eventName": "Anonymous Page Visit" }],
+      "blacklistedEvents": [{ "eventName": "Credit Card Added" }]
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "pixelId": 1234,
+      "eventsToQPEvents": [
+        {
+          "from": "Order Completed",
+          "to": "Initiate Checkout"
+        }
+      ],
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [{ "eventName": "" }],
+      "blacklistedEvents": [{ "eventName": "" }]
+    },
+    "result": false,
+    "err": ["pixelId must be string"]
+  },
+  {
+    "config": {
+      "pixelId": "",
+      "eventsToQPEvents": [
+        {
+          "from": "Order Completed",
+          "to": "Initiate Checkout"
+        }
+      ],
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [{ "eventName": "" }],
+      "blacklistedEvents": [{ "eventName": "" }]
+    },
+    "result": false,
+    "err": ["pixelId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""]
+  },
+  {
+    "config": {
+      "eventsToQPEvents": [
+        {
+          "from": "Order Completed",
+          "to": "Initiate Checkout"
+        }
+      ],
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [{ "eventName": "" }],
+      "blacklistedEvents": [{ "eventName": "" }]
+    },
+    "result": false,
+    "err": [" must have required property 'pixelId'"]
+  }
+]

@@ -32,7 +32,7 @@ async function initAjvValidators() {
 
   files.forEach((file, i) => {
     const filename = path.basename(path.dirname(file));
-    validators[filename] = ajv.compile(contents[i]["configSchema"]);
+    validators[filename] = ajv.compile(contents[i]["configSchema"] || {});
   });
 }
 

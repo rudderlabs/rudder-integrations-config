@@ -18,7 +18,7 @@ const destNameArray = getDestNames(path.join(process.cwd(),'data','destinations'
 
 const testDatas: Array<TestConfigSchema> = [];
 
-console.log(destNameArray)
+// console.log(destNameArray)
 
 destNameArray.forEach((dest: any) => {
   try {
