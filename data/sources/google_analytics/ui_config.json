@@ -1,3 +1,74 @@
 {
-  "uiConfig": null
+  "uiConfig": {
+    "auth": {
+      "type": "OAuth"
+    },
+    "config": [
+      {
+        "title": "Source Settings",
+        "fields": [
+          {
+            "type": "dynamicSelect",
+            "method": "post",
+            "url": "/cloudSources/info/roles/google_analytics/info/views",
+            "label": "View",
+            "labelKey": "name",
+            "valueKey": "id",
+            "responseKey": "views",
+            "value": "viewId",
+            "required": true
+          },
+          {
+            "type": "dynamicSelect",
+            "method": "post",
+            "url": "/cloudSources/info/roles/google_analytics/info/columns",
+            "label": "Dimensions",
+            "labelKey": "name",
+            "valueKey": "id",
+            "responseKey": "dimensions",
+            "value": "dimensions",
+            "required": true,
+            "preRequisiteField": {
+              "name": "viewId",
+              "includeValue": true,
+              "includeToRequest": {
+                "transformKey": "id"
+              }
+            },
+            "mode": "multiple"
+          },
+          {
+            "type": "dynamicSelect",
+            "method": "post",
+            "url": "/cloudSources/info/roles/google_analytics/info/columns",
+            "label": "Metrics",
+            "labelKey": "name",
+            "valueKey": "id",
+            "responseKey": "metrics",
+            "value": "metrics",
+            "required": true,
+            "preRequisiteField": {
+              "name": "viewId",
+              "includeValue": true,
+              "includeToRequest": {
+                "transformKey": "id"
+              }
+            },
+            "mode": "multiple"
+          },
+          {
+            "type": "datePicker",
+            "label": "Start from date",
+            "value": "dateSince",
+            "format": "YYYY-MM-DD",
+            "description": "Earliest report date",
+            "preRequisiteField": {
+              "name": "viewId"
+            },
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
 }
