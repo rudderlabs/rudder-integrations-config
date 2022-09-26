@@ -40,10 +40,7 @@ def parse_response(resp):
 
 def get_persisted_store(base_url, selector):
     request_url = f'{base_url}/{selector}-definitions'
-    print(request_url)
     response = requests.get(request_url)
-    print(response.text)
-    print(json.loads(response.text))
     return json.loads(response.text)
 
 def get_config_definition(base_url, selector, name):
