@@ -3,14 +3,18 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
     "required": [
-      "customerId"
+      "apiKey"
     ],
     "properties": {
-      "customerId": {
+      "apiKey": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,500})$"
       },
-      "eventsToOfflineConversionsTypeMapping": {
+      "appSubdomain": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,500})$"
+      },
+      "userAttributesMapping": {
         "type": "array",
         "items": {
           "type": "object",
@@ -26,7 +30,39 @@
           }
         }
       },
-      "eventsToConversionsNamesMapping": {
+      "userEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "rsEventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "userEventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "eventProperties": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "from": {
+                    "type": "string",
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  },
+                  "to": {
+                    "type": "string",
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "companyAttributesMapping": {
         "type": "array",
         "items": {
           "type": "object",
@@ -41,44 +77,6 @@
             }
           }
         }
-      },
-      "customVariables": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "from": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "to": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "UserIdentifierSource": {
-        "type": "string",
-        "pattern": "(^env[.].*)|^(none|UNSPECIFIED|UNKNOWN|FIRST_PARTY|THIRD_PARTY)$"
-      },
-      "thirdPartyUserId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "conversionEnvironment": {
-        "type": "string",
-        "pattern": "(^env[.].*)|^(none|UNSPECIFIED|UNKNOWN|APP|WEB)$"
-      },
-      "defaultUserIdentifier": {
-        "type": "string",
-        "pattern": "(^env[.].*)|^(email|phone)$"
-      },
-      "enableServerSideIdentify": {
-        "type": "boolean"
-      },
-      "validateOnly": {
-        "type": "boolean"
       }
     }
   }
