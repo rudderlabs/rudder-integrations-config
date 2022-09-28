@@ -11,6 +11,27 @@
           "regexErrorMessage": "Invalid Customer Id",
           "required": true,
           "placeholder": "e.g: 6293429833"
+        },
+        {
+          "type": "checkbox",
+          "label": "Sub Account",
+          "value": "subAccount",
+          "required": false,
+          "default": false
+        },
+        {
+          "type": "textInput",
+          "label": "Login Customer ID",
+          "preRequisiteField": [
+            {
+              "name": "subAccount",
+              "selectedValue": true
+            }
+          ],
+          "value": "loginCustomerId",
+          "regex": "^(.{1,100})$",
+          "required": true,
+          "footerNote": "If Customer-Id is from a sub account then provide customerId of manager account"
         }
       ]
     },
@@ -92,15 +113,6 @@
             "name": "None",
             "value": "none"
           }
-        },
-        {
-          "type": "textInput",
-          "label": "Third Party User Id",
-          "value": "thirdPartyUserId",
-          "regex": "^(.{1,100})$",
-          "required": false,
-          "footerNote": "Defaults maps to userId and based on the path provided it will be overridden",
-          "placeholder": "e.g: properties.thirdPartyUserId"
         },
         {
           "type": "singleSelect",
