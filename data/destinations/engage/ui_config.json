@@ -1,70 +1,57 @@
 {
   "uiConfig": [
     {
-      "title": "1. Connection Settings",
+      "title": "Connection Settings",
       "fields": [
         {
           "type": "textInput",
-          "label": "App Key",
-          "value": "appKey",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid App Key",
+          "label": "Public Key",
+          "value": "publicKey",
           "required": true,
-          "placeholder": "e.g: f2c7c97a-48d1-11ea-8e07-faffc22c7c7f"
+          "regex": ".*",
+          "placeholder": "e.g: kjwehfr8734rtg43bf34ty849rhf98",
+          "footerNote": "Enter Public Key which will be used as username for authentication."
         },
         {
           "type": "textInput",
-          "label": "Rest Api Key",
-          "value": "restApiKey",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Rest Api Key",
+          "label": "Private Key",
+          "value": "privateKey",
           "required": true,
-          "placeholder": "e.g: 06c19c59-48d2-11ea-b27a-faffc22c7c7f",
-          "secret": true
-        },
-        {
-          "type": "textInput",
-          "label": "Data Center",
-          "value": "dataCenter",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Data Center",
-          "required": true,
-          "placeholder": "e.g: EU-01"
-        },
-        {
-          "type": "checkbox",
-          "label": "Track events for anonymous users",
-          "value": "trackAnonymousUser",
-          "default": false,
-          "footerNote": "Turn on if you want to track anonymous users"
+          "regex": ".*",
+          "secret": true,
+          "placeholder": "e.g. b4a29aba5e75dkjc8a18acd921e2e",
+          "footerNote": "Enter the Private Key which will be used as Password for authentication. It is set as required to access the API's such as user deletion and update user's email."
         }
       ]
     },
     {
-      "title": "2. Custom html settings",
+      "title": "User List Settings",
       "fields": [
         {
-          "type": "checkbox",
-          "label": "Enable html in app messages",
-          "value": "enableHtmlInAppMessages",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Allow User Supplied Javascript",
-          "value": "allowUserSuppliedJavascript",
-          "default": false
+          "type": "dynamicCustomForm",
+          "value": "listIds",
+          "label": "List ID's",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "893bt6dg93n5t5v45t43c",
+              "value": "listID",
+              "label": "List ID",
+              "required": false
+            }
+          ],
+          "footerNote": "Enter the list IDs in which you want to add the users automatically if not provided inside externalID."
         }
       ]
     },
     {
-      "title": "3. Native SDK",
+      "title": "Native SDK",
       "fields": [
         {
           "type": "checkbox",
           "label": "Use device-mode to send events",
           "value": "useNativeSDK",
-          "default": true
+          "default": false
         }
       ]
     },
