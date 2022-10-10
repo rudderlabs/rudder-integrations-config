@@ -15,6 +15,215 @@
       ]
     },
     {
+      "title": "Native SDK",
+      "fields": [
+        {
+          "type": "defaultCheckbox",
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": true
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "getInAppEventMapping",
+          "label": "Mapping to trigger the getInApp messages",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Trigger inApp"
+            }
+          ],
+          "footerNote": "Set the event names for which you want to trigger the web in-app push events"
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "purchaseEventMapping",
+          "label": "Mapping to trigger the purchase events",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Trigger purchase"
+            }
+          ],
+          "footerNote": "Set the event names for which you want to trigger the purchase events"
+        },
+        {
+          "type": "singleSelect",
+          "label": "Identifier to identify a user over a session",
+          "value": "initialisationIdentifier",
+          "options": [
+            {
+              "name": "Email",
+              "value": "email"
+            },
+            {
+              "name": "UserID",
+              "value": "userId"
+            }
+          ],
+          "defaultOption": {
+            "name": "Email",
+            "value": "email"
+          }
+        },
+        {
+          "type": "checkbox",
+          "label": "Trigger a track event for web in-app push",
+          "value": "sendTrackForInapp",
+          "default": false,
+          "footerNote": "Enable this if you want to track web in-app push notifications."
+        },
+        {
+          "type": "textInput",
+          "label": "Package Name",
+          "value": "packageName",
+          "required": true,
+          "placeholder": "e.g: my-website"
+        },
+        {
+          "type": "textInput",
+          "label": "Time (in ms) for messages to animate in and out",
+          "value": "animationDuration",
+          "required": false,
+          "placeholder": "e.g: 400"
+        },
+        {
+          "type": "textInput",
+          "label": "Space (px or %) between screen bottom & messages.",
+          "value": "bottomOffset",
+          "required": false,
+          "placeholder": "e.g: 20%",
+          "footerNote": "Set the spacing between the screen bottom and push notification pop-up. This is not applicable for center, top, or full-screen messages"
+        },
+        {
+          "type": "textInput",
+          "label": "Space (px or %) between screen right & messages.",
+          "value": "rightOffset",
+          "required": false,
+          "placeholder": "e.g: 20%",
+          "footerNote": "Set the spacing between the screen right and push notification pop-up. This is not applicable for center, top, or full-screen messages."
+        },
+        {
+          "type": "textInput",
+          "label": "Space (px or %) between screen top & messages.",
+          "value": "topOffset",
+          "required": false,
+          "placeholder": "e.g: 20%",
+          "footerNote": "Set the spacing between the screen top and push notification pop-up. This is not applicable for center, top, or full-screen messages."
+        },
+        {
+          "type": "textInput",
+          "label": "Wait time for next message",
+          "value": "displayInterval",
+          "required": false,
+          "placeholder": "e.g: 25000",
+          "footerNote": "Time (in ms) to wait before showing next in-app message after closing the currently opened one."
+        },
+        {
+          "type": "singleSelect",
+          "label": "Control how to open links.",
+          "value": "handleLinks",
+          "required": false,
+          "options": [
+            {
+              "name": "Open all in new tabs",
+              "value": "open-all-new-tab"
+            },
+            {
+              "name": "Open all in same tabs",
+              "value": "open-all-same-tab"
+            },
+            {
+              "name": "Open in external new tab",
+              "value": "external-new-tab"
+            }
+          ],
+          "footerNote": "Set how do you want the links present in the push notification to open."
+        },
+        {
+          "type": "textInput",
+          "label": "Screen Reader Text",
+          "value": "onOpenScreenReaderMessage",
+          "required": false,
+          "placeholder": "e.g: Reader message here",
+          "footerNote": "Text that screen reader should use to announce when opening in-app messages."
+        },
+        {
+          "type": "textInput",
+          "label": "Focus Element",
+          "value": "onOpenNodeToTakeFocus",
+          "required": false,
+          "placeholder": "e.g: input",
+          "footerNote": "Specify the DOM element to take keyboard focus when the in-app message opens."
+        },
+        {
+          "type": "textInput",
+          "label": "Color of Close button",
+          "value": "closeButtonColor",
+          "required": false,
+          "placeholder": "e.g: cyan"
+        },
+        {
+          "type": "textInput",
+          "label": "Size of Close button",
+          "value": "closeButtonSize",
+          "required": false,
+          "placeholder": "e.g: 24"
+        },
+        {
+          "type": "textInput",
+          "label": "Position",
+          "value": "closeButtonPosition",
+          "required": false,
+          "footerNote": "Cross button's position relative to the in-app message.",
+          "options": [
+            {
+              "name": "Top Right",
+              "value": "otop-right"
+            },
+            {
+              "name": "Top Left",
+              "value": "top-left"
+            }
+          ]
+        },
+        {
+          "type": "textInput",
+          "label": "Space between button & container top",
+          "value": "closeButtonColorTopOffset",
+          "required": false,
+          "placeholder": "e.g: 4%",
+          "footerNote": "Set the spacing between the cross button and the pop-up notification's top border"
+        },
+        {
+          "type": "textInput",
+          "label": "Space between button & container side",
+          "value": "closeButtonColorSideOffset",
+          "required": false,
+          "placeholder": "e.g: 4%",
+          "footerNote": "Set the spacing between the cross button and the pop-up notification's side borders"
+        },
+        {
+          "type": "textInput",
+          "label": "Custom pathname",
+          "value": "iconPath",
+          "required": false,
+          "placeholder": "e.g: path/to/icon",
+          "footerNote": "image or SVG to show instead of the default X"
+        },
+        {
+          "type": "checkbox",
+          "label": "Prevent user dismissing in-app message by clicking outside message",
+          "value": "isRequiredToDismissMessage",
+          "default": false
+        }
+      ]
+    },
+    {
       "title": "Other Settings",
       "fields": [
         {
@@ -42,6 +251,25 @@
           "default": true
         }
       ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
+            }
+          ]
+        }
+      ]
     }
-  ]
+  ]  
 }
