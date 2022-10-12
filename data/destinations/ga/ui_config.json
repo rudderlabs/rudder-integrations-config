@@ -1,37 +1,38 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "Tracking ID",
-          "placeholder": "e.g: UA-125934xxx-1",
+          "value": "trackingID",
           "regex": "(^{{.*\\|\\|(.*)}}$)|(^(UA|YT|MO)-\\d+-\\d{0,100}$)",
           "regexErrorMessage": "Invalid Tracking ID",
           "required": true,
-          "type": "textInput",
-          "value": "trackingID"
+          "placeholder": "e.g: UA-125934xxx-1"
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Native SDK",
       "fields": [
         {
-          "default": false,
-          "label": "Use device-mode to send events",
           "type": "checkbox",
-          "value": "useNativeSDK"
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": false
         }
-      ],
-      "title": "Native SDK"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -46,289 +47,288 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Reporting",
       "fields": [
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Remarketing, Display Ads and Demographic Reports.",
-          "type": "checkbox",
-          "value": "doubleClick"
+          "value": "doubleClick",
+          "default": false
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Enable Enhanced Link Attribution",
-          "type": "checkbox",
-          "value": "enhancedLinkAttribution"
+          "value": "enhancedLinkAttribution",
+          "default": false
         }
-      ],
-      "title": "Reporting"
+      ]
     },
     {
+      "title": "Track Pages",
       "fields": [
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Include the Querystring in Page Views",
-          "type": "checkbox",
-          "value": "includeSearch"
+          "value": "includeSearch",
+          "default": false
         },
         {
-          "default": true,
+          "type": "checkbox",
           "label": "Track Categorized Pages",
-          "type": "checkbox",
-          "value": "trackCategorizedPages"
+          "value": "trackCategorizedPages",
+          "default": true
         },
         {
-          "default": true,
+          "type": "checkbox",
           "label": "Track Named Pages",
-          "type": "checkbox",
-          "value": "trackNamedPages"
+          "value": "trackNamedPages",
+          "default": true
         },
         {
-          "default": false,
-          "footerNote": "Enable this to use 'Viewed <name>/<category> Page' as event names for tracking named and categorized page events. For example, 'Viewed Signup Page'.",
+          "type": "checkbox",
           "label": "Use Rich Event Names",
-          "type": "checkbox",
-          "value": "useRichEventNames"
+          "value": "useRichEventNames",
+          "default": false,
+          "footerNote": "Enable this to use 'Viewed <name>/<category> Page' as event names for tracking named and categorized page events. For example, 'Viewed Signup Page'."
         }
-      ],
-      "title": "Track Pages"
+      ]
     },
     {
+      "title": "Sampling",
       "fields": [
         {
-          "default": "100",
-          "label": "Sample Rate",
-          "regex": "(^{{.*\\|\\|(.*)}}$)|(^(.{0,100})$)",
-          "regexErrorMessage": "Invalid Sample Rate",
           "type": "textInput",
-          "value": "sampleRate"
+          "label": "Sample Rate",
+          "value": "sampleRate",
+          "default": "100",
+          "regex": "(^{{.*\\|\\|(.*)}}$)|(^(.{0,100})$)",
+          "regexErrorMessage": "Invalid Sample Rate"
         },
         {
-          "default": "1",
-          "label": "Site Speed Sample Rate",
-          "regex": "(^{{.*\\|\\|(.*)}}$)|(^(.{0,100})$)",
-          "regexErrorMessage": "Invalid Site Speed Sample Rate",
           "type": "textInput",
-          "value": "siteSpeedSampleRate"
+          "label": "Site Speed Sample Rate",
+          "value": "siteSpeedSampleRate",
+          "default": "1",
+          "regex": "(^{{.*\\|\\|(.*)}}$)|(^(.{0,100})$)",
+          "regexErrorMessage": "Invalid Site Speed Sample Rate"
         }
-      ],
-      "title": "Sampling"
+      ]
     },
     {
+      "title": "Custom Dimensions & Metrics",
       "fields": [
         {
-          "keyLeft": "from",
-          "keyRight": "to",
+          "type": "dynamicForm",
           "labelLeft": "Event or Property",
           "labelRight": "Custom Dimension",
+          "keyLeft": "from",
+          "keyRight": "to",
           "placeholderLeft": "e.g: first_name",
           "placeholderRight": "e.g: dimension1",
-          "type": "dynamicForm",
           "value": "dimensions"
         },
         {
-          "keyLeft": "from",
-          "keyRight": "to",
+          "type": "dynamicForm",
           "labelLeft": "Traits or  Property",
           "labelRight": "Metric",
+          "keyLeft": "from",
+          "keyRight": "to",
           "placeholderLeft": "e.g: age",
           "placeholderRight": "e.g: metric1",
-          "type": "dynamicForm",
           "value": "metrics"
         },
         {
+          "type": "dynamicCustomForm",
+          "value": "resetCustomDimensionsOnPage",
           "customFields": [
             {
-              "default": [],
-              "label": "Reset dimensions on Page calls",
-              "regex": "(^{{.*\\|\\|(.*)}}$)|(^(.{0,100})$)",
-              "regexErrorMessage": "Invalid dimensions",
-              "required": false,
               "type": "textInput",
-              "value": "resetCustomDimensionsOnPage"
+              "label": "Reset dimensions on Page calls",
+              "value": "resetCustomDimensionsOnPage",
+              "required": false,
+              "default": [],
+              "regex": "(^{{.*\\|\\|(.*)}}$)|(^(.{0,100})$)",
+              "regexErrorMessage": "Invalid dimensions"
             }
-          ],
-          "type": "dynamicCustomForm",
-          "value": "resetCustomDimensionsOnPage"
+          ]
         },
         {
-          "default": true,
-          "label": "Set Custom Dimensions & Metrics to the Page",
           "type": "checkbox",
-          "value": "setAllMappedProps"
+          "label": "Set Custom Dimensions & Metrics to the Page",
+          "value": "setAllMappedProps",
+          "default": true
         }
-      ],
-      "title": "Custom Dimensions & Metrics"
+      ]
     },
     {
+      "title": "Property & Trait Mapping",
       "fields": [
         {
-          "keyLeft": "from",
-          "keyRight": "to",
+          "type": "dynamicForm",
           "labelLeft": "Traits or  Property",
           "labelRight": "Content Grouping",
-          "placeholderLeft": "e.g: section",
-          "placeholderRight": "e.g: contentGroup1",
-          "type": "dynamicForm",
-          "value": "contentGroupings"
-        }
-      ],
-      "title": "Property & Trait Mapping"
-    },
-    {
-      "fields": [
-        {
-          "default": false,
-          "label": "Enable Server Side Identify",
-          "type": "checkbox",
-          "value": "enableServerSideIdentify"
-        },
-        {
-          "default": "",
-          "label": "Server Side Identify Event Category",
-          "regex": "(^{{.*\\|\\|(.*)}}$)|(^(.{0,100})$)",
-          "regexErrorMessage": "Invalid Server Side Identify Event Category",
-          "type": "textInput",
-          "value": "serverSideIdentifyEventCategory"
-        },
-        {
-          "default": "",
-          "label": "Server Side Identify Event Action",
-          "regex": "(^{{.*\\|\\|(.*)}}$)|(^(.{0,100})$)",
-          "regexErrorMessage": "Invalid Server Side Identify Event Action",
-          "type": "textInput",
-          "value": "serverSideIdentifyEventAction"
-        }
-      ],
-      "title": "Server Side Identify"
-    },
-    {
-      "fields": [
-        {
-          "default": false,
-          "footerNote": "Turn this on to send events with track name rudderGATracker.",
-          "label": "Use Named Tracker",
-          "type": "checkbox",
-          "value": "namedTracker"
-        },
-        {
-          "default": false,
-          "label": "Disable Md5 encryption from Client ID",
-          "type": "checkbox",
-          "value": "disableMd5"
-        },
-        {
-          "default": false,
-          "label": "Anonymize IP Addresses",
-          "type": "checkbox",
-          "value": "anonymizeIp"
-        },
-        {
-          "default": "auto",
-          "label": "Cookie Domain Name",
-          "regex": "(^{{.*\\|\\|(.*)}}$)|(^(.{0,100})$)",
-          "regexErrorMessage": "Invalid Cookie Domain Name",
-          "type": "textInput",
-          "value": "domain"
-        },
-        {
-          "default": false,
-          "label": "Enable Enhanced Ecommerce",
-          "type": "checkbox",
-          "value": "enhancedEcommerce"
-        },
-        {
-          "default": false,
-          "label": "Add the non-interaction flag to all events",
-          "type": "checkbox",
-          "value": "nonInteraction"
-        },
-        {
-          "default": "",
-          "label": "Optimize Container ID",
-          "regex": "(^{{.*\\|\\|(.*)}}$)|(^(.{0,100})$)",
-          "regexErrorMessage": "Optimize Container ID",
-          "type": "textInput",
-          "value": "optimize"
-        },
-        {
-          "default": false,
-          "label": "Send user-id to GA",
-          "type": "checkbox",
-          "value": "sendUserId"
-        },
-        {
-          "default": false,
-          "label": "Use Google AMP Client ID",
-          "type": "checkbox",
-          "value": "useGoogleAmpClientId"
-        }
-      ],
-      "title": "Other Settings"
-    },
-    {
-      "fields": [
-        {
-          "hidden": true,
           "keyLeft": "from",
           "keyRight": "to",
-          "type": "dynamicForm",
-          "value": "customMappings"
+          "placeholderLeft": "e.g: section",
+          "placeholderRight": "e.g: contentGroup1",
+          "value": "contentGroupings"
+        }
+      ]
+    },
+    {
+      "title": "Server Side Identify",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Enable Server Side Identify",
+          "value": "enableServerSideIdentify",
+          "default": false
+        },
+        {
+          "type": "textInput",
+          "label": "Server Side Identify Event Category",
+          "value": "serverSideIdentifyEventCategory",
+          "default": "",
+          "regex": "(^{{.*\\|\\|(.*)}}$)|(^(.{0,100})$)",
+          "regexErrorMessage": "Invalid Server Side Identify Event Category"
+        },
+        {
+          "type": "textInput",
+          "label": "Server Side Identify Event Action",
+          "value": "serverSideIdentifyEventAction",
+          "default": "",
+          "regex": "(^{{.*\\|\\|(.*)}}$)|(^(.{0,100})$)",
+          "regexErrorMessage": "Invalid Server Side Identify Event Action"
+        }
+      ]
+    },
+    {
+      "title": "Other Settings",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Use Named Tracker",
+          "value": "namedTracker",
+          "footerNote": "Turn this on to send events with track name rudderGATracker.",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "Disable Md5 encryption from Client ID",
+          "value": "disableMd5",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "Anonymize IP Addresses",
+          "value": "anonymizeIp",
+          "default": false
+        },
+        {
+          "type": "textInput",
+          "label": "Cookie Domain Name",
+          "value": "domain",
+          "default": "auto",
+          "regex": "(^{{.*\\|\\|(.*)}}$)|(^(.{0,100})$)",
+          "regexErrorMessage": "Invalid Cookie Domain Name"
+        },
+        {
+          "type": "checkbox",
+          "label": "Enable Enhanced Ecommerce",
+          "value": "enhancedEcommerce",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "Add the non-interaction flag to all events",
+          "value": "nonInteraction",
+          "default": false
+        },
+        {
+          "type": "textInput",
+          "label": "Optimize Container ID",
+          "value": "optimize",
+          "default": "",
+          "regex": "(^{{.*\\|\\|(.*)}}$)|(^(.{0,100})$)",
+          "regexErrorMessage": "Optimize Container ID"
+        },
+        {
+          "type": "checkbox",
+          "label": "Send user-id to GA",
+          "value": "sendUserId",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "Use Google AMP Client ID",
+          "value": "useGoogleAmpClientId",
+          "default": false
         }
       ]
     },
     {
       "fields": [
         {
+          "type": "dynamicForm",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "hidden": true,
+          "value": "customMappings"
+        }
+      ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
     }
   ]
 }

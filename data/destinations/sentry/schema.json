@@ -1,99 +1,20 @@
 {
-  "schema": {
+  "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
     "additionalProperties": false,
+    "required": [
+      "dsn"
+    ],
     "properties": {
-      "allowUrls": {
-        "items": {
-          "properties": {
-            "allowUrls": {
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
-      },
-      "blacklistedEvents": {
-        "items": {
-          "properties": {
-            "eventName": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
-      },
-      "customVersionProperty": {
-        "type": "string"
-      },
-      "debugMode": {
-        "type": "boolean"
-      },
-      "denyUrls": {
-        "items": {
-          "properties": {
-            "denyUrls": {
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
-      },
       "dsn": {
         "type": "string"
       },
       "environment": {
         "type": "string"
       },
-      "eventFilteringOption": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$",
+      "customVersionProperty": {
         "type": "string"
-      },
-      "ignoreErrors": {
-        "items": {
-          "properties": {
-            "ignoreErrors": {
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
-      },
-      "includePaths": {
-        "items": {
-          "properties": {
-            "includePaths": {
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
-      },
-      "logger": {
-        "type": "string"
-      },
-      "oneTrustCookieCategories": {
-        "properties": {
-          "web": {
-            "items": {
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
       },
       "release": {
         "type": "string"
@@ -101,30 +22,109 @@
       "serverName": {
         "type": "string"
       },
+      "logger": {
+        "type": "string"
+      },
+      "debugMode": {
+        "type": "boolean"
+      },
+      "ignoreErrors": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "ignoreErrors": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "includePaths": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "includePaths": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "allowUrls": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "allowUrls": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "denyUrls": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "denyUrls": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "eventFilteringOption": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
+      },
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
       "useNativeSDK": {
+        "type": "object",
         "properties": {
           "web": {
             "type": "boolean"
           }
-        },
-        "type": "object"
+        }
       },
-      "whitelistedEvents": {
-        "items": {
-          "properties": {
-            "eventName": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
+      "oneTrustCookieCategories": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
             }
-          },
-          "type": "object"
-        },
-        "type": "array"
+          }
+        }
       }
-    },
-    "required": [
-      "dsn"
-    ],
-    "type": "object"
+    }
   }
 }

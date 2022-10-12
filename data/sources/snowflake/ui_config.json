@@ -1,89 +1,91 @@
-[
-  {
-    "docLinks": {
-      "grantPermissions": "https://docs.rudderstack.com/reverse-etl/snowflake/#granting-permissions",
-      "jsonMapperUseInstructions": "https://docs.rudderstack.com/reverse-etl/snowflake/#specifying-the-data-to-import",
-      "setupInstructions": "https://docs.rudderstack.com/reverse-etl/snowflake",
-      "verifyingCredentials": "https://docs.rudderstack.com/reverse-etl/snowflake/#what-do-the-three-validations-under-verifying-credentials-imply"
-    },
-    "fields": [
-      {
-        "addInAccountSummary": true,
-        "label": "Account",
-        "regex": "^(.{0,100})$",
-        "regexErrorMessage": "Invalid Value",
-        "required": true,
-        "trim": true,
-        "type": "textInput",
-        "value": "account"
+{
+  "uiConfig": [
+    {
+      "title": "Connection Credentials",
+      "secretFields": [
+        "password"
+      ],
+      "docLinks": {
+        "grantPermissions": "https://docs.rudderstack.com/reverse-etl/snowflake/#granting-permissions",
+        "verifyingCredentials": "https://docs.rudderstack.com/reverse-etl/snowflake/#what-do-the-three-validations-under-verifying-credentials-imply",
+        "jsonMapperUseInstructions": "https://docs.rudderstack.com/reverse-etl/snowflake/#specifying-the-data-to-import",
+        "setupInstructions": "https://docs.rudderstack.com/reverse-etl/snowflake"
       },
-      {
-        "addInAccountSummary": true,
-        "label": "Database",
-        "regex": "^(.{0,100})$",
-        "regexErrorMessage": "Invalid Value",
-        "required": true,
-        "trim": true,
-        "type": "textInput",
-        "value": "dbname"
-      },
-      {
-        "addInAccountSummary": true,
-        "label": "Warehouse",
-        "regex": "^(.{0,100})$",
-        "regexErrorMessage": "Invalid Value",
-        "required": true,
-        "trim": true,
-        "type": "textInput",
-        "value": "warehouse"
-      },
-      {
-        "label": "User",
-        "regex": "^(.{0,100})$",
-        "regexErrorMessage": "Invalid Value",
-        "required": true,
-        "trim": true,
-        "type": "textInput",
-        "value": "user"
-      },
-      {
-        "inputFieldType": "password",
-        "label": "Password",
-        "regex": ".*",
-        "required": true,
-        "secret": true,
-        "type": "textInput",
-        "value": "password"
-      },
-      {
-        "defaultOption": {
-          "name": "Amazon Web Services",
-          "value": "AWS"
+      "nameField": "account",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Account",
+          "value": "account",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "required": true,
+          "addInAccountSummary": true,
+          "trim": true
         },
-        "label": "Choose your Cloud",
-        "options": [
-          {
+        {
+          "type": "textInput",
+          "label": "Database",
+          "value": "dbname",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "required": true,
+          "addInAccountSummary": true,
+          "trim": true
+        },
+        {
+          "type": "textInput",
+          "label": "Warehouse",
+          "value": "warehouse",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "required": true,
+          "addInAccountSummary": true,
+          "trim": true
+        },
+        {
+          "type": "textInput",
+          "label": "User",
+          "value": "user",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "required": true,
+          "trim": true
+        },
+        {
+          "type": "textInput",
+          "label": "Password",
+          "value": "password",
+          "inputFieldType": "password",
+          "regex": ".*",
+          "required": true,
+          "secret": true
+        },
+        {
+          "type": "singleSelect",
+          "label": "Choose your Cloud",
+          "value": "cloudProvider",
+          "options": [
+            {
+              "name": "Amazon Web Services",
+              "value": "AWS"
+            },
+            {
+              "name": "Google Cloud Platform",
+              "value": "GCP"
+            },
+            {
+              "name": "Microsoft Azure",
+              "value": "AZURE"
+            }
+          ],
+          "defaultOption": {
             "name": "Amazon Web Services",
             "value": "AWS"
           },
-          {
-            "name": "Google Cloud Platform",
-            "value": "GCP"
-          },
-          {
-            "name": "Microsoft Azure",
-            "value": "AZURE"
-          }
-        ],
-        "required": true,
-        "type": "singleSelect",
-        "value": "cloudProvider"
-      }
-    ],
-    "nameField": "account",
-    "secretFields": [
-      "password"
-    ],
-    "title": "Connection Credentials"
-  }
-]
+          "required": true
+        }
+      ]
+    }
+  ]
+}

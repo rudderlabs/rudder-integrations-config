@@ -1,76 +1,75 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Credentials",
       "fields": [
         {
+          "type": "textInput",
           "label": "Project",
           "labelNote": "GCP Project ID where your BigQuery database is located",
-          "placeholder": "my-sample-project-191923",
+          "value": "project",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Project",
-          "required": true,
-          "type": "textInput",
-          "value": "project"
+          "placeholder": "my-sample-project-191923",
+          "required": true
         },
         {
-          "footerNote": "Examples: US, EU, asia-south1",
+          "type": "textInput",
           "label": "Location",
           "labelNote": "GCP region for your BigQuery datasets",
-          "placeholder": "US, EU, asia-southeast1",
+          "value": "location",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Location",
+          "placeholder": "US, EU, asia-southeast1",
           "required": false,
-          "type": "textInput",
-          "value": "location"
+          "footerNote": "Examples: US, EU, asia-south1"
         },
         {
-          "footerNote": "Please make sure the bucket exists in your GCP Project in the same region as bigquery dataset",
+          "type": "textInput",
           "label": "Staging GCS Storage Bucket Name",
           "labelNote": "GCS Bucket to store data before loading into BigQuery",
-          "placeholder": "e.g: gcs-event-logs",
-          "regex": "^(.{0,100})$",
+          "value": "bucketName",
+          "regex": "^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$",
           "regexErrorMessage": "Invalid Staging GCS Storage Bucket Name",
+          "placeholder": "e.g: gcs-event-logs",
           "required": true,
-          "type": "textInput",
-          "value": "bucketName"
+          "footerNote": "Please make sure the bucket exists in your GCP Project in the same region as bigquery dataset"
         },
         {
+          "type": "textInput",
           "label": "Prefix",
-          "placeholder": "e.g: ruddder",
+          "value": "prefix",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Prefix",
           "required": false,
-          "type": "textInput",
-          "value": "prefix"
+          "placeholder": "e.g: ruddder"
         },
         {
-          "footerNote": "Default will be the source name",
+          "type": "textInput",
           "label": "Namespace",
           "labelNote": "Schema name for the warehouse where the tables are created",
-          "placeholder": "eg: dataset name",
+          "value": "namespace",
           "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
           "regexErrorMessage": "Invalid Namespace",
           "required": false,
-          "type": "textInput",
-          "value": "namespace"
+          "placeholder": "eg: dataset name",
+          "footerNote": "Default will be the source name"
         },
         {
-          "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'BigQuery User'",
+          "type": "textareaInput",
+          "subType": "JSON",
           "label": "Credentials",
           "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your BigQuery database",
+          "value": "credentials",
           "regex": ".*",
           "required": true,
-          "secret": true,
-          "subType": "JSON",
-          "type": "textareaInput",
-          "value": "credentials"
+          "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'BigQuery User'",
+          "secret": true
         },
         {
-          "defaultOption": {
-            "name": "Every 30 minutes",
-            "value": "30"
-          },
+          "type": "singleSelect",
           "label": "Sync Frequency",
+          "value": "syncFrequency",
           "options": [
             {
               "name": "Every 30 minutes",
@@ -97,42 +96,56 @@
               "value": "1440"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "syncFrequency"
+          "defaultOption": {
+            "name": "Every 30 minutes",
+            "value": "30"
+          },
+          "required": false
         },
         {
-          "footerNote": "Note: Please specify time in UTC",
-          "label": "Sync Starting At (Optional)",
-          "options": {
-            "minuteStep": 15,
-            "omitSeconds": true
-          },
-          "required": false,
           "type": "timePicker",
-          "value": "syncStartAt"
-        },
-        {
-          "endTime": {
-            "label": "end time",
-            "value": "excludeWindowEndTime"
-          },
-          "footerNote": "Note: Please specify time in UTC",
-          "label": "Exclude window (Optional)",
+          "label": "Sync Starting At (Optional)",
+          "value": "syncStartAt",
           "options": {
-            "minuteStep": 1,
-            "omitSeconds": true
+            "omitSeconds": true,
+            "minuteStep": 15
           },
           "required": false,
+          "footerNote": "Note: Please specify time in UTC"
+        },
+        {
+          "type": "timeRangePicker",
+          "label": "Exclude window (Optional)",
+          "value": "excludeWindow",
           "startTime": {
             "label": "start time",
             "value": "excludeWindowStartTime"
           },
-          "type": "timeRangePicker",
-          "value": "excludeWindow"
+          "endTime": {
+            "label": "end time",
+            "value": "excludeWindowEndTime"
+          },
+          "options": {
+            "omitSeconds": true,
+            "minuteStep": 1
+          },
+          "required": false,
+          "footerNote": "Note: Please specify time in UTC"
+        },
+        {
+          "type": "textInput",
+          "label": "Json columns (Optional)",
+          "labelNote": "Specify required json properties in dot notation separated by commas",
+          "value": "jsonPaths",
+          "regex": "^(.*)$",
+          "placeholder": "e.g: testMap.nestedMap, testArray",
+          "required": false,
+          "footerURL": {
+            "link": "https://www.rudderstack.com/docs/data-warehouse-integrations/google-bigquery/#configuring-google-bigquery-destination-in-rudderstack",
+            "text": "Instructions for setting up the json columns"
+          }
         }
-      ],
-      "title": "Connection Credentials"
+      ]
     }
   ]
 }

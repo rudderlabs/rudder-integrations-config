@@ -1,129 +1,130 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "Public DSN",
-          "placeholder": "https://9e27dbf8970f47b9bde338589h5676db@o991473.ingest.sentry.io/5998763",
+          "value": "dsn",
           "required": true,
-          "secret": true,
-          "type": "textInput",
-          "value": "dsn"
+          "placeholder": "https://9e27dbf8970f47b9bde338589h5676db@o991473.ingest.sentry.io/5998763",
+          "secret": true
         },
         {
+          "type": "textInput",
           "label": "Environment",
-          "placeholder": "production",
+          "value": "environment",
           "required": false,
-          "type": "textInput",
-          "value": "environment"
+          "placeholder": "production"
         },
         {
+          "type": "textInput",
           "label": "Set Release By Property",
-          "placeholder": "my-project-name@2.3.12",
+          "value": "customVersionProperty",
           "required": false,
-          "type": "textInput",
-          "value": "customVersionProperty"
+          "placeholder": "my-project-name@2.3.12"
         },
         {
+          "type": "textInput",
           "label": "Release",
-          "placeholder": "my-project-name@2.3.12",
+          "value": "release",
           "required": false,
-          "type": "textInput",
-          "value": "release"
+          "placeholder": "my-project-name@2.3.12"
         },
         {
+          "type": "textInput",
           "label": "Server Name",
-          "placeholder": "my-server",
+          "value": "serverName",
           "required": false,
-          "type": "textInput",
-          "value": "serverName"
+          "placeholder": "my-server"
         },
         {
+          "type": "textInput",
           "label": "Logger",
-          "placeholder": "my-logger",
+          "value": "logger",
           "required": false,
-          "type": "textInput",
-          "value": "logger"
+          "placeholder": "my-logger"
         },
         {
+          "type": "dynamicCustomForm",
+          "value": "ignoreErrors",
           "customFields": [
             {
-              "label": "Ignore Errors",
+              "type": "textInput",
               "placeholder": "e.g. TYPE_ERROR",
-              "required": false,
-              "type": "textInput",
-              "value": "ignoreErrors"
+              "value": "ignoreErrors",
+              "label": "Ignore Errors",
+              "required": false
             }
-          ],
-          "type": "dynamicCustomForm",
-          "value": "ignoreErrors"
+          ]
         },
         {
+          "type": "dynamicCustomForm",
+          "value": "includePaths",
           "customFields": [
             {
-              "label": "Include Paths",
+              "type": "textInput",
               "placeholder": "e.g. abc/",
-              "required": false,
-              "type": "textInput",
-              "value": "includePaths"
+              "value": "includePaths",
+              "label": "Include Paths",
+              "required": false
             }
-          ],
-          "type": "dynamicCustomForm",
-          "value": "includePaths"
+          ]
         },
         {
+          "type": "dynamicCustomForm",
+          "value": "allowUrls",
           "customFields": [
             {
+              "type": "textInput",
+              "placeholder": "e.g. https://example.com/",
+              "value": "allowUrls",
               "label": "Allow URLs",
-              "placeholder": "e.g. https://example.com/",
-              "required": false,
-              "type": "textInput",
-              "value": "allowUrls"
+              "required": false
             }
-          ],
-          "type": "dynamicCustomForm",
-          "value": "allowUrls"
+          ]
         },
         {
+          "type": "dynamicCustomForm",
+          "value": "denyUrls",
           "customFields": [
             {
-              "label": "Deny URLs",
-              "placeholder": "e.g. https://example.com/",
-              "required": false,
               "type": "textInput",
-              "value": "denyUrls"
+              "placeholder": "e.g. https://example.com/",
+              "value": "denyUrls",
+              "label": "Deny URLs",
+              "required": false
             }
-          ],
-          "type": "dynamicCustomForm",
-          "value": "denyUrls"
+          ]
         },
         {
-          "default": false,
-          "label": "Debug Mode",
           "type": "checkbox",
-          "value": "debugMode"
+          "label": "Debug Mode",
+          "value": "debugMode",
+          "default": false
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Native SDK",
       "fields": [
         {
-          "default": true,
-          "label": "Use device-mode to send events",
           "type": "defaultCheckbox",
-          "value": "useNativeSDK"
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": true
         }
-      ],
-      "title": "Native SDK"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -138,58 +139,57 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Consent Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
     }
   ]
 }

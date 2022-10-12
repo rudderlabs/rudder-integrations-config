@@ -1,0 +1,79 @@
+[
+  {
+    "config": {
+      "host": "test-host",
+      "database": "test-database",
+      "user": "test-user",
+      "password": "test-password",
+      "port": "0000",
+      "syncFrequency": "30",
+      "enableSSE": false,
+      "useRudderStorage": false,
+      "useSTSTokens": false,
+      "bucketName": "test-bucket",
+      "accessKeyID": "test-access-key-id",
+      "accessKey": "test-access-key"
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "host": "test-host",
+      "database": "test-database",
+      "user": "test-user",
+      "password": "test-password",
+      "port": "0000",
+      "syncFrequency": "30",
+      "enableSSE": false,
+      "useRudderStorage": false,
+      "useSTSTokens": false,
+      "bucketName": "{{}}",
+      "accessKeyID": "test-access-key-id",
+      "accessKey": "test-access-key"
+    },
+    "result": false,
+    "err": [
+      "bucketName must match pattern \"(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$|(^\\{\\{.+\\}\\}$)\"",
+      " must match \"then\" schema"
+    ]
+  },
+  {
+    "config": {
+      "host": "test-host",
+      "database": "test-database",
+      "user": "test-user",
+      "password": "test-password",
+      "port": "0000",
+      "syncFrequency": "30",
+      "enableSSE": false,
+      "useRudderStorage": false,
+      "useSTSTokens": false,
+      "bucketName": "{{ TEST_BUCKET }}",
+      "accessKeyID": "test-access-key-id",
+      "accessKey": "test-access-key"
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "host": "test-host",
+      "database": "test-database",
+      "user": "test-user",
+      "password": "test-password",
+      "port": "0000",
+      "sslMode": "disable",
+      "enableSSE": false,
+      "useRudderStorage": false,
+      "useSTSTokens": false,
+      "syncFrequency": "30",
+      "bucketName": "ab..ab",
+      "accessKeyID": "test-access-key-id",
+      "accessKey": "test-access-key"
+    },
+    "result": false,
+    "err": [
+      "bucketName must match pattern \"(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$|(^\\{\\{.+\\}\\}$)\"",
+      " must match \"then\" schema"
+    ]
+  }
+]

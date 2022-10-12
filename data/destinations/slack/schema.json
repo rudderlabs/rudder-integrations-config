@@ -1,65 +1,65 @@
 {
-  "schema": {
+  "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
     "properties": {
-      "eventChannelSettings": {
-        "items": {
-          "properties": {
-            "eventChannel": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            },
-            "eventName": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            },
-            "eventRegex": {
-              "type": "boolean"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
-      },
-      "eventTemplateSettings": {
-        "items": {
-          "properties": {
-            "eventName": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            },
-            "eventRegex": {
-              "type": "boolean"
-            },
-            "eventTemplate": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,1000})$",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
+      "webhookUrl": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})"
       },
       "identifyTemplate": {
         "type": "string"
       },
-      "webhookUrl": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})",
-        "type": "string"
+      "eventChannelSettings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "eventChannel": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "eventRegex": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      "eventTemplateSettings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "eventTemplate": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,1000})$"
+            },
+            "eventRegex": {
+              "type": "boolean"
+            }
+          }
+        }
       },
       "whitelistedTraitsSettings": {
+        "type": "array",
         "items": {
+          "type": "object",
           "properties": {
             "trait": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})"
             }
-          },
-          "type": "object"
-        },
-        "type": "array"
+          }
+        }
       }
-    },
-    "type": "object"
+    }
   }
 }

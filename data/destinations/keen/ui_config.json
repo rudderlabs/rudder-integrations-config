@@ -1,74 +1,75 @@
 {
   "uiConfig": [
     {
+      "title": "1. Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "Project ID",
-          "placeholder": "e.g: 4a1d51eab8e77c0000c521ab",
+          "value": "projectID",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Project ID",
           "required": true,
-          "type": "textInput",
-          "value": "projectID"
+          "placeholder": "e.g: 4a1d51eab8e77c0000c521ab"
         },
         {
+          "type": "textInput",
           "label": "Write Key",
+          "value": "writeKey",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Write Key",
-          "required": true,
-          "type": "textInput",
-          "value": "writeKey"
+          "required": true
         }
-      ],
-      "title": "1. Connection Settings"
+      ]
     },
     {
+      "title": "2. Native SDK",
       "fields": [
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Use device-mode to send events",
-          "type": "checkbox",
-          "value": "useNativeSDK"
+          "value": "useNativeSDK",
+          "default": false
         }
-      ],
-      "title": "2. Native SDK"
+      ]
     },
     {
+      "title": "3. Add On",
       "fields": [
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Geo IP Add On",
-          "type": "checkbox",
-          "value": "ipAddon"
+          "value": "ipAddon",
+          "default": false
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "User Agent Add On",
-          "type": "checkbox",
-          "value": "uaAddon"
+          "value": "uaAddon",
+          "default": false
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "URL Parsing Add On",
-          "type": "checkbox",
-          "value": "urlAddon"
+          "value": "urlAddon",
+          "default": false
         },
         {
-          "default": false,
-          "label": "Referrer Parsing Add On",
           "type": "checkbox",
-          "value": "referrerAddon"
+          "label": "Referrer Parsing Add On",
+          "value": "referrerAddon",
+          "default": false
         }
-      ],
-      "title": "3. Add On"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -83,58 +84,57 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Consent Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
     }
   ]
 }

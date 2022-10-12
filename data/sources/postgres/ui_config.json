@@ -1,84 +1,86 @@
-[
-  {
-    "docLinks": {
-      "grantPermissions": "https://docs.rudderstack.com/reverse-etl/postgresql/#granting-permissions",
-      "jsonMapperUseInstructions": "https://docs.rudderstack.com/reverse-etl/postgresql/#specifying-the-data-to-import",
-      "setupInstructions": "https://docs.rudderstack.com/reverse-etl/postgresql",
-      "verifyingCredentials": "https://docs.rudderstack.com/reverse-etl/postgresql/#what-do-the-three-validations-under-verifying-credentials-imply"
-    },
-    "fields": [
-      {
-        "addInAccountSummary": true,
-        "label": "Host",
-        "regex": "^(.{0,100})$",
-        "regexErrorMessage": "Invalid Value",
-        "required": true,
-        "trim": true,
-        "type": "textInput",
-        "value": "host"
+{
+  "uiConfig": [
+    {
+      "title": "Connection Credentials",
+      "secretFields": [
+        "password"
+      ],
+      "docLinks": {
+        "grantPermissions": "https://docs.rudderstack.com/reverse-etl/postgresql/#granting-permissions",
+        "verifyingCredentials": "https://docs.rudderstack.com/reverse-etl/postgresql/#what-do-the-three-validations-under-verifying-credentials-imply",
+        "jsonMapperUseInstructions": "https://docs.rudderstack.com/reverse-etl/postgresql/#specifying-the-data-to-import",
+        "setupInstructions": "https://docs.rudderstack.com/reverse-etl/postgresql"
       },
-      {
-        "addInAccountSummary": true,
-        "label": "Database",
-        "regex": "^(.{0,100})$",
-        "regexErrorMessage": "Invalid Value",
-        "required": true,
-        "trim": true,
-        "type": "textInput",
-        "value": "dbname"
-      },
-      {
-        "label": "User",
-        "regex": "^(.{0,100})$",
-        "regexErrorMessage": "Invalid Value",
-        "required": true,
-        "trim": true,
-        "type": "textInput",
-        "value": "user"
-      },
-      {
-        "inputFieldType": "password",
-        "label": "Password",
-        "regex": ".*",
-        "required": true,
-        "secret": true,
-        "type": "textInput",
-        "value": "password"
-      },
-      {
-        "inputFieldType": "number",
-        "label": "Port",
-        "regex": "^(.{0,100})$",
-        "regexErrorMessage": "Invalid Value",
-        "required": true,
-        "type": "textInput",
-        "value": "port"
-      },
-      {
-        "defaultOption": {
-          "name": "disable",
-          "value": "disable"
+      "nameField": "user",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Host",
+          "value": "host",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "required": true,
+          "addInAccountSummary": true,
+          "trim": true
         },
-        "label": "SSL Mode",
-        "options": [
-          {
+        {
+          "type": "textInput",
+          "label": "Database",
+          "value": "dbname",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "required": true,
+          "addInAccountSummary": true,
+          "trim": true
+        },
+        {
+          "type": "textInput",
+          "label": "User",
+          "value": "user",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "required": true,
+          "trim": true
+        },
+        {
+          "type": "textInput",
+          "label": "Password",
+          "value": "password",
+          "inputFieldType": "password",
+          "regex": ".*",
+          "required": true,
+          "secret": true
+        },
+        {
+          "type": "textInput",
+          "label": "Port",
+          "value": "port",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "inputFieldType": "number",
+          "required": true
+        },
+        {
+          "type": "singleSelect",
+          "label": "SSL Mode",
+          "value": "sslMode",
+          "options": [
+            {
+              "name": "disable",
+              "value": "disable"
+            },
+            {
+              "name": "require",
+              "value": "require"
+            }
+          ],
+          "defaultOption": {
             "name": "disable",
             "value": "disable"
           },
-          {
-            "name": "require",
-            "value": "require"
-          }
-        ],
-        "required": true,
-        "type": "singleSelect",
-        "value": "sslMode"
-      }
-    ],
-    "nameField": "user",
-    "secretFields": [
-      "password"
-    ],
-    "title": "Connection Credentials"
-  }
-]
+          "required": true
+        }
+      ]
+    }
+  ]
+}

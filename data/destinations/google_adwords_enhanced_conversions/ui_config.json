@@ -1,25 +1,26 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "Customer ID",
-          "placeholder": "e.g: 9693429833",
+          "value": "customerId",
           "regex": "^(.{1,100})$",
           "regexErrorMessage": "Invalid Customer Id",
           "required": true,
-          "type": "textInput",
-          "value": "customerId"
+          "placeholder": "e.g: 9693429833"
         },
         {
-          "default": false,
-          "label": "Sub Account",
-          "required": false,
           "type": "checkbox",
-          "value": "subAccount"
+          "label": "Sub Account",
+          "value": "subAccount",
+          "required": false,
+          "default": false
         },
         {
-          "footerNote": "If Customer-Id is from a sub account then provide customerId of manager account",
+          "type": "textInput",
           "label": "Login Customer ID",
           "preRequisiteField": [
             {
@@ -27,38 +28,37 @@
               "selectedValue": true
             }
           ],
+          "value": "loginCustomerId",
           "regex": "^(.{1,100})$",
           "required": true,
-          "type": "textInput",
-          "value": "loginCustomerId"
+          "footerNote": "If Customer-Id is from a sub account then provide customerId of manager account"
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Event Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "listOfConversions",
+          "label": "List of Conversion",
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "conversions"
+              "value": "conversions",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
             }
-          ],
-          "label": "List of Conversion",
-          "type": "dynamicCustomForm",
-          "value": "listOfConversions"
+          ]
         },
         {
-          "default": true,
-          "footerNote": "If this option is set to on we will encrypt mail, phoneNumber, firstName, lastName and streetAddress",
-          "label": "Hashing required",
           "type": "checkbox",
-          "value": "requireHash"
+          "label": "Hashing required",
+          "value": "requireHash",
+          "default": true,
+          "footerNote": "If this option is set to on we will encrypt mail, phoneNumber, firstName, lastName and streetAddress"
         }
-      ],
-      "title": "Event Settings"
+      ]
     }
   ]
 }

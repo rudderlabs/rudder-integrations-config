@@ -1,49 +1,51 @@
 {
-  "auth": {
-    "type": "OAuth"
-  },
-  "config": [
-    {
-      "fields": [
-        {
-          "label": "Customer Account",
-          "labelKey": "accountName",
-          "method": "post",
-          "required": true,
-          "responseKey": "accounts",
-          "type": "dynamicSelect",
-          "url": "/cloudSources/info/roles/bing_ads/info/accounts",
-          "value": "customerAccountId",
-          "valueKey": "accountId"
-        },
-        {
-          "label": "Report Name",
-          "method": "get",
-          "required": true,
-          "responseKey": "reports",
-          "type": "dynamicSelect",
-          "url": "/cloudSources/info/roles/bing_ads/info/reports",
-          "value": "report.name"
-        },
-        {
-          "label": "Report Columns",
-          "labelKey": "name",
-          "method": "get",
-          "mode": "multiple",
-          "multiple": true,
-          "preRequisiteField": {
-            "includeValue": true,
-            "name": "report.name"
+  "uiConfig": {
+    "auth": {
+      "type": "OAuth"
+    },
+    "config": [
+      {
+        "title": "Source Settings",
+        "fields": [
+          {
+            "type": "dynamicSelect",
+            "method": "post",
+            "url": "/cloudSources/info/roles/bing_ads/info/accounts",
+            "label": "Customer Account",
+            "value": "customerAccountId",
+            "responseKey": "accounts",
+            "valueKey": "accountId",
+            "labelKey": "accountName",
+            "required": true
           },
-          "required": true,
-          "responseKey": "columns",
-          "type": "dynamicSelect",
-          "url": "/cloudSources/info/roles/bing_ads/info/columns/${preRequisiteValue}",
-          "value": "report.columns",
-          "valueKey": "name"
-        }
-      ],
-      "title": "Source Settings"
-    }
-  ]
+          {
+            "type": "dynamicSelect",
+            "method": "get",
+            "url": "/cloudSources/info/roles/bing_ads/info/reports",
+            "label": "Report Name",
+            "value": "report.name",
+            "responseKey": "reports",
+            "required": true
+          },
+          {
+            "type": "dynamicSelect",
+            "method": "get",
+            "url": "/cloudSources/info/roles/bing_ads/info/columns/${preRequisiteValue}",
+            "label": "Report Columns",
+            "value": "report.columns",
+            "multiple": true,
+            "responseKey": "columns",
+            "valueKey": "name",
+            "labelKey": "name",
+            "required": true,
+            "mode": "multiple",
+            "preRequisiteField": {
+              "name": "report.name",
+              "includeValue": true
+            }
+          }
+        ]
+      }
+    ]
+  }
 }
