@@ -1,42 +1,65 @@
 {
-  "schema": {
+  "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "additionalProperties": true,
+    "type": "object",
+    "required": [
+      "containerName",
+      "accountName"
+    ],
     "properties": {
-      "accountKey": {
-        "pattern": "(^env[.].+)|^(.{1,100})$",
-        "type": "string"
-      },
-      "accountName": {
-        "pattern": "(^env[.].+)|^(.{1,100})$",
-        "type": "string"
-      },
       "containerName": {
-        "pattern": "(^env[.].+)|^(.{1,100})$",
-        "type": "string"
-      },
-      "namespace": {
-        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
-        "type": "string"
+        "type": "string",
+        "pattern": "(^env[.].+)|^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$"
       },
       "prefix": {
-        "pattern": "(^env[.].*)|^(.{0,100})$",
-        "type": "string"
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
+      },
+      "accountName": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
       },
       "syncFrequency": {
-        "default": "30",
+        "type": "string",
         "pattern": "^(30|60|180|360|720|1440)$",
-        "type": "string"
+        "default": "30"
       },
       "syncStartAt": {
         "type": "string"
       }
     },
-    "required": [
-      "containerName",
-      "accountName",
-      "accountKey"
+    "anyOf": [
+      {
+        "properties": {
+          "accountKey": {
+            "type": "string",
+            "pattern": "(^env[.].+)|^(.{1,100})$"
+          }
+        },
+        "required": [
+          "accountKey"
+        ]
+      },
+      {
+        "properties": {
+          "sasToken": {
+            "type": "string",
+            "pattern": "(^env[.].+)|^(.+)$"
+          },
+          "useSASTokens": {
+            "const": true
+          }
+        },
+        "required": [
+          "useSASTokens",
+          "sasToken"
+        ]
+      }
     ],
-    "type": "object"
+    "additionalProperties": true
   }
 }

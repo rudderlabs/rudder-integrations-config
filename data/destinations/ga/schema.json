@@ -1,228 +1,228 @@
 {
-  "schema": {
+  "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+      "trackingID"
+    ],
     "properties": {
-      "anonymizeIp": {
-        "type": "boolean"
+      "trackingID": {
+        "type": "string",
+        "pattern": "(^env[.].+)|(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^(UA|YT|MO)-\\d+-\\d{0,100}$)"
       },
-      "blacklistedEvents": {
-        "items": {
-          "properties": {
-            "eventName": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
-      },
-      "contentGroupings": {
-        "items": {
-          "properties": {
-            "from": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            },
-            "to": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
-      },
-      "dimensions": {
-        "items": {
-          "properties": {
-            "from": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            },
-            "to": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
-      },
-      "disableMd5": {
-        "type": "boolean"
-      },
-      "domain": {
-        "properties": {
-          "web": {
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^(.{0,100})$)",
-            "type": "string"
-          }
-        },
-        "type": "object"
+      "eventFilteringOption": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
       },
       "doubleClick": {
-        "type": "boolean"
-      },
-      "enableServerSideIdentify": {
-        "type": "boolean"
-      },
-      "enhancedEcommerce": {
         "type": "boolean"
       },
       "enhancedLinkAttribution": {
         "type": "boolean"
       },
-      "eventFilteringOption": {
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$",
-        "type": "string"
-      },
       "includeSearch": {
         "type": "boolean"
       },
-      "namedTracker": {
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        },
-        "type": "object"
+      "enableServerSideIdentify": {
+        "type": "boolean"
+      },
+      "serverSideIdentifyEventCategory": {
+        "type": "string",
+        "pattern": "(^env[.].+)|(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^(.{0,100})$)"
+      },
+      "serverSideIdentifyEventAction": {
+        "type": "string",
+        "pattern": "(^env[.].+)|(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^(.{0,100})$)"
+      },
+      "disableMd5": {
+        "type": "boolean"
+      },
+      "anonymizeIp": {
+        "type": "boolean"
+      },
+      "enhancedEcommerce": {
+        "type": "boolean"
       },
       "nonInteraction": {
         "type": "boolean"
       },
-      "oneTrustCookieCategories": {
-        "properties": {
-          "web": {
-            "items": {
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
-      "optimize": {
-        "properties": {
-          "web": {
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^(.{0,100})$)",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "resetCustomDimensionsOnPage": {
-        "properties": {
-          "web": {
-            "items": {
-              "properties": {
-                "resetCustomDimensionsOnPage": {
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
-      "sampleRate": {
-        "properties": {
-          "web": {
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "sendUserId": {
         "type": "boolean"
       },
-      "serverSideIdentifyEventAction": {
-        "pattern": "(^env[.].+)|(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^(.{0,100})$)",
-        "type": "string"
-      },
-      "serverSideIdentifyEventCategory": {
-        "pattern": "(^env[.].+)|(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^(.{0,100})$)",
-        "type": "string"
-      },
-      "setAllMappedProps": {
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        },
-        "type": "object"
-      },
-      "siteSpeedSampleRate": {
-        "properties": {
-          "web": {
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "trackCategorizedPages": {
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        },
-        "type": "object"
-      },
-      "trackNamedPages": {
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        },
-        "type": "object"
-      },
-      "trackingID": {
-        "pattern": "(^env[.].+)|(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^(UA|YT|MO)-\\d+-\\d{0,100}$)",
-        "type": "string"
-      },
-      "useGoogleAmpClientId": {
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        },
-        "type": "object"
-      },
-      "useNativeSDK": {
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        },
-        "type": "object"
-      },
       "whitelistedEvents": {
+        "type": "array",
         "items": {
+          "type": "object",
           "properties": {
             "eventName": {
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "type": "string"
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
-          },
-          "type": "object"
-        },
-        "type": "array"
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "trackCategorizedPages": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "trackNamedPages": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "sampleRate": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          }
+        }
+      },
+      "siteSpeedSampleRate": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          }
+        }
+      },
+      "resetCustomDimensionsOnPage": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "resetCustomDimensionsOnPage": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
+        }
+      },
+      "setAllMappedProps": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "domain": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^(.{0,100})$)"
+          }
+        }
+      },
+      "optimize": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^(.{0,100})$)"
+          }
+        }
+      },
+      "useGoogleAmpClientId": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "namedTracker": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "contentGroupings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "to": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "dimensions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "to": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "oneTrustCookieCategories": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
+        }
       }
-    },
-    "required": [
-      "trackingID"
-    ],
-    "type": "object"
+    }
   }
 }

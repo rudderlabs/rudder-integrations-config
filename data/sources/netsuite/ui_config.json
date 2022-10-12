@@ -1,89 +1,91 @@
 {
-  "auth": {
+  "uiConfig": {
+    "auth": {
+      "type": "form",
+      "secretFields": [
+        "consumerKey",
+        "consumerSecret",
+        "tokenId",
+        "tokenSecret"
+      ],
+      "nameField": "rudder_account_name",
+      "config": [
+        {
+          "fields": [
+            {
+              "type": "textInput",
+              "label": "Account Name",
+              "value": "rudder_account_name",
+              "regex": "^(.{0,100})$",
+              "regexErrorMessage": "Invalid Value",
+              "required": true,
+              "placeholder": "e.g: account name"
+            },
+            {
+              "type": "textInput",
+              "label": "Account Id",
+              "value": "accountId",
+              "regex": "^(.{0,100})$",
+              "regexErrorMessage": "Invalid Value",
+              "required": true
+            },
+            {
+              "type": "textInput",
+              "label": "Consumer Key",
+              "value": "consumerKey",
+              "regex": "^(.{0,100})$",
+              "regexErrorMessage": "Invalid Value",
+              "required": true
+            },
+            {
+              "type": "textInput",
+              "label": "Consumer Secret",
+              "value": "consumerSecret",
+              "inputType": "password",
+              "regex": "^(.{0,100})$",
+              "regexErrorMessage": "Invalid Value",
+              "required": true
+            },
+            {
+              "type": "textInput",
+              "label": "Token ID",
+              "value": "tokenId",
+              "regex": "^(.{0,100})$",
+              "regexErrorMessage": "Invalid Value",
+              "required": true
+            },
+            {
+              "type": "textInput",
+              "label": "Token Secret",
+              "inputType": "password",
+              "value": "tokenSecret",
+              "regex": "^(.{0,100})$",
+              "regexErrorMessage": "Invalid Value",
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
     "config": [
       {
+        "title": "Source Settings",
         "fields": [
           {
-            "label": "Account Name",
-            "placeholder": "e.g: account name",
-            "regex": "^(.{0,100})$",
-            "regexErrorMessage": "Invalid Value",
-            "required": true,
-            "type": "textInput",
-            "value": "rudder_account_name"
+            "type": "datePicker",
+            "label": "Historical sync start date",
+            "value": "startDateIso",
+            "format": "YYYY-MM-DD",
+            "required": true
           },
           {
-            "label": "Account Id",
-            "regex": "^(.{0,100})$",
-            "regexErrorMessage": "Invalid Value",
-            "required": true,
             "type": "textInput",
-            "value": "accountId"
-          },
-          {
-            "label": "Consumer Key",
-            "regex": "^(.{0,100})$",
-            "regexErrorMessage": "Invalid Value",
-            "required": true,
-            "type": "textInput",
-            "value": "consumerKey"
-          },
-          {
-            "inputType": "password",
-            "label": "Consumer Secret",
-            "regex": "^(.{0,100})$",
-            "regexErrorMessage": "Invalid Value",
-            "required": true,
-            "type": "textInput",
-            "value": "consumerSecret"
-          },
-          {
-            "label": "Token ID",
-            "regex": "^(.{0,100})$",
-            "regexErrorMessage": "Invalid Value",
-            "required": true,
-            "type": "textInput",
-            "value": "tokenId"
-          },
-          {
-            "inputType": "password",
-            "label": "Token Secret",
-            "regex": "^(.{0,100})$",
-            "regexErrorMessage": "Invalid Value",
-            "required": true,
-            "type": "textInput",
-            "value": "tokenSecret"
+            "label": "Rudder Restlet URL",
+            "value": "restletUrl",
+            "footerNote": "In order to sync saved searches, you need to install https://js.blendo.co/netsuite/v1/restlet.js script in your Netsuite account, and paste the generated Restlet URL here."
           }
         ]
       }
-    ],
-    "nameField": "rudder_account_name",
-    "secretFields": [
-      "consumerKey",
-      "consumerSecret",
-      "tokenId",
-      "tokenSecret"
-    ],
-    "type": "form"
-  },
-  "config": [
-    {
-      "fields": [
-        {
-          "format": "YYYY-MM-DD",
-          "label": "Historical sync start date",
-          "required": true,
-          "type": "datePicker",
-          "value": "startDateIso"
-        },
-        {
-          "footerNote": "In order to sync saved searches, you need to install https://js.blendo.co/netsuite/v1/restlet.js script in your Netsuite account, and paste the generated Restlet URL here.",
-          "label": "Rudder Restlet URL",
-          "type": "textInput",
-          "value": "restletUrl"
-        }
-      ],
-      "title": "Source Settings"
-    }
-  ]
+    ]
+  }
 }

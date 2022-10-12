@@ -1,69 +1,68 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Credentials",
       "fields": [
         {
+          "type": "textInput",
           "label": "Host",
-          "placeholder": "redshift.mydomain.com",
+          "value": "host",
           "regex": "^(.{0,255})$",
           "regexErrorMessage": "Invalid Host",
-          "required": true,
-          "type": "textInput",
-          "value": "host"
+          "placeholder": "redshift.mydomain.com",
+          "required": true
         },
         {
+          "type": "textInput",
           "label": "Port",
-          "placeholder": "5432",
+          "value": "port",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Port",
-          "required": true,
-          "type": "textInput",
-          "value": "port"
+          "placeholder": "5432",
+          "required": true
         },
         {
+          "type": "textInput",
           "label": "Database",
-          "placeholder": "e.g: warehouse",
+          "value": "database",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Database",
-          "required": true,
-          "type": "textInput",
-          "value": "database"
+          "placeholder": "e.g: warehouse",
+          "required": true
         },
         {
+          "type": "textInput",
           "label": "User",
-          "placeholder": "e.g: warehouseuser",
+          "value": "user",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid User",
-          "required": true,
-          "type": "textInput",
-          "value": "user"
+          "placeholder": "e.g: warehouseuser",
+          "required": true
         },
         {
+          "type": "textInput",
           "label": "Password",
-          "placeholder": "e.g: warehousepassword",
+          "value": "password",
           "regex": ".*",
+          "placeholder": "e.g: warehousepassword",
           "required": true,
-          "secret": true,
-          "type": "textInput",
-          "value": "password"
+          "secret": true
         },
         {
-          "footerNote": "Default will be the source name",
+          "type": "textInput",
           "label": "Namespace",
           "labelNote": "Schema name for the warehouse where the tables are created",
-          "placeholder": "e.g: iosSource",
+          "value": "namespace",
           "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
           "regexErrorMessage": "Invalid Namespace",
           "required": false,
-          "type": "textInput",
-          "value": "namespace"
+          "placeholder": "e.g: iosSource",
+          "footerNote": "Default will be the source name"
         },
         {
-          "defaultOption": {
-            "name": "Every 30 minutes",
-            "value": "30"
-          },
+          "type": "singleSelect",
           "label": "Sync Frequency",
+          "value": "syncFrequency",
           "options": [
             {
               "name": "Every 30 minutes",
@@ -90,120 +89,134 @@
               "value": "1440"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "syncFrequency"
+          "defaultOption": {
+            "name": "Every 30 minutes",
+            "value": "30"
+          },
+          "required": false
         },
         {
-          "footerNote": "Note: Please specify time in UTC",
-          "label": "Sync Starting At (Optional)",
-          "options": {
-            "minuteStep": 15,
-            "omitSeconds": true
-          },
-          "required": false,
           "type": "timePicker",
-          "value": "syncStartAt"
-        },
-        {
-          "endTime": {
-            "label": "end time",
-            "value": "excludeWindowEndTime"
-          },
-          "footerNote": "Note: Please specify time in UTC",
-          "label": "Exclude window (Optional)",
+          "label": "Sync Starting At (Optional)",
+          "value": "syncStartAt",
           "options": {
-            "minuteStep": 1,
-            "omitSeconds": true
+            "omitSeconds": true,
+            "minuteStep": 15
           },
           "required": false,
+          "footerNote": "Note: Please specify time in UTC"
+        },
+        {
+          "type": "timeRangePicker",
+          "label": "Exclude window (Optional)",
+          "value": "excludeWindow",
           "startTime": {
             "label": "start time",
             "value": "excludeWindowStartTime"
           },
-          "type": "timeRangePicker",
-          "value": "excludeWindow"
-        }
-      ],
-      "title": "Connection Credentials"
-    },
-    {
-      "fields": [
-        {
-          "default": false,
-          "footerNote": "Note: Only available for Rudderstack managed data planes",
-          "label": "Use RudderStack managed object storage",
-          "type": "checkbox",
-          "value": "useRudderStorage"
+          "endTime": {
+            "label": "end time",
+            "value": "excludeWindowEndTime"
+          },
+          "options": {
+            "omitSeconds": true,
+            "minuteStep": 1
+          },
+          "required": false,
+          "footerNote": "Note: Please specify time in UTC"
         },
         {
-          "footerNote": "Please make sure the bucket exists in your S3",
+          "type": "textInput",
+          "label": "Json columns (Optional)",
+          "labelNote": "Specify required json properties in dot notation separated by commas",
+          "value": "jsonPaths",
+          "regex": "^(.*)$",
+          "placeholder": "e.g: testMap.nestedMap, testArray",
+          "required": false,
+          "footerURL": {
+            "link": "https://www.rudderstack.com/docs/data-warehouse-integrations/amazon-redshift/#configuring-redshift-destination-in-rudderstack",
+            "text": "Instructions for setting up the json columns"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Object Storage Configuration",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Use RudderStack managed object storage",
+          "value": "useRudderStorage",
+          "default": false,
+          "footerNote": "Note: Only available for Rudderstack managed data planes"
+        },
+        {
+          "type": "textInput",
           "label": "Staging S3 Storage Bucket Name",
           "labelNote": "S3 Bucket to store data before loading into Redshift",
+          "value": "bucketName",
+          "regex": "^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$|(^\\{\\{.+\\}\\}$)",
+          "regexErrorMessage": "Invalid Bucket name",
+          "required": true,
           "placeholder": "e.g: event-bucket",
+          "footerNote": "Please make sure the bucket exists in your S3",
           "preRequisiteField": {
             "name": "useRudderStorage",
             "selectedValue": false
-          },
-          "regex": "^([^\\s]{0,100})$",
-          "regexErrorMessage": "Invalid Bucket name",
-          "required": true,
-          "type": "textInput",
-          "value": "bucketName"
+          }
         },
         {
+          "type": "textInput",
           "label": "Prefix",
+          "value": "prefix",
+          "regex": "^([^\\s]{0,100})$",
+          "regexErrorMessage": "Invalid Prefix",
+          "required": false,
           "placeholder": "e.g: rudder",
           "preRequisiteField": {
             "name": "useRudderStorage",
             "selectedValue": false
-          },
-          "regex": "^([^\\s]{0,100})$",
-          "regexErrorMessage": "Invalid Prefix",
-          "required": false,
-          "type": "textInput",
-          "value": "prefix"
+          }
         },
         {
+          "type": "textInput",
           "label": "AWS Access Key ID",
-          "placeholder": "e.g: access-key-id",
-          "preRequisiteField": {
-            "name": "useRudderStorage",
-            "selectedValue": false
-          },
+          "value": "accessKeyID",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid AWS Access Key ID",
           "required": false,
+          "placeholder": "e.g: access-key-id",
           "secret": true,
-          "type": "textInput",
-          "value": "accessKeyID"
-        },
-        {
-          "label": "AWS Secret Access Key",
-          "placeholder": "e.g: secret-access-key",
           "preRequisiteField": {
             "name": "useRudderStorage",
             "selectedValue": false
-          },
+          }
+        },
+        {
+          "type": "textInput",
+          "label": "AWS Secret Access Key",
+          "value": "accessKey",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid AWS Secret Access Key",
           "required": false,
+          "placeholder": "e.g: secret-access-key",
           "secret": true,
-          "type": "textInput",
-          "value": "accessKey"
-        },
-        {
-          "default": false,
-          "label": "Enable Server Side Encryption For S3?",
           "preRequisiteField": {
             "name": "useRudderStorage",
             "selectedValue": false
-          },
+          }
+        },
+        {
           "type": "checkbox",
-          "value": "enableSSE"
+          "label": "Enable Server Side Encryption For S3?",
+          "value": "enableSSE",
+          "default": false,
+          "preRequisiteField": {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
         }
-      ],
-      "title": "Object Storage Configuration"
+      ]
     }
   ]
 }

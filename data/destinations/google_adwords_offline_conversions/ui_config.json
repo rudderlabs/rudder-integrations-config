@@ -1,0 +1,187 @@
+{
+  "uiConfig": [
+    {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Customer ID",
+          "value": "customerId",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Customer Id",
+          "required": true,
+          "placeholder": "e.g: 6293429833"
+        },
+        {
+          "type": "checkbox",
+          "label": "Sub Account",
+          "value": "subAccount",
+          "required": false,
+          "default": false
+        },
+        {
+          "type": "textInput",
+          "label": "Login Customer ID",
+          "preRequisiteField": [
+            {
+              "name": "subAccount",
+              "selectedValue": true
+            }
+          ],
+          "value": "loginCustomerId",
+          "regex": "^(.{1,100})$",
+          "required": true,
+          "footerNote": "If Customer-Id is from a sub account then provide customerId of manager account"
+        }
+      ]
+    },
+    {
+      "title": "Event Settings",
+      "fields": [
+        {
+          "type": "dynamicSelectForm",
+          "label": "Map your events with Google Ads Offline Conversions",
+          "labelLeft": "RudderStack event names",
+          "labelRight": "Google ads offline conversions",
+          "value": "eventsToOfflineConversionsTypeMapping",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "required": false,
+          "placeholderLeft": "e.g: Sign up completed",
+          "options": [
+            {
+              "name": "Click",
+              "value": "click"
+            },
+            {
+              "name": "Call",
+              "value": "call"
+            }
+          ]
+        },
+        {
+          "type": "dynamicForm",
+          "label": "Map your Google Ads Conversions Names",
+          "labelLeft": "RudderStack event names",
+          "labelRight": "Google Ads conversion names",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "placeholderLeft": "e.g: Sign up completed",
+          "placeholderRight": "e.g: App Sign-up",
+          "value": "eventsToConversionsNamesMapping"
+        },
+        {
+          "type": "dynamicForm",
+          "label": "Map your variable names to custom Google Ads variables.",
+          "labelLeft": "custom variable names",
+          "labelRight": "Google Ads custom variables",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "placeholderLeft": "e.g. value",
+          "placeholderRight": "eg: revenue",
+          "value": "customVariables"
+        },
+        {
+          "type": "singleSelect",
+          "label": "User Identifier Source",
+          "value": "UserIdentifierSource",
+          "required": false,
+          "footerNote": "Source of the user identifier",
+          "options": [
+            {
+              "name": "None",
+              "value": "none"
+            },
+            {
+              "name": "UNSPECIFIED",
+              "value": "UNSPECIFIED"
+            },
+            {
+              "name": "UNKNOWN",
+              "value": "UNKNOWN"
+            },
+            {
+              "name": "FIRST_PARTY",
+              "value": "FIRST_PARTY"
+            },
+            {
+              "name": "THIRD_PARTY",
+              "value": "THIRD_PARTY"
+            }
+          ],
+          "defaultOption": {
+            "name": "None",
+            "value": "none"
+          }
+        },
+        {
+          "type": "singleSelect",
+          "label": "Conversion Environment",
+          "value": "conversionEnvironment",
+          "required": false,
+          "footerNote": "The environment this conversion was recorded on. e.g. App or Web.",
+          "options": [
+            {
+              "name": "None",
+              "value": "none"
+            },
+            {
+              "name": "UNSPECIFIED",
+              "value": "UNSPECIFIED"
+            },
+            {
+              "name": "UNKNOWN",
+              "value": "UNKNOWN"
+            },
+            {
+              "name": "APP",
+              "value": "APP"
+            },
+            {
+              "name": "WEB",
+              "value": "WEB"
+            }
+          ],
+          "defaultOption": {
+            "name": "None",
+            "value": "none"
+          }
+        },
+        {
+          "type": "singleSelect",
+          "label": "Default user identifier for click conversions",
+          "value": "defaultUserIdentifier",
+          "footerNote": "The user identifier for click conversions matching",
+          "options": [
+            {
+              "name": "Email",
+              "value": "email"
+            },
+            {
+              "name": "Phone number",
+              "value": "phone"
+            }
+          ],
+          "defaultOption": {
+            "name": "Email",
+            "value": "email"
+          }
+        },
+        {
+          "type": "checkbox",
+          "label": "Hash User Identifying Information (SHA-256)",
+          "value": "hashUserIdentifier",
+          "default": true,
+          "footerNote": "To hash User identifying information like email, phone number, first name, last name and address using SHA-256."
+        },
+        {
+          "type": "checkbox",
+          "label": "Validate Only",
+          "value": "validateOnly",
+          "default": false,
+          "footerNote": "Enable this option to only validate the request"
+        }
+      ]
+    }
+  ]
+}

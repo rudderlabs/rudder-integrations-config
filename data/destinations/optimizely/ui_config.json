@@ -1,100 +1,101 @@
 {
   "uiConfig": [
     {
+      "title": "Send experiment data to other tools",
       "fields": [
         {
-          "default": false,
-          "label": "As a track call (recommended)",
           "type": "checkbox",
-          "value": "sendExperimentTrack"
+          "label": "As a track call (recommended)",
+          "value": "sendExperimentTrack",
+          "default": false
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "As an identify call (not recommended)",
-          "type": "checkbox",
-          "value": "sendExperimentIdentify"
+          "value": "sendExperimentIdentify",
+          "default": false
         }
-      ],
-      "title": "Send experiment data to other tools"
+      ]
     },
     {
+      "title": "Send Experiment Viewed event",
       "fields": [
         {
-          "default": false,
+          "type": "checkbox",
           "label": "As a non-interaction event",
-          "type": "checkbox",
-          "value": "sendExperimentTrackAsNonInteractive"
+          "value": "sendExperimentTrackAsNonInteractive",
+          "default": false
         }
-      ],
-      "title": "Send Experiment Viewed event"
+      ]
     },
     {
+      "title": "Revenue on Order Completed",
       "fields": [
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Send properties.revenue only on Order Completed events (recommended)",
-          "type": "checkbox",
-          "value": "revenueOnlyOnOrderCompleted"
+          "value": "revenueOnlyOnOrderCompleted",
+          "default": false
         }
-      ],
-      "title": "Revenue on Order Completed"
+      ]
     },
     {
+      "title": "Track Categorized Pages",
       "fields": [
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Track Categorized Pages",
-          "type": "checkbox",
-          "value": "trackCategorizedPages"
+          "value": "trackCategorizedPages",
+          "default": false
         }
-      ],
-      "title": "Track Categorized Pages"
+      ]
     },
     {
+      "title": "Track Named Pages",
       "fields": [
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Track Named Pages",
-          "type": "checkbox",
-          "value": "trackNamedPages"
+          "value": "trackNamedPages",
+          "default": false
         }
-      ],
-      "title": "Track Named Pages"
+      ]
     },
     {
+      "title": "Custom Campaign Properties",
       "fields": [
         {
-          "keyLeft": "from",
-          "keyRight": "to",
+          "type": "dynamicForm",
           "label": "Custom Campaign Properties",
           "labelLeft": "Event Property",
           "labelRight": "Campaign Property",
+          "keyLeft": "from",
+          "keyRight": "to",
           "placeholderLeft": "e.g: source",
           "placeholderRight": "e.g: campaign_name",
-          "type": "dynamicForm",
           "value": "customCampaignProperties"
         }
-      ],
-      "title": "Custom Campaign Properties"
+      ]
     },
     {
+      "title": "Native SDK",
       "fields": [
         {
-          "default": true,
-          "label": "Use device-mode to send events",
           "type": "defaultCheckbox",
-          "value": "useNativeSDK"
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": true
         }
-      ],
-      "title": "Native SDK"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -109,58 +110,57 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Consent Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
     }
   ]
 }

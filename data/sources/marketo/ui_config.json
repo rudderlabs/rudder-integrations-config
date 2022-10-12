@@ -1,67 +1,69 @@
 {
-  "auth": {
+  "uiConfig": {
+    "auth": {
+      "type": "form",
+      "secretFields": [
+        "clientSecret"
+      ],
+      "nameField": "rudder_account_name",
+      "config": [
+        {
+          "fields": [
+            {
+              "type": "textInput",
+              "label": "Account Name",
+              "value": "rudder_account_name",
+              "regex": "^(.{0,100})$",
+              "regexErrorMessage": "Invalid Value",
+              "required": true,
+              "placeholder": "e.g: account name"
+            },
+            {
+              "type": "textInput",
+              "label": "Marketo Client ID",
+              "value": "clientId",
+              "regex": "^(.{0,100})$",
+              "regexErrorMessage": "Invalid Value",
+              "required": true,
+              "placeholder": "e.g: client id"
+            },
+            {
+              "type": "textInput",
+              "label": "Marketo Client Secret",
+              "value": "clientSecret",
+              "regex": "^(.{0,100})$",
+              "regexErrorMessage": "Invalid Value",
+              "required": true,
+              "placeholder": "e.g: client secret",
+              "secret": true
+            },
+            {
+              "type": "textInput",
+              "label": "Marketo Munchkin Account ID",
+              "value": "munchkinId",
+              "regex": "^(.{0,100})$",
+              "regexErrorMessage": "Invalid Value",
+              "required": true,
+              "placeholder": "e.g: munchkin account id",
+              "secret": true
+            }
+          ]
+        }
+      ]
+    },
     "config": [
       {
+        "title": "Source Settings",
         "fields": [
           {
-            "label": "Account Name",
-            "placeholder": "e.g: account name",
-            "regex": "^(.{0,100})$",
-            "regexErrorMessage": "Invalid Value",
-            "required": true,
-            "type": "textInput",
-            "value": "rudder_account_name"
-          },
-          {
-            "label": "Marketo Client ID",
-            "placeholder": "e.g: client id",
-            "regex": "^(.{0,100})$",
-            "regexErrorMessage": "Invalid Value",
-            "required": true,
-            "type": "textInput",
-            "value": "clientId"
-          },
-          {
-            "label": "Marketo Client Secret",
-            "placeholder": "e.g: client secret",
-            "regex": "^(.{0,100})$",
-            "regexErrorMessage": "Invalid Value",
-            "required": true,
-            "secret": true,
-            "type": "textInput",
-            "value": "clientSecret"
-          },
-          {
-            "label": "Marketo Munchkin Account ID",
-            "placeholder": "e.g: munchkin account id",
-            "regex": "^(.{0,100})$",
-            "regexErrorMessage": "Invalid Value",
-            "required": true,
-            "secret": true,
-            "type": "textInput",
-            "value": "munchkinId"
+            "type": "datePicker",
+            "label": "Start date",
+            "value": "startDate",
+            "format": "YYYY-MM-DD",
+            "required": true
           }
         ]
       }
-    ],
-    "nameField": "rudder_account_name",
-    "secretFields": [
-      "clientSecret"
-    ],
-    "type": "form"
-  },
-  "config": [
-    {
-      "fields": [
-        {
-          "format": "YYYY-MM-DD",
-          "label": "Start date",
-          "required": true,
-          "type": "datePicker",
-          "value": "startDate"
-        }
-      ],
-      "title": "Source Settings"
-    }
-  ]
+    ]
+  }
 }

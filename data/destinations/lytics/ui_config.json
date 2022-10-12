@@ -1,71 +1,72 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "API Tokens",
           "placeholder": "e.g: at.a44fd0237ad3fb7e4e58eb9f602d48cb.u80b0d101dadcb9cb8ebcaf0d3da92a6",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid API Tokens",
+          "value": "apiKey",
           "required": true,
-          "type": "textInput",
-          "value": "apiKey"
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid API Tokens"
         },
         {
+          "type": "textInput",
           "label": "Account ID",
           "placeholder": "e.g: 6f59dd3f8a55ea850f53822cd32b29a7",
+          "value": "accountId",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Account ID",
-          "required": true,
-          "type": "textInput",
-          "value": "accountId"
+          "required": true
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Other Settings",
       "fields": [
         {
-          "default": "default",
+          "type": "textInput",
           "label": "Stream Name",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Stream Name",
-          "type": "textInput",
-          "value": "stream"
+          "value": "stream",
+          "default": "default"
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Allow UID Sharing Across Multiple Domains",
-          "type": "checkbox",
-          "value": "loadid"
+          "value": "loadid",
+          "default": false
         },
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Ensure Entity",
-          "type": "checkbox",
-          "value": "blockload"
+          "value": "blockload",
+          "default": false
         }
-      ],
-      "title": "Other Settings"
+      ]
     },
     {
+      "title": "Native SDK",
       "fields": [
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Use native SDK to send events",
-          "type": "checkbox",
-          "value": "useNativeSDK"
+          "value": "useNativeSDK",
+          "default": false
         }
-      ],
-      "title": "Native SDK"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -80,58 +81,57 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Consent Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
     }
   ]
 }

@@ -1,34 +1,35 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "List ID",
-          "placeholder": "e.g: 7692349833",
+          "value": "listId",
           "regex": "^(.{1,100})$",
           "regexErrorMessage": "Invalid Google remarketing list ID",
           "required": true,
-          "type": "textInput",
-          "value": "listId"
+          "placeholder": "e.g: 7692349833"
         },
         {
+          "type": "textInput",
           "label": "Customer ID",
-          "placeholder": "e.g: 9693429833",
+          "value": "customerId",
           "regex": "^(.{1,100})$",
           "regexErrorMessage": "Invalid Customer ID",
           "required": true,
-          "type": "textInput",
-          "value": "customerId"
+          "placeholder": "e.g: 9693429833"
         },
         {
-          "default": false,
-          "label": "Sub Account",
-          "required": false,
           "type": "checkbox",
-          "value": "subAccount"
+          "label": "Sub Account",
+          "value": "subAccount",
+          "required": false,
+          "default": false
         },
         {
-          "footerNote": "If customer ID is from a sub account, then provide the customer ID of manager account",
+          "type": "textInput",
           "label": "Login Customer ID",
           "preRequisiteField": [
             {
@@ -36,21 +37,20 @@
               "selectedValue": true
             }
           ],
+          "value": "loginCustomerId",
           "regex": "^(.{0,100})$",
           "required": true,
-          "type": "textInput",
-          "value": "loginCustomerId"
+          "footerNote": "If customer ID is from a sub account, then provide the customer ID of manager account"
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Event Settings",
       "fields": [
         {
-          "defaultOption": {
-            "value": "General"
-          },
+          "type": "singleSelect",
           "label": "List Type",
+          "value": "typeOfList",
           "mode": "single",
           "options": [
             {
@@ -66,23 +66,26 @@
               "value": "mobileDeviceID"
             }
           ],
-          "type": "singleSelect",
-          "value": "typeOfList"
-        },
-        {
-          "default": true,
-          "label": "Hash Required",
-          "type": "checkbox",
-          "value": "isHashRequired"
-        },
-        {
           "defaultOption": {
-            "name": "Email",
-            "value": [
-              "email"
-            ]
-          },
+            "value": "General"
+          }
+        },
+        {
+          "type": "checkbox",
+          "label": "Hash Required",
+          "value": "isHashRequired",
+          "default": true
+        },
+        {
+          "type": "singleSelect",
           "label": "Schema Fields",
+          "preRequisiteField": [
+            {
+              "name": "typeOfList",
+              "selectedValue": "General"
+            }
+          ],
+          "value": "userSchema",
           "mode": "multiple",
           "options": [
             {
@@ -98,17 +101,14 @@
               "value": "addressInfo"
             }
           ],
-          "preRequisiteField": [
-            {
-              "name": "typeOfList",
-              "selectedValue": "General"
-            }
-          ],
-          "type": "singleSelect",
-          "value": "userSchema"
+          "defaultOption": {
+            "name": "Email",
+            "value": [
+              "email"
+            ]
+          }
         }
-      ],
-      "title": "Event Settings"
+      ]
     }
   ]
 }

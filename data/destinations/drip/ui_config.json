@@ -1,64 +1,65 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "Account ID",
-          "placeholder": "e.g. 276450567",
+          "value": "accountId",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Please check your Account ID. It should be something like 276450567",
           "required": true,
-          "secret": true,
-          "type": "textInput",
-          "value": "accountId"
+          "placeholder": "e.g. 276450567",
+          "secret": true
         },
         {
+          "type": "textInput",
           "label": "API Token",
-          "placeholder": "e.g. tZrPAgHyn2jMWOVGKrS6gBGLYT8v9kJE",
+          "value": "apiKey",
           "regex": ".*",
           "required": false,
-          "secret": true,
-          "type": "textInput",
-          "value": "apiKey"
+          "placeholder": "e.g. tZrPAgHyn2jMWOVGKrS6gBGLYT8v9kJE",
+          "secret": true
         },
         {
+          "type": "textInput",
           "label": "Campaign ID",
-          "placeholder": "e.g. 276450567",
+          "value": "campaignId",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Please check your Campaign ID. It should be numerical, something like 276450567",
           "required": false,
-          "secret": true,
-          "type": "textInput",
-          "value": "campaignId"
+          "placeholder": "e.g. 276450567",
+          "secret": true
         },
         {
-          "default": true,
-          "footerNote": "When enabled it will create new user with email if user doesn't exist for track calls.",
+          "type": "checkbox",
           "label": "User Creation Mode",
-          "type": "checkbox",
-          "value": "enableUserCreation"
+          "value": "enableUserCreation",
+          "default": true,
+          "footerNote": "When enabled it will create new user with email if user doesn't exist for track calls."
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Native SDK",
       "fields": [
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Use device-mode to send events",
-          "type": "checkbox",
-          "value": "useNativeSDK"
+          "value": "useNativeSDK",
+          "default": false
         }
-      ],
-      "title": "Native SDK"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -73,58 +74,57 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Consent Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
     }
   ]
 }

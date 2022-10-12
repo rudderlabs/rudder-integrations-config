@@ -1,33 +1,50 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
       "fields": [
         {
+          "type": "textInput",
           "label": "API Token",
-          "placeholder": "c24f56ed817221606de5a5f0befe8b92",
+          "value": "token",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid API Token",
           "required": true,
-          "secret": true,
-          "type": "textInput",
-          "value": "token"
+          "placeholder": "c24f56ed817221606de5a5f0befe8b92",
+          "secret": true
         },
         {
+          "type": "textInput",
           "label": "API Secret",
-          "placeholder": "f8a911adfbb6546cc43cdfe29e912a90",
+          "value": "apiSecret",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid API Secret",
           "required": false,
-          "secret": true,
-          "type": "textInput",
-          "value": "apiSecret"
+          "placeholder": "f8a911adfbb6546cc43cdfe29e912a90",
+          "secret": true
         },
         {
-          "defaultOption": {
-            "name": "US",
-            "value": "us"
-          },
+          "type": "textInput",
+          "label": "Service Account Username",
+          "value": "serviceAccountUserName",
+          "required": false
+        },
+        {
+          "type": "textInput",
+          "label": "Service Account Secret",
+          "value": "serviceAccountSecret",
+          "required": false
+        },
+        {
+          "type": "textInput",
+          "label": "Project ID",
+          "value": "projectId",
+          "required": false
+        },
+        {
+          "type": "singleSelect",
           "label": "Data Residency",
+          "value": "dataResidency",
           "options": [
             {
               "name": "US",
@@ -38,134 +55,133 @@
               "value": "eu"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "dataResidency"
+          "defaultOption": {
+            "name": "US",
+            "value": "us"
+          },
+          "required": false
         }
-      ],
-      "title": "Connection Settings"
+      ]
     },
     {
+      "title": "Device Mode Settings",
       "fields": [
         {
-          "default": false,
-          "footerNote": "This will send all of your identify calls to Mixpanel's People feature.",
+          "type": "checkbox",
           "label": "Use Mixpanel People",
-          "type": "checkbox",
-          "value": "people"
+          "value": "people",
+          "default": false,
+          "footerNote": "This will send all of your identify calls to Mixpanel's People feature."
         },
         {
-          "default": false,
-          "footerNote": "While this is checked, our integration automatically sets all traits on identify calls as super properties and people properties if Mixpanel People is checked as well.",
+          "type": "checkbox",
           "label": "Automatically set all Traits as Super Properties and People Properties",
-          "type": "checkbox",
-          "value": "setAllTraitsByDefault"
+          "value": "setAllTraitsByDefault",
+          "default": false,
+          "footerNote": "While this is checked, our integration automatically sets all traits on identify calls as super properties and people properties if Mixpanel People is checked as well."
         },
         {
+          "type": "dynamicCustomForm",
+          "value": "superProperties",
           "customFields": [
             {
+              "type": "textInput",
               "label": "Property to send as super Properties",
-              "placeholder": "e.g: residence",
+              "value": "property",
               "regex": "^(.{0,100})$",
               "regexErrorMessage": "Invalid Property Name",
               "required": false,
-              "type": "textInput",
-              "value": "property"
+              "placeholder": "e.g: residence"
             }
-          ],
-          "type": "dynamicCustomForm",
-          "value": "superProperties"
+          ]
         },
         {
+          "type": "dynamicCustomForm",
+          "value": "peopleProperties",
           "customFields": [
             {
+              "type": "textInput",
               "label": "Traits to set as People Properties",
-              "placeholder": "e.g: address",
+              "value": "property",
               "regex": "^(.{0,100})$",
               "regexErrorMessage": "Invalid Property Name",
               "required": false,
-              "type": "textInput",
-              "value": "property"
+              "placeholder": "e.g: address"
             }
-          ],
-          "type": "dynamicCustomForm",
-          "value": "peopleProperties"
+          ]
         },
         {
+          "type": "dynamicCustomForm",
+          "value": "eventIncrements",
           "customFields": [
             {
+              "type": "textInput",
               "label": "Events to increment in People",
-              "placeholder": "e.g: Added-to-cart",
+              "value": "property",
               "regex": "^(.{0,100})$",
               "regexErrorMessage": "Invalid Property Name",
               "required": false,
-              "type": "textInput",
-              "value": "property"
+              "placeholder": "e.g: Added-to-cart"
             }
-          ],
-          "type": "dynamicCustomForm",
-          "value": "eventIncrements"
+          ]
         },
         {
+          "type": "dynamicCustomForm",
+          "value": "propIncrements",
           "customFields": [
             {
+              "type": "textInput",
               "label": "Properties to increment in People",
-              "placeholder": "e.g: Cart-Value",
+              "value": "property",
               "regex": "^(.{0,100})$",
               "regexErrorMessage": "Invalid Property Name",
               "required": false,
-              "type": "textInput",
-              "value": "property"
+              "placeholder": "e.g: Cart-Value"
             }
-          ],
-          "type": "dynamicCustomForm",
-          "value": "propIncrements"
+          ]
         },
         {
-          "default": true,
-          "footerNote": "This will track Loaded a Page events to Mixpanel for all page method calls. We enable this by default as it's how Mixpanel suggests sending these calls.",
+          "type": "checkbox",
           "label": "Track All Pages to Mixpanel with a Consolidated Event Name",
-          "type": "checkbox",
-          "value": "consolidatedPageCalls"
+          "value": "consolidatedPageCalls",
+          "default": true,
+          "footerNote": "This will track Loaded a Page events to Mixpanel for all page method calls. We enable this by default as it's how Mixpanel suggests sending these calls."
         },
         {
-          "default": false,
-          "footerNote": "This will track events to Mixpanel for page method calls that have a category associated with them. For example page('Docs', 'Index') would translate to Viewed Docs Index Page.",
+          "type": "checkbox",
           "label": "Track Categorized Pages to Mixpanel",
-          "type": "checkbox",
-          "value": "trackCategorizedPages"
-        },
-        {
+          "value": "trackCategorizedPages",
           "default": false,
-          "footerNote": "This will track events to Mixpanel for page method calls that have a name associated with them. For example page('Signup') would translate to Viewed Signup Page.",
-          "label": "Track Named Pages to Mixpanel",
-          "type": "checkbox",
-          "value": "trackNamedPages"
+          "footerNote": "This will track events to Mixpanel for page method calls that have a category associated with them. For example page('Docs', 'Index') would translate to Viewed Docs Index Page."
         },
         {
-          "footerNote": "This value, if it's not blank, will be sent as rudderstack_source_name to Mixpanel for every event/page/screen call.",
+          "type": "checkbox",
+          "label": "Track Named Pages to Mixpanel",
+          "value": "trackNamedPages",
+          "default": false,
+          "footerNote": "This will track events to Mixpanel for page method calls that have a name associated with them. For example page('Signup') would translate to Viewed Signup Page."
+        },
+        {
+          "type": "textInput",
           "label": "Source Name",
-          "placeholder": "e.g: Rudder-JS",
+          "value": "sourceName",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Source Name",
           "required": false,
-          "type": "textInput",
-          "value": "sourceName"
+          "placeholder": "e.g: Rudder-JS",
+          "footerNote": "This value, if it's not blank, will be sent as rudderstack_source_name to Mixpanel for every event/page/screen call."
         },
         {
-          "default": false,
-          "footerNote": "This will allow the Mixpanel cookie to persist between different pages of your application.",
-          "label": "Cross Subdomain Cookie",
           "type": "checkbox",
-          "value": "crossSubdomainCookie"
+          "label": "Cross Subdomain Cookie",
+          "value": "crossSubdomainCookie",
+          "default": false,
+          "footerNote": "This will allow the Mixpanel cookie to persist between different pages of your application."
         },
         {
-          "defaultOption": {
-            "name": "None",
-            "value": "none"
-          },
-          "footerNote": "Choose persistence for Mixpanel SDK",
+          "type": "singleSelect",
           "label": "Persistence Type",
+          "value": "persistence",
           "options": [
             {
               "name": "None",
@@ -180,70 +196,73 @@
               "value": "localStorage"
             }
           ],
-          "type": "singleSelect",
-          "value": "persistence"
+          "defaultOption": {
+            "name": "None",
+            "value": "none"
+          },
+          "footerNote": "Choose persistence for Mixpanel SDK"
         },
         {
-          "default": false,
-          "footerNote": "This will mark the Mixpanel cookie as secure, meaning it will only be transmitted over https",
-          "label": "Secure Cookie",
           "type": "checkbox",
-          "value": "secureCookie"
+          "label": "Secure Cookie",
+          "value": "secureCookie",
+          "default": false,
+          "footerNote": "This will mark the Mixpanel cookie as secure, meaning it will only be transmitted over https"
         }
-      ],
-      "title": "Device Mode Settings"
+      ]
     },
     {
+      "title": "Group Key Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "groupKeySettings",
+          "label": "Group Keys",
           "customFields": [
             {
+              "type": "textInput",
               "label": "Group Key",
-              "placeholder": "company",
+              "value": "groupKey",
               "regex": "^(.{0,100})$",
               "regexErrorMessage": "Invalid Group Key",
               "required": false,
-              "type": "textInput",
-              "value": "groupKey"
+              "placeholder": "company"
             }
-          ],
-          "label": "Group Keys",
-          "type": "dynamicCustomForm",
-          "value": "groupKeySettings"
+          ]
         }
-      ],
-      "title": "Group Key Settings"
+      ]
     },
     {
+      "title": "Native SDK",
       "fields": [
         {
-          "default": false,
+          "type": "checkbox",
           "label": "Use device-mode to send events",
-          "type": "checkbox",
-          "value": "useNativeSDK"
+          "value": "useNativeSDK",
+          "default": false
         }
-      ],
-      "title": "Native SDK"
+      ]
     },
     {
+      "title": "Event Map Setting",
       "fields": [
         {
-          "default": false,
-          "footerNote": "It is recomended to set this to on as we are deprecating support for the old mapping soon.",
+          "type": "checkbox",
+          "value": "useNewMapping",
           "label": "Use New Mapping",
-          "type": "checkbox",
-          "value": "useNewMapping"
+          "default": false,
+          "footerNote": "It is recomended to set this to on as we are deprecating support for the old mapping soon."
         }
-      ],
-      "title": "Event Map Setting"
+      ]
     },
     {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          },
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
           "options": [
             {
               "name": "Disable",
@@ -258,58 +277,57 @@
               "value": "blacklistedEvents"
             }
           ],
-          "required": false,
-          "type": "singleSelect",
-          "value": "eventFilteringOption"
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
         },
         {
-          "customFields": [
-            {
-              "placeholder": "e.g: Anonymous Page Visit",
-              "required": false,
-              "type": "textInput",
-              "value": "eventName"
-            }
-          ],
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
           "label": "Allowlist",
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents"
-        },
-        {
           "customFields": [
             {
-              "placeholder": "e.g: Credit Card Added",
-              "required": false,
               "type": "textInput",
-              "value": "eventName"
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
             }
-          ],
-          "label": "Denylist",
+          ]
+        },
+        {
           "type": "dynamicCustomForm",
-          "value": "blacklistedEvents"
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
         }
-      ],
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either whitelisted or blacklisted events",
-      "title": "Client-side Events Filtering"
+      ]
     },
     {
+      "title": "Consent Settings",
       "fields": [
         {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
           "customFields": [
             {
-              "label": "Category Name",
-              "placeholder": "Marketing",
-              "required": false,
               "type": "textInput",
-              "value": "oneTrustCookieCategory"
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name",
+              "required": false
             }
-          ],
-          "label": "OneTrust Cookie Categories",
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories"
+          ]
         }
-      ],
-      "title": "Consent Settings"
+      ]
     }
   ]
 }
