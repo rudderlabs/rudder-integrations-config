@@ -72,36 +72,6 @@ def create_config_definition(selector, fileData):
     url = f'{CONTROL_PLANE_URL}/{selector}-definitions/'
     resp = requests.post(url=url, headers=HEADER, data=json.dumps(fileData), auth=AUTH)
     return parse_response(resp)
-#########################
-
-# def calculate_diff(persisted_data_set, selector):
-#     final_report = []
-#
-#     ## data set
-#     current_items = [item.replace('.json', '') for item in os.listdir(f'./data/{selector}s')]
-#     persisted_items = [item['name'].lower() for item in persisted_data_set]
-#
-#     ## check for updates
-#     for persisted_data in persisted_data_set:
-#         name = persisted_data["name"].lower()
-#         if name in current_items:
-#             updated_data = get_file_content(name, selector)
-#
-#             diff = jsondiff.diff(persisted_data, updated_data, marshal=True)
-#             # ignore the $delete - values present in DB but missing in files. Anyways this doesn't get reflected in DB as keys are missing in files itself.
-#             # Best practice is to make sure all keys are maintained in the config files.
-#             #if diff['$delete'] == ['id', 'createdAt', 'updatedAt']:
-#             del diff['$delete']
-#
-#             if len(diff.keys()) > 0: # no changes
-#                 final_report.append({"name": name, "diff": diff, "action": "update"})
-#
-#     ## check for new items
-#     new_items = [item for item in current_items if item not in persisted_items]
-#     for item in new_items:
-#         final_report.append({"name": item, "diff": None, "action": "create"})
-#
-#     return final_report
 
 def update_config(data_diff, selector):
     results = []
@@ -179,27 +149,3 @@ if __name__ == '__main__':
     print(src_final_report)
     print("Source Stale Config Report")
     print(get_stale_data('source', src_final_report))
-
-    ##################
-    ## DESTINATIONS
-    ##################
-    # get persisted storage
-    #destinations = get_persisted_store(CONTROL_PLANE_URL, 'destination')
-    # calculate the diff and populate the list for update
-    #dest_diffs = calculate_diff(destinations, 'destination')
-    #print(dest_diffs)
-    # make API calls to update
-    #dest_updates = update_config(dest_diffs, 'destination')
-    #print(dest_updates)
-
-    ##################
-    ## SOURCES
-    ##################
-    # get persisted storage
-    #sources = get_persisted_store(CONTROL_PLANE_URL, 'source')
-    # calculate the diff and populate the list for update
-    #source_diffs = calculate_diff(sources, 'source')
-    #print(source_diffs)
-    # make API calls to update
-    #source_updates = update_config(source_diffs, 'source')
-    #print(source_updates)
