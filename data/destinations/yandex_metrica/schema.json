@@ -2,55 +2,40 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "required": ["advertiserId"],
+    "required": ["tagId"],
     "properties": {
-      "advertiserId": {
+      "tagId": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "activityTag": {
+      "clickMap": {
+        "type": "boolean"
+      },
+      "trackLinks": {
+        "type": "boolean"
+      },
+      "trackBounce": {
+        "type": "boolean"
+      },
+      "webvisor": {
+        "type": "boolean"
+      },
+      "containerName": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "groupTag": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "conversionEvents": {
+      "eventNameToYandexEvent": {
         "type": "array",
         "items": {
           "type": "object",
           "properties": {
-            "eventName": {
+            "from": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "floodlightActivityTag": {
+            "to": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "floodlightGroupTag": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "salesTag": {
-              "type": "boolean"
-            },
-            "customVariables": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "from": {
-                    "type": "string",
-                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                  },
-                  "to": {
-                    "type": "string",
-                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-                  }
-                }
-              }
             }
           }
         }
@@ -58,6 +43,10 @@
       "eventFilteringOption": {
         "type": "string",
         "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
+      },
+      "goalId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -91,43 +80,6 @@
           }
         }
       },
-      "tagFormat": {
-        "type": "string",
-        "pattern": "(^env[.].+)|^(globalSiteTag|iframeTag)$"
-      },
-      "conversionLinker": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "allowAdPersonalizationSignals": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "doubleclickId": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "googleNetworkId": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-          }
-        }
-      },
       "oneTrustCookieCategories": {
         "type": "object",
         "properties": {
@@ -146,5 +98,5 @@
         }
       }
     }
-  }    
+  }
 }
