@@ -2,68 +2,41 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "required": ["measurementId"],
+    "required": ["customerId", "siteToken"],
     "properties": {
-      "apiSecret": {
+      "customerId": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "typesOfClient": {
+      "siteToken": {
         "type": "string",
-        "pattern": "(^env[.].+)|^(gtag|firebase)$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "measurementId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(G-.{1,100})$|^$"
-      },
-      "firebaseAppId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "enableServerSideIdentify": {
+      "recordQualarooEvents": {
         "type": "boolean"
       },
-      "newOrExistingUserTrait": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "sendLoginSignup": {
+      "updateEventNames": {
         "type": "boolean"
       },
-      "loginSignupMethod": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "generateLead": {
-        "type": "boolean"
-      },
-      "generateLeadValueTrait": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "generateLeadCurrencyTrait": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "clientIdFieldIdentifier": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      "eventsToStandard": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "to": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
       },
       "eventFilteringOption": {
         "type": "string",
         "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
-      },
-      "blockPageViewEvent": {
-        "type": "boolean"
-      },
-      "extendPageViewParams": {
-        "type": "boolean"
-      },
-      "sendUserId": {
-        "type": "boolean"
-      },
-      "debugMode": {
-        "type": "boolean"
       },
       "whitelistedEvents": {
         "type": "array",
