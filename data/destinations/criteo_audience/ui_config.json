@@ -1,0 +1,91 @@
+{
+  "uiConfig": [
+    {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Client Id",
+          "value": "clientId",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Client Id",
+          "required": true,
+          "placeholder": "e.g. b05ebeb8-a223-3cd6-z4c5-9512d3d66d431",
+          "secret": true,
+          "footerNote": "Put your Client Id here, it will be used for generating access token."
+        },
+        {
+          "type": "textInput",
+          "label": "Client Secret",
+          "value": "clientSecret",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Client Secret",
+          "required": true,
+          "placeholder": "e.g: XpewiPsz3yc9LrADR43f9h53jADLccXTykHCcA6eEoFR4rXQ",
+          "secret": true,
+          "footerNote": "Put your Client Secret here, it will be used for generating access token."
+        }
+      ]
+    },
+    {
+      "title": "Audience Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Audience Id",
+          "value": "audienceId",
+          "regex": "^[0-9]+$",
+          "regexErrorMessage": "Invalid Audience Id",
+          "required": true,
+          "placeholder": "e.g. 532145",
+          "secret": false,
+          "footerNote": "The audience id of the audience to which you want to sync the data"
+        },
+        {
+          "type": "singleSelect",
+          "label": "Audience Type",
+          "value": "audienceType",
+          "required": true,
+          "placeholder": "email",
+          "options": [
+            {
+              "name": "email",
+              "value": "email"
+            },
+            {
+              "name": "madid",
+              "value": "madid"
+            },
+            {
+              "name": "identityLink",
+              "value": "identityLink"
+            },
+            {
+              "name": "gum",
+              "value": "gum"
+            }
+          ],
+          "defaultOption": {
+            "name": "email",
+            "value": "email"
+          }
+        },
+        {
+          "type": "textInput",
+          "label": "GUM Caller Id",
+          "value": "gumCallerId",
+          "regex": "^[0-9]+$",
+          "regexErrorMessage": "Invalid GUM Caller Id",
+          "required": true,
+          "placeholder": "e.g. 53213445",
+          "secret": false,
+          "preRequisiteField": {
+            "name": "audienceType",
+            "selectedValue": "gum"
+          },
+          "footerNote": "GUM cookie identifier"
+        }
+      ]
+    }
+  ]
+}
