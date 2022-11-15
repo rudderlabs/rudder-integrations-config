@@ -154,6 +154,72 @@
           ]
         }
       ]
+    },
+    {
+      "title": "Topic Settings",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Enable multiple topic support",
+          "value": "enableMultiTopic",
+          "default": false,
+          "footerNote": "Enable this option to deliver events to multiple topics"
+        },
+        {
+          "preRequisiteField": {
+            "name": "enableMultiTopic",
+            "selectedValue": true
+          },
+          "type": "dynamicSelectForm",
+          "label": "Map event type to topic",
+          "labelLeft": "Event Type",
+          "labelRight": "Topic",
+          "value": "eventTypeToTopicMap",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "reverse": true,
+          "required": true,
+          "placeholderRight": "e.g. Sample-topic",
+          "options": [
+            {
+              "name": "Identify",
+              "value": "identify"
+            },
+            {
+              "name": "Page",
+              "value": "page"
+            },
+            {
+              "name": "Screen",
+              "value": "screen"
+            },
+            {
+              "name": "Group",
+              "value": "group"
+            },
+            {
+              "name": "Alias",
+              "value": "alias"
+            }
+          ]
+        },
+        {
+          "preRequisiteField": {
+            "name": "enableMultiTopic",
+            "selectedValue": true
+          },
+          "type": "dynamicForm",
+          "label": "Map Track events to topic",
+          "required": true,
+          "placeholderLeft": "e.g. Product Searched",
+          "placeholderRight": "Sample-topic",
+          "labelLeft": "Event Name",
+          "labelRight": "Topic",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "value": "eventToTopicMap"
+        }
+      ]
     }
   ]
 }
