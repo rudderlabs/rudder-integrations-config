@@ -1,3 +1,20 @@
 {
-  "configSchema": null
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["advertiserId"],
+    "properties": {
+      "advertiserId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "eventsToTrack": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        }
+      }
+    }
+  }
 }
