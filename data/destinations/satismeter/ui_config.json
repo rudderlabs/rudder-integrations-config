@@ -28,6 +28,104 @@
       ]
     },
     {
+      "title": "Event Settings",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Record Satismeter Events",
+          "value": "recordSatismeterEvents",
+          "default": false,
+          "footerNote": "Enable this to sends the Satismeter callback events to other enabled destinations."
+        },
+        {
+          "type": "singleSelect",
+          "label": "List of Events",
+          "value": "eventsList",
+          "required": false,
+          "placeholder": "Show",
+          "mode": "multiple",
+          "options": [
+            {
+              "name": "Display",
+              "value": "display"
+            },
+            {
+              "name": "Dismiss",
+              "value": "dismiss"
+            },
+            {
+              "name": "Progress",
+              "value": "progress"
+            },
+            {
+              "name": "Complete",
+              "value": "complete"
+            }
+          ],
+          "defaultOption": {
+            "name": "Display",
+            "value": "display"
+          },
+          "preRequisiteField": {
+            "name": "recordSatismeterEvents",
+            "selectedValue": true
+          }
+        },
+        {
+          "type": "checkbox",
+          "preRequisiteField": [
+            {
+              "name": "recordSatismeterEvents",
+              "selectedValue": true
+            }
+          ],
+          "label": "Update Event Name in track call",
+          "value": "updateEventNames",
+          "default": false,
+          "footerNote": "Use this setting to update the event name in track call"
+        },
+        {
+          "type": "dynamicSelectForm",
+          "preRequisiteField": [
+            {
+              "name": "recordSatismeterEvents",
+              "selectedValue": true
+            },
+            {
+              "name": "updateEventNames",
+              "selectedValue": true
+            }
+          ],
+          "label": "Mapping to update the Event Name in track call",
+          "labelLeft": "Event Name",
+          "labelRight": "Standard Events",
+          "value": "eventsToStandard",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "required": false,
+          "placeholderRight": "e.g: Survey Showed",
+          "options": [
+            {
+              "name": "Display",
+              "value": "display"
+            },
+            {
+              "name": "Dismiss",
+              "value": "dismiss"
+            },
+            {
+              "name": "Progress",
+              "value": "progress"
+            },
+            {
+              "name": "Complete",
+              "value": "complete"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "title": "Client-side Events Filtering",
       "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
@@ -101,5 +199,5 @@
         }
       ]
     }
-  ]  
+  ]
 }
