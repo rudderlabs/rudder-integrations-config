@@ -11,11 +11,12 @@ jobs:
   create-branch:
     name: Create new branch
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master-temp' || github.ref == 'refs/heads/ci/add-new-github-actions-pipeline'
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Create branch
         uses: peterjgrainger/action-create-branch@v2.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          node-version: '16'
           branch: 'hotfix-test/${{ github.event.inputs.hotfix_name }}'

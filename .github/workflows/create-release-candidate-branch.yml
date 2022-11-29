@@ -6,11 +6,11 @@ jobs:
   create-branch:
     name: Create new branch
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/ci/add-new-github-actions-pipeline'
+    if: github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/hotfix/')
     steps:
       - name: Create branch
         uses: peterjgrainger/action-create-branch@v2.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          branch: 'release-candidate-test'
+          branch: 'new-release-candidate'
