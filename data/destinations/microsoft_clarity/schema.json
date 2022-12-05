@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["projectId"],
+  "properties": {
+    "projectId": {
+      "type": "string",
+      "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+    },
+    "cookieConsent": {
+      "type": "boolean"
+    },
+    "whitelistedEvents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "eventName": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          }
+        }
+      }
+    },
+    "blacklistedEvents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "eventName": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          }
+        }
+      }
+    },
+    "useNativeSDK": {
+      "type": "object",
+      "properties": {
+        "web": {
+          "type": "boolean"
+        }
+      }
+    },
+    "oneTrustCookieCategories": {
+      "type": "object",
+      "properties": {
+        "web": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "oneTrustCookieCategory": {
+                "type": "string",
+                "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
