@@ -1,0 +1,65 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["clientId"],
+    "properties": {
+      "clientId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "toggleToActivateCallback": {
+        "type": "boolean"
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "oneTrustCookieCategories": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
