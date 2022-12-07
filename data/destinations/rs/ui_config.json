@@ -64,7 +64,7 @@
           "label": "Use SSH Connection",
           "value": "useSSH",
           "default": false,
-          "footerNote": "Note: Testing the feature"
+          "footerNote": "Establish ssh forward tunnel connection"
         },
         {
           "type": "textInput",
@@ -106,10 +106,20 @@
           }
         },
         {
+          "type": "checkbox",
+          "label": "Enable SSL For Tunneling",
+          "value": "enableSSL",
+          "default": true,
+          "preRequisiteField": {
+            "name": "useSSH",
+            "selectedValue": true
+          }
+        },
+        {
           "type": "textareaInputCopy",
           "label": "SSH Public Key",
           "value": "sshPublicKey",
-          "default": "tempSSHKey",
+          "default": "",
           "required": true,
           "preRequisiteField": {
             "name": "useSSH",
@@ -117,6 +127,7 @@
           },
           "readOnly": true
         },
+
         {
           "type": "singleSelect",
           "label": "Sync Frequency",
