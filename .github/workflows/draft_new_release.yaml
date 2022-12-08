@@ -6,7 +6,7 @@ jobs:
   draft-new-release:
     name: Draft a new release
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/release-candidate' || startsWith(github.ref, 'refs/heads/hotfix/')
+    if: github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/hotfix/')
     steps:
       - name: Checkout source branch
         uses: actions/checkout@v2
@@ -65,7 +65,7 @@ jobs:
           echo $SUMMARY
           echo "::set-output name=commit_summary::$SUMMARY"
           npm run release
-
+          
       - name: Push new version in release branch & tag
         run: |
           git push --follow-tags
