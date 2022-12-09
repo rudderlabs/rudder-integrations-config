@@ -2,68 +2,14 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "required": [
-      "advertiserId"
-    ],
+    "required": ["clientId"],
     "properties": {
-      "advertiserId": {
-        "type": "string"
-      },
-      "clientAuthId": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string"
-          }
-        }
-      },
-      "customDomain": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string"
-          }
-        }
-      },
-      "enableCookieSync": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "eventsMap": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "from": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "to": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "eventFilteringOption": {
+      "clientId": {
         "type": "string",
-        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "whitelistedEvents": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "eventName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
+      "toggleToActivateCallback": {
+        "type": "boolean"
       },
       "blacklistedEvents": {
         "type": "array",
@@ -77,15 +23,19 @@
           }
         }
       },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
           }
         }
       },
-      "useNativeSDKToSend": {
+      "useNativeSDK": {
         "type": "object",
         "properties": {
           "web": {

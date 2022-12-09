@@ -12,6 +12,24 @@
       ],
       "fields": [
         {
+          "type": "singleSelect",
+          "label": "Connection Mode",
+          "value": "connectionMode",
+          "options": [
+            {
+              "name": "Cross-Account Role (recommended)",
+              "value": "crossAccountRole"
+            },
+            {
+              "name": "Access Key",
+              "value": "accessKey"
+            }
+          ],
+          "defaultOption": {
+            "value": "crossAccountRole"
+          }
+        },
+        {
           "type": "textInput",
           "label": "Account Name",
           "value": "rudder_account_name",
@@ -29,7 +47,11 @@
           "required": true,
           "placeholder": "e.g: access-key-id",
           "secret": true,
-          "trim": true
+          "trim": true,
+          "preRequisiteField": {
+            "name": "connectionMode",
+            "selectedValue": "accessKey"
+          }
         },
         {
           "type": "textInput",
@@ -40,7 +62,25 @@
           "inputFieldType": "password",
           "required": true,
           "placeholder": "e.g: secret-access-key",
-          "secret": true
+          "secret": true,
+          "preRequisiteField": {
+            "name": "connectionMode",
+            "selectedValue": "accessKey"
+          }
+        },
+        {
+          "type": "textInput",
+          "label": "Role ARN",
+          "value": "roleARN",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Role ARN",
+          "required": true,
+          "placeholder": "arn:aws:iam::xxxx:role/xxxx",
+          "preRequisiteField": {
+            "name": "connectionMode",
+            "selectedValue": "crossAccountRole"
+          },
+          "footerNote": "Please follow our docs to create the role ARN. For creating the role add the Account ID: `422074288268` and use Workspace Id as the External Id."
         }
       ]
     }

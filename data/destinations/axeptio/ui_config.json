@@ -5,13 +5,20 @@
       "fields": [
         {
           "type": "textInput",
-          "label": "Widget ID",
-          "value": "widgetId",
+          "label": "Client ID",
+          "value": "clientId",
           "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Widget ID length should be less than 100 characters",
+          "regexErrorMessage": "Invalid Client ID, example value 1234db3fdsed3287df0d93f8ec6f",
           "required": true,
-          "placeholder": "e.g: 0c739ebb-2016-44a0-b1da-a5b5eb272474",
-          "secret": true
+          "placeholder": "e.g. 1234db3fdsed3287df0d93f8ec6f",
+          "secret": true,
+          "footerNote": "Your Client ID"
+        },
+        {
+          "type": "checkbox",
+          "label": "Toggle it on to send data through callback",
+          "value": "toggleToActivateCallback",
+          "default": false
         }
       ]
     },
@@ -19,78 +26,10 @@
       "title": "Native SDK",
       "fields": [
         {
-          "type": "defaultCheckbox",
+          "type": "checkbox",
           "label": "Use device-mode to send events",
           "value": "useNativeSDK",
           "default": true
-        }
-      ]
-    },
-    {
-      "title": "Other Settings",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Record Live Chat Events",
-          "value": "recordLiveChatEvents",
-          "default": false,
-          "footerNote": "Automatically records and sends the events from Live Chat to other enabled tools."
-        },
-        {
-          "type": "checkbox",
-          "preRequisiteField": [
-            {
-              "name": "recordLiveChatEvents",
-              "selectedValue": true
-            }
-          ],
-          "label": "Update Event Name in track call",
-          "value": "updateEventNames",
-          "default": false,
-          "footerNote": "Use this setting to update the event name in track call"
-        },
-        {
-          "type": "dynamicSelectForm",
-          "preRequisiteField": [
-            {
-              "name": "recordLiveChatEvents",
-              "selectedValue": true
-            },
-            {
-              "name": "updateEventNames",
-              "selectedValue": true
-            }
-          ],
-          "label": "Mapping to update the Event Name in track call",
-          "labelLeft": "Event Name",
-          "labelRight": "Standard Events",
-          "value": "eventsToStandard",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "required": false,
-          "placeholderLeft": "e.g: Submit",
-          "options": [
-            {
-              "name": "Start Chat",
-              "value": "startChat"
-            },
-            {
-              "name": "Close",
-              "value": "close"
-            },
-            {
-              "name": "Chat Message Sent",
-              "value": "chatMessageSent"
-            },
-            {
-              "name": "Chat Message Received",
-              "value": "chatMessageReceived"
-            },
-            {
-              "name": "Inline Button Clicked",
-              "value": "inlineButtonClicked"
-            }
-          ]
         }
       ]
     },
