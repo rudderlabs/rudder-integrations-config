@@ -323,6 +323,22 @@
           }
         },
         {
+          "type": "checkbox",
+          "preRequisiteField": [
+            {
+              "name": "cloudProvider",
+              "selectedValue": "AWS"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
+          ],
+          "label": "Role Based Authentication",
+          "value": "roleBasedAuth",
+          "default": false
+        },
+        {
           "type": "textInput",
           "preRequisiteField": [
             {
@@ -332,6 +348,37 @@
             {
               "name": "useRudderStorage",
               "selectedValue": false
+            },
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": true
+            }
+          ],
+          "label": "IAM Role ARN",
+          "value": "iamRoleARN",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Role ARN",
+          "required": true,
+          "placeholder": "e.g: arn:aws:iam::123456789012:role/S3Access",
+          "footerURL": {
+            "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/",
+            "text": "Instructions for creating IAM Role"
+          }
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": [
+            {
+              "name": "cloudProvider",
+              "selectedValue": "AWS"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            },
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": true
             }
           ],
           "label": "AWS Access Key ID",
@@ -352,6 +399,10 @@
             {
               "name": "useRudderStorage",
               "selectedValue": false
+            },
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": true
             }
           ],
           "label": "AWS Secret Access Key",
