@@ -32,6 +32,12 @@
         },
         {
           "type": "textInput",
+          "preRequisiteField": [
+            {
+              "name": "useSASTokens",
+              "selectedValue": false
+            }
+          ],
           "label": "Azure Blob Storage Account Key",
           "value": "accountKey",
           "regex": "^(.{0,100})$",
@@ -39,6 +45,29 @@
           "required": true,
           "placeholder": "e.g: account-key",
           "secret": true
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": [
+            {
+              "name": "useSASTokens",
+              "selectedValue": true
+            }
+          ],
+          "label": "Azure Blob Storage SAS Token",
+          "value": "sasToken",
+          "regex": "^(.+)$",
+          "regexErrorMessage": "Invalid Azure Blob Storage SAS Token",
+          "required": true,
+          "placeholder": "e.g: sas-token",
+          "secret": true
+        },
+        {
+          "type": "checkbox",
+          "label": "Use shared access signature (SAS) Tokens",
+          "value": "useSASTokens",
+          "default": false,
+          "footerNote": "Use this to Grant limited access to Azure Storage resources using shared access signatures (SAS)"
         }
       ]
     }
