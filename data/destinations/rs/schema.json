@@ -8,7 +8,6 @@
       "database",
       "user",
       "password",
-      "useTunneling",
       "syncFrequency",
       "useRudderStorage"
     ],
@@ -47,10 +46,7 @@
       },
       "excludeWindow": {
         "type": "object",
-        "required": [
-          "excludeWindowStartTime",
-          "excludeWindowEndTime"
-        ],
+        "required": ["excludeWindowStartTime", "excludeWindowEndTime"],
         "properties": {
           "excludeWindowStartTime": {
             "type": "string"
@@ -92,13 +88,10 @@
               "const": true
             }
           },
-          "required": [
-            "useSSH"
-          ]
+          "required": ["useSSH"]
         },
         "then": {
           "properties": {
-            
             "sshHost": {
               "type": "string",
               "pattern": "(^env[.].+)|^(.{1,255})$"
@@ -114,9 +107,9 @@
             "sshPublicKey": {
               "type": "string",
               "pattern": "(^env[.].+)|^(.{1,10000})$"
-            },
-            "required": ["sshHost","sshPort","sshUser","sshPublicKey"]
-          }
+            }
+          },
+          "required": ["sshHost", "sshPort", "sshUser", "sshPublicKey"]
         }
       },
       {
@@ -126,9 +119,7 @@
               "const": false
             }
           },
-          "required": [
-            "useRudderStorage"
-          ]
+          "required": ["useRudderStorage"]
         },
         "then": {
           "properties": {
@@ -137,9 +128,7 @@
               "pattern": "(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$|(^\\{\\{.+\\}\\}$)"
             }
           },
-          "required": [
-            "bucketName"
-          ]
+          "required": ["bucketName"]
         }
       }
     ],
