@@ -179,6 +179,41 @@
           }
         },
         {
+          "type": "checkbox",
+          "preRequisiteField": [
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
+          ],
+          "label": "Role Based Authentication",
+          "value": "roleBasedAuth",
+          "default": false
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": [
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            },
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": true
+            }
+          ],
+          "label": "IAM Role ARN",
+          "value": "iamRoleARN",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Role ARN",
+          "required": true,
+          "placeholder": "e.g: arn:aws:iam::123456789012:role/S3Access",
+          "footerURL": {
+            "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/",
+            "text": "Instructions for creating IAM Role"
+          }
+        },
+        {
           "type": "textInput",
           "label": "AWS Access Key ID",
           "value": "accessKeyID",
@@ -187,10 +222,16 @@
           "required": false,
           "placeholder": "e.g: access-key-id",
           "secret": true,
-          "preRequisiteField": {
-            "name": "useRudderStorage",
-            "selectedValue": false
-          }
+          "preRequisiteField": [
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            },
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": false
+            }
+          ]
         },
         {
           "type": "textInput",
@@ -201,10 +242,16 @@
           "required": false,
           "placeholder": "e.g: secret-access-key",
           "secret": true,
-          "preRequisiteField": {
-            "name": "useRudderStorage",
-            "selectedValue": false
-          }
+          "preRequisiteField": [
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            },
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": false
+            }
+          ]
         },
         {
           "type": "checkbox",
