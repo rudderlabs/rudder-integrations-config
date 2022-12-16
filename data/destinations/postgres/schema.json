@@ -51,10 +51,7 @@
       },
       "excludeWindow": {
         "type": "object",
-        "required": [
-          "excludeWindowStartTime",
-          "excludeWindowEndTime"
-        ],
+        "required": ["excludeWindowStartTime", "excludeWindowEndTime"],
         "properties": {
           "excludeWindowStartTime": {
             "type": "string"
@@ -81,18 +78,45 @@
       {
         "if": {
           "properties": {
+            "useSSH": {
+              "const": true
+            }
+          },
+          "required": ["useSSH"]
+        },
+        "then": {
+          "properties": {
+            "sshHost": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,255})$"
+            },
+            "sshPort": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,255})$"
+            },
+            "sshUser": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,255})$"
+            },
+            "sshPublicKey": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,10000})$"
+            }
+          },
+          "required": ["sshHost", "sshPort", "sshUser", "sshPublicKey"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
             "useRudderStorage": {
               "const": false
             }
           },
-          "required": [
-            "useRudderStorage"
-          ]
+          "required": ["useRudderStorage"]
         },
         "then": {
-          "required": [
-            "bucketProvider"
-          ]
+          "required": ["bucketProvider"]
         }
       },
       {
@@ -105,31 +129,30 @@
               "const": false
             }
           },
-          "required": [
-            "bucketProvider",
-            "useRudderStorage"
-          ]
+          "required": ["bucketProvider", "useRudderStorage"]
         },
         "then": {
           "properties": {
+            "iamRoleARN": {
+              "type": "string"
+            },
+            "roleBasedAuth": {
+              "type": "boolean"
+            },
             "bucketName": {
               "type": "string",
               "pattern": "(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
             },
             "accessKeyID": {
               "type": "string",
-              "pattern": "(^env[.].+)|^(.{1,100})$"
+              "pattern": "(^env[.].+)|^(.{0,100})$"
             },
             "accessKey": {
               "type": "string",
-              "pattern": "(^env[.].+)|^(.{1,100})$"
+              "pattern": "(^env[.].+)|^(.{0,100})$"
             }
           },
-          "required": [
-            "bucketName",
-            "accessKeyID",
-            "accessKey"
-          ]
+          "required": ["bucketName", "accessKeyID", "accessKey"]
         }
       },
       {
@@ -142,10 +165,7 @@
               "const": false
             }
           },
-          "required": [
-            "bucketProvider",
-            "useRudderStorage"
-          ]
+          "required": ["bucketProvider", "useRudderStorage"]
         },
         "then": {
           "properties": {
@@ -158,10 +178,7 @@
               "pattern": "(^env[.].+)|.+"
             }
           },
-          "required": [
-            "bucketName",
-            "credentials"
-          ]
+          "required": ["bucketName", "credentials"]
         }
       },
       {
@@ -174,10 +191,7 @@
               "const": false
             }
           },
-          "required": [
-            "bucketProvider",
-            "useRudderStorage"
-          ]
+          "required": ["bucketProvider", "useRudderStorage"]
         },
         "then": {
           "properties": {
@@ -190,10 +204,7 @@
               "pattern": "(^env[.].+)|^(.{1,100})$"
             }
           },
-          "required": [
-            "containerName",
-            "accountName"
-          ],
+          "required": ["containerName", "accountName"],
           "anyOf": [
             {
               "properties": {
@@ -202,9 +213,7 @@
                   "pattern": "(^env[.].+)|^(.{1,100})$"
                 }
               },
-              "required": [
-                "accountKey"
-              ]
+              "required": ["accountKey"]
             },
             {
               "properties": {
@@ -216,10 +225,7 @@
                   "const": true
                 }
               },
-              "required": [
-                "useSASTokens",
-                "sasToken"
-              ]
+              "required": ["useSASTokens", "sasToken"]
             }
           ]
         }
@@ -234,10 +240,7 @@
               "const": false
             }
           },
-          "required": [
-            "bucketProvider",
-            "useRudderStorage"
-          ]
+          "required": ["bucketProvider", "useRudderStorage"]
         },
         "then": {
           "properties": {
@@ -277,9 +280,7 @@
               "const": "verify-ca"
             }
           },
-          "required": [
-            "sslMode"
-          ]
+          "required": ["sslMode"]
         },
         "then": {
           "properties": {
@@ -296,11 +297,7 @@
               "pattern": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----"
             }
           },
-          "required": [
-            "clientKey",
-            "clientCert",
-            "serverCA"
-          ]
+          "required": ["clientKey", "clientCert", "serverCA"]
         }
       }
     ],
