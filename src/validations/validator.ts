@@ -26,7 +26,7 @@ async function importJsonFromFile(file: string) {
 }
 
 async function initAjvValidators() {
-  const files = await globPromisified(path.join(process.cwd(),'data','destinations/*/schema.json'));
+  const files = await globPromisified(path.join('configurations/destinations/*/schema.json'));
   const filePromises = files.map(importJsonFromFile);
   const contents = await Promise.all(filePromises);
 
