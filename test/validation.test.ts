@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import init, { validateConfig } from '../validator';
+import init, { validateConfig } from '../src/validations/validator';
 import fs from 'fs';
 import path from 'path';
 
@@ -14,15 +14,15 @@ function getDestNames(path:any) {
 }
 
 // dynamically fetch all the destination names
-const destNameArray = getDestNames(path.join(process.cwd(),'data','destinations'));
+const destNameArray = getDestNames(path.resolve('src/configurations/destinations'));
 
-const testDatas: Array<TestConfigSchema> = [];
+const testData: Array<TestConfigSchema> = [];
 
 // console.log(destNameArray)
 
 destNameArray.forEach((dest: any) => {
   try {
-    testDatas[dest] = JSON.parse(
+    testData[dest] = JSON.parse(
         fs.readFileSync(
             path.resolve(
                 __dirname,
@@ -44,10 +44,10 @@ describe('Validator Tests', () => {
     await delay(1000);
   });
   let destCount = 1;
-  Object.keys(testDatas).forEach((dest: any) => {
+  Object.keys(testData).forEach((dest: any) => {
     let payloadCount = 0;
     describe(`${destCount}. ${dest}`, () => {
-      Object.values(testDatas[dest]).forEach((td: any) => {
+      Object.values(testData[dest]).forEach((td: any) => {
         it(`Payload ${payloadCount}`, async () => {
           if (td.result === true) {
             expect(validateConfig(dest, td.config)).toBeUndefined();
