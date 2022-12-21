@@ -1,10 +1,8 @@
-const { pathsToModuleNameMapper } = require('ts-jest');
-const { compilerOptions } = require('./tsconfig.paths.json');
-
 // For a detailed explanation regarding each configuration property, visit:
 // https://jestjs.io/docs/en/configuration.html
 
 module.exports = {
+  prettierPath: 'prettier',
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -15,35 +13,43 @@ module.exports = {
   // browser: false,
 
   // The directory where Jest should store its cached dependency information
-  // cacheDirectory: "/private/var/folders/bj/xt4sffgd21z57fxhvqrd30_80000gn/T/jest_dx",
+  cacheDirectory: '<rootDir>/node_modules/.cache/unit-tests',
 
   // Automatically clear mock calls and instances between every test
-  // clearMocks: false,
+  clearMocks: true,
 
   // Indicates whether the coverage information should be collected while executing the test
   // collectCoverage: false,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  // collectCoverageFrom: null,
+  collectCoverageFrom: [
+    'src/**/*.[jt]s'
+  ],
 
   // The directory where Jest should output its coverage files
   coverageDirectory: 'reports/coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
-  coveragePathIgnorePatterns: [
-    '/node_modules/',
-  ],
+  coveragePathIgnorePatterns: [ ],
 
   // A list of reporter names that Jest uses when writing coverage reports
   // coverageReporters: [
   //   "json",
   //   "text",
   //   "lcov",
-  //   "clover"
+  //   "clover",
+  //   { projectRoot: '/'}
   // ],
 
   // An object that configures minimum threshold enforcement for coverage results
-  // coverageThreshold: null,
+  coverageThreshold: {
+    global: {
+      branches: 0,
+      functions: 0,
+      lines: 0,
+      statements: 0,
+    },
+  },
 
   // A path to a custom dependency extractor
   // dependencyExtractor: null,
@@ -82,10 +88,7 @@ module.exports = {
   // ],
 
   // A map from regular expressions to module names that allow to stub out resources with a single module
-  moduleNameMapper: {
-    ...pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
-    '^__tests__/(.*)$': '<rootDir>/__tests__/$1',
-  },
+  // moduleNameMapper: {},
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
@@ -147,19 +150,14 @@ module.exports = {
   // testLocationInResults: false,
 
   // The glob patterns Jest uses to detect test files
-  // testMatch: [
-  //   "**/__tests__/**/*.[jt]s?(x)",
-  //   "**/?(*.)+(spec|test).[tj]s?(x)"
-  // ],
+  testMatch: [
+    "<rootDir>/test/**/*test.[jt]s?(x)",
+    "<rootDir>/test/**/?(*.)+(spec|test).[tj]s?(x)"
+  ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   testPathIgnorePatterns: [
     '/node_modules/',
-    'migration',
-    'generic.test.js',
-    '__tests__/v1/',
-    '__tests__/config.js',
-    '__tests__/testUtils.ts',
   ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
@@ -191,7 +189,7 @@ module.exports = {
   // unmockedModulePathPatterns: undefined,
 
   // Indicates whether each individual test should be reported during the run
-  // verbose: null,
+  verbose: true,
 
   // An array of regexp patterns that are matched against all source file paths before re-running tests in watch mode
   watchPathIgnorePatterns: ['node_modules'],
