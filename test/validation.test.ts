@@ -50,14 +50,10 @@ describe('Validator Tests', () => {
       Object.values(testData[dest]).forEach((td: any) => {
         it(`Payload ${payloadCount}`, async () => {
           if (td.result === true) {
-            expect(validateConfig(dest, td.config)).toBeUndefined();
+            expect(validateConfig(dest, td.config, true)).toBeUndefined();
           }
           if (td.result === false) {
-            try {
-              validateConfig(dest, td.config);
-            } catch (err: any) {
-              expect(err.message).toEqual(JSON.stringify(td.err));
-            }
+            expect(() => { validateConfig(dest, td.config, true) }).toThrow(JSON.stringify(td.err));
           }
         });
         payloadCount += 1;
