@@ -2,62 +2,108 @@
 import { init, validateConfig } from '../src';
 import fs from 'fs';
 import path from 'path';
+import Commander from 'commander';
 
-type TestConfigSchema = {
-  [key: string]: unknown;
-};
+const command = new Commander.Command();
+command
+  .allowUnknownOption()
+  .option('-d, --destinations <string>', 'Enter destination names separated by comma', 'all')
+  .option('-s, --sources <string>', 'Enter source names separated by comma', 'all')
+  .parse();
 
-function getDestNames(path: any) {
-  return fs.readdirSync(path).filter(function (file) {
-    return fs.statSync(path + '/' + file).isDirectory();
+const cmdOpts = command.opts();
+
+function getIntegrationNames(type) {
+  const dirPath = path.resolve(`src/configurations/${type}`);
+  return fs.readdirSync(dirPath).filter(function (file) {
+    return fs.statSync(dirPath + '/' + file).isDirectory();
   });
 }
 
-// dynamically fetch all the destination names
-const destNameArray = getDestNames(path.resolve('src/configurations/destinations'));
-
-const testData: Array<TestConfigSchema> = [];
-
-// console.log(destNameArray)
-
-destNameArray.forEach((dest: any) => {
+function getIntegrationData(name, type) {
   try {
-    testData[dest] = JSON.parse(
-      fs.readFileSync(
-        path.resolve(__dirname, `./validation_test_data/${dest.toLowerCase()}_test.json`),
-        'utf-8',
-      ),
+    return JSON.parse(
+      fs.readFileSync(path.resolve(__dirname, `./data/validation/${type}/${name}.json`), 'utf-8'),
     );
-  } catch (e) {}
+  } catch (e) {
+    // console.error(e);
+    // console.error(`Unable to load test data for: "${name}" (${type})`);
+  }
+}
+
+let destList: string[] = [];
+if (cmdOpts.destinations !== 'all') {
+  destList = cmdOpts.destinations
+    .split(',')
+    .map((x: string) => x.trim())
+    .filter((x: any) => x);
+  console.log(`Destinations specified: ${destList}`);
+} else {
+  destList = getIntegrationNames('destinations');
+}
+const destTcData = {};
+destList.forEach((d) => {
+  const intgData = getIntegrationData(d, 'destinations');
+  if (intgData) destTcData[d] = intgData;
+});
+
+let srcList: string[] = [];
+if (cmdOpts.sources !== 'all') {
+  srcList = cmdOpts.sources
+    .split(',')
+    .map((x: string) => x.trim())
+    .filter((x: any) => x);
+  console.log(`Sources specified: ${srcList}`);
+} else {
+  srcList = getIntegrationNames('sources');
+}
+const srcTcData = {};
+srcList.forEach((s) => {
+  const intgData = getIntegrationData(s, 'sources');
+  if (intgData) srcTcData[s] = intgData;
 });
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-describe('Validator Tests', () => {
+describe('Validation Tests', () => {
   beforeAll(async () => {
     init();
     await delay(1000);
   });
-  let destCount = 1;
-  Object.keys(testData).forEach((dest: any) => {
-    let payloadCount = 0;
-    describe(`${destCount}. ${dest}`, () => {
-      Object.values(testData[dest]).forEach((td: any) => {
-        it(`Payload ${payloadCount}`, async () => {
+
+  // Destination tests
+  Object.keys(destTcData).forEach((dest: any, destIdx: number) => {
+    describe(`${destIdx + 1}. Destination - ${dest}`, () => {
+      destTcData[dest].forEach((td: any, tcIdx: number) => {
+        it(`TC ${tcIdx + 1}`, async () => {
           if (td.result === true) {
             expect(validateConfig(dest, td.config, true)).toBeUndefined();
-          }
-          if (td.result === false) {
+          } else {
             expect(() => {
               validateConfig(dest, td.config, true);
             }).toThrow(JSON.stringify(td.err));
           }
         });
-        payloadCount += 1;
       });
-      destCount += 1;
+    });
+  });
+
+  // Source tests
+  Object.keys(srcTcData).forEach((src: any, srcIdx: number) => {
+    describe(`${srcIdx + 1}. Source - ${src}`, () => {
+      srcTcData[src].forEach((td: any, tcIdx: number) => {
+        it(`TC ${tcIdx + 1}`, async () => {
+          if (td.result === true) {
+            expect(validateConfig(src, td.config, true)).toBeUndefined();
+          } else {
+            expect(() => {
+              validateConfig(src, td.config, true);
+            }).toThrow(JSON.stringify(td.err));
+          }
+        });
+      });
     });
   });
 });
