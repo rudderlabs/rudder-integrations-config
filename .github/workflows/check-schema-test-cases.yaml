@@ -2,11 +2,10 @@ name: Test schema files
 
 on:
   pull_request:
-    branches: [ 'main', 'develop', 'ci/add-new-github-actions-pipeline' ]
+    branches: ['main', 'develop', 'ci/add-new-github-actions-pipeline']
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -15,11 +14,11 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm test
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm test

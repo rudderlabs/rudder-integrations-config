@@ -26,18 +26,23 @@ async function importJsonFromFile(file: string) {
 }
 
 async function initAjvValidators() {
-  const files = await globPromisified(path.join(__dirname, '../configurations/destinations/*/schema.json'));
+  const files = await globPromisified(
+    path.join(__dirname, '../configurations/destinations/*/schema.json'),
+  );
   const filePromises = files.map(importJsonFromFile);
   const contents = await Promise.all(filePromises);
 
   files.forEach((file, i) => {
     const filename = path.basename(path.dirname(file));
-    validators[filename] = ajv.compile(contents[i]["configSchema"] || {});
+    validators[filename] = ajv.compile(contents[i]['configSchema'] || {});
   });
 }
 
-export function validateConfig(definitionName: string, config: any,
-  throwErrorOnMissingValidations: boolean = false) {
+export function validateConfig(
+  definitionName: string,
+  config: any,
+  throwErrorOnMissingValidations: boolean = false,
+) {
   if (!definitionName) {
     throw new Error('Missing definitionName');
   }
@@ -52,10 +57,10 @@ export function validateConfig(definitionName: string, config: any,
   if (validationMethod && !validationMethod(config)) {
     let errorMessages: string[] = [];
     if (validationMethod.errors?.length) {
-      errorMessages = validationMethod.errors.map(((e) => {
+      errorMessages = validationMethod.errors.map((e) => {
         const propertyName = e.instancePath.slice(1).replace(/\//g, '.');
         return `${propertyName} ${e.message}`;
-      }));
+      });
     }
 
     throw new Error(errorMessages.length ? JSON.stringify(errorMessages) : 'Validation failed');

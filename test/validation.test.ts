@@ -7,9 +7,9 @@ type TestConfigSchema = {
   [key: string]: unknown;
 };
 
-function getDestNames(path:any) {
+function getDestNames(path: any) {
   return fs.readdirSync(path).filter(function (file) {
-    return fs.statSync(path+'/'+file).isDirectory();
+    return fs.statSync(path + '/' + file).isDirectory();
   });
 }
 
@@ -23,13 +23,10 @@ const testData: Array<TestConfigSchema> = [];
 destNameArray.forEach((dest: any) => {
   try {
     testData[dest] = JSON.parse(
-        fs.readFileSync(
-            path.resolve(
-                __dirname,
-                `./validation_test_data/${dest.toLowerCase()}_test.json`,
-            ),
-            'utf-8',
-        ),
+      fs.readFileSync(
+        path.resolve(__dirname, `./validation_test_data/${dest.toLowerCase()}_test.json`),
+        'utf-8',
+      ),
     );
   } catch (e) {}
 });
@@ -53,7 +50,9 @@ describe('Validator Tests', () => {
             expect(validateConfig(dest, td.config, true)).toBeUndefined();
           }
           if (td.result === false) {
-            expect(() => { validateConfig(dest, td.config, true) }).toThrow(JSON.stringify(td.err));
+            expect(() => {
+              validateConfig(dest, td.config, true);
+            }).toThrow(JSON.stringify(td.err));
           }
         });
         payloadCount += 1;
