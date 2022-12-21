@@ -62,7 +62,7 @@ export function validateConfig(definitionName: string, config: any,
   }
 }
 
-export default function init() {
+export function init() {
   validators = {};
   initAjvValidators();
 }

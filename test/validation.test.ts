@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import init, { validateConfig } from '../src/validator';
+import { init, validateConfig } from '../src';
 import fs from 'fs';
 import path from 'path';
 
