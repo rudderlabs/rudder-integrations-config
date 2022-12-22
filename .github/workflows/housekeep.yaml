@@ -1,8 +1,9 @@
-name: Handle stale PRs
+name: Handle Stale Items
 
 on:
   schedule:
-    - cron: '42 1 * * *'
+    # Run everyday at 1 AM
+    - cron: '0 1 * * *'
 
 jobs:
   prs:
@@ -13,27 +14,31 @@ jobs:
       pull-requests: write
 
     steps:
-      - uses: actions/stale@v5
+      - name: Clean up stale PRs
+      - uses: actions/stale@v7
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ github.token }}
           operations-per-run: 200
           stale-pr-message: 'This PR is considered to be stale. It has been open 20 days with no further activity thus it is going to be closed in 7 days. To avoid such a case please consider removing the stale label manually or add a comment to the PR.'
+          close-pr-message: 'This PR is stale. Hence, closing it.'
           days-before-pr-stale: 20
           days-before-pr-close: 7
           stale-pr-label: 'Stale'
 
   branches:
-    name: Cleanup old branches
+    name: Clean up stale branches
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Run delete-old-branches-action
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Delete stale branches
         uses: beatlabs/delete-old-branches-action@v0.0.9
         with:
           repo_token: ${{ github.token }}
           date: '6 months ago'
           dry_run: false
           delete_tags: false
-          extra_protected_branch_regex: ^(main|master|release.*|develop)$
+          extra_protected_branch_regex: ^(develop|main|master|release.*|hotfix/.*|hotfix-release/.*)$
           exclude_open_pr_branches: true

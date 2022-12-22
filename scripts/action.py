@@ -27,6 +27,7 @@ PASSWORD=os.environ['API_PASSWORD'] #sys.argv[3]
 # CONSTANTS
 HEADER = {"Content-Type": "application/json"}
 AUTH = (USERNAME, PASSWORD)
+CONFIG_DIR = 'src/configurations'
 #########################
 
 
@@ -51,7 +52,7 @@ def get_config_definition(base_url, selector, name):
 def get_file_content(name, selector):
     file_selectors = ['db_config.json', 'ui_config.json', 'schema.json']
 
-    directory = f'./data/{selector}s/{name}'
+    directory = f'./${CONFIG_DIR}/{selector}s/{name}'
     available_files = os.listdir(directory)
 
     file_content = {}
@@ -98,7 +99,7 @@ def update_diff_db(selector):
     final_report = []
 
     ## data sets
-    current_items = os.listdir(f'./data/{selector}s')
+    current_items = os.listdir(f'./${CONFIG_DIR}/{selector}s')
 
     for item in current_items:
         updated_data = get_file_content(item, selector)
