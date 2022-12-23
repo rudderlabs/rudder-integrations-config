@@ -1,8 +1,9 @@
+/* eslint-disable no-console */
 /* eslint-disable max-len */
-import { init, validateConfig } from '../src';
 import fs from 'fs';
 import path from 'path';
 import Commander from 'commander';
+import { init, validateConfig } from '../src';
 
 const command = new Commander.Command();
 command
@@ -15,20 +16,20 @@ const cmdOpts = command.opts();
 
 function getIntegrationNames(type) {
   const dirPath = path.resolve(`src/configurations/${type}`);
-  return fs.readdirSync(dirPath).filter(function (file) {
-    return fs.statSync(dirPath + '/' + file).isDirectory();
-  });
+  return fs.readdirSync(dirPath).filter((file) => fs.statSync(`${dirPath}/${file}`).isDirectory());
 }
 
 function getIntegrationData(name, type) {
+  let intgData;
   try {
-    return JSON.parse(
+    intgData = JSON.parse(
       fs.readFileSync(path.resolve(__dirname, `./data/validation/${type}/${name}.json`), 'utf-8'),
     );
   } catch (e) {
     // console.error(e);
     // console.error(`Unable to load test data for: "${name}" (${type})`);
   }
+  return intgData;
 }
 
 let destList: string[] = [];
@@ -36,7 +37,7 @@ if (cmdOpts.destinations !== 'all') {
   destList = cmdOpts.destinations
     .split(',')
     .map((x: string) => x.trim())
-    .filter((x: any) => x);
+    .filter((x: string) => x);
   console.log(`Destinations specified: ${destList}`);
 } else {
   destList = getIntegrationNames('destinations');
@@ -52,7 +53,7 @@ if (cmdOpts.sources !== 'all') {
   srcList = cmdOpts.sources
     .split(',')
     .map((x: string) => x.trim())
-    .filter((x: any) => x);
+    .filter((x: string) => x);
   console.log(`Sources specified: ${srcList}`);
 } else {
   srcList = getIntegrationNames('sources');
@@ -62,10 +63,6 @@ srcList.forEach((s) => {
   const intgData = getIntegrationData(s, 'sources');
   if (intgData) srcTcData[s] = intgData;
 });
-
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 describe('Core Tests', () => {
   it('If invalid integration name is provide, throw error', async () => {
@@ -99,9 +96,9 @@ describe('Validation Tests', () => {
   });
 
   // Destination tests
-  Object.keys(destTcData).forEach((dest: any, destIdx: number) => {
+  Object.keys(destTcData).forEach((dest: string, destIdx: number) => {
     describe(`${destIdx + 1}. Destination - ${dest}`, () => {
-      destTcData[dest].forEach((td: any, tcIdx: number) => {
+      destTcData[dest].forEach((td: Record<string, unknown>, tcIdx: number) => {
         it(`TC ${tcIdx + 1}`, async () => {
           if (td.result === true) {
             expect(validateConfig(dest, td.config, 'destinations', true)).toBeUndefined();
@@ -116,9 +113,9 @@ describe('Validation Tests', () => {
   });
 
   // Source tests
-  Object.keys(srcTcData).forEach((src: any, srcIdx: number) => {
+  Object.keys(srcTcData).forEach((src: string, srcIdx: number) => {
     describe(`${srcIdx + 1}. Source - ${src}`, () => {
-      srcTcData[src].forEach((td: any, tcIdx: number) => {
+      srcTcData[src].forEach((td: Record<string, unknown>, tcIdx: number) => {
         it(`TC ${tcIdx + 1}`, async () => {
           if (td.result === true) {
             expect(validateConfig(src, td.config, 'sources', true)).toBeUndefined();

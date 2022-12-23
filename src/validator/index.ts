@@ -34,15 +34,15 @@ async function initAjvValidators() {
     const intgDir = path.dirname(file);
     const intgName = path.basename(intgDir);
     const intgType = path.basename(path.dirname(intgDir));
-    validators[`${intgType}___${intgName}`] = ajv.compile(contents[i]['configSchema'] || {});
+    validators[`${intgType}___${intgName}`] = ajv.compile(contents[i]?.configSchema || {});
   });
 }
 
 export function validateConfig(
   definitionName: string,
-  config: any,
+  config: Record<string, unknown>,
   intgType: string,
-  throwErrorOnMissingValidations: boolean = false,
+  throwErrorOnMissingValidations = false,
 ) {
   if (!definitionName) {
     throw new Error('Missing definitionName');
