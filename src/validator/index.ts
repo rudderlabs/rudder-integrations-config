@@ -63,7 +63,7 @@ export function validateConfig(
       });
     }
 
-    throw new Error(errorMessages.length ? JSON.stringify(errorMessages) : 'Validation failed');
+    throw new Error(JSON.stringify(errorMessages));
   }
 }
 
