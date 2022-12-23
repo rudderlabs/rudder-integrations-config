@@ -1,4 +1,4 @@
-name: Deploy config to DB
+name: Deploy Configurations To Production DB
 
 on:
   workflow_dispatch:
@@ -50,7 +50,7 @@ jobs:
           pwd
           ls -a
 
-      - name: Display Current Version
+      - name: Display Current Package Version
         run: echo $(jq -r .version package.json)
 
       - name: Deploy To Production DB
@@ -58,4 +58,4 @@ jobs:
           API_USER: ${{secrets.PROD_USERNAME}}
           API_PASSWORD: ${{secrets.PROD_PASSWORD}}
         run: |
-          python scripts/action.py https://api.rudderstack.com
+          python scripts/deployToDB.py https://api.rudderstack.com

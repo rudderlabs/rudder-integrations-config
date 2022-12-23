@@ -1,4 +1,4 @@
-name: Deploy To Development DB
+name: Deploy Configurations To Development DB
 
 on:
   push:
@@ -52,7 +52,7 @@ jobs:
           pwd
           ls -a
 
-      - name: Display Current Version
+      - name: Display Current Package Version
         run: echo $(jq -r .version package.json)
 
       - name: Deploy To Development DB
@@ -60,4 +60,4 @@ jobs:
           API_USER: ${{secrets.DEV_USERNAME}}
           API_PASSWORD: ${{secrets.DEV_PASSWORD}}
         run: |
-          python scripts/action.py https://api.dev.rudderlabs.com
+          python scripts/deployToDB.py https://api.dev.rudderlabs.com

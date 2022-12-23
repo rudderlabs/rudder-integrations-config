@@ -1,4 +1,4 @@
-name: Deploy To Staging DB
+name: Deploy Configurations To Staging DB
 
 on:
   workflow_dispatch:
@@ -50,7 +50,7 @@ jobs:
           pwd
           ls -a
 
-      - name: Display Current Version
+      - name: Display Current Package Version
         run: echo $(jq -r .version package.json)
 
       - name: Deploy To Staging DB
@@ -58,4 +58,4 @@ jobs:
           API_USER: ${{secrets.DEV_USERNAME}}
           API_PASSWORD: ${{secrets.DEV_PASSWORD}}
         run: |
-          python scripts/action.py https://api.staging.rudderlabs.com
+          python scripts/deployToDB.py https://api.staging.rudderlabs.com
