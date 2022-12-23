@@ -21,7 +21,7 @@
     "release": "npx standard-version",
     "check:lint": "eslint \"src/**/*.*\" -f json -o reports/eslint.json || exit 0",
     "format": "prettier . --write",
-    "lint:fix": "eslint . --fix",
+    "lint:fix": "eslint \"src/**/*.*\" --fix",
     "prepare": "husky install",
     "pre-commit": "npm run test && npx lint-staged",
     "commit-msg": "commitlint --edit",
@@ -70,6 +70,7 @@
     "glob": "^8.0.3"
   },
   "lint-staged": {
+    "*.{json,js,ts}": "eslint",
     "*.{json,js,ts,md}": "prettier --write"
   },
   "config": {
