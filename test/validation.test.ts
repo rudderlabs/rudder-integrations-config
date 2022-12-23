@@ -67,6 +67,34 @@ function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+describe('Core Tests', () => {
+  it('If invalid integration name is provide, throw error', async () => {
+    expect(() => {
+      validateConfig('', {}, "destinations", true);
+    }).toThrow('Missing definitionName');
+  });
+
+  it('If unknown integration name is provided, throw error', async () => {
+    init();
+    await delay(1000);
+
+    const invalidIntg = 'INVALID_INTEGRATION_NAME';
+    expect(() => {
+      validateConfig(invalidIntg, {}, "destinations", true);
+    }).toThrow(`No validation method found for definition ${invalidIntg}`);
+  });
+
+  it('If unknown integration name is provided and throw errors flag is disabled, no error should be thrown', async () => {
+    init();
+    await delay(1000);
+
+    const invalidIntg = 'INVALID_INTEGRATION_NAME';
+    expect(() => {
+      validateConfig(invalidIntg, {}, "destinations");
+    }).not.toThrow();
+  });
+});
+
 describe('Validation Tests', () => {
   beforeAll(async () => {
     init();
@@ -79,10 +107,10 @@ describe('Validation Tests', () => {
       destTcData[dest].forEach((td: any, tcIdx: number) => {
         it(`TC ${tcIdx + 1}`, async () => {
           if (td.result === true) {
-            expect(validateConfig(dest, td.config, true)).toBeUndefined();
+            expect(validateConfig(dest, td.config, "destinations", true)).toBeUndefined();
           } else {
             expect(() => {
-              validateConfig(dest, td.config, true);
+              validateConfig(dest, td.config, "destinations", true);
             }).toThrow(JSON.stringify(td.err));
           }
         });
@@ -96,10 +124,10 @@ describe('Validation Tests', () => {
       srcTcData[src].forEach((td: any, tcIdx: number) => {
         it(`TC ${tcIdx + 1}`, async () => {
           if (td.result === true) {
-            expect(validateConfig(src, td.config, true)).toBeUndefined();
+            expect(validateConfig(src, td.config, "sources", true)).toBeUndefined();
           } else {
             expect(() => {
-              validateConfig(src, td.config, true);
+              validateConfig(src, td.config, "sources", true);
             }).toThrow(JSON.stringify(td.err));
           }
         });

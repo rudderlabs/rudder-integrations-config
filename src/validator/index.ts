@@ -27,32 +27,33 @@ async function importJsonFromFile(file: string) {
 
 async function initAjvValidators() {
   const files = await globPromisified(
-    path.join(__dirname, '../configurations/destinations/*/schema.json'),
+    path.join(__dirname, '../configurations/**/schema.json'),
   );
   const filePromises = files.map(importJsonFromFile);
   const contents = await Promise.all(filePromises);
 
   files.forEach((file, i) => {
-    const filename = path.basename(path.dirname(file));
-    validators[filename] = ajv.compile(contents[i]['configSchema'] || {});
+    const intgDir = path.dirname(file);
+    const intgName = path.basename(intgDir);
+    const intgType = path.basename(path.dirname(intgDir));
+    validators[`${intgType}___${intgName}`] = ajv.compile(contents[i]['configSchema'] || {});
   });
 }
 
 export function validateConfig(
   definitionName: string,
   config: any,
+  intgType: string,
   throwErrorOnMissingValidations: boolean = false,
 ) {
   if (!definitionName) {
     throw new Error('Missing definitionName');
   }
 
-  const validationMethod = validators[definitionName];
+  const validationMethod = validators[`${intgType}___${definitionName}`];
   if (!validationMethod && throwErrorOnMissingValidations) {
     throw new Error(`No validation method found for definition ${definitionName}`);
   }
-
-  // console.log(definitionName, validationMethod, !validationMethod(config), " -- ", (validationMethod && !validationMethod(config)));
 
   if (validationMethod && !validationMethod(config)) {
     let errorMessages: string[] = [];
