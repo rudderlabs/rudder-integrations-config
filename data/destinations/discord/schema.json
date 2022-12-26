@@ -1,0 +1,47 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "webhookUrl": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})"
+      },
+      "identifyTemplate": {
+        "type": "string",
+        "pattern": "^(.{0,1000})$"
+      },
+      "eventTemplateSettings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "eventTemplate": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,1000})$"
+            },
+            "eventRegex": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      "whitelistedTraitsSettings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "trait": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})"
+            }
+          }
+        }
+      }
+    }
+  }
+}
