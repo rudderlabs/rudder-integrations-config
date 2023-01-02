@@ -20,6 +20,12 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'npm'
 
+      - name: Install Dependencies
+        env:
+          HUSKY: 0
+        run: |
+          npm ci
+
       # In order to make a commit, we need to initialize a user.
       # You may choose to write something less generic here if you want, it doesn't matter functionality wise.
       - name: Initialize Mandatory Git Config
@@ -54,9 +60,9 @@ jobs:
           git checkout -b "$branch_name"
           git push --set-upstream origin "$branch_name"
 
-          echo "::set-output name=source_branch_name::$source_branch_name"
-          echo "::set-output name=branch_name::$branch_name"
-          echo "::set-output name=new_version::$new_version"
+          echo "source_branch_name=$source_branch_name" >> $GITHUB_OUTPUT
+          echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
+          echo "new_version=$new_version" >> $GITHUB_OUTPUT
           echo "CURRENT_VERSION_VALUE=$current_version" >> $GITHUB_ENV
           echo "NEW_VERSION_VALUE=$new_version" >> $GITHUB_ENV
 
@@ -67,10 +73,6 @@ jobs:
         run: |
           echo "Current version: $CURRENT_VERSION_VALUE"
           echo "New version: $NEW_VERSION_VALUE"
-          npm i -g conventional-changelog-cli
-          SUMMARY=$(((npx conventional-changelog -u) 2>&1) | sed "s/*/<br> */g" | sed "s/#/ /g" | tr -d '\n' || true)
-          echo $SUMMARY
-          echo "::set-output name=commit_summary::$SUMMARY"
           npm run release -- -a --skip.tag
           git push
 
@@ -79,6 +81,6 @@ jobs:
         with:
           source_branch: ${{ steps.create-release.outputs.branch_name }}
           destination_branch: 'main'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.PAT }}
           pr_title: 'chore(release): pull ${{ steps.create-release.outputs.branch_name }} into main'
-          pr_body: ":crown: *An automated PR*\n\n${{ steps.finish-release.outputs.commit_summary }}"
+          pr_body: ":crown: *An automated PR*"

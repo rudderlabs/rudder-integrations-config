@@ -2,10 +2,10 @@ name: Publish New Release
 
 on:
   pull_request:
-    branches:
-      - main
     types:
       - closed
+    branches:
+      - main
 
 jobs:
   release:
@@ -35,6 +35,12 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'npm'
 
+      - name: Install Dependencies
+        env:
+          HUSKY: 0
+        run: |
+          npm ci
+
       # In order to make a commit, we need to initialize a user.
       # You may choose to write something less generic here if you want, it doesn't matter functionality wise.
       - name: Initialize Mandatory Git Config
@@ -46,11 +52,11 @@ jobs:
         id: create_release
         env:
           HUSKY: 0
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CONVENTIONAL_GITHUB_RELEASER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+          CONVENTIONAL_GITHUB_RELEASER_TOKEN: ${{ secrets.PAT }}
         run: |
-          git tag -a v${{ steps.extract-version.outputs.release_version }} -m "chore: release v${{ steps.extract-version.outputs.release_version }}"
-          git push origin refs/tags/v${{ steps.extract-version.outputs.release_version }}
+          git tag -a ${{ steps.extract-version.outputs.release_version }} -m "chore: release v${{ steps.extract-version.outputs.release_version }}"
+          git push origin refs/tags/${{ steps.extract-version.outputs.release_version }}
           npm run release:github
           echo "DATE=$(date)" >> $GITHUB_ENV
 
@@ -59,7 +65,7 @@ jobs:
         with:
           source_branch: 'main'
           destination_branch: 'develop'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.PAT }}
           pr_title: 'chore(release): pull main into develop post release v${{ steps.extract-version.outputs.release_version }}'
           pr_body: ':crown: *An automated PR*'
 
