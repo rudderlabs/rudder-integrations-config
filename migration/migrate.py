@@ -53,7 +53,7 @@ def update_destination():
             os.system(f'mkdir ${DEST_CONFIG_PATH}/{dest}')
             print (f'created directory for {dest}')
 
-        file_names = ['db_config', 'ui_config', 'schema', 'metadata']
+        file_names = ['db-config', 'ui-config', 'schema', 'metadata']
         for index, f_name in enumerate(file_names):
             print (f'writing {f_name} for {dest}...')
             with open(f'${DEST_CONFIG_PATH}/{dest}/{f_name}.json', 'w') as f:

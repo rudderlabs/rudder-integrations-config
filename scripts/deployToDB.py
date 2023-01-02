@@ -50,7 +50,7 @@ def get_config_definition(base_url, selector, name):
     return response
 
 def get_file_content(name, selector):
-    file_selectors = ['db_config.json', 'ui_config.json', 'schema.json']
+    file_selectors = ['db-config.json', 'ui-config.json', 'schema.json']
 
     directory = f'./${CONFIG_DIR}/{selector}s/{name}'
     available_files = os.listdir(directory)
