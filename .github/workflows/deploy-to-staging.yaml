@@ -2,11 +2,18 @@ name: Deploy Configurations To Staging DB
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - 'main'
+    types:
+      - 'opened'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    # Either from release candidate branches or pull requests must trigger
+    if: (startsWith(github.ref, 'refs/heads/hotfix-release/') || startsWith(github.ref, 'refs/heads/release/')) || (startsWith(github.event.pull_request.head.ref, 'release/') || startsWith(github.event.pull_request.head.ref, 'hotfix-release/'))
     steps:
       - name: Checkout
         uses: actions/checkout@v3
