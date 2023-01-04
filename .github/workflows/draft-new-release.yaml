@@ -84,3 +84,12 @@ jobs:
           github_token: ${{ secrets.PAT }}
           pr_title: 'chore(release): pull ${{ steps.create-release.outputs.branch_name }} into main'
           pr_body: ":crown: *An automated PR*"
+
+      - name: Delete Hotfix Base Branch
+        uses: dawidd6/action-delete-branch@v3
+        if: startsWith(github.ref, 'refs/heads/hotfix/')
+        with:
+          branches: '${{ steps.create-release.outputs.new_version }}'
+          prefix: 'hotfix/'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
