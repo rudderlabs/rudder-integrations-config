@@ -52,7 +52,7 @@ def get_config_definition(base_url, selector, name):
 def get_file_content(name, selector):
     file_selectors = ['db-config.json', 'ui-config.json', 'schema.json']
 
-    directory = f'./${CONFIG_DIR}/{selector}s/{name}'
+    directory = f'./{CONFIG_DIR}/{selector}s/{name}'
     available_files = os.listdir(directory)
 
     file_content = {}
@@ -99,7 +99,7 @@ def update_diff_db(selector):
     final_report = []
 
     ## data sets
-    current_items = os.listdir(f'./${CONFIG_DIR}/{selector}s')
+    current_items = os.listdir(f'./{CONFIG_DIR}/{selector}s')
 
     for item in current_items:
         updated_data = get_file_content(item, selector)

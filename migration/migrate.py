@@ -11,8 +11,8 @@ SOURCE_CONFIG_BE_FILE_PATH = 'rudder-config-backend/src/scripts/sourceConfigs/'
 # SOURCE_SCHEMA_FILE_PATH = 'rudder-config-backend/src/scripts/schemaList/destinations/'
 
 CONFIGURATIONS_DIR_PATH = '../src/configurations'
-DEST_CONFIG_PATH = f'${CONFIGURATIONS_DIR_PATH}/destinations'
-SRC_CONFIG_PATH = f'${CONFIGURATIONS_DIR_PATH}/sources'
+DEST_CONFIG_PATH = f'{CONFIGURATIONS_DIR_PATH}/destinations'
+SRC_CONFIG_PATH = f'{CONFIGURATIONS_DIR_PATH}/sources'
 
 def update_destination():
     dest_list = [d[:-5].lower() for d in os.listdir(f'../../{DEST_CONFIG_BE_FILE_PATH}')]
@@ -50,13 +50,13 @@ def update_destination():
         ## write new files
         ########################
         if dest not in os.listdir(DEST_CONFIG_PATH):
-            os.system(f'mkdir ${DEST_CONFIG_PATH}/{dest}')
+            os.system(f'mkdir {DEST_CONFIG_PATH}/{dest}')
             print (f'created directory for {dest}')
 
         file_names = ['db-config', 'ui-config', 'schema', 'metadata']
         for index, f_name in enumerate(file_names):
             print (f'writing {f_name} for {dest}...')
-            with open(f'${DEST_CONFIG_PATH}/{dest}/{f_name}.json', 'w') as f:
+            with open(f'{DEST_CONFIG_PATH}/{dest}/{f_name}.json', 'w') as f:
                 f.write(json.dumps(final_data[index], indent=2))
 
         print (f'complete for {dest}...')
@@ -101,13 +101,13 @@ def update_source():
         ## write new files
         ########################
         if source not in os.listdir(SRC_CONFIG_PATH):
-            os.system(f'mkdir ${SRC_CONFIG_PATH}/{source}')
+            os.system(f'mkdir {SRC_CONFIG_PATH}/{source}')
             print (f'created directory for {source}')
 
         file_names = ['db_config', 'ui_config', 'schema', 'metadata']
         for index, f_name in enumerate(file_names):
             print (f'writing {f_name} for {source}...')
-            with open(f'${SRC_CONFIG_PATH}/{source}/{f_name}.json', 'w') as f:
+            with open(f'{SRC_CONFIG_PATH}/{source}/{f_name}.json', 'w') as f:
                 f.write(json.dumps(final_data[index], indent=2))
 
         print (f'complete for {source}...')
