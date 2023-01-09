@@ -1,0 +1,128 @@
+{
+  "uiConfig": [
+    {
+      "title": "1. Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Site ID",
+          "value": "siteID",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Site ID",
+          "required": true,
+          "placeholder": "e.g: ABCDEFG"
+        },
+        {
+          "type": "textInput",
+          "label": "API Key",
+          "value": "apiKey",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid API Key",
+          "required": true,
+          "placeholder": "e.g: ABCDEFG"
+        },
+        {
+          "type": "textInput",
+          "label": "Event Sent After Setting Device Token",
+          "value": "deviceTokenEventName",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Event Name",
+          "placeholder": "e.g: device_token_registered",
+          "footerNote": "This event should be fired just after setting device token to enable sending device tokens to CustomerIO immediately."
+        },
+        {
+          "type": "checkbox",
+          "label": "Account based in the EU data center?",
+          "value": "datacenterEU",
+          "default": false,
+          "footerNote": "Turn it ON if you want to send data to EU servers"
+        }
+      ]
+    },
+    {
+      "title": "2. Native SDK",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": false
+        }
+      ]
+    },
+    {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+      "fields": [
+        {
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
+          "options": [
+            {
+              "name": "Disable",
+              "value": "disable"
+            },
+            {
+              "name": "Allowlist",
+              "value": "whitelistedEvents"
+            },
+            {
+              "name": "Denylist",
+              "value": "blacklistedEvents"
+            }
+          ],
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
+          "label": "Allowlist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
+            }
+          ]
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name/ID",
+              "required": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
