@@ -1,0 +1,111 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["siteId", "serverUrl"],
+    "type": "object",
+    "properties": {
+      "serverUrl": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$"
+      },
+      "siteId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,10})$"
+      },
+      "eventsMapToGoalId": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "to": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "eventsToStandard": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "to": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "trackAllContentImpressions": {
+        "type": "boolean"
+      },
+      "trackVisibleContentImpressions": {
+        "type": "boolean"
+      },
+      "checkOnScroll": {
+        "type": "boolean"
+      },
+      "timeIntervalInMs": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+      },
+      "logAllContentBlocksOnPage": {
+        "type": "boolean"
+      },
+      "enableHeartBeatTimer": {
+        "type": "boolean"
+      },
+      "activeTimeInseconds": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+      },
+      "enableLinkTracking": {
+        "type": "boolean"
+      },
+      "disablePerformanceTracking": {
+        "type": "boolean"
+      },
+      "enableCrossDomainLinking": {
+        "type": "boolean"
+      },
+      "setCrossDomainLinkingTimeout": {
+        "type": "boolean"
+      },
+      "timeout": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+      },
+      "getCrossDomainLinkingUrlParameter": {
+        "type": "boolean"
+      },
+      "disableBrowserFeatureDetection": {
+        "type": "boolean"
+      },
+      "oneTrustCookieCategories": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

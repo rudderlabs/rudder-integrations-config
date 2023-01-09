@@ -1,0 +1,300 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "required": [
+      "host",
+      "database",
+      "user",
+      "password",
+      "port",
+      "sslMode",
+      "syncFrequency",
+      "useRudderStorage"
+    ],
+    "properties": {
+      "host": {
+        "type": "string",
+        "pattern": "(^env[.].+)|(?!.*.ngrok.io)^(.{1,100})$"
+      },
+      "database": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "user": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "password": {
+        "type": "string",
+        "pattern": "(^env[.].+)|.+"
+      },
+      "port": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
+      },
+      "sslMode": {
+        "type": "string",
+        "pattern": "^(disable|require|verify-ca)$"
+      },
+      "syncFrequency": {
+        "type": "string",
+        "pattern": "^(30|60|180|360|720|1440)$",
+        "default": "30"
+      },
+      "syncStartAt": {
+        "type": "string"
+      },
+      "excludeWindow": {
+        "type": "object",
+        "required": ["excludeWindowStartTime", "excludeWindowEndTime"],
+        "properties": {
+          "excludeWindowStartTime": {
+            "type": "string"
+          },
+          "excludeWindowEndTime": {
+            "type": "string"
+          }
+        }
+      },
+      "jsonPaths": {
+        "type": "string",
+        "pattern": "(^env[.].*)|.*"
+      },
+      "useRudderStorage": {
+        "type": "boolean",
+        "default": false
+      },
+      "bucketProvider": {
+        "type": "string",
+        "pattern": "^(S3|GCS|AZURE_BLOB|MINIO)$"
+      }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "useSSH": {
+              "const": true
+            }
+          },
+          "required": ["useSSH"]
+        },
+        "then": {
+          "properties": {
+            "sshHost": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,255})$"
+            },
+            "sshPort": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,255})$"
+            },
+            "sshUser": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,255})$"
+            },
+            "sshPublicKey": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,10000})$"
+            }
+          },
+          "required": ["sshHost", "sshPort", "sshUser", "sshPublicKey"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "useRudderStorage": {
+              "const": false
+            }
+          },
+          "required": ["useRudderStorage"]
+        },
+        "then": {
+          "required": ["bucketProvider"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "bucketProvider": {
+              "const": "S3"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
+          },
+          "required": ["bucketProvider", "useRudderStorage"]
+        },
+        "then": {
+          "properties": {
+            "iamRoleARN": {
+              "type": "string"
+            },
+            "roleBasedAuth": {
+              "type": "boolean"
+            },
+            "bucketName": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
+            },
+            "accessKeyID": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{0,100})$"
+            },
+            "accessKey": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{0,100})$"
+            }
+          },
+          "required": ["bucketName", "accessKeyID", "accessKey"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "bucketProvider": {
+              "const": "GCS"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
+          },
+          "required": ["bucketProvider", "useRudderStorage"]
+        },
+        "then": {
+          "properties": {
+            "bucketName": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$"
+            },
+            "credentials": {
+              "type": "string",
+              "pattern": "(^env[.].+)|.+"
+            }
+          },
+          "required": ["bucketName", "credentials"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "bucketProvider": {
+              "const": "AZURE_BLOB"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
+          },
+          "required": ["bucketProvider", "useRudderStorage"]
+        },
+        "then": {
+          "properties": {
+            "containerName": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$"
+            },
+            "accountName": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["containerName", "accountName"],
+          "anyOf": [
+            {
+              "properties": {
+                "accountKey": {
+                  "type": "string",
+                  "pattern": "(^env[.].+)|^(.{1,100})$"
+                }
+              },
+              "required": ["accountKey"]
+            },
+            {
+              "properties": {
+                "sasToken": {
+                  "type": "string",
+                  "pattern": "(^env[.].+)|^(.+)$"
+                },
+                "useSASTokens": {
+                  "const": true
+                }
+              },
+              "required": ["useSASTokens", "sasToken"]
+            }
+          ]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "bucketProvider": {
+              "const": "MINIO"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
+          },
+          "required": ["bucketProvider", "useRudderStorage"]
+        },
+        "then": {
+          "properties": {
+            "bucketName": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^((?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
+            },
+            "accessKeyID": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
+            },
+            "endPoint": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(?!.*\\.ngrok\\.io)(.{1,100})$"
+            },
+            "secretAccessKey": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
+            },
+            "useSSL": {
+              "type": "boolean"
+            }
+          },
+          "required": ["bucketName", "endPoint", "accessKeyID", "secretAccessKey", "useSSL"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "sslMode": {
+              "const": "verify-ca"
+            }
+          },
+          "required": ["sslMode"]
+        },
+        "then": {
+          "properties": {
+            "clientKey": {
+              "type": "string",
+              "pattern": "-----BEGIN RSA PRIVATE KEY-----.*-----END RSA PRIVATE KEY-----"
+            },
+            "clientCert": {
+              "type": "string",
+              "pattern": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----"
+            },
+            "serverCA": {
+              "type": "string",
+              "pattern": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----"
+            }
+          },
+          "required": ["clientKey", "clientCert", "serverCA"]
+        }
+      }
+    ],
+    "additionalProperties": true
+  }
+}

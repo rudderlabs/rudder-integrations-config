@@ -1,0 +1,92 @@
+{
+  "uiConfig": [
+    {
+      "title": "Connection Credentials",
+      "secretFields": ["password"],
+      "docLinks": {
+        "jsonMapperUseInstructions": "https://docs.rudderstack.com/reverse-etl/clickhouse/#specifying-the-data-to-import",
+        "setupInstructions": "https://docs.rudderstack.com/reverse-etl/clickhouse"
+      },
+      "nameField": "user",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Host",
+          "value": "host",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "required": true,
+          "addInAccountSummary": true,
+          "trim": true
+        },
+        {
+          "type": "textInput",
+          "label": "Port",
+          "inputFieldType": "number",
+          "value": "port",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "required": true
+        },
+        {
+          "type": "textInput",
+          "label": "Database",
+          "value": "dbname",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "required": true,
+          "addInAccountSummary": true,
+          "trim": true
+        },
+        {
+          "type": "textInput",
+          "label": "User",
+          "value": "user",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "required": true,
+          "trim": true
+        },
+        {
+          "type": "textInput",
+          "label": "Password",
+          "value": "password",
+          "inputFieldType": "password",
+          "regex": ".*",
+          "required": false,
+          "secret": true
+        },
+        {
+          "type": "checkbox",
+          "label": "Secure",
+          "value": "secure",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "preRequisiteField": {
+            "name": "secure",
+            "selectedValue": true
+          },
+          "label": "Skip verify",
+          "value": "skipVerify",
+          "default": false,
+          "footerNote": "If you are using self signed certificates set this field to true"
+        },
+        {
+          "type": "textareaInput",
+          "preRequisiteField": {
+            "name": "secure",
+            "selectedValue": true
+          },
+          "label": "CA certificate",
+          "value": "caCertificate",
+          "regex": ".*",
+          "required": false,
+          "placeholder": "CA Certificate",
+          "trim": true
+        }
+      ]
+    }
+  ]
+}
