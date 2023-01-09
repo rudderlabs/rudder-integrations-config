@@ -1,0 +1,49 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["apiToken", "boardId"],
+    "properties": {
+      "apiToken": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,300})$"
+      },
+      "boardId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "groupTitle": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "columnToPropertyMapping": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "to": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      }
+    }
+  }
+}
