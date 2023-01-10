@@ -1,0 +1,80 @@
+[
+  {
+    "config": {
+      "identifyTemplate": "",
+      "webhookUrl": "https://api.discord.com/1234/5678/1457",
+      "embedTitleTemplate": "",
+      "embedDescriptionTemplate": "",
+      "embedFlag": true,
+      "eventTemplateSettings": [
+        {
+          "eventName": "",
+          "eventTemplate": "",
+          "eventRegex": false
+        }
+      ],
+      "whitelistedTraitsSettings": [
+        {
+          "trait": ""
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "identifyTemplate": "",
+      "webhookUrl": "https://api.discord.com/1234/5678/1457",
+      "embedFlag": false,
+      "eventTemplateSettings": [
+        {
+          "eventName": "abc",
+          "eventTemplate": "a: {{properties.a}} {{properties.newLine}} b: {{properties.b}}",
+          "eventRegex": false
+        }
+      ],
+      "whitelistedTraitsSettings": [
+        {
+          "trait": ""
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "identifyTemplate": "",
+      "embedTitleTemplate": "Rudderstack Message",
+      "embedDescriptionTemplate": " {{name}}",
+      "embedFlag": true,
+      "webhookUrl": ""
+    },
+    "result": false,
+    "err": [
+      "webhookUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(https?|ftp)://[^\\s/$.?#].[^\\s]*$\""
+    ]
+  },
+  {
+    "config": {
+      "identifyTemplate": "",
+      "webhookUrl": "https://api.discord.com/1234/5678/1457",
+      "eventTemplateSettings": [
+        {
+          "eventName": 1234,
+          "eventTemplate": "a: {{properties.a}} {{properties.newLine}} b: {{properties.b}}",
+          "eventRegex": "false"
+        }
+      ],
+      "whitelistedTraitsSettings": [
+        {
+          "trait": ""
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventTemplateSettings.0.eventName must be string",
+      "eventTemplateSettings.0.eventRegex must be boolean"
+    ]
+  }
+]

@@ -1,0 +1,288 @@
+{
+  "uiConfig": [
+    {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "API Secret",
+          "value": "apiSecret",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+          "regexErrorMessage": "Invalid API Secret",
+          "required": false,
+          "placeholder": "e.g: QuIUHRj7QhG2L7eZDZiPQU",
+          "footerNote": "Your API Secret",
+          "secret": true
+        },
+        {
+          "type": "singleSelect",
+          "label": "Client Type",
+          "value": "typesOfClient",
+          "mode": "single",
+          "options": [
+            {
+              "name": "gtag.js",
+              "value": "gtag"
+            },
+            {
+              "name": "Firebase",
+              "value": "firebase"
+            }
+          ],
+          "defaultOption": {
+            "value": "gtag"
+          }
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": [
+            {
+              "name": "typesOfClient",
+              "selectedValue": "gtag"
+            }
+          ],
+          "label": "Measurement Id",
+          "value": "measurementId",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(G-.{1,100})$|^$",
+          "regexErrorMessage": "Invalid Measurement Id",
+          "required": true,
+          "placeholder": "e.g: G-AB1CD2E34F",
+          "footerNote": "The identifier for a Data Stream.",
+          "secret": false
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": [
+            {
+              "name": "typesOfClient",
+              "selectedValue": "firebase"
+            }
+          ],
+          "label": "Firebase App Id",
+          "value": "firebaseAppId",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+          "regexErrorMessage": "Invalid Firebase App Id",
+          "required": true,
+          "placeholder": "e.g: 2:637908496727:web:a4284b4c99e329d5",
+          "footerNote": "Firebase App ID. The identifier for a Firebase app",
+          "secret": false
+        },
+        {
+          "type": "textInput",
+          "label": "GA4 client_id Field Identifier",
+          "value": "clientIdFieldIdentifier",
+          "required": false,
+          "footerNote": "RudderStack looks up this identifier in the payload and maps its value to the GA4 client_id",
+          "placeholder": "e.g: ga4ClientId"
+        },
+        {
+          "type": "checkbox",
+          "label": "Enable debug mode",
+          "value": "debugMode",
+          "default": false,
+          "footerNote": "Enable this option to monitor events in DebugView"
+        }
+      ]
+    },
+    {
+      "title": "Identify",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Enable Server Side Identify",
+          "value": "enableServerSideIdentify",
+          "default": false
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": {
+            "name": "enableServerSideIdentify",
+            "selectedValue": true
+          },
+          "label": "Trait to differentiate between new or existing user",
+          "value": "newOrExistingUserTrait",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+          "required": true,
+          "placeholder": "e.g: firstLogin",
+          "footerNote": "Sending 'true' to this field in traits will convert the identify to Signup. Otherwise, it'll be a Login event"
+        },
+        {
+          "type": "checkbox",
+          "preRequisiteField": {
+            "name": "enableServerSideIdentify",
+            "selectedValue": true
+          },
+          "label": "Convert identify event to Login or Signup event",
+          "value": "sendLoginSignup",
+          "default": false
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": {
+            "name": "enableServerSideIdentify",
+            "selectedValue": true
+          },
+          "label": "Trait key for the 'method' parameter in Login or Signup event",
+          "value": "loginSignupMethod",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+          "required": false,
+          "placeholder": "e.g: method",
+          "footerNote": "The key that will be retrieved from traits to determine the 'method' used for Login/Signup"
+        },
+        {
+          "type": "checkbox",
+          "preRequisiteField": {
+            "name": "enableServerSideIdentify",
+            "selectedValue": true
+          },
+          "label": "Send 'generate_lead' event for 'identify' event",
+          "value": "generateLead",
+          "default": false
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": {
+            "name": "enableServerSideIdentify",
+            "selectedValue": true
+          },
+          "label": "Value - traits for lead generation",
+          "value": "generateLeadValueTrait",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+          "regexErrorMessage": "Invalid value trait for lead generation",
+          "required": false,
+          "placeholder": "e.g: Value LTV",
+          "footerNote": "The key that will be retrieved from traits to determine 'value' for Lead Generation"
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": {
+            "name": "enableServerSideIdentify",
+            "selectedValue": true
+          },
+          "label": "Currency - traits for lead generation",
+          "value": "generateLeadCurrencyTrait",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+          "regexErrorMessage": "Invalid currency trait for lead generation",
+          "required": false,
+          "placeholder": "e.g: Currency LTV",
+          "footerNote": "The key that will be retrieved from traits to determine 'currency' for Lead Generation"
+        }
+      ]
+    },
+    {
+      "title": "Native SDK",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Send only attribution or sessionization events through device mode",
+          "value": "useNativeSDK",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "label": "Block a Page View Event",
+          "value": "blockPageViewEvent",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "Extend Page View Property",
+          "value": "extendPageViewParams",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "Send userId to GA",
+          "value": "sendUserId",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "Send all other events through device mode",
+          "value": "useNativeSDKToSend",
+          "default": false,
+          "preRequisiteField": [
+            {
+              "name": "web-useNativeSDK",
+              "selectedValue": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+      "fields": [
+        {
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
+          "options": [
+            {
+              "name": "Disable",
+              "value": "disable"
+            },
+            {
+              "name": "Allowlist",
+              "value": "whitelistedEvents"
+            },
+            {
+              "name": "Denylist",
+              "value": "blacklistedEvents"
+            }
+          ],
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
+          "label": "Allowlist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
+            }
+          ]
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name/ID",
+              "required": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
