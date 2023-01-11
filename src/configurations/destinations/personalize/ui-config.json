@@ -1,0 +1,142 @@
+{
+  "uiConfig": [
+    {
+      "title": "1. Connection Credentials",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Role Based Authentication",
+          "value": "roleBasedAuth",
+          "default": false
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": {
+            "name": "roleBasedAuth",
+            "selectedValue": true
+          },
+          "label": "IAM Role ARN",
+          "value": "iamRoleARN",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Role ARN",
+          "required": true,
+          "placeholder": "e.g: arn:aws:iam::123456789012:role/S3Access",
+          "footerURL": {
+            "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/",
+            "text": "Instructions for creating IAM Role"
+          }
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": {
+            "name": "roleBasedAuth",
+            "selectedValue": false
+          },
+          "label": "Access Key Id",
+          "value": "accessKeyId",
+          "regex": "^(.{0,100})$",
+          "required": false,
+          "placeholder": "e.g: bSjsdGYsOo9sjw23Shj",
+          "secret": true
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": {
+            "name": "roleBasedAuth",
+            "selectedValue": false
+          },
+          "label": "Secret Access Key",
+          "value": "secretAccessKey",
+          "regex": "^(.{0,100})$",
+          "required": false,
+          "placeholder": "e.g: 1d6583b196d34de28a3g19ahadde4b0z",
+          "secret": true
+        },
+        {
+          "type": "textInput",
+          "label": "Region",
+          "value": "region",
+          "required": true,
+          "placeholder": "e.g: us-east-1",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Region"
+        }
+      ]
+    },
+    {
+      "title": "2. Information on Dataset Group",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "TrackingId",
+          "value": "trackingId",
+          "placeholder": "e.g: f9e6789b-5211-490a-823c-668d204561f7",
+          "required": false,
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid TrackingId"
+        },
+        {
+          "type": "textInput",
+          "label": "Dataset ARN",
+          "value": "datasetARN",
+          "placeholder": "e.g: arn:aws:personalize:us-east-1:454533227350:dataset/putTest_DataSetGroup/ITEMS",
+          "required": false,
+          "regex": "arn:([a-z/d-]+):personalize:.*:.*:.+",
+          "regexErrorMessage": "Invalid Dataset ARN"
+        }
+      ]
+    },
+    {
+      "title": "3. Operational Choice",
+      "fields": [
+        {
+          "type": "singleSelect",
+          "label": "Personalize Events",
+          "value": "eventChoice",
+          "placeholder": "PutEvents",
+          "mode": "single",
+          "options": [
+            {
+              "name": "PutEvents",
+              "value": "PutEvents"
+            },
+            {
+              "name": "PutUsers",
+              "value": "PutUsers"
+            },
+            {
+              "name": "PutItems",
+              "value": "PutItems"
+            }
+          ],
+          "defaultOption": {
+            "name": "PutEvents",
+            "value": "PutEvents"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Map all the fields: ",
+      "fields": [
+        {
+          "type": "dynamicForm",
+          "labelLeft": "Schema Field",
+          "labelRight": "Mapped Field",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "placeholderLeft": "e.g: ITEM_ID",
+          "placeholderRight": "e.g: anonymous_id",
+          "value": "customMappings"
+        },
+        {
+          "type": "checkbox",
+          "label": "Disable Stringifying Additional Properties",
+          "value": "disableStringify",
+          "required": false,
+          "default": false
+        }
+      ]
+    }
+  ]
+}

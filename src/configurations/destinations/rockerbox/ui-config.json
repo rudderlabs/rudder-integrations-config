@@ -1,0 +1,147 @@
+{
+  "uiConfig": [
+    {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Advertiser Id",
+          "value": "advertiserId",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Length of Advertiser Id must be below 150 characters.",
+          "required": true,
+          "secret": false,
+          "placeholder": "e.g: MOx2ZmMwLNE2A2IdNKL0N2VhN2I3ZGY1MTVmMzA1ODk0YmIkN"
+        },
+        {
+          "type": "textInput",
+          "label": "Client Auth ID",
+          "value": "clientAuthId",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Length of API Key must be below 50 characters.",
+          "required": false,
+          "secret": true,
+          "placeholder": "e.g: 755fc11162r14c41ar7e7df232f305984bb021a1"
+        },
+        {
+          "type": "dynamicForm",
+          "label": "Map your Rockerbox events to RudderStack Events",
+          "labelRight": "Rockerbox Event",
+          "labelLeft": "RudderStack Event",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "placeholderRight": "e.g: conv.add_to_cart",
+          "placeholderLeft": "e.g: Product Added",
+          "value": "eventsMap"
+        },
+        {
+          "type": "textInput",
+          "label": "Custom Domain",
+          "value": "customDomain",
+          "required": false,
+          "regex": "^(?!.*\\.ngrok\\.io).*$",
+          "placeholder": "customdomain.com",
+          "footerNote": "Load pixel from a custom specific domain"
+        },
+        {
+          "type": "checkbox",
+          "label": "Enable Cookie Sync",
+          "value": "enableCookieSync",
+          "default": false,
+          "footerNote": "Toggle cookie sync between the domain and Rockerbox"
+        }
+      ]
+    },
+    {
+      "title": "Native SDK",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "Use device-mode to send track events",
+          "value": "useNativeSDKToSend",
+          "default": false
+        }
+      ]
+    },
+    {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+      "fields": [
+        {
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
+          "options": [
+            {
+              "name": "Disable",
+              "value": "disable"
+            },
+            {
+              "name": "Allowlist",
+              "value": "whitelistedEvents"
+            },
+            {
+              "name": "Denylist",
+              "value": "blacklistedEvents"
+            }
+          ],
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
+          "label": "Allowlist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
+            }
+          ]
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name/ID",
+              "required": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

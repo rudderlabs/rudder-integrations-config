@@ -1,0 +1,47 @@
+[
+  {
+    "config": {
+      "apiKey": "abcd123",
+      "eventsToEvents": [
+        {
+          "from": "First",
+          "to": "createVote"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "apiKey": "",
+      "eventsToEvents": [
+        {
+          "from": "First",
+          "to": "createPost"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["apiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""]
+  },
+  {
+    "config": {
+      "apiKey": "abcd",
+      "eventsToEvents": [
+        {
+          "from": "First",
+          "to": "createPost"
+        },
+        {
+          "from": "Second",
+          "to": "createPost"
+        },
+        {
+          "from": "First",
+          "to": "createVote"
+        }
+      ]
+    },
+    "result": true
+  }
+]
