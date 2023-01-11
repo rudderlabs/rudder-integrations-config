@@ -2,26 +2,32 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "required": ["apiKey", "clientKey"],
+    "required": ["apiKey"],
     "properties": {
+      "accountSID": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
       "apiKey": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "clientKey": {
+      "campaignId": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
       },
-      "doi": { "type": "boolean" },
-      "templateId": {
+      "impactAppId": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$|^$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*?)\\}\\}$)|(^env[.].+)|^[0-9]+$|^$"
       },
-      "redirectionUrl": {
+      "eventTypeId": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*?)\\}\\}$)|(^env[.].+)|^[0-9]+$|^$"
       },
-      "keyToContactAttributeMapping": {
+      "enableEmailHashing": {
+        "type": "boolean"
+      },
+      "rudderToImpactProperty": {
         "type": "array",
         "items": {
           "type": "object",
@@ -37,12 +43,32 @@
           }
         }
       },
-      "sendTraitsInTrack": { "type": "boolean" },
-      "eventFilteringOption": {
-        "type": "string",
-        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
+      "productsMapping": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "to": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
       },
-      "whitelistedEvents": {
+      "enableIdentifyEvents": {
+        "type": "boolean"
+      },
+      "enablePageEvents": {
+        "type": "boolean"
+      },
+      "enableScreenEvents": {
+        "type": "boolean"
+      },
+      "actionEventNames": {
         "type": "array",
         "items": {
           "type": "object",
@@ -54,7 +80,7 @@
           }
         }
       },
-      "blacklistedEvents": {
+      "installEventNames": {
         "type": "array",
         "items": {
           "type": "object",
@@ -62,31 +88,6 @@
             "eventName": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "oneTrustCookieCategories": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
             }
           }
         }
