@@ -1,0 +1,140 @@
+{
+  "uiConfig": [
+    {
+      "title": "1. Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Project ID",
+          "value": "projectID",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Project ID",
+          "required": true,
+          "placeholder": "e.g: 4a1d51eab8e77c0000c521ab"
+        },
+        {
+          "type": "textInput",
+          "label": "Write Key",
+          "value": "writeKey",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Write Key",
+          "required": true
+        }
+      ]
+    },
+    {
+      "title": "2. Native SDK",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": false
+        }
+      ]
+    },
+    {
+      "title": "3. Add On",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Geo IP Add On",
+          "value": "ipAddon",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "User Agent Add On",
+          "value": "uaAddon",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "URL Parsing Add On",
+          "value": "urlAddon",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "Referrer Parsing Add On",
+          "value": "referrerAddon",
+          "default": false
+        }
+      ]
+    },
+    {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+      "fields": [
+        {
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
+          "options": [
+            {
+              "name": "Disable",
+              "value": "disable"
+            },
+            {
+              "name": "Allowlist",
+              "value": "whitelistedEvents"
+            },
+            {
+              "name": "Denylist",
+              "value": "blacklistedEvents"
+            }
+          ],
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
+          "label": "Allowlist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
+            }
+          ]
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name/ID",
+              "required": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

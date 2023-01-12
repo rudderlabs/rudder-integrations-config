@@ -1,0 +1,149 @@
+{
+  "uiConfig": [
+    {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Account SID",
+          "value": "accountSID",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Account SID",
+          "required": true,
+          "placeholder": "e.g. saDbFeVZicnpPeGJ6M0JOTXFxTVN2QkdpWTJ3NENpNUlZ",
+          "secret": false,
+          "footerNote": "Your Impact Account SID"
+        },
+        {
+          "type": "textInput",
+          "label": "API Key",
+          "value": "apiKey",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid API Key",
+          "required": true,
+          "placeholder": "e.g: npPeGJ6M0JOjgAvfCs-XAYkh~dpWTJ",
+          "secret": true,
+          "footerNote": "Your Impact Auth Token"
+        },
+        {
+          "type": "textInput",
+          "label": "Campaign Id",
+          "value": "campaignId",
+          "regex": "^[0-9]+$",
+          "regexErrorMessage": "Invalid Campaign Id",
+          "required": true,
+          "placeholder": "e.g: 34343",
+          "secret": false,
+          "footerNote": "Your unique campaign identifier/Program Id"
+        },
+        {
+          "type": "textInput",
+          "label": "Impact App Id",
+          "value": "impactAppId",
+          "regex": "^[0-9]+$",
+          "regexErrorMessage": "Invalid Impact App Id",
+          "required": false,
+          "placeholder": "e.g: 34343",
+          "secret": false,
+          "footerNote": "'System App ID' of your app in impact.com"
+        }
+      ]
+    },
+    {
+      "title": "Event Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Event Type Id",
+          "value": "eventTypeId",
+          "regex": "^[0-9]+$",
+          "regexErrorMessage": "Invalid Account SID",
+          "required": false,
+          "placeholder": "e.g. 35355",
+          "secret": false,
+          "footerNote": "Your Event Type Id (Uniqe identifier for the event type)"
+        },
+        {
+          "type": "checkbox",
+          "label": "Enable to hash email",
+          "value": "enableEmailHashing",
+          "default": false,
+          "footerNote": "Toggle it on to hash the email value"
+        },
+        {
+          "type": "dynamicForm",
+          "label": "Additional parameters mapping",
+          "labelLeft": "Rudder payload property",
+          "labelRight": "Impact radius parameter",
+          "value": "rudderToImpactProperty",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "placeholderLeft": "e.g: properties.profit",
+          "placeholderRight": "e.g: Money1",
+          "footerNote": "Add additional parameters that you want to map from rudder payload. Here, first is rudder payload fields eg.(properties.profit) and second is ImpactRadius parameter eg.(Money1) you want it to be mapped to"
+        },
+        {
+          "type": "dynamicForm",
+          "label": "Custom mapping for Products",
+          "labelLeft": "Rudder product property",
+          "labelRight": "Impact radius parameter",
+          "value": "productsMapping",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "placeholderLeft": "e.g: variant",
+          "placeholderRight": "e.g: ItemCategory",
+          "footerNote": "Custom mapping for products fields"
+        },
+        {
+          "type": "checkbox",
+          "label": "Enable Identify Events",
+          "value": "enableIdentifyEvents",
+          "default": false,
+          "footerNote": "Enable to allow identify events"
+        },
+        {
+          "type": "checkbox",
+          "label": "Enable Page Events",
+          "value": "enablePageEvents",
+          "default": false,
+          "footerNote": "Enable to allow page events"
+        },
+        {
+          "type": "checkbox",
+          "label": "Enable Screen Events",
+          "value": "enableScreenEvents",
+          "default": false,
+          "footerNote": "Enable to allow screen events"
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "actionEventNames",
+          "label": "Action Event Names",
+          "footerNote": "Add the exact event names for which you want to track events as actions. Default: 'Order Completed'",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
+            }
+          ]
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "installEventNames",
+          "label": "Install Event Names",
+          "footerNote": "Add track events that correspond to app install event names. Default: 'Applcation Installed'",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
