@@ -1,0 +1,114 @@
+{
+  "uiConfig": [
+    {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "API Key",
+          "value": "apiKey",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid API Key",
+          "required": true,
+          "placeholder": "e.g: ABCDEFG"
+        }
+      ]
+    },
+    {
+      "title": "Native SDK",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": false
+        }
+      ]
+    },
+    {
+      "title": "Prefix Properties",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Prefix the properties with page or event name",
+          "value": "prefixProperties",
+          "default": false
+        }
+      ]
+    },
+    {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+      "fields": [
+        {
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
+          "options": [
+            {
+              "name": "Disable",
+              "value": "disable"
+            },
+            {
+              "name": "Allowlist",
+              "value": "whitelistedEvents"
+            },
+            {
+              "name": "Denylist",
+              "value": "blacklistedEvents"
+            }
+          ],
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
+          "label": "Allowlist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
+            }
+          ]
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name/ID",
+              "required": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
