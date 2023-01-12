@@ -11,7 +11,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    # Either trigger from main or merged pull requests
+    # Only merged pull requests from release candidate branches must trigger
     if: ((startsWith(github.event.pull_request.head.ref, 'release/') || startsWith(github.event.pull_request.head.ref, 'hotfix-release/')) && github.event.pull_request.merged == true)
 
     steps:
