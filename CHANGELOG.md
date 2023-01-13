@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.3.6 (2023-01-13)
+
+
+### Bug Fixes
+
+* reenable ga4 page call support for cloud mode ([#299](https://github.com/rudderlabs/rudder-config-schema/issues/299)) ([8bf3643](https://github.com/rudderlabs/rudder-config-schema/commit/8bf3643c4edd268a562f67f79f4a0b3ea22248d1))
+
+### 1.3.5 (2023-01-13)
+
+
+### Bug Fixes
+
+* enanble pro and enterpise for cdkv2 comparison test ([#293](https://github.com/rudderlabs/rudder-config-schema/issues/293)) ([a6593dc](https://github.com/rudderlabs/rudder-config-schema/commit/a6593dcac8f96d2ad925121095ce307a3daabe5a))
+
 ### 1.3.4 (2023-01-13)
 
 ### 1.3.3 (2023-01-13)
