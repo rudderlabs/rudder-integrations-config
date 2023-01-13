@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.4.0 (2023-01-13)
+
+
+### Features
+
+* ga4 cloud mode page call support ([#296](https://github.com/rudderlabs/rudder-config-schema/issues/296)) ([2ace276](https://github.com/rudderlabs/rudder-config-schema/commit/2ace276dba234b8ed85f37e3fd12ff5a48b188c5))
+
 ### 1.3.5 (2023-01-13)
 
 
