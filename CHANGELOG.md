@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.3.3 (2023-01-13)
+
+
+### Bug Fixes
+
+* enable cdkv2 for algolia and pinterest ([630644e](https://github.com/rudderlabs/rudder-config-schema/commit/630644e5466d5d624e76f52dd37d1524e71ef499))
+* revert a specific commit from [#253](https://github.com/rudderlabs/rudder-config-schema/issues/253) ([#284](https://github.com/rudderlabs/rudder-config-schema/issues/284)) ([856c9b9](https://github.com/rudderlabs/rudder-config-schema/commit/856c9b91c3f33bef5ca8c46b1d0b751629574b8f))
+
 ### 1.3.2 (2023-01-12)
 
 
