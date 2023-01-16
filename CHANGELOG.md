@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.3.6 (2023-01-13)
+
+
+### Bug Fixes
+
+* reenable ga4 page call support for cloud mode ([#299](https://github.com/rudderlabs/rudder-config-schema/issues/299)) ([8bf3643](https://github.com/rudderlabs/rudder-config-schema/commit/8bf3643c4edd268a562f67f79f4a0b3ea22248d1))
+
+### 1.3.5 (2023-01-13)
+
+
+### Bug Fixes
+
+* enanble pro and enterpise for cdkv2 comparison test ([#293](https://github.com/rudderlabs/rudder-config-schema/issues/293)) ([a6593dc](https://github.com/rudderlabs/rudder-config-schema/commit/a6593dcac8f96d2ad925121095ce307a3daabe5a))
+
+### 1.3.4 (2023-01-13)
+
+### 1.3.3 (2023-01-13)
+
+
+### Bug Fixes
+
+* enable cdkv2 for algolia and pinterest ([630644e](https://github.com/rudderlabs/rudder-config-schema/commit/630644e5466d5d624e76f52dd37d1524e71ef499))
+* revert a specific commit from [#253](https://github.com/rudderlabs/rudder-config-schema/issues/253) ([#284](https://github.com/rudderlabs/rudder-config-schema/issues/284)) ([856c9b9](https://github.com/rudderlabs/rudder-config-schema/commit/856c9b91c3f33bef5ca8c46b1d0b751629574b8f))
+
+### 1.3.2 (2023-01-12)
+
+
+### Bug Fixes
+
+* hotfix intercom image update ([#280](https://github.com/rudderlabs/rudder-config-schema/issues/280)) ([0aeef10](https://github.com/rudderlabs/rudder-config-schema/commit/0aeef10eed47b0715fd878c2753c0c298ab794b3))
+
+### 1.3.1 (2023-01-12)
+
 ## 1.3.0 (2023-01-11)
 
 
