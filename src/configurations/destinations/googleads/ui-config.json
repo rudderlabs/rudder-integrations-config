@@ -61,6 +61,95 @@
       ]
     },
     {
+      "title": "Track Events",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Track Conversions",
+          "value": "trackConversions",
+          "default": false
+        },
+        {
+          "preRequisiteField": [
+            {
+              "name": "trackConversions",
+              "selectedValue": true
+            }
+          ],
+          "type": "checkbox",
+          "label": "Enable Conversion Events Filtering",
+          "value": "enableConversionEventsFiltering",
+          "footerNote": "If enabled, specified list of events will be consider as conversion events else all the events will be consider as conversion events",
+          "default": false
+        },
+        {
+          "preRequisiteField": [
+            {
+              "name": "trackConversions",
+              "selectedValue": true
+            },         
+            {
+              "name": "enableConversionEventsFiltering",
+              "selectedValue": true
+            }
+          ],
+          "type": "dynamicCustomForm",
+          "label": "Events to Track Conversions",
+          "value": "eventsToTrackConversions",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Product Added"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "label": "Track Dynamic Remarketing",
+          "value": "trackDynamicRemarketing",
+          "default": false
+        },
+        {
+          "preRequisiteField": [
+            {
+              "name": "trackDynamicRemarketing",
+              "selectedValue": true
+            }
+          ],
+          "type": "checkbox",
+          "label": "Enable Dynamic Remarketing Events Filtering",
+          "value": "enableDynamicRemarketingEventsFiltering",
+          "footerNote": "If enabled, specified list of events will be consider as dynamic remarketing events else all the events will be consider as dynamic remarketing events",
+          "default": false
+        },
+        {
+          "preRequisiteField": [
+            {
+              "name": "trackDynamicRemarketing",
+              "selectedValue": true
+            },
+            {
+              "name": "enableDynamicRemarketingEventsFiltering",
+              "selectedValue": true
+            }
+          ],
+          "type": "dynamicCustomForm",
+          "label": "Events to Track Dynamic Remarketing",
+          "value": "eventsToTrackDynamicRemarketing",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Product Added"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "title": "Native SDK",
       "fields": [
         {
@@ -168,12 +257,6 @@
     {
       "title": "Additional Settings",
       "fields": [
-        {
-          "type": "checkbox",
-          "label": "Dynamic Remarketing",
-          "value": "dynamicRemarketing",
-          "default": false
-        },
         {
           "type": "checkbox",
           "label": "Send Page View",
