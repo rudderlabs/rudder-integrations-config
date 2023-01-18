@@ -1,0 +1,107 @@
+{
+  "uiConfig": [
+    {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Region",
+          "value": "region",
+          "required": true,
+          "placeholder": "e.g: us-east-1",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Region"
+        },
+        {
+          "type": "checkbox",
+          "label": "Role Based Authentication",
+          "value": "roleBasedAuth",
+          "default": false
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": {
+            "name": "roleBasedAuth",
+            "selectedValue": true
+          },
+          "label": "IAM Role ARN",
+          "value": "iamRoleARN",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Role ARN",
+          "required": true,
+          "placeholder": "e.g: arn:aws:iam::123456789012:role/LambdaAccess",
+          "footerURL": {
+            "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/",
+            "text": "Instructions for creating IAM Role"
+          }
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": {
+            "name": "roleBasedAuth",
+            "selectedValue": false
+          },
+          "label": "Access Key Id",
+          "value": "accessKeyId",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Access Key Id",
+          "required": false,
+          "placeholder": "e.g: bSjsdGYsOo9sjw23Shj",
+          "secret": true
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": {
+            "name": "roleBasedAuth",
+            "selectedValue": false
+          },
+          "label": "Secret Access Key",
+          "value": "accessKey",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Secret Access Key",
+          "required": false,
+          "placeholder": "e.g: 1d6583b196d34de28a3g19ahadde4b0z",
+          "secret": true
+        },
+        {
+          "type": "textInput",
+          "label": "Lambda",
+          "value": "lambda",
+          "required": true,
+          "placeholder": "e.g: arn:aws:lambda:us-west-2:123456789012:function:my-function"
+        }
+      ]
+    },
+    {
+      "title": "Optional Settings",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Enable Batch Input",
+          "value": "enableBatchInput",
+          "default": false
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": {
+            "name": "enableBatchInput",
+            "selectedValue": true
+          },
+          "label": "Max Batch Size",
+          "value": "maxBatchSize",
+          "regex": "^[1-9]\\d*$",
+          "regexErrorMessage": "Invalid batch size",
+          "placeholder": "e.g: 100",
+          "required": false
+        },
+        {
+          "type": "textInput",
+          "label": "Client Context",
+          "value": "clientContext",
+          "placeholder": "base64-encoded data about the invoking client",
+          "required": false
+        }
+      ]
+    }
+  ]
+}
