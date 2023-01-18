@@ -1,6 +1,30 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "SDK Key",
+          "value": "sdkKey",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid SDK Key",
+          "placeholder": "e.g. 3Cee2qXeMgVPsqk8Sh5qX",
+          "secret": true,
+          "footerNote": "Your SDK Key From Settings>Environments>SDK Key. **This field is required in Cloud Mode**"
+        },
+        {
+          "type": "textInput",
+          "label": "Base Url",
+          "value": "baseUrl",
+          "regex": "(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+          "regexErrorMessage": "Invalid Base Url",
+          "placeholder": "e.g. https://example.com",
+          "footerNote": "Url Where Optimizely Agent is running. This url will be used as a base endpoint for track and page calls. **This field is required in Cloud Mode**"
+        }
+      ]
+    },
+    {
       "title": "Only Track known users",
       "fields": [
         {
@@ -40,7 +64,7 @@
       "title": "Native SDK",
       "fields": [
         {
-          "type": "defaultCheckbox",
+          "type": "checkbox",
           "label": "Use device-mode to send events",
           "value": "useNativeSDK",
           "default": true
