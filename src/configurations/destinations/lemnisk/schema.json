@@ -2,13 +2,68 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "required": [
-      "cloudMode"
-    ],
+    "required": ["cloudMode"],
     "properties": {
       "cloudMode": {
         "type": "string",
         "pattern": "^(web|server)$"
+      },
+      "sdkWriteKey": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "accountId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "oneTrustCookieCategories": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "allOf": [
@@ -20,9 +75,7 @@
               "const": "server"
             }
           },
-          "required": [
-            "cloudMode"
-          ]
+          "required": ["cloudMode"]
         },
         "then": {
           "properties": {
@@ -45,11 +98,7 @@
               "type": "string"
             }
           },
-          "required": [
-            "apiKey",
-            "passKey",
-            "diapi"
-          ]
+          "required": ["apiKey", "passKey", "diapi"]
         }
       },
       {
@@ -60,9 +109,7 @@
               "const": "web"
             }
           },
-          "required": [
-            "cloudMode"
-          ]
+          "required": ["cloudMode"]
         },
         "then": {
           "properties": {
@@ -75,10 +122,7 @@
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
             }
           },
-          "required": [
-            "pl",
-            "plWriteKey"
-          ]
+          "required": ["pl", "plWriteKey"]
         }
       }
     ],
