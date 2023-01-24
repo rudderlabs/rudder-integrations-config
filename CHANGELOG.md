@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.5.0 (2023-01-24)
+
+
+### Features
+
+* move mp,zendesk,sfmc to processor ([a07c2ba](https://github.com/rudderlabs/rudder-config-schema/commit/a07c2ba97e4cd32b68e9fa66960001ca351fb105))
+
 ## 1.4.0 (2023-01-24)
 
 
