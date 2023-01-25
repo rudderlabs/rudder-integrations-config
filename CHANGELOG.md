@@ -30,6 +30,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### 1.3.7 (2023-01-18)
 
+* chore: updates amplitude to 4.0.7 ([c0d37b9](https://github.com/rudderlabs/rudder-config-schema/commit/c0d37b9badca4cc6bb85a6d79f7d5afdac313448))
+
 ### 1.3.6 (2023-01-13)
 
 
@@ -45,6 +47,8 @@ All notable changes to this project will be documented in this file. See [standa
 * enanble pro and enterpise for cdkv2 comparison test ([#293](https://github.com/rudderlabs/rudder-config-schema/issues/293)) ([a6593dc](https://github.com/rudderlabs/rudder-config-schema/commit/a6593dcac8f96d2ad925121095ce307a3daabe5a))
 
 ### 1.3.4 (2023-01-13)
+
+* chore: reverts intercom after oauth video ([73449fb](https://github.com/rudderlabs/rudder-config-schema/commit/73449fbc8de23379fbea0d46b7a832b5da4c3b4e))
 
 ### 1.3.3 (2023-01-13)
 
