@@ -2,7 +2,35 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.4.1 (2023-01-24)
+
+
+### Bug Fixes
+
+* move mp,zendesk,sfmc to processor ([7433e22](https://github.com/rudderlabs/rudder-config-schema/commit/7433e229c1426a7cd5d0aefc2fd94442170b9e45))
+
+## 1.4.0 (2023-01-24)
+
+
+### Features
+
+* add axeptio into prod ([#302](https://github.com/rudderlabs/rudder-config-schema/issues/302)) ([231db08](https://github.com/rudderlabs/rudder-config-schema/commit/231db0873b9bd948521d69fa7cc25efdd621a394))
+* add microsoft clarity to prod ([#275](https://github.com/rudderlabs/rudder-config-schema/issues/275)) ([9327566](https://github.com/rudderlabs/rudder-config-schema/commit/9327566284652fb48c98da3ca31776661df03e66))
+* **destination:** onboard lemnisk integration ([#306](https://github.com/rudderlabs/rudder-config-schema/issues/306)) ([392a9d1](https://github.com/rudderlabs/rudder-config-schema/commit/392a9d1ae1be9f4046c4eeea0f49b1b9166a5fcd))
+* ga4 hybrid mode support ([#316](https://github.com/rudderlabs/rudder-config-schema/issues/316)) ([724e865](https://github.com/rudderlabs/rudder-config-schema/commit/724e86516a8b5d86aefeb3db6da0e54ac1ebc569))
+* update footernote in bigquerystream ([#271](https://github.com/rudderlabs/rudder-config-schema/issues/271)) ([4aeaa42](https://github.com/rudderlabs/rudder-config-schema/commit/4aeaa42240d237e784bb8ea397ad69a003573dc4))
+* updated the ui-config of amplitude to version2 ([#318](https://github.com/rudderlabs/rudder-config-schema/issues/318)) ([caa8bf8](https://github.com/rudderlabs/rudder-config-schema/commit/caa8bf8108fe213c6162eb800a2b17e549330925))
+
+
+### Bug Fixes
+
+* bing ads updated image ([#292](https://github.com/rudderlabs/rudder-config-schema/issues/292)) ([e3891c1](https://github.com/rudderlabs/rudder-config-schema/commit/e3891c1a8ca2567a95e398d1dfbceefa6013edc5))
+* destination transformation change from processor to router ([#246](https://github.com/rudderlabs/rudder-config-schema/issues/246)) ([2c3b461](https://github.com/rudderlabs/rudder-config-schema/commit/2c3b46186db5e5d286c293a1af644a98f82d2123))
+* disables skills resource in freshdesk ([f2c7343](https://github.com/rudderlabs/rudder-config-schema/commit/f2c7343bb7c411685c92609d67bffdfd59bc3b64))
+
 ### 1.3.7 (2023-01-18)
+
+* chore: updates amplitude to 4.0.7 ([c0d37b9](https://github.com/rudderlabs/rudder-config-schema/commit/c0d37b9badca4cc6bb85a6d79f7d5afdac313448))
 
 ### 1.3.6 (2023-01-13)
 
@@ -19,6 +47,8 @@ All notable changes to this project will be documented in this file. See [standa
 * enanble pro and enterpise for cdkv2 comparison test ([#293](https://github.com/rudderlabs/rudder-config-schema/issues/293)) ([a6593dc](https://github.com/rudderlabs/rudder-config-schema/commit/a6593dcac8f96d2ad925121095ce307a3daabe5a))
 
 ### 1.3.4 (2023-01-13)
+
+* chore: reverts intercom after oauth video ([73449fb](https://github.com/rudderlabs/rudder-config-schema/commit/73449fbc8de23379fbea0d46b7a832b5da4c3b4e))
 
 ### 1.3.3 (2023-01-13)
 
