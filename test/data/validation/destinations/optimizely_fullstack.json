@@ -1,0 +1,34 @@
+[
+  {
+    "config": {
+      "sdkKey": "test-sdk-key",
+      "baseUrl": "https://example.com",
+      "trackKnownUsers": false,
+      "nonInteraction": false,
+      "listen": false,
+      "trackCategorizedPages": true,
+      "trackNamedPages": true
+    },
+    "result": true
+  },
+  {
+    "config": {},
+    "result": true
+  },
+  {
+    "config": {
+      "sdkKey": 123
+    },
+    "result": false,
+    "err": ["sdkKey must be string"]
+  },
+  {
+    "config": {
+      "baseUrl": "xyz"
+    },
+    "result": false,
+    "err": [
+      "baseUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$|^$\""
+    ]
+  }
+]
