@@ -1,0 +1,143 @@
+{
+  "uiConfig": [
+    {
+      "title": "Cloud Mode Settings",
+      "fields": [
+        {
+          "type": "singleSelect",
+          "label": "Cloud Mode",
+          "value": "cloudMode",
+          "options": [
+            {
+              "name": "Web Cloud Mode",
+              "value": "web"
+            },
+            {
+              "name": "Server-side Cloud Mode",
+              "value": "server"
+            }
+          ],
+          "defaultOption": {
+            "name": "Web Cloud Mode",
+            "value": "web"
+          },
+          "required": true,
+          "footerNote": "Select Cloud Mode"
+        },
+        {
+          "type": "textInput",
+          "label": "Write Key",
+          "value": "plWriteKey",
+          "secret": true,
+          "placeholder": "e.g: 2IotciVg4XIaAhhYqCEuSDozsum",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regexErrorMessage": "Invalid Write Key",
+          "preRequisiteField": [
+            {
+              "name": "cloudMode",
+              "selectedValue": "web"
+            }
+          ],
+          "required": true,
+          "footerNote": "Enter the Write Key for the source created at Lemnisk"
+        },
+        {
+          "type": "textInput",
+          "label": "Region URL",
+          "value": "pl",
+          "placeholder": "e.g: https://mu-pl.lemnisk.co/analyze/analyze.php",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(https?|ftp)://[^\\s/$.?#].[^\\s]*$",
+          "regexErrorMessage": "Invalid Region Url",
+          "preRequisiteField": [
+            {
+              "name": "cloudMode",
+              "selectedValue": "web"
+            }
+          ],
+          "required": true,
+          "footerNote": "Enter the Region URL provided by Lemnisk"
+        },
+        {
+          "type": "textInput",
+          "label": "X-API-PASSKEY",
+          "value": "passKey",
+          "secret": true,
+          "placeholder": "e.g: UleCnOxRCz0XP6jg9uUm",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regexErrorMessage": "Invalid Pass Key",
+          "preRequisiteField": [
+            {
+              "name": "cloudMode",
+              "selectedValue": "server"
+            }
+          ],
+          "required": true,
+          "footerNote": "Enter the X-API-PASSKEY provided by Lemnisk"
+        },
+        {
+          "type": "textInput",
+          "label": "X-API-KEY",
+          "value": "apiKey",
+          "secret": true,
+          "placeholder": "e.g: RzWW5mwo4h8XufeFn6v3I4oCC7izQL6U3zzILDqz",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regexErrorMessage": "Invalid API Key",
+          "preRequisiteField": [
+            {
+              "name": "cloudMode",
+              "selectedValue": "server"
+            }
+          ],
+          "required": true,
+          "footerNote": "Enter the X-API-KEY provided by Lemnisk"
+        },
+        {
+          "type": "textInput",
+          "label": "Write Key",
+          "value": "diapiWriteKey",
+          "placeholder": "e.g: 2IotciVg4XIaAhhYqCEuSDozsum",
+          "preRequisiteField": [
+            {
+              "name": "cloudMode",
+              "selectedValue": "server"
+            }
+          ],
+          "required": false,
+          "secret": true,
+          "footerNote": "Enter the Write Key provided by Lemnisk"
+        },
+        {
+          "type": "textInput",
+          "label": "Source ID",
+          "value": "srcId",
+          "placeholder": "e.g: 31",
+          "preRequisiteField": [
+            {
+              "name": "cloudMode",
+              "selectedValue": "server"
+            }
+          ],
+          "required": false,
+          "footerNote": "Enter the Source ID provided by Lemnisk"
+        },
+        {
+          "type": "textInput",
+          "label": "Region URL",
+          "value": "diapi",
+          "placeholder": "e.g: https://crux.lemnisk.co/v3/data",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(https?|ftp)://[^\\s/$.?#].[^\\s]*$",
+          "regexErrorMessage": "Invalid Region Url",
+          "required": true,
+          "footerNote": "Enter the Region URL provided by Lemnisk",
+          "preRequisiteField": [
+            {
+              "name": "cloudMode",
+              "selectedValue": "server"
+            }
+          ]
+        }
+      ]
+    }
+   
+  ]
+}
