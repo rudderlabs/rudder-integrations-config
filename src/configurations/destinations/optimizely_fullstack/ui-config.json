@@ -1,6 +1,30 @@
 {
   "uiConfig": [
     {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "SDK Key",
+          "value": "sdkKey",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid SDK Key",
+          "placeholder": "e.g. 3Cee2qXeMgVPsqk8Sh5qX",
+          "secret": true,
+          "footerNote": "Your SDK Key From Settings>Environments>SDK Key. **This field is required in cloud-mode only**"
+        },
+        {
+          "type": "textInput",
+          "label": "Base Url",
+          "value": "baseUrl",
+          "regex": "(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+          "regexErrorMessage": "Invalid Base Url",
+          "placeholder": "e.g. https://example.com",
+          "footerNote": "Url Where Optimizely Agent is running. This url will be used as a base endpoint for track and page calls. **This field is required in cloud-mode only**"
+        }
+      ]
+    },
+    {
       "title": "Only Track known users",
       "fields": [
         {
@@ -37,10 +61,34 @@
       ]
     },
     {
+      "title": "Track Categorized Pages",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Track Categorized Pages",
+          "value": "trackCategorizedPages",
+          "default": false,
+          "footerNote": "Applicable only for cloud-mode"
+        }
+      ]
+    },
+    {
+      "title": "Track Named Pages",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Track Named Pages",
+          "value": "trackNamedPages",
+          "default": false,
+          "footerNote": "Applicable only for cloud-mode"
+        }
+      ]
+    },
+    {
       "title": "Native SDK",
       "fields": [
         {
-          "type": "defaultCheckbox",
+          "type": "checkbox",
           "label": "Use device-mode to send events",
           "value": "useNativeSDK",
           "default": true
@@ -97,6 +145,25 @@
               "value": "eventName",
               "required": false,
               "placeholder": "e.g: Credit Card Added"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name/ID",
+              "required": false
             }
           ]
         }
