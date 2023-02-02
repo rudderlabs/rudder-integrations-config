@@ -68,6 +68,16 @@
         },
         {
           "type": "textInput",
+          "label": "Catalog",
+          "labelNote": "Catalog name where you organize your data assets",
+          "value": "catalog",
+          "regex": "^(.*)$",
+          "regexErrorMessage": "Invalid Catalog",
+          "required": false,
+          "placeholder": "e.g: iosCatalog"
+        },
+        {
+          "type": "textInput",
           "label": "Namespace",
           "labelNote": "Schema name for the warehouse where the tables are created",
           "value": "namespace",
@@ -149,6 +159,13 @@
       "title": "Object Storage Configuration",
       "fields": [
         {
+          "type": "checkbox",
+          "label": "Use RudderStack managed object storage",
+          "value": "useRudderStorage",
+          "default": false,
+          "footerNote": "Note: Only available for RudderStack managed data planes"
+        },
+        {
           "type": "singleSelect",
           "label": "Choose your Storage Provider",
           "value": "bucketProvider",
@@ -170,7 +187,11 @@
             "name": "S3",
             "value": "S3"
           },
-          "required": true
+          "required": true,
+          "preRequisiteField": {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
         },
         {
           "type": "textInput",
@@ -178,6 +199,10 @@
             {
               "name": "bucketProvider",
               "selectedValue": "S3"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
             }
           ],
           "label": "Staging S3 Storage Bucket Name",
@@ -195,6 +220,10 @@
             {
               "name": "bucketProvider",
               "selectedValue": "GCS"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
             }
           ],
           "label": "Staging GCS Object Storage Bucket Name",
@@ -212,6 +241,10 @@
             {
               "name": "bucketProvider",
               "selectedValue": "AZURE_BLOB"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
             }
           ],
           "label": "Staging Azure Blob Storage Container Name",
@@ -225,6 +258,12 @@
         },
         {
           "type": "textInput",
+          "preRequisiteField": [
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
+          ],
           "label": "Prefix",
           "value": "prefix",
           "regex": "^(.{0,100})$",
@@ -242,6 +281,10 @@
             {
               "name": "bucketProvider",
               "selectedValue": "S3"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
             }
           ]
         },
@@ -255,6 +298,10 @@
             {
               "name": "useSTSTokens",
               "selectedValue": true
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
             }
           ],
           "label": "Role Based Authentication",
@@ -275,6 +322,10 @@
             {
               "name": "roleBasedAuth",
               "selectedValue": true
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
             }
           ],
           "label": "IAM Role ARN",
@@ -302,6 +353,10 @@
             {
               "name": "roleBasedAuth",
               "selectedValue": false
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
             }
           ],
           "label": "AWS Access Key ID",
@@ -326,6 +381,10 @@
             {
               "name": "roleBasedAuth",
               "selectedValue": false
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
             }
           ],
           "label": "AWS Secret Access Key",
@@ -342,6 +401,10 @@
             {
               "name": "bucketProvider",
               "selectedValue": "S3"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
             }
           ],
           "label": "Enable Server Side Encryption For S3?",
@@ -354,6 +417,10 @@
             {
               "name": "bucketProvider",
               "selectedValue": "AZURE_BLOB"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
             }
           ],
           "label": "Azure Blob Storage Account Name",
@@ -373,6 +440,10 @@
             },
             {
               "name": "useSASTokens",
+              "selectedValue": false
+            },
+            {
+              "name": "useRudderStorage",
               "selectedValue": false
             }
           ],
@@ -394,6 +465,10 @@
             {
               "name": "useSASTokens",
               "selectedValue": true
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
             }
           ],
           "label": "Azure Blob Storage SAS Token",
@@ -410,6 +485,10 @@
             {
               "name": "bucketProvider",
               "selectedValue": "AZURE_BLOB"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
             }
           ],
           "label": "Use shared access signature (SAS) Tokens",
@@ -423,6 +502,10 @@
             {
               "name": "bucketProvider",
               "selectedValue": "GCS"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
             }
           ],
           "label": "Credentials",
