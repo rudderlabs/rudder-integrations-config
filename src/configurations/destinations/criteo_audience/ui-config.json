@@ -1,0 +1,64 @@
+{
+  "uiConfig": [
+    {
+      "title": "Audience Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Audience Id",
+          "value": "audienceId",
+          "regex": "^[0-9]+$",
+          "regexErrorMessage": "Invalid Audience Id",
+          "required": true,
+          "placeholder": "e.g. 532145",
+          "secret": false,
+          "footerNote": "The audience id of the audience to which you want to sync the data"
+        },
+        {
+          "type": "singleSelect",
+          "label": "Audience Type",
+          "value": "audienceType",
+          "required": true,
+          "placeholder": "email",
+          "options": [
+            {
+              "name": "email",
+              "value": "email"
+            },
+            {
+              "name": "madid",
+              "value": "madid"
+            },
+            {
+              "name": "identityLink",
+              "value": "identityLink"
+            },
+            {
+              "name": "gum",
+              "value": "gum"
+            }
+          ],
+          "defaultOption": {
+            "name": "email",
+            "value": "email"
+          }
+        },
+        {
+          "type": "textInput",
+          "label": "GUM Caller Id",
+          "value": "gumCallerId",
+          "regex": "^[0-9]+$",
+          "regexErrorMessage": "Invalid GUM Caller Id",
+          "required": false,
+          "placeholder": "e.g. 53213445",
+          "secret": false,
+          "preRequisiteField": {
+            "name": "audienceType",
+            "selectedValue": "gum"
+          },
+          "footerNote": "GUM cookie identifier"
+        }
+      ]
+    }
+  ]
+}
