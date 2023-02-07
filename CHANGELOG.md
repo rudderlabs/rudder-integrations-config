@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.3](https://github.com/rudderlabs/rudder-config-schema/compare/1.6.2...1.6.3) (2023-02-07)
+
+
+### Bug Fixes
+
+* googleads dynamicRemarketing flag changes ([#367](https://github.com/rudderlabs/rudder-config-schema/issues/367)) ([e214d1e](https://github.com/rudderlabs/rudder-config-schema/commit/e214d1ecde7de648a4f244890133dedd7e747e06))
+
 ### [1.6.2](https://github.com/rudderlabs/rudder-config-schema/compare/1.6.1...1.6.2) (2023-02-07)
 
 
