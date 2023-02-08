@@ -2,55 +2,87 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### 1.4.1 (2023-01-24)
+### [1.6.1](https://github.com/rudderlabs/rudder-config-schema/compare/1.6.0...1.6.1) (2023-02-03)
+
+## [1.6.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.5.0...1.6.0) (2023-02-02)
+
+
+### Features
+
+* add time window layout to s3 datalake glue ([#348](https://github.com/rudderlabs/rudder-config-schema/issues/348)) ([784bd3f](https://github.com/rudderlabs/rudder-config-schema/commit/784bd3fca1f50899430c544608cee4234cf858e9))
+* added catalog for databricks ([#253](https://github.com/rudderlabs/rudder-config-schema/issues/253)) ([#338](https://github.com/rudderlabs/rudder-config-schema/issues/338)) ([56e9bf8](https://github.com/rudderlabs/rudder-config-schema/commit/56e9bf8c5fa76200c0611833673b648d0109fc5c))
+* added OneTrust consent support for mobile device modes ([19454ee](https://github.com/rudderlabs/rudder-config-schema/commit/19454ee8b72a8e0d6f7348fbc02ae860323623a4))
+* added use rudder storage option to deltalake ([#349](https://github.com/rudderlabs/rudder-config-schema/issues/349)) ([3ad3317](https://github.com/rudderlabs/rudder-config-schema/commit/3ad3317b17e0a5f2b8074c35c3863507d1a6cdd4))
+* **CDK v2:** enabling CDK v2 comparison for webhook ([#341](https://github.com/rudderlabs/rudder-config-schema/issues/341)) ([33e59c5](https://github.com/rudderlabs/rudder-config-schema/commit/33e59c5c43334f567689de70e971081df093f661))
+* **destination:** onboard criteo audience integration ([#320](https://github.com/rudderlabs/rudder-config-schema/issues/320)) ([fd6fbb6](https://github.com/rudderlabs/rudder-config-schema/commit/fd6fbb61ead9b7a576a9f32326336a302f35a0da))
+* **integration:** rockerbox- add support for custom properties ([#315](https://github.com/rudderlabs/rudder-config-schema/issues/315)) ([a06c9d5](https://github.com/rudderlabs/rudder-config-schema/commit/a06c9d539b9aebef04e85f05515366707c54762a))
+* **integration:** rockerbox- revert adding support for custom properties ([#345](https://github.com/rudderlabs/rudder-config-schema/issues/345)) ([2de567a](https://github.com/rudderlabs/rudder-config-schema/commit/2de567a37943f1d95621f35b6d58a93f49b99f75))
+* **mailchimp:** add support for track call ([#327](https://github.com/rudderlabs/rudder-config-schema/issues/327)) ([16ce89a](https://github.com/rudderlabs/rudder-config-schema/commit/16ce89afa5a6faa76f3877365b524cf46ae1d3e9))
+* **optimizely:** add fullstack cloude mode support ([#317](https://github.com/rudderlabs/rudder-config-schema/issues/317)) ([cda7dd5](https://github.com/rudderlabs/rudder-config-schema/commit/cda7dd594cdc4dafc0f3e77b43faa18686347fd0))
+
+
+### Bug Fixes
+
+* add supportedMessageTypes in GAEC ([#339](https://github.com/rudderlabs/rudder-config-schema/issues/339)) ([8a93e92](https://github.com/rudderlabs/rudder-config-schema/commit/8a93e92276e70268f5e49c0de94cc9553b24ee56))
+* add tag option to standard-version command ([fc8264b](https://github.com/rudderlabs/rudder-config-schema/commit/fc8264b543005a6a6ed6e4077d8125a7b9f60480))
+* adobe_analytics schema regex ([#325](https://github.com/rudderlabs/rudder-config-schema/issues/325)) ([9751dba](https://github.com/rudderlabs/rudder-config-schema/commit/9751dba7c141e8507edcb452a4da03d13b4b6351))
+* **changelog:** fixing changelog for release 1.4.0, 1.3.7 and 1.3.4 ([#333](https://github.com/rudderlabs/rudder-config-schema/issues/333)) ([b2d5604](https://github.com/rudderlabs/rudder-config-schema/commit/b2d5604abe825c81acab638464b9de224c08a3fb))
+* default blockPageViewEvent enabled to prevent duplicate page calls ([#340](https://github.com/rudderlabs/rudder-config-schema/issues/340)) ([24f8fcf](https://github.com/rudderlabs/rudder-config-schema/commit/24f8fcfec22cf06849bfed76f08584024c109489))
+* optimizely fullstack schema ([#344](https://github.com/rudderlabs/rudder-config-schema/issues/344)) ([e42af44](https://github.com/rudderlabs/rudder-config-schema/commit/e42af44f05ed72c51c590839b635b18e7808e2df))
+
+### [1.4.1](https://github.com/rudderlabs/rudder-config-schema/compare/1.4.0...1.4.1) (2023-01-24)
 
 
 ### Bug Fixes
 
 * move mp,zendesk,sfmc to processor ([7433e22](https://github.com/rudderlabs/rudder-config-schema/commit/7433e229c1426a7cd5d0aefc2fd94442170b9e45))
 
-## 1.4.0 (2023-01-24)
+## [1.4.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.3.7...1.4.0) (2023-01-24)
+
+
+### Features
+
+* **destination:** onboard lemnisk integration ([#306](https://github.com/rudderlabs/rudder-config-schema/issues/306)) ([392a9d1](https://github.com/rudderlabs/rudder-config-schema/commit/392a9d1ae1be9f4046c4eeea0f49b1b9166a5fcd))
+* ga4 hybrid mode support ([#316](https://github.com/rudderlabs/rudder-config-schema/issues/316)) ([724e865](https://github.com/rudderlabs/rudder-config-schema/commit/724e86516a8b5d86aefeb3db6da0e54ac1ebc569))
+* updated the ui-config of amplitude to version2 ([#318](https://github.com/rudderlabs/rudder-config-schema/issues/318)) ([caa8bf8](https://github.com/rudderlabs/rudder-config-schema/commit/caa8bf8108fe213c6162eb800a2b17e549330925))
+
+
+### Bug Fixes
+
+* disables skills resource in freshdesk ([f2c7343](https://github.com/rudderlabs/rudder-config-schema/commit/f2c7343bb7c411685c92609d67bffdfd59bc3b64))
+
+### [1.3.7](https://github.com/rudderlabs/rudder-config-schema/compare/1.3.6...1.3.7) (2023-01-18)
 
 
 ### Features
 
 * add axeptio into prod ([#302](https://github.com/rudderlabs/rudder-config-schema/issues/302)) ([231db08](https://github.com/rudderlabs/rudder-config-schema/commit/231db0873b9bd948521d69fa7cc25efdd621a394))
 * add microsoft clarity to prod ([#275](https://github.com/rudderlabs/rudder-config-schema/issues/275)) ([9327566](https://github.com/rudderlabs/rudder-config-schema/commit/9327566284652fb48c98da3ca31776661df03e66))
-* **destination:** onboard lemnisk integration ([#306](https://github.com/rudderlabs/rudder-config-schema/issues/306)) ([392a9d1](https://github.com/rudderlabs/rudder-config-schema/commit/392a9d1ae1be9f4046c4eeea0f49b1b9166a5fcd))
-* ga4 hybrid mode support ([#316](https://github.com/rudderlabs/rudder-config-schema/issues/316)) ([724e865](https://github.com/rudderlabs/rudder-config-schema/commit/724e86516a8b5d86aefeb3db6da0e54ac1ebc569))
+* added catalog for databricks ([#253](https://github.com/rudderlabs/rudder-config-schema/issues/253)) ([#308](https://github.com/rudderlabs/rudder-config-schema/issues/308)) ([4446798](https://github.com/rudderlabs/rudder-config-schema/commit/4446798083cff92760b5dac7ee6b7d2a9939e0c9))
 * update footernote in bigquerystream ([#271](https://github.com/rudderlabs/rudder-config-schema/issues/271)) ([4aeaa42](https://github.com/rudderlabs/rudder-config-schema/commit/4aeaa42240d237e784bb8ea397ad69a003573dc4))
-* updated the ui-config of amplitude to version2 ([#318](https://github.com/rudderlabs/rudder-config-schema/issues/318)) ([caa8bf8](https://github.com/rudderlabs/rudder-config-schema/commit/caa8bf8108fe213c6162eb800a2b17e549330925))
 
 
 ### Bug Fixes
 
 * bing ads updated image ([#292](https://github.com/rudderlabs/rudder-config-schema/issues/292)) ([e3891c1](https://github.com/rudderlabs/rudder-config-schema/commit/e3891c1a8ca2567a95e398d1dfbceefa6013edc5))
-* destination transformation change from processor to router ([#246](https://github.com/rudderlabs/rudder-config-schema/issues/246)) ([2c3b461](https://github.com/rudderlabs/rudder-config-schema/commit/2c3b46186db5e5d286c293a1af644a98f82d2123))
-* disables skills resource in freshdesk ([f2c7343](https://github.com/rudderlabs/rudder-config-schema/commit/f2c7343bb7c411685c92609d67bffdfd59bc3b64))
 
-### 1.3.7 (2023-01-18)
-
-* chore: updates amplitude to 4.0.7 ([c0d37b9](https://github.com/rudderlabs/rudder-config-schema/commit/c0d37b9badca4cc6bb85a6d79f7d5afdac313448))
-
-### 1.3.6 (2023-01-13)
+### [1.3.6](https://github.com/rudderlabs/rudder-config-schema/compare/1.3.5...1.3.6) (2023-01-13)
 
 
 ### Bug Fixes
 
 * reenable ga4 page call support for cloud mode ([#299](https://github.com/rudderlabs/rudder-config-schema/issues/299)) ([8bf3643](https://github.com/rudderlabs/rudder-config-schema/commit/8bf3643c4edd268a562f67f79f4a0b3ea22248d1))
 
-### 1.3.5 (2023-01-13)
+### [1.3.5](https://github.com/rudderlabs/rudder-config-schema/compare/1.3.4...1.3.5) (2023-01-13)
 
 
 ### Bug Fixes
 
 * enanble pro and enterpise for cdkv2 comparison test ([#293](https://github.com/rudderlabs/rudder-config-schema/issues/293)) ([a6593dc](https://github.com/rudderlabs/rudder-config-schema/commit/a6593dcac8f96d2ad925121095ce307a3daabe5a))
 
-### 1.3.4 (2023-01-13)
+### [1.3.4](https://github.com/rudderlabs/rudder-config-schema/compare/1.3.3...1.3.4) (2023-01-13)
 
-* chore: reverts intercom after oauth video ([73449fb](https://github.com/rudderlabs/rudder-config-schema/commit/73449fbc8de23379fbea0d46b7a832b5da4c3b4e))
-
-### 1.3.3 (2023-01-13)
+### [1.3.3](https://github.com/rudderlabs/rudder-config-schema/compare/1.3.2...1.3.3) (2023-01-13)
 
 
 ### Bug Fixes
@@ -58,16 +90,21 @@ All notable changes to this project will be documented in this file. See [standa
 * enable cdkv2 for algolia and pinterest ([630644e](https://github.com/rudderlabs/rudder-config-schema/commit/630644e5466d5d624e76f52dd37d1524e71ef499))
 * revert a specific commit from [#253](https://github.com/rudderlabs/rudder-config-schema/issues/253) ([#284](https://github.com/rudderlabs/rudder-config-schema/issues/284)) ([856c9b9](https://github.com/rudderlabs/rudder-config-schema/commit/856c9b91c3f33bef5ca8c46b1d0b751629574b8f))
 
-### 1.3.2 (2023-01-12)
+### [1.3.2](https://github.com/rudderlabs/rudder-config-schema/compare/1.3.1...1.3.2) (2023-01-12)
 
 
 ### Bug Fixes
 
 * hotfix intercom image update ([#280](https://github.com/rudderlabs/rudder-config-schema/issues/280)) ([0aeef10](https://github.com/rudderlabs/rudder-config-schema/commit/0aeef10eed47b0715fd878c2753c0c298ab794b3))
 
-### 1.3.1 (2023-01-12)
+### [1.3.1](https://github.com/rudderlabs/rudder-config-schema/compare/1.3.0...1.3.1) (2023-01-12)
 
-## 1.3.0 (2023-01-11)
+
+### Bug Fixes
+
+* destination transformation change from processor to router ([#246](https://github.com/rudderlabs/rudder-config-schema/issues/246)) ([2c3b461](https://github.com/rudderlabs/rudder-config-schema/commit/2c3b46186db5e5d286c293a1af644a98f82d2123))
+
+## [1.3.0](https://github.com/rudderlabs/rudder-config-schema/compare/a615d2b76ce7cf7cebb5c1241806b5de3de2f857...1.3.0) (2023-01-12)
 
 
 ### Features
@@ -87,6 +124,7 @@ All notable changes to this project will be documented in this file. See [standa
 * **braze:** braze logs flag ([#252](https://github.com/rudderlabs/rudder-config-schema/issues/252)) ([c2f8017](https://github.com/rudderlabs/rudder-config-schema/commit/c2f80170113a9f91d9789903fdee7ed7335068b5))
 * **braze:** make logs visibility configurable braze ([#240](https://github.com/rudderlabs/rudder-config-schema/issues/240)) ([c052a6d](https://github.com/rudderlabs/rudder-config-schema/commit/c052a6d885eb8f773596900fcbf43b61c270271b))
 * **dcm floodlight:** add iframe support ([#61](https://github.com/rudderlabs/rudder-config-schema/issues/61)) ([e1804c0](https://github.com/rudderlabs/rudder-config-schema/commit/e1804c0dcc28fbf1a6db4a37cb8e17a627bb37fa))
+* **dcm floodlight:** add iframe support ([#80](https://github.com/rudderlabs/rudder-config-schema/issues/80)) ([559fbaa](https://github.com/rudderlabs/rudder-config-schema/commit/559fbaaa273c080bf227bbb1333cdaa524255b53))
 * deploying singer freshdesk ([7aac54c](https://github.com/rudderlabs/rudder-config-schema/commit/7aac54caf4f5def3f9be4e477cffaf0359070407))
 * **destination:** onboard awin integration ([#140](https://github.com/rudderlabs/rudder-config-schema/issues/140)) ([a58f507](https://github.com/rudderlabs/rudder-config-schema/commit/a58f507ab51ae812ac0a9751594c6c2ad40ddeec))
 * **destination:** onboard discord ([#227](https://github.com/rudderlabs/rudder-config-schema/issues/227)) ([7407f26](https://github.com/rudderlabs/rudder-config-schema/commit/7407f264da59e1a45ad1a53eac83637bc9b0b68b))
@@ -103,6 +141,8 @@ All notable changes to this project will be documented in this file. See [standa
 * ga4 hybrid mode support ([#214](https://github.com/rudderlabs/rudder-config-schema/issues/214)) ([7ecbaa5](https://github.com/rudderlabs/rudder-config-schema/commit/7ecbaa57a7beb80ac98f0717ac87e78e3e780f7b))
 * google analytics v4 release ([#202](https://github.com/rudderlabs/rudder-config-schema/issues/202)) ([0315e65](https://github.com/rudderlabs/rudder-config-schema/commit/0315e6507e569c4a5ffcc72f1e81bac5766adbcc))
 * hide moengage source from prod ([#255](https://github.com/rudderlabs/rudder-config-schema/issues/255)) ([7387bca](https://github.com/rudderlabs/rudder-config-schema/commit/7387bca688d8e80101ddc7ce503eebfbce675b68))
+* hotfix 1.0.9 ([#100](https://github.com/rudderlabs/rudder-config-schema/issues/100)) ([fc850e3](https://github.com/rudderlabs/rudder-config-schema/commit/fc850e39d67e135946260c73ec7bfc7eecb0f1ed)), closes [#89](https://github.com/rudderlabs/rudder-config-schema/issues/89)
+* hotfix 1.1.1 ([#124](https://github.com/rudderlabs/rudder-config-schema/issues/124)) ([3273a16](https://github.com/rudderlabs/rudder-config-schema/commit/3273a16a125d4f2ed5b743e6eddfb4ce25daddde)), closes [#123](https://github.com/rudderlabs/rudder-config-schema/issues/123)
 * impact radius - onbaord impact radius ([#225](https://github.com/rudderlabs/rudder-config-schema/issues/225)) ([72dfb30](https://github.com/rudderlabs/rudder-config-schema/commit/72dfb30e5ff90ab3cb51530e6cfed359806c1c7c))
 * **integration:** Adobe Analytics - add schema validations ([#142](https://github.com/rudderlabs/rudder-config-schema/issues/142)) ([2a3b221](https://github.com/rudderlabs/rudder-config-schema/commit/2a3b22132c1e53c380f18356caf3f8128f47bfa8))
 * **integration:** Adobe Analytics - fix schema validations ([#144](https://github.com/rudderlabs/rudder-config-schema/issues/144)) ([5f5135c](https://github.com/rudderlabs/rudder-config-schema/commit/5f5135cf6117636a71b7b8b32bab5a005d5b9d34))
@@ -141,6 +181,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
+* add coming soon and remove from audience ([#139](https://github.com/rudderlabs/rudder-config-schema/issues/139)) ([d9d9a26](https://github.com/rudderlabs/rudder-config-schema/commit/d9d9a2632dd858bd1507c452613ce0d14a400842))
 * add coming soon and remove from audience ([#143](https://github.com/rudderlabs/rudder-config-schema/issues/143)) ([638a957](https://github.com/rudderlabs/rudder-config-schema/commit/638a957f1d73f4a6862c3544857dd59914973663))
 * add TestCase and update config for Podsights ([#92](https://github.com/rudderlabs/rudder-config-schema/issues/92)) ([4375261](https://github.com/rudderlabs/rudder-config-schema/commit/43752611be9ed2080085cffeb70e81eb91e71ab7))
 * added onetrustCookieCategories in destinations schema ([#163](https://github.com/rudderlabs/rudder-config-schema/issues/163)) ([29daf01](https://github.com/rudderlabs/rudder-config-schema/commit/29daf014be7d8a7a04cce5b3858b10500a23ca63))
@@ -165,14 +206,19 @@ All notable changes to this project will be documented in this file. See [standa
 * removing preview tag ([#167](https://github.com/rudderlabs/rudder-config-schema/issues/167)) ([ffb79ba](https://github.com/rudderlabs/rudder-config-schema/commit/ffb79ba1af2e495a421cdbaff6d316ce58a63722))
 * rename files to the latest format ([efecaf7](https://github.com/rudderlabs/rudder-config-schema/commit/efecaf7652d828beaa90c6360362a43fd6a4bf30))
 * resolve conflicts with master ([#107](https://github.com/rudderlabs/rudder-config-schema/issues/107)) ([fef97a8](https://github.com/rudderlabs/rudder-config-schema/commit/fef97a8560f6aaf1cc6daa3c9147d1d1ede5ddbd)), closes [#80](https://github.com/rudderlabs/rudder-config-schema/issues/80) [#100](https://github.com/rudderlabs/rudder-config-schema/issues/100) [#89](https://github.com/rudderlabs/rudder-config-schema/issues/89)
+* revert bq changes ([#270](https://github.com/rudderlabs/rudder-config-schema/issues/270)) ([7775865](https://github.com/rudderlabs/rudder-config-schema/commit/77758655d8ac27d090a36fb2f316e3814bff5ac7))
 * revert personalize config changed to remove iam role ([#122](https://github.com/rudderlabs/rudder-config-schema/issues/122)) ([6f66035](https://github.com/rudderlabs/rudder-config-schema/commit/6f6603582947d62253e2ffbc74719222ddbd8216))
 * **satismeter:** set hidden to false ([#207](https://github.com/rudderlabs/rudder-config-schema/issues/207)) ([c4f6723](https://github.com/rudderlabs/rudder-config-schema/commit/c4f6723ed1e3e44663fe7c7a8e119a65d7f0f6b4))
+* sendinblue regex ([#269](https://github.com/rudderlabs/rudder-config-schema/issues/269)) ([424ff9c](https://github.com/rudderlabs/rudder-config-schema/commit/424ff9c52e4342a14b94a236c66a3aee97cbc83f))
 * **sendinblue:** schema ([#262](https://github.com/rudderlabs/rudder-config-schema/issues/262)) ([00bec4a](https://github.com/rudderlabs/rudder-config-schema/commit/00bec4a72bf15d90658a9d3ba41a745a2ca4cab0))
 * **sendinblue:** schema ([#263](https://github.com/rudderlabs/rudder-config-schema/issues/263)) ([5888a95](https://github.com/rudderlabs/rudder-config-schema/commit/5888a95d570a50556e82e15894d4fac1dd1bf744))
 * set preview to true (satismeter, axeptio, microsoft_clarity) ([#206](https://github.com/rudderlabs/rudder-config-schema/issues/206)) ([625d76f](https://github.com/rudderlabs/rudder-config-schema/commit/625d76fbd8508a387f5959e2af578a306481363a))
 * singer salesforce new version ([#89](https://github.com/rudderlabs/rudder-config-schema/issues/89)) ([761ba3d](https://github.com/rudderlabs/rudder-config-schema/commit/761ba3dfa4207521ce6abca34c3820787784925c))
 * supportedSourcesValidation in dbconfig ([#174](https://github.com/rudderlabs/rudder-config-schema/issues/174)) ([2112936](https://github.com/rudderlabs/rudder-config-schema/commit/2112936894e65b8c723b24641e1b4e7bb9291857))
+* typo introduced while hiding facebook ads ([#238](https://github.com/rudderlabs/rudder-config-schema/issues/238)) ([1c5d860](https://github.com/rudderlabs/rudder-config-schema/commit/1c5d860d9fecb72a8ebd74ad68eb556f49db91ab))
 * typo introduced while hiding facebook ads ([#238](https://github.com/rudderlabs/rudder-config-schema/issues/238)) ([2b63885](https://github.com/rudderlabs/rudder-config-schema/commit/2b63885619aace90910ac6c748c2e62cce236837))
 * update google sheets image ([#194](https://github.com/rudderlabs/rudder-config-schema/issues/194)) ([3057183](https://github.com/rudderlabs/rudder-config-schema/commit/30571838340d13e64c5d7a28073321150f5a3a17))
+* update singer_hubspot image ([68000da](https://github.com/rudderlabs/rudder-config-schema/commit/68000da2fed52f065ab938b75f308575cc51dbf9))
 * updated factorsAI configs ([c586f5b](https://github.com/rudderlabs/rudder-config-schema/commit/c586f5b99db1738f746ada41d193589f09e7ecf6))
+* updated flutter device mode support for destinations ADJ, AM, AppCenter, Braze, Firebase, Leanplum ([65bd102](https://github.com/rudderlabs/rudder-config-schema/commit/65bd102752a9a9bb93b0f8592125168c23ef0ec9))
 * Webhook category added ([#81](https://github.com/rudderlabs/rudder-config-schema/issues/81)) ([0239729](https://github.com/rudderlabs/rudder-config-schema/commit/023972953dee246a6b60ecc2c3220bf8b94c45c1))
