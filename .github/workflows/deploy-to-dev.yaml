@@ -1,7 +1,6 @@
 name: Deploy Configurations To Development DB
 
 on:
-  workflow_dispatch:
   pull_request:
     types:
       - closed
@@ -12,8 +11,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    # Either triggered from develop branch or merged pull requests
-    if: github.event.pull_request.merged == true || github.ref == 'refs/heads/develop'
+    # Only merged pull requests must trigger
+    if: github.event.pull_request.merged == true
     steps:
       - name: Checkout
         uses: actions/checkout@v3
