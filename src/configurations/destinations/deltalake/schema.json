@@ -20,6 +20,10 @@
         "type": "string",
         "pattern": "(^env[.].+)|^(.{1,100})$"
       },
+      "catalog": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.*)$"
+      },
       "namespace": {
         "type": "string",
         "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
@@ -55,9 +59,26 @@
       "enableExternalLocation": {
         "type": "boolean",
         "default": false
+      },
+      "useRudderStorage": {
+        "type": "boolean",
+        "default": false
       }
     },
     "allOf": [
+      {
+        "if": {
+          "properties": {
+            "useRudderStorage": {
+              "const": false
+            }
+          },
+          "required": ["useRudderStorage"]
+        },
+        "then": {
+          "required": ["bucketProvider"]
+        }
+      },
       {
         "if": {
           "properties": {
@@ -82,9 +103,12 @@
           "properties": {
             "bucketProvider": {
               "const": "S3"
+            },
+            "useRudderStorage": {
+              "const": false
             }
           },
-          "required": ["bucketProvider"]
+          "required": ["bucketProvider", "useRudderStorage"]
         },
         "then": {
           "properties": {
@@ -107,9 +131,12 @@
               "properties": {
                 "useSTSTokens": {
                   "const": true
+                },
+                "useRudderStorage": {
+                  "const": false
                 }
               },
-              "required": ["useSTSTokens"]
+              "required": ["useSTSTokens", "useRudderStorage"]
             },
             "then": {
               "properties": {
@@ -138,9 +165,12 @@
           "properties": {
             "bucketProvider": {
               "const": "GCS"
+            },
+            "useRudderStorage": {
+              "const": false
             }
           },
-          "required": ["bucketProvider"]
+          "required": ["bucketProvider", "useRudderStorage"]
         },
         "then": {
           "properties": {
@@ -161,9 +191,12 @@
           "properties": {
             "bucketProvider": {
               "const": "AZURE_BLOB"
+            },
+            "useRudderStorage": {
+              "const": false
             }
           },
-          "required": ["bucketProvider"]
+          "required": ["bucketProvider", "useRudderStorage"]
         },
         "then": {
           "properties": {
