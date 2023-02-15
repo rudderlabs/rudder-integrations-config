@@ -1,0 +1,154 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+      "cloudMode"
+    ],
+    "properties": {
+      "cloudMode": {
+        "type": "string",
+        "pattern": "^(web|server|device)$"
+      },
+      "sdkWriteKey": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+          }
+        }
+      },
+      "accountId": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+          }
+        }
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "oneTrustCookieCategories": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "cloudMode": {
+              "type": "string",
+              "const": "server"
+            }
+          },
+          "required": [
+            "cloudMode"
+          ]
+        },
+        "then": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            },
+            "passKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            },
+            "diapi": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(https?|ftp)://[^\\s/$.?#].[^\\s]*$"
+            },
+            "srcId": {
+              "type": "string"
+            },
+            "diapiWriteKey": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "apiKey",
+            "passKey",
+            "diapi"
+          ]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "cloudMode": {
+              "type": "string",
+              "const": "web"
+            }
+          },
+          "required": [
+            "cloudMode"
+          ]
+        },
+        "then": {
+          "properties": {
+            "pl": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(https?|ftp)://[^\\s/$.?#].[^\\s]*$"
+            },
+            "plWriteKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": [
+            "pl",
+            "plWriteKey"
+          ]
+        }
+      }
+    ],
+    "additionalProperties": true
+  }
+}
