@@ -1,0 +1,477 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+      "apiKey"
+    ],
+    "properties": {
+      "apiKey": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+        "regex": "^(.{1,100})$",
+        "label": "API Key",
+        "regexErrorMessage": "Invalid Api Key",
+        "placeholder": "e.g: bSjsdGYsOo9sjw23Shj",
+        "secret": true
+      },
+      "apiSecret": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+        "regex": "^(.{0,100})$",
+        "label": "Secret key",
+        "regexErrorMessage": "Invalid Api Key",
+        "placeholder": "e.g: bSjsdGYsOo9sjw23Shj",
+        "secret": true
+      },
+      "groupTypeTrait": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+        "regex": "^(.{0,100})$",
+        "label": "Group name trait",
+        "regexErrorMessage": "Invalid Group Name Trait",
+        "placeholder": "e.g: company_id",
+        "secret": false
+      },
+      "groupValueTrait": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+        "regex": "^(.{0,100})$",
+        "label": "Group value trait",
+        "regexErrorMessage": "Invalid Group Name Trait",
+        "placeholder": "e.g: company_name",
+        "secret": false
+      },
+      "trackAllPages": {
+        "type": "boolean",
+        "regex": "",
+        "label": "Track all Pages to Amplitude",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "trackCategorizedPages": {
+        "type": "boolean",
+        "regex": "",
+        "label": "Track Categorized Pages to Amplitude",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "trackNamedPages": {
+        "type": "boolean",
+        "regex": "",
+        "label": "Track Named Pages to Amplitude",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "trackProductsOnce": {
+        "type": "boolean",
+        "regex": "",
+        "label": "Track products as a single event",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "trackRevenuePerProduct": {
+        "type": "boolean",
+        "regex": "",
+        "label": "Track Revenue per product",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "versionName": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+        "regex": "^(.{0,100})$",
+        "label": "Version Name",
+        "regexErrorMessage": "Invalid Version Name",
+        "placeholder": "e.g: 1.12.3",
+        "secret": false
+      },
+      "residencyServer": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(standard|EU)$",
+        "regex": "",
+        "label": "Residency server",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "traitsToIncrement": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "traits": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Traits to increment",
+              "placeholder": "e.g: Revenue"
+            }
+          }
+        }
+      },
+      "traitsToSetOnce": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "traits": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Traits to set once",
+              "placeholder": "e.g: lastName"
+            }
+          }
+        }
+      },
+      "traitsToAppend": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "traits": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Traits to append",
+              "placeholder": "e.g: createdAt"
+            }
+          }
+        }
+      },
+      "traitsToPrepend": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "traits": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Traits to prepend",
+              "placeholder": "e.g: createdAt"
+            }
+          }
+        }
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          },
+          "ios": {
+            "type": "boolean"
+          },
+          "android": {
+            "type": "boolean"
+          },
+          "reactnative": {
+            "type": "boolean"
+          }
+        },
+        "regex": "",
+        "label": "",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "preferAnonymousIdForDeviceId": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        },
+        "regex": "",
+        "label": "Replace Device ID with Anonymous ID",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "deviceIdFromUrlParam": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        },
+        "regex": "",
+        "label": "Set Device ID From URL Parameter",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "forceHttps": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        },
+        "regex": "",
+        "label": "Force HTTPS",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "trackGclid": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        },
+        "regex": "",
+        "label": "Track GCLID",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "trackReferrer": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        },
+        "regex": "",
+        "label": "Track referrer information",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "saveParamsReferrerOncePerSession": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        },
+        "regex": "",
+        "label": "Save Referrer, URL Params, GCLID only once per session",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "trackUtmProperties": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        },
+        "regex": "",
+        "label": "Track UTM properties",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "unsetParamsReferrerOnNewSession": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        },
+        "regex": "",
+        "label": "Reset referrer or UTM params for new sessions",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "batchEvents": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        },
+        "regex": "",
+        "label": "Batch events prior to upload",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Allowlisted events",
+              "placeholder": "e.g: Anonymous page visit"
+            }
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Denylisted events",
+              "placeholder": "e.g: Anonymous page visit"
+            }
+          }
+        }
+      },
+      "eventUploadPeriodMillis": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          },
+          "android": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          },
+          "ios": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          },
+          "reactnative": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          }
+        },
+        "regex": "^([0-9]{0,100})$",
+        "label": "Batch event upload period (ms)",
+        "regexErrorMessage": "Invalid Value",
+        "placeholder": "e.g: 30000",
+        "secret": false
+      },
+      "eventUploadThreshold": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          },
+          "android": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          },
+          "ios": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          },
+          "reactnative": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          }
+        },
+        "regex": "^([0-9]{0,100})$",
+        "label": "Batch event upload threshold",
+        "regexErrorMessage": "Invalid Value",
+        "placeholder": "e.g: 30",
+        "secret": false
+      },
+      "mapDeviceBrand": {
+        "type": "boolean",
+        "regex": "",
+        "label": "Map device brand",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "enableLocationListening": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "boolean"
+          },
+          "reactnative": {
+            "type": "boolean"
+          }
+        },
+        "regex": "",
+        "label": "Enable location listening",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "trackSessionEvents": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "boolean"
+          },
+          "ios": {
+            "type": "boolean"
+          },
+          "reactnative": {
+            "type": "boolean"
+          }
+        },
+        "regex": "",
+        "label": "Track session events",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "useAdvertisingIdForDeviceId": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "boolean"
+          },
+          "reactnative": {
+            "type": "boolean"
+          }
+        },
+        "regex": "",
+        "label": "Use Advertising ID for Device ID",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "useIdfaAsDeviceId": {
+        "type": "object",
+        "properties": {
+          "ios": {
+            "type": "boolean"
+          },
+          "reactnative": {
+            "type": "boolean"
+          }
+        },
+        "regex": "",
+        "label": "Use IDFA for Device ID",
+        "regexErrorMessage": "",
+        "placeholder": "",
+        "secret": false
+      },
+      "oneTrustCookieCategories": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
+        },
+        "regex": "",
+        "label": "Cookie category name",
+        "regexErrorMessage": "",
+        "placeholder": "e.g: Credit card visit",
+        "secret": false
+      }
+    }
+  }
+}
