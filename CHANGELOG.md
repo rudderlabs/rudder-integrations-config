@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.7.2...1.8.0) (2023-02-20)
+
+
+### Features
+
+* **ga4:** add sent_to parameter ([5c57ff9](https://github.com/rudderlabs/rudder-config-schema/commit/5c57ff987726967a9e27ccd999f9ed3b1938f2e7))
+
 ### [1.7.2](https://github.com/rudderlabs/rudder-config-schema/compare/1.7.1...1.7.2) (2023-02-17)
 
 ### [1.7.1](https://github.com/rudderlabs/rudder-config-schema/compare/1.7.0...1.7.1) (2023-02-16)
