@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.8.2...1.9.0) (2023-02-27)
+
+
+### Features
+
+* added roles for snoflake ([78f6e0d](https://github.com/rudderlabs/rudder-config-schema/commit/78f6e0d01df7ac544722e65dd548879615616ca3))
+
+### [1.8.2](https://github.com/rudderlabs/rudder-config-schema/compare/1.8.1...1.8.2) (2023-02-27)
+
+### [1.8.1](https://github.com/rudderlabs/rudder-config-schema/compare/1.8.0...1.8.1) (2023-02-27)
+
 ## [1.8.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.7.2...1.8.0) (2023-02-21)
 
 
