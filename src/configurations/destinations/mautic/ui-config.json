@@ -21,13 +21,55 @@
           "footerNote": "Enter the password associated with the above username."
         },
         {
+          "type": "singleSelect",
+          "label": "Domain Method",
+          "value": "domainMethod",
+          "options": [
+            {
+              "name": "SubDomain",
+              "value": "subDomainNameOption"
+            },
+            {
+              "name": "Domain (Preferred for Self Hosted Instance)",
+              "value": "domainNameOption"
+            }
+          ],
+          "defaultOption": {
+            "name": "SubDomain",
+            "value": "subDomainNameOption"
+          },
+          "required": true,
+          "footerNote": "Select Domain Input Method"
+        },
+        {
           "type": "textInput",
           "label": "Sub-Domain Name",
           "value": "subDomainName",
           "required": true,
           "secret": true,
+          "preRequisiteField": [
+            {
+              "name": "domainMethod",
+              "selectedValue": "subDomainNameOption"
+            }
+          ],
           "placeholder": "e.g: testdomain",
           "footerNote": "Enter the subdomain name of your Mautic instance."
+        },
+        {
+          "type": "textInput",
+          "label": "Domain Name",
+          "value": "domainName",
+          "required": true,
+          "secret": true,
+          "preRequisiteField": [
+            {
+              "name": "domainMethod",
+              "selectedValue": "domainNameOption"
+            }
+          ],
+          "placeholder": "e.g: testdomain",
+          "footerNote": "Enter the Domain name of your Mautic instance."
         },
         {
           "type": "textInput",
