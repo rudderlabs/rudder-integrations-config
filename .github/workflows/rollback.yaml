@@ -1,0 +1,65 @@
+name: Rollback Production
+
+on: workflow_dispatch
+
+jobs:
+  deploy-tag:
+    name: Rollback Production To a Tag
+    runs-on: ubuntu-latest
+
+    # Only allow to be deployed from tags and main
+    # Only allow specific actors to trigger
+    if: (startsWith(github.ref, 'refs/tags/') || startsWith(github.ref, 'refs/heads/main'))&& (github.actor == 'ItsSudip' || github.actor == 'krishna2020' || github.actor == 'lvrach' || github.actor == 'cisse21' || github.actor == 'nidhilashkari17' || github.actor == 'AchuthaSourabhC' || github.actor == 'saikumarrs') && (github.triggering_actor == 'ItsSudip' || github.triggering_actor == 'krishna2020' || github.triggering_actor == 'lvrach' || github.triggering_actor == 'cisse21' || github.triggering_actor == 'nidhilashkari17' || github.triggering_actor == 'AchuthaSourabhC' || github.triggering_actor == 'saikumarrs')
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        env:
+          HUSKY: 0
+        run: |
+          npm ci
+
+      - name: Execute Unit Tests
+        env:
+          HUSKY: 0
+        run: |
+          npm run test
+
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9.13'
+
+      - name: Display Python Version
+        run: |
+          which python
+          python -c "import sys; print(sys.version)"
+
+      - name: Install Python Dependencies
+        run: python -m pip install --upgrade pip requests jsondiff
+
+      - name: Display Working Directory Files
+        run: |
+          echo current directory
+          pwd
+          ls -a
+
+      - name: Display Current Package Version
+        run: echo $(jq -r .version package.json)
+
+      - name: Deploy To Production DB
+        env:
+          API_USER: ${{secrets.PROD_USERNAME}}
+          API_PASSWORD: ${{secrets.PROD_PASSWORD}}
+        run: |
+          python scripts/deployToDB.py https://api.rudderstack.com
