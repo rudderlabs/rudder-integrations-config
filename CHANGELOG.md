@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.10.0...1.11.0) (2023-03-02)
+
+
+### Features
+
+* upgrade ga version to 5.1.0 ([#354](https://github.com/rudderlabs/rudder-config-schema/issues/354)) ([91175ac](https://github.com/rudderlabs/rudder-config-schema/commit/91175ac86dbae7de7c15ab3c692c3da82a8f08b0))
+
 ## [1.10.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.9.0...1.10.0) (2023-02-28)
 
 
