@@ -2,7 +2,9 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "required": ["measurementId"],
+    "required": [
+      "measurementId"
+    ],
     "properties": {
       "apiSecret": {
         "type": "string",
@@ -25,17 +27,32 @@
         "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
       },
       "capturePageView": {
-        "type": "string",
-        "pattern": "(^env[.].+)|^(rs|gtag)$"
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^env[.].+)|^(rs|gtag)$"
+          }
+        }
       },
       "extendPageViewParams": {
-        "type": "boolean"
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
       },
       "debugMode": {
         "type": "boolean"
       },
       "addSendToParameter": {
-        "type": "boolean"
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
       },
       "whitelistedEvents": {
         "type": "array",
