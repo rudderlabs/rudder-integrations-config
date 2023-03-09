@@ -34,7 +34,7 @@ async function initAjvValidators() {
     const intgDir = path.dirname(file);
     const intgName = path.basename(intgDir);
     const intgType = path.basename(path.dirname(intgDir));
-    validators[`${intgType}___${intgName}`] = ajv.compile(contents[i]?.configSchema || {});
+    validators[`${intgType}___${intgName}`] = ajv.compile(contents[i].configSchema || {});
   });
 }
 
@@ -53,14 +53,11 @@ export function validateConfig(
     throw new Error(`No validation method found for definition ${definitionName}`);
   }
 
-  if (validationMethod && !validationMethod(config)) {
-    let errorMessages: string[] = [];
-    if (validationMethod.errors?.length) {
-      errorMessages = validationMethod.errors.map((e) => {
-        const propertyName = e.instancePath.slice(1).replace(/\//g, '.');
-        return `${propertyName} ${e.message}`;
-      });
-    }
+  if (validationMethod && !validationMethod(config) && validationMethod.errors) {
+    const errorMessages = validationMethod.errors.map((e) => {
+      const propertyName = e.instancePath.slice(1).replace(/\//g, '.');
+      return `${propertyName} ${e.message}`;
+    });
 
     throw new Error(JSON.stringify(errorMessages));
   }
