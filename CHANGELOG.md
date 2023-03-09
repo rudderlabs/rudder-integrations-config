@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.12.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.10.0...1.12.0) (2023-03-06)
+
+
+### Features
+
+* add connection mode to AM ([#422](https://github.com/rudderlabs/rudder-config-schema/issues/422)) ([dabe652](https://github.com/rudderlabs/rudder-config-schema/commit/dabe65217c67b971ecb496d9340e3c4b190a4f3b))
+* introduced external_id flag  ([#425](https://github.com/rudderlabs/rudder-config-schema/issues/425)) ([47b2ae3](https://github.com/rudderlabs/rudder-config-schema/commit/47b2ae3af21ebcf81305d5f03c85143a7605cfd7))
+* moved oneTrustCookieCategories to default config and made available for cloud mode ([#403](https://github.com/rudderlabs/rudder-config-schema/issues/403)) ([12c7ee8](https://github.com/rudderlabs/rudder-config-schema/commit/12c7ee82457ffda2c1d2299cf3ef2e235a941340))
+* upgrade ga version to 5.1.0 ([#354](https://github.com/rudderlabs/rudder-config-schema/issues/354)) ([29c5d11](https://github.com/rudderlabs/rudder-config-schema/commit/29c5d11f6994657412b2a6a779d44f79a889a8f4))
+
+
+### Bug Fixes
+
+* reverting an unwanted change, adding connectionMode field back to uiConfig ([#433](https://github.com/rudderlabs/rudder-config-schema/issues/433)) ([a6a07f5](https://github.com/rudderlabs/rudder-config-schema/commit/a6a07f5da55f960f805ee21365d86e5e74f582c7))
+* singer-shopify image version ([#432](https://github.com/rudderlabs/rudder-config-schema/issues/432)) ([c715761](https://github.com/rudderlabs/rudder-config-schema/commit/c715761ebea1ca2d830a69c7e7c52e3f582c9773))
+
 ### [1.11.1](https://github.com/rudderlabs/rudder-config-schema/compare/1.11.0...1.11.1) (2023-03-03)
 
 ## [1.11.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.10.0...1.11.0) (2023-03-02)
