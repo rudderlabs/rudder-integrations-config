@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.14.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.13.0...1.14.0) (2023-03-13)
+
+
+### Features
+
+* remove supportedMessageTypes for Firehose ([#450](https://github.com/rudderlabs/rudder-config-schema/issues/450)) ([623f897](https://github.com/rudderlabs/rudder-config-schema/commit/623f897fcb348465c520e61113b7e0dc37b5c547))
+
 ## [1.13.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.12.0...1.13.0) (2023-03-09)
 
 
