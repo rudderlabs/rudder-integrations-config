@@ -2,7 +2,12 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "required": ["userName", "password", "subDomainName", "lookUpField"],
+    "required": [
+      "userName",
+      "password",
+      "lookUpField",
+      "domainMethod"
+    ],
     "properties": {
       "userName": {
         "type": "string",
@@ -12,14 +17,61 @@
         "type": "string",
         "pattern": "(^env[.].+)|.+"
       },
-      "subDomainName": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-      },
       "lookUpField": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       }
-    }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "domainMethod": {
+              "type": "string",
+              "const": "subDomainNameOption"
+            }
+          },
+          "required": [
+            "domainMethod"
+          ]
+        },
+        "then": {
+          "properties": {
+            "subDomainName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": [
+            "subDomainName"
+          ]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "domainMethod": {
+              "type": "string",
+              "const": "domainNameOption"
+            }
+          },
+          "required": [
+            "domainMethod"
+          ]
+        },
+        "then": {
+          "properties": {
+            "domainName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(https?|ftp)://[^\\s/$.?#].[^\\s]*[^/]$"
+            }
+          },
+          "required": [
+            "domainName"
+          ]
+        }
+      }
+    ],
+    "additionalProperties": true
   }
 }
