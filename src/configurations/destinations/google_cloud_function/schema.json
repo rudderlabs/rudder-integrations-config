@@ -4,31 +4,26 @@
     "type": "object",
     "required": ["triggerType"],
     "properties": {
-      "apiKeyId": {
-        "type": "string"
-      },
-      "enableBatchInput": {
-        "type": "boolean"
-      },
-      "maxBatchSize": {
-        "type": "string",
-        "pattern": "^[1-9]\\d*$"
-      },
-      "triggerType": {
-        "type": "string",
-        "pattern": "^(Http|Https)$"
+      "apiKeyId": { "type": "string" },
+      "enableBatchInput": { "type": "boolean" },
+      "maxBatchSize": { "type": "string", "pattern": "^[1-9]\\d*$" },
+      "triggerType": { "type": "string", "pattern": "^(Http|Https)$" },
+      "oneTrustCookieCategories": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "oneTrustCookieCategory": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
       }
     },
     "allOf": [
       {
-        "if": {
-          "properties": {
-            "triggerType": {
-              "const": "Http"
-            }
-          },
-          "required": ["triggerType"]
-        },
+        "if": { "properties": { "triggerType": { "const": "Http" } }, "required": ["triggerType"] },
         "then": {
           "properties": {
             "googleCloudFunctionUrl": {
@@ -41,11 +36,7 @@
       },
       {
         "if": {
-          "properties": {
-            "triggerType": {
-              "const": "Https"
-            }
-          },
+          "properties": { "triggerType": { "const": "Https" } },
           "required": ["triggerType"]
         },
         "then": {
@@ -54,10 +45,7 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
             },
-            "gcloudAuthorization": {
-              "type": "string",
-              "pattern": "(^env[.].+)|.+"
-            }
+            "gcloudAuthorization": { "type": "string", "pattern": "(^env[.].+)|.+" }
           },
           "required": ["googleCloudFunctionUrl", "gcloudAuthorization"]
         }
