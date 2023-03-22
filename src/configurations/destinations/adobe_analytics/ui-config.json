@@ -8,21 +8,23 @@
           "label": "Tracking Server URL",
           "value": "trackingServerUrl",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$",
-          "regexErrorMessage": "Please put a valid url"
+          "regexErrorMessage": "Please put a valid url",
+          "footerNote": "This is the URL of your Adobe Analytics server. Please don't prepend http:// in the URL"
         },
         {
           "type": "textInput",
           "label": "Tracking Server Secure URL",
           "value": "trackingServerSecureUrl",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$",
-          "regexErrorMessage": "Please put a valid url"
+          "regexErrorMessage": "Please put a valid url",
+          "footerNote": "This is the secure HTTPS URL of your Adobe Analytics server. Please don't prepend https:// in the URL"
         },
         {
           "type": "textInput",
           "label": "Report Suite ID(s)",
           "value": "reportSuiteIds",
           "required": true,
-          "footerNote": "You can add multiple report suite ids by separated by commas."
+          "footerNote": "Report Suite ID can be found in the Adobe Analytics Settings page. You can add multiple report suite ids by separated by commas."
         },
         {
           "type": "checkbox",
@@ -35,33 +37,36 @@
           "label": "Heartbeat Tracking Server URL",
           "value": "heartbeatTrackingServerUrl",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$",
-          "regexErrorMessage": "Please put a valid url"
+          "regexErrorMessage": "Please put a valid url",
+          "footerNote": "This is the URL of your Adobe Heartbeat server. Please reach out to Adobe for this URL."
         },
         {
-          "type": "checkbox",
+          "type": "defaultCheckbox",
           "label": "Use UTF-8 charset",
           "value": "useUtf8Charset",
           "default": true
         },
         {
-          "type": "checkbox",
+          "type": "defaultCheckbox",
           "label": "Use Secure URL for Server-side",
           "value": "useSecureServerSide",
           "default": true
         },
         {
           "type": "textInput",
-          "label": "Adobe Analytics Javascript SDK URL",
+          "label": "Adobe Analytics Javascript SDK Proxy URL",
           "value": "proxyNormalUrl",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$",
-          "regexErrorMessage": "Please put a valid url"
+          "regexErrorMessage": "Please put a valid url",
+          "footerNote": "Enter your proxy url for hosting adobe analytics JS SDK. By default it is https://cdn.rudderlabs.com/adobe-analytics-js/adobe-analytics-js.js"
         },
         {
           "type": "textInput",
-          "label": "Adobe Analytics Hearbeat SDK URL",
+          "label": "Adobe Analytics Hearbeat SDK Proxy URL",
           "value": "proxyHeartbeatUrl",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$",
-          "regexErrorMessage": "Please put a valid url"
+          "regexErrorMessage": "Please put a valid url",
+          "footerNote": "Enter your proxy url for hosting adobe analytics Heartbeat SDK. By default it is https://cdn.rudderlabs.com/adobe-analytics-js/adobe-analytics-js-heartbeat.js"
         }
       ]
     },
@@ -165,13 +170,15 @@
         {
           "type": "textInput",
           "label": "Marketing Cloud Organization Id",
-          "value": "marketingCloudOrgId"
+          "value": "marketingCloudOrgId",
+          "footerNote": "Enter the Marketing Cloud Organization ID to use visitorAPI.js. It can be located on the Marketing Cloud administration page."
         },
         {
           "type": "checkbox",
           "label": "Drop Visitor Id",
           "value": "dropVisitorId",
-          "default": true
+          "default": true,
+          "footerNote": "When enabled, this will not assign userId to Visitor ID."
         }
       ]
     },
@@ -183,6 +190,7 @@
           "label": "Timestamp Option",
           "value": "timestampOption",
           "required": false,
+          "footerNote": "RudderStack sets visitorID depending on this value if the Drop Visitor ID setting is disabled.",
           "options": [
             {
               "name": "Timestamp Hybrid",
@@ -210,18 +218,21 @@
           "type": "checkbox",
           "label": "Send Both Timestamp and VisitorID for Timestamp Optional Reporting Suites",
           "value": "timestampOptionalReporting",
+          "footerNote": "Enable this to allow both timestamp and visitorId to be sent in the payload.",
           "default": false
         },
         {
           "type": "checkbox",
           "label": "No Fallbacks for Visitor ID",
           "value": "noFallbackVisitorId",
+          "footerNote": "Applicable for Cloud mode only, if this option is disabled, fallback visitor ID is set from the external Id.",
           "default": false
         },
         {
           "type": "checkbox",
           "label": "Prefer Visitor Id",
           "value": "preferVisitorId",
+          "footerNote": "If enabled, RudderStack sets the visitorID field. If disabled, RudderStack sets the timestamp value. This is applicable when timestamp option is set as hybrid.",
           "default": false
         }
       ]
@@ -246,6 +257,7 @@
           "type": "checkbox",
           "label": "Enable pageName for Track Events",
           "value": "trackPageName",
+          "footerNote": "Enable this toggle to send a pageName everytime with the track call.",
           "default": true
         },
         {
@@ -269,13 +281,13 @@
           "required": false
         },
         {
-          "type": "checkbox",
+          "type": "defaultCheckbox",
           "label": "Use Legacy LinkName",
           "value": "useLegacyLinkName",
           "default": true
         },
         {
-          "type": "checkbox",
+          "type": "defaultCheckbox",
           "label": "Page Name Fallback to Screen",
           "value": "pageNameFallbackTostring",
           "default": true
@@ -294,7 +306,7 @@
           "footerNote": "Add properties under context key in rudder payload"
         },
         {
-          "type": "checkbox",
+          "type": "defaultCheckbox",
           "label": "Send false value from properties ",
           "value": "sendFalseValues",
           "default": true
@@ -450,7 +462,7 @@
               "type": "textInput",
               "placeholder": "e.g. currency",
               "value": "eventMerchProperties",
-              "label": "Currency/Incremental properties to add to merchandise events at event level",
+              "label": "Incremental properties to add to merchandise events in events string",
               "required": false
             }
           ]
@@ -480,7 +492,7 @@
               "type": "textInput",
               "placeholder": "e.g. currency",
               "value": "productMerchProperties",
-              "label": "Currency/Incremental properties to add to merchandise events at product level",
+              "label": "Incremental properties to add to merchandise events in products string",
               "required": false
             }
           ]
@@ -489,6 +501,7 @@
           "type": "dynamicForm",
           "label": "Map Rudder Properties to eVars at product level",
           "value": "productMerchEvarsMap",
+          "footerNote": "Use this to populate the products string with the mapped eVars.",
           "required": false,
           "keyLeft": "from",
           "keyRight": "to",
