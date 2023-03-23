@@ -31,18 +31,10 @@
           "required": true,
           "placeholder": "e.g: test-topic"
         },
-        {
-          "type": "checkbox",
-          "label": "SSL Enabled",
-          "value": "sslEnabled",
-          "default": true
-        },
+        { "type": "checkbox", "label": "SSL Enabled", "value": "sslEnabled", "default": true },
         {
           "type": "textareaInput",
-          "preRequisiteField": {
-            "name": "sslEnabled",
-            "selectedValue": true
-          },
+          "preRequisiteField": { "name": "sslEnabled", "selectedValue": true },
           "label": "CA certificate",
           "value": "caCertificate",
           "regex": ".*",
@@ -62,38 +54,20 @@
         },
         {
           "type": "singleSelect",
-          "preRequisiteField": {
-            "name": "useSASL",
-            "selectedValue": true
-          },
+          "preRequisiteField": { "name": "useSASL", "selectedValue": true },
           "label": "SASL Type",
           "value": "saslType",
           "options": [
-            {
-              "name": "Plain",
-              "value": "plain"
-            },
-            {
-              "name": "SCRAM SHA-512",
-              "value": "sha512"
-            },
-            {
-              "name": "SCRAM SHA-256",
-              "value": "sha256"
-            }
+            { "name": "Plain", "value": "plain" },
+            { "name": "SCRAM SHA-512", "value": "sha512" },
+            { "name": "SCRAM SHA-256", "value": "sha256" }
           ],
-          "defaultOption": {
-            "name": "Plain",
-            "value": "plain"
-          },
+          "defaultOption": { "name": "Plain", "value": "plain" },
           "required": true
         },
         {
           "type": "textInput",
-          "preRequisiteField": {
-            "name": "useSASL",
-            "selectedValue": true
-          },
+          "preRequisiteField": { "name": "useSASL", "selectedValue": true },
           "label": "Username",
           "value": "username",
           "regex": "^(.{0,100})$",
@@ -103,10 +77,7 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": {
-            "name": "useSASL",
-            "selectedValue": true
-          },
+          "preRequisiteField": { "name": "useSASL", "selectedValue": true },
           "label": "Password",
           "value": "password",
           "regex": "^(.{0,100})$",
@@ -128,10 +99,7 @@
           "footerNote": "If this option is turned on we will convert the data to avro"
         },
         {
-          "preRequisiteField": {
-            "name": "convertToAvro",
-            "selectedValue": true
-          },
+          "preRequisiteField": { "name": "convertToAvro", "selectedValue": true },
           "label": "AVRO Schema Lists",
           "value": "avroSchemas",
           "required": true,
@@ -166,10 +134,7 @@
           "footerNote": "Enable this option to deliver events to multiple topics"
         },
         {
-          "preRequisiteField": {
-            "name": "enableMultiTopic",
-            "selectedValue": true
-          },
+          "preRequisiteField": { "name": "enableMultiTopic", "selectedValue": true },
           "type": "dynamicSelectForm",
           "label": "Map event type to topic",
           "labelLeft": "Event Type",
@@ -181,33 +146,15 @@
           "required": true,
           "placeholderRight": "e.g. Sample-topic",
           "options": [
-            {
-              "name": "Identify",
-              "value": "identify"
-            },
-            {
-              "name": "Page",
-              "value": "page"
-            },
-            {
-              "name": "Screen",
-              "value": "screen"
-            },
-            {
-              "name": "Group",
-              "value": "group"
-            },
-            {
-              "name": "Alias",
-              "value": "alias"
-            }
+            { "name": "Identify", "value": "identify" },
+            { "name": "Page", "value": "page" },
+            { "name": "Screen", "value": "screen" },
+            { "name": "Group", "value": "group" },
+            { "name": "Alias", "value": "alias" }
           ]
         },
         {
-          "preRequisiteField": {
-            "name": "enableMultiTopic",
-            "selectedValue": true
-          },
+          "preRequisiteField": { "name": "enableMultiTopic", "selectedValue": true },
           "type": "dynamicForm",
           "label": "Map Track events to topic",
           "required": true,
@@ -218,6 +165,25 @@
           "keyLeft": "from",
           "keyRight": "to",
           "value": "eventToTopicMap"
+        }
+      ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name/ID",
+              "required": false
+            }
+          ]
         }
       ]
     }
