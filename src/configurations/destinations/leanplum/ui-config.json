@@ -1,130 +1,185 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Application ID",
-          "value": "applicationId",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Application ID",
-          "required": true,
-          "placeholder": "e.g: ABCDEFG"
-        },
-        {
-          "type": "textInput",
-          "label": "Client Key",
-          "value": "clientKey",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Client Key",
-          "required": true,
-          "placeholder": "e.g: ABCDEFG",
-          "secret": true
-        }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Initialize Native SDK to send automated events",
-          "value": "useNativeSDK",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send user generated events",
-          "value": "useNativeSDKToSend",
-          "default": false
-        }
-      ]
-    },
-    {
-      "title": "Development Mode",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use in Development Environment",
-          "value": "isDevelop",
-          "default": false
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Application ID",
+                    "configKey": "applicationId",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Application ID",
+                    "placeholder": "e.g: ABCDEFG"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Client Key",
+                    "configKey": "clientKey",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Client Key",
+                    "placeholder": "e.g: ABCDEFG"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
           }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Destination settings",
+                "note": "Configure advanced destination-specific settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Use in Development Environment",
+                    "configKey": "isDevelop",
+                    "default": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Client-side event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on events filtering:",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
+                      {
+                        "label": "No events filtering",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input separate events by pressing 'Enter'.\nInput the events you want to allowlist.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input separate events by pressing 'Enter'.\nInput the events you want to denylist. ",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack's OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing 'Enter' after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     }
-  ]
+  }
 }
