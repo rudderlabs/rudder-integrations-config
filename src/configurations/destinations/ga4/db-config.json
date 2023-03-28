@@ -1,23 +1,20 @@
 {
   "name": "GA4",
-  "displayName": "Google Analytics 4",
+  "displayName": "Google Analytics 4 (GA4)",
   "config": {
     "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": false,
     "includeKeys": [
       "measurementId",
-      "blockPageViewEvent",
-      "extendPageViewParams",
-      "clientIdFieldIdentifier",
-      "sendUserId",
-      "useNativeSDKToSend",
-      "eventFilteringOption",
+      "capturePageView",
       "whitelistedEvents",
       "blacklistedEvents",
-      "oneTrustCookieCategories",
-      "debugMode",
-      "addSendToParameter"
+      "useNativeSDKToSend",
+      "addSendToParameter",
+      "eventFilteringOption",
+      "extendPageViewParams",
+      "oneTrustCookieCategories"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
@@ -32,35 +29,60 @@
       "cordova",
       "warehouse"
     ],
-    "supportedMessageTypes": ["identify", "track", "group", "page"],
+    "supportedMessageTypes": [
+      "track",
+      "group",
+      "page"
+    ],
+    "supportedConnectionModes": {
+      "android": [
+        "cloud",
+        "device"
+      ],
+      "web": [
+        "cloud",
+        "device",
+        "hybrid"
+      ],
+      "ios": [
+        "cloud",
+        "device"
+      ]
+    },
     "destConfig": {
       "defaultConfig": [
         "apiSecret",
+        "debugMode",
         "typesOfClient",
         "measurementId",
         "firebaseAppId",
-        "clientIdFieldIdentifier",
-        "enableServerSideIdentify",
-        "newOrExistingUserTrait",
-        "sendLoginSignup",
-        "loginSignupMethod",
-        "generateLead",
-        "generateLeadValueTrait",
-        "generateLeadCurrencyTrait",
-        "blockPageViewEvent",
-        "extendPageViewParams",
-        "sendUserId",
-        "debugMode",
-        "addSendToParameter",
-        "eventFilteringOption",
         "whitelistedEvents",
-        "blacklistedEvents"
+        "blacklistedEvents",
+        "eventFilteringOption",
+        "oneTrustCookieCategories"
       ],
-      "web": ["useNativeSDK", "useNativeSDKToSend", "oneTrustCookieCategories"],
-      "android": ["useNativeSDK", "oneTrustCookieCategories"],
-      "ios": ["useNativeSDK", "oneTrustCookieCategories"]
+      "web": [
+        "useNativeSDK",
+        "connectionMode",
+        "capturePageView",
+        "addSendToParameter",
+        "useNativeSDKToSend",
+        "extendPageViewParams"
+      ],
+      "android": [
+        "useNativeSDK",
+        "connectionMode"
+      ],
+      "ios": [
+        "useNativeSDK",
+        "connectionMode"
+      ]
     },
-    "secretKeys": ["apiSecret"]
+    "secretKeys": [
+      "apiSecret"
+    ]
   },
-  "options": { "isBeta": true }
+  "options": {
+    "isBeta": true
+  }
 }

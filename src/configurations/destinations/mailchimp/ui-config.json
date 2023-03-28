@@ -7,7 +7,7 @@
           "type": "textInput",
           "label": "Mailchimp Api Key",
           "value": "apiKey",
-          "regex": "^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
           "regexErrorMessage": "Invalid Mailchimp Api Key",
           "required": true,
           "placeholder": "e.g: 94f71917dald93kf897449b0c90caa4c-us20"
@@ -16,7 +16,7 @@
           "type": "textInput",
           "label": "Mailchimp Audience Id",
           "value": "audienceId",
-          "regex": "^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
           "regexErrorMessage": "Invalid Mailchimp Audience Id",
           "required": true,
           "placeholder": "e.g: dn42a32d30"
@@ -25,7 +25,7 @@
           "type": "textInput",
           "label": "Mailchimp DataCenter Id",
           "value": "datacenterId",
-          "regex": "^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
           "regexErrorMessage": "Invalid Mailchimp DataCenter Id",
           "required": true,
           "placeholder": "e.g: us20"
@@ -41,6 +41,25 @@
           "value": "enableMergeFields",
           "default": false,
           "footerNote": "It is recomended to set this to on as it will help to add merge_fields while updating a subscriber."
+        }
+      ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name/ID",
+              "required": false
+            }
+          ]
         }
       ]
     }

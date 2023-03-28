@@ -8,25 +8,14 @@
           "label": "Choose your Trigger Type ",
           "value": "triggerType",
           "options": [
-            {
-              "name": "HTTP",
-              "value": "Http"
-            },
-            {
-              "name": "HTTPS",
-              "value": "Https"
-            }
+            { "name": "HTTP", "value": "Http" },
+            { "name": "HTTPS", "value": "Https" }
           ],
           "required": true
         },
         {
           "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "triggerType",
-              "selectedValue": "Http"
-            }
-          ],
+          "preRequisiteField": [{ "name": "triggerType", "selectedValue": "Http" }],
           "label": "URL",
           "value": "googleCloudFunctionUrl",
           "required": true,
@@ -36,12 +25,7 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "triggerType",
-              "selectedValue": "Https"
-            }
-          ],
+          "preRequisiteField": [{ "name": "triggerType", "selectedValue": "Https" }],
           "label": "URL",
           "value": "googleCloudFunctionUrl",
           "required": true,
@@ -51,12 +35,7 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "triggerType",
-              "selectedValue": "Https"
-            }
-          ],
+          "preRequisiteField": [{ "name": "triggerType", "selectedValue": "Https" }],
           "label": "Gcloud Authorization",
           "value": "gcloudAuthorization",
           "regex": ".*",
@@ -90,16 +69,32 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": {
-            "name": "enableBatchInput",
-            "selectedValue": true
-          },
+          "preRequisiteField": { "name": "enableBatchInput", "selectedValue": true },
           "label": "Max Batch Size",
           "value": "maxBatchSize",
           "regex": "^[1-9]\\d*$",
           "regexErrorMessage": "Invalid batch size",
           "placeholder": "e.g: 100",
           "required": false
+        }
+      ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name/ID",
+              "required": false
+            }
+          ]
         }
       ]
     }

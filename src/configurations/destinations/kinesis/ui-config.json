@@ -7,7 +7,7 @@
           "type": "textInput",
           "label": "Region",
           "value": "region",
-          "regex": "^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
           "regexErrorMessage": "Invalid Region",
           "required": true,
           "placeholder": "e.g: us-east-1"
@@ -16,7 +16,7 @@
           "type": "textInput",
           "label": "Stream Name",
           "value": "stream",
-          "regex": "^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
           "regexErrorMessage": "Invalid Stream Name",
           "required": true,
           "placeholder": "e.g: test-stream"
@@ -25,17 +25,14 @@
           "type": "checkbox",
           "label": "Role Based Authentication",
           "value": "roleBasedAuth",
-          "default": false
+          "default": true
         },
         {
           "type": "textInput",
-          "preRequisiteField": {
-            "name": "roleBasedAuth",
-            "selectedValue": true
-          },
+          "preRequisiteField": { "name": "roleBasedAuth", "selectedValue": true },
           "label": "IAM Role ARN",
           "value": "iamRoleARN",
-          "regex": "^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
           "regexErrorMessage": "Invalid Role ARN",
           "required": true,
           "placeholder": "e.g: arn:aws:iam::123456789012:role/Kinesis",
@@ -46,10 +43,7 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": {
-            "name": "roleBasedAuth",
-            "selectedValue": false
-          },
+          "preRequisiteField": { "name": "roleBasedAuth", "selectedValue": false },
           "label": "AWS Access Key ID",
           "value": "accessKeyID",
           "regex": "^(.{0,100})$",
@@ -60,10 +54,7 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": {
-            "name": "roleBasedAuth",
-            "selectedValue": false
-          },
+          "preRequisiteField": { "name": "roleBasedAuth", "selectedValue": false },
           "label": "AWS Secret Access Key",
           "value": "accessKey",
           "regex": "^(.{0,100})$",
@@ -77,6 +68,25 @@
           "label": "Use MessageId as Partition Key",
           "value": "useMessageId",
           "default": false
+        }
+      ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name/ID",
+              "required": false
+            }
+          ]
         }
       ]
     }

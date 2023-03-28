@@ -7,14 +7,11 @@
           "type": "checkbox",
           "label": "Role Based Authentication",
           "value": "roleBasedAuth",
-          "default": false
+          "default": true
         },
         {
           "type": "textInput",
-          "preRequisiteField": {
-            "name": "roleBasedAuth",
-            "selectedValue": true
-          },
+          "preRequisiteField": { "name": "roleBasedAuth", "selectedValue": true },
           "label": "IAM Role ARN",
           "value": "iamRoleARN",
           "regex": "^(.{0,100})$",
@@ -28,10 +25,7 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": {
-            "name": "roleBasedAuth",
-            "selectedValue": false
-          },
+          "preRequisiteField": { "name": "roleBasedAuth", "selectedValue": false },
           "label": "Access Key Id",
           "value": "accessKeyId",
           "regex": "^(.{0,100})$",
@@ -41,10 +35,7 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": {
-            "name": "roleBasedAuth",
-            "selectedValue": false
-          },
+          "preRequisiteField": { "name": "roleBasedAuth", "selectedValue": false },
           "label": "Secret Access Key",
           "value": "secretAccessKey",
           "regex": "^(.{0,100})$",
@@ -96,23 +87,11 @@
           "placeholder": "PutEvents",
           "mode": "single",
           "options": [
-            {
-              "name": "PutEvents",
-              "value": "PutEvents"
-            },
-            {
-              "name": "PutUsers",
-              "value": "PutUsers"
-            },
-            {
-              "name": "PutItems",
-              "value": "PutItems"
-            }
+            { "name": "PutEvents", "value": "PutEvents" },
+            { "name": "PutUsers", "value": "PutUsers" },
+            { "name": "PutItems", "value": "PutItems" }
           ],
-          "defaultOption": {
-            "name": "PutEvents",
-            "value": "PutEvents"
-          }
+          "defaultOption": { "name": "PutEvents", "value": "PutEvents" }
         }
       ]
     },
@@ -135,6 +114,25 @@
           "value": "disableStringify",
           "required": false,
           "default": false
+        }
+      ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name/ID",
+              "required": false
+            }
+          ]
         }
       ]
     }

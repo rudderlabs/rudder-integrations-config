@@ -4,9 +4,18 @@
     "type": "object",
     "required": ["writeKey"],
     "properties": {
-      "writeKey": {
-        "type": "string",
-        "pattern": "(^env[.].+)|^(.{1,100})$"
+      "writeKey": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
+      "oneTrustCookieCategories": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "oneTrustCookieCategory": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
       }
     },
     "additionalProperties": true
