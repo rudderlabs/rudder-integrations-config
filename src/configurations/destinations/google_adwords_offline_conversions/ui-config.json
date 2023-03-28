@@ -153,12 +153,16 @@
         },
         {
           "type": "singleSelect",
-          "label": "The user identifier for click conversions matching",
+          "label": "The user identifier for store and click conversions ",
           "value": "defaultUserIdentifier",
           "options": [
             {
               "name": "Email",
               "value": "email"
+            },
+            {
+              "name": "Address (Not for click conversions)",
+              "value": "address"
             },
             {
               "name": "Phone number",
@@ -172,16 +176,20 @@
         },
         {
           "type": "singleSelect",
-          "label": "The user identifier for store conversions ",
-          "value": "defaultStoreUserIdentifier",
+          "label": "The user identifier for click conversions matching since address is not available for click conversions",
+          "value": "defaultUserIdentifier",
+          "preRequisites": {
+            "fields": [
+              {
+                "name": "defaultUserIdentifier",
+                "selectedValue": "address"
+              }
+            ]
+          },
           "options": [
             {
               "name": "Email",
               "value": "email"
-            },
-            {
-              "name": "Address",
-              "value": "address"
             },
             {
               "name": "Phone number",
