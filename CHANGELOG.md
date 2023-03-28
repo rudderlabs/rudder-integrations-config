@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.18.1](https://github.com/rudderlabs/rudder-config-schema/compare/1.18.0...1.18.1) (2023-03-28)
+
+
+### Bug Fixes
+
+* udate zendesk support source  image version ([959ea67](https://github.com/rudderlabs/rudder-config-schema/commit/959ea67b71085bef93f84dfcdd7001185e976d47))
+
 ## [1.18.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.17.1...1.18.0) (2023-03-28)
 
 
