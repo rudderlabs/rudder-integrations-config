@@ -21,13 +21,35 @@
           "footerNote": "Enter the password associated with the above username."
         },
         {
+          "type": "singleSelect",
+          "label": "Domain Method",
+          "value": "domainMethod",
+          "options": [
+            { "name": "SubDomain", "value": "subDomainNameOption" },
+            { "name": "Domain (Preferred for Self Hosted Instance)", "value": "domainNameOption" }
+          ],
+          "defaultOption": { "name": "SubDomain", "value": "subDomainNameOption" },
+          "required": true,
+          "footerNote": "Select Domain Input Method"
+        },
+        {
           "type": "textInput",
           "label": "Sub-Domain Name",
           "value": "subDomainName",
           "required": true,
-          "secret": true,
+          "preRequisiteField": [{ "name": "domainMethod", "selectedValue": "subDomainNameOption" }],
           "placeholder": "e.g: testdomain",
           "footerNote": "Enter the subdomain name of your Mautic instance."
+        },
+        {
+          "type": "textInput",
+          "label": "Domain Name",
+          "value": "domainName",
+          "required": true,
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(https?|ftp)://[^\\s/$.?#].[^\\s]*[^/]$",
+          "preRequisiteField": [{ "name": "domainMethod", "selectedValue": "domainNameOption" }],
+          "placeholder": "e.g: https://test.mautic.app",
+          "footerNote": "Enter the Domain name of your Mautic instance."
         },
         {
           "type": "textInput",
@@ -36,6 +58,25 @@
           "required": true,
           "placeholder": "e.g: email",
           "footerNote": "Enter a unique Mautic user property to be used for contact lookup. The provided lookup field key will be retrieved from the traits."
+        }
+      ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name/ID",
+              "required": false
+            }
+          ]
         }
       ]
     }
