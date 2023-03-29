@@ -16,6 +16,7 @@ jobs:
     name: Report Code Coverage
     if: github.event_name == 'push'
     uses: ./.github/workflows/report-code-coverage.yml
+    secrets: inherit
 
   extract-version:
     name: Extract Deployment Version
@@ -50,3 +51,5 @@ jobs:
     secrets:
       API_USERNAME: ${{ secrets.PROD_USERNAME }}
       API_PASSWORD: ${{ secrets.PROD_PASSWORD }}
+      SLACK_BOT_TOKEN: $$ {{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_RELEASE_CHANNEL_ID: ${{ secrets.SLACK_RELEASE_CHANNEL_ID }}
