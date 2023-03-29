@@ -24,13 +24,6 @@ All notable changes to this project will be documented in this file. See [standa
 ### Features
 
 * moved oneTrustCookieCategories field to defaultConfig ([#456](https://github.com/rudderlabs/rudder-config-schema/issues/456)) ([eccf357](https://github.com/rudderlabs/rudder-config-schema/commit/eccf35751916879255dd25848a34912b13298135))
-
-## [1.17.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.16.0...1.17.0) (2023-03-23)
-
-
-### Features
-
-* moved oneTrustCookieCategories field to defaultConfig ([#456](https://github.com/rudderlabs/rudder-config-schema/issues/456)) ([eccf357](https://github.com/rudderlabs/rudder-config-schema/commit/eccf35751916879255dd25848a34912b13298135))
 * moved oneTrustCookieCategories field to defaultConfig ([#456](https://github.com/rudderlabs/rudder-config-schema/issues/456)) ([f527af7](https://github.com/rudderlabs/rudder-config-schema/commit/f527af765254598c0670bed9e43509ff174271a7))
 * **snowflake:** drop cloud provider from src ui-config ([#449](https://github.com/rudderlabs/rudder-config-schema/issues/449)) ([fc6d33c](https://github.com/rudderlabs/rudder-config-schema/commit/fc6d33c2d4b4b201fa9ef02fc54a75f9e695bad1))
 
