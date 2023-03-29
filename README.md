@@ -32,7 +32,20 @@
 
 ## Getting started
 
-\*\*Describe how to use the software.\*\*
+You need to install Python3.
+
+And then, install Python dependencies:
+
+`pip3 install -r ./scripts/requirements.txt`
+
+Run below command to deploy integrations definitions config to database:
+
+```
+python3 ./scripts/deployToDB.py <config-be-url> <username> <password>
+
+Ex:
+python3 ./scripts/deployToDB.py http://localhost:5050 myusername mypassword
+```
 
 ## Contribute
 
