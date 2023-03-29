@@ -1,0 +1,39 @@
+name: Deploy Configurations To Development DB
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    types:
+      - closed
+    branches:
+      - develop
+
+jobs:
+  report-code-coverage:
+    name: Report Code Coverage
+    if: github.event_name == 'push'
+    uses: ./.github/workflows/report-code-coverage.yml
+
+  deploy-to-dev:
+    name: Deployment To Development DB
+    # Only merged pull requests must trigger
+    if: github.event.pull_request.merged == true
+    uses: ./.github/workflows/deploy.yml
+    with:
+      deploy_url: https://api.dev.rudderlabs.com
+    secrets:
+      API_USERNAME: ${{ secrets.DEV_USERNAME }}
+      API_PASSWORD: ${{ secrets.DEV_PASSWORD }}
+
+  deploy-to-sources-dev:
+    name: Deployment To Sources Development DB
+    # Only merged pull requests must trigger
+    if: github.event.pull_request.merged == true
+    uses: ./.github/workflows/deploy.yml
+    with:
+      deploy_url: https://sources-api.dev.rudderlabs.com
+    secrets:
+      API_USERNAME: ${{ secrets.DEV_USERNAME }}
+      API_PASSWORD: ${{ secrets.DEV_PASSWORD }}
