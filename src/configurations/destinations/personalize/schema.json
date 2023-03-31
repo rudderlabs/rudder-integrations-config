@@ -4,36 +4,14 @@
     "type": "object",
     "required": ["region"],
     "properties": {
-      "iamRoleARN": {
-        "type": "string"
-      },
-      "roleBasedAuth": {
-        "type": "boolean"
-      },
-      "accessKeyId": {
-        "type": "string",
-        "pattern": "^(.{0,100})$"
-      },
-      "secretAccessKey": {
-        "type": "string",
-        "pattern": "^(.{0,100})$"
-      },
-      "region": {
-        "type": "string",
-        "pattern": "^(.{0,100})$"
-      },
-      "trackingId": {
-        "type": "string",
-        "pattern": "^(.{0,100})$"
-      },
-      "datasetARN": {
-        "type": "string",
-        "pattern": "arn:([a-z/d-]+):personalize:.*:.*:.+"
-      },
-      "eventChoice": {
-        "type": "string",
-        "pattern": "(^env[.].*)|^(PutEvents|PutUsers|PutItems)$"
-      },
+      "iamRoleARN": { "type": "string" },
+      "roleBasedAuth": { "type": "boolean" },
+      "accessKeyId": { "type": "string", "pattern": "^(.{0,100})$" },
+      "secretAccessKey": { "type": "string", "pattern": "^(.{0,100})$" },
+      "region": { "type": "string", "pattern": "^(.{0,100})$" },
+      "trackingId": { "type": "string", "pattern": "^(.{0,100})$" },
+      "datasetARN": { "type": "string", "pattern": "arn:([a-z/d-]+):personalize:.*:.*:.+" },
+      "eventChoice": { "type": "string", "pattern": "(^env[.].*)|^(PutEvents|PutUsers|PutItems)$" },
       "customMappings": {
         "type": "array",
         "items": {
@@ -50,8 +28,18 @@
           }
         }
       },
-      "disableStringify": {
-        "type": "boolean"
+      "disableStringify": { "type": "boolean" },
+      "oneTrustCookieCategories": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "oneTrustCookieCategory": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
       }
     }
   }
