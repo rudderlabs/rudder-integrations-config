@@ -2,15 +2,16 @@ name: Check PR Title
 
 on:
   pull_request:
-    types: ['opened', 'reopened', 'edited', 'synchronize']
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
 
 jobs:
-  check_pr_title:
+  check-pr-title:
     name: Check PR Title
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Source Branch
-        uses: actions/checkout@v3
-
       - name: Check PR Title
         uses: rudderlabs/github-action-check-pr-title@v1.0.7
