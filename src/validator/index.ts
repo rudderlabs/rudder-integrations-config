@@ -1,11 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import glob from 'glob';
-import { promisify } from 'util';
 import Ajv, { ValidateFunction } from 'ajv';
-
-const globPromisified = promisify(glob);
-const readFile = promisify(fs.readFile);
 
 const ajv = new Ajv({
   allErrors: true,
@@ -21,12 +17,12 @@ const ajv = new Ajv({
 let validators: Record<string, ValidateFunction> = {};
 
 async function importJsonFromFile(file: string) {
-  const content = await readFile(file, { encoding: 'utf-8' });
+  const content = await fs.promises.readFile(file, { encoding: 'utf-8' });
   return JSON.parse(content);
 }
 
 async function initAjvValidators() {
-  const files = await globPromisified(path.join(__dirname, '../configurations/**/schema.json'));
+  const files = await glob(path.join(__dirname, '../configurations/**/schema.json'));
   const filePromises = files.map(importJsonFromFile);
   const contents = await Promise.all(filePromises);
 
