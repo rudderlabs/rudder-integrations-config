@@ -13,7 +13,7 @@
         "type": "array",
         "items": {
           "type": "string",
-          "pattern": "^(email|sms)$"
+          "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
         }
       },
       "sendPageAsTrack": { "type": "boolean" },
@@ -21,6 +21,16 @@
       "eventFilteringOption": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
+      },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "^(cloud|device)$"
+          }
+        }
       },
       "whitelistedEvents": {
         "type": "array",
