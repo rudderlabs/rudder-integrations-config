@@ -1,0 +1,112 @@
+name: Deploy Configurations To DB
+
+on:
+  workflow_call:
+    inputs:
+      deploy_url:
+        required: true
+        type: string
+      notify:
+        type: boolean
+      version:
+        type: string
+    secrets:
+      API_USERNAME:
+        required: true
+      API_PASSWORD:
+        required: true
+      SLACK_BOT_TOKEN:
+        required: true
+      SLACK_RELEASE_CHANNEL_ID:
+        required: true
+
+jobs:
+  deploy:
+    name: Deployment To DB
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.5.0
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v3.6.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        env:
+          HUSKY: 0
+        run: |
+          npm ci
+
+      - name: Execute Unit Tests
+        env:
+          HUSKY: 0
+        run: |
+          npm run test:ci
+
+      - name: Install Python
+        uses: actions/setup-python@v4.5.0
+        with:
+          python-version: '3.9.13'
+
+      - name: Display Python Version
+        run: |
+          which python
+          python -c "import sys; print(sys.version)"
+
+      - name: Install Python Dependencies
+        run: pip3 install -r ./scripts/requirements.txt
+
+      - name: List Working Directory Files
+        run: |
+          echo current directory
+          pwd
+          ls -a
+
+      - name: Display Current Package Version
+        run: echo $(jq -r .version package.json)
+
+      - name: Deploy To DB
+        env:
+          API_USER: ${{ secrets.API_USERNAME }}
+          API_PASSWORD: ${{ secrets.API_PASSWORD }}
+        run: |
+          python scripts/deployToDB.py ${{ inputs.deploy_url }}
+
+      - name: Notify Slack Channel
+        id: slack
+        uses: slackapi/slack-github-action@v1.23.0
+        if: inputs.notify == true
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          PROJECT_NAME: 'Rudder Integrations Config'
+          RELEASES_URL: 'https://github.com/rudderlabs/rudder-integrations-config/releases/tag/'
+        with:
+          channel-id: ${{ secrets.SLACK_RELEASE_CHANNEL_ID }}
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":tada:  ${{ env.PROJECT_NAME }} - Production Deployment Complete  :tada:"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*<${{env.RELEASES_URL}}v${{ inputs.version }}|v${{ inputs.version }}>*\nCC: <@U03KG4BK1L1> <@U02AE5GMMHV> <@U01LVJ30QEB> <@U03NAD30MTJ> <@U02AGPP420Y> <@U035SSC9NSH>"
+                  }
+                }
+              ]
+            }

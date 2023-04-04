@@ -19,8 +19,9 @@ function getIntegrationNames(type) {
   return fs.readdirSync(dirPath).filter((file) => fs.statSync(`${dirPath}/${file}`).isDirectory());
 }
 
-function getIntegrationData(name, type) {
-  let intgData;
+function getIntegrationData(name, type): Record<string, unknown>[] {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let intgData: any;
   try {
     intgData = JSON.parse(
       fs.readFileSync(path.resolve(__dirname, `./data/validation/${type}/${name}.json`), 'utf-8'),
@@ -42,7 +43,7 @@ if (cmdOpts.destinations !== 'all') {
 } else {
   destList = getIntegrationNames('destinations');
 }
-const destTcData = {};
+const destTcData: Record<string, Record<string, unknown>[]> = {};
 destList.forEach((d) => {
   const intgData = getIntegrationData(d, 'destinations');
   if (intgData) destTcData[d] = intgData;
@@ -58,7 +59,7 @@ if (cmdOpts.sources !== 'all') {
 } else {
   srcList = getIntegrationNames('sources');
 }
-const srcTcData = {};
+const srcTcData: Record<string, Record<string, unknown>[]> = {};
 srcList.forEach((s) => {
   const intgData = getIntegrationData(s, 'sources');
   if (intgData) srcTcData[s] = intgData;
@@ -101,10 +102,10 @@ describe('Validation Tests', () => {
       destTcData[dest].forEach((td: Record<string, unknown>, tcIdx: number) => {
         it(`TC ${tcIdx + 1}`, async () => {
           if (td.result === true) {
-            expect(validateConfig(dest, td.config, 'destinations', true)).toBeUndefined();
+            expect(validateConfig(dest, td.config as Record<string, unknown>, 'destinations', true)).toBeUndefined();
           } else {
             expect(() => {
-              validateConfig(dest, td.config, 'destinations', true);
+              validateConfig(dest, td.config as Record<string, unknown>, 'destinations', true);
             }).toThrow(JSON.stringify(td.err));
           }
         });
@@ -118,10 +119,10 @@ describe('Validation Tests', () => {
       srcTcData[src].forEach((td: Record<string, unknown>, tcIdx: number) => {
         it(`TC ${tcIdx + 1}`, async () => {
           if (td.result === true) {
-            expect(validateConfig(src, td.config, 'sources', true)).toBeUndefined();
+            expect(validateConfig(src, td.config as Record<string, unknown>, 'sources', true)).toBeUndefined();
           } else {
             expect(() => {
-              validateConfig(src, td.config, 'sources', true);
+              validateConfig(src, td.config as Record<string, unknown>, 'sources', true);
             }).toThrow(JSON.stringify(td.err));
           }
         });
