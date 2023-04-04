@@ -1,0 +1,24 @@
+name: Deploy Configurations To Staging DB
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deployment To Staging DB
+    # Only pull requests from release candidate branches must trigger
+    if: (startsWith(github.event.pull_request.head.ref, 'release/') || startsWith(github.event.pull_request.head.ref, 'hotfix-release/'))
+    uses: ./.github/workflows/deploy.yml
+    with:
+      deploy_url: https://api.staging.rudderlabs.com
+    secrets:
+      API_USERNAME: ${{ secrets.DEV_USERNAME }}
+      API_PASSWORD: ${{ secrets.DEV_PASSWORD }}
+      SLACK_BOT_TOKEN: $$ {{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_RELEASE_CHANNEL_ID: ${{ secrets.SLACK_RELEASE_CHANNEL_ID }}
