@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.20.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.19.0...v1.20.0) (2023-04-04)
+
+
+### Features
+
+* **klaviyo:** make private API kay mandatory ([#501](https://github.com/rudderlabs/rudder-config-schema/issues/501)) ([a2d26b8](https://github.com/rudderlabs/rudder-config-schema/commit/a2d26b8d3a1e8faa463585545411b329ee1b950e))
+
+
+### Bug Fixes
+
+* impact error message and test update ([#499](https://github.com/rudderlabs/rudder-config-schema/issues/499)) ([de7d78f](https://github.com/rudderlabs/rudder-config-schema/commit/de7d78f67554f16c35bb0509fe0fd8f37a6adca2))
+
 ## 1.19.0 (2023-04-03)
 
 
