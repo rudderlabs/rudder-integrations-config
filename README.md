@@ -17,6 +17,7 @@
 </p>
 
 ---
+[![codecov](https://codecov.io/gh/rudderlabs/rudder-integrations-config/branch/develop/graph/badge.svg?token=K75QABOWUT)](https://codecov.io/gh/rudderlabs/rudder-integrations-config)
 
 # \*\*rudder-config-schema\*\*
 
@@ -32,7 +33,20 @@
 
 ## Getting started
 
-\*\*Describe how to use the software.\*\*
+You need to install Python3.
+
+And then, install Python dependencies:
+
+`pip3 install -r ./scripts/requirements.txt`
+
+Run below command to deploy integrations definitions config to database:
+
+```
+python3 ./scripts/deployToDB.py <config-be-url> <username> <password>
+
+Ex:
+python3 ./scripts/deployToDB.py http://localhost:5050 myusername mypassword
+```
 
 ## Contribute
 
