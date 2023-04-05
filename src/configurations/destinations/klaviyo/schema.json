@@ -2,9 +2,13 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "required": ["publicApiKey"],
+    "required": ["publicApiKey", "privateApiKey"],
     "properties": {
       "publicApiKey": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "privateApiKey": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
@@ -12,30 +16,15 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "enforceEmailAsPrimary": {
-        "type": "boolean"
-      },
+      "enforceEmailAsPrimary": { "type": "boolean" },
       "consent": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(email|web|sms|directmail|mobile)$"
       },
-      "smsConsent": {
-        "type": "boolean"
-      },
-      "sendPageAsTrack": {
-        "type": "boolean"
-      },
-      "additionalPageInfo": {
-        "type": "boolean"
-      },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
+      "smsConsent": { "type": "boolean" },
+      "sendPageAsTrack": { "type": "boolean" },
+      "additionalPageInfo": { "type": "boolean" },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "eventFilteringOption": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
@@ -65,18 +54,13 @@
         }
       },
       "oneTrustCookieCategories": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "oneTrustCookieCategory": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
         }

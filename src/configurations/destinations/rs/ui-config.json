@@ -64,45 +64,21 @@
           "label": "Sync Frequency",
           "value": "syncFrequency",
           "options": [
-            {
-              "name": "Every 30 minutes",
-              "value": "30"
-            },
-            {
-              "name": "Every 1 hour",
-              "value": "60"
-            },
-            {
-              "name": "Every 3 hours",
-              "value": "180"
-            },
-            {
-              "name": "Every 6 hours",
-              "value": "360"
-            },
-            {
-              "name": "Every 12 hours",
-              "value": "720"
-            },
-            {
-              "name": "Every 24 hours",
-              "value": "1440"
-            }
+            { "name": "Every 30 minutes", "value": "30" },
+            { "name": "Every 1 hour", "value": "60" },
+            { "name": "Every 3 hours", "value": "180" },
+            { "name": "Every 6 hours", "value": "360" },
+            { "name": "Every 12 hours", "value": "720" },
+            { "name": "Every 24 hours", "value": "1440" }
           ],
-          "defaultOption": {
-            "name": "Every 30 minutes",
-            "value": "30"
-          },
+          "defaultOption": { "name": "Every 30 minutes", "value": "30" },
           "required": false
         },
         {
           "type": "timePicker",
           "label": "Sync Starting At (Optional)",
           "value": "syncStartAt",
-          "options": {
-            "omitSeconds": true,
-            "minuteStep": 15
-          },
+          "options": { "omitSeconds": true, "minuteStep": 15 },
           "required": false,
           "footerNote": "Note: Please specify time in UTC"
         },
@@ -110,18 +86,9 @@
           "type": "timeRangePicker",
           "label": "Exclude window (Optional)",
           "value": "excludeWindow",
-          "startTime": {
-            "label": "start time",
-            "value": "excludeWindowStartTime"
-          },
-          "endTime": {
-            "label": "end time",
-            "value": "excludeWindowEndTime"
-          },
-          "options": {
-            "omitSeconds": true,
-            "minuteStep": 1
-          },
+          "startTime": { "label": "start time", "value": "excludeWindowStartTime" },
+          "endTime": { "label": "end time", "value": "excludeWindowEndTime" },
+          "options": { "omitSeconds": true, "minuteStep": 1 },
           "required": false,
           "footerNote": "Note: Please specify time in UTC"
         },
@@ -160,10 +127,7 @@
           "required": true,
           "placeholder": "e.g: event-bucket",
           "footerNote": "Please make sure the bucket exists in your S3",
-          "preRequisiteField": {
-            "name": "useRudderStorage",
-            "selectedValue": false
-          }
+          "preRequisiteField": { "name": "useRudderStorage", "selectedValue": false }
         },
         {
           "type": "textInput",
@@ -173,34 +137,20 @@
           "regexErrorMessage": "Invalid Prefix",
           "required": false,
           "placeholder": "e.g: rudder",
-          "preRequisiteField": {
-            "name": "useRudderStorage",
-            "selectedValue": false
-          }
+          "preRequisiteField": { "name": "useRudderStorage", "selectedValue": false }
         },
         {
           "type": "checkbox",
-          "preRequisiteField": [
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            }
-          ],
+          "preRequisiteField": [{ "name": "useRudderStorage", "selectedValue": false }],
           "label": "Role Based Authentication",
           "value": "roleBasedAuth",
-          "default": false
+          "default": true
         },
         {
           "type": "textInput",
           "preRequisiteField": [
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            },
-            {
-              "name": "roleBasedAuth",
-              "selectedValue": true
-            }
+            { "name": "useRudderStorage", "selectedValue": false },
+            { "name": "roleBasedAuth", "selectedValue": true }
           ],
           "label": "IAM Role ARN",
           "value": "iamRoleARN",
@@ -223,14 +173,8 @@
           "placeholder": "e.g: access-key-id",
           "secret": true,
           "preRequisiteField": [
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            },
-            {
-              "name": "roleBasedAuth",
-              "selectedValue": false
-            }
+            { "name": "useRudderStorage", "selectedValue": false },
+            { "name": "roleBasedAuth", "selectedValue": false }
           ]
         },
         {
@@ -243,14 +187,8 @@
           "placeholder": "e.g: secret-access-key",
           "secret": true,
           "preRequisiteField": [
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            },
-            {
-              "name": "roleBasedAuth",
-              "selectedValue": false
-            }
+            { "name": "useRudderStorage", "selectedValue": false },
+            { "name": "roleBasedAuth", "selectedValue": false }
           ]
         },
         {
@@ -258,10 +196,26 @@
           "label": "Enable Server Side Encryption For S3?",
           "value": "enableSSE",
           "default": false,
-          "preRequisiteField": {
-            "name": "useRudderStorage",
-            "selectedValue": false
-          }
+          "preRequisiteField": { "name": "useRudderStorage", "selectedValue": false }
+        }
+      ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Cookie Categories",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "Marketing",
+              "value": "oneTrustCookieCategory",
+              "label": "Category Name/ID",
+              "required": false
+            }
+          ]
         }
       ]
     }

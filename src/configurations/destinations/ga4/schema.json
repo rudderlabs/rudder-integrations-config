@@ -2,7 +2,9 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "required": ["measurementId"],
+    "required": [
+      "measurementId"
+    ],
     "properties": {
       "apiSecret": {
         "type": "string",
@@ -20,53 +22,54 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "enableServerSideIdentify": {
-        "type": "boolean"
-      },
-      "newOrExistingUserTrait": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "sendLoginSignup": {
-        "type": "boolean"
-      },
-      "loginSignupMethod": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "generateLead": {
-        "type": "boolean"
-      },
-      "generateLeadValueTrait": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "generateLeadCurrencyTrait": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "clientIdFieldIdentifier": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
       "eventFilteringOption": {
         "type": "string",
         "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
       },
-      "blockPageViewEvent": {
-        "type": "boolean"
+      "capturePageView": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^env[.].+)|^(rs|gtag)$"
+          }
+        }
       },
       "extendPageViewParams": {
-        "type": "boolean"
-      },
-      "sendUserId": {
-        "type": "boolean"
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
       },
       "debugMode": {
         "type": "boolean"
       },
       "addSendToParameter": {
-        "type": "boolean"
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "^(cloud|device|hybrid)$"
+          },
+          "ios": {
+            "type": "string",
+            "pattern": "^(cloud|device)$"
+          },
+          "android": {
+            "type": "string",
+            "pattern": "^(cloud|device)$"
+          }
+        }
       },
       "whitelistedEvents": {
         "type": "array",
@@ -101,18 +104,13 @@
         }
       },
       "oneTrustCookieCategories": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "oneTrustCookieCategory": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
         }
