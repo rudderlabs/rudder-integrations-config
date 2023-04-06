@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.20.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.20.2...v1.20.3) (2023-04-06)
+
+
+### Bug Fixes
+
+* added device mode support for a flutter source to appsflyer destination ([#514](https://github.com/rudderlabs/rudder-config-schema/issues/514)) ([02a6d84](https://github.com/rudderlabs/rudder-config-schema/commit/02a6d843e7fd7b62efd73249415b4c9c275d6a87))
+
 ### [1.20.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.20.1...v1.20.2) (2023-04-05)
 
 ### [1.20.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.20.0...v1.20.1) (2023-04-04)
