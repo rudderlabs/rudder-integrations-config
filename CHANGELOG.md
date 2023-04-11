@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.21.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.21.0...v1.21.1) (2023-04-11)
+
+
+### Bug Fixes
+
+* updates amplitude to 5.3.0 ([e1fb0e8](https://github.com/rudderlabs/rudder-config-schema/commit/e1fb0e8a0d58998a4f33e20f0456ea37076686de))
+* updates hubspot to 6.2.4 ([ba48524](https://github.com/rudderlabs/rudder-config-schema/commit/ba48524d36c239156d459ad9cebd1a638bd42a26))
+
 ## [1.21.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.20.4...v1.21.0) (2023-04-11)
 
 
