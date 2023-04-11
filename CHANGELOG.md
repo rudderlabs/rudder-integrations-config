@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.20.4](https://github.com/rudderlabs/rudder-config-schema/compare/v1.20.3...v1.20.4) (2023-04-06)
+
+
+### Bug Fixes
+
+* copy update to ga4 ([#518](https://github.com/rudderlabs/rudder-config-schema/issues/518)) ([7c52d57](https://github.com/rudderlabs/rudder-config-schema/commit/7c52d57f717c50a03795c0d1f699856fc15bcf57))
+
 ### [1.20.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.20.2...v1.20.3) (2023-04-06)
 
 
