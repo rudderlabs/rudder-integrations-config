@@ -52,7 +52,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 * impact error message and test update ([#499](https://github.com/rudderlabs/rudder-config-schema/issues/499)) ([de7d78f](https://github.com/rudderlabs/rudder-config-schema/commit/de7d78f67554f16c35bb0509fe0fd8f37a6adca2))
 
-## [1.19.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.18.1...v1.19.0) (2023-04-04)
+## [1.19.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.18.1...v1.19.0) (2023-04-04)
 
 
 ### Features
@@ -66,23 +66,23 @@ All notable changes to this project will be documented in this file. See [standa
 
 * removes extract support for cloud destinations ([#494](https://github.com/rudderlabs/rudder-config-schema/issues/494)) ([20f989d](https://github.com/rudderlabs/rudder-config-schema/commit/20f989d3b2ebed552068da6c66adc8d809a9aa5c))
 
-### [1.18.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.18.0...v1.18.1) (2023-03-28)
+### [1.18.1](https://github.com/rudderlabs/rudder-config-schema/compare/1.18.0...1.18.1) (2023-03-28)
 
 
 ### Bug Fixes
 
 * udate zendesk support source  image version ([959ea67](https://github.com/rudderlabs/rudder-config-schema/commit/959ea67b71085bef93f84dfcdd7001185e976d47))
 
-## [1.18.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.17.1...v1.18.0) (2023-03-28)
+## [1.18.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.17.1...1.18.0) (2023-03-28)
 
 
 ### Bug Fixes
 
 * **optimizely_fullstack:** filter identify events  ([#482](https://github.com/rudderlabs/rudder-config-schema/issues/482)) ([3dcc917](https://github.com/rudderlabs/rudder-config-schema/commit/3dcc917730fb8c2a3d0e8c0fb31d993b23289b97))
 
-### [1.17.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.17.0...v1.17.1) (2023-03-27)
+### [1.17.1](https://github.com/rudderlabs/rudder-config-schema/compare/1.17.0...1.17.1) (2023-03-27)
 
-## [1.17.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.16.0...v1.17.0) (2023-03-23)
+## [1.17.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.16.0...1.17.0) (2023-03-23)
 
 
 ### Features
@@ -96,7 +96,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 * destination name revamp to latest standard ([#459](https://github.com/rudderlabs/rudder-config-schema/issues/459)) ([44b243b](https://github.com/rudderlabs/rudder-config-schema/commit/44b243b14cb8a9e2608f321845b5555297b4d4b1))
 
-## [1.16.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.15.1...v1.16.0) (2023-03-21)
+## [1.16.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.15.1...1.16.0) (2023-03-21)
 
 
 ### Features
@@ -104,9 +104,9 @@ All notable changes to this project will be documented in this file. See [standa
 * **clevertap:** add support for indonesia and middle east regions ([#460](https://github.com/rudderlabs/rudder-config-schema/issues/460)) ([205ceb5](https://github.com/rudderlabs/rudder-config-schema/commit/205ceb5cfb94b67ee6eed59c4e731fa91f503b75))
 * remove beta tag from courier ([#465](https://github.com/rudderlabs/rudder-config-schema/issues/465)) ([114b164](https://github.com/rudderlabs/rudder-config-schema/commit/114b164612bebaa6c666fcb84ecfe95967044f36))
 
-### [1.15.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.15.0...v1.15.1) (2023-03-20)
+### [1.15.1](https://github.com/rudderlabs/rudder-config-schema/compare/1.15.0...1.15.1) (2023-03-20)
 
-## [1.15.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.14.0...v1.15.0) (2023-03-14)
+## [1.15.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.14.0...1.15.0) (2023-03-14)
 
 
 ### Features
@@ -118,14 +118,14 @@ All notable changes to this project will be documented in this file. See [standa
 
 * remove dest pipedrive by using hidden flag ([#453](https://github.com/rudderlabs/rudder-config-schema/issues/453)) ([bd8cb89](https://github.com/rudderlabs/rudder-config-schema/commit/bd8cb89820438685becb9f7cafbc3f5064b34b66))
 
-## [1.14.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.13.1...v1.14.0) (2023-03-13)
+## [1.14.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.13.1...1.14.0) (2023-03-13)
 
 
 ### Features
 
 * remove supportedMessageTypes for Firehose ([#450](https://github.com/rudderlabs/rudder-config-schema/issues/450)) ([623f897](https://github.com/rudderlabs/rudder-config-schema/commit/623f897fcb348465c520e61113b7e0dc37b5c547))
 
-### [1.13.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.13.0...v1.13.1) (2023-03-13)
+### [1.13.1](https://github.com/rudderlabs/rudder-config-schema/compare/1.13.0...1.13.1) (2023-03-13)
 
 
 ### Features
@@ -136,7 +136,7 @@ All notable changes to this project will be documented in this file. See [standa
 * moengage alias call ([#445](https://github.com/rudderlabs/rudder-config-schema/issues/445)) ([33e3965](https://github.com/rudderlabs/rudder-config-schema/commit/33e3965d63bc77a94c3a429860d5342003f6e113))
 * moving sfmc to router ([#443](https://github.com/rudderlabs/rudder-config-schema/issues/443)) ([ab0255d](https://github.com/rudderlabs/rudder-config-schema/commit/ab0255d5b1fc4d4b314f4814757e0a9cc84d9bcf))
 
-## [1.13.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.12.0...v1.13.0) (2023-03-09)
+## [1.13.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.12.0...1.13.0) (2023-03-09)
 
 
 ### Features
@@ -151,7 +151,7 @@ All notable changes to this project will be documented in this file. See [standa
 * missing consent settings schema for FB ([524a8b1](https://github.com/rudderlabs/rudder-config-schema/commit/524a8b1393c450d2cbbd4e46ef33016d78cb89c4))
 * missing schema testcase for FB ([5376a0f](https://github.com/rudderlabs/rudder-config-schema/commit/5376a0f387049361426e074e0d709a4f09ae0f50))
 
-## [1.12.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.11.1...v1.12.0) (2023-03-07)
+## [1.12.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.11.1...1.12.0) (2023-03-07)
 
 
 ### Features
@@ -166,16 +166,16 @@ All notable changes to this project will be documented in this file. See [standa
 * reverting an unwanted change, adding connectionMode field back to uiConfig ([#433](https://github.com/rudderlabs/rudder-config-schema/issues/433)) ([a6a07f5](https://github.com/rudderlabs/rudder-config-schema/commit/a6a07f5da55f960f805ee21365d86e5e74f582c7))
 * singer-shopify image version ([#432](https://github.com/rudderlabs/rudder-config-schema/issues/432)) ([c715761](https://github.com/rudderlabs/rudder-config-schema/commit/c715761ebea1ca2d830a69c7e7c52e3f582c9773))
 
-### [1.11.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.11.0...v1.11.1) (2023-03-03)
+### [1.11.1](https://github.com/rudderlabs/rudder-config-schema/compare/1.11.0...1.11.1) (2023-03-03)
 
 
 ### Features
 
 * add connection mode to AM ([#422](https://github.com/rudderlabs/rudder-config-schema/issues/422)) ([dabe652](https://github.com/rudderlabs/rudder-config-schema/commit/dabe65217c67b971ecb496d9340e3c4b190a4f3b))
 
-## [1.11.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.10.0...v1.11.0) (2023-03-02)
+## [1.11.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.10.0...1.11.0) (2023-03-02)
 
-## [1.10.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.9.0...v1.10.0) (2023-02-28)
+## [1.10.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.9.0...1.10.0) (2023-02-28)
 
 
 ### Features
@@ -183,16 +183,16 @@ All notable changes to this project will be documented in this file. See [standa
 * add beta to courier destination ([#409](https://github.com/rudderlabs/rudder-config-schema/issues/409)) ([93fe0ed](https://github.com/rudderlabs/rudder-config-schema/commit/93fe0edae50f1f71e15d8cb40ef55ce31dd246c2))
 * upgrade ga version to 5.1.0 ([#354](https://github.com/rudderlabs/rudder-config-schema/issues/354)) ([29c5d11](https://github.com/rudderlabs/rudder-config-schema/commit/29c5d11f6994657412b2a6a779d44f79a889a8f4))
 
-## [1.9.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.8.2...v1.9.0) (2023-02-27)
+## [1.9.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.8.2...1.9.0) (2023-02-27)
 
 
 ### Features
 
 * added roles for snoflake ([78f6e0d](https://github.com/rudderlabs/rudder-config-schema/commit/78f6e0d01df7ac544722e65dd548879615616ca3))
 
-### [1.8.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.8.1...v1.8.2) (2023-02-27)
+### [1.8.2](https://github.com/rudderlabs/rudder-config-schema/compare/1.8.1...1.8.2) (2023-02-27)
 
-### [1.8.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.8.0...v1.8.1) (2023-02-27)
+### [1.8.1](https://github.com/rudderlabs/rudder-config-schema/compare/1.8.0...1.8.1) (2023-02-27)
 
 
 ### Features
@@ -202,16 +202,16 @@ All notable changes to this project will be documented in this file. See [standa
 * onboard destination courier ([#379](https://github.com/rudderlabs/rudder-config-schema/issues/379)) ([22d124a](https://github.com/rudderlabs/rudder-config-schema/commit/22d124a2e1110cf96d7aefe73d50a6935def1560))
 * upgrade stripe version to 5.3.0 ([#399](https://github.com/rudderlabs/rudder-config-schema/issues/399)) ([659aae1](https://github.com/rudderlabs/rudder-config-schema/commit/659aae1cf17f68157ff317f12a84e7202df02f05))
 
-## [1.8.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.7.2...v1.8.0) (2023-02-21)
+## [1.8.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.7.2...1.8.0) (2023-02-21)
 
 
 ### Bug Fixes
 
 * use node 16 for test coverage ([#395](https://github.com/rudderlabs/rudder-config-schema/issues/395)) ([4f447e4](https://github.com/rudderlabs/rudder-config-schema/commit/4f447e4314da94f549a834fe424727919a3290d8))
 
-### [1.7.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.7.1...v1.7.2) (2023-02-17)
+### [1.7.2](https://github.com/rudderlabs/rudder-config-schema/compare/1.7.1...1.7.2) (2023-02-17)
 
-### [1.7.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.7.0...v1.7.1) (2023-02-16)
+### [1.7.1](https://github.com/rudderlabs/rudder-config-schema/compare/1.7.0...1.7.1) (2023-02-16)
 
 
 ### Features
@@ -223,7 +223,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 * destination transformation change from processor to router ([#347](https://github.com/rudderlabs/rudder-config-schema/issues/347)) ([3e0f05d](https://github.com/rudderlabs/rudder-config-schema/commit/3e0f05d5c7479b39a72f478aa607c098e3636c25))
 
-## [1.7.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.6.5...v1.7.0) (2023-02-14)
+## [1.7.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.6.5...1.7.0) (2023-02-14)
 
 
 ### Features
@@ -231,9 +231,9 @@ All notable changes to this project will be documented in this file. See [standa
 * for amplitude moved oneTrustCookieCategory field to sdkTemplate ([#375](https://github.com/rudderlabs/rudder-config-schema/issues/375)) ([d02f82b](https://github.com/rudderlabs/rudder-config-schema/commit/d02f82b34090b459a7ced90e9db0afda1eac8755))
 * for amplitude, moved oneTrustCookieCategory field to sdkTemplate in uiConfig ([b5820aa](https://github.com/rudderlabs/rudder-config-schema/commit/b5820aaaa10ffd146ea097264bac4759c04e7732))
 
-### [1.6.5](https://github.com/rudderlabs/rudder-config-schema/compare/v1.6.4...v1.6.5) (2023-02-13)
+### [1.6.5](https://github.com/rudderlabs/rudder-config-schema/compare/1.6.4...1.6.5) (2023-02-13)
 
-### [1.6.4](https://github.com/rudderlabs/rudder-config-schema/compare/v1.6.3...v1.6.4) (2023-02-10)
+### [1.6.4](https://github.com/rudderlabs/rudder-config-schema/compare/1.6.3...1.6.4) (2023-02-10)
 
 
 ### Features
@@ -241,9 +241,9 @@ All notable changes to this project will be documented in this file. See [standa
 * adds singer shopify ([98d1057](https://github.com/rudderlabs/rudder-config-schema/commit/98d1057e50c0793ffd23ed7317b98ec14ef13621))
 * updates mixpanel image ([d86d0c2](https://github.com/rudderlabs/rudder-config-schema/commit/d86d0c2bccc5644a0f44aab81165f6b76b7aee39))
 
-### [1.6.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.6.2...v1.6.3) (2023-02-07)
+### [1.6.3](https://github.com/rudderlabs/rudder-config-schema/compare/1.6.2...1.6.3) (2023-02-07)
 
-### [1.6.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.6.1...v1.6.2) (2023-02-07)
+### [1.6.2](https://github.com/rudderlabs/rudder-config-schema/compare/1.6.1...1.6.2) (2023-02-07)
 
 
 ### Features
@@ -256,14 +256,14 @@ All notable changes to this project will be documented in this file. See [standa
 * **facebook_pixel:** validation inconsistency in ui and schema ([#356](https://github.com/rudderlabs/rudder-config-schema/issues/356)) ([9b4e48d](https://github.com/rudderlabs/rudder-config-schema/commit/9b4e48d2c49aae203b11fef35099b6a2998ce51b))
 * update googleAds config  ([#364](https://github.com/rudderlabs/rudder-config-schema/issues/364)) ([e2abc96](https://github.com/rudderlabs/rudder-config-schema/commit/e2abc9609bd884bf6934cf12f6eade9c204cfe73))
 
-### [1.6.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.6.0...v1.6.1) (2023-02-03)
+### [1.6.1](https://github.com/rudderlabs/rudder-config-schema/compare/1.6.0...1.6.1) (2023-02-03)
 
 
 ### Features
 
 * onboarding Lemnisk device mode ([#326](https://github.com/rudderlabs/rudder-config-schema/issues/326)) ([e64f957](https://github.com/rudderlabs/rudder-config-schema/commit/e64f957d9fd5d4b8d4d7ea75c9be44f172b83f6e))
 
-## [1.6.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.5.0...v1.6.0) (2023-02-02)
+## [1.6.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.5.0...1.6.0) (2023-02-02)
 
 
 ### Features
@@ -287,7 +287,7 @@ All notable changes to this project will be documented in this file. See [standa
 * default blockPageViewEvent enabled to prevent duplicate page calls ([#340](https://github.com/rudderlabs/rudder-config-schema/issues/340)) ([24f8fcf](https://github.com/rudderlabs/rudder-config-schema/commit/24f8fcfec22cf06849bfed76f08584024c109489))
 * optimizely fullstack schema ([#344](https://github.com/rudderlabs/rudder-config-schema/issues/344)) ([e42af44](https://github.com/rudderlabs/rudder-config-schema/commit/e42af44f05ed72c51c590839b635b18e7808e2df))
 
-## [1.5.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.4.1...v1.5.0) (2023-01-25)
+## [1.5.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.4.1...1.5.0) (2023-01-25)
 
 
 ### Features
@@ -299,14 +299,14 @@ All notable changes to this project will be documented in this file. See [standa
 
 * **changelog:** fixing changelog for release 1.4.0, 1.3.7 and 1.3.4 ([#333](https://github.com/rudderlabs/rudder-config-schema/issues/333)) ([b2d5604](https://github.com/rudderlabs/rudder-config-schema/commit/b2d5604abe825c81acab638464b9de224c08a3fb))
 
-### [1.4.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.4.0...v1.4.1) (2023-01-24)
+### [1.4.1](https://github.com/rudderlabs/rudder-config-schema/compare/1.4.0...1.4.1) (2023-01-24)
 
 
 ### Bug Fixes
 
 * move mp,zendesk,sfmc to processor ([7433e22](https://github.com/rudderlabs/rudder-config-schema/commit/7433e229c1426a7cd5d0aefc2fd94442170b9e45))
 
-## [1.4.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.3.7...v1.4.0) (2023-01-24)
+## [1.4.0](https://github.com/rudderlabs/rudder-config-schema/compare/1.3.7...1.4.0) (2023-01-24)
 
 
 ### Features
@@ -320,7 +320,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 * disables skills resource in freshdesk ([f2c7343](https://github.com/rudderlabs/rudder-config-schema/commit/f2c7343bb7c411685c92609d67bffdfd59bc3b64))
 
-### [1.3.7](https://github.com/rudderlabs/rudder-config-schema/compare/v1.3.6...v1.3.7) (2023-01-18)
+### [1.3.7](https://github.com/rudderlabs/rudder-config-schema/compare/1.3.6...1.3.7) (2023-01-18)
 
 
 ### Features
@@ -335,23 +335,23 @@ All notable changes to this project will be documented in this file. See [standa
 
 * bing ads updated image ([#292](https://github.com/rudderlabs/rudder-config-schema/issues/292)) ([e3891c1](https://github.com/rudderlabs/rudder-config-schema/commit/e3891c1a8ca2567a95e398d1dfbceefa6013edc5))
 
-### [1.3.6](https://github.com/rudderlabs/rudder-config-schema/compare/v1.3.5...v1.3.6) (2023-01-13)
+### [1.3.6](https://github.com/rudderlabs/rudder-config-schema/compare/1.3.5...1.3.6) (2023-01-13)
 
 
 ### Bug Fixes
 
 * reenable ga4 page call support for cloud mode ([#299](https://github.com/rudderlabs/rudder-config-schema/issues/299)) ([8bf3643](https://github.com/rudderlabs/rudder-config-schema/commit/8bf3643c4edd268a562f67f79f4a0b3ea22248d1))
 
-### [1.3.5](https://github.com/rudderlabs/rudder-config-schema/compare/v1.3.4...v1.3.5) (2023-01-13)
+### [1.3.5](https://github.com/rudderlabs/rudder-config-schema/compare/1.3.4...1.3.5) (2023-01-13)
 
 
 ### Bug Fixes
 
 * enanble pro and enterpise for cdkv2 comparison test ([#293](https://github.com/rudderlabs/rudder-config-schema/issues/293)) ([a6593dc](https://github.com/rudderlabs/rudder-config-schema/commit/a6593dcac8f96d2ad925121095ce307a3daabe5a))
 
-### [1.3.4](https://github.com/rudderlabs/rudder-config-schema/compare/v1.3.3...v1.3.4) (2023-01-13)
+### [1.3.4](https://github.com/rudderlabs/rudder-config-schema/compare/1.3.3...1.3.4) (2023-01-13)
 
-### [1.3.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.3.2...v1.3.3) (2023-01-13)
+### [1.3.3](https://github.com/rudderlabs/rudder-config-schema/compare/1.3.2...1.3.3) (2023-01-13)
 
 
 ### Bug Fixes
@@ -359,14 +359,14 @@ All notable changes to this project will be documented in this file. See [standa
 * enable cdkv2 for algolia and pinterest ([630644e](https://github.com/rudderlabs/rudder-config-schema/commit/630644e5466d5d624e76f52dd37d1524e71ef499))
 * revert a specific commit from [#253](https://github.com/rudderlabs/rudder-config-schema/issues/253) ([#284](https://github.com/rudderlabs/rudder-config-schema/issues/284)) ([856c9b9](https://github.com/rudderlabs/rudder-config-schema/commit/856c9b91c3f33bef5ca8c46b1d0b751629574b8f))
 
-### [1.3.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.3.1...v1.3.2) (2023-01-12)
+### [1.3.2](https://github.com/rudderlabs/rudder-config-schema/compare/1.3.1...1.3.2) (2023-01-12)
 
 
 ### Bug Fixes
 
 * hotfix intercom image update ([#280](https://github.com/rudderlabs/rudder-config-schema/issues/280)) ([0aeef10](https://github.com/rudderlabs/rudder-config-schema/commit/0aeef10eed47b0715fd878c2753c0c298ab794b3))
 
-### [1.3.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.3.0...v1.3.1) (2023-01-12)
+### [1.3.1](https://github.com/rudderlabs/rudder-config-schema/compare/1.3.0...1.3.1) (2023-01-12)
 
 
 ### Bug Fixes
