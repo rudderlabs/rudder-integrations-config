@@ -1,3 +1,99 @@
 {
-  "configSchema": null
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "required": ["hostName", "port", "topic"],
+    "properties": {
+      "hostName": {
+        "type": "string",
+        "pattern": "^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\\.[A-Za-z0-9-]{1,63})*(,\\s*(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\\.[A-Za-z0-9-]{1,63})*)*$"
+      },
+      "port": {
+        "type": "string",
+        "pattern": "^([1-9]|[1-9][0-9]{1,3}|[1-5][0-9]{4}|6[0-5]{2}[0-3][0-5]|[1-5][0-9]{0,3}[0-9]|[1-9][0-9]?[0-9]?[0-9]?[0-9]?)$"
+      },
+      "topic": { "type": "string", "pattern": "^[a-zA-Z0-9_\\-]{1,249}$" }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "sslEnabled": { "const": true }
+          },
+          "required": ["sslEnabled"]
+        },
+        "then": {
+          "properties": {
+            "caCertificate": { "type": "string", "pattern": ".*" }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "useSSH": { "const": true }
+          },
+          "required": ["useSSH"]
+        },
+        "then": {
+          "properties": {
+            "sshHost": {
+              "type": "string",
+              "pattern": "^(?!-)[a-zA-Z0-9-.]{1,253}(?<!-)(?::\\d{1,5})?$"
+            },
+            "sshPort": {
+              "type": "string",
+              "pattern": "^([1-9]|[1-9][0-9]{1,3}|[1-5][0-9]{4}|6[0-5]{2}[0-3][0-5]|[1-5][0-9]{0,3}[0-9]|[1-9][0-9]?[0-9]?[0-9]?[0-9]?)$"
+            },
+            "sshUser": { "type": "string", "pattern": "^[a-zA-Z0-9_-]{1,32}$" }
+          },
+          "required": ["sshHost", "sshPort", "sshUser"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "useSASL": { "const": false }
+          },
+          "required": ["useSASL"]
+        },
+        "then": {
+          "properties": {
+            "saslType": {
+              "type": "string",
+              "default": "Plain"
+            },
+            "username": { "type": "string", "pattern": "^[a-zA-Z0-9_-]{1,32}$" },
+            "password": {
+              "type": "string",
+              "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z0-9@#\\$%^&+=_-]{8,}$"
+            }
+          },
+          "required": ["saslType", "username", "password"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "convertToAvro": { "const": false }
+          },
+          "required": ["convertToAvro"]
+        },
+        "then": {
+          "properties": {
+            "avroSchemas": {
+              "type": "object",
+              "properties": {
+                "schemaId": { "type": "string", "pattern": ".*" },
+                "schema": { "type": "string", "pattern": ".*" }
+              },
+              "required": ["schemaId", "schema"]
+            }
+          },
+          "required": ["avroSchemas"]
+        }
+      }
+    ],
+    "additionalProperties": true
+  }
 }
