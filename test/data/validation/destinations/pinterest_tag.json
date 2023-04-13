@@ -55,6 +55,7 @@
   {
     "config": {
       "tagId": "123456789",
+      "apiVersion": "legacyApi",
       "advertiserId": "429047995abc",
       "appId": "429047995",
       "sendingUnHashedData": false,
@@ -131,6 +132,68 @@
     "result": false,
     "err": [
       "deduplicationKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\""
+    ]
+  },
+  {
+    "config": {
+      "tagId": "123456789",
+      "advertiserId": "429047995",
+      "appId": "429047995",
+      "apiVersion": "newApi",
+      "adAccountId": "abc",
+      "conversionToken": "conversionToken123",
+      "enhancedMatch": true,
+      "sendingUnHashedData": true,
+      "enableDeduplication": true,
+      "deduplicationKey": "messageId",
+      "customProperties": [
+        {
+          "properties": "customProperty.customValue"
+        },
+        {
+          "properties": "randomValue"
+        }
+      ],
+      "eventsMapping": [
+        {
+          "from": "Track Ping",
+          "to": "ping"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["adAccountId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]*$\""]
+  },
+  {
+    "config": {
+      "tagId": "123456789",
+      "advertiserId": "429047995",
+      "appId": "429047995",
+      "apiVersion": "newApi",
+      "adAccountId": "12345",
+      "conversionToken": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "enhancedMatch": true,
+      "sendingUnHashedData": true,
+      "enableDeduplication": true,
+      "deduplicationKey": "messageId",
+      "customProperties": [
+        {
+          "properties": "customProperty.customValue"
+        },
+        {
+          "properties": "randomValue"
+        }
+      ],
+      "eventsMapping": [
+        {
+          "from": "Track Ping",
+          "to": "ping"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "conversionToken must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,101})$\""
     ]
   }
 ]
