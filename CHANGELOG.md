@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.22.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.21.3...v1.22.0) (2023-04-13)
+
+
+### Features
+
+* braze UI update ([#544](https://github.com/rudderlabs/rudder-config-schema/issues/544)) ([e48f509](https://github.com/rudderlabs/rudder-config-schema/commit/e48f509f73e52eb51b3c16f924992e2a46032faa))
+
 ### [1.21.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.21.2...v1.21.3) (2023-04-12)
 
 
