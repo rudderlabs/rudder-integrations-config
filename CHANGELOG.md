@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.22.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.22.0...v1.22.1) (2023-04-17)
+
+
+### Bug Fixes
+
+* **cdk v2:** temporarily moving webhook from cdk v2 to native ([de7a6f4](https://github.com/rudderlabs/rudder-config-schema/commit/de7a6f4bc4710a294ee53cb5d6330309b1d3352d))
+
 ## [1.22.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.21.3...v1.22.0) (2023-04-13)
 
 
