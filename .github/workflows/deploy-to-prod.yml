@@ -1,0 +1,55 @@
+name: Deploy Configurations To Production DB
+
+on:
+  workflow_call:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+jobs:
+  report-code-coverage:
+    name: Report Code Coverage
+    if: github.event_name == 'push'
+    uses: ./.github/workflows/report-code-coverage.yml
+    secrets: inherit
+
+  extract-version:
+    name: Extract Deployment Version
+    runs-on: ubuntu-latest
+    # Only merged pull requests from release candidate branches and external workflow calls must trigger
+    if: (((startsWith(github.event.pull_request.head.ref, 'release/') || startsWith(github.event.pull_request.head.ref, 'hotfix-release/')) && github.event.pull_request.merged == true) || github.event_name == 'workflow_call')
+    outputs:
+      version: ${{ steps.extract_version.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.5.0
+        with:
+          fetch-depth: 1
+
+      - name: Extract Package Version
+        id: extract_version
+        run: |
+          version=$(jq -r .version package.json)
+          echo $version
+          echo "version=$version" >> $GITHUB_OUTPUT
+
+  deploy:
+    needs: [ extract-version ]
+    name: Deployment To Production DB
+    # Only merged pull requests from release candidate branches and external workflow calls must trigger
+    if: (((startsWith(github.event.pull_request.head.ref, 'release/') || startsWith(github.event.pull_request.head.ref, 'hotfix-release/')) && github.event.pull_request.merged == true) || github.event_name == 'workflow_call')
+    uses: ./.github/workflows/deploy.yml
+    with:
+      deploy_url: https://api.rudderstack.com
+      notify: true
+      version: ${{ needs.extract-version.outputs.version }}
+    secrets:
+      API_USERNAME: ${{ secrets.PROD_USERNAME }}
+      API_PASSWORD: ${{ secrets.PROD_PASSWORD }}
+      SLACK_BOT_TOKEN: $$ {{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_RELEASE_CHANNEL_ID: ${{ secrets.SLACK_RELEASE_CHANNEL_ID }}
