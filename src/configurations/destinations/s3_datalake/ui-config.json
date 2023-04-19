@@ -17,7 +17,8 @@
           "label": "Register schema on AWS Glue",
           "value": "useGlue",
           "default": false,
-          "footerNote": "We register the schema on AWS Glue's Data Catalog if this option is enabled"
+          "footerNote": "We register the schema on AWS Glue's Data Catalog if this option is enabled",
+          "required": true
         },
         {
           "type": "textInput",
@@ -25,8 +26,11 @@
           "labelNote": "Your AWS Glue region.Ex-For N.Virginia, this field's value would be 'us-east-1'",
           "value": "region",
           "regex": ".*",
-          "required": true,
-          "preRequisiteField": { "name": "useGlue", "selectedValue": true }
+          "required": false,
+          "preRequisiteField": {
+            "name": "useGlue",
+            "selectedValue": true
+          }
         },
         {
           "type": "textInput",
@@ -50,7 +54,8 @@
           "type": "checkbox",
           "label": "Role Based Authentication",
           "value": "roleBasedAuth",
-          "default": true
+          "default": true,
+          "required": false
         },
         {
           "type": "textInput",
@@ -59,7 +64,7 @@
           "value": "iamRoleARN",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Role ARN",
-          "required": true,
+          "required": false,
           "placeholder": "e.g: arn:aws:iam::123456789012:role/S3Access",
           "footerURL": {
             "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/",
@@ -90,7 +95,8 @@
           "type": "checkbox",
           "label": "Enable Server Side Encryption For S3?",
           "value": "enableSSE",
-          "default": false
+          "default": false,
+          "required": false
         },
         {
           "type": "singleSelect",
@@ -104,8 +110,11 @@
             { "name": "Every 12 hours", "value": "720" },
             { "name": "Every 24 hours", "value": "1440" }
           ],
-          "defaultOption": { "name": "Every 30 minutes", "value": "30" },
-          "required": false
+          "defaultOption": {
+            "name": "Every 30 minutes",
+            "value": "30"
+          },
+          "required": true
         },
         {
           "type": "timePicker",
@@ -132,7 +141,8 @@
               "label": "Category Name/ID",
               "required": false
             }
-          ]
+          ],
+          "required": false
         }
       ]
     }

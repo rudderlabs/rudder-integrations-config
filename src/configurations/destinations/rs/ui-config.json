@@ -71,14 +71,20 @@
             { "name": "Every 12 hours", "value": "720" },
             { "name": "Every 24 hours", "value": "1440" }
           ],
-          "defaultOption": { "name": "Every 30 minutes", "value": "30" },
-          "required": false
+          "defaultOption": {
+            "name": "Every 30 minutes",
+            "value": "30"
+          },
+          "required": true
         },
         {
           "type": "timePicker",
           "label": "Sync Starting At (Optional)",
           "value": "syncStartAt",
-          "options": { "omitSeconds": true, "minuteStep": 15 },
+          "options": {
+            "omitSeconds": true,
+            "minuteStep": 15
+          },
           "required": false,
           "footerNote": "Note: Please specify time in UTC"
         },
@@ -115,7 +121,8 @@
           "label": "Use RudderStack managed object storage",
           "value": "useRudderStorage",
           "default": false,
-          "footerNote": "Note: Only available for Rudderstack managed data planes"
+          "footerNote": "Note: Only available for Rudderstack managed data planes",
+          "required": true
         },
         {
           "type": "textInput",
@@ -124,7 +131,7 @@
           "value": "bucketName",
           "regex": "^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$|(^\\{\\{.+\\}\\}$)",
           "regexErrorMessage": "Invalid Bucket name",
-          "required": true,
+          "required": false,
           "placeholder": "e.g: event-bucket",
           "footerNote": "Please make sure the bucket exists in your S3",
           "preRequisiteField": { "name": "useRudderStorage", "selectedValue": false }
@@ -144,7 +151,8 @@
           "preRequisiteField": [{ "name": "useRudderStorage", "selectedValue": false }],
           "label": "Role Based Authentication",
           "value": "roleBasedAuth",
-          "default": true
+          "default": true,
+          "required": false
         },
         {
           "type": "textInput",
@@ -156,7 +164,7 @@
           "value": "iamRoleARN",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Role ARN",
-          "required": true,
+          "required": false,
           "placeholder": "e.g: arn:aws:iam::123456789012:role/S3Access",
           "footerURL": {
             "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/",
@@ -173,8 +181,14 @@
           "placeholder": "e.g: access-key-id",
           "secret": true,
           "preRequisiteField": [
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "roleBasedAuth", "selectedValue": false }
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            },
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": false
+            }
           ]
         },
         {
@@ -196,7 +210,11 @@
           "label": "Enable Server Side Encryption For S3?",
           "value": "enableSSE",
           "default": false,
-          "preRequisiteField": { "name": "useRudderStorage", "selectedValue": false }
+          "preRequisiteField": {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          },
+          "required": false
         }
       ]
     },
@@ -215,7 +233,8 @@
               "label": "Category Name/ID",
               "required": false
             }
-          ]
+          ],
+          "required": false
         }
       ]
     }

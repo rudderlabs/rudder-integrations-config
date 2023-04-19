@@ -57,14 +57,24 @@
           "required": false,
           "secret": true
         },
-        { "type": "checkbox", "label": "Secure", "value": "secure", "default": false },
         {
           "type": "checkbox",
-          "preRequisiteField": { "name": "secure", "selectedValue": true },
+          "label": "Secure",
+          "value": "secure",
+          "default": false,
+          "required": true
+        },
+        {
+          "type": "checkbox",
+          "preRequisiteField": {
+            "name": "secure",
+            "selectedValue": true
+          },
           "label": "Skip verify",
           "value": "skipVerify",
           "default": false,
-          "footerNote": "If you are using self signed certificates set this field to true"
+          "footerNote": "If you are using self signed certificates set this field to true",
+          "required": false
         },
         {
           "type": "textareaInput",
@@ -87,8 +97,11 @@
             { "name": "Every 12 hours", "value": "720" },
             { "name": "Every 24 hours", "value": "1440" }
           ],
-          "defaultOption": { "name": "Every 30 minutes", "value": "30" },
-          "required": false
+          "defaultOption": {
+            "name": "Every 30 minutes",
+            "value": "30"
+          },
+          "required": true
         },
         {
           "type": "timePicker",
@@ -118,7 +131,8 @@
           "label": "Use RudderStack managed object storage",
           "value": "useRudderStorage",
           "default": false,
-          "footerNote": "Note: Only available for RudderStack managed data planes"
+          "footerNote": "Note: Only available for RudderStack managed data planes",
+          "required": true
         },
         {
           "type": "singleSelect",
@@ -130,9 +144,15 @@
             { "name": "AZURE_BLOB", "value": "AZURE_BLOB" },
             { "name": "MINIO", "value": "MINIO" }
           ],
-          "defaultOption": { "name": "S3", "value": "S3" },
-          "required": true,
-          "preRequisiteField": { "name": "useRudderStorage", "selectedValue": false }
+          "defaultOption": {
+            "name": "S3",
+            "value": "S3"
+          },
+          "required": false,
+          "preRequisiteField": {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
         },
         {
           "type": "textInput",
@@ -145,7 +165,7 @@
           "value": "bucketName",
           "regex": "^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
           "regexErrorMessage": "Invalid Staging S3 Storage Bucket Name",
-          "required": true,
+          "required": false,
           "placeholder": "e.g: s3-event-logs",
           "footerNote": "Please make sure the bucket exists in your S3"
         },
@@ -160,7 +180,7 @@
           "value": "bucketName",
           "regex": "^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$",
           "regexErrorMessage": "Invalid Staging GCS Object Storage Bucket Name",
-          "required": true,
+          "required": false,
           "placeholder": "e.g: gcs-event-logs",
           "footerNote": "Please make sure the bucket exists in your GCS"
         },
@@ -175,7 +195,7 @@
           "value": "containerName",
           "regex": "^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$",
           "regexErrorMessage": "Invalid Staging Azure Blob Storage Container Name",
-          "required": true,
+          "required": false,
           "placeholder": "e.g: azure-event-logs",
           "footerNote": "Please make sure the container exists in your Azure Blob Storage"
         },
@@ -190,7 +210,7 @@
           "value": "bucketName",
           "regex": "^((?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
           "regexErrorMessage": "Invalid Staging MINIO Storage Bucket Name",
-          "required": true,
+          "required": false,
           "placeholder": "e.g: minio-event-logs",
           "footerNote": "Please make sure the bucket exists in your MINIO"
         },
@@ -202,7 +222,8 @@
           ],
           "label": "Role Based Authentication",
           "value": "roleBasedAuth",
-          "default": true
+          "default": true,
+          "required": false
         },
         {
           "type": "textInput",
@@ -215,7 +236,7 @@
           "value": "iamRoleARN",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Role ARN",
-          "required": true,
+          "required": false,
           "placeholder": "e.g: arn:aws:iam::123456789012:role/S3Access",
           "footerURL": {
             "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/",
@@ -233,7 +254,7 @@
           "value": "accessKeyID",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid AWS Access Key ID",
-          "required": true,
+          "required": false,
           "placeholder": "e.g: access-key-id"
         },
         {
@@ -247,7 +268,7 @@
           "value": "accessKey",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid AWS Secret Access Key",
-          "required": true,
+          "required": false,
           "placeholder": "e.g: secret-access-key"
         },
         {
@@ -260,7 +281,7 @@
           "value": "accountName",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Azure Blob Storage Account Name",
-          "required": true,
+          "required": false,
           "placeholder": "e.g: account-name"
         },
         {
@@ -274,7 +295,7 @@
           "value": "accountKey",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Azure Blob Storage Account Key",
-          "required": true,
+          "required": false,
           "secret": true,
           "placeholder": "e.g: account-key"
         },
@@ -289,7 +310,7 @@
           "value": "sasToken",
           "regex": "^(.+)$",
           "regexErrorMessage": "Invalid Azure Blob Storage SAS Token",
-          "required": true,
+          "required": false,
           "placeholder": "e.g: sas-token",
           "secret": true
         },
@@ -302,7 +323,8 @@
           "label": "Use shared access signature (SAS) Tokens",
           "value": "useSASTokens",
           "default": false,
-          "footerNote": "Use this to Grant limited access to Azure Storage resources using shared access signatures (SAS)"
+          "footerNote": "Use this to Grant limited access to Azure Storage resources using shared access signatures (SAS)",
+          "required": false
         },
         {
           "type": "textareaInput",
@@ -315,7 +337,7 @@
           "value": "credentials",
           "regex": ".*",
           "regexErrorMessage": "Invalid Credentials",
-          "required": true,
+          "required": false,
           "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'storage.objectCreator'"
         },
         {
@@ -328,7 +350,7 @@
           "value": "endPoint",
           "regex": "(?!.*\\.ngrok\\.io)^(.{0,100})$",
           "regexErrorMessage": "Invalid MinIO Endpoint",
-          "required": true,
+          "required": false,
           "placeholder": "e.g: play.min.io:9000"
         },
         {
@@ -341,7 +363,7 @@
           "value": "accessKeyID",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid MINIO Access Key ID",
-          "required": true,
+          "required": false,
           "placeholder": "e.g: access-key-id"
         },
         {
@@ -354,7 +376,7 @@
           "value": "secretAccessKey",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid MINIO Secret Access Key",
-          "required": true,
+          "required": false,
           "placeholder": "e.g: secret-access-key"
         },
         {
@@ -365,7 +387,8 @@
           ],
           "label": "Use SSL for connection",
           "value": "useSSL",
-          "default": true
+          "default": true,
+          "required": false
         }
       ]
     },
@@ -384,7 +407,8 @@
               "label": "Category Name/ID",
               "required": false
             }
-          ]
+          ],
+          "required": false
         }
       ]
     }
