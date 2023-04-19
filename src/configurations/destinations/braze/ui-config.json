@@ -1,174 +1,326 @@
 {
-  "uiConfig": [
-    {
-      "title": "1. Connection Settings",
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "App Key",
+                    "configKey": "appKey",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid App Key",
+                    "required": true,
+                    "placeholder": "e.g: f2c7c97a-48d1-11ea-8e07-faffc22c7c7f",
+                    "secret": true
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Rest Api Key",
+                    "configKey": "restApiKey",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Rest Api Key",
+                    "required": true,
+                    "placeholder": "e.g: 06c19c59-48d2-11ea-b27a-faffc22c7c7f",
+                    "secret": true
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Data Center",
+                    "configKey": "dataCenter",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Data Center",
+                    "options": [
+                      {
+                        "label": "US-01",
+                        "value": "US-01"
+                      },
+                      {
+                        "label": "US-02",
+                        "value": "US-02"
+                      },
+                      {
+                        "label": "US-03",
+                        "value": "US-03"
+                      },
+                      {
+                        "label": "US-04",
+                        "value": "US-04"
+                      },
+                      {
+                        "label": "US-05",
+                        "value": "US-05"
+                      },
+                      {
+                        "label": "US-06",
+                        "value": "US-06"
+                      },
+                      {
+                        "label": "US-07",
+                        "value": "US-07"
+                      },
+                      {
+                        "label": "US-08",
+                        "value": "US-08"
+                      },
+                      {
+                        "label": "EU-01",
+                        "value": "EU-01"
+                      },
+                      {
+                        "label": "EU-02",
+                        "value": "EU-02"
+                      },
+                      {
+                        "label": "EU-03",
+                        "value": "EU-03"
+                      }
+                    ],
+                    "required": true,
+                    "placeholder": "e.g: US-01",
+                    "default": "US-01"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Event Settings",
+                "note": "Set if you want to enable following features",
+                "icon": "file",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Enable subscription groups in group call",
+                    "configKey": "enableSubscriptionGroupInGroupCall",
+                    "default": false,
+                    "note": [
+                      "Turn on if you want to support ",
+                      {
+                        "text": "subscription group",
+                        "link": "https://www.braze.com/docs/api/endpoints/subscription_groups"
+                      },
+                      " via group call."
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Use Custom Attributes Operation",
+                    "configKey": "enableNestedArrayOperations",
+                    "default": false,
+                    "note": [
+                      "Turn on if you want to use ",
+                      {
+                        "text": "nested array operations",
+                        "link": "https://www.braze.com/docs/user_guide/data_and_analytics/custom_data/custom_attributes/array_of_objects/"
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Track events for anonymous users",
+                    "configKey": "trackAnonymousUser",
+                    "default": false,
+                    "note": "Turn on if you want to track anonymous users"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Client-side event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.webDevice",
+                      "value": true
+                    },
+                    {
+                      "configKey": "connectionModes.mobileDevice",
+                      "value": true
+                    }
+                  ],
+                  "condition": "or"
+                },
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on events filtering:",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
+                      {
+                        "label": "Disabled",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack’s OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
       "fields": [
-        {
-          "type": "textInput",
-          "label": "App Key",
-          "value": "appKey",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid App Key",
-          "required": true,
-          "placeholder": "e.g: f2c7c97a-48d1-11ea-8e07-faffc22c7c7f"
-        },
-        {
-          "type": "textInput",
-          "label": "Rest Api Key",
-          "value": "restApiKey",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Rest Api Key",
-          "required": true,
-          "placeholder": "e.g: 06c19c59-48d2-11ea-b27a-faffc22c7c7f",
-          "secret": true
-        },
-        {
-          "type": "textInput",
-          "label": "Data Center",
-          "value": "dataCenter",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Data Center",
-          "required": true,
-          "placeholder": "e.g: EU-01"
-        },
-        {
-          "type": "checkbox",
-          "label": "Track events for anonymous users",
-          "value": "trackAnonymousUser",
-          "default": false,
-          "footerNote": "Turn on if you want to track anonymous users"
-        },
-        {
-          "type": "checkbox",
-          "label": "Enable subscription groups in group call",
-          "value": "enableSubscriptionGroupInGroupCall",
-          "default": false,
-          "footerNote": "Turn on if you want to support subscription group (https://www.braze.com/docs/api/endpoints/subscription_groups) via group call. "
-        },
-        {
-          "type": "checkbox",
-          "label": "Use Nested Array Operation",
-          "value": "enableNestedArrayOperations",
-          "default": false,
-          "footerNote": "Turn on if you want to use nested array operations (https://www.braze.com/docs/user_guide/data_and_analytics/custom_data/custom_attributes/array_of_objects/)"
-        }
-      ]
-    },
-    {
-      "title": "2. Custom html settings",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Enable html in app messages",
-          "value": "enableHtmlInAppMessages",
-          "default": false
-        },
         {
           "type": "checkbox",
           "label": "Allow User Supplied Javascript",
-          "value": "allowUserSuppliedJavascript",
+          "configKey": "allowUserSuppliedJavascript",
           "default": false
-        }
-      ]
-    },
-    {
-      "title": "3. Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": true
         },
         {
           "type": "checkbox",
           "label": "Deduplicate Traits",
-          "value": "supportDedup",
+          "configKey": "supportDedup",
           "default": false,
-          "footerNote": "Turn on if you want to enable Deduplicate Traits on identify, supported only in device mode"
+          "note": "Turn on if you want to enable Deduplicate Traits on identify, supported only in device mode"
         },
         {
           "type": "checkbox",
           "label": "Show braze logs",
-          "value": "enableBrazeLogging",
+          "configKey": "enableBrazeLogging",
           "default": false,
-          "footerNote": "Turn on if you want to show braze logs to customer"
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
+          "note": "Turn on if you want to show braze logs to customer"
         }
       ]
     }
-  ]
+  }
 }
