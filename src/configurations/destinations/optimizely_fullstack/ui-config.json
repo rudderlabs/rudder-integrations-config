@@ -1,173 +1,181 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "SDK Key",
-          "value": "sdkKey",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid SDK Key",
-          "placeholder": "e.g. 3Cee2qXeMgVPsqk8Sh5qX",
-          "secret": true,
-          "footerNote": "Your SDK Key From Settings>Environments>SDK Key. **This field is required in cloud-mode only**"
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "SDK Key",
+                    "value": "sdkKey",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid SDK Key",
+                    "placeholder": "e.g. 3Cee2qXeMgVPsqk8Sh5qX",
+                    "secret": true,
+                    "footerNote": "Your SDK Key From Settings>Environments>SDK Key. **This field is required in cloud-mode only**",
+                    "required": false
+                },
+                {
+                    "type": "textInput",
+                    "label": "Base Url",
+                    "value": "baseUrl",
+                    "regex": "(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+                    "regexErrorMessage": "Invalid Base Url",
+                    "placeholder": "e.g. https://example.com",
+                    "footerNote": "Url Where Optimizely Agent is running. This url will be used as a base endpoint for track and page calls. **This field is required in cloud-mode only**",
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Base Url",
-          "value": "baseUrl",
-          "regex": "(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
-          "regexErrorMessage": "Invalid Base Url",
-          "placeholder": "e.g. https://example.com",
-          "footerNote": "Url Where Optimizely Agent is running. This url will be used as a base endpoint for track and page calls. **This field is required in cloud-mode only**"
-        }
-      ]
-    },
-    {
-      "title": "Only Track known users",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Track Known Users",
-          "value": "trackKnownUsers",
-          "required": false,
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Sends the experiment and variation information",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Sends the experiment and variation information as properties on a track call",
-          "value": "listen",
-          "required": false,
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Non-Interaction Event",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Specifies the Experiment Viewed as a non-interaction event for Google Analytics",
-          "value": "nonInteraction",
-          "required": false,
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Track Categorized Pages",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Track Categorized Pages",
-          "value": "trackCategorizedPages",
-          "default": false,
-          "footerNote": "Applicable only for cloud-mode"
-        }
-      ]
-    },
-    {
-      "title": "Track Named Pages",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Track Named Pages",
-          "value": "trackNamedPages",
-          "default": false,
-          "footerNote": "Applicable only for cloud-mode"
-        }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          }
+            "title": "Only Track known users",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Track Known Users",
+                    "value": "trackKnownUsers",
+                    "required": false,
+                    "default": true
+                }
+            ]
         },
         {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
+            "title": "Sends the experiment and variation information",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Sends the experiment and variation information as properties on a track call",
+                    "value": "listen",
+                    "required": false,
+                    "default": true
+                }
+            ]
         },
         {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
+            "title": "Non-Interaction Event",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Specifies the Experiment Viewed as a non-interaction event for Google Analytics",
+                    "value": "nonInteraction",
+                    "required": false,
+                    "default": true
+                }
+            ]
+        },
         {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
+            "title": "Track Categorized Pages",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Track Categorized Pages",
+                    "value": "trackCategorizedPages",
+                    "default": false,
+                    "footerNote": "Applicable only for cloud-mode",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "title": "Track Named Pages",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Track Named Pages",
+                    "value": "trackNamedPages",
+                    "default": false,
+                    "footerNote": "Applicable only for cloud-mode",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "title": "Native SDK",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Use device-mode to send events",
+                    "value": "useNativeSDK",
+                    "default": true,
+                    "required": false
+                }
+            ]
+        },
+        {
+            "title": "Client-side Events Filtering",
+            "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+            "fields": [
+                {
+                    "type": "singleSelect",
+                    "value": "eventFilteringOption",
+                    "required": false,
+                    "options": [
+                        {
+                            "name": "Disable",
+                            "value": "disable"
+                        },
+                        {
+                            "name": "Allowlist",
+                            "value": "whitelistedEvents"
+                        },
+                        {
+                            "name": "Denylist",
+                            "value": "blacklistedEvents"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Disable",
+                        "value": "disable"
+                    }
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "whitelistedEvents",
+                    "label": "Allowlist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Anonymous Page Visit"
+                        }
+                    ],
+                    "required": false
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "blacklistedEvents",
+                    "label": "Denylist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Credit Card Added"
+                        }
+                    ],
+                    "required": false
+                }
+            ]
+        },
+        {
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }

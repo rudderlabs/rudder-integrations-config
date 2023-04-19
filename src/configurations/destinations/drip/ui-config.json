@@ -1,130 +1,130 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "Account ID",
-          "value": "accountId",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Please check your Account ID. It should be something like 276450567",
-          "required": true,
-          "placeholder": "e.g. 276450567",
-          "secret": true
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Account ID",
+                    "value": "accountId",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Please check your Account ID. It should be something like 276450567",
+                    "required": true,
+                    "placeholder": "e.g. 276450567",
+                    "secret": true
+                },
+                {
+                    "type": "textInput",
+                    "label": "API Token",
+                    "value": "apiKey",
+                    "regex": ".*",
+                    "required": false,
+                    "placeholder": "e.g. tZrPAgHyn2jMWOVGKrS6gBGLYT8v9kJE",
+                    "secret": true
+                },
+                {
+                    "type": "textInput",
+                    "label": "Campaign ID",
+                    "value": "campaignId",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Please check your Campaign ID. It should be numerical, something like 276450567",
+                    "required": false,
+                    "placeholder": "e.g. 276450567",
+                    "secret": true
+                },
+                {
+                    "type": "checkbox",
+                    "label": "User Creation Mode",
+                    "value": "enableUserCreation",
+                    "default": true,
+                    "footerNote": "When enabled it will create new user with email if user doesn't exist for track calls."
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "API Token",
-          "value": "apiKey",
-          "regex": ".*",
-          "required": false,
-          "placeholder": "e.g. tZrPAgHyn2jMWOVGKrS6gBGLYT8v9kJE",
-          "secret": true
+            "title": "Native SDK",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Use device-mode to send events",
+                    "value": "useNativeSDK",
+                    "default": false
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Campaign ID",
-          "value": "campaignId",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Please check your Campaign ID. It should be numerical, something like 276450567",
-          "required": false,
-          "placeholder": "e.g. 276450567",
-          "secret": true
+            "title": "Client-side Events Filtering",
+            "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+            "fields": [
+                {
+                    "type": "singleSelect",
+                    "value": "eventFilteringOption",
+                    "required": false,
+                    "options": [
+                        {
+                            "name": "Disable",
+                            "value": "disable"
+                        },
+                        {
+                            "name": "Allowlist",
+                            "value": "whitelistedEvents"
+                        },
+                        {
+                            "name": "Denylist",
+                            "value": "blacklistedEvents"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Disable",
+                        "value": "disable"
+                    }
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "whitelistedEvents",
+                    "label": "Allowlist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Anonymous Page Visit"
+                        }
+                    ]
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "blacklistedEvents",
+                    "label": "Denylist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Credit Card Added"
+                        }
+                    ]
+                }
+            ]
         },
         {
-          "type": "checkbox",
-          "label": "User Creation Mode",
-          "value": "enableUserCreation",
-          "default": true,
-          "footerNote": "When enabled it will create new user with email if user doesn't exist for track calls."
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ]
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": false
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

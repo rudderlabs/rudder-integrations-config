@@ -1,232 +1,240 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "Hub ID",
-          "value": "hubID",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Hub ID",
-          "required": false,
-          "placeholder": "e.g: 748991",
-          "footerNote": "Your Hub ID (under account name)"
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Hub ID",
+                    "value": "hubID",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Hub ID",
+                    "required": false,
+                    "placeholder": "e.g: 748991",
+                    "footerNote": "Your Hub ID (under account name)"
+                },
+                {
+                    "type": "singleSelect",
+                    "label": "Authorization Type",
+                    "value": "authorizationType",
+                    "options": [
+                        {
+                            "name": "API Key (deprecating soon)",
+                            "value": "legacyApiKey"
+                        },
+                        {
+                            "name": "Private Apps",
+                            "value": "newPrivateAppApi"
+                        }
+                    ],
+                    "defaultOption": {
+                        "value": "legacyApiKey"
+                    },
+                    "required": false
+                },
+                {
+                    "type": "textInput",
+                    "preRequisiteField": {
+                        "name": "authorizationType",
+                        "selectedValue": "legacyApiKey"
+                    },
+                    "label": "API Key",
+                    "value": "apiKey",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid API Key",
+                    "required": false,
+                    "placeholder": "e.g: 05afa518-132c-40db-830a-de0f688902f7",
+                    "footerNote": "Your API Key (Settings -> Integrations -> API Key)"
+                },
+                {
+                    "type": "textInput",
+                    "preRequisiteField": {
+                        "name": "authorizationType",
+                        "selectedValue": "newPrivateAppApi"
+                    },
+                    "label": "Access Token",
+                    "value": "accessToken",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Access Token",
+                    "required": false,
+                    "placeholder": "e.g: pat-eu1-kjg875ya-9de4-98uu-8171-62875ht847r9",
+                    "footerNote": "Your private app access token"
+                },
+                {
+                    "type": "singleSelect",
+                    "label": "API Version",
+                    "value": "apiVersion",
+                    "options": [
+                        {
+                            "name": "Legacy API (v1)",
+                            "value": "legacyApi"
+                        },
+                        {
+                            "name": "New API (v3)",
+                            "value": "newApi"
+                        }
+                    ],
+                    "defaultOption": {
+                        "value": "legacyApi"
+                    },
+                    "required": false
+                },
+                {
+                    "type": "textInput",
+                    "preRequisiteField": {
+                        "name": "apiVersion",
+                        "selectedValue": "newApi"
+                    },
+                    "label": "Hubspot property name to be used as lookup field",
+                    "value": "lookupField",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Property Name",
+                    "required": false,
+                    "placeholder": "e.g: lookupField",
+                    "footerNote": "Provide unique Hubspot property field, which could be used for contact lookup. The provided lookup field key will be retrieved from traits. eg: traits: { lookupField: 'alex@example.com' }"
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Create associations between object records",
+                    "value": "doAssociation",
+                    "default": false,
+                    "preRequisiteField": {
+                        "name": "apiVersion",
+                        "selectedValue": "newApi"
+                    },
+                    "required": false
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "label": "Map RudderStack event name to HubSpot Custom Behavioral event name",
+                    "value": "hubspotEvents",
+                    "preRequisiteField": {
+                        "name": "apiVersion",
+                        "selectedValue": "newApi"
+                    },
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "label": "RudderStack Event Name",
+                            "value": "rsEventName",
+                            "regex": "^(.{0,100})$",
+                            "required": false,
+                            "placeholder": "e.g Products Searched",
+                            "footerNote": "Enter the RudderStack event name you want to map"
+                        },
+                        {
+                            "type": "textInput",
+                            "label": "HubSpot Event Name",
+                            "value": "hubspotEventName",
+                            "regex": "^(.{0,100})$",
+                            "required": false,
+                            "placeholder": "e.g Search",
+                            "footerNote": "Enter the corresponding Hubspot event name you want to map"
+                        },
+                        {
+                            "type": "dynamicForm",
+                            "label": "Map your Event Property",
+                            "value": "eventProperties",
+                            "labelLeft": "RudderStack Property Name",
+                            "labelRight": "HubSpot Property Name",
+                            "keyLeft": "from",
+                            "keyRight": "to",
+                            "placeholderLeft": "e.g firstName",
+                            "placeholderRight": "e.g first_name"
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "singleSelect",
-          "label": "Authorization Type",
-          "value": "authorizationType",
-          "options": [
-            {
-              "name": "API Key (deprecating soon)",
-              "value": "legacyApiKey"
-            },
-            {
-              "name": "Private Apps",
-              "value": "newPrivateAppApi"
-            }
-          ],
-          "defaultOption": {
-            "value": "legacyApiKey"
-          }
+            "title": "Native SDK",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Use device-mode to send events",
+                    "value": "useNativeSDK",
+                    "default": false,
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "preRequisiteField": {
-            "name": "authorizationType",
-            "selectedValue": "legacyApiKey"
-          },
-          "label": "API Key",
-          "value": "apiKey",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid API Key",
-          "required": true,
-          "placeholder": "e.g: 05afa518-132c-40db-830a-de0f688902f7",
-          "footerNote": "Your API Key (Settings -> Integrations -> API Key)"
+            "title": "Client-side Events Filtering",
+            "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+            "fields": [
+                {
+                    "type": "singleSelect",
+                    "value": "eventFilteringOption",
+                    "required": false,
+                    "options": [
+                        {
+                            "name": "Disable",
+                            "value": "disable"
+                        },
+                        {
+                            "name": "Allowlist",
+                            "value": "whitelistedEvents"
+                        },
+                        {
+                            "name": "Denylist",
+                            "value": "blacklistedEvents"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Disable",
+                        "value": "disable"
+                    }
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "whitelistedEvents",
+                    "label": "Allowlist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Anonymous Page Visit"
+                        }
+                    ],
+                    "required": false
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "blacklistedEvents",
+                    "label": "Denylist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Credit Card Added"
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "preRequisiteField": {
-            "name": "authorizationType",
-            "selectedValue": "newPrivateAppApi"
-          },
-          "label": "Access Token",
-          "value": "accessToken",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Access Token",
-          "required": true,
-          "placeholder": "e.g: pat-eu1-kjg875ya-9de4-98uu-8171-62875ht847r9",
-          "footerNote": "Your private app access token"
-        },
-        {
-          "type": "singleSelect",
-          "label": "API Version",
-          "value": "apiVersion",
-          "options": [
-            {
-              "name": "Legacy API (v1)",
-              "value": "legacyApi"
-            },
-            {
-              "name": "New API (v3)",
-              "value": "newApi"
-            }
-          ],
-          "defaultOption": {
-            "value": "legacyApi"
-          }
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": {
-            "name": "apiVersion",
-            "selectedValue": "newApi"
-          },
-          "label": "Hubspot property name to be used as lookup field",
-          "value": "lookupField",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Property Name",
-          "required": true,
-          "placeholder": "e.g: lookupField",
-          "footerNote": "Provide unique Hubspot property field, which could be used for contact lookup. The provided lookup field key will be retrieved from traits. eg: traits: { lookupField: 'alex@example.com' }"
-        },
-        {
-          "type": "checkbox",
-          "label": "Create associations between object records",
-          "value": "doAssociation",
-          "default": false,
-          "preRequisiteField": {
-            "name": "apiVersion",
-            "selectedValue": "newApi"
-          }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "label": "Map RudderStack event name to HubSpot Custom Behavioral event name",
-          "value": "hubspotEvents",
-          "preRequisiteField": {
-            "name": "apiVersion",
-            "selectedValue": "newApi"
-          },
-          "customFields": [
-            {
-              "type": "textInput",
-              "label": "RudderStack Event Name",
-              "value": "rsEventName",
-              "regex": "^(.{0,100})$",
-              "required": false,
-              "placeholder": "e.g Products Searched",
-              "footerNote": "Enter the RudderStack event name you want to map"
-            },
-            {
-              "type": "textInput",
-              "label": "HubSpot Event Name",
-              "value": "hubspotEventName",
-              "regex": "^(.{0,100})$",
-              "required": false,
-              "placeholder": "e.g Search",
-              "footerNote": "Enter the corresponding Hubspot event name you want to map"
-            },
-            {
-              "type": "dynamicForm",
-              "label": "Map your Event Property",
-              "value": "eventProperties",
-              "labelLeft": "RudderStack Property Name",
-              "labelRight": "HubSpot Property Name",
-              "keyLeft": "from",
-              "keyRight": "to",
-              "placeholderLeft": "e.g firstName",
-              "placeholderRight": "e.g first_name"
-            }
-          ]
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": false
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

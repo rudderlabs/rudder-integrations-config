@@ -1,596 +1,614 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "Tracking Server URL",
-          "value": "trackingServerUrl",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$",
-          "regexErrorMessage": "Please put a valid url",
-          "footerNote": "This is the URL of your Adobe Analytics server."
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Tracking Server URL",
+                    "value": "trackingServerUrl",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$",
+                    "regexErrorMessage": "Please put a valid url",
+                    "footerNote": "This is the URL of your Adobe Analytics server.",
+                    "required": false
+                },
+                {
+                    "type": "textInput",
+                    "label": "Tracking Server Secure URL",
+                    "value": "trackingServerSecureUrl",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$",
+                    "regexErrorMessage": "Please put a valid url",
+                    "footerNote": "This is the secure HTTPS URL of your Adobe Analytics server. While sending data via cloud mode, this field is mandatory.",
+                    "required": false
+                },
+                {
+                    "type": "textInput",
+                    "label": "Report Suite ID(s)",
+                    "value": "reportSuiteIds",
+                    "required": true,
+                    "footerNote": "Report Suite ID can be found in the Adobe Analytics Settings page. You can add multiple report suite ids by separated by commas."
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Check for Heartbeat calls to be made over https",
+                    "value": "sslHeartbeat",
+                    "default": true,
+                    "required": false
+                },
+                {
+                    "type": "textInput",
+                    "label": "Heartbeat Tracking Server URL",
+                    "value": "heartbeatTrackingServerUrl",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$",
+                    "regexErrorMessage": "Please put a valid url",
+                    "footerNote": "This is the URL of your Adobe Heartbeat server. Please reach out to Adobe for this URL.",
+                    "required": false
+                },
+                {
+                    "type": "textInput",
+                    "label": "Adobe Analytics Javascript SDK Proxy URL",
+                    "value": "proxyNormalUrl",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$",
+                    "regexErrorMessage": "Please put a valid url",
+                    "footerNote": "Enter your proxy url for hosting adobe analytics JS SDK. By default it is https://cdn.rudderlabs.com/adobe-analytics-js/adobe-analytics-js.js",
+                    "required": false
+                },
+                {
+                    "type": "textInput",
+                    "label": "Adobe Analytics Hearbeat SDK Proxy URL",
+                    "value": "proxyHeartbeatUrl",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$",
+                    "regexErrorMessage": "Please put a valid url",
+                    "footerNote": "Enter your proxy url for hosting adobe analytics Heartbeat SDK. By default it is https://cdn.rudderlabs.com/adobe-analytics-js/adobe-analytics-js-heartbeat.js",
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Tracking Server Secure URL",
-          "value": "trackingServerSecureUrl",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$",
-          "regexErrorMessage": "Please put a valid url",
-          "footerNote": "This is the secure HTTPS URL of your Adobe Analytics server. While sending data via cloud mode, this field is mandatory."
+            "title": "Adobe Heartbeat Settings",
+            "fields": [
+                {
+                    "type": "dynamicSelectForm",
+                    "label": "Map your Rudder video events with types of Video Events",
+                    "labelLeft": "Video Event Name",
+                    "labelRight": "Type of Video Event",
+                    "value": "eventsToTypes",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "required": false,
+                    "placeholderLeft": "e.g. video playback started",
+                    "options": [
+                        {
+                            "name": "Initialise Heartbeat",
+                            "value": "initHeartbeat"
+                        },
+                        {
+                            "name": "Heartbeat Playback Started",
+                            "value": "heartbeatPlaybackStarted"
+                        },
+                        {
+                            "name": "Heartbeat Playback Paused",
+                            "value": "heartbeatPlaybackPaused"
+                        },
+                        {
+                            "name": "Heartbeat Playback Resumed",
+                            "value": "heartbeatPlaybackResumed"
+                        },
+                        {
+                            "name": "Heartbeat Playback Completed",
+                            "value": "heartbeatPlaybackCompleted"
+                        },
+                        {
+                            "name": "Heartbeat Playback Interrupted",
+                            "value": "heartbeatPlaybackInterrupted"
+                        },
+                        {
+                            "name": "Heartbeat Content Start",
+                            "value": "heartbeatContentStarted"
+                        },
+                        {
+                            "name": "Heartbeat Content Complete",
+                            "value": "heartbeatContentComplete"
+                        },
+                        {
+                            "name": "Heartbeat Ad BreakStarted",
+                            "value": "heartbeatAdBreakStarted"
+                        },
+                        {
+                            "name": "Heartbeat Ad Break Completed",
+                            "value": "heartbeatAdBreakCompleted"
+                        },
+                        {
+                            "name": "Heartbeat Ad Start",
+                            "value": "heartbeatAdStarted"
+                        },
+                        {
+                            "name": "Heartbeat Ad Completed",
+                            "value": "heartbeatAdCompleted"
+                        },
+                        {
+                            "name": "Heartbeat Ad Skipped",
+                            "value": "heartbeatAdSkipped"
+                        },
+                        {
+                            "name": "Heartbeat Seek Started",
+                            "value": "heartbeatSeekStarted"
+                        },
+                        {
+                            "name": "Heartbeat Seek Completed",
+                            "value": "heartbeatSeekCompleted"
+                        },
+                        {
+                            "name": "Heartbeat Buffer Started",
+                            "value": "heartbeatBufferStarted"
+                        },
+                        {
+                            "name": "Heartbeat Buffer Completed",
+                            "value": "heartbeatBufferCompleted"
+                        },
+                        {
+                            "name": "Heartbeat Quality Updated",
+                            "value": "heartbeatQualityUpdated"
+                        },
+                        {
+                            "name": "Heartbeat Playhead Update",
+                            "value": "heartbeatUpdatePlayhead"
+                        }
+                    ]
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Report Suite ID(s)",
-          "value": "reportSuiteIds",
-          "required": true,
-          "footerNote": "Report Suite ID can be found in the Adobe Analytics Settings page. You can add multiple report suite ids by separated by commas."
+            "title": "Identity Resolution",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Marketing Cloud Organization Id",
+                    "value": "marketingCloudOrgId",
+                    "footerNote": "Enter the Marketing Cloud Organization ID to use visitorAPI.js. It can be located on the Marketing Cloud administration page.",
+                    "required": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Drop Visitor Id",
+                    "value": "dropVisitorId",
+                    "default": true,
+                    "footerNote": "When enabled, this will not assign userId to Visitor ID.",
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "checkbox",
-          "label": "Check for Heartbeat calls to be made over https",
-          "value": "sslHeartbeat",
-          "default": true
+            "title": "Timestamps",
+            "fields": [
+                {
+                    "type": "singleSelect",
+                    "label": "Timestamp Option",
+                    "value": "timestampOption",
+                    "required": false,
+                    "footerNote": "RudderStack sets visitorID depending on this value if the Drop Visitor ID setting is disabled.",
+                    "options": [
+                        {
+                            "name": "Timestamp Hybrid",
+                            "value": "hybrid"
+                        },
+                        {
+                            "name": "Timestamp Optional",
+                            "value": "optional"
+                        },
+                        {
+                            "name": "Timestamp Enabled",
+                            "value": "enabled"
+                        },
+                        {
+                            "name": "Timestamp Disabled",
+                            "value": "disabled"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Timestamp Disabled",
+                        "value": "disabled"
+                    }
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Send Both Timestamp and VisitorID for Timestamp Optional Reporting Suites",
+                    "value": "timestampOptionalReporting",
+                    "footerNote": "Enable this to allow both timestamp and visitorId to be sent in the payload.",
+                    "default": false,
+                    "required": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "No Fallbacks for Visitor ID",
+                    "value": "noFallbackVisitorId",
+                    "footerNote": "Applicable for Cloud mode only, if this option is disabled, fallback visitor ID is set from the external Id.",
+                    "default": false,
+                    "required": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Prefer Visitor Id",
+                    "value": "preferVisitorId",
+                    "footerNote": "If enabled, RudderStack sets the visitorID field. If disabled, RudderStack sets the timestamp value. This is applicable when timestamp option is set as hybrid.",
+                    "default": false,
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Heartbeat Tracking Server URL",
-          "value": "heartbeatTrackingServerUrl",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$",
-          "regexErrorMessage": "Please put a valid url",
-          "footerNote": "This is the URL of your Adobe Heartbeat server. Please reach out to Adobe for this URL."
+            "title": "Event and Property Mappings",
+            "fields": [
+                {
+                    "type": "dynamicForm",
+                    "label": "Map Rudder Events to Adobe Custom Events",
+                    "value": "rudderEventsToAdobeEvents",
+                    "required": false,
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g. Product Searched",
+                    "placeholderRight": "event1,event2",
+                    "labelLeft": "Event Name",
+                    "labelRight": "Adobe Custom Event",
+                    "footerNote": "Add one event or many events for adobe custom events separated by comma"
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Enable pageName for Track Events",
+                    "value": "trackPageName",
+                    "footerNote": "Enable this toggle to send a pageName everytime with the track call.",
+                    "default": true,
+                    "required": false
+                },
+                {
+                    "type": "dynamicForm",
+                    "label": "Map Rudder Context data to Adobe Context Data",
+                    "value": "contextDataMapping",
+                    "required": false,
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g. page.name",
+                    "placeholderRight": "pName",
+                    "labelLeft": "Context Data path",
+                    "labelRight": "Adobe Context Data property name",
+                    "footerNote": "Add properties under context key in rudder payload"
+                },
+                {
+                    "type": "textInput",
+                    "placeholder": "eg: rudder-",
+                    "value": "contextDataPrefix",
+                    "label": "Prefix to add before all contextData property.",
+                    "required": false
+                },
+                {
+                    "type": "dynamicForm",
+                    "label": "Map Rudder Mobile events",
+                    "value": "mobileEventMapping",
+                    "required": false,
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g. page.name",
+                    "placeholderRight": "pName",
+                    "labelLeft": "Context Data path",
+                    "labelRight": "Adobe Context Data property name",
+                    "footerNote": "Add properties under context key in rudder payload"
+                },
+                {
+                    "type": "dynamicForm",
+                    "label": "Map Rudder Properties to Adobe eVars",
+                    "value": "eVarMapping",
+                    "required": false,
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g. phone",
+                    "placeholderRight": "2",
+                    "labelLeft": "Rudder Property",
+                    "labelRight": "eVar Index",
+                    "footerNote": "Only give the index of the eVar"
+                },
+                {
+                    "type": "dynamicForm",
+                    "label": "Map Rudder Properties to Adobe Hierarchy properties",
+                    "value": "hierMapping",
+                    "required": false,
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g. phone",
+                    "placeholderRight": "2",
+                    "labelLeft": "Rudder Property",
+                    "labelRight": "hier Index",
+                    "footerNote": "Only give the index of the hier"
+                },
+                {
+                    "type": "dynamicForm",
+                    "label": "Map Rudder Properties to Adobe list properties",
+                    "value": "listMapping",
+                    "required": false,
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g. listProp",
+                    "placeholderRight": "2",
+                    "labelLeft": "Rudder Property",
+                    "labelRight": "list Index",
+                    "footerNote": "The list properties should be an array/string separated by commas"
+                },
+                {
+                    "type": "dynamicSelectForm",
+                    "label": "Map your Rudder Property with Delimiters for list properties",
+                    "labelLeft": "Rudder Property",
+                    "labelRight": "List Delimiter",
+                    "value": "listDelimiter",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "required": false,
+                    "placeholderLeft": "e.g. prop",
+                    "options": [
+                        {
+                            "name": "|",
+                            "value": "|"
+                        },
+                        {
+                            "name": ":",
+                            "value": ":"
+                        },
+                        {
+                            "name": ",",
+                            "value": ","
+                        },
+                        {
+                            "name": ";",
+                            "value": ";"
+                        },
+                        {
+                            "name": "/",
+                            "value": "/"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": ",",
+                        "value": ","
+                    }
+                },
+                {
+                    "type": "dynamicForm",
+                    "label": "Map Rudder Properties to Adobe Custom properties",
+                    "value": "customPropsMapping",
+                    "required": false,
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g phone",
+                    "placeholderRight": "2",
+                    "labelLeft": "Rudder Property",
+                    "labelRight": "prop Index",
+                    "footerNote": "Only give the index of the prop"
+                },
+                {
+                    "type": "dynamicSelectForm",
+                    "label": "Map your Rudder Property with Delimiters for Adobe Custom properties",
+                    "labelLeft": "Rudder Property",
+                    "labelRight": "List Delimiter",
+                    "value": "propsDelimiter",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "required": false,
+                    "placeholderLeft": "e.g. phone",
+                    "options": [
+                        {
+                            "name": "|",
+                            "value": "|"
+                        },
+                        {
+                            "name": ":",
+                            "value": ":"
+                        },
+                        {
+                            "name": ",",
+                            "value": ","
+                        },
+                        {
+                            "name": ";",
+                            "value": ";"
+                        },
+                        {
+                            "name": "/",
+                            "value": "/"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": ",",
+                        "value": ","
+                    }
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Adobe Analytics Javascript SDK Proxy URL",
-          "value": "proxyNormalUrl",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$",
-          "regexErrorMessage": "Please put a valid url",
-          "footerNote": "Enter your proxy url for hosting adobe analytics JS SDK. By default it is https://cdn.rudderlabs.com/adobe-analytics-js/adobe-analytics-js.js"
+            "title": "Merchandise Event Level Settings",
+            "fields": [
+                {
+                    "type": "dynamicForm",
+                    "label": "Map Rudder Events to Adobe Merchandise events",
+                    "value": "eventMerchEventToAdobeEvent",
+                    "required": false,
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g Order Completed",
+                    "placeholderRight": "event1",
+                    "labelLeft": "Rudder Event",
+                    "labelRight": "Adobe Event"
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "eventMerchProperties",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "e.g. currency",
+                            "value": "eventMerchProperties",
+                            "label": "Incremental properties to add to merchandise events in events string",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Adobe Analytics Hearbeat SDK Proxy URL",
-          "value": "proxyHeartbeatUrl",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$",
-          "regexErrorMessage": "Please put a valid url",
-          "footerNote": "Enter your proxy url for hosting adobe analytics Heartbeat SDK. By default it is https://cdn.rudderlabs.com/adobe-analytics-js/adobe-analytics-js-heartbeat.js"
+            "title": "Merchandise Product Level Settings",
+            "fields": [
+                {
+                    "type": "dynamicForm",
+                    "label": "Map Rudder Events to Adobe Merchandise events",
+                    "value": "productMerchEventToAdobeEvent",
+                    "required": false,
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g Order Completed",
+                    "placeholderRight": "event1",
+                    "labelLeft": "Rudder Event",
+                    "labelRight": "Adobe Event"
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "productMerchProperties",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "e.g. currency",
+                            "value": "productMerchProperties",
+                            "label": "Incremental properties to add to merchandise events in products string",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                },
+                {
+                    "type": "dynamicForm",
+                    "label": "Map Rudder Properties to eVars at product level",
+                    "value": "productMerchEvarsMap",
+                    "footerNote": "Use this to populate the products string with the mapped eVars.",
+                    "required": false,
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g. product_id",
+                    "placeholderRight": "2",
+                    "labelLeft": "Rudder Property",
+                    "labelRight": "eVar Index"
+                },
+                {
+                    "type": "singleSelect",
+                    "label": "Product Identifier",
+                    "value": "productIdentifier",
+                    "required": false,
+                    "footerNote": "Adobe Analytics only accepts a single product identifier. Use this option to choose whether we send product name, id, or sku.",
+                    "options": [
+                        {
+                            "name": "Product Name",
+                            "value": "name"
+                        },
+                        {
+                            "name": "ID",
+                            "value": "id"
+                        },
+                        {
+                            "name": "SKU",
+                            "value": "sku"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Product Name",
+                        "value": "name"
+                    }
+                }
+            ]
+        },
+        {
+            "title": "Native SDK",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Use device-mode to send events",
+                    "value": "useNativeSDK",
+                    "default": true,
+                    "required": false
+                }
+            ]
+        },
+        {
+            "title": "Client-side Events Filtering",
+            "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+            "fields": [
+                {
+                    "type": "singleSelect",
+                    "value": "eventFilteringOption",
+                    "required": false,
+                    "options": [
+                        {
+                            "name": "Disable",
+                            "value": "disable"
+                        },
+                        {
+                            "name": "Allowlist",
+                            "value": "whitelistedEvents"
+                        },
+                        {
+                            "name": "Denylist",
+                            "value": "blacklistedEvents"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Disable",
+                        "value": "disable"
+                    }
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "whitelistedEvents",
+                    "label": "Allowlist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Anonymous Page Visit"
+                        }
+                    ],
+                    "required": false
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "blacklistedEvents",
+                    "label": "Denylist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Credit Card Added"
+                        }
+                    ],
+                    "required": false
+                }
+            ]
+        },
+        {
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Adobe Heartbeat Settings",
-      "fields": [
-        {
-          "type": "dynamicSelectForm",
-          "label": "Map your Rudder video events with types of Video Events",
-          "labelLeft": "Video Event Name",
-          "labelRight": "Type of Video Event",
-          "value": "eventsToTypes",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "required": false,
-          "placeholderLeft": "e.g. video playback started",
-          "options": [
-            {
-              "name": "Initialise Heartbeat",
-              "value": "initHeartbeat"
-            },
-            {
-              "name": "Heartbeat Playback Started",
-              "value": "heartbeatPlaybackStarted"
-            },
-            {
-              "name": "Heartbeat Playback Paused",
-              "value": "heartbeatPlaybackPaused"
-            },
-            {
-              "name": "Heartbeat Playback Resumed",
-              "value": "heartbeatPlaybackResumed"
-            },
-            {
-              "name": "Heartbeat Playback Completed",
-              "value": "heartbeatPlaybackCompleted"
-            },
-            {
-              "name": "Heartbeat Playback Interrupted",
-              "value": "heartbeatPlaybackInterrupted"
-            },
-            {
-              "name": "Heartbeat Content Start",
-              "value": "heartbeatContentStarted"
-            },
-            {
-              "name": "Heartbeat Content Complete",
-              "value": "heartbeatContentComplete"
-            },
-            {
-              "name": "Heartbeat Ad BreakStarted",
-              "value": "heartbeatAdBreakStarted"
-            },
-            {
-              "name": "Heartbeat Ad Break Completed",
-              "value": "heartbeatAdBreakCompleted"
-            },
-            {
-              "name": "Heartbeat Ad Start",
-              "value": "heartbeatAdStarted"
-            },
-            {
-              "name": "Heartbeat Ad Completed",
-              "value": "heartbeatAdCompleted"
-            },
-            {
-              "name": "Heartbeat Ad Skipped",
-              "value": "heartbeatAdSkipped"
-            },
-            {
-              "name": "Heartbeat Seek Started",
-              "value": "heartbeatSeekStarted"
-            },
-            {
-              "name": "Heartbeat Seek Completed",
-              "value": "heartbeatSeekCompleted"
-            },
-            {
-              "name": "Heartbeat Buffer Started",
-              "value": "heartbeatBufferStarted"
-            },
-            {
-              "name": "Heartbeat Buffer Completed",
-              "value": "heartbeatBufferCompleted"
-            },
-            {
-              "name": "Heartbeat Quality Updated",
-              "value": "heartbeatQualityUpdated"
-            },
-            {
-              "name": "Heartbeat Playhead Update",
-              "value": "heartbeatUpdatePlayhead"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Identity Resolution",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Marketing Cloud Organization Id",
-          "value": "marketingCloudOrgId",
-          "footerNote": "Enter the Marketing Cloud Organization ID to use visitorAPI.js. It can be located on the Marketing Cloud administration page."
-        },
-        {
-          "type": "checkbox",
-          "label": "Drop Visitor Id",
-          "value": "dropVisitorId",
-          "default": true,
-          "footerNote": "When enabled, this will not assign userId to Visitor ID."
-        }
-      ]
-    },
-    {
-      "title": "Timestamps",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "label": "Timestamp Option",
-          "value": "timestampOption",
-          "required": false,
-          "footerNote": "RudderStack sets visitorID depending on this value if the Drop Visitor ID setting is disabled.",
-          "options": [
-            {
-              "name": "Timestamp Hybrid",
-              "value": "hybrid"
-            },
-            {
-              "name": "Timestamp Optional",
-              "value": "optional"
-            },
-            {
-              "name": "Timestamp Enabled",
-              "value": "enabled"
-            },
-            {
-              "name": "Timestamp Disabled",
-              "value": "disabled"
-            }
-          ],
-          "defaultOption": {
-            "name": "Timestamp Disabled",
-            "value": "disabled"
-          }
-        },
-        {
-          "type": "checkbox",
-          "label": "Send Both Timestamp and VisitorID for Timestamp Optional Reporting Suites",
-          "value": "timestampOptionalReporting",
-          "footerNote": "Enable this to allow both timestamp and visitorId to be sent in the payload.",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "No Fallbacks for Visitor ID",
-          "value": "noFallbackVisitorId",
-          "footerNote": "Applicable for Cloud mode only, if this option is disabled, fallback visitor ID is set from the external Id.",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Prefer Visitor Id",
-          "value": "preferVisitorId",
-          "footerNote": "If enabled, RudderStack sets the visitorID field. If disabled, RudderStack sets the timestamp value. This is applicable when timestamp option is set as hybrid.",
-          "default": false
-        }
-      ]
-    },
-    {
-      "title": "Event and Property Mappings",
-      "fields": [
-        {
-          "type": "dynamicForm",
-          "label": "Map Rudder Events to Adobe Custom Events",
-          "value": "rudderEventsToAdobeEvents",
-          "required": false,
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g. Product Searched",
-          "placeholderRight": "event1,event2",
-          "labelLeft": "Event Name",
-          "labelRight": "Adobe Custom Event",
-          "footerNote": "Add one event or many events for adobe custom events separated by comma"
-        },
-        {
-          "type": "checkbox",
-          "label": "Enable pageName for Track Events",
-          "value": "trackPageName",
-          "footerNote": "Enable this toggle to send a pageName everytime with the track call.",
-          "default": true
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Map Rudder Context data to Adobe Context Data",
-          "value": "contextDataMapping",
-          "required": false,
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g. page.name",
-          "placeholderRight": "pName",
-          "labelLeft": "Context Data path",
-          "labelRight": "Adobe Context Data property name",
-          "footerNote": "Add properties under context key in rudder payload"
-        },
-        {
-          "type": "textInput",
-          "placeholder": "eg: rudder-",
-          "value": "contextDataPrefix",
-          "label": "Prefix to add before all contextData property.",
-          "required": false
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Map Rudder Mobile events",
-          "value": "mobileEventMapping",
-          "required": false,
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g. page.name",
-          "placeholderRight": "pName",
-          "labelLeft": "Context Data path",
-          "labelRight": "Adobe Context Data property name",
-          "footerNote": "Add properties under context key in rudder payload"
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Map Rudder Properties to Adobe eVars",
-          "value": "eVarMapping",
-          "required": false,
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g. phone",
-          "placeholderRight": "2",
-          "labelLeft": "Rudder Property",
-          "labelRight": "eVar Index",
-          "footerNote": "Only give the index of the eVar"
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Map Rudder Properties to Adobe Hierarchy properties",
-          "value": "hierMapping",
-          "required": false,
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g. phone",
-          "placeholderRight": "2",
-          "labelLeft": "Rudder Property",
-          "labelRight": "hier Index",
-          "footerNote": "Only give the index of the hier"
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Map Rudder Properties to Adobe list properties",
-          "value": "listMapping",
-          "required": false,
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g. listProp",
-          "placeholderRight": "2",
-          "labelLeft": "Rudder Property",
-          "labelRight": "list Index",
-          "footerNote": "The list properties should be an array/string separated by commas"
-        },
-        {
-          "type": "dynamicSelectForm",
-          "label": "Map your Rudder Property with Delimiters for list properties",
-          "labelLeft": "Rudder Property",
-          "labelRight": "List Delimiter",
-          "value": "listDelimiter",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "required": false,
-          "placeholderLeft": "e.g. prop",
-          "options": [
-            {
-              "name": "|",
-              "value": "|"
-            },
-            {
-              "name": ":",
-              "value": ":"
-            },
-            {
-              "name": ",",
-              "value": ","
-            },
-            {
-              "name": ";",
-              "value": ";"
-            },
-            {
-              "name": "/",
-              "value": "/"
-            }
-          ],
-          "defaultOption": {
-            "name": ",",
-            "value": ","
-          }
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Map Rudder Properties to Adobe Custom properties",
-          "value": "customPropsMapping",
-          "required": false,
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g phone",
-          "placeholderRight": "2",
-          "labelLeft": "Rudder Property",
-          "labelRight": "prop Index",
-          "footerNote": "Only give the index of the prop"
-        },
-        {
-          "type": "dynamicSelectForm",
-          "label": "Map your Rudder Property with Delimiters for Adobe Custom properties",
-          "labelLeft": "Rudder Property",
-          "labelRight": "List Delimiter",
-          "value": "propsDelimiter",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "required": false,
-          "placeholderLeft": "e.g. phone",
-          "options": [
-            {
-              "name": "|",
-              "value": "|"
-            },
-            {
-              "name": ":",
-              "value": ":"
-            },
-            {
-              "name": ",",
-              "value": ","
-            },
-            {
-              "name": ";",
-              "value": ";"
-            },
-            {
-              "name": "/",
-              "value": "/"
-            }
-          ],
-          "defaultOption": {
-            "name": ",",
-            "value": ","
-          }
-        }
-      ]
-    },
-    {
-      "title": "Merchandise Event Level Settings",
-      "fields": [
-        {
-          "type": "dynamicForm",
-          "label": "Map Rudder Events to Adobe Merchandise events",
-          "value": "eventMerchEventToAdobeEvent",
-          "required": false,
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g Order Completed",
-          "placeholderRight": "event1",
-          "labelLeft": "Rudder Event",
-          "labelRight": "Adobe Event"
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "eventMerchProperties",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "e.g. currency",
-              "value": "eventMerchProperties",
-              "label": "Incremental properties to add to merchandise events in events string",
-              "required": false
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Merchandise Product Level Settings",
-      "fields": [
-        {
-          "type": "dynamicForm",
-          "label": "Map Rudder Events to Adobe Merchandise events",
-          "value": "productMerchEventToAdobeEvent",
-          "required": false,
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g Order Completed",
-          "placeholderRight": "event1",
-          "labelLeft": "Rudder Event",
-          "labelRight": "Adobe Event"
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "productMerchProperties",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "e.g. currency",
-              "value": "productMerchProperties",
-              "label": "Incremental properties to add to merchandise events in products string",
-              "required": false
-            }
-          ]
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Map Rudder Properties to eVars at product level",
-          "value": "productMerchEvarsMap",
-          "footerNote": "Use this to populate the products string with the mapped eVars.",
-          "required": false,
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g. product_id",
-          "placeholderRight": "2",
-          "labelLeft": "Rudder Property",
-          "labelRight": "eVar Index"
-        },
-        {
-          "type": "singleSelect",
-          "label": "Product Identifier",
-          "value": "productIdentifier",
-          "required": false,
-          "footerNote": "Adobe Analytics only accepts a single product identifier. Use this option to choose whether we send product name, id, or sku.",
-          "options": [
-            {
-              "name": "Product Name",
-              "value": "name"
-            },
-            {
-              "name": "ID",
-              "value": "id"
-            },
-            {
-              "name": "SKU",
-              "value": "sku"
-            }
-          ],
-          "defaultOption": {
-            "name": "Product Name",
-            "value": "name"
-          }
-        }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

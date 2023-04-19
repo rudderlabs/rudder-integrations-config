@@ -1,66 +1,73 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "API Key",
-          "value": "apiKey",
-          "regex": ".*",
-          "required": true,
-          "placeholder": "e.g. b4a29aba5e75dkjc8a18acd921e2e",
-          "secret": true
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "API Key",
+                    "value": "apiKey",
+                    "regex": ".*",
+                    "required": true,
+                    "placeholder": "e.g. b4a29aba5e75dkjc8a18acd921e2e",
+                    "secret": true
+                },
+                {
+                    "type": "textInput",
+                    "label": "Domain",
+                    "value": "domain",
+                    "regex": ".*",
+                    "required": true,
+                    "placeholder": "e.g. mycompany-1234",
+                    "secret": false
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Domain",
-          "value": "domain",
-          "regex": ".*",
-          "required": true,
-          "placeholder": "e.g. mycompany-1234",
-          "secret": false
-        }
-      ]
-    },
-    {
-      "title": "Event Settings",
-      "fields": [
+            "title": "Event Settings",
+            "fields": [
+                {
+                    "type": "dynamicSelectForm",
+                    "label": "Map your events with Freshsales Standard Events",
+                    "labelLeft": "Event Name",
+                    "labelRight": "Standard Event Name",
+                    "value": "rudderEventsToFreshsalesEvents",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "required": false,
+                    "placeholderLeft": "e.g. Sales Activities",
+                    "options": [
+                        {
+                            "name": "Sales Activities",
+                            "value": "sales_activity"
+                        },
+                        {
+                            "name": "Lifecycle Stage",
+                            "value": "lifecycle_stage"
+                        }
+                    ]
+                }
+            ]
+        },
         {
-          "type": "dynamicSelectForm",
-          "label": "Map your events with Freshsales Standard Events",
-          "labelLeft": "Event Name",
-          "labelRight": "Standard Event Name",
-          "value": "rudderEventsToFreshsalesEvents",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "required": false,
-          "placeholderLeft": "e.g. Sales Activities",
-          "options": [
-            { "name": "Sales Activities", "value": "sales_activity" },
-            { "name": "Lifecycle Stage", "value": "lifecycle_stage" }
-          ]
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

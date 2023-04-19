@@ -1,84 +1,97 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "Account ID",
-          "value": "accountId",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid Account ID",
-          "required": true,
-          "placeholder": "e.g. 1234567",
-          "secret": true
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Account ID",
+                    "value": "accountId",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Account ID",
+                    "required": true,
+                    "placeholder": "e.g. 1234567",
+                    "secret": true
+                },
+                {
+                    "type": "textInput",
+                    "label": "Insert Key",
+                    "value": "insertKey",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Insert Key",
+                    "required": true,
+                    "placeholder": "e.g. zXvp6bWcSL3muCRuGrWyUA",
+                    "secret": true
+                },
+                {
+                    "type": "singleSelect",
+                    "label": "Data Center",
+                    "value": "dataCenter",
+                    "mode": "single",
+                    "options": [
+                        {
+                            "name": "US(standard)",
+                            "value": "us"
+                        },
+                        {
+                            "name": "EU",
+                            "value": "eu"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "US(standard)",
+                        "value": "us"
+                    },
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Insert Key",
-          "value": "insertKey",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid Insert Key",
-          "required": true,
-          "placeholder": "e.g. zXvp6bWcSL3muCRuGrWyUA",
-          "secret": true
+            "title": "Other Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Custom Default Event Type",
+                    "value": "customEventType",
+                    "regex": ".*",
+                    "required": false,
+                    "placeholder": "e.g. abcdef"
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Send Device Context",
+                    "value": "sendDeviceContext",
+                    "default": false,
+                    "required": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Send UserId and AnonymousId",
+                    "value": "sendUserIdanonymousId",
+                    "default": false,
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "singleSelect",
-          "label": "Data Center",
-          "value": "dataCenter",
-          "mode": "single",
-          "options": [
-            { "name": "US(standard)", "value": "us" },
-            { "name": "EU", "value": "eu" }
-          ],
-          "defaultOption": { "name": "US(standard)", "value": "us" }
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Other Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Custom Default Event Type",
-          "value": "customEventType",
-          "regex": ".*",
-          "required": false,
-          "placeholder": "e.g. abcdef"
-        },
-        {
-          "type": "checkbox",
-          "label": "Send Device Context",
-          "value": "sendDeviceContext",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Send UserId and AnonymousId",
-          "value": "sendUserIdanonymousId",
-          "default": false
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

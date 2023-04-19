@@ -1,312 +1,292 @@
 {
-  "uiConfig": {
-    "baseTemplate": [
-      {
-        "title": "Initial setup",
-        "note": "Review how this destination is set up",
-        "sections": [
-          {
-            "groups": [
-              {
-                "title": "One click checkout",
-                "note": "Update your connection settings here",
-                "icon": "settings",
-                "fields": [
-                  {
-                    "type": "textInput",
-                    "label": "API Secret",
-                    "note": "Enter the API secret associated with your GA4 data stream.  Create this in your GA UI under Admin > Data Streams > choose your stream > Measurement Protocol API Secrets > Create",
-                    "configKey": "apiSecret",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                    "regexErrorMessage": "Invalid API Secret",
-                    "placeholder": "e.g: QuIUHRj7QhG2L7eZDZiPQU",
-                    "secret": true
-                  },
-                  {
-                    "type": "singleSelect",
-                    "label": "Client Type",
-                    "configKey": "typesOfClient",
-                    "options": [
-                      {
-                        "label": "gtag.js",
-                        "value": "gtag"
-                      },
-                      {
-                        "label": "Firebase",
-                        "value": "firebase"
-                      }
-                    ],
-                    "default": "gtag"
-                  },
-                  {
-                    "type": "textInput",
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "typesOfClient",
-                          "value": "gtag"
-                        }
-                      ]
-                    },
-                    "label": "Measurement Id",
-                    "configKey": "measurementId",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(G-.{1,100})$|^$",
-                    "regexErrorMessage": "Invalid Measurement Id",
-                    "note": "Enter the ID associated with your stream.  Find this under Admin > Data Streams > choose your stream > Measurement ID",
-                    "placeholder": "e.g: G-AB1CD2E34F",
-                    "secret": false
-                  },
-                  {
-                    "type": "textInput",
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "typesOfClient",
-                          "value": "firebase"
-                        }
-                      ]
-                    },
-                    "label": "Firebase App Id",
-                    "configKey": "firebaseAppId",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                    "regexErrorMessage": "Invalid Firebase App Id",
-                    "note": "Enter the ID associated with your stream.  Find this under Admin > Data Streams > choose your stream > Firebase App ID",
-                    "placeholder": "e.g: 2:637908496727:web:a4284b4c99e329d5",
-                    "secret": false
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "groups": [
-              {
-                "title": "Connection mode",
-                "note": [
-                  "Update how you want to route events from your source to destination. ",
-                  {
-                    "text": "Get help deciding",
-                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
-                  }
-                ],
-                "icon": "sliders",
-                "fields": []
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "title": "Configuration settings",
-        "note": "Manage the settings for your destination",
-        "sections": [
-          {
-            "title": "Destination settings",
-            "note": "Configure advanced destination-specific settings here",
-            "icon": "settings",
-            "groups": [
-              {
-                "title": "GA4 IT",
-                "fields": [
-                  {
-                    "type": "checkbox",
-                    "label": "Enable debug mode",
-                    "note": [
-                      "Enabling this sends events to GA4's validation server. This allows you to check validation responses in Live Events, but note that ",
-                      {
-                        "text": "these events will not show up in reports",
-                        "link": "https://developers.google.com/analytics/devguides/collection/protocol/ga4/validating-events?client_type=gtag"
-                      }
-                    ],
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "connectionModes.cloud",
-                          "value": true
-                        }
-                      ]
-                    },
-                    "configKey": "debugMode",
-                    "default": false
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "title": "Other settings",
-            "note": "Configure advanced RudderStack features here",
-            "icon": "otherSettings",
-            "groups": [
-              {
-                "title": "Client-side event filtering",
-                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
-                "preRequisites": {
-                  "fields": [
+    "uiConfig": {
+        "baseTemplate": [
+            {
+                "title": "Initial setup",
+                "note": "Review how this destination is set up",
+                "sections": [
                     {
-                      "configKey": "connectionModes.webDevice",
-                      "value": true
+                        "groups": [
+                            {
+                                "title": "One click checkout",
+                                "note": "Update your connection settings here",
+                                "icon": "settings",
+                                "fields": [
+                                    {
+                                        "type": "textInput",
+                                        "label": "API Secret",
+                                        "note": "Enter the API secret associated with your GA4 data stream.  Create this in your GA UI under Admin > Data Streams > choose your stream > Measurement Protocol API Secrets > Create",
+                                        "configKey": "apiSecret",
+                                        "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                                        "regexErrorMessage": "Invalid API Secret",
+                                        "placeholder": "e.g: QuIUHRj7QhG2L7eZDZiPQU",
+                                        "secret": true
+                                    },
+                                    {
+                                        "type": "singleSelect",
+                                        "label": "Client Type",
+                                        "configKey": "typesOfClient",
+                                        "options": [
+                                            {
+                                                "label": "gtag.js",
+                                                "value": "gtag"
+                                            },
+                                            {
+                                                "label": "Firebase",
+                                                "value": "firebase"
+                                            }
+                                        ],
+                                        "default": "gtag"
+                                    },
+                                    {
+                                        "type": "textInput",
+                                        "preRequisites": {
+                                            "fields": [
+                                                {
+                                                    "configKey": "typesOfClient",
+                                                    "value": "gtag"
+                                                }
+                                            ]
+                                        },
+                                        "label": "Measurement Id",
+                                        "configKey": "measurementId",
+                                        "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(G-.{1,100})$|^$",
+                                        "regexErrorMessage": "Invalid Measurement Id",
+                                        "note": "Enter the ID associated with your stream.  Find this under Admin > Data Streams > choose your stream > Measurement ID",
+                                        "placeholder": "e.g: G-AB1CD2E34F",
+                                        "secret": false
+                                    },
+                                    {
+                                        "type": "textInput",
+                                        "preRequisites": {
+                                            "fields": [
+                                                {
+                                                    "configKey": "typesOfClient",
+                                                    "value": "firebase"
+                                                }
+                                            ]
+                                        },
+                                        "label": "Firebase App Id",
+                                        "configKey": "firebaseAppId",
+                                        "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                                        "regexErrorMessage": "Invalid Firebase App Id",
+                                        "note": "Enter the ID associated with your stream.  Find this under Admin > Data Streams > choose your stream > Firebase App ID",
+                                        "placeholder": "e.g: 2:637908496727:web:a4284b4c99e329d5",
+                                        "secret": false
+                                    }
+                                ]
+                            }
+                        ]
                     },
                     {
-                      "configKey": "connectionModes.mobileDevice",
-                      "value": true
+                        "groups": [
+                            {
+                                "title": "Connection mode",
+                                "note": [
+                                    "Update how you want to route events from your source to destination. ",
+                                    {
+                                        "text": "Get help deciding",
+                                        "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                                    }
+                                ],
+                                "icon": "sliders",
+                                "fields": []
+                            }
+                        ]
                     }
-                  ],
-                  "condition": "or"
-                },
-                "fields": [
-                  {
-                    "type": "singleSelect",
-                    "label": "Choose if you want to turn on events filtering:",
-                    "configKey": "eventFilteringOption",
-                    "note": "You must select either allowlist or denylist to enable events filtering",
-                    "options": [
-                      {
-                        "label": "No events filtering",
-                        "value": "disable"
-                      },
-                      {
-                        "label": "Filter via allowlist",
-                        "value": "whitelistedEvents"
-                      },
-                      {
-                        "label": "Filter via denylist",
-                        "value": "blacklistedEvents"
-                      }
-                    ],
-                    "default": "disable"
-                  },
-                  {
-                    "type": "tagInput",
-                    "label": "Allowlisted events",
-                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
-                    "configKey": "whitelistedEvents",
-                    "tagKey": "eventName",
-                    "placeholder": "e.g: Anonymous page visit",
-                    "default": [
-                      {
-                        "eventName": ""
-                      }
-                    ],
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "eventFilteringOption",
-                          "value": "whitelistedEvents"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type": "tagInput",
-                    "label": "Denylisted events",
-                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
-                    "configKey": "blacklistedEvents",
-                    "tagKey": "eventName",
-                    "placeholder": "e.g: Anonymous page visit",
-                    "default": [
-                      {
-                        "eventName": ""
-                      }
-                    ],
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "eventFilteringOption",
-                          "value": "blacklistedEvents"
-                        }
-                      ]
-                    }
-                  }
                 ]
-              },
-              {
-                "title": "OneTrust cookie consent settings",
-                "note": [
-                  "Enter your OneTrust category names if you have them configured. ",
-                  {
-                    "text": "Learn more ",
-                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
-                  },
-                  "about RudderStack’s OneTrust Consent Manager feature."
-                ],
-                "fields": [
-                  {
-                    "type": "tagInput",
-                    "label": "Cookie category name",
-                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
-                    "configKey": "oneTrustCookieCategories",
-                    "tagKey": "oneTrustCookieCategory",
-                    "placeholder": "e.g: Credit card visit",
-                    "default": [
-                      {
-                        "oneTrustCookieCategory": ""
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    "sdkTemplate": {
-      "title": "Web SDK settings",
-      "note": "not visible in the ui",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "label": "Choose how to capture pageviews",
-          "configKey": "capturePageView",
-          "note": [
-            "Choose whether you want to send page view events through the RudderStack JS SDK, or through automatic collection on each page load using GA4 Enhanced Measurement (gtag).",
-            {
-              "text": "Learn more here ",
-              "link": "https://support.google.com/analytics/answer/11403294"
-            },
-            "about how GA4 measures pages and screens"
-          ],
-          "options": [
-            {
-              "label": "RudderStack JS SDK",
-              "value": "rs"
             },
             {
-              "label": "gtag Automated Capture",
-              "value": "gtag"
+                "title": "Configuration settings",
+                "note": "Manage the settings for your destination",
+                "sections": [
+                    {
+                        "title": "Destination settings",
+                        "note": "Configure advanced destination-specific settings here",
+                        "icon": "settings",
+                        "groups": [
+                            {
+                                "title": "GA4 IT",
+                                "fields": [
+                                    {
+                                        "type": "checkbox",
+                                        "label": "Enable debug mode",
+                                        "note": [
+                                            "Enabling this sends events to GA4's validation server. This allows you to check validation responses in Live Events, but note that ",
+                                            {
+                                                "text": "these events will not show up in reports",
+                                                "link": "https://developers.google.com/analytics/devguides/collection/protocol/ga4/validating-events?client_type=gtag"
+                                            }
+                                        ],
+                                        "preRequisites": {
+                                            "fields": [
+                                                {
+                                                    "configKey": "connectionModes.cloud",
+                                                    "value": true
+                                                }
+                                            ]
+                                        },
+                                        "configKey": "debugMode",
+                                        "default": false
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Other settings",
+                        "note": "Configure advanced RudderStack features here",
+                        "icon": "otherSettings",
+                        "groups": [
+                            {
+                                "title": "Client-side event filtering",
+                                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                                "preRequisites": {
+                                    "fields": [
+                                        {
+                                            "configKey": "connectionModes.webDevice",
+                                            "value": true
+                                        },
+                                        {
+                                            "configKey": "connectionModes.mobileDevice",
+                                            "value": true
+                                        }
+                                    ],
+                                    "condition": "or"
+                                },
+                                "fields": [
+                                    {
+                                        "type": "singleSelect",
+                                        "label": "Choose if you want to turn on events filtering:",
+                                        "configKey": "eventFilteringOption",
+                                        "note": "You must select either allowlist or denylist to enable events filtering",
+                                        "options": [
+                                            {
+                                                "label": "No events filtering",
+                                                "value": "disable"
+                                            },
+                                            {
+                                                "label": "Filter via allowlist",
+                                                "value": "whitelistedEvents"
+                                            },
+                                            {
+                                                "label": "Filter via denylist",
+                                                "value": "blacklistedEvents"
+                                            }
+                                        ],
+                                        "default": "disable"
+                                    },
+                                    {
+                                        "type": "tagInput",
+                                        "label": "Allowlisted events",
+                                        "note": "Input separate events by pressing \u2018Enter\u2019.\nInput the events you want to allowlist.",
+                                        "configKey": "whitelistedEvents",
+                                        "tagKey": "eventName",
+                                        "placeholder": "e.g: Anonymous page visit",
+                                        "default": [
+                                            {
+                                                "eventName": ""
+                                            }
+                                        ],
+                                        "preRequisites": {
+                                            "fields": [
+                                                {
+                                                    "configKey": "eventFilteringOption",
+                                                    "value": "whitelistedEvents"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "type": "tagInput",
+                                        "label": "Denylisted events",
+                                        "note": "Input separate events by pressing \u2018Enter\u2019.\nInput the events you want to denylist. ",
+                                        "configKey": "blacklistedEvents",
+                                        "tagKey": "eventName",
+                                        "placeholder": "e.g: Anonymous page visit",
+                                        "default": [
+                                            {
+                                                "eventName": ""
+                                            }
+                                        ],
+                                        "preRequisites": {
+                                            "fields": [
+                                                {
+                                                    "configKey": "eventFilteringOption",
+                                                    "value": "blacklistedEvents"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "title": "OneTrust cookie consent settings",
+                                "note": [
+                                    "Enter your OneTrust category names if you have them configured. ",
+                                    {
+                                        "text": "Learn more ",
+                                        "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                                    },
+                                    "about RudderStack\u2019s OneTrust Consent Manager feature."
+                                ],
+                                "fields": [
+                                    {
+                                        "type": "tagInput",
+                                        "label": "Cookie category name",
+                                        "note": "Input your OneTrust category names by pressing \u2018Enter\u2019 after each entry",
+                                        "configKey": "oneTrustCookieCategories",
+                                        "tagKey": "oneTrustCookieCategory",
+                                        "placeholder": "e.g: Credit card visit",
+                                        "default": [
+                                            {
+                                                "oneTrustCookieCategory": ""
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
             }
-          ],
-          "default": "rs"
-        },
-        {
-          "type": "checkbox",
-          "label": "Include URL and Search as Page View properties",
-          "configKey": "extendPageViewParams",
-          "note": "Enabling this extends the set of properties automatically collected to include 'URL' and 'search'.  Note that GA4 has a limit on the number of unique properties per event name",
-          "default": false
-        },
-        {
-          "preRequisites": {
+        ],
+        "sdkTemplate": {
+            "title": "Web SDK settings",
+            "note": "not visible in the ui",
             "fields": [
-              {
-                "configKey": "connectionModes.cloud",
-                "value": true
-              },
-              {
-                "configKey": "connectionModes.webDevice",
-                "value": true
-              }
-            ],
-            "condition": "and"
-          },
-          "type": "checkbox",
-          "label": "Override gtag session_id with rudderstack session_id",
-          "configKey": "overrideSessionId",
-          "note": "By enabling this rudderstack will override gtag session_id with it's own session_id. For all the hybrid mode events rudderstack session_id will be sent to GA4",
-          "default": false
+                {
+                    "type": "singleSelect",
+                    "label": "Choose how to capture pageviews",
+                    "configKey": "capturePageView",
+                    "note": [
+                        "Choose whether you want to send page view events through the RudderStack JS SDK, or through automatic collection on each page load using GA4 Enhanced Measurement (gtag).",
+                        {
+                            "text": "Learn more here ",
+                            "link": "https://support.google.com/analytics/answer/11403294"
+                        },
+                        "about how GA4 measures pages and screens"
+                    ],
+                    "options": [
+                        {
+                            "label": "RudderStack JS SDK",
+                            "value": "rs"
+                        },
+                        {
+                            "label": "gtag Automated Capture",
+                            "value": "gtag"
+                        }
+                    ],
+                    "default": "rs"
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Include URL and Search as Page View properties",
+                    "configKey": "extendPageViewParams",
+                    "note": "Enabling this extends the set of properties automatically collected to include 'URL' and 'search'.  Note that GA4 has a limit on the number of unique properties per event name",
+                    "default": false
+                }
+            ]
         }
-      ]
     }
-  }
 }

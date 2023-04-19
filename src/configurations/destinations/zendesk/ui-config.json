@@ -1,81 +1,86 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "Email",
-          "value": "email",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Email Address",
-          "required": true,
-          "placeholder": "e.g: abc@xyz.com"
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Email",
+                    "value": "email",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Email Address",
+                    "required": true,
+                    "placeholder": "e.g: abc@xyz.com"
+                },
+                {
+                    "type": "textInput",
+                    "label": "API Token",
+                    "value": "apiToken",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid API Token",
+                    "required": true,
+                    "placeholder": "API Token for Zendesk login",
+                    "secret": true
+                },
+                {
+                    "type": "textInput",
+                    "label": "Zendesk Subdomain",
+                    "value": "domain",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Zendesk Subdomain",
+                    "required": true,
+                    "placeholder": "Subdomain only not including .zendesk.com"
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Create users as verified",
+                    "value": "createUsersAsVerified",
+                    "default": false,
+                    "required": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Send Group Calls without User ID",
+                    "value": "sendGroupCallsWithoutUserId",
+                    "default": false,
+                    "required": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Enable Removing Users from Organizations",
+                    "value": "removeUsersFromOrganization",
+                    "default": false,
+                    "required": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Update user's primary email",
+                    "value": "searchByExternalId",
+                    "default": false,
+                    "footerNote": "If enabled, RudderStack sets the email in the event as the user's primary email in Zendesk, replacing the previous primary email. Otherwise, it is set as the secondary email, if any primary email exists.",
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "API Token",
-          "value": "apiToken",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid API Token",
-          "required": true,
-          "placeholder": "API Token for Zendesk login",
-          "secret": true
-        },
-        {
-          "type": "textInput",
-          "label": "Zendesk Subdomain",
-          "value": "domain",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Zendesk Subdomain",
-          "required": true,
-          "placeholder": "Subdomain only not including .zendesk.com"
-        },
-        {
-          "type": "checkbox",
-          "label": "Create users as verified",
-          "value": "createUsersAsVerified",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Send Group Calls without User ID",
-          "value": "sendGroupCallsWithoutUserId",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Enable Removing Users from Organizations",
-          "value": "removeUsersFromOrganization",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Update user's primary email",
-          "value": "searchByExternalId",
-          "default": false,
-          "footerNote": "If enabled, RudderStack sets the email in the event as the user's primary email in Zendesk, replacing the previous primary email. Otherwise, it is set as the secondary email, if any primary email exists."
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

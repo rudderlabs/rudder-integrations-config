@@ -1,59 +1,61 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Credentials",
-      "secretFields": ["credentials"],
-      "docLinks": {
-        "grantPermissions": "https://docs.rudderstack.com/reverse-etl/google-bigquery/#granting-permissions",
-        "verifyingCredentials": "https://docs.rudderstack.com/reverse-etl/google-bigquery/#what-do-the-three-validations-under-verifying-credentials-imply",
-        "jsonMapperUseInstructions": "https://docs.rudderstack.com/reverse-etl/google-bigquery/#specifying-the-data-to-import",
-        "setupInstructions": "https://docs.rudderstack.com/reverse-etl/google-bigquery"
-      },
-      "schemaAlias": "Dataset",
-      "nameField": "project",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textareaInput",
-          "subType": "JSON",
-          "label": "Credentials",
-          "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your BigQuery database",
-          "value": "credentials",
-          "regex": ".*",
-          "required": true,
-          "secret": true
-        },
-        {
-          "type": "textInput",
-          "label": "Project ID",
-          "labelNote": "GCP Project ID where your BigQuery database is located.",
-          "value": "project",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Value",
-          "required": true,
-          "infoTooltip": "Inferred from project_id field in the credentials settings.",
-          "addInAccountSummary": true,
-          "readOnly": true,
-          "obtainValueFromField": {
-            "name": "credentials",
-            "key": "project_id"
-          }
-        },
-        {
-          "type": "textInput",
-          "label": "Service account",
-          "value": "serviceAccount",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Email Address",
-          "required": true,
-          "infoTooltip": "Inferred from client_email field in the credentials settings.",
-          "addInAccountSummary": true,
-          "readOnly": true,
-          "obtainValueFromField": {
-            "name": "credentials",
-            "key": "client_email"
-          }
+            "title": "Connection Credentials",
+            "secretFields": [
+                "credentials"
+            ],
+            "docLinks": {
+                "grantPermissions": "https://docs.rudderstack.com/reverse-etl/google-bigquery/#granting-permissions",
+                "verifyingCredentials": "https://docs.rudderstack.com/reverse-etl/google-bigquery/#what-do-the-three-validations-under-verifying-credentials-imply",
+                "jsonMapperUseInstructions": "https://docs.rudderstack.com/reverse-etl/google-bigquery/#specifying-the-data-to-import",
+                "setupInstructions": "https://docs.rudderstack.com/reverse-etl/google-bigquery"
+            },
+            "schemaAlias": "Dataset",
+            "nameField": "project",
+            "fields": [
+                {
+                    "type": "textareaInput",
+                    "subType": "JSON",
+                    "label": "Credentials",
+                    "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your BigQuery database",
+                    "value": "credentials",
+                    "regex": ".*",
+                    "required": true,
+                    "secret": true
+                },
+                {
+                    "type": "textInput",
+                    "label": "Project ID",
+                    "labelNote": "GCP Project ID where your BigQuery database is located.",
+                    "value": "project",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Value",
+                    "required": true,
+                    "infoTooltip": "Inferred from project_id field in the credentials settings.",
+                    "addInAccountSummary": true,
+                    "readOnly": true,
+                    "obtainValueFromField": {
+                        "name": "credentials",
+                        "key": "project_id"
+                    }
+                },
+                {
+                    "type": "textInput",
+                    "label": "Service account",
+                    "value": "serviceAccount",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Email Address",
+                    "required": true,
+                    "infoTooltip": "Inferred from client_email field in the credentials settings.",
+                    "addInAccountSummary": true,
+                    "readOnly": true,
+                    "obtainValueFromField": {
+                        "name": "credentials",
+                        "key": "client_email"
+                    }
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }

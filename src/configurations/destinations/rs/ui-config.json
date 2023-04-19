@@ -1,223 +1,292 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Credentials",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "Host",
-          "value": "host",
-          "regex": "(?!.*\\.ngrok\\.io)^(.{0,255})$",
-          "regexErrorMessage": "Invalid Host",
-          "placeholder": "redshift.mydomain.com",
-          "required": true
+            "title": "Connection Credentials",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Host",
+                    "value": "host",
+                    "regex": "(?!.*\\.ngrok\\.io)^(.{0,255})$",
+                    "regexErrorMessage": "Invalid Host",
+                    "placeholder": "redshift.mydomain.com",
+                    "required": true
+                },
+                {
+                    "type": "textInput",
+                    "label": "Port",
+                    "value": "port",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Port",
+                    "placeholder": "5439",
+                    "required": true
+                },
+                {
+                    "type": "textInput",
+                    "label": "Database",
+                    "value": "database",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Database",
+                    "placeholder": "e.g: warehouse",
+                    "required": true
+                },
+                {
+                    "type": "textInput",
+                    "label": "User",
+                    "value": "user",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid User",
+                    "placeholder": "e.g: warehouseuser",
+                    "required": true
+                },
+                {
+                    "type": "textInput",
+                    "label": "Password",
+                    "value": "password",
+                    "regex": ".*",
+                    "placeholder": "e.g: warehousepassword",
+                    "required": true,
+                    "secret": true
+                },
+                {
+                    "type": "textInput",
+                    "label": "Namespace",
+                    "labelNote": "Schema name for the warehouse where the tables are created",
+                    "value": "namespace",
+                    "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+                    "regexErrorMessage": "Invalid Namespace",
+                    "required": false,
+                    "placeholder": "e.g: iosSource",
+                    "footerNote": "Default will be the source name"
+                },
+                {
+                    "type": "singleSelect",
+                    "label": "Sync Frequency",
+                    "value": "syncFrequency",
+                    "options": [
+                        {
+                            "name": "Every 30 minutes",
+                            "value": "30"
+                        },
+                        {
+                            "name": "Every 1 hour",
+                            "value": "60"
+                        },
+                        {
+                            "name": "Every 3 hours",
+                            "value": "180"
+                        },
+                        {
+                            "name": "Every 6 hours",
+                            "value": "360"
+                        },
+                        {
+                            "name": "Every 12 hours",
+                            "value": "720"
+                        },
+                        {
+                            "name": "Every 24 hours",
+                            "value": "1440"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Every 30 minutes",
+                        "value": "30"
+                    },
+                    "required": true
+                },
+                {
+                    "type": "timePicker",
+                    "label": "Sync Starting At (Optional)",
+                    "value": "syncStartAt",
+                    "options": {
+                        "omitSeconds": true,
+                        "minuteStep": 15
+                    },
+                    "required": false,
+                    "footerNote": "Note: Please specify time in UTC"
+                },
+                {
+                    "type": "timeRangePicker",
+                    "label": "Exclude window (Optional)",
+                    "value": "excludeWindow",
+                    "startTime": {
+                        "label": "start time",
+                        "value": "excludeWindowStartTime"
+                    },
+                    "endTime": {
+                        "label": "end time",
+                        "value": "excludeWindowEndTime"
+                    },
+                    "options": {
+                        "omitSeconds": true,
+                        "minuteStep": 1
+                    },
+                    "required": false,
+                    "footerNote": "Note: Please specify time in UTC"
+                },
+                {
+                    "type": "textInput",
+                    "label": "Json columns (Optional)",
+                    "labelNote": "Specify required json properties in dot notation separated by commas",
+                    "value": "jsonPaths",
+                    "regex": "^(.*)$",
+                    "placeholder": "e.g: testMap.nestedMap, testArray",
+                    "required": false,
+                    "footerURL": {
+                        "link": "https://www.rudderstack.com/docs/data-warehouse-integrations/amazon-redshift/#configuring-redshift-destination-in-rudderstack",
+                        "text": "Instructions for setting up the json columns"
+                    }
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Port",
-          "value": "port",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Port",
-          "placeholder": "5439",
-          "required": true
+            "title": "Object Storage Configuration",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Use RudderStack managed object storage",
+                    "value": "useRudderStorage",
+                    "default": false,
+                    "footerNote": "Note: Only available for Rudderstack managed data planes",
+                    "required": true
+                },
+                {
+                    "type": "textInput",
+                    "label": "Staging S3 Storage Bucket Name",
+                    "labelNote": "S3 Bucket to store data before loading into Redshift",
+                    "value": "bucketName",
+                    "regex": "^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$|(^\\{\\{.+\\}\\}$)",
+                    "regexErrorMessage": "Invalid Bucket name",
+                    "required": false,
+                    "placeholder": "e.g: event-bucket",
+                    "footerNote": "Please make sure the bucket exists in your S3",
+                    "preRequisiteField": {
+                        "name": "useRudderStorage",
+                        "selectedValue": false
+                    }
+                },
+                {
+                    "type": "textInput",
+                    "label": "Prefix",
+                    "value": "prefix",
+                    "regex": "^([^\\s]{0,100})$",
+                    "regexErrorMessage": "Invalid Prefix",
+                    "required": false,
+                    "placeholder": "e.g: rudder",
+                    "preRequisiteField": {
+                        "name": "useRudderStorage",
+                        "selectedValue": false
+                    }
+                },
+                {
+                    "type": "checkbox",
+                    "preRequisiteField": [
+                        {
+                            "name": "useRudderStorage",
+                            "selectedValue": false
+                        }
+                    ],
+                    "label": "Role Based Authentication",
+                    "value": "roleBasedAuth",
+                    "default": true,
+                    "required": false
+                },
+                {
+                    "type": "textInput",
+                    "preRequisiteField": [
+                        {
+                            "name": "useRudderStorage",
+                            "selectedValue": false
+                        },
+                        {
+                            "name": "roleBasedAuth",
+                            "selectedValue": true
+                        }
+                    ],
+                    "label": "IAM Role ARN",
+                    "value": "iamRoleARN",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Role ARN",
+                    "required": false,
+                    "placeholder": "e.g: arn:aws:iam::123456789012:role/S3Access",
+                    "footerURL": {
+                        "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/",
+                        "text": "Instructions for creating IAM Role"
+                    }
+                },
+                {
+                    "type": "textInput",
+                    "label": "AWS Access Key ID",
+                    "value": "accessKeyID",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid AWS Access Key ID",
+                    "required": false,
+                    "placeholder": "e.g: access-key-id",
+                    "secret": true,
+                    "preRequisiteField": [
+                        {
+                            "name": "useRudderStorage",
+                            "selectedValue": false
+                        },
+                        {
+                            "name": "roleBasedAuth",
+                            "selectedValue": false
+                        }
+                    ]
+                },
+                {
+                    "type": "textInput",
+                    "label": "AWS Secret Access Key",
+                    "value": "accessKey",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid AWS Secret Access Key",
+                    "required": false,
+                    "placeholder": "e.g: secret-access-key",
+                    "secret": true,
+                    "preRequisiteField": [
+                        {
+                            "name": "useRudderStorage",
+                            "selectedValue": false
+                        },
+                        {
+                            "name": "roleBasedAuth",
+                            "selectedValue": false
+                        }
+                    ]
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Enable Server Side Encryption For S3?",
+                    "value": "enableSSE",
+                    "default": false,
+                    "preRequisiteField": {
+                        "name": "useRudderStorage",
+                        "selectedValue": false
+                    },
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Database",
-          "value": "database",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Database",
-          "placeholder": "e.g: warehouse",
-          "required": true
-        },
-        {
-          "type": "textInput",
-          "label": "User",
-          "value": "user",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid User",
-          "placeholder": "e.g: warehouseuser",
-          "required": true
-        },
-        {
-          "type": "textInput",
-          "label": "Password",
-          "value": "password",
-          "regex": ".*",
-          "placeholder": "e.g: warehousepassword",
-          "required": true,
-          "secret": true
-        },
-        {
-          "type": "textInput",
-          "label": "Namespace",
-          "labelNote": "Schema name for the warehouse where the tables are created",
-          "value": "namespace",
-          "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
-          "regexErrorMessage": "Invalid Namespace",
-          "required": false,
-          "placeholder": "e.g: iosSource",
-          "footerNote": "Default will be the source name"
-        },
-        {
-          "type": "singleSelect",
-          "label": "Sync Frequency",
-          "value": "syncFrequency",
-          "options": [
-            { "name": "Every 30 minutes", "value": "30" },
-            { "name": "Every 1 hour", "value": "60" },
-            { "name": "Every 3 hours", "value": "180" },
-            { "name": "Every 6 hours", "value": "360" },
-            { "name": "Every 12 hours", "value": "720" },
-            { "name": "Every 24 hours", "value": "1440" }
-          ],
-          "defaultOption": { "name": "Every 30 minutes", "value": "30" },
-          "required": false
-        },
-        {
-          "type": "timePicker",
-          "label": "Sync Starting At (Optional)",
-          "value": "syncStartAt",
-          "options": { "omitSeconds": true, "minuteStep": 15 },
-          "required": false,
-          "footerNote": "Note: Please specify time in UTC"
-        },
-        {
-          "type": "timeRangePicker",
-          "label": "Exclude window (Optional)",
-          "value": "excludeWindow",
-          "startTime": { "label": "start time", "value": "excludeWindowStartTime" },
-          "endTime": { "label": "end time", "value": "excludeWindowEndTime" },
-          "options": { "omitSeconds": true, "minuteStep": 1 },
-          "required": false,
-          "footerNote": "Note: Please specify time in UTC"
-        },
-        {
-          "type": "textInput",
-          "label": "Json columns (Optional)",
-          "labelNote": "Specify required json properties in dot notation separated by commas",
-          "value": "jsonPaths",
-          "regex": "^(.*)$",
-          "placeholder": "e.g: testMap.nestedMap, testArray",
-          "required": false,
-          "footerURL": {
-            "link": "https://www.rudderstack.com/docs/data-warehouse-integrations/amazon-redshift/#configuring-redshift-destination-in-rudderstack",
-            "text": "Instructions for setting up the json columns"
-          }
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Object Storage Configuration",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use RudderStack managed object storage",
-          "value": "useRudderStorage",
-          "default": false,
-          "footerNote": "Note: Only available for Rudderstack managed data planes"
-        },
-        {
-          "type": "textInput",
-          "label": "Staging S3 Storage Bucket Name",
-          "labelNote": "S3 Bucket to store data before loading into Redshift",
-          "value": "bucketName",
-          "regex": "^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$|(^\\{\\{.+\\}\\}$)",
-          "regexErrorMessage": "Invalid Bucket name",
-          "required": true,
-          "placeholder": "e.g: event-bucket",
-          "footerNote": "Please make sure the bucket exists in your S3",
-          "preRequisiteField": { "name": "useRudderStorage", "selectedValue": false }
-        },
-        {
-          "type": "textInput",
-          "label": "Prefix",
-          "value": "prefix",
-          "regex": "^([^\\s]{0,100})$",
-          "regexErrorMessage": "Invalid Prefix",
-          "required": false,
-          "placeholder": "e.g: rudder",
-          "preRequisiteField": { "name": "useRudderStorage", "selectedValue": false }
-        },
-        {
-          "type": "checkbox",
-          "preRequisiteField": [{ "name": "useRudderStorage", "selectedValue": false }],
-          "label": "Role Based Authentication",
-          "value": "roleBasedAuth",
-          "default": true
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "roleBasedAuth", "selectedValue": true }
-          ],
-          "label": "IAM Role ARN",
-          "value": "iamRoleARN",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Role ARN",
-          "required": true,
-          "placeholder": "e.g: arn:aws:iam::123456789012:role/S3Access",
-          "footerURL": {
-            "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/",
-            "text": "Instructions for creating IAM Role"
-          }
-        },
-        {
-          "type": "textInput",
-          "label": "AWS Access Key ID",
-          "value": "accessKeyID",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid AWS Access Key ID",
-          "required": false,
-          "placeholder": "e.g: access-key-id",
-          "secret": true,
-          "preRequisiteField": [
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "roleBasedAuth", "selectedValue": false }
-          ]
-        },
-        {
-          "type": "textInput",
-          "label": "AWS Secret Access Key",
-          "value": "accessKey",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid AWS Secret Access Key",
-          "required": false,
-          "placeholder": "e.g: secret-access-key",
-          "secret": true,
-          "preRequisiteField": [
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "roleBasedAuth", "selectedValue": false }
-          ]
-        },
-        {
-          "type": "checkbox",
-          "label": "Enable Server Side Encryption For S3?",
-          "value": "enableSSE",
-          "default": false,
-          "preRequisiteField": { "name": "useRudderStorage", "selectedValue": false }
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

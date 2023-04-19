@@ -1,96 +1,108 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "Munchkin Account Id",
-          "value": "munchkinId",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Munchkin Account Id",
-          "required": true,
-          "footerNote": "Your Marketo Accound ID from Admin settings section",
-          "placeholder": "e.g: 585-AXP-446"
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Munchkin Account Id",
+                    "value": "munchkinId",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Munchkin Account Id",
+                    "required": true,
+                    "footerNote": "Your Marketo Accound ID from Admin settings section",
+                    "placeholder": "e.g: 585-AXP-446"
+                },
+                {
+                    "type": "textInput",
+                    "label": "Client ID",
+                    "value": "clientId",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Client ID",
+                    "required": true,
+                    "placeholder": "e.g: 53b1934e-51dd-4599-b24b-92612c71515f",
+                    "footerNote": "Your REST API Client ID"
+                },
+                {
+                    "type": "textInput",
+                    "label": "Client Secret",
+                    "value": "clientSecret",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Client Secret",
+                    "required": true,
+                    "placeholder": "e.g: oxzXtNhcuw9YGsdhplKUeEMi8765dsfw",
+                    "secret": true,
+                    "footerNote": "Your REST API Client Secret"
+                },
+                {
+                    "type": "textInput",
+                    "label": "De-duplication Field",
+                    "value": "deDuplicationField",
+                    "required": false,
+                    "placeholder": "e.g: email",
+                    "secret": false,
+                    "footerNote": "RudderStack will use this Marketo field name for de-duplication & this field should be present in column field mapping."
+                },
+                {
+                    "type": "singleSelect",
+                    "label": "Upload Interval",
+                    "value": "uploadInterval",
+                    "options": [
+                        {
+                            "name": "Every 10 minutes",
+                            "value": "10"
+                        },
+                        {
+                            "name": "Every 20 minutes",
+                            "value": "20"
+                        },
+                        {
+                            "name": "Every 30 minutes",
+                            "value": "30"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Every 10 minutes",
+                        "value": "10"
+                    }
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Client ID",
-          "value": "clientId",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Client ID",
-          "required": true,
-          "placeholder": "e.g: 53b1934e-51dd-4599-b24b-92612c71515f",
-          "footerNote": "Your REST API Client ID"
+            "title": "Column Fields Mapping",
+            "fields": [
+                {
+                    "type": "dynamicForm",
+                    "label": "Map your traits to Marketo column fields",
+                    "labelRight": "Marketo field name",
+                    "labelLeft": "RudderStack trait name",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g: leadScore",
+                    "placeholderRight": "e.g: customLeadScore",
+                    "value": "columnFieldsMapping",
+                    "footerNote": "Map your user's traits to the allowed standard fields in Marketo"
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Client Secret",
-          "value": "clientSecret",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Client Secret",
-          "required": true,
-          "placeholder": "e.g: oxzXtNhcuw9YGsdhplKUeEMi8765dsfw",
-          "secret": true,
-          "footerNote": "Your REST API Client Secret"
-        },
-        {
-          "type": "textInput",
-          "label": "De-duplication Field",
-          "value": "deDuplicationField",
-          "required": false,
-          "placeholder": "e.g: email",
-          "secret": false,
-          "footerNote": "RudderStack will use this Marketo field name for de-duplication & this field should be present in column field mapping."
-        },
-        {
-          "type": "singleSelect",
-          "label": "Upload Interval",
-          "value": "uploadInterval",
-          "options": [
-            { "name": "Every 10 minutes", "value": "10" },
-            { "name": "Every 20 minutes", "value": "20" },
-            { "name": "Every 30 minutes", "value": "30" }
-          ],
-          "defaultOption": { "name": "Every 10 minutes", "value": "10" }
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ]
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Column Fields Mapping",
-      "fields": [
-        {
-          "type": "dynamicForm",
-          "label": "Map your traits to Marketo column fields",
-          "labelRight": "Marketo field name",
-          "labelLeft": "RudderStack trait name",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g: leadScore",
-          "placeholderRight": "e.g: customLeadScore",
-          "value": "columnFieldsMapping",
-          "footerNote": "Map your user's traits to the allowed standard fields in Marketo"
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

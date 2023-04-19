@@ -1,191 +1,244 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "Host Name(s)",
-          "value": "hostName",
-          "regex": "^((,|^)[^\\s]*)*$",
-          "regexErrorMessage": "Invalid Host Name(s)",
-          "required": true,
-          "placeholder": "e.g: localhost",
-          "footerNote": "For multiple host names, provide them in comma separated string format"
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Host Name(s)",
+                    "value": "hostName",
+                    "regex": "^((,|^)[^\\s]*)*$",
+                    "regexErrorMessage": "Invalid Host Name(s)",
+                    "required": true,
+                    "placeholder": "e.g: localhost",
+                    "footerNote": "For multiple host names, provide them in comma separated string format"
+                },
+                {
+                    "type": "textInput",
+                    "label": "Port",
+                    "value": "port",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Port",
+                    "required": true,
+                    "placeholder": "e.g: 9092"
+                },
+                {
+                    "type": "textInput",
+                    "label": "Topic Name",
+                    "value": "topic",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Topic Name",
+                    "required": true,
+                    "placeholder": "e.g: test-topic"
+                },
+                {
+                    "type": "checkbox",
+                    "label": "SSL Enabled",
+                    "value": "sslEnabled",
+                    "default": true
+                },
+                {
+                    "type": "textareaInput",
+                    "preRequisiteField": {
+                        "name": "sslEnabled",
+                        "selectedValue": true
+                    },
+                    "label": "CA certificate",
+                    "value": "caCertificate",
+                    "regex": ".*",
+                    "required": false,
+                    "placeholder": "CA Certificate"
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Port",
-          "value": "port",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Port",
-          "required": true,
-          "placeholder": "e.g: 9092"
+            "title": "SASL Authentication",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Enable SASL with SSL",
+                    "value": "useSASL",
+                    "default": false
+                },
+                {
+                    "type": "singleSelect",
+                    "preRequisiteField": {
+                        "name": "useSASL",
+                        "selectedValue": true
+                    },
+                    "label": "SASL Type",
+                    "value": "saslType",
+                    "options": [
+                        {
+                            "name": "Plain",
+                            "value": "plain"
+                        },
+                        {
+                            "name": "SCRAM SHA-512",
+                            "value": "sha512"
+                        },
+                        {
+                            "name": "SCRAM SHA-256",
+                            "value": "sha256"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Plain",
+                        "value": "plain"
+                    },
+                    "required": true
+                },
+                {
+                    "type": "textInput",
+                    "preRequisiteField": {
+                        "name": "useSASL",
+                        "selectedValue": true
+                    },
+                    "label": "Username",
+                    "value": "username",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid User Name",
+                    "required": true,
+                    "placeholder": "e.g: userjohn"
+                },
+                {
+                    "type": "textInput",
+                    "preRequisiteField": {
+                        "name": "useSASL",
+                        "selectedValue": true
+                    },
+                    "label": "Password",
+                    "value": "password",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Password",
+                    "required": true,
+                    "placeholder": "e.g: 1jdu234nasfa",
+                    "secret": true
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Topic Name",
-          "value": "topic",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Topic Name",
-          "required": true,
-          "placeholder": "e.g: test-topic"
+            "title": "Event Settings",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Convert Data to AVRO format",
+                    "value": "convertToAvro",
+                    "default": false,
+                    "footerNote": "If this option is turned on we will convert the data to avro"
+                },
+                {
+                    "preRequisiteField": {
+                        "name": "convertToAvro",
+                        "selectedValue": true
+                    },
+                    "label": "AVRO Schema Lists",
+                    "value": "avroSchemas",
+                    "required": true,
+                    "type": "dynamicCustomForm",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "schemaId",
+                            "required": true,
+                            "label": "Schema Id",
+                            "placeholder": "e.g: schema-id"
+                        },
+                        {
+                            "type": "textareaInput",
+                            "value": "schema",
+                            "label": "Schema",
+                            "required": true,
+                            "placeholder": "schema object"
+                        }
+                    ]
+                }
+            ]
         },
-        { "type": "checkbox", "label": "SSL Enabled", "value": "sslEnabled", "default": true },
         {
-          "type": "textareaInput",
-          "preRequisiteField": { "name": "sslEnabled", "selectedValue": true },
-          "label": "CA certificate",
-          "value": "caCertificate",
-          "regex": ".*",
-          "required": false,
-          "placeholder": "CA Certificate"
+            "title": "Topic Settings",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Enable multiple topic support for event types and event names",
+                    "value": "enableMultiTopic",
+                    "default": false,
+                    "footerNote": "Enable this option to deliver events to multiple topics"
+                },
+                {
+                    "preRequisiteField": {
+                        "name": "enableMultiTopic",
+                        "selectedValue": true
+                    },
+                    "type": "dynamicSelectForm",
+                    "label": "Map event type to topic",
+                    "labelLeft": "Event Type",
+                    "labelRight": "Topic",
+                    "value": "eventTypeToTopicMap",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "reverse": true,
+                    "required": true,
+                    "placeholderRight": "e.g. Sample-topic",
+                    "options": [
+                        {
+                            "name": "Identify",
+                            "value": "identify"
+                        },
+                        {
+                            "name": "Page",
+                            "value": "page"
+                        },
+                        {
+                            "name": "Screen",
+                            "value": "screen"
+                        },
+                        {
+                            "name": "Group",
+                            "value": "group"
+                        },
+                        {
+                            "name": "Alias",
+                            "value": "alias"
+                        }
+                    ]
+                },
+                {
+                    "preRequisiteField": {
+                        "name": "enableMultiTopic",
+                        "selectedValue": true
+                    },
+                    "type": "dynamicForm",
+                    "label": "Map Track events to topic",
+                    "required": true,
+                    "placeholderLeft": "e.g. Product Searched",
+                    "placeholderRight": "Sample-topic",
+                    "labelLeft": "Event Name",
+                    "labelRight": "Topic",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "value": "eventToTopicMap"
+                }
+            ]
+        },
+        {
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ]
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "SASL Authentication",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Enable SASL with SSL",
-          "value": "useSASL",
-          "default": false
-        },
-        {
-          "type": "singleSelect",
-          "preRequisiteField": { "name": "useSASL", "selectedValue": true },
-          "label": "SASL Type",
-          "value": "saslType",
-          "options": [
-            { "name": "Plain", "value": "plain" },
-            { "name": "SCRAM SHA-512", "value": "sha512" },
-            { "name": "SCRAM SHA-256", "value": "sha256" }
-          ],
-          "defaultOption": { "name": "Plain", "value": "plain" },
-          "required": true
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": { "name": "useSASL", "selectedValue": true },
-          "label": "Username",
-          "value": "username",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid User Name",
-          "required": true,
-          "placeholder": "e.g: userjohn"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": { "name": "useSASL", "selectedValue": true },
-          "label": "Password",
-          "value": "password",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Password",
-          "required": true,
-          "placeholder": "e.g: 1jdu234nasfa",
-          "secret": true
-        }
-      ]
-    },
-    {
-      "title": "Event Settings",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Convert Data to AVRO format",
-          "value": "convertToAvro",
-          "default": false,
-          "footerNote": "If this option is turned on we will convert the data to avro"
-        },
-        {
-          "preRequisiteField": { "name": "convertToAvro", "selectedValue": true },
-          "label": "AVRO Schema Lists",
-          "value": "avroSchemas",
-          "required": true,
-          "type": "dynamicCustomForm",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "schemaId",
-              "required": true,
-              "label": "Schema Id",
-              "placeholder": "e.g: schema-id"
-            },
-            {
-              "type": "textareaInput",
-              "value": "schema",
-              "label": "Schema",
-              "required": true,
-              "placeholder": "schema object"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Topic Settings",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Enable multiple topic support for event types and event names",
-          "value": "enableMultiTopic",
-          "default": false,
-          "footerNote": "Enable this option to deliver events to multiple topics"
-        },
-        {
-          "preRequisiteField": { "name": "enableMultiTopic", "selectedValue": true },
-          "type": "dynamicSelectForm",
-          "label": "Map event type to topic",
-          "labelLeft": "Event Type",
-          "labelRight": "Topic",
-          "value": "eventTypeToTopicMap",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "reverse": true,
-          "required": true,
-          "placeholderRight": "e.g. Sample-topic",
-          "options": [
-            { "name": "Identify", "value": "identify" },
-            { "name": "Page", "value": "page" },
-            { "name": "Screen", "value": "screen" },
-            { "name": "Group", "value": "group" },
-            { "name": "Alias", "value": "alias" }
-          ]
-        },
-        {
-          "preRequisiteField": { "name": "enableMultiTopic", "selectedValue": true },
-          "type": "dynamicForm",
-          "label": "Map Track events to topic",
-          "required": true,
-          "placeholderLeft": "e.g. Product Searched",
-          "placeholderRight": "Sample-topic",
-          "labelLeft": "Event Name",
-          "labelRight": "Topic",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "value": "eventToTopicMap"
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

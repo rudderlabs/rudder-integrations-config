@@ -1,77 +1,86 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "API Key",
-          "value": "apiKey",
-          "regex": ".*",
-          "required": true,
-          "placeholder": "e.g. tZrPAgHyn2jMWOVGKrS6gBGLYT8v9kJE",
-          "secret": true,
-          "footerNote": "Your API Key"
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "API Key",
+                    "value": "apiKey",
+                    "regex": ".*",
+                    "required": true,
+                    "placeholder": "e.g. tZrPAgHyn2jMWOVGKrS6gBGLYT8v9kJE",
+                    "secret": true,
+                    "footerNote": "Your API Key"
+                },
+                {
+                    "type": "singleSelect",
+                    "label": "Channel",
+                    "value": "channel",
+                    "required": true,
+                    "placeholder": "Email",
+                    "options": [
+                        {
+                            "name": "Email",
+                            "value": "email"
+                        },
+                        {
+                            "name": "SMS",
+                            "value": "sms"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Email",
+                        "value": "email"
+                    }
+                },
+                {
+                    "type": "textInput",
+                    "label": "Delay",
+                    "value": "delay",
+                    "required": false,
+                    "placeholder": "e.g. 60",
+                    "default": "0",
+                    "footerNote": "The amount of seconds to wait before sending the survey email."
+                }
+            ]
         },
         {
-          "type": "singleSelect",
-          "label": "Channel",
-          "value": "channel",
-          "required": true,
-          "placeholder": "Email",
-          "options": [
-            { "name": "Email", "value": "email" },
-            { "name": "SMS", "value": "sms" }
-          ],
-          "defaultOption": { "name": "Email", "value": "email" }
+            "title": "Event Names",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "eventNamesSettings",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "label": "Event",
+                            "value": "event",
+                            "required": false,
+                            "placeholder": "e.g: Product Reviewed"
+                        }
+                    ]
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Delay",
-          "value": "delay",
-          "required": false,
-          "placeholder": "e.g. 60",
-          "default": "0",
-          "footerNote": "The amount of seconds to wait before sending the survey email."
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ]
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Event Names",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "eventNamesSettings",
-          "customFields": [
-            {
-              "type": "textInput",
-              "label": "Event",
-              "value": "event",
-              "required": false,
-              "placeholder": "e.g: Product Reviewed"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

@@ -1,87 +1,89 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "API Token",
-          "value": "apiToken",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid API Token",
-          "required": true,
-          "placeholder": "e.g. pk_880343042_1W64ZBPLP71H5YAYAUEJHSRL",
-          "secret": true,
-          "footerNote": "Your API Token"
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "API Token",
+                    "value": "apiToken",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid API Token",
+                    "required": true,
+                    "placeholder": "e.g. pk_880343042_1W64ZBPLP71H5YAYAUEJHSRL",
+                    "secret": true,
+                    "footerNote": "Your API Token"
+                },
+                {
+                    "type": "textInput",
+                    "label": "List ID",
+                    "value": "listId",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid List ID",
+                    "required": true,
+                    "placeholder": "e.g. 175496000",
+                    "secret": false,
+                    "footerNote": "Default List To Create New Task"
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "List ID",
-          "value": "listId",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid List ID",
-          "required": true,
-          "placeholder": "e.g. 175496000",
-          "secret": false,
-          "footerNote": "Default List To Create New Task"
-        }
-      ]
-    },
-    {
-      "title": "Custom Fields",
-      "fields": [
+            "title": "Custom Fields",
+            "fields": [
+                {
+                    "type": "dynamicForm",
+                    "label": "Mapping to add custom fields while creating a task",
+                    "value": "keyToCustomFieldName",
+                    "required": false,
+                    "labelRight": "ClickUp Custom Field Name",
+                    "labelLeft": "Rudder Payload Property",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g: abc",
+                    "placeholderRight": "e.g: Industry",
+                    "footerNote": "Map Rudder Properties to ClickUp Custom Fields. Here, properties will be fetched from properties object(message.properties). You can provide multiple Custom Fields of different Lists. Custom field name must be unique within a list to create a task successfully."
+                }
+            ]
+        },
         {
-          "type": "dynamicForm",
-          "label": "Mapping to add custom fields while creating a task",
-          "value": "keyToCustomFieldName",
-          "required": false,
-          "labelRight": "ClickUp Custom Field Name",
-          "labelLeft": "Rudder Payload Property",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g: abc",
-          "placeholderRight": "e.g: Industry",
-          "footerNote": "Map Rudder Properties to ClickUp Custom Fields. Here, properties will be fetched from properties object(message.properties). You can provide multiple Custom Fields of different Lists. Custom field name must be unique within a list to create a task successfully."
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "fields": [
+            "title": "Client-side Events Filtering",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "whitelistedEvents",
+                    "label": "Allowlist",
+                    "footerNote": "Events not included in the Allowlist will be discarded.",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Anonymous Page Visit"
+                        }
+                    ],
+                    "required": false
+                }
+            ]
+        },
         {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "footerNote": "Events not included in the Allowlist will be discarded.",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

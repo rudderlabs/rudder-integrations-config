@@ -1,143 +1,147 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "Refiner REST API Key",
-          "value": "apiKey",
-          "regex": "^(.{1,100})$",
-          "required": true,
-          "placeholder": "e.g. da70156h-05a3-4fa6-bb1g-da757fd036b4",
-          "secret": true,
-          "footerNote": "you can get it from refiner dashboard > integrations > REST API"
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Refiner REST API Key",
+                    "value": "apiKey",
+                    "regex": "^(.{1,100})$",
+                    "required": true,
+                    "placeholder": "e.g. da70156h-05a3-4fa6-bb1g-da757fd036b4",
+                    "secret": true,
+                    "footerNote": "you can get it from refiner dashboard > integrations > REST API"
+                },
+                {
+                    "type": "textInput",
+                    "label": "Refiner Web Client API Key",
+                    "value": "webClientApiKey",
+                    "regex": "^(.{1,100})$",
+                    "required": true,
+                    "placeholder": "e.g. 0d8759e0-401c-11ed-8dbd-9757h4929b55",
+                    "secret": true,
+                    "footerNote": "you can get it from refiner dashboard > settings > Web Client"
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Refiner Web Client API Key",
-          "value": "webClientApiKey",
-          "regex": "^(.{1,100})$",
-          "required": true,
-          "placeholder": "e.g. 0d8759e0-401c-11ed-8dbd-9757h4929b55",
-          "secret": true,
-          "footerNote": "you can get it from refiner dashboard > settings > Web Client"
-        }
-      ]
-    },
-    {
-      "title": "Mapping Configurations",
-      "fields": [
-        {
-          "type": "dynamicForm",
-          "label": "Map Rudder user attributes to Refiner contact traits",
-          "value": "userAttributesMapping",
-          "required": false,
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g. firstName",
-          "placeholderRight": "e.g. first_name",
-          "labelLeft": "Rudder Property",
-          "labelRight": "Refiner contact traits"
+            "title": "Mapping Configurations",
+            "fields": [
+                {
+                    "type": "dynamicForm",
+                    "label": "Map Rudder user attributes to Refiner contact traits",
+                    "value": "userAttributesMapping",
+                    "required": false,
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g. firstName",
+                    "placeholderRight": "e.g. first_name",
+                    "labelLeft": "Rudder Property",
+                    "labelRight": "Refiner contact traits"
+                },
+                {
+                    "type": "dynamicForm",
+                    "label": "Map Rudder account attributes to Refiner account traits",
+                    "value": "accountAttributesMapping",
+                    "required": false,
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g. email",
+                    "placeholderRight": "e.g. businessEmail",
+                    "labelLeft": "Rudder Property",
+                    "labelRight": "Refiner account traits"
+                }
+            ]
         },
         {
-          "type": "dynamicForm",
-          "label": "Map Rudder account attributes to Refiner account traits",
-          "value": "accountAttributesMapping",
-          "required": false,
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g. email",
-          "placeholderRight": "e.g. businessEmail",
-          "labelLeft": "Rudder Property",
-          "labelRight": "Refiner account traits"
-        }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": false
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          }
+            "title": "Native SDK",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Use device-mode to send events",
+                    "value": "useNativeSDK",
+                    "default": false,
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
+            "title": "Client-side Events Filtering",
+            "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+            "fields": [
+                {
+                    "type": "singleSelect",
+                    "value": "eventFilteringOption",
+                    "required": false,
+                    "options": [
+                        {
+                            "name": "Disable",
+                            "value": "disable"
+                        },
+                        {
+                            "name": "Allowlist",
+                            "value": "whitelistedEvents"
+                        },
+                        {
+                            "name": "Denylist",
+                            "value": "blacklistedEvents"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Disable",
+                        "value": "disable"
+                    }
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "whitelistedEvents",
+                    "label": "Allowlist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Anonymous Page Visit"
+                        }
+                    ],
+                    "required": false
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "blacklistedEvents",
+                    "label": "Denylist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Credit Card Added"
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

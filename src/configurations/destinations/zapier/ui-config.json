@@ -1,65 +1,66 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "Zap URL",
-          "value": "zapUrl",
-          "regex": "(?!.*\\.ngrok\\.io)^(.{1,100})$",
-          "regexErrorMessage": "Invalid Zap URL",
-          "required": true,
-          "placeholder": "e.g. https://hooks.zapier.com/hooks/catch/123456/abcdefg/",
-          "secret": true,
-          "footerNote": "Enter the ZAP URL where all your events should go"
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Zap URL",
+                    "value": "zapUrl",
+                    "regex": "(?!.*\\.ngrok\\.io)^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Zap URL",
+                    "required": true,
+                    "placeholder": "e.g. https://hooks.zapier.com/hooks/catch/123456/abcdefg/",
+                    "secret": true,
+                    "footerNote": "Enter the ZAP URL where all your events should go"
+                },
+                {
+                    "type": "dynamicForm",
+                    "label": "Mapping Track Events to a particular Zap",
+                    "labelLeft": "Event Name",
+                    "labelRight": "Zap URL",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "required": false,
+                    "placeholderLeft": "e.g: Submit",
+                    "placeholderRight": "e.g: https://hooks.zapier.com/hooks/catch/123456/abcdefg/",
+                    "value": "trackEventsToZap",
+                    "footerNote": "Enter the Track events to be sent to the specified ZAP URL"
+                },
+                {
+                    "type": "dynamicForm",
+                    "label": "Mapping Page/Screen Events to a particular Zap",
+                    "labelLeft": "Event Name",
+                    "labelRight": "Zap URL",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "required": false,
+                    "placeholderLeft": "e.g: Submit",
+                    "placeholderRight": "e.g: https://hooks.zapier.com/hooks/catch/123456/abcdefg/",
+                    "value": "pageScreenEventsToZap",
+                    "footerNote": "Enter the Page or Screen events to be sent to the specified ZAP URL"
+                }
+            ]
         },
         {
-          "type": "dynamicForm",
-          "label": "Mapping Track Events to a particular Zap",
-          "labelLeft": "Event Name",
-          "labelRight": "Zap URL",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "required": false,
-          "placeholderLeft": "e.g: Submit",
-          "placeholderRight": "e.g: https://hooks.zapier.com/hooks/catch/123456/abcdefg/",
-          "value": "trackEventsToZap",
-          "footerNote": "Enter the Track events to be sent to the specified ZAP URL"
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Mapping Page/Screen Events to a particular Zap",
-          "labelLeft": "Event Name",
-          "labelRight": "Zap URL",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "required": false,
-          "placeholderLeft": "e.g: Submit",
-          "placeholderRight": "e.g: https://hooks.zapier.com/hooks/catch/123456/abcdefg/",
-          "value": "pageScreenEventsToZap",
-          "footerNote": "Enter the Page or Screen events to be sent to the specified ZAP URL"
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

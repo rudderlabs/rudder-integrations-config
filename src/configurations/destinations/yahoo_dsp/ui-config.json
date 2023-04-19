@@ -1,121 +1,147 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "Client Id",
-          "value": "clientId",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid Client Id",
-          "required": true,
-          "placeholder": "e.g. b05ebeb8-a223-3cd6-z4c5-9512d3d66d431",
-          "secret": true,
-          "footerNote": "Put your Client Id here, it will be used for generating access token."
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Client Id",
+                    "value": "clientId",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Client Id",
+                    "required": true,
+                    "placeholder": "e.g. b05ebeb8-a223-3cd6-z4c5-9512d3d66d431",
+                    "secret": true,
+                    "footerNote": "Put your Client Id here, it will be used for generating access token."
+                },
+                {
+                    "type": "textInput",
+                    "label": "Client Secret",
+                    "value": "clientSecret",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Client Secret",
+                    "required": true,
+                    "placeholder": "e.g: XpewiPsz3yc9LrADR43f9h53jADLccXTykHCcA6eEoFR4rXQ",
+                    "secret": true,
+                    "footerNote": "Put your Client Secret here, it will be used for generating access token."
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Client Secret",
-          "value": "clientSecret",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid Client Secret",
-          "required": true,
-          "placeholder": "e.g: XpewiPsz3yc9LrADR43f9h53jADLccXTykHCcA6eEoFR4rXQ",
-          "secret": true,
-          "footerNote": "Put your Client Secret here, it will be used for generating access token."
-        }
-      ]
-    },
-    {
-      "title": "Account Setting",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Account Id",
-          "value": "accountId",
-          "regex": "^[0-9]+$",
-          "regexErrorMessage": "Invalid Account Id",
-          "required": true,
-          "placeholder": "e.g. 84223",
-          "secret": false,
-          "footerNote": "Your Account Id"
-        }
-      ]
-    },
-    {
-      "title": "Audience Settings",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "label": "Audience Type",
-          "value": "audienceType",
-          "required": true,
-          "placeholder": "Email",
-          "options": [
-            { "name": "Email", "value": "EMAIL" },
-            { "name": "Device Id", "value": "DEVICE_ID" },
-            { "name": "IP Address", "value": "IP_ADDRESS" }
-          ],
-          "defaultOption": { "name": "Email", "value": "EMAIL" }
+            "title": "Account Setting",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Account Id",
+                    "value": "accountId",
+                    "regex": "^[0-9]+$",
+                    "regexErrorMessage": "Invalid Account Id",
+                    "required": true,
+                    "placeholder": "e.g. 84223",
+                    "secret": false,
+                    "footerNote": "Your Account Id"
+                }
+            ]
         },
         {
-          "type": "singleSelect",
-          "label": "Seed List Type",
-          "value": "seedListType",
-          "required": true,
-          "placeholder": "Google (GPADVID)",
-          "options": [
-            { "name": "Google (GPADVID)", "value": "GPADVID" },
-            { "name": "Apple (IDFA)", "value": "IDFA" }
-          ],
-          "defaultOption": { "name": "Google (GPADVID)", "value": "GPADVID" },
-          "preRequisiteField": { "name": "audienceType", "selectedValue": "DEVICE_ID" },
-          "footerNote": "Your device type"
+            "title": "Audience Settings",
+            "fields": [
+                {
+                    "type": "singleSelect",
+                    "label": "Audience Type",
+                    "value": "audienceType",
+                    "required": false,
+                    "placeholder": "Email",
+                    "options": [
+                        {
+                            "name": "Email",
+                            "value": "EMAIL"
+                        },
+                        {
+                            "name": "Device Id",
+                            "value": "DEVICE_ID"
+                        },
+                        {
+                            "name": "IP Address",
+                            "value": "IP_ADDRESS"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Email",
+                        "value": "EMAIL"
+                    }
+                },
+                {
+                    "type": "singleSelect",
+                    "label": "Seed List Type",
+                    "value": "seedListType",
+                    "required": false,
+                    "placeholder": "Google (GPADVID)",
+                    "options": [
+                        {
+                            "name": "Google (GPADVID)",
+                            "value": "GPADVID"
+                        },
+                        {
+                            "name": "Apple (IDFA)",
+                            "value": "IDFA"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Google (GPADVID)",
+                        "value": "GPADVID"
+                    },
+                    "preRequisiteField": {
+                        "name": "audienceType",
+                        "selectedValue": "DEVICE_ID"
+                    },
+                    "footerNote": "Your device type"
+                },
+                {
+                    "type": "textInput",
+                    "label": "Audience Id",
+                    "value": "audienceId",
+                    "regex": "^[0-9]+$",
+                    "regexErrorMessage": "Invalid Audience Id",
+                    "required": true,
+                    "placeholder": "e.g. 53213445",
+                    "secret": false,
+                    "footerNote": "The audience id of the audience to which you want to sync the data"
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Audience Id",
-          "value": "audienceId",
-          "regex": "^[0-9]+$",
-          "regexErrorMessage": "Invalid Audience Id",
-          "required": true,
-          "placeholder": "e.g. 53213445",
-          "secret": false,
-          "footerNote": "The audience id of the audience to which you want to sync the data"
-        }
-      ]
-    },
-    {
-      "title": "Event Setting",
-      "fields": [
+            "title": "Event Setting",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Hash Required",
+                    "value": "hashRequired",
+                    "default": true,
+                    "footerNote": "Toggle it off if hashing is not required",
+                    "required": false
+                }
+            ]
+        },
         {
-          "type": "checkbox",
-          "label": "Hash Required",
-          "value": "hashRequired",
-          "default": true,
-          "footerNote": "Toggle it off if hashing is not required"
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

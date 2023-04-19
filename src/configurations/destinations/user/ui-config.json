@@ -1,111 +1,113 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "Public REST API Key",
-          "value": "apiKey",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid API Key",
-          "required": true,
-          "placeholder": "e.g: 1d6583b196d34de28a3g19ahadde4b0z"
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Public REST API Key",
+                    "value": "apiKey",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid API Key",
+                    "required": true,
+                    "placeholder": "e.g: 1d6583b196d34de28a3g19ahadde4b0z"
+                },
+                {
+                    "type": "textInput",
+                    "label": "Your App Subdomain",
+                    "value": "appSubdomain",
+                    "regex": "^(.{0,500})$",
+                    "regexErrorMessage": "Invalid App Subdomain",
+                    "required": false,
+                    "placeholder": "e.g: commander"
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Your App Subdomain",
-          "value": "appSubdomain",
-          "regex": "^(.{0,500})$",
-          "regexErrorMessage": "Invalid App Subdomain",
-          "required": true,
-          "placeholder": "e.g: commander"
-        }
-      ]
-    },
-    {
-      "title": "Mapping Configurations",
-      "fields": [
-        {
-          "type": "dynamicForm",
-          "label": "Map Rudder user attributes to User.com user attributes",
-          "value": "userAttributesMapping",
-          "required": false,
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g. userIndustry",
-          "placeholderRight": "e.g. industry",
-          "labelLeft": "Rudder Property",
-          "labelRight": "user.com user attribute"
+            "title": "Mapping Configurations",
+            "fields": [
+                {
+                    "type": "dynamicForm",
+                    "label": "Map Rudder user attributes to User.com user attributes",
+                    "value": "userAttributesMapping",
+                    "required": false,
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g. userIndustry",
+                    "placeholderRight": "e.g. industry",
+                    "labelLeft": "Rudder Property",
+                    "labelRight": "user.com user attribute"
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "label": "Map RudderStack event name to User.com event name",
+                    "value": "userEvents",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "label": "RudderStack Event Name",
+                            "value": "rsEventName",
+                            "regex": "^(.{0,100})$",
+                            "required": false,
+                            "placeholder": "e.g Products Searched",
+                            "footerNote": "Enter the RudderStack event name you want to map"
+                        },
+                        {
+                            "type": "textInput",
+                            "label": "User.com Event Name",
+                            "value": "userEventName",
+                            "regex": "^(.{0,100})$",
+                            "required": false,
+                            "placeholder": "e.g Search",
+                            "footerNote": "Enter the corresponding User.com event name you want to map"
+                        },
+                        {
+                            "type": "dynamicForm",
+                            "label": "Map your Event Property",
+                            "value": "eventProperties",
+                            "labelLeft": "RudderStack Property Name",
+                            "labelRight": "User.com Event Attribute Name",
+                            "keyLeft": "from",
+                            "keyRight": "to",
+                            "placeholderLeft": "e.g firstName",
+                            "placeholderRight": "e.g first_name"
+                        }
+                    ],
+                    "required": false
+                },
+                {
+                    "type": "dynamicForm",
+                    "label": "Map Rudder company attributes to User.com company attributes",
+                    "value": "companyAttributesMapping",
+                    "required": false,
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g. companyCategoty",
+                    "placeholderRight": "e.g. category",
+                    "labelLeft": "Rudder Property",
+                    "labelRight": "user.com company attribute"
+                }
+            ]
         },
         {
-          "type": "dynamicCustomForm",
-          "label": "Map RudderStack event name to User.com event name",
-          "value": "userEvents",
-          "customFields": [
-            {
-              "type": "textInput",
-              "label": "RudderStack Event Name",
-              "value": "rsEventName",
-              "regex": "^(.{0,100})$",
-              "required": false,
-              "placeholder": "e.g Products Searched",
-              "footerNote": "Enter the RudderStack event name you want to map"
-            },
-            {
-              "type": "textInput",
-              "label": "User.com Event Name",
-              "value": "userEventName",
-              "regex": "^(.{0,100})$",
-              "required": false,
-              "placeholder": "e.g Search",
-              "footerNote": "Enter the corresponding User.com event name you want to map"
-            },
-            {
-              "type": "dynamicForm",
-              "label": "Map your Event Property",
-              "value": "eventProperties",
-              "labelLeft": "RudderStack Property Name",
-              "labelRight": "User.com Event Attribute Name",
-              "keyLeft": "from",
-              "keyRight": "to",
-              "placeholderLeft": "e.g firstName",
-              "placeholderRight": "e.g first_name"
-            }
-          ]
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Map Rudder company attributes to User.com company attributes",
-          "value": "companyAttributesMapping",
-          "required": false,
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g. companyCategoty",
-          "placeholderRight": "e.g. category",
-          "labelLeft": "Rudder Property",
-          "labelRight": "user.com company attribute"
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

@@ -1,162 +1,169 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "AppsFlyer Dev Key",
-          "value": "devKey",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid AppsFlyer Dev Key",
-          "required": true,
-          "placeholder": "e.g: bSjsdGYsOo9sjw23Shj"
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "AppsFlyer Dev Key",
+                    "value": "devKey",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid AppsFlyer Dev Key",
+                    "required": true,
+                    "placeholder": "e.g: bSjsdGYsOo9sjw23Shj"
+                },
+                {
+                    "type": "textInput",
+                    "label": "Android App ID",
+                    "value": "androidAppId",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Android App ID",
+                    "required": false,
+                    "placeholder": "com.mypackage.example",
+                    "footerNote": "Field is required if os.name is set to android"
+                },
+                {
+                    "type": "textInput",
+                    "label": "Apple App ID",
+                    "value": "appleAppId",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Apple App ID",
+                    "required": false,
+                    "placeholder": "123456789",
+                    "footerNote": "Field is required if os.name is set to any of the Apple OS names (ios, ipados, watchos, tvos etc.)"
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Use Rich Event Names",
+                    "value": "useRichEventName",
+                    "footerNote": "To include screen/page name in Screen/Page event names (ex: Viewed Contacts Page)",
+                    "default": false,
+                    "required": false
+                },
+                {
+                    "type": "textInput",
+                    "label": "Sharing Filter",
+                    "value": "sharingFilter",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid sharing filter. Default value is used",
+                    "required": false,
+                    "placeholder": "['googleadwords_int', 'adcolony_int']",
+                    "default": "all",
+                    "footerNote": "Use the filter to fulfill regulatory requirements like GDPR and CCPA, to comply with user opt-out mechanisms, and for other business logic reasons. "
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Android App ID",
-          "value": "androidAppId",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Android App ID",
-          "required": false,
-          "placeholder": "com.mypackage.example",
-          "footerNote": "Field is required if os.name is set to android"
+            "title": "Native SDK",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Use device-mode to send events",
+                    "value": "useNativeSDK",
+                    "default": true,
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Apple App ID",
-          "value": "appleAppId",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Apple App ID",
-          "required": false,
-          "placeholder": "123456789",
-          "footerNote": "Field is required if os.name is set to any of the Apple OS names (ios, ipados, watchos, tvos etc.)"
+            "title": "Client-side Events Filtering",
+            "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+            "fields": [
+                {
+                    "type": "singleSelect",
+                    "value": "eventFilteringOption",
+                    "required": false,
+                    "options": [
+                        {
+                            "name": "Disable",
+                            "value": "disable"
+                        },
+                        {
+                            "name": "Allowlist",
+                            "value": "whitelistedEvents"
+                        },
+                        {
+                            "name": "Denylist",
+                            "value": "blacklistedEvents"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Disable",
+                        "value": "disable"
+                    }
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "whitelistedEvents",
+                    "label": "Allowlist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Anonymous Page Visit"
+                        }
+                    ],
+                    "required": false
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "blacklistedEvents",
+                    "label": "Denylist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Credit Card Added"
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "checkbox",
-          "label": "Use Rich Event Names",
-          "value": "useRichEventName",
-          "footerNote": "To include screen/page name in Screen/Page event names (ex: Viewed Contacts Page)",
-          "default": false
+            "title": "User Deletion",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Status Callback Urls",
+                    "value": "statusCallbackUrls",
+                    "regex": "^(?!.*\\.ngrok\\.io).*$",
+                    "placeholder": "https://examplecontroller.com/opengdpr_callbacks",
+                    "footerNote": "Endpoint for status callbacks to be sent with the deletion request status changes. If you want to provide more than one callbacks, provide them as comma separated strings.",
+                    "required": false
+                },
+                {
+                    "type": "textInput",
+                    "label": "API Token",
+                    "value": "apiToken",
+                    "placeholder": "c81aaf36-8323-4bb6-b5a8-asdfasdfas4f3c",
+                    "secret": true,
+                    "footerNote": "Provide your V1.0 API Token.",
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Sharing Filter",
-          "value": "sharingFilter",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid sharing filter. Default value is used",
-          "required": false,
-          "placeholder": "['googleadwords_int', 'adcolony_int']",
-          "default": "all",
-          "footerNote": "Use the filter to fulfill regulatory requirements like GDPR and CCPA, to comply with user opt-out mechanisms, and for other business logic reasons. "
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "User Deletion",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Status Callback Urls",
-          "value": "statusCallbackUrls",
-          "regex": "^(?!.*\\.ngrok\\.io).*$",
-          "placeholder": "https://examplecontroller.com/opengdpr_callbacks",
-          "footerNote": "Endpoint for status callbacks to be sent with the deletion request status changes. If you want to provide more than one callbacks, provide them as comma separated strings."
-        },
-        {
-          "type": "textInput",
-          "label": "API Token",
-          "value": "apiToken",
-          "placeholder": "c81aaf36-8323-4bb6-b5a8-asdfasdfas4f3c",
-          "secret": true,
-          "footerNote": "Provide your V1.0 API Token."
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

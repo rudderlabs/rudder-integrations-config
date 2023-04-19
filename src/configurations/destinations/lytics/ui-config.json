@@ -1,137 +1,137 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "API Tokens",
-          "placeholder": "e.g: at.a44fd0237ad3fb7e4e58eb9f602d48cb.u80b0d101dadcb9cb8ebcaf0d3da92a6",
-          "value": "apiKey",
-          "required": true,
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid API Tokens"
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "API Tokens",
+                    "placeholder": "e.g: at.a44fd0237ad3fb7e4e58eb9f602d48cb.u80b0d101dadcb9cb8ebcaf0d3da92a6",
+                    "value": "apiKey",
+                    "required": true,
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid API Tokens"
+                },
+                {
+                    "type": "textInput",
+                    "label": "Account ID",
+                    "placeholder": "e.g: 6f59dd3f8a55ea850f53822cd32b29a7",
+                    "value": "accountId",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Account ID",
+                    "required": true
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Account ID",
-          "placeholder": "e.g: 6f59dd3f8a55ea850f53822cd32b29a7",
-          "value": "accountId",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Account ID",
-          "required": true
-        }
-      ]
-    },
-    {
-      "title": "Other Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Stream Name",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Stream Name",
-          "value": "stream",
-          "default": "default"
+            "title": "Other Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Stream Name",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Stream Name",
+                    "value": "stream",
+                    "default": "default"
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Allow UID Sharing Across Multiple Domains",
+                    "value": "loadid",
+                    "default": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Ensure Entity",
+                    "value": "blockload",
+                    "default": false
+                }
+            ]
         },
         {
-          "type": "checkbox",
-          "label": "Allow UID Sharing Across Multiple Domains",
-          "value": "loadid",
-          "default": false
+            "title": "Native SDK",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Use native SDK to send events",
+                    "value": "useNativeSDK",
+                    "default": false
+                }
+            ]
         },
         {
-          "type": "checkbox",
-          "label": "Ensure Entity",
-          "value": "blockload",
-          "default": false
-        }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use native SDK to send events",
-          "value": "useNativeSDK",
-          "default": false
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          }
+            "title": "Client-side Events Filtering",
+            "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+            "fields": [
+                {
+                    "type": "singleSelect",
+                    "value": "eventFilteringOption",
+                    "required": false,
+                    "options": [
+                        {
+                            "name": "Disable",
+                            "value": "disable"
+                        },
+                        {
+                            "name": "Allowlist",
+                            "value": "whitelistedEvents"
+                        },
+                        {
+                            "name": "Denylist",
+                            "value": "blacklistedEvents"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Disable",
+                        "value": "disable"
+                    }
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "whitelistedEvents",
+                    "label": "Allowlist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Anonymous Page Visit"
+                        }
+                    ]
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "blacklistedEvents",
+                    "label": "Denylist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Credit Card Added"
+                        }
+                    ]
+                }
+            ]
         },
         {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ]
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

@@ -1,225 +1,232 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "TAG ID",
-          "value": "tagId",
-          "required": false,
-          "placeholder": "e.g: 123456789",
-          "secret": true
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "TAG ID",
+                    "value": "tagId",
+                    "required": false,
+                    "placeholder": "e.g: 123456789",
+                    "secret": true
+                },
+                {
+                    "type": "textInput",
+                    "label": "App Store App ID",
+                    "value": "appId",
+                    "required": false,
+                    "placeholder": "e.g: 429047995",
+                    "secret": false,
+                    "footerNote": "Relevant if ios source is connected"
+                },
+                {
+                    "type": "textInput",
+                    "label": "Pinterest Advertiser ID",
+                    "value": "advertiserId",
+                    "required": false,
+                    "placeholder": "e.g: 429047995",
+                    "secret": true,
+                    "footerNote": "Required field for cloud mode integration"
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "App Store App ID",
-          "value": "appId",
-          "required": false,
-          "placeholder": "e.g: 429047995",
-          "secret": false,
-          "footerNote": "Relevant if ios source is connected"
+            "title": "Other Settings",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Enable hashing for user data conversions",
+                    "value": "sendingUnHashedData",
+                    "default": true,
+                    "footerNote": "Rudderstack will hash your user data by default. Switch this off if you are already sending hashed data",
+                    "required": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Enable Event Deduplication",
+                    "value": "enableDeduplication",
+                    "default": false,
+                    "footerNote": "If not enabled here, Rudderstack will send messageId as event_id field.",
+                    "required": false
+                },
+                {
+                    "type": "textInput",
+                    "preRequisiteField": [
+                        {
+                            "name": "enableDeduplication",
+                            "selectedValue": true
+                        }
+                    ],
+                    "label": "Deduplication Key",
+                    "value": "deduplicationKey",
+                    "placeholder": "e.g: messageId",
+                    "required": false,
+                    "footerNote": "Rudderstack will send this key-value from payload as an event deduplication key"
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Enable Enhanced Match on Page Load",
+                    "value": "enhancedMatch",
+                    "required": false,
+                    "default": true,
+                    "footerNote": "If this setting is enabled, the Pinterest tag will be loaded with the existing traits of the logged user"
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "customProperties",
+                    "footerNote": "If you wish to send any extra custom properties to Pinterest - in addition to the standard Pinterest properties - then list them below. These properties are case-insensitive, and can be nested. For example, if you want to send rudderanalytics.track('Event', {customProperty: { customValue: 2 }, someRandomMailId: 'user@gmail.com'}) then input these two property customProperty.customValue and someRandomMailId",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "required": false,
+                            "value": "properties",
+                            "label": "Custom Properties",
+                            "placeholder": "customProperty.customValue or someRandomMailId"
+                        }
+                    ],
+                    "required": false
+                },
+                {
+                    "type": "dynamicSelectForm",
+                    "label": "Map Your Events To Pinterest Events.",
+                    "labelLeft": "Event Name",
+                    "labelRight": "Pinterest Event",
+                    "value": "eventsMapping",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "required": false,
+                    "placeholderLeft": "e.g: Order Completed",
+                    "placeholderRight": "e.g: Checkout",
+                    "options": [
+                        {
+                            "name": "Lead",
+                            "value": "Lead"
+                        },
+                        {
+                            "name": "PageVisit",
+                            "value": "PageVisit"
+                        },
+                        {
+                            "name": "ViewCategory",
+                            "value": "ViewCategory"
+                        },
+                        {
+                            "name": "SignUp",
+                            "value": "Signup"
+                        },
+                        {
+                            "name": "WatchVideo",
+                            "value": "WatchVideo"
+                        },
+                        {
+                            "name": "Checkout",
+                            "value": "Checkout"
+                        },
+                        {
+                            "name": "Search",
+                            "value": "Search"
+                        },
+                        {
+                            "name": "AddToCart",
+                            "value": "AddToCart"
+                        },
+                        {
+                            "name": "Custom",
+                            "value": "Custom"
+                        }
+                    ]
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Pinterest Advertiser ID",
-          "value": "advertiserId",
-          "required": false,
-          "placeholder": "e.g: 429047995",
-          "secret": true,
-          "footerNote": "Required field for cloud mode integration"
+            "title": "Native SDK",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Use device-mode to send events",
+                    "value": "useNativeSDK",
+                    "default": true,
+                    "required": false
+                }
+            ]
+        },
+        {
+            "title": "Client-side Events Filtering",
+            "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+            "fields": [
+                {
+                    "type": "singleSelect",
+                    "value": "eventFilteringOption",
+                    "required": false,
+                    "options": [
+                        {
+                            "name": "Disable",
+                            "value": "disable"
+                        },
+                        {
+                            "name": "Allowlist",
+                            "value": "whitelistedEvents"
+                        },
+                        {
+                            "name": "Denylist",
+                            "value": "blacklistedEvents"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Disable",
+                        "value": "disable"
+                    }
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "whitelistedEvents",
+                    "label": "Allowlist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Anonymous Page Visit"
+                        }
+                    ],
+                    "required": false
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "blacklistedEvents",
+                    "label": "Denylist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Credit Card Added"
+                        }
+                    ],
+                    "required": false
+                }
+            ]
+        },
+        {
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Other Settings",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Enable hashing for user data conversions",
-          "value": "sendingUnHashedData",
-          "default": true,
-          "footerNote": "Rudderstack will hash your user data by default. Switch this off if you are already sending hashed data"
-        },
-        {
-          "type": "checkbox",
-          "label": "Enable Event Deduplication",
-          "value": "enableDeduplication",
-          "default": false,
-          "footerNote": "If not enabled here, Rudderstack will send messageId as event_id field."
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "enableDeduplication",
-              "selectedValue": true
-            }
-          ],
-          "label": "Deduplication Key",
-          "value": "deduplicationKey",
-          "placeholder": "e.g: messageId",
-          "required": false,
-          "footerNote": "Rudderstack will send this key-value from payload as an event deduplication key"
-        },
-        {
-          "type": "checkbox",
-          "label": "Enable Enhanced Match on Page Load",
-          "value": "enhancedMatch",
-          "required": false,
-          "default": true,
-          "footerNote": "If this setting is enabled, the Pinterest tag will be loaded with the existing traits of the logged user"
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "customProperties",
-          "footerNote": "If you wish to send any extra custom properties to Pinterest - in addition to the standard Pinterest properties - then list them below. These properties are case-insensitive, and can be nested. For example, if you want to send rudderanalytics.track('Event', {customProperty: { customValue: 2 }, someRandomMailId: 'user@gmail.com'}) then input these two property customProperty.customValue and someRandomMailId",
-          "customFields": [
-            {
-              "type": "textInput",
-              "required": false,
-              "value": "properties",
-              "label": "Custom Properties",
-              "placeholder": "customProperty.customValue or someRandomMailId"
-            }
-          ]
-        },
-        {
-          "type": "dynamicSelectForm",
-          "label": "Map Your Events To Pinterest Events.",
-          "labelLeft": "Event Name",
-          "labelRight": "Pinterest Event",
-          "value": "eventsMapping",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "required": false,
-          "placeholderLeft": "e.g: Order Completed",
-          "placeholderRight": "e.g: Checkout",
-          "options": [
-            {
-              "name": "Lead",
-              "value": "Lead"
-            },
-            {
-              "name": "PageVisit",
-              "value": "PageVisit"
-            },
-            {
-              "name": "ViewCategory",
-              "value": "ViewCategory"
-            },
-            {
-              "name": "SignUp",
-              "value": "Signup"
-            },
-            {
-              "name": "WatchVideo",
-              "value": "WatchVideo"
-            },
-            {
-              "name": "Checkout",
-              "value": "Checkout"
-            },
-            {
-              "name": "Search",
-              "value": "Search"
-            },
-            {
-              "name": "AddToCart",
-              "value": "AddToCart"
-            },
-            {
-              "name": "Custom",
-              "value": "Custom"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

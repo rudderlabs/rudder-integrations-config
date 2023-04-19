@@ -1,75 +1,84 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "User Name",
-          "value": "userName",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "regexErrorMessage": "Invalid User Name",
-          "required": true,
-          "placeholder": "e.g. user_name"
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "User Name",
+                    "value": "userName",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid User Name",
+                    "required": true,
+                    "placeholder": "e.g. user_name"
+                },
+                {
+                    "type": "textInput",
+                    "label": "Password",
+                    "value": "password",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "required": true,
+                    "placeholder": "e.g. password",
+                    "secret": true
+                },
+                {
+                    "type": "textInput",
+                    "label": "Security Token",
+                    "value": "initialAccessToken",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Security Token",
+                    "required": true,
+                    "placeholder": "e.g. ISnPS2LcOtn9bHf6Id6vG0jgh",
+                    "secret": true
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Password",
-          "value": "password",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "required": true,
-          "placeholder": "e.g. password",
-          "secret": true
+            "title": "Other Settings",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Map Rudder Properties to Salesforce Properties",
+                    "value": "mapProperties",
+                    "default": true,
+                    "required": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Sandbox mode",
+                    "value": "sandbox",
+                    "default": false,
+                    "required": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Use contactId for converted leads",
+                    "value": "useContactId",
+                    "default": false,
+                    "footerNote": "It is suggested to enable this option when both lead and contact field mappings are same.",
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Security Token",
-          "value": "initialAccessToken",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "regexErrorMessage": "Invalid Security Token",
-          "required": true,
-          "placeholder": "e.g. ISnPS2LcOtn9bHf6Id6vG0jgh",
-          "secret": true
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Other Settings",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Map Rudder Properties to Salesforce Properties",
-          "value": "mapProperties",
-          "default": true
-        },
-        { "type": "checkbox", "label": "Sandbox mode", "value": "sandbox", "default": false },
-        {
-          "type": "checkbox",
-          "label": "Use contactId for converted leads",
-          "value": "useContactId",
-          "default": false,
-          "footerNote": "It is suggested to enable this option when both lead and contact field mappings are same."
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

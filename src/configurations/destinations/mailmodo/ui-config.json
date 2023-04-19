@@ -1,49 +1,50 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "API Key",
-          "value": "apiKey",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid MailModo API Key",
-          "required": true,
-          "placeholder": "e.g. L9DFHY-PTF4B4Q-PH3NY7E-LPYBX0Q",
-          "secret": true
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "API Key",
+                    "value": "apiKey",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid MailModo API Key",
+                    "required": true,
+                    "placeholder": "e.g. L9DFHY-PTF4B4Q-PH3NY7E-LPYBX0Q",
+                    "secret": true
+                },
+                {
+                    "type": "textInput",
+                    "label": "List Name",
+                    "value": "listName",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid List Name",
+                    "required": false,
+                    "placeholder": "e.g. rudderstack",
+                    "secret": false,
+                    "footerNote": "Name of the list where contacts should be added. If not provided, \u201cRudderstack\u201d is taken as the default name. Only applicable for the identify call"
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "List Name",
-          "value": "listName",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid List Name",
-          "required": false,
-          "placeholder": "e.g. rudderstack",
-          "secret": false,
-          "footerNote": "Name of the list where contacts should be added. If not provided, “Rudderstack” is taken as the default name. Only applicable for the identify call"
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

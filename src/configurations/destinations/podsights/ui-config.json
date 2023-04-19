@@ -1,156 +1,161 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "Pixel ID",
-          "value": "pixelId",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Pixel ID",
-          "required": true,
-          "placeholder": "e.g. dzq1p89h2bnp1ubi9x65hyx2hf5q1k3v",
-          "secret": true,
-          "footerNote": "Podsights dashboard > Manage > Your Pixels"
-        }
-      ]
-    },
-    {
-      "title": "Event Mapping",
-      "fields": [
-        {
-          "type": "dynamicSelectForm",
-          "label": "Map Rudder events to Podsights Pixel events",
-          "labelLeft": "Event Name",
-          "labelRight": "Podsights Pixel Event",
-          "value": "eventsToPodsightsEvents",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "required": false,
-          "placeholderLeft": "e.g: Order Completed",
-          "placeholderRight": "e.g: Initiate Checkout",
-          "footerNote": "Multiple Podsights Pixel events can be mapped with single RudderStack event and vice versa. e.g. `ABC` can be mapped with `Product` and `Purchase`.",
-          "options": [
-            {
-              "name": "Lead",
-              "value": "lead"
-            },
-            {
-              "name": "Product",
-              "value": "product"
-            },
-            {
-              "name": "Add to Cart",
-              "value": "addtocart"
-            },
-            {
-              "name": "Check out",
-              "value": "checkout"
-            },
-            {
-              "name": "Purchase",
-              "value": "purchase"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Podsights Alias Event Setting",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Pass Internal Id",
-          "value": "enableAliasCall",
-          "default": false,
-          "footerNote": "Podsights dashboard > Manage > Your Pixels > Alias Events. Enable this option to pass the hashed internal ID with each event to match the Podsights conversions attribute with your internal systems. RudderStack uses sha256 for hashing the Id. "
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          }
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Pixel ID",
+                    "value": "pixelId",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Pixel ID",
+                    "required": true,
+                    "placeholder": "e.g. dzq1p89h2bnp1ubi9x65hyx2hf5q1k3v",
+                    "secret": true,
+                    "footerNote": "Podsights dashboard > Manage > Your Pixels"
+                }
+            ]
         },
         {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
+            "title": "Event Mapping",
+            "fields": [
+                {
+                    "type": "dynamicSelectForm",
+                    "label": "Map Rudder events to Podsights Pixel events",
+                    "labelLeft": "Event Name",
+                    "labelRight": "Podsights Pixel Event",
+                    "value": "eventsToPodsightsEvents",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "required": false,
+                    "placeholderLeft": "e.g: Order Completed",
+                    "placeholderRight": "e.g: Initiate Checkout",
+                    "footerNote": "Multiple Podsights Pixel events can be mapped with single RudderStack event and vice versa. e.g. `ABC` can be mapped with `Product` and `Purchase`.",
+                    "options": [
+                        {
+                            "name": "Lead",
+                            "value": "lead"
+                        },
+                        {
+                            "name": "Product",
+                            "value": "product"
+                        },
+                        {
+                            "name": "Add to Cart",
+                            "value": "addtocart"
+                        },
+                        {
+                            "name": "Check out",
+                            "value": "checkout"
+                        },
+                        {
+                            "name": "Purchase",
+                            "value": "purchase"
+                        }
+                    ]
+                }
+            ]
         },
         {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
+            "title": "Podsights Alias Event Setting",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Pass Internal Id",
+                    "value": "enableAliasCall",
+                    "default": false,
+                    "footerNote": "Podsights dashboard > Manage > Your Pixels > Alias Events. Enable this option to pass the hashed internal ID with each event to match the Podsights conversions attribute with your internal systems. RudderStack uses sha256 for hashing the Id. ",
+                    "required": false
+                }
+            ]
+        },
         {
-          "type": "defaultCheckbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
+            "title": "Client-side Events Filtering",
+            "fields": [
+                {
+                    "type": "singleSelect",
+                    "value": "eventFilteringOption",
+                    "required": false,
+                    "options": [
+                        {
+                            "name": "Disable",
+                            "value": "disable"
+                        },
+                        {
+                            "name": "Allowlist",
+                            "value": "whitelistedEvents"
+                        },
+                        {
+                            "name": "Denylist",
+                            "value": "blacklistedEvents"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Disable",
+                        "value": "disable"
+                    }
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "whitelistedEvents",
+                    "label": "Allowlist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Anonymous Page Visit"
+                        }
+                    ],
+                    "required": false
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "blacklistedEvents",
+                    "label": "Denylist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Credit Card Added"
+                        }
+                    ],
+                    "required": false
+                }
+            ]
+        },
         {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
+            "title": "Native SDK",
+            "fields": [
+                {
+                    "type": "defaultCheckbox",
+                    "label": "Use device-mode to send events",
+                    "value": "useNativeSDK",
+                    "default": true,
+                    "required": false
+                }
+            ]
+        },
+        {
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }

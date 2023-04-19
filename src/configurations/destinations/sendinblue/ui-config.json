@@ -1,174 +1,181 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "API Key",
-          "value": "apiKey",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid API Key",
-          "required": true,
-          "placeholder": "e.g. xkeysib-cI7d098201bW5acf0453FY1b64fsej32da3f8ae01d7c8f9b78L43153d814td000020eb9-1e4M595C0",
-          "secret": true,
-          "footerNote": "Your Sendinblue API Key from SMTP & API tab"
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "API Key",
+                    "value": "apiKey",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid API Key",
+                    "required": true,
+                    "placeholder": "e.g. xkeysib-cI7d098201bW5acf0453FY1b64fsej32da3f8ae01d7c8f9b78L43153d814td000020eb9-1e4M595C0",
+                    "secret": true,
+                    "footerNote": "Your Sendinblue API Key from SMTP & API tab"
+                },
+                {
+                    "type": "textInput",
+                    "label": "Client Key",
+                    "value": "clientKey",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Client Key",
+                    "required": true,
+                    "placeholder": "e.g. 1vd0i6w1al7q38ap5kucurfy",
+                    "secret": true,
+                    "footerNote": "Your Sendinblue Client Key from JS tracker script"
+                }
+            ]
         },
         {
-          "type": "textInput",
-          "label": "Client Key",
-          "value": "clientKey",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid Client Key",
-          "required": true,
-          "placeholder": "e.g. 1vd0i6w1al7q38ap5kucurfy",
-          "secret": true,
-          "footerNote": "Your Sendinblue Client Key from JS tracker script"
+            "title": "Native SDK",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Use device-mode to send events",
+                    "value": "useNativeSDK",
+                    "default": true,
+                    "required": false
+                }
+            ]
+        },
+        {
+            "title": "Contact Settings",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Create contact via Double-opt-in",
+                    "value": "doi",
+                    "default": false,
+                    "footerNote": "Applicable only for cloud-mode. If enabled, a confirmation email will be sent to an email address",
+                    "required": false
+                },
+                {
+                    "type": "textInput",
+                    "label": "Template ID",
+                    "value": "templateId",
+                    "regex": "^[0-9]+$",
+                    "regexErrorMessage": "Invalid Template ID",
+                    "placeholder": "e.g. 2",
+                    "footerNote": "Your DOI template ID from Automation tab",
+                    "preRequisiteField": {
+                        "name": "doi",
+                        "selectedValue": true
+                    },
+                    "required": false
+                },
+                {
+                    "type": "textInput",
+                    "label": "Redirection Url",
+                    "value": "redirectionUrl",
+                    "regex": "(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+                    "regexErrorMessage": "Invalid Redirection Url",
+                    "required": false,
+                    "placeholder": "e.g. https://my.sendinblue.com/",
+                    "footerNote": "URL of the web page that the user will be redirected to after clicking on the confirmation email",
+                    "preRequisiteField": {
+                        "name": "doi",
+                        "selectedValue": true
+                    }
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Send user traits in track call",
+                    "value": "sendTraitsInTrack",
+                    "default": false,
+                    "footerNote": "If enabled, RuddersStack will send the user traits to Sendinblue in track call",
+                    "required": false
+                },
+                {
+                    "type": "dynamicForm",
+                    "label": "Map your traits to Sendinblue contact attributes",
+                    "value": "contactAttributeMapping",
+                    "required": false,
+                    "labelLeft": "Rudder payload trait key",
+                    "labelRight": "Sendinblue contact attribute name",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g: area_code",
+                    "placeholderRight": "e.g: AREACODE"
+                }
+            ]
+        },
+        {
+            "title": "Client-side Events Filtering",
+            "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+            "fields": [
+                {
+                    "type": "singleSelect",
+                    "value": "eventFilteringOption",
+                    "required": false,
+                    "options": [
+                        {
+                            "name": "Disable",
+                            "value": "disable"
+                        },
+                        {
+                            "name": "Allowlist",
+                            "value": "whitelistedEvents"
+                        },
+                        {
+                            "name": "Denylist",
+                            "value": "blacklistedEvents"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Disable",
+                        "value": "disable"
+                    }
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "whitelistedEvents",
+                    "label": "Allowlist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Anonymous Page Visit"
+                        }
+                    ],
+                    "required": false
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "blacklistedEvents",
+                    "label": "Denylist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Credit Card Added"
+                        }
+                    ],
+                    "required": false
+                }
+            ]
+        },
+        {
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Contact Settings",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Create contact via Double-opt-in",
-          "value": "doi",
-          "default": false,
-          "footerNote": "Applicable only for cloud-mode. If enabled, a confirmation email will be sent to an email address"
-        },
-        {
-          "type": "textInput",
-          "label": "Template ID",
-          "value": "templateId",
-          "regex": "^[0-9]+$",
-          "regexErrorMessage": "Invalid Template ID",
-          "placeholder": "e.g. 2",
-          "footerNote": "Your DOI template ID from Automation tab",
-          "preRequisiteField": {
-            "name": "doi",
-            "selectedValue": true
-          }
-        },
-        {
-          "type": "textInput",
-          "label": "Redirection Url",
-          "value": "redirectionUrl",
-          "regex": "(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
-          "regexErrorMessage": "Invalid Redirection Url",
-          "required": true,
-          "placeholder": "e.g. https://my.sendinblue.com/",
-          "footerNote": "URL of the web page that the user will be redirected to after clicking on the confirmation email",
-          "preRequisiteField": {
-            "name": "doi",
-            "selectedValue": true
-          }
-        },
-        {
-          "type": "checkbox",
-          "label": "Send user traits in track call",
-          "value": "sendTraitsInTrack",
-          "default": false,
-          "footerNote": "If enabled, RuddersStack will send the user traits to Sendinblue in track call"
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Map your traits to Sendinblue contact attributes",
-          "value": "contactAttributeMapping",
-          "required": false,
-          "labelLeft": "Rudder payload trait key",
-          "labelRight": "Sendinblue contact attribute name",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g: area_code",
-          "placeholderRight": "e.g: AREACODE"
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

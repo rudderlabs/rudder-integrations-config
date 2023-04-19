@@ -1,52 +1,75 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "Public API Key",
-          "value": "apiKey",
-          "regex": "^(.{1,100})$",
-          "required": true,
-          "placeholder": "e.g. b4a29aba5e75d99c8a18acd920ec1e2e",
-          "secret": true,
-          "footerNote": "Your Public API Key"
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Public API Key",
+                    "value": "apiKey",
+                    "regex": "^(.{1,100})$",
+                    "required": true,
+                    "placeholder": "e.g. b4a29aba5e75d99c8a18acd920ec1e2e",
+                    "secret": true,
+                    "footerNote": "Your Public API Key"
+                },
+                {
+                    "type": "singleSelect",
+                    "label": "X-Platform",
+                    "value": "xPlatform",
+                    "options": [
+                        {
+                            "name": "iOS",
+                            "value": "ios"
+                        },
+                        {
+                            "name": "Android",
+                            "value": "android"
+                        },
+                        {
+                            "name": "Amazon",
+                            "value": "amazon"
+                        },
+                        {
+                            "name": "macOS",
+                            "value": "macos"
+                        },
+                        {
+                            "name": "Stripe",
+                            "value": "stripe"
+                        },
+                        {
+                            "name": "UI kit for mac",
+                            "value": "uikitformac"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Stripe",
+                        "value": "stripe"
+                    },
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "singleSelect",
-          "label": "X-Platform",
-          "value": "xPlatform",
-          "options": [
-            { "name": "iOS", "value": "ios" },
-            { "name": "Android", "value": "android" },
-            { "name": "Amazon", "value": "amazon" },
-            { "name": "macOS", "value": "macos" },
-            { "name": "Stripe", "value": "stripe" },
-            { "name": "UI kit for mac", "value": "uikitformac" }
-          ],
-          "defaultOption": { "name": "Stripe", "value": "stripe" }
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

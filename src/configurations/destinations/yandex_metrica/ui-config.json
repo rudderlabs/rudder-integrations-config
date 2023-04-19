@@ -1,189 +1,197 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
+    "uiConfig": [
         {
-          "type": "textInput",
-          "label": "Tag ID",
-          "value": "tagId",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid Tag ID, example value 56252632",
-          "required": true,
-          "placeholder": "e.g. 56252632",
-          "secret": true,
-          "footerNote": "Your Tag ID"
+            "title": "Connection Settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Tag ID",
+                    "value": "tagId",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Tag ID, example value 56252632",
+                    "required": true,
+                    "placeholder": "e.g. 56252632",
+                    "secret": true,
+                    "footerNote": "Your Tag ID"
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Enable Clickmap",
+                    "value": "clickMap",
+                    "default": false,
+                    "footerNote": "Enable it to collect data for a click map",
+                    "required": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Enable Tracklinks",
+                    "value": "trackLinks",
+                    "default": false,
+                    "footerNote": "Enable it to track clicks on outbound links",
+                    "required": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Enable Accurate Track Bounce",
+                    "value": "trackBounce",
+                    "default": false,
+                    "footerNote": "Enables the accurate bounce rate, with a non-bounce event registered after 15000 ms",
+                    "required": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Enable WebVisor",
+                    "value": "webvisor",
+                    "default": false,
+                    "footerNote": "Enable it to use session replay",
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "checkbox",
-          "label": "Enable Clickmap",
-          "value": "clickMap",
-          "default": false,
-          "footerNote": "Enable it to collect data for a click map"
+            "title": "Ecommerce settings",
+            "fields": [
+                {
+                    "type": "textInput",
+                    "label": "Container name",
+                    "value": "containerName",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Container name",
+                    "required": false,
+                    "placeholder": "e.g. dataLayer",
+                    "secret": false,
+                    "footerNote": "Your E-commerce container name used for storing ecommerce object"
+                },
+                {
+                    "type": "dynamicSelectForm",
+                    "label": "Map your event name with supported Yandex.Metrica event name",
+                    "labelLeft": "Event Name",
+                    "labelRight": "Yandex.Metrica Event Name",
+                    "value": "eventNameToYandexEvent",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "required": false,
+                    "placeholderLeft": "e.g. Checkout done",
+                    "options": [
+                        {
+                            "name": "Detail/View",
+                            "value": "detail"
+                        },
+                        {
+                            "name": "Add",
+                            "value": "add"
+                        },
+                        {
+                            "name": "Remove",
+                            "value": "remove"
+                        },
+                        {
+                            "name": "Purchase",
+                            "value": "purchase"
+                        }
+                    ]
+                },
+                {
+                    "type": "textInput",
+                    "label": "Goal ID",
+                    "value": "goalId",
+                    "regex": "^[0-9]+$",
+                    "regexErrorMessage": "Invalid Goal ID",
+                    "required": false,
+                    "placeholder": "e.g. 263922671",
+                    "secret": false,
+                    "footerNote": "Your Goal Number from Yandex.Metrica Dashboard"
+                }
+            ]
         },
         {
-          "type": "checkbox",
-          "label": "Enable Tracklinks",
-          "value": "trackLinks",
-          "default": false,
-          "footerNote": "Enable it to track clicks on outbound links"
+            "title": "Native SDK",
+            "fields": [
+                {
+                    "type": "defaultCheckbox",
+                    "label": "Use device-mode to send events",
+                    "value": "useNativeSDK",
+                    "default": true,
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "checkbox",
-          "label": "Enable Accurate Track Bounce",
-          "value": "trackBounce",
-          "default": false,
-          "footerNote": "Enables the accurate bounce rate, with a non-bounce event registered after 15000 ms"
+            "title": "Client-side Events Filtering",
+            "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+            "fields": [
+                {
+                    "type": "singleSelect",
+                    "value": "eventFilteringOption",
+                    "required": false,
+                    "options": [
+                        {
+                            "name": "Disable",
+                            "value": "disable"
+                        },
+                        {
+                            "name": "Allowlist",
+                            "value": "whitelistedEvents"
+                        },
+                        {
+                            "name": "Denylist",
+                            "value": "blacklistedEvents"
+                        }
+                    ],
+                    "defaultOption": {
+                        "name": "Disable",
+                        "value": "disable"
+                    }
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "whitelistedEvents",
+                    "label": "Allowlist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Anonymous Page Visit"
+                        }
+                    ],
+                    "required": false
+                },
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "blacklistedEvents",
+                    "label": "Denylist",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "value": "eventName",
+                            "required": false,
+                            "placeholder": "e.g: Credit Card Added"
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         },
         {
-          "type": "checkbox",
-          "label": "Enable WebVisor",
-          "value": "webvisor",
-          "default": false,
-          "footerNote": "Enable it to use session replay"
+            "title": "Consent Settings",
+            "fields": [
+                {
+                    "type": "dynamicCustomForm",
+                    "value": "oneTrustCookieCategories",
+                    "label": "OneTrust Cookie Categories",
+                    "customFields": [
+                        {
+                            "type": "textInput",
+                            "placeholder": "Marketing",
+                            "value": "oneTrustCookieCategory",
+                            "label": "Category Name/ID",
+                            "required": false
+                        }
+                    ],
+                    "required": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "title": "Ecommerce settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Container name",
-          "value": "containerName",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Container name",
-          "required": false,
-          "placeholder": "e.g. dataLayer",
-          "secret": false,
-          "footerNote": "Your E-commerce container name used for storing ecommerce object"
-        },
-        {
-          "type": "dynamicSelectForm",
-          "label": "Map your event name with supported Yandex.Metrica event name",
-          "labelLeft": "Event Name",
-          "labelRight": "Yandex.Metrica Event Name",
-          "value": "eventNameToYandexEvent",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "required": false,
-          "placeholderLeft": "e.g. Checkout done",
-          "options": [
-            {
-              "name": "Detail/View",
-              "value": "detail"
-            },
-            {
-              "name": "Add",
-              "value": "add"
-            },
-            {
-              "name": "Remove",
-              "value": "remove"
-            },
-            {
-              "name": "Purchase",
-              "value": "purchase"
-            }
-          ]
-        },
-        {
-          "type": "textInput",
-          "label": "Goal ID",
-          "value": "goalId",
-          "regex": "^[0-9]+$",
-          "regexErrorMessage": "Invalid Goal ID",
-          "required": false,
-          "placeholder": "e.g. 263922671",
-          "secret": false,
-          "footerNote": "Your Goal Number from Yandex.Metrica Dashboard"
-        }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
-        {
-          "type": "defaultCheckbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }

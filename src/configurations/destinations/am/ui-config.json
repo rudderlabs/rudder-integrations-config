@@ -1,583 +1,583 @@
 {
-  "uiConfig": {
-    "baseTemplate": [
-      {
-        "title": "Initial setup",
-        "note": "Review how this destination is set up",
-        "sections": [
-          {
-            "groups": [
-              {
-                "title": "Connection settings",
-                "note": "Update your connection settings here",
-                "icon": "settings",
-                "fields": [
-                  {
-                    "type": "textInput",
-                    "label": "API Key",
-                    "note": [
-                      "Edit your API key here. You can find your API key by going to your project in Amplitude and looking in the ",
-                      {
-                        "text": "general tab",
-                        "link": "https://help.amplitude.com/hc/en-us/articles/360058073772-Create-and-manage-organizations-and-projects#view-and-edit-your-project-information"
-                      }
-                    ],
-                    "configKey": "apiKey",
-                    "regex": "^(.{1,100})$",
-                    "regexErrorMessage": "Invalid Api Key",
-                    "placeholder": "e.g: bSjsdGYsOo9sjw23Shj",
-                    "secret": true
-                  },
-                  {
-                    "type": "singleSelect",
-                    "label": "Residency server",
-                    "configKey": "residencyServer",
-                    "note": "Edit your Amplitude server selection here",
-                    "options": [
-                      {
-                        "label": "Standard Server",
-                        "value": "standard"
-                      },
-                      {
-                        "label": "EU Residency Server",
-                        "value": "EU"
-                      }
-                    ],
-                    "default": "standard"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "groups": [
-              {
-                "title": "Connection mode",
-                "note": [
-                  "Update how you want to route events from your source to destination. ",
-                  {
-                    "text": "Get help deciding",
-                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
-                  }
-                ],
-                "icon": "sliders",
-                "fields": []
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "title": "Configuration settings",
-        "note": "Manage the settings for your destination",
-        "sections": [
-          {
-            "groups": [
-              {
-                "title": "Page settings",
-                "note": "Set how you want to send your page calls to Amplitude",
-                "icon": "file",
-                "callout": {
-                  "message": "We suggest checking your event volume setup with Amplitude prior to configuring this section",
-                  "type": "info"
-                },
-                "preRequisites": {
-                  "fields": [
-                    {
-                      "configKey": "connectionModes.mobileDevice",
-                      "value": true
-                    },
-                    {
-                      "configKey": "connectionModes.webDevice",
-                      "value": true
-                    }
-                  ],
-                  "condition": "or"
-                },
-                "fields": [
-                  {
-                    "type": "checkbox",
-                    "label": "Track all Pages to Amplitude",
-                    "configKey": "trackAllPages",
-                    "note": "Send all pageview events to Amplitude with either “Loaded a page” or “Viewed a screen” event names",
-                    "default": false
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "Track Categorized Pages to Amplitude",
-                    "configKey": "trackCategorizedPages",
-                    "note": "Any page call with a category will be sent to Amplitude as either a “Loaded {Category} Page” or “Viewed {Category} Screen” event",
-                    "default": true
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "Track Named Pages to Amplitude",
-                    "configKey": "trackNamedPages",
-                    "note": "Any page call with a name will be sent to Amplitude as either a “Loaded {Name} Page” or “Viewed {Name} Screen” event",
-                    "default": true
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "title": "Identify and Group settings",
-            "note": "Set how you want your Group or Identify call user properties to be sent to Amplitude",
-            "icon": "magnifyingGlass",
-            "groups": [
-              {
-                "title": "Group: traits",
-                "note": "Set the properties of particular groups. A group is an object that a set of users belong to (e.g., organization, company, team)",
-                "fields": [
-                  {
-                    "type": "textInput",
-                    "label": "Group name trait",
-                    "note": "Specify the type of group (group_type) for your group calls to Amplitude. Examples of a group_type could be: Org ID, Org Name, or Industry",
-                    "configKey": "groupTypeTrait",
-                    "placeholder": "e.g: company_id",
-                    "regex": "^(.{0,100})$",
-                    "regexErrorMessage": "Invalid Group Name Trait"
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "Group value trait",
-                    "note": "Specify the group value (group_value) for your group calls to Amplitude. For example, if you set group_type: “industry”, group_value might be “retail”",
-                    "configKey": "groupValueTrait",
-                    "placeholder": "e.g: company_name",
-                    "regex": "^(.{0,100})$",
-                    "regexErrorMessage": "Invalid Group Name Trait"
-                  }
-                ]
-              },
-              {
-                "title": "Identify: traits",
-                "note": "Customize how you want to send your Identify traits",
-                "fields": [
-                  {
-                    "type": "tagInput",
-                    "label": "Traits to increment",
-                    "note": "Input separate traits by pressing ‘Enter’ after each trait. Set the traits to increment on an identify call. These traits will then be incremented by the numerical value associated with the trait in your identify call.",
-                    "configKey": "traitsToIncrement",
-                    "tagKey": "traits",
-                    "placeholder": "e.g: Revenue",
-                    "default": [
-                      {
-                        "traits": ""
-                      }
-                    ]
-                  },
-                  {
-                    "type": "tagInput",
-                    "label": "Traits to set once",
-                    "note": "Input separate traits by pressing ‘Enter’ after each trait. Specify the traits that should be set once. This prevents overriding the property value.",
-                    "configKey": "traitsToSetOnce",
-                    "tagKey": "traits",
-                    "placeholder": "e.g: lastName",
-                    "default": [
-                      {
-                        "traits": ""
-                      }
-                    ],
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "connectionModes.cloud",
-                          "value": true
-                        },
-                        {
-                          "configKey": "connectionModes.mobileDevice",
-                          "value": true
-                        }
-                      ],
-                      "condition": "or"
-                    }
-                  },
-                  {
-                    "type": "tagInput",
-                    "label": "Traits to append",
-                    "note": "Input separate traits by pressing ‘Enter’ after each trait. Append a value or multiple values to a user property array",
-                    "configKey": "traitsToAppend",
-                    "tagKey": "traits",
-                    "placeholder": "e.g: createdAt",
-                    "default": [
-                      {
-                        "traits": ""
-                      }
-                    ],
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "connectionModes.cloud",
-                          "value": true
-                        },
-                        {
-                          "configKey": "connectionModes.mobileDevice",
-                          "value": true
-                        }
-                      ],
-                      "condition": "or"
-                    }
-                  },
-                  {
-                    "type": "tagInput",
-                    "label": "Traits to prepend",
-                    "note": "Input separate traits by pressing ‘Enter’ after each trait. Prepend a value or multiple values to a user property array",
-                    "configKey": "traitsToPrepend",
-                    "tagKey": "traits",
-                    "placeholder": "e.g: createdAt",
-                    "default": [
-                      {
-                        "traits": ""
-                      }
-                    ],
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "connectionModes.cloud",
-                          "value": true
-                        },
-                        {
-                          "configKey": "connectionModes.mobileDevice",
-                          "value": true
-                        }
-                      ],
-                      "condition": "or"
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "title": "Destination settings",
-            "note": "Configure advanced destination-specific settings here",
-            "icon": "settings",
-            "groups": [
-              {
-                "title": "Amplitude IT",
-                "note": "Configure a few advanced Amplitude settings here",
-                "fields": [
-                  {
-                    "type": "textInput",
-                    "label": "Secret key",
-                    "configKey": "apiSecret",
-                    "note": [
-                      "Enter your Amplitude Secret Key to delete users. To find your Secret Key, go to your project in Amplitude and look in the ",
-                      {
-                        "text": "general tab",
-                        "link": "https://help.amplitude.com/hc/en-us/articles/360058073772-Create-and-manage-organizations-and-projects#view-and-edit-your-project-information"
-                      }
-                    ],
-                    "regex": "^(.{0,100})$",
-                    "regexErrorMessage": "Invalid Api Key",
-                    "placeholder": "e.g: bSjsdGYsOo9sjw23Shj",
-                    "secret": true
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "Version Name",
-                    "note": "Assign a version name for your page, and we’ll send it to Amplitude for more detailed events",
-                    "configKey": "versionName",
-                    "regex": "^(.{0,100})$",
-                    "regexErrorMessage": "Invalid Version Name",
-                    "placeholder": "e.g: 1.12.3",
-                    "secret": false,
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "connectionModes.webDevice",
-                          "value": true
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "Map device brand",
-                    "note": "Capture brand, manufacturer, and model information for mobile devices",
-                    "configKey": "mapDeviceBrand",
-                    "default": false,
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "connectionModes.mobileDevice",
-                          "value": true
-                        }
-                      ]
-                    }
-                  }
-                ]
-              },
-              {
-                "title": "eCommerce settings",
-                "note": "Define how you want your ‘Order Completed’ events to be passed to Amplitude",
-                "preRequisites": {
-                  "fields": [
-                    {
-                      "configKey": "connectionModes.cloud",
-                      "value": true
-                    }
-                  ]
-                },
-                "fields": [
-                  {
-                    "type": "checkbox",
-                    "label": "Track products as a single event",
-                    "note": "An array of products will be tracked as a single event. The event will be passed as the original event name, and all the products as properties",
-                    "configKey": "trackProductsOnce",
-                    "default": false
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "Track Revenue per product",
-                    "note": "Track the revenue of each product in an event individually. Otherwise, the event will be sent as an aggregate revenue of all products",
-                    "configKey": "trackRevenuePerProduct",
-                    "default": false
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "title": "Other settings",
-            "note": "Configure advanced RudderStack features here",
-            "icon": "otherSettings",
-            "groups": [
-              {
-                "title": "Client-side event filtering",
-                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
-                "preRequisites": {
-                  "fields": [
-                    {
-                      "configKey": "connectionModes.webDevice",
-                      "value": true
-                    },
-                    {
-                      "configKey": "connectionModes.mobileDevice",
-                      "value": true
-                    }
-                  ],
-                  "condition": "or"
-                },
-                "fields": [
-                  {
-                    "type": "singleSelect",
-                    "label": "Choose if you want to turn on events filtering:",
-                    "configKey": "eventFilteringOption",
-                    "note": "You must select either allowlist or denylist to enable events filtering",
-                    "options": [
-                      {
-                        "label": "Disabled",
-                        "value": "disable"
-                      },
-                      {
-                        "label": "Filter via allowlist",
-                        "value": "whitelistedEvents"
-                      },
-                      {
-                        "label": "Filter via denylist",
-                        "value": "blacklistedEvents"
-                      }
-                    ],
-                    "default": "disable"
-                  },
-                  {
-                    "type": "tagInput",
-                    "label": "Allowlisted events",
-                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
-                    "configKey": "whitelistedEvents",
-                    "tagKey": "eventName",
-                    "placeholder": "e.g: Anonymous page visit",
-                    "default": [
-                      {
-                        "eventName": ""
-                      }
-                    ],
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "eventFilteringOption",
-                          "value": "whitelistedEvents"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type": "tagInput",
-                    "label": "Denylisted events",
-                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
-                    "configKey": "blacklistedEvents",
-                    "tagKey": "eventName",
-                    "placeholder": "e.g: Anonymous page visit",
-                    "default": [
-                      {
-                        "eventName": ""
-                      }
-                    ],
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "eventFilteringOption",
-                          "value": "blacklistedEvents"
-                        }
-                      ]
-                    }
-                  }
-                ]
-              },
-              {
-                "title": "OneTrust cookie consent settings",
-                "note": [
-                  "Enter your OneTrust category names if you have them configured. ",
-                  {
-                    "text": "Learn more ",
-                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
-                  },
-                  "about RudderStack’s OneTrust Consent Manager feature."
-                ],
-                "fields": [
-                  {
-                    "type": "tagInput",
-                    "label": "Cookie category name",
-                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
-                    "configKey": "oneTrustCookieCategories",
-                    "tagKey": "oneTrustCookieCategory",
-                    "placeholder": "e.g: Credit card visit",
-                    "default": [
-                      {
-                        "oneTrustCookieCategory": ""
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    "sdkTemplate": {
-      "title": "SDK settings",
-      "note": "not visible in the ui",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Enable location listening",
-          "note": "Capture user location information for anyone who has granted app location permission",
-          "configKey": "enableLocationListening",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Track session events",
-          "note": "Send start and end session events",
-          "configKey": "trackSessionEvents",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Use Advertising ID for Device ID",
-          "note": "Send Advertising ID instead of Device ID to Amplitude",
-          "configKey": "useAdvertisingIdForDeviceId",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Use IDFA for Device ID",
-          "note": "Send the IDFA instead of device ID to Amplitude",
-          "configKey": "useIdfaAsDeviceId",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Replace Device ID with Anonymous ID",
-          "note": [
-            "Use anonymous ID instead of device ID. The anonymous ID can be generated by RudderStack’s SDK. Or, you can set it yourselves using the ",
+    "uiConfig": {
+        "baseTemplate": [
             {
-              "text": "setAnonymousID() method.",
-              "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/supported-api/#overriding-anonymous-id"
+                "title": "Initial setup",
+                "note": "Review how this destination is set up",
+                "sections": [
+                    {
+                        "groups": [
+                            {
+                                "title": "Connection settings",
+                                "note": "Update your connection settings here",
+                                "icon": "settings",
+                                "fields": [
+                                    {
+                                        "type": "textInput",
+                                        "label": "API Key",
+                                        "note": [
+                                            "Edit your API key here. You can find your API key by going to your project in Amplitude and looking in the ",
+                                            {
+                                                "text": "general tab",
+                                                "link": "https://help.amplitude.com/hc/en-us/articles/360058073772-Create-and-manage-organizations-and-projects#view-and-edit-your-project-information"
+                                            }
+                                        ],
+                                        "configKey": "apiKey",
+                                        "regex": "^(.{1,100})$",
+                                        "regexErrorMessage": "Invalid Api Key",
+                                        "placeholder": "e.g: bSjsdGYsOo9sjw23Shj",
+                                        "secret": true
+                                    },
+                                    {
+                                        "type": "singleSelect",
+                                        "label": "Residency server",
+                                        "configKey": "residencyServer",
+                                        "note": "Edit your Amplitude server selection here",
+                                        "options": [
+                                            {
+                                                "label": "Standard Server",
+                                                "value": "standard"
+                                            },
+                                            {
+                                                "label": "EU Residency Server",
+                                                "value": "EU"
+                                            }
+                                        ],
+                                        "default": "standard"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "groups": [
+                            {
+                                "title": "Connection mode",
+                                "note": [
+                                    "Update how you want to route events from your source to destination. ",
+                                    {
+                                        "text": "Get help deciding",
+                                        "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                                    }
+                                ],
+                                "icon": "sliders",
+                                "fields": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "title": "Configuration settings",
+                "note": "Manage the settings for your destination",
+                "sections": [
+                    {
+                        "groups": [
+                            {
+                                "title": "Page settings",
+                                "note": "Set how you want to send your page calls to Amplitude",
+                                "icon": "file",
+                                "callout": {
+                                    "message": "We suggest checking your event volume setup with Amplitude prior to configuring this section",
+                                    "type": "info"
+                                },
+                                "preRequisites": {
+                                    "fields": [
+                                        {
+                                            "configKey": "connectionModes.mobileDevice",
+                                            "value": true
+                                        },
+                                        {
+                                            "configKey": "connectionModes.webDevice",
+                                            "value": true
+                                        }
+                                    ],
+                                    "condition": "or"
+                                },
+                                "fields": [
+                                    {
+                                        "type": "checkbox",
+                                        "label": "Track all Pages to Amplitude",
+                                        "configKey": "trackAllPages",
+                                        "note": "Send all pageview events to Amplitude with either \u201cLoaded a page\u201d or \u201cViewed a screen\u201d event names",
+                                        "default": false
+                                    },
+                                    {
+                                        "type": "checkbox",
+                                        "label": "Track Categorized Pages to Amplitude",
+                                        "configKey": "trackCategorizedPages",
+                                        "note": "Any page call with a category will be sent to Amplitude as either a \u201cLoaded {Category} Page\u201d or \u201cViewed {Category} Screen\u201d event",
+                                        "default": true
+                                    },
+                                    {
+                                        "type": "checkbox",
+                                        "label": "Track Named Pages to Amplitude",
+                                        "configKey": "trackNamedPages",
+                                        "note": "Any page call with a name will be sent to Amplitude as either a \u201cLoaded {Name} Page\u201d or \u201cViewed {Name} Screen\u201d event",
+                                        "default": true
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Identify and Group settings",
+                        "note": "Set how you want your Group or Identify call user properties to be sent to Amplitude",
+                        "icon": "magnifyingGlass",
+                        "groups": [
+                            {
+                                "title": "Group: traits",
+                                "note": "Set the properties of particular groups. A group is an object that a set of users belong to (e.g., organization, company, team)",
+                                "fields": [
+                                    {
+                                        "type": "textInput",
+                                        "label": "Group name trait",
+                                        "note": "Specify the type of group (group_type) for your group calls to Amplitude. Examples of a group_type could be: Org ID, Org Name, or Industry",
+                                        "configKey": "groupTypeTrait",
+                                        "placeholder": "e.g: company_id",
+                                        "regex": "^(.{0,100})$",
+                                        "regexErrorMessage": "Invalid Group Name Trait"
+                                    },
+                                    {
+                                        "type": "textInput",
+                                        "label": "Group value trait",
+                                        "note": "Specify the group value (group_value) for your group calls to Amplitude. For example, if you set group_type: \u201cindustry\u201d, group_value might be \u201cretail\u201d",
+                                        "configKey": "groupValueTrait",
+                                        "placeholder": "e.g: company_name",
+                                        "regex": "^(.{0,100})$",
+                                        "regexErrorMessage": "Invalid Group Name Trait"
+                                    }
+                                ]
+                            },
+                            {
+                                "title": "Identify: traits",
+                                "note": "Customize how you want to send your Identify traits",
+                                "fields": [
+                                    {
+                                        "type": "tagInput",
+                                        "label": "Traits to increment",
+                                        "note": "Input separate traits by pressing \u2018Enter\u2019 after each trait. Set the traits to increment on an identify call. These traits will then be incremented by the numerical value associated with the trait in your identify call.",
+                                        "configKey": "traitsToIncrement",
+                                        "tagKey": "traits",
+                                        "placeholder": "e.g: Revenue",
+                                        "default": [
+                                            {
+                                                "traits": ""
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "tagInput",
+                                        "label": "Traits to set once",
+                                        "note": "Input separate traits by pressing \u2018Enter\u2019 after each trait. Specify the traits that should be set once. This prevents overriding the property value.",
+                                        "configKey": "traitsToSetOnce",
+                                        "tagKey": "traits",
+                                        "placeholder": "e.g: lastName",
+                                        "default": [
+                                            {
+                                                "traits": ""
+                                            }
+                                        ],
+                                        "preRequisites": {
+                                            "fields": [
+                                                {
+                                                    "configKey": "connectionModes.cloud",
+                                                    "value": true
+                                                },
+                                                {
+                                                    "configKey": "connectionModes.mobileDevice",
+                                                    "value": true
+                                                }
+                                            ],
+                                            "condition": "or"
+                                        }
+                                    },
+                                    {
+                                        "type": "tagInput",
+                                        "label": "Traits to append",
+                                        "note": "Input separate traits by pressing \u2018Enter\u2019 after each trait. Append a value or multiple values to a user property array",
+                                        "configKey": "traitsToAppend",
+                                        "tagKey": "traits",
+                                        "placeholder": "e.g: createdAt",
+                                        "default": [
+                                            {
+                                                "traits": ""
+                                            }
+                                        ],
+                                        "preRequisites": {
+                                            "fields": [
+                                                {
+                                                    "configKey": "connectionModes.cloud",
+                                                    "value": true
+                                                },
+                                                {
+                                                    "configKey": "connectionModes.mobileDevice",
+                                                    "value": true
+                                                }
+                                            ],
+                                            "condition": "or"
+                                        }
+                                    },
+                                    {
+                                        "type": "tagInput",
+                                        "label": "Traits to prepend",
+                                        "note": "Input separate traits by pressing \u2018Enter\u2019 after each trait. Prepend a value or multiple values to a user property array",
+                                        "configKey": "traitsToPrepend",
+                                        "tagKey": "traits",
+                                        "placeholder": "e.g: createdAt",
+                                        "default": [
+                                            {
+                                                "traits": ""
+                                            }
+                                        ],
+                                        "preRequisites": {
+                                            "fields": [
+                                                {
+                                                    "configKey": "connectionModes.cloud",
+                                                    "value": true
+                                                },
+                                                {
+                                                    "configKey": "connectionModes.mobileDevice",
+                                                    "value": true
+                                                }
+                                            ],
+                                            "condition": "or"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Destination settings",
+                        "note": "Configure advanced destination-specific settings here",
+                        "icon": "settings",
+                        "groups": [
+                            {
+                                "title": "Amplitude IT",
+                                "note": "Configure a few advanced Amplitude settings here",
+                                "fields": [
+                                    {
+                                        "type": "textInput",
+                                        "label": "Secret key",
+                                        "configKey": "apiSecret",
+                                        "note": [
+                                            "Enter your Amplitude Secret Key to delete users. To find your Secret Key, go to your project in Amplitude and look in the ",
+                                            {
+                                                "text": "general tab",
+                                                "link": "https://help.amplitude.com/hc/en-us/articles/360058073772-Create-and-manage-organizations-and-projects#view-and-edit-your-project-information"
+                                            }
+                                        ],
+                                        "regex": "^(.{0,100})$",
+                                        "regexErrorMessage": "Invalid Api Key",
+                                        "placeholder": "e.g: bSjsdGYsOo9sjw23Shj",
+                                        "secret": true
+                                    },
+                                    {
+                                        "type": "textInput",
+                                        "label": "Version Name",
+                                        "note": "Assign a version name for your page, and we\u2019ll send it to Amplitude for more detailed events",
+                                        "configKey": "versionName",
+                                        "regex": "^(.{0,100})$",
+                                        "regexErrorMessage": "Invalid Version Name",
+                                        "placeholder": "e.g: 1.12.3",
+                                        "secret": false,
+                                        "preRequisites": {
+                                            "fields": [
+                                                {
+                                                    "configKey": "connectionModes.webDevice",
+                                                    "value": true
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "type": "checkbox",
+                                        "label": "Map device brand",
+                                        "note": "Capture brand, manufacturer, and model information for mobile devices",
+                                        "configKey": "mapDeviceBrand",
+                                        "default": false,
+                                        "preRequisites": {
+                                            "fields": [
+                                                {
+                                                    "configKey": "connectionModes.mobileDevice",
+                                                    "value": true
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "title": "eCommerce settings",
+                                "note": "Define how you want your \u2018Order Completed\u2019 events to be passed to Amplitude",
+                                "preRequisites": {
+                                    "fields": [
+                                        {
+                                            "configKey": "connectionModes.cloud",
+                                            "value": true
+                                        }
+                                    ]
+                                },
+                                "fields": [
+                                    {
+                                        "type": "checkbox",
+                                        "label": "Track products as a single event",
+                                        "note": "An array of products will be tracked as a single event. The event will be passed as the original event name, and all the products as properties",
+                                        "configKey": "trackProductsOnce",
+                                        "default": false
+                                    },
+                                    {
+                                        "type": "checkbox",
+                                        "label": "Track Revenue per product",
+                                        "note": "Track the revenue of each product in an event individually. Otherwise, the event will be sent as an aggregate revenue of all products",
+                                        "configKey": "trackRevenuePerProduct",
+                                        "default": false
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Other settings",
+                        "note": "Configure advanced RudderStack features here",
+                        "icon": "otherSettings",
+                        "groups": [
+                            {
+                                "title": "Client-side event filtering",
+                                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                                "preRequisites": {
+                                    "fields": [
+                                        {
+                                            "configKey": "connectionModes.webDevice",
+                                            "value": true
+                                        },
+                                        {
+                                            "configKey": "connectionModes.mobileDevice",
+                                            "value": true
+                                        }
+                                    ],
+                                    "condition": "or"
+                                },
+                                "fields": [
+                                    {
+                                        "type": "singleSelect",
+                                        "label": "Choose if you want to turn on events filtering:",
+                                        "configKey": "eventFilteringOption",
+                                        "note": "You must select either allowlist or denylist to enable events filtering",
+                                        "options": [
+                                            {
+                                                "label": "Disabled",
+                                                "value": "disable"
+                                            },
+                                            {
+                                                "label": "Filter via allowlist",
+                                                "value": "whitelistedEvents"
+                                            },
+                                            {
+                                                "label": "Filter via denylist",
+                                                "value": "blacklistedEvents"
+                                            }
+                                        ],
+                                        "default": "disable"
+                                    },
+                                    {
+                                        "type": "tagInput",
+                                        "label": "Allowlisted events",
+                                        "note": "Input separate events by pressing \u2018Enter\u2019.\nInput the events you want to allowlist.",
+                                        "configKey": "whitelistedEvents",
+                                        "tagKey": "eventName",
+                                        "placeholder": "e.g: Anonymous page visit",
+                                        "default": [
+                                            {
+                                                "eventName": ""
+                                            }
+                                        ],
+                                        "preRequisites": {
+                                            "fields": [
+                                                {
+                                                    "configKey": "eventFilteringOption",
+                                                    "value": "whitelistedEvents"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "type": "tagInput",
+                                        "label": "Denylisted events",
+                                        "note": "Input separate events by pressing \u2018Enter\u2019.\nInput the events you want to denylist. ",
+                                        "configKey": "blacklistedEvents",
+                                        "tagKey": "eventName",
+                                        "placeholder": "e.g: Anonymous page visit",
+                                        "default": [
+                                            {
+                                                "eventName": ""
+                                            }
+                                        ],
+                                        "preRequisites": {
+                                            "fields": [
+                                                {
+                                                    "configKey": "eventFilteringOption",
+                                                    "value": "blacklistedEvents"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "title": "OneTrust cookie consent settings",
+                                "note": [
+                                    "Enter your OneTrust category names if you have them configured. ",
+                                    {
+                                        "text": "Learn more ",
+                                        "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                                    },
+                                    "about RudderStack\u2019s OneTrust Consent Manager feature."
+                                ],
+                                "fields": [
+                                    {
+                                        "type": "tagInput",
+                                        "label": "Cookie category name",
+                                        "note": "Input your OneTrust category names by pressing \u2018Enter\u2019 after each entry",
+                                        "configKey": "oneTrustCookieCategories",
+                                        "tagKey": "oneTrustCookieCategory",
+                                        "placeholder": "e.g: Credit card visit",
+                                        "default": [
+                                            {
+                                                "oneTrustCookieCategory": ""
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
             }
-          ],
-          "configKey": "preferAnonymousIdForDeviceId",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Set Device ID From URL Parameter",
-          "note": "Set the device ID by parsing the URL parameter from amp_device_ID",
-          "configKey": "deviceIdFromUrlParam",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Force HTTPS",
-          "note": "Upload events to the HTTPS endpoint instead of the embedding site’s protocol",
-          "configKey": "forceHttps",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Track GCLID",
-          "note": "Capture GCLID URL parameters along with the user’s initial_gclid parameters",
-          "configKey": "trackGclid",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Track referrer information",
-          "note": "Capture the user’s referrer, initial referrer, and referring domain as user properties",
-          "configKey": "trackReferrer",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Track UTM properties",
-          "note": "Capture UTM parameters as user properties by either parsing the query string or from the _utmz cookie",
-          "configKey": "trackUtmProperties",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Save Referrer, URL Params, GCLID only once per session",
-          "note": "Track GCLID, referrer, and UTM parameters only once per session, ignoring any new values which may enter a user’s session",
-          "configKey": "saveParamsReferrerOncePerSession",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Reset referrer or UTM params for new sessions",
-          "note": "Set referrer and utm_parameter properties to null upon instantiating a new session; otherwise, existing referrer and utm_parameter values will be passed to each new session",
-          "configKey": "unsetParamsReferrerOnNewSession",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Batch events prior to upload",
-          "note": "Batch events to upload only after the number of queued events is greater than or equal to eventUploadThreshold, or after events to upload after eventUploadPeriodMillis milliseconds have passed since the first unsent event",
-          "configKey": "batchEvents",
-          "default": false
-        },
-        {
-          "type": "textInput",
-          "label": "Batch event upload period (ms)",
-          "note": "Set the time limit (in ms) between batch uploads",
-          "configKey": "eventUploadPeriodMillis",
-          "default": "30000",
-          "regex": "^([0-9]{0,100})$",
-          "regexErrorMessage": "Invalid Value",
-          "placeholder": "e.g: 30000"
-        },
-        {
-          "type": "textInput",
-          "label": "Batch event upload threshold",
-          "note": "Set the minimum number of events to be sent in a batch",
-          "configKey": "eventUploadThreshold",
-          "regex": "^([0-9]{0,100})$",
-          "regexErrorMessage": "Invalid Value",
-          "default": "30",
-          "placeholder": "e.g: 30"
+        ],
+        "sdkTemplate": {
+            "title": "SDK settings",
+            "note": "not visible in the ui",
+            "fields": [
+                {
+                    "type": "checkbox",
+                    "label": "Enable location listening",
+                    "note": "Capture user location information for anyone who has granted app location permission",
+                    "configKey": "enableLocationListening",
+                    "default": true
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Track session events",
+                    "note": "Send start and end session events",
+                    "configKey": "trackSessionEvents",
+                    "default": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Use Advertising ID for Device ID",
+                    "note": "Send Advertising ID instead of Device ID to Amplitude",
+                    "configKey": "useAdvertisingIdForDeviceId",
+                    "default": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Use IDFA for Device ID",
+                    "note": "Send the IDFA instead of device ID to Amplitude",
+                    "configKey": "useIdfaAsDeviceId",
+                    "default": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Replace Device ID with Anonymous ID",
+                    "note": [
+                        "Use anonymous ID instead of device ID. The anonymous ID can be generated by RudderStack\u2019s SDK. Or, you can set it yourselves using the ",
+                        {
+                            "text": "setAnonymousID() method.",
+                            "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/supported-api/#overriding-anonymous-id"
+                        }
+                    ],
+                    "configKey": "preferAnonymousIdForDeviceId",
+                    "default": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Set Device ID From URL Parameter",
+                    "note": "Set the device ID by parsing the URL parameter from amp_device_ID",
+                    "configKey": "deviceIdFromUrlParam",
+                    "default": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Force HTTPS",
+                    "note": "Upload events to the HTTPS endpoint instead of the embedding site\u2019s protocol",
+                    "configKey": "forceHttps",
+                    "default": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Track GCLID",
+                    "note": "Capture GCLID URL parameters along with the user\u2019s initial_gclid parameters",
+                    "configKey": "trackGclid",
+                    "default": true
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Track referrer information",
+                    "note": "Capture the user\u2019s referrer, initial referrer, and referring domain as user properties",
+                    "configKey": "trackReferrer",
+                    "default": true
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Track UTM properties",
+                    "note": "Capture UTM parameters as user properties by either parsing the query string or from the _utmz cookie",
+                    "configKey": "trackUtmProperties",
+                    "default": true
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Save Referrer, URL Params, GCLID only once per session",
+                    "note": "Track GCLID, referrer, and UTM parameters only once per session, ignoring any new values which may enter a user\u2019s session",
+                    "configKey": "saveParamsReferrerOncePerSession",
+                    "default": true
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Reset referrer or UTM params for new sessions",
+                    "note": "Set referrer and utm_parameter properties to null upon instantiating a new session; otherwise, existing referrer and utm_parameter values will be passed to each new session",
+                    "configKey": "unsetParamsReferrerOnNewSession",
+                    "default": false
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Batch events prior to upload",
+                    "note": "Batch events to upload only after the number of queued events is greater than or equal to eventUploadThreshold, or after events to upload after eventUploadPeriodMillis milliseconds have passed since the first unsent event",
+                    "configKey": "batchEvents",
+                    "default": false
+                },
+                {
+                    "type": "textInput",
+                    "label": "Batch event upload period (ms)",
+                    "note": "Set the time limit (in ms) between batch uploads",
+                    "configKey": "eventUploadPeriodMillis",
+                    "default": "30000",
+                    "regex": "^([0-9]{0,100})$",
+                    "regexErrorMessage": "Invalid Value",
+                    "placeholder": "e.g: 30000"
+                },
+                {
+                    "type": "textInput",
+                    "label": "Batch event upload threshold",
+                    "note": "Set the minimum number of events to be sent in a batch",
+                    "configKey": "eventUploadThreshold",
+                    "regex": "^([0-9]{0,100})$",
+                    "regexErrorMessage": "Invalid Value",
+                    "default": "30",
+                    "placeholder": "e.g: 30"
+                }
+            ]
         }
-      ]
     }
-  }
 }
