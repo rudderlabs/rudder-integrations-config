@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.23.0...v1.23.1) (2023-04-19)
+
+
+### Bug Fixes
+
+* updates shopify to 6.2.3 ([08e41d2](https://github.com/rudderlabs/rudder-config-schema/commit/08e41d2d46d4a01fd53be57041437d23a664fa36))
+
 ## [1.23.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.22.1...v1.23.0) (2023-04-17)
 
 
