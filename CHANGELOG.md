@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.23.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.22.1...v1.23.0) (2023-04-17)
+
+
+### Features
+
+* braze new UI ([#542](https://github.com/rudderlabs/rudder-config-schema/issues/542)) ([a8fa48c](https://github.com/rudderlabs/rudder-config-schema/commit/a8fa48c1f1773cb1f086b55f0bef77ce19593e50))
+* **mixpanel:** add identity merge dropdown ([#517](https://github.com/rudderlabs/rudder-config-schema/issues/517)) ([0113e4b](https://github.com/rudderlabs/rudder-config-schema/commit/0113e4bb508d73ede5bbfa5df91ab0af4dc85d9e))
+
+
+### Bug Fixes
+
+* **cdk v2:** putting webhook back to cdk v2 ([#556](https://github.com/rudderlabs/rudder-config-schema/issues/556)) ([d47f1b7](https://github.com/rudderlabs/rudder-config-schema/commit/d47f1b707eb509887699d576936b0b46f833826d))
+* **GA4:** remove send_to parameter as configurable option  ([#522](https://github.com/rudderlabs/rudder-config-schema/issues/522)) ([f07ab0f](https://github.com/rudderlabs/rudder-config-schema/commit/f07ab0f7fda59af78b779ab106ed3a3896aaec5b))
+
+### [1.22.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.22.0...v1.22.1) (2023-04-17)
+
+
+### Bug Fixes
+
+* **cdk v2:** temporarily moving webhook from cdk v2 to native ([de7a6f4](https://github.com/rudderlabs/rudder-config-schema/commit/de7a6f4bc4710a294ee53cb5d6330309b1d3352d))
+
+## [1.22.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.21.3...v1.22.0) (2023-04-13)
+
+
+### Features
+
+* braze UI update ([#544](https://github.com/rudderlabs/rudder-config-schema/issues/544)) ([e48f509](https://github.com/rudderlabs/rudder-config-schema/commit/e48f509f73e52eb51b3c16f924992e2a46032faa))
+
 ### [1.21.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.21.2...v1.21.3) (2023-04-12)
 
 
