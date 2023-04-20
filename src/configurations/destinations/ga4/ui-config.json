@@ -285,6 +285,26 @@
           "configKey": "extendPageViewParams",
           "note": "Enabling this extends the set of properties automatically collected to include 'URL' and 'search'.  Note that GA4 has a limit on the number of unique properties per event name",
           "default": false
+        },
+        {
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "connectionModes.cloud",
+                "value": true
+              },
+              {
+                "configKey": "connectionModes.webDevice",
+                "value": true
+              }
+            ],
+            "condition": "and"
+          },
+          "type": "checkbox",
+          "label": "Override gtag session_id with rudderstack session_id",
+          "configKey": "overrideSessionId",
+          "note": "By enabling this rudderstack will override gtag session_id with it's own session_id. For all the hybrid mode events rudderstack session_id will be sent to GA4",
+          "default": false
         }
       ]
     }
