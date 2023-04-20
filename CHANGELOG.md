@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.24.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.23.1...v1.24.0) (2023-04-20)
+
+
+### Features
+
+* **ga4:** override gtag session_id configuration option ([#565](https://github.com/rudderlabs/rudder-config-schema/issues/565)) ([92813a3](https://github.com/rudderlabs/rudder-config-schema/commit/92813a3c6e1d73c0a8581938c043dd0aefc376fa))
+
 ### [1.23.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.23.0...v1.23.1) (2023-04-19)
 
 
