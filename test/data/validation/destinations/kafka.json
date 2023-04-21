@@ -1,74 +1,9 @@
 [
   {
     "config": {
-      "hostName": "rudder.com",
-      "port": "443",
-      "topic": "test-topic",
-      "sslEnabled": false,
-      "useSSH": false
-    },
-    "result": true
-  },
-  {
-    "config": {
-      "hostName": "b-2.helloworld.123ninh.c23.kafka.us-east-1.amazonaws.com",
-      "port": "443",
-      "topic": "test.topic"
-    },
-    "result": true
-  },
-  {
-    "config": {
       "hostName": "rudder$.com",
       "port": "443",
-      "topic": "test-topic",
-      "sslEnabled": true,
-      "useSSH": true,
-      "sshHost": "randomhost",
-      "sshPort": "1234",
-      "sshUser": "random-user"
-    },
-    "result": false
-  },
-  {
-    "config": {
-      "hostName": "b-2.helloworld.123ninh.c23.kafka.us-east-1.amazonaws.com, b-3.helloworld.123ninh.c23.kafka.us-east-1.amazonaws.com",
-      "port": "443",
-      "topic": "test.topic"
-    },
-    "result": true
-  },
-  {
-    "config": {
-      "hostName": "invalid_hostName#",
-      "port": "443",
-      "topic": "test.topic"
-    },
-    "result": false
-  },  
-  {
-    "config": {
-      "hostName": "localhost",
-      "port": "443",
-      "topic": "test-topic",
-      "sslEnabled": false,
-      "useSSH": false
-    },
-    "result": true
-  },
-  {
-    "config": {
-      "hostName": "b-2.helloworld.123ninh.c23.kafka.us-east-1.amazonaws.com",
-      "port": "443",
-      "topic": "test.topic"
-    },
-    "result": true
-  },
-  {
-    "config": {
-      "hostName": "b-2.helloworld.123ninh.c23.kafka.us-east-1.amazonaws.com",
-      "port": "443",
-      "topic": "$invalid_topic_name"
+      "topic": "test-topic"
     },
     "result": false
   },
@@ -76,30 +11,64 @@
     "config": {
       "hostName": "b-2.helloworld.123ninh.c23.kafka.us-east-1.amazonaws.com",
       "port": "443",
-      "topic": "test%topic",
-      "sslEnabled": true,
-      "useSSH": true,
-      "sshHost": "randomhost",
-      "sshPort": "1234",
-      "sshUser": "random-user"
+      "topic": "test-topic"
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "hostName": "rudder.com",
+      "port": "65536",
+      "topic": "test-topic"
     },
     "result": false
   },
   {
     "config": {
       "hostName": "rudder.com",
-      "port": "4324237843",
-      "topic": "test-topic",
-      "sslEnabled": false,
-      "useSSH": false
+      "port": "65535",
+      "topic": "test-topic"
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "hostName": "rudder.com",
+      "port": "65535",
+      "topic": "$testtopic"
     },
     "result": false
   },
   {
     "config": {
-      "hostName": "b-2.helloworld.123ninh.c23.kafka.us-east-1.amazonaws.com",
-      "port": "invalid_port",
+      "hostName": "rudder.com",
+      "port": "65535",
+      "topic": "%testtopic"
+    },
+    "result": false
+  },
+  {
+    "config": {
+      "hostName": "rudder.com",
+      "port": "65535",
+      "topic": "test-topic"
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "hostName": "rudder.com",
+      "port": "65535",
       "topic": "test.topic"
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "hostName": "rudder.com",
+      "port": "443",
+      "topic": "test-topic",
+      "sslEnabled": true
     },
     "result": false
   },
@@ -109,16 +78,41 @@
       "port": "443",
       "topic": "test-topic",
       "sslEnabled": true,
+      "caCertificate": "random"
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "hostName": "rudder.com",
+      "port": "65535",
+      "topic": "test.topic",
+      "sslEnabled": true,
+      "caCertificate": "random",
       "useSSH": true
     },
     "result": false
   },
   {
     "config": {
-      "hostName": "b-2.helloworld.123ninh.c23.kafka.us-east-1.amazonaws.com",
-      "port": "443",
-      "topic": "test-topic",
+      "hostName": "rudder.com",
+      "port": "65535",
+      "topic": "test.topic",
       "sslEnabled": true,
+      "caCertificate": "random",
+      "useSSH": true,
+      "sshHost": "randomhost",
+      "sshUser": "random-user"
+    },
+    "result": false
+  },
+  {
+    "config": {
+      "hostName": "rudder.com",
+      "port": "65535",
+      "topic": "test.topic",
+      "sslEnabled": true,
+      "caCertificate": "random",
       "useSSH": true,
       "sshHost": "randomhost",
       "sshPort": "1234",
@@ -129,26 +123,74 @@
   {
     "config": {
       "hostName": "rudder.com",
-      "port": "443",
-      "topic": "test-topic",
+      "port": "65535",
+      "topic": "test.topic",
       "sslEnabled": true,
+      "caCertificate": "random",
       "useSSH": true,
-      "sshHost": "ran#domhost",
+      "sshHost": "randomhost",
       "sshPort": "1234",
-      "sshUser": "random-user"
+      "sshUser": "random-user",
+      "useSASL": true
     },
     "result": false
   },
   {
     "config": {
-      "hostName": "b-2.helloworld.123ninh.c23.kafka.us-east-1.amazonaws.com",
-      "port": "443",
+      "hostName": "rudder.com",
+      "port": "65535",
       "topic": "test.topic",
       "sslEnabled": true,
+      "caCertificate": "random",
       "useSSH": true,
       "sshHost": "randomhost",
       "sshPort": "1234",
-      "sshUser": "random-user"
+      "sshUser": "random-user",
+      "useSASL": true,
+      "saslType": "random",
+      "username": "random-user",
+      "password": "Rudder123"
+    },
+    "result": false
+  },
+  {
+    "config": {
+      "hostName": "rudder.com",
+      "port": "65535",
+      "topic": "test.topic",
+      "sslEnabled": true,
+      "caCertificate": "random",
+      "useSSH": true,
+      "sshHost": "randomhost",
+      "sshPort": "1234",
+      "sshUser": "random-user",
+      "useSASL": true,
+      "saslType": "plain",
+      "username": "random-user",
+      "password": "Rudder123"
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "hostName": "hello.world",
+      "port": "65535",
+      "topic": "foo",
+      "sslEnabled": true,
+      "caCertificate": "asd",
+      "useSSH": true,
+      "sshHost": "something",
+      "sshPort": "65535",
+      "sshUser": "linux",
+      "useSASL": true,
+      "saslType": "plain",
+      "username": "foo",
+      "password": "Rudder123",
+      "convertToAvro": true,
+      "avroSchemas": {
+        "schemaId": "foo",
+        "schema": "bar"
+      }
     },
     "result": true
   }
