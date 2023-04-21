@@ -1,88 +1,86 @@
 {
-    "uiConfig": [
+  "uiConfig": [
+    {
+      "title": "Connection Credentials",
+      "docLinks": {
+        "jsonMapperUseInstructions": "https://docs.rudderstack.com/reverse-etl/amazon-s3/#specifying-the-data-to-import",
+        "setupInstructions": "https://docs.rudderstack.com/reverse-etl/amazon-s3"
+      },
+      "nameField": "rudder_account_name",
+      "secretFields": ["accessKey"],
+      "fields": [
         {
-            "title": "Connection Credentials",
-            "docLinks": {
-                "jsonMapperUseInstructions": "https://docs.rudderstack.com/reverse-etl/amazon-s3/#specifying-the-data-to-import",
-                "setupInstructions": "https://docs.rudderstack.com/reverse-etl/amazon-s3"
+          "type": "singleSelect",
+          "label": "Connection Mode",
+          "value": "connectionMode",
+          "options": [
+            {
+              "name": "Cross-Account Role (recommended)",
+              "value": "crossAccountRole"
             },
-            "nameField": "rudder_account_name",
-            "secretFields": [
-                "accessKey"
-            ],
-            "fields": [
-                {
-                    "type": "singleSelect",
-                    "label": "Connection Mode",
-                    "value": "connectionMode",
-                    "options": [
-                        {
-                            "name": "Cross-Account Role (recommended)",
-                            "value": "crossAccountRole"
-                        },
-                        {
-                            "name": "Access Key",
-                            "value": "accessKey"
-                        }
-                    ],
-                    "defaultOption": {
-                        "value": "crossAccountRole"
-                    }
-                },
-                {
-                    "type": "textInput",
-                    "label": "Account Name",
-                    "value": "rudder_account_name",
-                    "regex": "^(.{0,100})$",
-                    "regexErrorMessage": "Invalid Value",
-                    "required": true,
-                    "trim": true
-                },
-                {
-                    "type": "textInput",
-                    "label": "AWS Access Key ID",
-                    "value": "accessKeyID",
-                    "regex": "^(.{0,100})$",
-                    "regexErrorMessage": "Invalid Value",
-                    "required": true,
-                    "placeholder": "e.g: access-key-id",
-                    "secret": true,
-                    "trim": true,
-                    "preRequisiteField": {
-                        "name": "connectionMode",
-                        "selectedValue": "accessKey"
-                    }
-                },
-                {
-                    "type": "textInput",
-                    "label": "AWS Secret Access Key",
-                    "value": "accessKey",
-                    "regex": "^(.{0,100})$",
-                    "regexErrorMessage": "Invalid Value",
-                    "inputFieldType": "password",
-                    "required": true,
-                    "placeholder": "e.g: secret-access-key",
-                    "secret": true,
-                    "preRequisiteField": {
-                        "name": "connectionMode",
-                        "selectedValue": "accessKey"
-                    }
-                },
-                {
-                    "type": "textInput",
-                    "label": "Role ARN",
-                    "value": "roleARN",
-                    "regex": "^(.{0,100})$",
-                    "regexErrorMessage": "Invalid Role ARN",
-                    "required": true,
-                    "placeholder": "arn:aws:iam::xxxx:role/xxxx",
-                    "preRequisiteField": {
-                        "name": "connectionMode",
-                        "selectedValue": "crossAccountRole"
-                    },
-                    "footerNote": "Please follow our docs to create the role ARN. For creating the role add the Account ID: `422074288268` and use Workspace Id as the External Id."
-                }
-            ]
+            {
+              "name": "Access Key",
+              "value": "accessKey"
+            }
+          ],
+          "defaultOption": {
+            "value": "crossAccountRole"
+          }
+        },
+        {
+          "type": "textInput",
+          "label": "Account Name",
+          "value": "rudder_account_name",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "required": true,
+          "trim": true
+        },
+        {
+          "type": "textInput",
+          "label": "AWS Access Key ID",
+          "value": "accessKeyID",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "required": true,
+          "placeholder": "e.g: access-key-id",
+          "secret": true,
+          "trim": true,
+          "preRequisiteField": {
+            "name": "connectionMode",
+            "selectedValue": "accessKey"
+          }
+        },
+        {
+          "type": "textInput",
+          "label": "AWS Secret Access Key",
+          "value": "accessKey",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "inputFieldType": "password",
+          "required": true,
+          "placeholder": "e.g: secret-access-key",
+          "secret": true,
+          "preRequisiteField": {
+            "name": "connectionMode",
+            "selectedValue": "accessKey"
+          }
+        },
+        {
+          "type": "textInput",
+          "label": "Role ARN",
+          "value": "roleARN",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Role ARN",
+          "required": true,
+          "placeholder": "arn:aws:iam::xxxx:role/xxxx",
+          "preRequisiteField": {
+            "name": "connectionMode",
+            "selectedValue": "crossAccountRole"
+          },
+          "footerNote": "Please follow our docs to create the role ARN. For creating the role add the Account ID: `422074288268` and use Workspace Id as the External Id."
         }
-    ]
+      ]
+    }
+  ]
 }
