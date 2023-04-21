@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.24.0...v1.24.1) (2023-04-21)
+
+
+### Bug Fixes
+
+* revert displayNames for BingAds, GA, Kissmetrics ([b5645d5](https://github.com/rudderlabs/rudder-config-schema/commit/b5645d590bda0ce7ae89daadbe57cc78dbb96680))
+
 ## [1.24.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.23.1...v1.24.0) (2023-04-20)
 
 
