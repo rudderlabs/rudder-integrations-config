@@ -92,8 +92,7 @@ export function validateHybridModeCloudConfig(destinationDefinition: any): boole
     return { isValid: true, valList: subsetValues };
   };
   if (destinationDefinition?.config?.hybridModeCloudEventsFilter) {
-    const hybridModeCloudEventsFilter = destinationDefinition?.config?.hybridModeCloudEventsFilter;
-    const supportedSourceTypes = destinationDefinition?.config?.supportedSourceTypes;
+    const { hybridModeCloudEventsFilter, supportedSourceTypes } = destinationDefinition.config;
 
     const { isValid: isSourceTypeValid, valList: sourceTypes } =
       checkForValidaObjectAndValidateWithMasterList(
@@ -132,7 +131,7 @@ export function validateHybridModeCloudConfig(destinationDefinition: any): boole
 
       // basic-check
       return eventProperties.some((eventProperty) =>
-        Array.isArray(sourceTypeFilterMap?.[eventProperty]),
+        Array.isArray(sourceTypeFilterMap[eventProperty]),
       );
     });
   }
@@ -147,7 +146,7 @@ export async function validateDestinationDefinitions(destName: string): Promise<
   return isValidHybridModeCloudConfig;
 }
 
-export function validateSourceType(sourceDefinition: Record<string, any>) {
+export function validateSourceType(sourceDefinition: any) {
   // currently these are the valid source-types according to the ServiceUtil.getSourceType logic in config-backend
   const validSourceTypes = [
     'cloud',

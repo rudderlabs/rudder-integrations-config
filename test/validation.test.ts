@@ -225,6 +225,25 @@ describe('Destination Definition wrong configuration tests', () => {
       expect(isValid).toBe(testCase.expected);
     });
   });
+
+  it('should return true, destinationDefinition is undefined', () => {
+    expect(validateHybridModeCloudConfig(undefined)).toEqual(true);
+  });
+  it('should return true, destinationDefinition.config is undefined', () => {
+    expect(validateHybridModeCloudConfig({ config: undefined })).toEqual(true);
+  });
+  it('should return true, destinationDefinition.config.supportedSourceTypes is undefined', () => {
+    expect(validateHybridModeCloudConfig({ config: { supportedSourceTypes: undefined } })).toEqual(
+      true,
+    );
+  });
+  it('should return true, destinationDefinition.config.hybridModeCloudEventsFilter is undefined', () => {
+    expect(
+      validateHybridModeCloudConfig({
+        config: { supportedSourceTypes, hybridModeCloudEventsFilter: undefined },
+      }),
+    ).toEqual(true);
+  });
 });
 
 describe('Source Definition validation tests', () => {
@@ -236,5 +255,8 @@ describe('Source Definition validation tests', () => {
 
   it('sourceDefinition does not have valid type', () => {
     expect(validateSourceType({ type: 'someSource' })).toEqual(false);
+  });
+  it('sourceDefinition undefined', () => {
+    expect(validateSourceType(undefined)).toEqual(false);
   });
 });
