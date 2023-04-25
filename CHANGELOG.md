@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.26.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.26.1...v1.26.2) (2023-04-25)
+
+
+### Bug Fixes
+
+* revert kafka over ssh change via control-plane ([#591](https://github.com/rudderlabs/rudder-config-schema/issues/591)) ([ed835b8](https://github.com/rudderlabs/rudder-config-schema/commit/ed835b849c18a3a5db1f08caff96bacee608f9d9))
+
 ### [1.26.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.26.0...v1.26.1) (2023-04-25)
 
 
