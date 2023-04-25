@@ -7,7 +7,7 @@
           "type": "textInput",
           "label": "Host Name(s)",
           "value": "hostName",
-          "regex": "^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\\.[A-Za-z0-9-]{1,63})*(,\\s*(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\\.[A-Za-z0-9-]{1,63})*)*$",
+          "regex": "^((,|^)[^\\s]*)*$",
           "regexErrorMessage": "Invalid Host Name(s)",
           "required": true,
           "placeholder": "e.g: localhost",
@@ -17,7 +17,7 @@
           "type": "textInput",
           "label": "Port",
           "value": "port",
-          "regex": "^([1-9]|[1-9][0-9]{1,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$",
+          "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Port",
           "required": true,
           "placeholder": "e.g: 9092"
@@ -26,17 +26,12 @@
           "type": "textInput",
           "label": "Topic Name",
           "value": "topic",
-          "regex": "^[a-zA-Z0-9_\\-]{1,249}$",
+          "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Topic Name",
           "required": true,
           "placeholder": "e.g: test-topic"
         },
-        {
-          "type": "checkbox",
-          "label": "SSL Enabled",
-          "value": "sslEnabled",
-          "default": true
-        },
+        { "type": "checkbox", "label": "SSL Enabled", "value": "sslEnabled", "default": true },
         {
           "type": "textareaInput",
           "preRequisiteField": { "name": "sslEnabled", "selectedValue": true },
@@ -75,7 +70,7 @@
           "preRequisiteField": { "name": "useSASL", "selectedValue": true },
           "label": "Username",
           "value": "username",
-          "regex": "^[a-zA-Z0-9_-]{1,32}$",
+          "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid User Name",
           "required": true,
           "placeholder": "e.g: userjohn"
