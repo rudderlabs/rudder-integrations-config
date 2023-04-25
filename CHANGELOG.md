@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.25.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.24.1...v1.25.0) (2023-04-24)
+
+
+### Features
+
+* **pinterest:** update secretKeys ([#575](https://github.com/rudderlabs/rudder-config-schema/issues/575)) ([1ec812e](https://github.com/rudderlabs/rudder-config-schema/commit/1ec812eeef874eca2239f7fbfc336afce99c075f))
+* **pinterest:** version update  ([#573](https://github.com/rudderlabs/rudder-config-schema/issues/573)) ([7ca6c71](https://github.com/rudderlabs/rudder-config-schema/commit/7ca6c716d96a7ec53190698adeb911a21d2cfb04))
+
 ### [1.24.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.24.0...v1.24.1) (2023-04-21)
 
 
