@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.26.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.26.0...v1.26.1) (2023-04-25)
+
+
+### Bug Fixes
+
+* **pinterest:** remove cdk flag ([#587](https://github.com/rudderlabs/rudder-config-schema/issues/587)) ([898f17a](https://github.com/rudderlabs/rudder-config-schema/commit/898f17a1f09611c4bae15d1209fbb8fd567ceb27))
+
 ## [1.26.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.25.0...v1.26.0) (2023-04-25)
 
 
