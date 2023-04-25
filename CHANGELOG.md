@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.26.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.25.0...v1.26.0) (2023-04-25)
+
+
+### Features
+
+* **ga4:** override gtag session_id configuration option ([#559](https://github.com/rudderlabs/rudder-config-schema/issues/559)) ([14ea841](https://github.com/rudderlabs/rudder-config-schema/commit/14ea841d8db53fd4f5d2a941f4942d10f5e60581))
+* **ga4:** update ui field name && description ([429b9f3](https://github.com/rudderlabs/rudder-config-schema/commit/429b9f3dcaff5ce3b4b785e78221d8eed6e1a9e4))
+* move hardcoded ga dimensions and metrics ([#523](https://github.com/rudderlabs/rudder-config-schema/issues/523)) ([9c61fb3](https://github.com/rudderlabs/rudder-config-schema/commit/9c61fb31df5ccce083162faae66d8fa9c0dc7583))
+* onboard leanplum destination new ui config ([#475](https://github.com/rudderlabs/rudder-config-schema/issues/475)) ([26edab1](https://github.com/rudderlabs/rudder-config-schema/commit/26edab1d753a9e8bf7e993dbdaa76883d2fdd738))
+* **pinterest:** version update ([#546](https://github.com/rudderlabs/rudder-config-schema/issues/546)) ([dd245b8](https://github.com/rudderlabs/rudder-config-schema/commit/dd245b899fa00c89dee0b4dfff72317d20961efb))
+* support connection to kafka over ssh for growth customer ([#535](https://github.com/rudderlabs/rudder-config-schema/issues/535)) ([d18e45a](https://github.com/rudderlabs/rudder-config-schema/commit/d18e45a60d4a26901db42ac1905a5406f9f67b65))
+
+
+### Bug Fixes
+
+* renaming blacklist to denylist and whitelist to allowlist ([#581](https://github.com/rudderlabs/rudder-config-schema/issues/581)) ([4f9a9f7](https://github.com/rudderlabs/rudder-config-schema/commit/4f9a9f78203d743e2c16785ad23ea68f13e5382b))
+
 ## [1.25.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.24.1...v1.25.0) (2023-04-24)
 
 
