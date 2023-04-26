@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.27.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.26.2...v1.27.0) (2023-04-26)
+
+
+### Features
+
+* hide shopify source from UI ([64b867c](https://github.com/rudderlabs/rudder-config-schema/commit/64b867c9be7de41634c4bfe383e2bfa1a59377ca))
+
 ### [1.26.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.26.1...v1.26.2) (2023-04-25)
 
 
