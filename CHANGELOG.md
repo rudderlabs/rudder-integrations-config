@@ -8,7 +8,6 @@ All notable changes to this project will be documented in this file. See [standa
 ### Features
 
 * added audience support for criteo_audience ([#598](https://github.com/rudderlabs/rudder-config-schema/issues/598)) ([cbaa120](https://github.com/rudderlabs/rudder-config-schema/commit/cbaa120255ee2a827e8243c24e51514904eab05d))
-* modified to return sshPublicKey to end user ([#585](https://github.com/rudderlabs/rudder-config-schema/issues/585)) ([fe9e125](https://github.com/rudderlabs/rudder-config-schema/commit/fe9e125dc966818b4db8f592f778eb0b5105e012))
 
 
 ### Bug Fixes
