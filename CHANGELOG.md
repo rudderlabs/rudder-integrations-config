@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.28.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.27.0...v1.28.0) (2023-05-02)
+
+
+### Features
+
+* added audience support for criteo_audience ([#598](https://github.com/rudderlabs/rudder-config-schema/issues/598)) ([cbaa120](https://github.com/rudderlabs/rudder-config-schema/commit/cbaa120255ee2a827e8243c24e51514904eab05d))
+* modified to return sshPublicKey to end user ([#585](https://github.com/rudderlabs/rudder-config-schema/issues/585)) ([fe9e125](https://github.com/rudderlabs/rudder-config-schema/commit/fe9e125dc966818b4db8f592f778eb0b5105e012))
+
+
+### Bug Fixes
+
+* **GA4:** updated broken link for capture page view ([#597](https://github.com/rudderlabs/rudder-config-schema/issues/597)) ([95f9a7f](https://github.com/rudderlabs/rudder-config-schema/commit/95f9a7f739702c5435d806f0007ae9b519cc93e6))
+
 ## [1.27.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.26.2...v1.27.0) (2023-04-26)
 
 
