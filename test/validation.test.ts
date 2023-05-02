@@ -197,7 +197,7 @@ describe('Destination Definition wrong configuration tests', () => {
     },
     {
       caseName:
-        'should return false, destinationDefinition.config.hybridModeCloudEventsFilter[web] = { randomType: ["random_1", "random_2"] }',
+        'should return false, when destinationDefinition.config.hybridModeCloudEventsFilter[web] = { randomType: ["random_1", "random_2"] }',
       hybridModeCloudEventsFilter: {
         web: {
           randomType: ['random_1', 'random_2'],
@@ -207,7 +207,7 @@ describe('Destination Definition wrong configuration tests', () => {
     },
     {
       caseName:
-        'should return false, destinationDefinition.config.hybridModeCloudEventsFilter[web] = { messageType: "track" }',
+        'should return false, when destinationDefinition.config.hybridModeCloudEventsFilter[web] = { messageType: "track" }',
       hybridModeCloudEventsFilter: {
         web: {
           messageType: 'track',
@@ -217,27 +217,24 @@ describe('Destination Definition wrong configuration tests', () => {
     },
   ];
 
-  testCases.forEach((testCase) => {
-    it(testCase.caseName, () => {
-      destinationDefinition.config.hybridModeCloudEventsFilter =
-        testCase.hybridModeCloudEventsFilter;
-      const isValid = validateHybridModeCloudConfig(destinationDefinition);
-      expect(isValid).toBe(testCase.expected);
-    });
+  it.each(testCases)('$caseName', (testCase) => {
+    destinationDefinition.config.hybridModeCloudEventsFilter = testCase.hybridModeCloudEventsFilter;
+    const isValid = validateHybridModeCloudConfig(destinationDefinition);
+    expect(isValid).toBe(testCase.expected);
   });
 
-  it('should return true, destinationDefinition is undefined', () => {
+  it('should return true, when destinationDefinition is undefined', () => {
     expect(validateHybridModeCloudConfig(undefined)).toEqual(true);
   });
-  it('should return true, destinationDefinition.config is undefined', () => {
+  it('should return true, when destinationDefinition.config is undefined', () => {
     expect(validateHybridModeCloudConfig({ config: undefined })).toEqual(true);
   });
-  it('should return true, destinationDefinition.config.supportedSourceTypes is undefined', () => {
+  it('should return true, when destinationDefinition.config.supportedSourceTypes is undefined', () => {
     expect(validateHybridModeCloudConfig({ config: { supportedSourceTypes: undefined } })).toEqual(
       true,
     );
   });
-  it('should return true, destinationDefinition.config.hybridModeCloudEventsFilter is undefined', () => {
+  it('should return true, when destinationDefinition.config.hybridModeCloudEventsFilter is undefined', () => {
     expect(
       validateHybridModeCloudConfig({
         config: { supportedSourceTypes, hybridModeCloudEventsFilter: undefined },
