@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.28.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.28.1...v1.28.2) (2023-05-03)
+
+
+### Bug Fixes
+
+* empty schema for kafka to override config-be validator ([576c59a](https://github.com/rudderlabs/rudder-config-schema/commit/576c59a8c4ab008364f3e94d2f3c9bd289154506))
+* updates klaviyo to 6.2.5 ([3a593ad](https://github.com/rudderlabs/rudder-integrations-config/pull/609/commits/3a593adb47b0897aa0dc91a3132a928ee45f2593))
+
 ### [1.28.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.28.0...v1.28.1) (2023-05-02)
 
 ## [1.28.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.27.0...v1.28.0) (2023-05-02)
