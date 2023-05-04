@@ -2,6 +2,81 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.28.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.28.0...v1.28.1) (2023-05-02)
+
+## [1.28.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.27.0...v1.28.0) (2023-05-02)
+
+
+### Features
+
+* added audience support for criteo_audience ([#598](https://github.com/rudderlabs/rudder-config-schema/issues/598)) ([cbaa120](https://github.com/rudderlabs/rudder-config-schema/commit/cbaa120255ee2a827e8243c24e51514904eab05d))
+* modified to return sshPublicKey to end user ([#585](https://github.com/rudderlabs/rudder-config-schema/issues/585)) ([fe9e125](https://github.com/rudderlabs/rudder-config-schema/commit/fe9e125dc966818b4db8f592f778eb0b5105e012))
+
+
+### Bug Fixes
+
+* **GA4:** updated broken link for capture page view ([#597](https://github.com/rudderlabs/rudder-config-schema/issues/597)) ([95f9a7f](https://github.com/rudderlabs/rudder-config-schema/commit/95f9a7f739702c5435d806f0007ae9b519cc93e6))
+
+## [1.27.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.26.2...v1.27.0) (2023-04-26)
+
+
+### Features
+
+* hide shopify source from UI ([64b867c](https://github.com/rudderlabs/rudder-config-schema/commit/64b867c9be7de41634c4bfe383e2bfa1a59377ca))
+
+### [1.26.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.26.1...v1.26.2) (2023-04-25)
+
+
+### Bug Fixes
+
+* revert kafka over ssh change via control-plane ([#591](https://github.com/rudderlabs/rudder-config-schema/issues/591)) ([ed835b8](https://github.com/rudderlabs/rudder-config-schema/commit/ed835b849c18a3a5db1f08caff96bacee608f9d9))
+
+### [1.26.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.26.0...v1.26.1) (2023-04-25)
+
+
+### Bug Fixes
+
+* **pinterest:** remove cdk flag ([#587](https://github.com/rudderlabs/rudder-config-schema/issues/587)) ([898f17a](https://github.com/rudderlabs/rudder-config-schema/commit/898f17a1f09611c4bae15d1209fbb8fd567ceb27))
+
+## [1.26.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.25.0...v1.26.0) (2023-04-25)
+
+
+### Features
+
+* **ga4:** override gtag session_id configuration option ([#559](https://github.com/rudderlabs/rudder-config-schema/issues/559)) ([14ea841](https://github.com/rudderlabs/rudder-config-schema/commit/14ea841d8db53fd4f5d2a941f4942d10f5e60581))
+* **ga4:** update ui field name && description ([429b9f3](https://github.com/rudderlabs/rudder-config-schema/commit/429b9f3dcaff5ce3b4b785e78221d8eed6e1a9e4))
+* move hardcoded ga dimensions and metrics ([#523](https://github.com/rudderlabs/rudder-config-schema/issues/523)) ([9c61fb3](https://github.com/rudderlabs/rudder-config-schema/commit/9c61fb31df5ccce083162faae66d8fa9c0dc7583))
+* onboard leanplum destination new ui config ([#475](https://github.com/rudderlabs/rudder-config-schema/issues/475)) ([26edab1](https://github.com/rudderlabs/rudder-config-schema/commit/26edab1d753a9e8bf7e993dbdaa76883d2fdd738))
+* **pinterest:** version update ([#546](https://github.com/rudderlabs/rudder-config-schema/issues/546)) ([dd245b8](https://github.com/rudderlabs/rudder-config-schema/commit/dd245b899fa00c89dee0b4dfff72317d20961efb))
+* support connection to kafka over ssh for growth customer ([#535](https://github.com/rudderlabs/rudder-config-schema/issues/535)) ([d18e45a](https://github.com/rudderlabs/rudder-config-schema/commit/d18e45a60d4a26901db42ac1905a5406f9f67b65))
+
+
+### Bug Fixes
+
+* renaming blacklist to denylist and whitelist to allowlist ([#581](https://github.com/rudderlabs/rudder-config-schema/issues/581)) ([4f9a9f7](https://github.com/rudderlabs/rudder-config-schema/commit/4f9a9f78203d743e2c16785ad23ea68f13e5382b))
+
+## [1.25.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.24.1...v1.25.0) (2023-04-24)
+
+
+### Features
+
+* **pinterest:** update secretKeys ([#575](https://github.com/rudderlabs/rudder-config-schema/issues/575)) ([1ec812e](https://github.com/rudderlabs/rudder-config-schema/commit/1ec812eeef874eca2239f7fbfc336afce99c075f))
+* **pinterest:** version update  ([#573](https://github.com/rudderlabs/rudder-config-schema/issues/573)) ([7ca6c71](https://github.com/rudderlabs/rudder-config-schema/commit/7ca6c716d96a7ec53190698adeb911a21d2cfb04))
+
+### [1.24.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.24.0...v1.24.1) (2023-04-21)
+
+
+### Bug Fixes
+
+* revert displayNames for BingAds, GA, Kissmetrics ([b5645d5](https://github.com/rudderlabs/rudder-config-schema/commit/b5645d590bda0ce7ae89daadbe57cc78dbb96680))
+
+## [1.24.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.23.1...v1.24.0) (2023-04-20)
+
+
+### Features
+
+* **ga4:** override gtag session_id configuration option ([#565](https://github.com/rudderlabs/rudder-config-schema/issues/565)) ([92813a3](https://github.com/rudderlabs/rudder-config-schema/commit/92813a3c6e1d73c0a8581938c043dd0aefc376fa))
+
 ### [1.23.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.23.0...v1.23.1) (2023-04-19)
 
 
