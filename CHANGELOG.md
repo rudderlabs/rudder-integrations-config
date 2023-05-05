@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.29.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.28.2...v1.29.0) (2023-05-05)
+
+
+### Features
+
+* added blank audience support for criteo_audience ([8b2f76c](https://github.com/rudderlabs/rudder-config-schema/commit/8b2f76c1e7f153735b5a5e47ced94a8f14bc3597))
+* added key for supporting blank audience for fb audience ([3ad957b](https://github.com/rudderlabs/rudder-config-schema/commit/3ad957b5c52d14721ea789642e09cc05ba332202))
+
 ### [1.28.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.28.1...v1.28.2) (2023-05-03)
 
 
