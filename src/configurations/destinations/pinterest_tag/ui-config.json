@@ -21,13 +21,67 @@
           "footerNote": "Relevant if ios source is connected"
         },
         {
+          "type": "singleSelect",
+          "label": "API Version",
+          "value": "apiVersion",
+          "options": [
+            {
+              "name": "V3 (deprecating soon)",
+              "value": "legacyApi"
+            },
+            {
+              "name": "V5",
+              "value": "newApi"
+            }
+          ],
+          "defaultOption": {
+            "value": "legacyApi"
+          }
+        },
+        {
           "type": "textInput",
+          "preRequisiteField": {
+            "name": "apiVersion",
+            "selectedValue": "legacyApi"
+          },
           "label": "Pinterest Advertiser ID",
           "value": "advertiserId",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]*$",
+          "regexErrorMessage": "Invalid Advertiser ID",
           "required": false,
           "placeholder": "e.g: 429047995",
           "secret": true,
           "footerNote": "Required field for cloud mode integration"
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": {
+            "name": "apiVersion",
+            "selectedValue": "newApi"
+          },
+          "label": "Ad Account ID",
+          "value": "adAccountId",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]*$",
+          "regexErrorMessage": "Invalid Ad Account ID",
+          "required": false,
+          "placeholder": "e.g: 549935085302",
+          "secret": true,
+          "footerNote": "Required field for cloud mode integration. For more information about how to get ad account id refer docs"
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": {
+            "name": "apiVersion",
+            "selectedValue": "newApi"
+          },
+          "label": "Conversion Token",
+          "value": "conversionToken",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,101})$",
+          "regexErrorMessage": "Invalid Conversion Token",
+          "required": false,
+          "placeholder": "e.g: pina_A98DB973KWL8XP1LZ94KJF0BMA5PEZ8C6490FWEI01QJMN32YU",
+          "secret": true,
+          "footerNote": "Required field for cloud mode integration. For more information about how to get conversion token refer docs"
         }
       ]
     },
@@ -69,6 +123,22 @@
           "required": false,
           "default": true,
           "footerNote": "If this setting is enabled, the Pinterest tag will be loaded with the existing traits of the logged user"
+        },
+        {
+          "type": "checkbox",
+          "label": "Send external_id for user",
+          "value": "sendExternalId",
+          "required": false,
+          "default": false,
+          "footerNote": "If this setting is enabled, RudderStack will send external_id to Pinterest. Please ref docs for more info on external_id mapping"
+        },
+        {
+          "type": "checkbox",
+          "label": "Send as custom event",
+          "value": "sendAsCustomEvent",
+          "required": false,
+          "default": false,
+          "footerNote": "If this setting is enabled, RudderStack will send unmapped event as Pinterest custom event."
         },
         {
           "type": "dynamicCustomForm",
