@@ -105,7 +105,7 @@ def generateDynamicFormSchema(field):
     '''
         return an schema object corresponding to dynamicForm
     '''
-    def generateFromAndTo():
+    def generateKeyLeft():
         obj = {
             "type": typeGenerator(field["type"]),
             "pattern": patternGenerator(field)
@@ -118,7 +118,7 @@ def generateDynamicFormSchema(field):
     dynamicFormItemObject["type"] = "object"
     dynamicFormItemObject['properties'] = {}
     dynamicFormItemObjectProps = [
-        ('from', generateFromAndTo), ('to', generateFromAndTo)]
+        (field['keyLeft'], generateKeyLeft), (field['keyRight'], generateKeyLeft)]
     for dynamicFromItemObjectProp in dynamicFormItemObjectProps:
         dynamicFormItemObject['properties'][dynamicFromItemObjectProp[0]
                                             ] = dynamicFromItemObjectProp[1]()
