@@ -4,24 +4,25 @@ import json
 import os
 import sys
 import jsondiff
+from schemaGenerator import validateSchema
 
 #########################
 # ENV VARIABLES FOT TESTING
-# CONTROL_PLANE_URL="https://api.rudderstack.com"
-# print(CONTROL_PLANE_URL)
-# USERNAME="cbadmin"
-# print(USERNAME)
-# PASSWORD="testpassword"
-# print(PASSWORD)
+CONTROL_PLANE_URL="https://api.rudderstack.com"
+print(CONTROL_PLANE_URL)
+USERNAME="cbadmin"
+print(USERNAME)
+PASSWORD="testpassword"
+print(PASSWORD)
 #########################
 
 #########################
 # ENV VARIABLES
-CONTROL_PLANE_URL=sys.argv[1]
-print(CONTROL_PLANE_URL)
-USERNAME=os.environ['API_USER'] #sys.argv[2]
-print(USERNAME)
-PASSWORD=os.environ['API_PASSWORD'] #sys.argv[3]
+# CONTROL_PLANE_URL=sys.argv[1]
+# print(CONTROL_PLANE_URL)
+# USERNAME=os.environ['API_USER'] #sys.argv[2]
+# print(USERNAME)
+# PASSWORD=os.environ['API_PASSWORD'] #sys.argv[3]
 #print(PASSWORD)
 #########################
 # CONSTANTS
@@ -62,6 +63,10 @@ def get_file_content(name, selector):
             with open (f'{directory}/{file_selector}', 'r') as f:
                 file_content.update(json.loads(f.read()))
 
+    # Validating the schema
+    uiConfig = file_content.get("uiConfig")
+    schema = file_content.get("configSchema")
+    validateSchema(uiConfig, schema)
     return file_content
 
 def update_config_definition(selector, name, fileData):
