@@ -1,121 +1,117 @@
 import json
 from jsondiff import diff
 import warnings
+from enum import Enum
+
+class TypeString(Enum):
+    STRING = "string"
+    OBJECT = "object"
+    BOOLEAN = "boolean"
+    ARRAY = "array"
 
 def checkIsOldFormat(uiConfig):
     if isinstance(uiConfig, dict):
         return False
     return True
 
-def typeGenerator(fieldType):
-    if fieldType == "checkbox":
-        return "boolean"
-    elif fieldType == "defaultCheckbox":
-        return "object"
-    elif fieldType == "dynamicCustomForm":
-        return "array"
-    else:
-        return "string"
-
-
-def patternGenerator(field):
+def generatePattern(field):
     pattern = ""
     fieldType = field["type"]
     # for singleSelect
     if fieldType == "singleSelect":
-        pattern += "^("
+        pattern = "^("
         for i in range(0, len(field["options"])):
             pattern += field["options"][i]["value"]
             if i == len(field["options"])-1:
                 break
             pattern += "|"
         pattern += ")$"
-    # for text Input
-    elif fieldType == "textInput":
-        pattern += field["regex"]
-    # default pattern
+    # for others
     else:
-        pattern +=  "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        pattern = "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|"
+        if "regex" in field:
+            pattern += field["regex"]
+        else:
+            pattern += '^(.{0,100})$'
     return pattern
 
-def defaultCheckboxSchemaGenerator(field):
-    fieldType = typeGenerator(field["type"])
-    schema = {
-        "type": fieldType,
+def generateDefaultCheckbox(field, dbConfig):
+    defaultCheckboxObj = {
+        "type": TypeString.OBJECT.value,
         "properties": {
             "web": {
-                "type": "boolean"
+                "type": TypeString.BOOLEAN.value
             }
         }
     }
-    return schema
+    return defaultCheckboxObj
 
-def checkboxSchemaGenerator(field):
-    fieldType = typeGenerator(field["type"])
-    schema = {
-        "type": fieldType
-    }
-    return schema
+def generateCheckbox(field, dbConfig):
+    isSourceDependent = False
+    for sourceType in dbConfig["supportedSourceTypes"]:
+            if sourceType in dbConfig["destConfig"] and field["value"] in dbConfig["destConfig"][sourceType]:
+                isSourceDependent = True
+                break
+    checkboxSchemaObj = {}
+    if isSourceDependent:
+        checkboxSchemaObj["type"] = TypeString.OBJECT.value
+        checkboxSchemaObj["properties"] = {}
+        for sourceType in dbConfig["supportedSourceTypes"]:
+            if sourceType in dbConfig["destConfig"] and field["value"] in dbConfig["destConfig"][sourceType]:
+                checkboxSchemaObj["properties"][sourceType] = { "type": TypeString.BOOLEAN.value}
+    else:
+        checkboxSchemaObj["type"] = TypeString.BOOLEAN.value
+        if "default" in field:
+            checkboxSchemaObj["default"] = field["default"]
+    return checkboxSchemaObj
 
-def textInputSchemaGenerator(field):
-    fieldType = typeGenerator(field["type"])
-    schema = {
-        "type": fieldType,
-    }
+def generateTextInput(field, dbConfig):
+    textInputSchemaObj = {"type": TypeString.STRING.value}
     if 'regex' in field:
-        schema["pattern"] = patternGenerator(field)
-    return schema
+        textInputSchemaObj["pattern"] = generatePattern(field)
+    return textInputSchemaObj
 
-def textareaInputSchemaGenerator(field):
-    fieldType = typeGenerator(field["type"])
-    schema = {
-        "type": fieldType,
-    }    
+def generateTextareaInput(field, dbConfig):
+    textareaInputObj = {"type": TypeString.STRING.value}
     if 'regex' in field:
-        schema["pattern"] = field["regex"]
-    return schema
+        textareaInputObj["pattern"] = generatePattern(field)
+    return textareaInputObj
 
-def singleSelectSchemaGenerator(field):
-    fieldType = typeGenerator(field["type"])
-    schema = {
-        "type": fieldType,
-    }
-    schema["pattern"] = patternGenerator(field)
+def generateSingleSelect(field, dbConfig):
+    singleSelectObj = {"type": TypeString.STRING.value}
+    singleSelectObj["pattern"] = generatePattern(field)
     if "defaultOption" in field:
-        schema["default"] = field["defaultOption"]["value"]
-    return schema
+        singleSelectObj["default"] = field["defaultOption"]["value"]
+    return singleSelectObj
 
-def dynamicCustomFormSchemaGenerator(field):
-    fieldType = typeGenerator(field["type"])
-    schema = {
-        "type": fieldType,
-        "items": {
-            "type": "object",
-            "properties": {
-
-            }
-        } 
-    }
+def generateDynamicCustomForm(field, dbConfig):
+    dynamicCustomFormObj = {"type": TypeString.ARRAY.value}
+    dynamicCustomFormItemObj = {"type": TypeString.OBJECT.value}
+    dynamicCustomFormItemObj["properties"] = {}
     for customField in field["customFields"]:
-        customeFieldSchema = uiTypetoSchemaType.get(customField["type"])(customField)
-        schema["items"]["properties"][customField["value"]] = customeFieldSchema
-    return schema
+        customeFieldSchemaObj = uiTypetoSchemaFn.get(customField["type"])(customField, dbConfig)
+        if 'pattern' not in customeFieldSchemaObj:
+            customeFieldSchemaObj["pattern"] = generatePattern(customField)
+        dynamicCustomFormItemObj["properties"][customField["value"]] =  customeFieldSchemaObj
 
-def generateDynamicFormSchema(field):
+    dynamicCustomFormObj["items"] = dynamicCustomFormItemObj
+    return dynamicCustomFormObj
+
+def generateDynamicFormSchema(field, dbConfig):
     '''
         return an schema object corresponding to dynamicForm
     '''
     def generateKeyLeft():
         obj = {
-            "type": typeGenerator(field["type"]),
-            "pattern": patternGenerator(field)
+            "type": TypeString.STRING.value,
+            "pattern": generatePattern(field)
         }
         return obj
 
     dynamicFormSchemaObject = {}
-    dynamicFormSchemaObject['type'] = "array"
+    dynamicFormSchemaObject['type'] = TypeString.ARRAY.value
     dynamicFormItemObject = {}
-    dynamicFormItemObject["type"] = "object"
+    dynamicFormItemObject["type"] = TypeString.OBJECT.value
     dynamicFormItemObject['properties'] = {}
     dynamicFormItemObjectProps = [
         (field['keyLeft'], generateKeyLeft), (field['keyRight'], generateKeyLeft)]
@@ -125,56 +121,56 @@ def generateDynamicFormSchema(field):
     dynamicFormSchemaObject['items'] = dynamicFormItemObject
     return dynamicFormSchemaObject
 
-def generateDynamicSelectForm(field):
-    return generateDynamicFormSchema(field)
+def generateDynamicSelectForm(field, dbConfig):
+    return generateDynamicFormSchema(field, dbConfig)
 
-def generateTagInput(field):
+def generateTagInput(field, dbConfig):
     tagObject = {}
-    tagObject["type"] = "array"
+    tagObject["type"] = TypeString.ARRAY.value
     tagItem = {}
-    tagItem['type'] = "object"
+    tagItem['type'] = TypeString.OBJECT.value
     tagItemProps = {
         str(field['tagKey']): {
-            "type": typeGenerator(field["type"]),
-            "pattern": patternGenerator(field)
+            "type": TypeString.STRING.value,
+            "pattern": generatePattern(field)
         }
     }
     tagItem['properties'] = tagItemProps
     tagObject["items"] = tagObject
     return tagObject
 
-def generateTimeRangePicker(field):
+def generateTimeRangePicker(field, dbConfig):
     timeRangeObj = {}
-    timeRangeObj['type'] = "object"
+    timeRangeObj['type'] = TypeString.OBJECT.value
     timeRangeProps = {
-        field['startTime']['value']: {'type': typeGenerator(field["type"])},
-        field['endTime']['value']: {'type': typeGenerator(field["type"])}
+        field['startTime']['value']: {'type': TypeString.STRING.value},
+        field['endTime']['value']: {'type': TypeString.STRING.value}
     }
     timeRangeObj['properties'] = timeRangeProps
     timeRangeObj['required'] = list(timeRangeProps.keys())
     return timeRangeObj
 
-def generateTimePicker(field):
+def generateTimePicker(field, dbConfig):
     return {
-        "type": typeGenerator(field["type"])
+        "type": TypeString.STRING.value
     }
 
 
-def generateProperties(uiConfig, schemaObject, properties):
+def generateProperties(uiConfig, dbConfig, schemaObject, properties):
     if checkIsOldFormat(uiConfig):
         for group in uiConfig:
             fields = group.get('fields', [])
             for field in fields:
-                generateFunction = uiTypetoSchemaType.get(field['type'], None)
+                generateFunction = uiTypetoSchemaFn.get(field['type'], None)
                 if generateFunction:
-                    properties[field['value']] = generateFunction(field)
+                    properties[field['value']] = generateFunction(field, dbConfig)
                 if field.get('required', False) == True:
                     schemaObject['required'].append(field['value'])
     else:
         pass
 
 
-def generateSchema(uiConfig):
+def generateSchema(uiConfig, dbConfig):
     newSchema = {}
     schemaObject = {}
     schemaObject['$schema'] = 'http://json-schema.org/draft-07/schema#'
@@ -182,31 +178,31 @@ def generateSchema(uiConfig):
     schemaObject['type'] = "object"
     schemaObject['properties'] = {}
 
-    generateProperties(uiConfig, schemaObject, schemaObject['properties'])
+    generateProperties(uiConfig, dbConfig, schemaObject, schemaObject['properties'])
     newSchema['configSchema'] = schemaObject
     return newSchema
 
 
-def testIndividualType(uiConfig, schema, curType):
+def testIndividualType(uiConfig, dbConfig, schema, curUiType):
     for uiConfigItem in uiConfig:
         for field in uiConfigItem["fields"]:
-            if field["type"] == curType:
+            if field["type"] == curUiType:
                 if field["value"] not in schema["properties"]:
                     warnings.warn(f'{field["value"]} field is not in schema',  UserWarning)
                 else:
                     curSchemaField = schema["properties"][field["value"]]
-                    newSchemaField = uiTypetoSchemaType.get(curType)(field)
+                    newSchemaField = uiTypetoSchemaFn.get(curUiType)(field, dbConfig)
                     schemaDiff = diff(newSchemaField,curSchemaField)
                     if schemaDiff:
-                        warnings.warn("Difference is : {}".format(schemaDiff), UserWarning)
+                        warnings.warn("For type:{} field:{} Difference is : {}".format(curUiType, field["value"],schemaDiff), UserWarning)
 
-uiTypetoSchemaType = {
-    "defaultCheckbox": defaultCheckboxSchemaGenerator,
-    "checkbox": checkboxSchemaGenerator,
-    "textInput": textInputSchemaGenerator,
-    "textareaInput": textareaInputSchemaGenerator,
-    "singleSelect": singleSelectSchemaGenerator,
-    "dynamicCustomForm": dynamicCustomFormSchemaGenerator,
+uiTypetoSchemaFn = {
+    "defaultCheckbox": generateDefaultCheckbox,
+    "checkbox": generateCheckbox,
+    "textInput": generateTextInput,
+    "textareaInput": generateTextareaInput,
+    "singleSelect": generateSingleSelect,
+    "dynamicCustomForm": generateDynamicCustomForm,
     'dynamicForm': generateDynamicFormSchema,
     'dynamicSelectForm': generateDynamicSelectForm,
     'tagInput': generateTagInput,
@@ -215,29 +211,21 @@ uiTypetoSchemaType = {
 }
 
 
-def validateSchema(uiConfig, schema):
+def validateSchema(uiConfig, dbConfig, schema):
     if schema == None:
-        warnings.warn("Schema in null")
+        warnings.warn("Schema is null")
         return
     if uiConfig == None:
-        warnings.warn("Ui-Config in null")
+        warnings.warn("Ui-Config is null")
         return
     if not checkIsOldFormat(uiConfig):
         warnings.warn("Ui-Config is of new type")
         return
-    generatedSchema = generateSchema(uiConfig)
-    schemaDiff = diff(schema, generatedSchema)
+    generatedSchema = generateSchema(uiConfig, dbConfig)
+    schemaDiff = diff(schema, generatedSchema["configSchema"])
     if schemaDiff:
         # call for individual warnings
-        for uiType in uiTypetoSchemaType.keys():
-            testIndividualType(uiConfig, schema, uiType)
+        for uiType in uiTypetoSchemaFn.keys():
+            testIndividualType(uiConfig, dbConfig, schema, uiType)
     return
-
-
-
-
-
-
-
-
 
