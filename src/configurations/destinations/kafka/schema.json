@@ -43,7 +43,7 @@
         "pattern": "^ssh-(rsa|ed25519|dss) [A-Za-z0-9+/]+[=]{0,3}( [^@]+@[^@]+)?$"
       },
       "useSASL": {
-        "const": true
+        "type": "boolean"
       },
       "saslType": {
         "type": "string",
@@ -59,7 +59,7 @@
         "pattern": "^(.{0,100})$"
       },
       "convertToAvro": {
-        "const": true
+        "type": "boolean"
       },
       "avroSchemas": {
         "type": "object",
@@ -73,6 +73,9 @@
             "pattern": ".*"
           }
         }
+      },
+      "embedAvroSchemaID": {
+        "type": "boolean"
       }
     },
     "allOf": [
@@ -188,12 +191,15 @@
                 }
               },
               "required": ["schemaId", "schema"]
+            },
+            "embedAvroSchemaID": {
+              "boolean": "true"
             }
           },
-          "required": ["avroSchemas"]
+          "required": ["avroSchemas", "embedAvroSchemaID"]
         }
       }
     ],
-    "additionalProperties": false
+    "additionalProperties": true
   }
 }
