@@ -35,6 +35,12 @@ def generatePattern(field):
             pattern += '^(.{0,100})$'
     return pattern
 
+def checkIsDependentOnSource(field, dbConfig):
+    for sourceType in dbConfig["supportedSourceTypes"]:
+            if sourceType in dbConfig["destConfig"] and field["value"] in dbConfig["destConfig"][sourceType]:
+                return True
+    return False
+
 def generateDefaultCheckbox(field, dbConfig):
     defaultCheckboxObj = {
         "type": TypeString.OBJECT.value,
@@ -47,11 +53,7 @@ def generateDefaultCheckbox(field, dbConfig):
     return defaultCheckboxObj
 
 def generateCheckbox(field, dbConfig):
-    isSourceDependent = False
-    for sourceType in dbConfig["supportedSourceTypes"]:
-            if sourceType in dbConfig["destConfig"] and field["value"] in dbConfig["destConfig"][sourceType]:
-                isSourceDependent = True
-                break
+    isSourceDependent = checkIsDependentOnSource(field, dbConfig)
     checkboxSchemaObj = {}
     if isSourceDependent:
         checkboxSchemaObj["type"] = TypeString.OBJECT.value
@@ -66,9 +68,20 @@ def generateCheckbox(field, dbConfig):
     return checkboxSchemaObj
 
 def generateTextInput(field, dbConfig):
-    textInputSchemaObj = {"type": TypeString.STRING.value}
-    if 'regex' in field:
-        textInputSchemaObj["pattern"] = generatePattern(field)
+    textInputSchemaObj = {}
+    isSourceDependent = checkIsDependentOnSource(field, dbConfig)
+    if isSourceDependent:
+        textInputSchemaObj["type"] = TypeString.OBJECT.value
+        textInputSchemaObj["properties"] = {}
+        for sourceType in dbConfig["supportedSourceTypes"]:
+            if sourceType in dbConfig["destConfig"] and field["value"] in dbConfig["destConfig"][sourceType]:
+                textInputSchemaObj["properties"][sourceType] = { "type": TypeString.STRING.value}
+                if 'regex' in field:
+                    textInputSchemaObj["properties"][sourceType]["pattern"] = field["regex"]
+    else:
+        textInputSchemaObj = {"type": TypeString.STRING.value}
+        if 'regex' in field:
+            textInputSchemaObj["pattern"] = generatePattern(field)
     return textInputSchemaObj
 
 def generateTextareaInput(field, dbConfig):
@@ -90,7 +103,7 @@ def generateDynamicCustomForm(field, dbConfig):
     dynamicCustomFormItemObj["properties"] = {}
     for customField in field["customFields"]:
         customeFieldSchemaObj = uiTypetoSchemaFn.get(customField["type"])(customField, dbConfig)
-        if 'pattern' not in customeFieldSchemaObj:
+        if 'pattern' not in customeFieldSchemaObj and not checkIsDependentOnSource(customField, dbConfig):
             customeFieldSchemaObj["pattern"] = generatePattern(customField)
         dynamicCustomFormItemObj["properties"][customField["value"]] =  customeFieldSchemaObj
 
@@ -228,4 +241,3 @@ def validateSchema(uiConfig, dbConfig, schema):
         for uiType in uiTypetoSchemaFn.keys():
             testIndividualType(uiConfig, dbConfig, schema, uiType)
     return
-
