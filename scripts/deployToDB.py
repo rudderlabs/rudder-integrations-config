@@ -69,7 +69,7 @@ def get_file_content(name, selector):
     dbConfig = file_content.get("config")
 
     print(f'##### Destination : {name} #####')
-    validateSchema(uiConfig, dbConfig, schema)
+    validateSchema(uiConfig, dbConfig, schema, name, selector)
     return file_content
 
 def update_config_definition(selector, name, fileData):
