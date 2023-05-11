@@ -168,12 +168,81 @@ def generateTimePicker(field, dbConfig):
         "type": TypeString.STRING.value
     }
 
+def comparePreRequisiteObject(fieldA, fieldB):
+   if type(fieldA) != type(fieldB):
+       return False
+   elif type(fieldA) == list:
+       if len(fieldA) != len(fieldB):
+           return False
+       for i in range(0, len(fieldA)):
+           if fieldA[i]['name'] != fieldB[i]['name'] or fieldA[i]['selectedValue'] != fieldB[i]['selectedValue']:
+               return False
+   else:
+       if fieldA['name'] != fieldB['name'] or fieldA['selectedValue'] != fieldB['selectedValue']:
+               return False
+   return True
+
+def getUniquePreRequisiteFields(uiConfig, dbConfig):
+    preRequisiteFieldsList = []
+    for group in uiConfig:
+        fields = group.get('fields', [])
+        for field in fields:
+            if "preRequisiteField" not in field:
+                continue
+            isPresent = False
+            for preRequisiteField in preRequisiteFieldsList:
+                if comparePreRequisiteObject(preRequisiteField, field["preRequisiteField"]):
+                    isPresent = True
+                    break
+            if not isPresent:
+                preRequisiteFieldsList.append(field["preRequisiteField"])
+    return preRequisiteFieldsList
+
+
+def generateIfObject(preRequisiteField):
+    ifObj = {"properties": {}, "required": []}
+    if type(preRequisiteField) == list:
+        for field in preRequisiteField:
+            ifObj["properties"][field["name"]] = {
+                "const": field["selectedValue"]
+            }
+            ifObj["required"].append(field["name"])
+    else:
+        ifObj["properties"][preRequisiteField["name"]] = {
+            "const": preRequisiteField["selectedValue"]
+        }
+        ifObj["required"].append(preRequisiteField["name"])
+    return ifObj
+
+
+def generateAllOfSchema(uiConfig, dbConfig):
+    allOfObj = []
+    preRequisiteFieldsList = getUniquePreRequisiteFields(uiConfig, dbConfig)
+    for preRequisiteField in preRequisiteFieldsList:
+        ifObj = generateIfObject(preRequisiteField)
+        allOfItemObj = {"if": ifObj}
+        thenObj = {"properties": {}, "required": []}
+        for group in uiConfig:
+            fields = group.get('fields', [])
+            for field in fields:
+                if "preRequisiteField" not in field:
+                    continue
+                if comparePreRequisiteObject(field["preRequisiteField"], preRequisiteField):
+                    thenObj["properties"][field["value"]] = uiTypetoSchemaFn.get(field["type"])(field, dbConfig)
+                    if "required" in field and field["required"] == True:
+                        thenObj["required"].append(field["value"])
+        allOfItemObj["then"] = thenObj
+        allOfObj.append(allOfItemObj)
+    return allOfObj
+
 
 def generateProperties(uiConfig, dbConfig, schemaObject, properties):
     if checkIsOldFormat(uiConfig):
         for group in uiConfig:
             fields = group.get('fields', [])
             for field in fields:
+                if "preRequisiteField" in field:
+                    continue
                 generateFunction = uiTypetoSchemaFn.get(field['type'], None)
                 if generateFunction:
                     properties[field['value']] = generateFunction(field, dbConfig)
@@ -190,7 +259,9 @@ def generateSchema(uiConfig, dbConfig):
     schemaObject['required'] = []
     schemaObject['type'] = "object"
     schemaObject['properties'] = {}
-
+    allOfSchemaObj = generateAllOfSchema(uiConfig, dbConfig)
+    if allOfSchemaObj:
+        schemaObject['allOf'] = allOfSchemaObj
     generateProperties(uiConfig, dbConfig, schemaObject, schemaObject['properties'])
     newSchema['configSchema'] = schemaObject
     return newSchema
@@ -222,7 +293,6 @@ uiTypetoSchemaFn = {
     'timeRangePicker': generateTimeRangePicker,
     'timePicker': generateTimePicker
 }
-
 
 def validateSchema(uiConfig, dbConfig, schema):
     if schema == None:
