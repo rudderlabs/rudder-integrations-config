@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.30.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.2...v1.30.3) (2023-05-12)
+
+
+### Bug Fixes
+
+* fixes stripe api version issue ([471a8c9](https://github.com/rudderlabs/rudder-config-schema/commit/471a8c9aa5e13d35e37be6bfd6399798db4f360a))
+
 ### [1.30.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.1...v1.30.2) (2023-05-12)
 
 
