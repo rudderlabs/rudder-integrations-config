@@ -169,20 +169,20 @@ def generateTimePicker(field, dbConfig):
     }
 
 def comparePreRequisiteObject(fieldA, fieldB):
-   if type(fieldA) != type(fieldB):
-       return False
-   elif type(fieldA) == list:
-       if len(fieldA) != len(fieldB):
-           return False
-       for i in range(0, len(fieldA)):
-           if fieldA[i]['name'] != fieldB[i]['name'] or fieldA[i]['selectedValue'] != fieldB[i]['selectedValue']:
-               return False
-   else:
-       if fieldA['name'] != fieldB['name'] or fieldA['selectedValue'] != fieldB['selectedValue']:
-               return False
-   return True
+    if type(fieldA) != type(fieldB):
+        return False
+    elif type(fieldA) == list:
+        if len(fieldA) != len(fieldB):
+            return False
+        for i in range(0, len(fieldA)):
+            if fieldA[i]['name'] != fieldB[i]['name'] or fieldA[i]['selectedValue'] != fieldB[i]['selectedValue']:
+                return False
+    else:
+        if fieldA['name'] != fieldB['name'] or fieldA['selectedValue'] != fieldB['selectedValue']:
+                return False
+    return True
 
-def getUniquePreRequisiteFields(uiConfig, dbConfig):
+def getUniquePreRequisiteFields(uiConfig):
     preRequisiteFieldsList = []
     for group in uiConfig:
         fields = group.get('fields', [])
@@ -216,12 +216,12 @@ def generateIfObject(preRequisiteField):
 
 
 def generateAllOfSchema(uiConfig, dbConfig):
-    allOfObj = []
-    preRequisiteFieldsList = getUniquePreRequisiteFields(uiConfig, dbConfig)
+    allOfItemList = []
+    preRequisiteFieldsList = getUniquePreRequisiteFields(uiConfig)
     for preRequisiteField in preRequisiteFieldsList:
         ifObj = generateIfObject(preRequisiteField)
-        allOfItemObj = {"if": ifObj}
         thenObj = {"properties": {}, "required": []}
+        allOfItemObj = {"if": ifObj}
         for group in uiConfig:
             fields = group.get('fields', [])
             for field in fields:
@@ -232,9 +232,75 @@ def generateAllOfSchema(uiConfig, dbConfig):
                     if "required" in field and field["required"] == True:
                         thenObj["required"].append(field["value"])
         allOfItemObj["then"] = thenObj
-        allOfObj.append(allOfItemObj)
-    return allOfObj
+        allOfItemList.append(allOfItemObj)
+    allOfItemList = generateAnyOfSchema(allOfItemList)
+    return allOfItemList
 
+def getCommonAndOppositeFields(propertiesA, propertiesB):
+    keysListA = list(propertiesA.keys())
+    keysListB = list(propertiesB.keys())
+    commonProperties = []
+    oppositeProperties = []
+    for key in keysListA:
+        if key not in keysListB:
+            return None, None
+        if propertiesA[key]["const"] == propertiesB[key]["const"]:
+            commonProperties.append({"key": key, "value": propertiesA[key]["const"]})
+        elif type(propertiesA[key]["const"]) == bool and propertiesA[key]["const"] != propertiesB[key]["const"]:
+            oppositeProperties.append({"key": key, "value": propertiesA[key]["const"]})
+        else:
+            return None, None
+    return commonProperties, oppositeProperties
+
+def checkIfConditionsMatch(ifPropsA, ifObjectB):
+    for ifProp in ifPropsA:
+        if ifProp["key"] not in ifObjectB:
+            return False
+        if ifProp["value"] != ifObjectB[ifProp["key"]]["const"]:
+            return False
+    return True
+
+def findIndexToPlaceAnyOf(ifProp, allOfItemList):
+    if not ifProp:
+        return -1
+    length = len(allOfItemList)
+    for index in range(length):
+        if "if" in allOfItemList[index] and checkIfConditionsMatch(ifProp, allOfItemList[index]["if"]["properties"]):
+            return index
+    return -1
+
+def generateAnyOfSchema(allOfItemList):
+    length = len(allOfItemList)
+    delIndices = []
+    for i in range(0, length):
+        for j in range(i+1, length):
+            ifPropertiesA = allOfItemList[i]["if"]["properties"]
+            thenPropertiesA = allOfItemList[i]["then"]
+            ifPropertiesB = allOfItemList[j]["if"]["properties"]
+            thenPropertiesB = allOfItemList[j]["then"]
+            commonIfProp, oppositeIfProp = getCommonAndOppositeFields(ifPropertiesA, ifPropertiesB)
+            if oppositeIfProp:
+                anyOfObj = [{}, {}]
+                for k in range(0, len(oppositeIfProp)):
+                    if ifPropertiesA[oppositeIfProp[k]["key"]]["const"] == True:
+                        anyOfObj[1] = thenPropertiesA
+                        anyOfObj[1]["properties"][oppositeIfProp[k]["key"]] = {"const": True}
+                        anyOfObj[1]["required"].append(oppositeIfProp[k]["key"])
+                        anyOfObj[0] = thenPropertiesB
+                    else:
+                        anyOfObj[1] = thenPropertiesB
+                        anyOfObj[1]["properties"][oppositeIfProp[k]["key"]] = {"const": True}
+                        anyOfObj[1]["required"].append(oppositeIfProp[k]["key"])
+                        anyOfObj[0] = thenPropertiesA
+                indexToPlace = findIndexToPlaceAnyOf(commonIfProp, allOfItemList)
+                if indexToPlace == -1:
+                    allOfItemList.append(anyOfObj)
+                else:
+                    allOfItemList[indexToPlace]["then"]["anyOf"] = anyOfObj
+                delIndices.append(i)
+                delIndices.append(j)
+    allOfItemList = [allOfItemList[index] for index in range(len(allOfItemList)) if index not in delIndices]
+    return allOfItemList
 
 def generateProperties(uiConfig, dbConfig, schemaObject, properties):
     if checkIsOldFormat(uiConfig):
@@ -261,7 +327,10 @@ def generateSchema(uiConfig, dbConfig):
     schemaObject['properties'] = {}
     allOfSchemaObj = generateAllOfSchema(uiConfig, dbConfig)
     if allOfSchemaObj:
-        schemaObject['allOf'] = allOfSchemaObj
+        if len(allOfSchemaObj) == 1:
+            schemaObject['anyOf'] = allOfSchemaObj[0]
+        else:
+            schemaObject['allOf'] = allOfSchemaObj
     generateProperties(uiConfig, dbConfig, schemaObject, schemaObject['properties'])
     newSchema['configSchema'] = schemaObject
     return newSchema
