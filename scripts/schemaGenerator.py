@@ -335,7 +335,6 @@ def generateSchema(uiConfig, dbConfig):
     newSchema['configSchema'] = schemaObject
     return newSchema
 
-
 def testIndividualType(uiConfig, dbConfig, schema, curUiType):
     for uiConfigItem in uiConfig:
         for field in uiConfigItem["fields"]:
@@ -379,4 +378,16 @@ def validateSchema(uiConfig, dbConfig, schema):
         # call for individual warnings
         for uiType in uiTypetoSchemaFn.keys():
             testIndividualType(uiConfig, dbConfig, schema, uiType)
+        if "allOf" in schema:
+            curAllOfSchema = schema["allOf"]
+            newAllOfSchema = generateAllOfSchema(uiConfig, dbConfig)
+            allOfSchemaDiff = diff(newAllOfSchema, curAllOfSchema)
+            if allOfSchemaDiff:
+                warnings.warn("For allOf field Difference is : {}".format(allOfSchemaDiff), UserWarning)
+        if "anyOf" in schema:
+            curAnyOfSchema = schema["anyOf"]
+            newAnyOfSchema = generateAllOfSchema(uiConfig, dbConfig)
+            anyOfSchemaDiff = diff(newAnyOfSchema, curAnyOfSchema)
+            if anyOfSchemaDiff:
+                warnings.warn("For anyOf field Difference is : {}".format(anyOfSchemaDiff), UserWarning)
     return
