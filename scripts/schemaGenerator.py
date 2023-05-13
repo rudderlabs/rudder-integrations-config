@@ -103,11 +103,25 @@ def generateDynamicCustomForm(field, dbConfig):
     dynamicCustomFormItemObj["properties"] = {}
     for customField in field["customFields"]:
         customeFieldSchemaObj = uiTypetoSchemaFn.get(customField["type"])(customField, dbConfig)
-        if 'pattern' not in customeFieldSchemaObj and not checkIsDependentOnSource(customField, dbConfig):
+        isCustomFieldDependentOnSource = checkIsDependentOnSource(customField, dbConfig)
+        if 'pattern' not in customeFieldSchemaObj and not isCustomFieldDependentOnSource:
             customeFieldSchemaObj["pattern"] = generatePattern(customField)
+        if isCustomFieldDependentOnSource:
+            for sourceType in dbConfig["supportedSourceTypes"]:
+                if sourceType in dbConfig["destConfig"] and field["value"] in dbConfig["destConfig"][sourceType]:
+                    customeFieldSchemaObj = customeFieldSchemaObj["properties"][sourceType]
+                    break
         dynamicCustomFormItemObj["properties"][customField["value"]] =  customeFieldSchemaObj
 
     dynamicCustomFormObj["items"] = dynamicCustomFormItemObj
+    isSourceDependent = checkIsDependentOnSource(field, dbConfig)
+    if isSourceDependent:
+        newDynamicCustomFormObj = {"type": TypeString.OBJECT.value}
+        newDynamicCustomFormObj["properties"] = {}
+        for sourceType in dbConfig["supportedSourceTypes"]:
+            if sourceType in dbConfig["destConfig"] and field["value"] in dbConfig["destConfig"][sourceType]:
+                newDynamicCustomFormObj["properties"][sourceType] = dynamicCustomFormObj
+        dynamicCustomFormObj = newDynamicCustomFormObj
     return dynamicCustomFormObj
 
 def generateDynamicFormSchema(field, dbConfig):
