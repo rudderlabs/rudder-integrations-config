@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.30.5](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.4...v1.30.5) (2023-05-13)
+
+
+### Bug Fixes
+
+* updates stripe to 6.3.4 ([580ddaa](https://github.com/rudderlabs/rudder-config-schema/commit/580ddaa84c2b8f184792f5eda0a7a74dc68d7309))
+
+### [1.30.4](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.3...v1.30.4) (2023-05-13)
+
+
+### Bug Fixes
+
+* updates stripe image to v6.3.3 ([05cf4f3](https://github.com/rudderlabs/rudder-config-schema/commit/05cf4f3811c9d242c011905537f0aa7ddc9af379))
+
 ### [1.30.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.2...v1.30.3) (2023-05-12)
 
 
