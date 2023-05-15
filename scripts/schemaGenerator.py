@@ -3,16 +3,19 @@ from jsondiff import diff
 import warnings
 from enum import Enum
 
+
 class TypeString(Enum):
     STRING = "string"
     OBJECT = "object"
     BOOLEAN = "boolean"
     ARRAY = "array"
 
+
 def checkIsOldFormat(uiConfig):
     if isinstance(uiConfig, dict):
         return False
     return True
+
 
 def generatePattern(field):
     pattern = ""
@@ -35,11 +38,13 @@ def generatePattern(field):
             pattern += '^(.{0,100})$'
     return pattern
 
+
 def checkIsDependentOnSource(field, dbConfig):
     for sourceType in dbConfig["supportedSourceTypes"]:
-            if sourceType in dbConfig["destConfig"] and field["value"] in dbConfig["destConfig"][sourceType]:
-                return True
+        if sourceType in dbConfig["destConfig"] and field["value"] in dbConfig["destConfig"][sourceType]:
+            return True
     return False
+
 
 def generateDefaultCheckbox(field, dbConfig):
     defaultCheckboxObj = {
@@ -52,6 +57,7 @@ def generateDefaultCheckbox(field, dbConfig):
     }
     return defaultCheckboxObj
 
+
 def generateCheckbox(field, dbConfig):
     isSourceDependent = checkIsDependentOnSource(field, dbConfig)
     checkboxSchemaObj = {}
@@ -60,12 +66,14 @@ def generateCheckbox(field, dbConfig):
         checkboxSchemaObj["properties"] = {}
         for sourceType in dbConfig["supportedSourceTypes"]:
             if sourceType in dbConfig["destConfig"] and field["value"] in dbConfig["destConfig"][sourceType]:
-                checkboxSchemaObj["properties"][sourceType] = { "type": TypeString.BOOLEAN.value}
+                checkboxSchemaObj["properties"][sourceType] = {
+                    "type": TypeString.BOOLEAN.value}
     else:
         checkboxSchemaObj["type"] = TypeString.BOOLEAN.value
         if "default" in field:
             checkboxSchemaObj["default"] = field["default"]
     return checkboxSchemaObj
+
 
 def generateTextInput(field, dbConfig):
     textInputSchemaObj = {}
@@ -75,7 +83,8 @@ def generateTextInput(field, dbConfig):
         textInputSchemaObj["properties"] = {}
         for sourceType in dbConfig["supportedSourceTypes"]:
             if sourceType in dbConfig["destConfig"] and field["value"] in dbConfig["destConfig"][sourceType]:
-                textInputSchemaObj["properties"][sourceType] = { "type": TypeString.STRING.value}
+                textInputSchemaObj["properties"][sourceType] = {
+                    "type": TypeString.STRING.value}
                 if 'regex' in field:
                     textInputSchemaObj["properties"][sourceType]["pattern"] = field["regex"]
     else:
@@ -84,11 +93,13 @@ def generateTextInput(field, dbConfig):
             textInputSchemaObj["pattern"] = generatePattern(field)
     return textInputSchemaObj
 
+
 def generateTextareaInput(field, dbConfig):
     textareaInputObj = {"type": TypeString.STRING.value}
     if 'regex' in field:
         textareaInputObj["pattern"] = generatePattern(field)
     return textareaInputObj
+
 
 def generateSingleSelect(field, dbConfig):
     singleSelectObj = {"type": TypeString.STRING.value}
@@ -97,9 +108,12 @@ def generateSingleSelect(field, dbConfig):
         singleSelectObj["default"] = field["defaultOption"]["value"]
     return singleSelectObj
 
+
 def generateDynamicCustomForm(field, dbConfig):
-    dynamicCustomFormObj = {"type": TypeString.ARRAY.value}
-    dynamicCustomFormItemObj = {"type": TypeString.OBJECT.value}
+    dynamicCustomFormObj = {}
+    dynamicCustomFormObj["type"] = TypeString.ARRAY.value
+    dynamicCustomFormItemObj = {}
+    dynamicCustomFormItemObj["type"] = TypeString.OBJECT.value
     dynamicCustomFormItemObj["properties"] = {}
     for customField in field["customFields"]:
         customeFieldSchemaObj = uiTypetoSchemaFn.get(customField["type"])(customField, dbConfig)
@@ -123,6 +137,7 @@ def generateDynamicCustomForm(field, dbConfig):
                 newDynamicCustomFormObj["properties"][sourceType] = dynamicCustomFormObj
         dynamicCustomFormObj = newDynamicCustomFormObj
     return dynamicCustomFormObj
+
 
 def generateDynamicFormSchema(field, dbConfig):
     '''
@@ -148,8 +163,10 @@ def generateDynamicFormSchema(field, dbConfig):
     dynamicFormSchemaObject['items'] = dynamicFormItemObject
     return dynamicFormSchemaObject
 
+
 def generateDynamicSelectForm(field, dbConfig):
     return generateDynamicFormSchema(field, dbConfig)
+
 
 def generateTagInput(field, dbConfig):
     tagObject = {}
@@ -166,6 +183,7 @@ def generateTagInput(field, dbConfig):
     tagObject["items"] = tagObject
     return tagObject
 
+
 def generateTimeRangePicker(field, dbConfig):
     timeRangeObj = {}
     timeRangeObj['type'] = TypeString.OBJECT.value
@@ -176,6 +194,7 @@ def generateTimeRangePicker(field, dbConfig):
     timeRangeObj['properties'] = timeRangeProps
     timeRangeObj['required'] = list(timeRangeProps.keys())
     return timeRangeObj
+
 
 def generateTimePicker(field, dbConfig):
     return {
@@ -316,7 +335,7 @@ def generateAnyOfSchema(allOfItemList):
     allOfItemList = [allOfItemList[index] for index in range(len(allOfItemList)) if index not in delIndices]
     return allOfItemList
 
-def generateProperties(uiConfig, dbConfig, schemaObject, properties):
+def generateProperties(uiConfig, dbConfig, schemaObject, properties, name, selector):
     if checkIsOldFormat(uiConfig):
         for group in uiConfig:
             fields = group.get('fields', [])
@@ -325,14 +344,57 @@ def generateProperties(uiConfig, dbConfig, schemaObject, properties):
                     continue
                 generateFunction = uiTypetoSchemaFn.get(field['type'], None)
                 if generateFunction:
-                    properties[field['value']] = generateFunction(field, dbConfig)
+                    properties[field['value']] = generateFunction(
+                        field, dbConfig)
                 if field.get('required', False) == True:
                     schemaObject['required'].append(field['value'])
     else:
-        pass
+        if selector == 'destination':
+            baseTemplate = uiConfig.get('baseTemplate', [])
+            sdkTemplate = uiConfig.get('sdkTemplate', {})
+            for template in baseTemplate:
+                for section in template.get('sections', []):
+                    for group in section.get('groups', []):
+                        for field in group.get('fields', []):
+                            generateFunction = uiTypetoSchemaFn.get(
+                                field['type'], None)
+                            if generateFunction:
+                                properties[field['configKey']] = generateFunction(
+                                    field, dbConfig)
+                            if template.get('title', "") == "Initial setup":
+                                schemaObject['required'].append(
+                                    field['configKey'])
+
+            for field in sdkTemplate.get('fields', []):
+                generateFunction = uiTypetoSchemaFn.get(field['type'], None)
+                if generateFunction:
+                    properties[field['configKey']] = generateFunction(
+                        field, dbConfig)
+                schemaObject['required'].append(field['configKey'])
+
+        else:
+            def generateConfigProps(config):
+                for group in config:
+                    fields = group.get('fields', [])
+                    for field in fields:
+                        generateFunction = uiTypetoSchemaFn.get(
+                            field['type'], None)
+                        if generateFunction:
+                            properties[field['value']] = generateFunction(
+                                field, dbConfig)
+
+            auth = uiConfig.get('auth', None)
+            config = uiConfig.get('config', [])
+            if auth:
+                type = auth.get('type')
+                if type == "form":
+                    auth_config = auth.get('config', [])
+                    generateConfigProps(auth_config)
+
+            generateConfigProps(config)
 
 
-def generateSchema(uiConfig, dbConfig):
+def generateSchema(uiConfig, dbConfig, name, selector):
     newSchema = {}
     schemaObject = {}
     schemaObject['$schema'] = 'http://json-schema.org/draft-07/schema#'
@@ -345,7 +407,8 @@ def generateSchema(uiConfig, dbConfig):
             schemaObject['anyOf'] = allOfSchemaObj[0]
         else:
             schemaObject['allOf'] = allOfSchemaObj
-    generateProperties(uiConfig, dbConfig, schemaObject, schemaObject['properties'])
+    generateProperties(uiConfig, dbConfig, schemaObject,
+                       schemaObject['properties'], name, selector)
     newSchema['configSchema'] = schemaObject
     return newSchema
 
@@ -354,13 +417,17 @@ def testIndividualType(uiConfig, dbConfig, schema, curUiType):
         for field in uiConfigItem["fields"]:
             if field["type"] == curUiType:
                 if field["value"] not in schema["properties"]:
-                    warnings.warn(f'{field["value"]} field is not in schema',  UserWarning)
+                    warnings.warn(
+                        f'{field["value"]} field is not in schema',  UserWarning)
                 else:
                     curSchemaField = schema["properties"][field["value"]]
-                    newSchemaField = uiTypetoSchemaFn.get(curUiType)(field, dbConfig)
-                    schemaDiff = diff(newSchemaField,curSchemaField)
+                    newSchemaField = uiTypetoSchemaFn.get(
+                        curUiType)(field, dbConfig)
+                    schemaDiff = diff(newSchemaField, curSchemaField)
                     if schemaDiff:
-                        warnings.warn("For type:{} field:{} Difference is : {}".format(curUiType, field["value"],schemaDiff), UserWarning)
+                        warnings.warn("For type:{} field:{} Difference is : {}".format(
+                            curUiType, field["value"], schemaDiff), UserWarning)
+
 
 uiTypetoSchemaFn = {
     "defaultCheckbox": generateDefaultCheckbox,
@@ -376,7 +443,8 @@ uiTypetoSchemaFn = {
     'timePicker': generateTimePicker
 }
 
-def validateSchema(uiConfig, dbConfig, schema):
+
+def validateSchema(uiConfig, dbConfig, schema, name, selector):
     if schema == None:
         warnings.warn("Schema is null")
         return
@@ -386,7 +454,7 @@ def validateSchema(uiConfig, dbConfig, schema):
     if not checkIsOldFormat(uiConfig):
         warnings.warn("Ui-Config is of new type")
         return
-    generatedSchema = generateSchema(uiConfig, dbConfig)
+    generatedSchema = generateSchema(uiConfig, dbConfig, name, selector)
     schemaDiff = diff(schema, generatedSchema["configSchema"])
     if schemaDiff:
         # call for individual warnings
