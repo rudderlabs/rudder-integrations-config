@@ -39,14 +39,14 @@ def generatePattern(field):
     return pattern
 
 
-def checkIsDependentOnSource(field, dbConfig):
+def checkIsDependentOnSource(field, dbConfig, valueProp):
     for sourceType in dbConfig["supportedSourceTypes"]:
-        if sourceType in dbConfig["destConfig"] and field["value"] in dbConfig["destConfig"][sourceType]:
+        if sourceType in dbConfig["destConfig"] and field[valueProp] in dbConfig["destConfig"][sourceType]:
             return True
     return False
 
 
-def generateDefaultCheckbox(field, dbConfig):
+def generateDefaultCheckbox(field, dbConfig, valueProp):
     defaultCheckboxObj = {
         "type": TypeString.OBJECT.value,
         "properties": {
@@ -58,14 +58,14 @@ def generateDefaultCheckbox(field, dbConfig):
     return defaultCheckboxObj
 
 
-def generateCheckbox(field, dbConfig):
-    isSourceDependent = checkIsDependentOnSource(field, dbConfig)
+def generateCheckbox(field, dbConfig, valueProp):
+    isSourceDependent = checkIsDependentOnSource(field, dbConfig, valueProp)
     checkboxSchemaObj = {}
     if isSourceDependent:
         checkboxSchemaObj["type"] = TypeString.OBJECT.value
         checkboxSchemaObj["properties"] = {}
         for sourceType in dbConfig["supportedSourceTypes"]:
-            if sourceType in dbConfig["destConfig"] and field["value"] in dbConfig["destConfig"][sourceType]:
+            if sourceType in dbConfig["destConfig"] and field[valueProp] in dbConfig["destConfig"][sourceType]:
                 checkboxSchemaObj["properties"][sourceType] = {
                     "type": TypeString.BOOLEAN.value}
     else:
@@ -75,14 +75,14 @@ def generateCheckbox(field, dbConfig):
     return checkboxSchemaObj
 
 
-def generateTextInput(field, dbConfig):
+def generateTextInput(field, dbConfig, valueProp):
     textInputSchemaObj = {}
-    isSourceDependent = checkIsDependentOnSource(field, dbConfig)
+    isSourceDependent = checkIsDependentOnSource(field, dbConfig, valueProp)
     if isSourceDependent:
         textInputSchemaObj["type"] = TypeString.OBJECT.value
         textInputSchemaObj["properties"] = {}
         for sourceType in dbConfig["supportedSourceTypes"]:
-            if sourceType in dbConfig["destConfig"] and field["value"] in dbConfig["destConfig"][sourceType]:
+            if sourceType in dbConfig["destConfig"] and field[valueProp] in dbConfig["destConfig"][sourceType]:
                 textInputSchemaObj["properties"][sourceType] = {
                     "type": TypeString.STRING.value}
                 if 'regex' in field:
@@ -94,52 +94,61 @@ def generateTextInput(field, dbConfig):
     return textInputSchemaObj
 
 
-def generateTextareaInput(field, dbConfig):
+def generateTextareaInput(field, dbConfig, valueProp):
     textareaInputObj = {"type": TypeString.STRING.value}
     if 'regex' in field:
         textareaInputObj["pattern"] = generatePattern(field)
     return textareaInputObj
 
 
-def generateSingleSelect(field, dbConfig):
+def generateSingleSelect(field, dbConfig, valueProp):
     singleSelectObj = {"type": TypeString.STRING.value}
     singleSelectObj["pattern"] = generatePattern(field)
     if "defaultOption" in field:
         singleSelectObj["default"] = field["defaultOption"]["value"]
+
+    isSourceDependent = checkIsDependentOnSource(field, dbConfig, valueProp)
+    if isSourceDependent:
+        newSingleSelectObj = {"type": TypeString.OBJECT.value}
+        newSingleSelectObj["properties"] = {}
+        for sourceType in dbConfig["supportedSourceTypes"]:
+            if sourceType in dbConfig["destConfig"] and field[valueProp] in dbConfig["destConfig"][sourceType]:
+                newSingleSelectObj["properties"][sourceType] = singleSelectObj
+        singleSelectObj = newSingleSelectObj
     return singleSelectObj
 
 
-def generateDynamicCustomForm(field, dbConfig):
+def generateDynamicCustomForm(field, dbConfig, valueProp):
     dynamicCustomFormObj = {}
     dynamicCustomFormObj["type"] = TypeString.ARRAY.value
     dynamicCustomFormItemObj = {}
     dynamicCustomFormItemObj["type"] = TypeString.OBJECT.value
     dynamicCustomFormItemObj["properties"] = {}
     for customField in field["customFields"]:
-        customeFieldSchemaObj = uiTypetoSchemaFn.get(customField["type"])(customField, dbConfig)
-        isCustomFieldDependentOnSource = checkIsDependentOnSource(customField, dbConfig)
+        customeFieldSchemaObj = uiTypetoSchemaFn.get(customField["type"])(customField, dbConfig, valueProp)
+        isCustomFieldDependentOnSource = checkIsDependentOnSource(customField, dbConfig, valueProp)
         if 'pattern' not in customeFieldSchemaObj and not isCustomFieldDependentOnSource:
             customeFieldSchemaObj["pattern"] = generatePattern(customField)
         if isCustomFieldDependentOnSource:
             for sourceType in dbConfig["supportedSourceTypes"]:
-                if sourceType in dbConfig["destConfig"] and field["value"] in dbConfig["destConfig"][sourceType]:
+                if sourceType in dbConfig["destConfig"] and field[valueProp] in dbConfig["destConfig"][sourceType]:
                     customeFieldSchemaObj = customeFieldSchemaObj["properties"][sourceType]
                     break
-        dynamicCustomFormItemObj["properties"][customField["value"]] =  customeFieldSchemaObj
+        dynamicCustomFormItemObj["properties"][customField[valueProp]] =  customeFieldSchemaObj
 
     dynamicCustomFormObj["items"] = dynamicCustomFormItemObj
-    isSourceDependent = checkIsDependentOnSource(field, dbConfig)
+    isSourceDependent = checkIsDependentOnSource(field, dbConfig, valueProp)
     if isSourceDependent:
         newDynamicCustomFormObj = {"type": TypeString.OBJECT.value}
         newDynamicCustomFormObj["properties"] = {}
         for sourceType in dbConfig["supportedSourceTypes"]:
-            if sourceType in dbConfig["destConfig"] and field["value"] in dbConfig["destConfig"][sourceType]:
+            if sourceType in dbConfig["destConfig"] and field[valueProp] in dbConfig["destConfig"][sourceType]:
                 newDynamicCustomFormObj["properties"][sourceType] = dynamicCustomFormObj
         dynamicCustomFormObj = newDynamicCustomFormObj
     return dynamicCustomFormObj
 
 
-def generateDynamicFormSchema(field, dbConfig):
+def generateDynamicFormSchema(field, dbConfig, valueProp):
     '''
         return an schema object corresponding to dynamicForm
     '''
@@ -164,11 +173,11 @@ def generateDynamicFormSchema(field, dbConfig):
     return dynamicFormSchemaObject
 
 
-def generateDynamicSelectForm(field, dbConfig):
-    return generateDynamicFormSchema(field, dbConfig)
+def generateDynamicSelectForm(field, dbConfig, valueProp):
+    return generateDynamicFormSchema(field, dbConfig, valueProp)
 
 
-def generateTagInput(field, dbConfig):
+def generateTagInput(field, dbConfig, valueProp):
     tagObject = {}
     tagObject["type"] = TypeString.ARRAY.value
     tagItem = {}
@@ -180,11 +189,11 @@ def generateTagInput(field, dbConfig):
         }
     }
     tagItem['properties'] = tagItemProps
-    tagObject["items"] = tagObject
+    tagObject["items"] = tagItem
     return tagObject
 
 
-def generateTimeRangePicker(field, dbConfig):
+def generateTimeRangePicker(field, dbConfig, valueProp):
     timeRangeObj = {}
     timeRangeObj['type'] = TypeString.OBJECT.value
     timeRangeProps = {
@@ -196,7 +205,7 @@ def generateTimeRangePicker(field, dbConfig):
     return timeRangeObj
 
 
-def generateTimePicker(field, dbConfig):
+def generateTimePicker(field, dbConfig, valueProp):
     return {
         "type": TypeString.STRING.value
     }
@@ -248,7 +257,7 @@ def generateIfObject(preRequisiteField):
     return ifObj
 
 
-def generateAllOfSchema(uiConfig, dbConfig):
+def generateAllOfSchema(uiConfig, dbConfig, valueProp):
     allOfItemList = []
     preRequisiteFieldsList = getUniquePreRequisiteFields(uiConfig)
     for preRequisiteField in preRequisiteFieldsList:
@@ -261,15 +270,15 @@ def generateAllOfSchema(uiConfig, dbConfig):
                 if "preRequisiteField" not in field:
                     continue
                 if comparePreRequisiteObject(field["preRequisiteField"], preRequisiteField):
-                    thenObj["properties"][field["value"]] = uiTypetoSchemaFn.get(field["type"])(field, dbConfig)
+                    thenObj["properties"][field[valueProp]] = uiTypetoSchemaFn.get(field["type"])(field, dbConfig, valueProp)
                     if "required" in field and field["required"] == True:
-                        thenObj["required"].append(field["value"])
+                        thenObj["required"].append(field[valueProp])
         allOfItemObj["then"] = thenObj
         allOfItemList.append(allOfItemObj)
-    allOfItemList = generateAnyOfSchema(allOfItemList)
+    allOfItemList = generateAnyOfSchema(allOfItemList, valueProp)
     return allOfItemList
 
-def getCommonAndOppositeFields(propertiesA, propertiesB):
+def getCommonAndOppositeFields(propertiesA, propertiesB, valueProp):
     keysListA = list(propertiesA.keys())
     keysListB = list(propertiesB.keys())
     commonProperties = []
@@ -278,31 +287,31 @@ def getCommonAndOppositeFields(propertiesA, propertiesB):
         if key not in keysListB:
             return None, None
         if propertiesA[key]["const"] == propertiesB[key]["const"]:
-            commonProperties.append({"key": key, "value": propertiesA[key]["const"]})
+            commonProperties.append({"key": key, valueProp: propertiesA[key]["const"]})
         elif type(propertiesA[key]["const"]) == bool and propertiesA[key]["const"] != propertiesB[key]["const"]:
-            oppositeProperties.append({"key": key, "value": propertiesA[key]["const"]})
+            oppositeProperties.append({"key": key, valueProp: propertiesA[key]["const"]})
         else:
             return None, None
     return commonProperties, oppositeProperties
 
-def checkIfConditionsMatch(ifPropsA, ifObjectB):
+def checkIfConditionsMatch(ifPropsA, ifObjectB, valueProp):
     for ifProp in ifPropsA:
         if ifProp["key"] not in ifObjectB:
             return False
-        if ifProp["value"] != ifObjectB[ifProp["key"]]["const"]:
+        if ifProp[valueProp] != ifObjectB[ifProp["key"]]["const"]:
             return False
     return True
 
-def findIndexToPlaceAnyOf(ifProp, allOfItemList):
+def findIndexToPlaceAnyOf(ifProp, allOfItemList, valueProp):
     if not ifProp:
         return -1
     length = len(allOfItemList)
     for index in range(length):
-        if "if" in allOfItemList[index] and checkIfConditionsMatch(ifProp, allOfItemList[index]["if"]["properties"]):
+        if "if" in allOfItemList[index] and checkIfConditionsMatch(ifProp, allOfItemList[index]["if"]["properties"], valueProp):
             return index
     return -1
 
-def generateAnyOfSchema(allOfItemList):
+def generateAnyOfSchema(allOfItemList, valueProp):
     length = len(allOfItemList)
     delIndices = []
     for i in range(0, length):
@@ -311,7 +320,7 @@ def generateAnyOfSchema(allOfItemList):
             thenPropertiesA = allOfItemList[i]["then"]
             ifPropertiesB = allOfItemList[j]["if"]["properties"]
             thenPropertiesB = allOfItemList[j]["then"]
-            commonIfProp, oppositeIfProp = getCommonAndOppositeFields(ifPropertiesA, ifPropertiesB)
+            commonIfProp, oppositeIfProp = getCommonAndOppositeFields(ifPropertiesA, ifPropertiesB, valueProp)
             if oppositeIfProp:
                 anyOfObj = [{}, {}]
                 for k in range(0, len(oppositeIfProp)):
@@ -325,7 +334,7 @@ def generateAnyOfSchema(allOfItemList):
                         anyOfObj[1]["properties"][oppositeIfProp[k]["key"]] = {"const": True}
                         anyOfObj[1]["required"].append(oppositeIfProp[k]["key"])
                         anyOfObj[0] = thenPropertiesA
-                indexToPlace = findIndexToPlaceAnyOf(commonIfProp, allOfItemList)
+                indexToPlace = findIndexToPlaceAnyOf(commonIfProp, allOfItemList, valueProp)
                 if indexToPlace == -1:
                     allOfItemList.append(anyOfObj)
                 else:
@@ -345,7 +354,7 @@ def generateProperties(uiConfig, dbConfig, schemaObject, properties, name, selec
                 generateFunction = uiTypetoSchemaFn.get(field['type'], None)
                 if generateFunction:
                     properties[field['value']] = generateFunction(
-                        field, dbConfig)
+                        field, dbConfig, 'value')
                 if field.get('required', False) == True:
                     schemaObject['required'].append(field['value'])
     else:
@@ -360,7 +369,7 @@ def generateProperties(uiConfig, dbConfig, schemaObject, properties, name, selec
                                 field['type'], None)
                             if generateFunction:
                                 properties[field['configKey']] = generateFunction(
-                                    field, dbConfig)
+                                    field, dbConfig, 'configKey')
                             if template.get('title', "") == "Initial setup":
                                 schemaObject['required'].append(
                                     field['configKey'])
@@ -369,7 +378,7 @@ def generateProperties(uiConfig, dbConfig, schemaObject, properties, name, selec
                 generateFunction = uiTypetoSchemaFn.get(field['type'], None)
                 if generateFunction:
                     properties[field['configKey']] = generateFunction(
-                        field, dbConfig)
+                        field, dbConfig, 'configKey')
                 schemaObject['required'].append(field['configKey'])
 
         else:
@@ -381,7 +390,7 @@ def generateProperties(uiConfig, dbConfig, schemaObject, properties, name, selec
                             field['type'], None)
                         if generateFunction:
                             properties[field['value']] = generateFunction(
-                                field, dbConfig)
+                                field, dbConfig, 'value')
 
             auth = uiConfig.get('auth', None)
             config = uiConfig.get('config', [])
@@ -401,7 +410,9 @@ def generateSchema(uiConfig, dbConfig, name, selector):
     schemaObject['required'] = []
     schemaObject['type'] = "object"
     schemaObject['properties'] = {}
-    allOfSchemaObj = generateAllOfSchema(uiConfig, dbConfig)
+    allOfSchemaObj = {}
+    if checkIsOldFormat(uiConfig):
+        allOfSchemaObj = generateAllOfSchema(uiConfig, dbConfig, "value")
     if allOfSchemaObj:
         if len(allOfSchemaObj) == 1:
             schemaObject['anyOf'] = allOfSchemaObj[0]
@@ -413,20 +424,58 @@ def generateSchema(uiConfig, dbConfig, name, selector):
     return newSchema
 
 def testIndividualType(uiConfig, dbConfig, schema, curUiType):
-    for uiConfigItem in uiConfig:
-        for field in uiConfigItem["fields"]:
-            if field["type"] == curUiType:
-                if field["value"] not in schema["properties"]:
-                    warnings.warn(
-                        f'{field["value"]} field is not in schema',  UserWarning)
-                else:
-                    curSchemaField = schema["properties"][field["value"]]
-                    newSchemaField = uiTypetoSchemaFn.get(
-                        curUiType)(field, dbConfig)
-                    schemaDiff = diff(newSchemaField, curSchemaField)
-                    if schemaDiff:
-                        warnings.warn("For type:{} field:{} Difference is : {}".format(
-                            curUiType, field["value"], schemaDiff), UserWarning)
+    if checkIsOldFormat(uiConfig):
+        for uiConfigItem in uiConfig:
+            for field in uiConfigItem["fields"]:
+                if field["type"] == curUiType:
+                    if field["value"] not in schema["properties"]:
+                        warnings.warn(
+                            f'{field["value"]} field is not in schema',  UserWarning)
+                    else:
+                        curSchemaField = schema["properties"][field["value"]]
+                        newSchemaField = uiTypetoSchemaFn.get(
+                            curUiType)(field, dbConfig, "value")
+                        schemaDiff = diff(newSchemaField, curSchemaField)
+                        if schemaDiff:
+                            warnings.warn("For type:{} field:{} Difference is : {}".format(
+                                curUiType, field["value"], schemaDiff), UserWarning)
+    else:
+        baseTemplate = uiConfig.get('baseTemplate', [])
+        sdkTemplate = uiConfig.get('sdkTemplate', {})
+        for template in baseTemplate:
+            for section in template.get('sections', []):
+                for group in section.get('groups', []):
+                    for field in group.get('fields', []):
+                        generateFunction = uiTypetoSchemaFn.get(
+                            field['type'], None)
+                        if generateFunction and field["type"] == curUiType:
+                            if field["configKey"] not in schema["properties"]:
+                                warnings.warn(
+                                    f'{field["configKey"]} field is not in schema',  UserWarning)
+                            else:
+                                curSchemaField = schema["properties"][field["configKey"]]
+                                newSchemaField = uiTypetoSchemaFn.get(
+                                    curUiType)(field, dbConfig, "configKey")
+                                schemaDiff = diff(newSchemaField, curSchemaField)
+                                if schemaDiff:
+                                    warnings.warn("For type:{} field:{} Difference is : {}".format(
+                                        curUiType, field["configKey"], schemaDiff), UserWarning)
+                        
+        for field in sdkTemplate.get('fields', []):
+            generateFunction = uiTypetoSchemaFn.get(field['type'], None)
+            if generateFunction:
+                if generateFunction and field["type"] == curUiType:
+                    if field["configKey"] not in schema["properties"]:
+                        warnings.warn(
+                            f'{field["configKey"]} field is not in schema',  UserWarning)
+                    else:
+                        curSchemaField = schema["properties"][field["configKey"]]
+                        newSchemaField = uiTypetoSchemaFn.get(
+                            curUiType)(field, dbConfig, "configKey")
+                        schemaDiff = diff(newSchemaField, curSchemaField)
+                        if schemaDiff:
+                            warnings.warn("For type:{} field:{} Difference is : {}".format(
+                                curUiType, field["configKey"], schemaDiff), UserWarning)
 
 
 uiTypetoSchemaFn = {
@@ -451,9 +500,6 @@ def validateSchema(uiConfig, dbConfig, schema, name, selector):
     if uiConfig == None:
         warnings.warn("Ui-Config is null")
         return
-    if not checkIsOldFormat(uiConfig):
-        warnings.warn("Ui-Config is of new type")
-        return
     generatedSchema = generateSchema(uiConfig, dbConfig, name, selector)
     schemaDiff = diff(schema, generatedSchema["configSchema"])
     if schemaDiff:
@@ -462,13 +508,13 @@ def validateSchema(uiConfig, dbConfig, schema, name, selector):
             testIndividualType(uiConfig, dbConfig, schema, uiType)
         if "allOf" in schema:
             curAllOfSchema = schema["allOf"]
-            newAllOfSchema = generateAllOfSchema(uiConfig, dbConfig)
+            newAllOfSchema = generateAllOfSchema(uiConfig, dbConfig, "value")
             allOfSchemaDiff = diff(newAllOfSchema, curAllOfSchema)
             if allOfSchemaDiff:
                 warnings.warn("For allOf field Difference is : {}".format(allOfSchemaDiff), UserWarning)
         if "anyOf" in schema:
             curAnyOfSchema = schema["anyOf"]
-            newAnyOfSchema = generateAllOfSchema(uiConfig, dbConfig)
+            newAnyOfSchema = generateAllOfSchema(uiConfig, dbConfig, "value")
             anyOfSchemaDiff = diff(newAnyOfSchema, curAnyOfSchema)
             if anyOfSchemaDiff:
                 warnings.warn("For anyOf field Difference is : {}".format(anyOfSchemaDiff), UserWarning)
