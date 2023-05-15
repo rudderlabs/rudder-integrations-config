@@ -2,6 +2,57 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.30.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.2...v1.30.3) (2023-05-12)
+
+
+### Bug Fixes
+
+* fixes stripe api version issue ([471a8c9](https://github.com/rudderlabs/rudder-config-schema/commit/471a8c9aa5e13d35e37be6bfd6399798db4f360a))
+
+### [1.30.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.1...v1.30.2) (2023-05-12)
+
+
+### Bug Fixes
+
+* resolve discrepancies in amplitude config files ([#637](https://github.com/rudderlabs/rudder-config-schema/issues/637)) ([543a9f6](https://github.com/rudderlabs/rudder-config-schema/commit/543a9f6121c5dae15628994dd92b7fdb90d512bf))
+
+### [1.30.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.0...v1.30.1) (2023-05-10)
+
+## [1.30.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.29.0...v1.30.0) (2023-05-09)
+
+
+### Features
+
+* alias call braze ([#625](https://github.com/rudderlabs/rudder-config-schema/issues/625)) ([b15cc40](https://github.com/rudderlabs/rudder-config-schema/commit/b15cc40c54285fa87790b705a9d083d6c1ce679c))
+* onboard new source formsort  ([#606](https://github.com/rudderlabs/rudder-config-schema/issues/606)) ([6560241](https://github.com/rudderlabs/rudder-config-schema/commit/6560241a81818d0490aa0d68e884e6cd04930add))
+
+### [1.28.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.28.2...v1.28.3) (2023-05-05)
+
+
+### Features
+
+* added blank audience support for criteo and fb audience, added warehouse settings for criteo ([#543](https://github.com/rudderlabs/rudder-config-schema/issues/543)) ([e0b64cc](https://github.com/rudderlabs/rudder-config-schema/commit/e0b64ccd2546685a2aa70e9234f43948f00dcfff))
+* conversion label option added for google ads conversion events ([#602](https://github.com/rudderlabs/rudder-config-schema/issues/602)) ([80ffe00](https://github.com/rudderlabs/rudder-config-schema/commit/80ffe00e3900b48eab9ab88d70856a9ac0378741))
+* **destination:** onboard bing ads audience destination ([#525](https://github.com/rudderlabs/rudder-config-schema/issues/525)) ([f7f76f2](https://github.com/rudderlabs/rudder-config-schema/commit/f7f76f26d72ce0ea48290750cc8e75881a90a8a5))
+* enable group for intercom ([#583](https://github.com/rudderlabs/rudder-config-schema/issues/583)) ([0bef2dd](https://github.com/rudderlabs/rudder-config-schema/commit/0bef2ddded00ec95c9800916ab314798c5df1308))
+* enable pinterest cdk ([#603](https://github.com/rudderlabs/rudder-config-schema/issues/603)) ([4465335](https://github.com/rudderlabs/rudder-config-schema/commit/4465335c82d3f12d860376849bd6f3ba663e8392))
+* kafka via ssh redo reverted change ([#610](https://github.com/rudderlabs/rudder-config-schema/issues/610)) ([7dab511](https://github.com/rudderlabs/rudder-config-schema/commit/7dab511f132fe0463ee8aca34236f3d9a37252f8))
+* singer marketo ([#614](https://github.com/rudderlabs/rudder-config-schema/issues/614)) ([6603c79](https://github.com/rudderlabs/rudder-config-schema/commit/6603c798ffa070555084d40ae71f9121e0b0b364))
+
+
+### Bug Fixes
+
+* **fb_custom_audience:** remove skip verify checkbox ([#612](https://github.com/rudderlabs/rudder-config-schema/issues/612)) ([8ddeafd](https://github.com/rudderlabs/rudder-config-schema/commit/8ddeafd76380b886ed901ad5c00db212d5f99dcc))
+* removed adAccountId from shcema ([#618](https://github.com/rudderlabs/rudder-config-schema/issues/618)) ([d074a32](https://github.com/rudderlabs/rudder-config-schema/commit/d074a3279ff6a3aad0cbe86c2b4b17762c8f43ec))
+
+## [1.29.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.28.2...v1.29.0) (2023-05-05)
+
+
+### Features
+
+* added blank audience support for criteo_audience ([8b2f76c](https://github.com/rudderlabs/rudder-config-schema/commit/8b2f76c1e7f153735b5a5e47ced94a8f14bc3597))
+* added key for supporting blank audience for fb audience ([3ad957b](https://github.com/rudderlabs/rudder-config-schema/commit/3ad957b5c52d14721ea789642e09cc05ba332202))
+
 ### [1.28.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.28.1...v1.28.2) (2023-05-03)
 
 
