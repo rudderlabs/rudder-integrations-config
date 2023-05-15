@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.31.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.5...v1.31.0) (2023-05-15)
+
+
+### Features
+
+* custom host for fullstory ([#619](https://github.com/rudderlabs/rudder-config-schema/issues/619)) ([52f1ad1](https://github.com/rudderlabs/rudder-config-schema/commit/52f1ad1e5a51874b8ccbb19ec668993d46219238))
+* **GA4:** override configuration for client_id and session_id in GA hybrid mode ([#607](https://github.com/rudderlabs/rudder-config-schema/issues/607)) ([7d2acf6](https://github.com/rudderlabs/rudder-config-schema/commit/7d2acf6ddcdbe5e13e56f430709b6c8ee82ba84d))
+* mixpanel deletion api ([#631](https://github.com/rudderlabs/rudder-config-schema/issues/631)) ([8c0d632](https://github.com/rudderlabs/rudder-config-schema/commit/8c0d6325de1e7462c00b7d4063278f798477ae78))
+
 ### [1.30.5](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.4...v1.30.5) (2023-05-13)
 
 
