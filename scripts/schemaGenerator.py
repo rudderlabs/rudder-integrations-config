@@ -344,6 +344,24 @@ def generateAnyOfSchema(allOfItemList, valueProp):
     allOfItemList = [allOfItemList[index] for index in range(len(allOfItemList)) if index not in delIndices]
     return allOfItemList
 
+def generateConnectionMode(dbConfig):
+    connectionObj = {"type": TypeString.OBJECT.value}
+    connectionObj["properties"] = {}
+    for sourceType in dbConfig["supportedSourceTypes"]:
+            if sourceType in dbConfig["supportedConnectionModes"]:
+                connectionItemObj = {"type": TypeString.STRING.value}
+                pattern = "^("
+                length = len(dbConfig["supportedConnectionModes"][sourceType])
+                for i in range(0, length):
+                    pattern += dbConfig["supportedConnectionModes"][sourceType][i]
+                    if i != length - 1:
+                        pattern += '|'
+                pattern += ")$"
+                connectionItemObj["pattern"] = pattern
+                connectionObj["properties"][sourceType] = connectionItemObj
+    return connectionObj
+
+
 def generateProperties(uiConfig, dbConfig, schemaObject, properties, name, selector):
     if checkIsOldFormat(uiConfig):
         for group in uiConfig:
@@ -380,7 +398,10 @@ def generateProperties(uiConfig, dbConfig, schemaObject, properties, name, selec
                     properties[field['configKey']] = generateFunction(
                         field, dbConfig, 'configKey')
                 schemaObject['required'].append(field['configKey'])
-
+            
+            schemaObject['properties']['useNativeSDK'] = generateCheckbox({"type":"checkbox", 
+                                                                           "value":"useNativeSDK"}, dbConfig, "value")
+            schemaObject['properties']['connectionMode'] = generateConnectionMode(dbConfig)
         else:
             def generateConfigProps(config):
                 for group in config:
