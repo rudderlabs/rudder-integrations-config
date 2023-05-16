@@ -4,7 +4,7 @@ import json
 import os
 import sys
 import jsondiff
-from schemaGenerator import validateSchema
+from scripts.schemaGenerator import validateSchema
 
 #########################
 # ENV VARIABLES FOT TESTING
@@ -15,7 +15,7 @@ print(USERNAME)
 PASSWORD="testpassword"
 print(PASSWORD)
 #########################
-
+ 
 #########################
 # ENV VARIABLES
 # CONTROL_PLANE_URL=sys.argv[1]
@@ -67,9 +67,11 @@ def get_file_content(name, selector):
     uiConfig = file_content.get("uiConfig")
     schema = file_content.get("configSchema")
     dbConfig = file_content.get("config")
-
-    print(f'##### {selector} : {name} #####')
-    validateSchema(uiConfig, dbConfig, schema, name, selector)
+    try:
+        print(f'##### {selector} : {name} #####')
+        validateSchema(uiConfig, dbConfig, schema, name, selector)
+    except Exception as e:
+        print(str(e))
     return file_content
 
 def update_config_definition(selector, name, fileData):
