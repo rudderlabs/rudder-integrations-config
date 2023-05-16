@@ -40,6 +40,8 @@ def generatePattern(field):
 
 
 def checkIsDependentOnSource(field, dbConfig, valueProp):
+    if not dbConfig:
+        return False
     for sourceType in dbConfig["supportedSourceTypes"]:
         if sourceType in dbConfig["destConfig"] and field[valueProp] in dbConfig["destConfig"][sourceType]:
             return True
@@ -408,7 +410,7 @@ def generateProperties(uiConfig, dbConfig, schemaObject, properties, name, selec
                     fields = group.get('fields', [])
                     for field in fields:
                         generateFunction = uiTypetoSchemaFn.get(
-                            field['type'], None)
+                            field["type"], None)
                         if generateFunction:
                             properties[field['value']] = generateFunction(
                                 field, dbConfig, 'value')
@@ -515,28 +517,38 @@ uiTypetoSchemaFn = {
 
 
 def validateSchema(uiConfig, dbConfig, schema, name, selector):
-    if schema == None:
-        warnings.warn("Schema is null")
+    if schema == None and uiConfig == None:
         return
     if uiConfig == None:
-        warnings.warn("Ui-Config is null")
+        print('-'*50)
+        warnings.warn(f"Ui-Config is null for {name} in {selector}",UserWarning)
+        print('-'*50)
         return
     generatedSchema = generateSchema(uiConfig, dbConfig, name, selector)
-    schemaDiff = diff(schema, generatedSchema["configSchema"])
-    if schemaDiff:
+    if schema:
+        schemaDiff = diff(schema, generatedSchema["configSchema"])
+        if schemaDiff:
+            print('-'*50)
+            print(f'schema diff for {name} in {selector}s')
         # call for individual warnings
-        for uiType in uiTypetoSchemaFn.keys():
-            testIndividualType(uiConfig, dbConfig, schema, uiType)
-        if "allOf" in schema:
-            curAllOfSchema = schema["allOf"]
-            newAllOfSchema = generateAllOfSchema(uiConfig, dbConfig, "value")
-            allOfSchemaDiff = diff(newAllOfSchema, curAllOfSchema)
-            if allOfSchemaDiff:
-                warnings.warn("For allOf field Difference is : {}".format(allOfSchemaDiff), UserWarning)
-        if "anyOf" in schema:
-            curAnyOfSchema = schema["anyOf"]
-            newAnyOfSchema = generateAllOfSchema(uiConfig, dbConfig, "value")
-            anyOfSchemaDiff = diff(newAnyOfSchema, curAnyOfSchema)
-            if anyOfSchemaDiff:
-                warnings.warn("For anyOf field Difference is : {}".format(anyOfSchemaDiff), UserWarning)
-    return
+            for uiType in uiTypetoSchemaFn.keys():
+                testIndividualType(uiConfig, dbConfig, schema, uiType)
+            if "allOf" in schema:
+                curAllOfSchema = schema["allOf"]
+                newAllOfSchema = generateAllOfSchema(uiConfig, dbConfig, "value")
+                allOfSchemaDiff = diff(newAllOfSchema, curAllOfSchema)
+                if allOfSchemaDiff:
+                    warnings.warn("For allOf field Difference is : {}".format(allOfSchemaDiff), UserWarning)
+            if "anyOf" in schema:
+                curAnyOfSchema = schema["anyOf"]
+                newAnyOfSchema = generateAllOfSchema(uiConfig, dbConfig, "value")
+                anyOfSchemaDiff = diff(newAnyOfSchema, curAnyOfSchema)
+                if anyOfSchemaDiff:
+                    warnings.warn("For anyOf field Difference is : {}".format(anyOfSchemaDiff), UserWarning)
+            print('-'*50)
+    else:
+        print('-'*50)
+        print(f'Generated Schema for {name} in {selector}s')
+        print(json.dumps(generatedSchema,indent=2))
+        print('-'*50)
+
