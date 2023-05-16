@@ -24,7 +24,10 @@ def generatePattern(field):
     if fieldType == "singleSelect":
         pattern = "^("
         for i in range(0, len(field["options"])):
-            pattern += field["options"][i]["value"]
+            if isinstance(field["options"][i], int) or isinstance(field["options"][i], str):
+                pattern += str(field["options"][i])
+            else:
+                pattern += str(field["options"][i]["value"])
             if i == len(field["options"])-1:
                 break
             pattern += "|"
