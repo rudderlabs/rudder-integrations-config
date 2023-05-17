@@ -2,7 +2,10 @@ import json
 from jsondiff import diff
 import warnings
 from enum import Enum
+import sys
+import os
 
+CONFIG_DIR = 'src/configurations'
 
 class TypeString(Enum):
     STRING = "string"
@@ -456,14 +459,14 @@ def testIndividualType(uiConfig, dbConfig, schema, curUiType):
                 if field["type"] == curUiType:
                     if field["value"] not in schema["properties"]:
                         warnings.warn(
-                            f'{field["value"]} field is not in schema',  UserWarning)
+                            f'{field["value"]} field is not in schema \n',  UserWarning)
                     else:
                         curSchemaField = schema["properties"][field["value"]]
                         newSchemaField = uiTypetoSchemaFn.get(
                             curUiType)(field, dbConfig, "value")
                         schemaDiff = diff(newSchemaField, curSchemaField)
                         if schemaDiff:
-                            warnings.warn("For type:{} field:{} Difference is : {}".format(
+                            warnings.warn("For type:{} field:{} Difference is : \n\n {} \n".format(
                                 curUiType, field["value"], schemaDiff), UserWarning)
     else:
         baseTemplate = uiConfig.get('baseTemplate', [])
@@ -477,14 +480,14 @@ def testIndividualType(uiConfig, dbConfig, schema, curUiType):
                         if generateFunction and field["type"] == curUiType:
                             if field["configKey"] not in schema["properties"]:
                                 warnings.warn(
-                                    f'{field["configKey"]} field is not in schema',  UserWarning)
+                                    f'{field["configKey"]} field is not in schema \n',  UserWarning)
                             else:
                                 curSchemaField = schema["properties"][field["configKey"]]
                                 newSchemaField = uiTypetoSchemaFn.get(
                                     curUiType)(field, dbConfig, "configKey")
                                 schemaDiff = diff(newSchemaField, curSchemaField)
                                 if schemaDiff:
-                                    warnings.warn("For type:{} field:{} Difference is : {}".format(
+                                    warnings.warn("For type:{} field:{} Difference is : \n\n {} \n".format(
                                         curUiType, field["configKey"], schemaDiff), UserWarning)
                         
         for field in sdkTemplate.get('fields', []):
@@ -493,14 +496,14 @@ def testIndividualType(uiConfig, dbConfig, schema, curUiType):
                 if generateFunction and field["type"] == curUiType:
                     if field["configKey"] not in schema["properties"]:
                         warnings.warn(
-                            f'{field["configKey"]} field is not in schema',  UserWarning)
+                            f'{field["configKey"]} field is not in schema \n',  UserWarning)
                     else:
                         curSchemaField = schema["properties"][field["configKey"]]
                         newSchemaField = uiTypetoSchemaFn.get(
                             curUiType)(field, dbConfig, "configKey")
                         schemaDiff = diff(newSchemaField, curSchemaField)
                         if schemaDiff:
-                            warnings.warn("For type:{} field:{} Difference is : {}".format(
+                            warnings.warn("For type:{} field:{} Difference is : \n\n {} \n".format(
                                 curUiType, field["configKey"], schemaDiff), UserWarning)
 
 
@@ -524,7 +527,7 @@ def validateSchema(uiConfig, dbConfig, schema, name, selector):
         return
     if uiConfig == None:
         print('-'*50)
-        warnings.warn(f"Ui-Config is null for {name} in {selector}",UserWarning)
+        warnings.warn(f"Ui-Config is null for {name} in {selector} \n",UserWarning)
         print('-'*50)
         return
     generatedSchema = generateSchema(uiConfig, dbConfig, name, selector)
@@ -532,8 +535,8 @@ def validateSchema(uiConfig, dbConfig, schema, name, selector):
         schemaDiff = diff(schema, generatedSchema["configSchema"])
         if schemaDiff:
             print('-'*50)
-            print(f'schema diff for {name} in {selector}s')
-        # call for individual warnings
+            print(f'Schema diff for {name} in {selector}s')
+            # call for individual warnings
             for uiType in uiTypetoSchemaFn.keys():
                 testIndividualType(uiConfig, dbConfig, schema, uiType)
             if "allOf" in schema:
@@ -541,13 +544,13 @@ def validateSchema(uiConfig, dbConfig, schema, name, selector):
                 newAllOfSchema = generateAllOfSchema(uiConfig, dbConfig, "value")
                 allOfSchemaDiff = diff(newAllOfSchema, curAllOfSchema)
                 if allOfSchemaDiff:
-                    warnings.warn("For allOf field Difference is : {}".format(allOfSchemaDiff), UserWarning)
+                    warnings.warn("For allOf field Difference is :  \n\n {} \n".format(allOfSchemaDiff), UserWarning)
             if "anyOf" in schema:
                 curAnyOfSchema = schema["anyOf"]
                 newAnyOfSchema = generateAllOfSchema(uiConfig, dbConfig, "value")
                 anyOfSchemaDiff = diff(newAnyOfSchema, curAnyOfSchema)
                 if anyOfSchemaDiff:
-                    warnings.warn("For anyOf field Difference is : {}".format(anyOfSchemaDiff), UserWarning)
+                    warnings.warn("For anyOf field Difference is :  \n\n {} \n".format(anyOfSchemaDiff), UserWarning)
             print('-'*50)
     else:
         print('-'*50)
@@ -555,3 +558,25 @@ def validateSchema(uiConfig, dbConfig, schema, name, selector):
         print(json.dumps(generatedSchema,indent=2))
         print('-'*50)
 
+def getSchemaDiff(name, selector):
+    file_selectors = ['db-config.json', 'ui-config.json', 'schema.json']
+    directory = f'./{CONFIG_DIR}/{selector}s/{name}'
+    available_files = os.listdir(directory)
+    file_content = {}
+    for file_selector in file_selectors:
+        if file_selector in available_files:
+            with open (f'{directory}/{file_selector}', 'r') as f:
+                file_content.update(json.loads(f.read()))
+    uiConfig = file_content.get("uiConfig")
+    schema = file_content.get("configSchema")
+    dbConfig = file_content.get("config")
+    validateSchema(uiConfig, dbConfig, schema, name, selector)
+
+
+if __name__ == '__main__':
+    if len(sys.argv) < 3:
+        print("Please provide selector and name")
+    else:
+        selector = sys.argv[1]
+        name = sys.argv[2]
+        getSchemaDiff(name, selector)
