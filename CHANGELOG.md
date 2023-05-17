@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.31.0...v1.31.1) (2023-05-17)
+
+
+### Bug Fixes
+
+* fix ui-config and schema for avroSchemas and embedAvroSchemaID fields in kafka destination ([#657](https://github.com/rudderlabs/rudder-config-schema/issues/657)) ([a390cc0](https://github.com/rudderlabs/rudder-config-schema/commit/a390cc041e88d6f4b04cef859689a8c83c7982fc))
+
 ## [1.31.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.5...v1.31.0) (2023-05-15)
 
 
