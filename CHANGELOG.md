@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.32.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.31.1...v1.32.0) (2023-05-18)
+
+
+### Features
+
+* move Rockerbox to new UI form builder ([#660](https://github.com/rudderlabs/rudder-config-schema/issues/660)) ([110b690](https://github.com/rudderlabs/rudder-config-schema/commit/110b6900d80a34da07d32d81a5855206ea7cde06))
+
 ### [1.31.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.31.0...v1.31.1) (2023-05-17)
 
 
