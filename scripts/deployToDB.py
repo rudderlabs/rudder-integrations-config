@@ -7,21 +7,21 @@ import jsondiff
 
 #########################
 # ENV VARIABLES FOT TESTING
-CONTROL_PLANE_URL="http://localhost:5050"
-print(CONTROL_PLANE_URL)
-USERNAME="cbadmin"
-print(USERNAME)
-PASSWORD="xasamelo94"
-print(PASSWORD)
+# CONTROL_PLANE_URL="https://api.rudderstack.com"
+# print(CONTROL_PLANE_URL)
+# USERNAME="cbadmin"
+# print(USERNAME)
+# PASSWORD="testpassword"
+# print(PASSWORD)
 #########################
 
 #########################
 # ENV VARIABLES
-# CONTROL_PLANE_URL=sys.argv[1]
-# print(CONTROL_PLANE_URL)
-# USERNAME=os.environ['API_USER'] #sys.argv[2]
-# print(USERNAME)
-# PASSWORD=os.environ['API_PASSWORD'] #sys.argv[3]
+CONTROL_PLANE_URL=sys.argv[1]
+print(CONTROL_PLANE_URL)
+USERNAME=os.environ['API_USER'] #sys.argv[2]
+print(USERNAME)
+PASSWORD=os.environ['API_PASSWORD'] #sys.argv[3]
 #print(PASSWORD)
 #########################
 # CONSTANTS
