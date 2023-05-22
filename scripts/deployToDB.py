@@ -4,7 +4,7 @@ import json
 import os
 import sys
 import jsondiff
-from scripts.schemaGenerator import validateSchema
+from scripts.schemaGenerator import validate_config_consistency
 
 #########################
 # ENV VARIABLES FOT TESTING
@@ -69,7 +69,7 @@ def get_file_content(name, selector):
     dbConfig = file_content.get("config")
     try:
         print(f'##### {selector} : {name} #####')
-        validateSchema(uiConfig, dbConfig, schema, name, selector)
+        validate_config_consistency(name, selector, uiConfig, dbConfig, schema)
     except Exception as e:
         print(str(e))
     return file_content
