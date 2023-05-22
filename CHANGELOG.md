@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.32.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.31.1...v1.32.0) (2023-05-18)
+
+
+### Features
+
+* move Rockerbox to new UI form builder ([#660](https://github.com/rudderlabs/rudder-config-schema/issues/660)) ([110b690](https://github.com/rudderlabs/rudder-config-schema/commit/110b6900d80a34da07d32d81a5855206ea7cde06))
+
+### [1.31.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.31.0...v1.31.1) (2023-05-17)
+
+
+### Bug Fixes
+
+* fix ui-config and schema for avroSchemas and embedAvroSchemaID fields in kafka destination ([#657](https://github.com/rudderlabs/rudder-config-schema/issues/657)) ([a390cc0](https://github.com/rudderlabs/rudder-config-schema/commit/a390cc041e88d6f4b04cef859689a8c83c7982fc))
+
+## [1.31.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.5...v1.31.0) (2023-05-15)
+
+
+### Features
+
+* custom host for fullstory ([#619](https://github.com/rudderlabs/rudder-config-schema/issues/619)) ([52f1ad1](https://github.com/rudderlabs/rudder-config-schema/commit/52f1ad1e5a51874b8ccbb19ec668993d46219238))
+* **GA4:** override configuration for client_id and session_id in GA hybrid mode ([#607](https://github.com/rudderlabs/rudder-config-schema/issues/607)) ([7d2acf6](https://github.com/rudderlabs/rudder-config-schema/commit/7d2acf6ddcdbe5e13e56f430709b6c8ee82ba84d))
+* mixpanel deletion api ([#631](https://github.com/rudderlabs/rudder-config-schema/issues/631)) ([8c0d632](https://github.com/rudderlabs/rudder-config-schema/commit/8c0d6325de1e7462c00b7d4063278f798477ae78))
+* support event filtering in a scalable way for hybrid mode ([#524](https://github.com/rudderlabs/rudder-config-schema/issues/524)) ([f8ef967](https://github.com/rudderlabs/rudder-config-schema/commit/f8ef9677521752c5bf8060050e22b10d084cb796))
+
 ### [1.30.5](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.4...v1.30.5) (2023-05-13)
 
 
