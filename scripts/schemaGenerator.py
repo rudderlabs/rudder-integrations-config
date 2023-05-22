@@ -4,6 +4,7 @@ import warnings
 from enum import Enum
 import sys
 import os
+import argparse
 
 CONFIG_DIR = 'src/configurations'
 
@@ -574,9 +575,21 @@ def getSchemaDiff(name, selector):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 3:
-        print("Please provide selector and name")
+    parser = argparse.ArgumentParser(description='Generates schema.json from ui-cofing.json and db-config.json and validates against actual scheme.json')
+    group = parser.add_mutually_exclusive_group()
+    parser.add_argument('selector',metavar='selector',type=str,help='Enter wheather -name is a source or destination')
+    group.add_argument('-name',metavar='name',type=str,help='Enter the folder name under selector')
+    group.add_argument('-all',action='store_true', help='will run validation for all entites under selector')
+    
+    
+    args = parser.parse_args()
+    selector = args.selector
+    if args.all:
+        CONFIG_DIR = 'src/configurations'
+        current_items = os.listdir(f'./{CONFIG_DIR}/{selector}s')
+        for name in current_items:
+            getSchemaDiff(name,selector)
+        
     else:
-        selector = sys.argv[1]
-        name = sys.argv[2]
+        name = args.name 
         getSchemaDiff(name, selector)

@@ -76,6 +76,7 @@ def get_file_content(name, selector):
         validateSchema(uiConfig, dbConfig, schema, name, selector)
     except Exception as e:
         print(str(e))
+        raise
     return file_content
 
 def update_config_definition(selector, name, fileData):
