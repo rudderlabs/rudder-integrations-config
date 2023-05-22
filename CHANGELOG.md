@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.31.1...v1.31.2) (2023-05-22)
+
+
+### Bug Fixes
+
+* satismeter device mode only ([#664](https://github.com/rudderlabs/rudder-config-schema/issues/664)) ([40a5841](https://github.com/rudderlabs/rudder-config-schema/commit/40a584113115c7d7a1ae35c7f41ad73ebd1d61fa))
+
 ### [1.31.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.31.0...v1.31.1) (2023-05-17)
 
 
