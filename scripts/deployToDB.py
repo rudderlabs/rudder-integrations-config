@@ -4,7 +4,11 @@ import json
 import os
 import sys
 import jsondiff
-from scripts.schemaGenerator import validateSchema
+if __name__ == '__main__' and __package__ is None:
+    package_path = os.path.dirname(os.path.realpath(__file__))
+    sys.path.append(os.path.dirname(package_path))
+    __package__ = os.path.basename(package_path)
+from .schemaGenerator import validateSchema
 
 #########################
 # ENV VARIABLES FOT TESTING
