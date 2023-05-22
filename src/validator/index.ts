@@ -59,6 +59,119 @@ export function validateConfig(
   }
 }
 
+export function validateHybridModeCloudConfig(destinationDefinition: any): boolean {
+  const isObject = (val: any): boolean => {
+    // invalid types condition check
+    if (!val || typeof val !== 'object' || Array.isArray(val)) {
+      return false;
+    }
+    return true;
+  };
+
+  const checkForValidaObjectAndValidateWithMasterList = (
+    inputValues: any,
+    masterList: string[],
+    logKeys: { location: string; subsetName: string; masterName: string },
+  ): { isValid: boolean; valList: string[] } => {
+    if (!isObject(inputValues)) {
+      return { isValid: false, valList: [] };
+    }
+    const subsetValues = Object.keys(inputValues);
+    // no subset defined
+    if (subsetValues.length === 0) {
+      return { isValid: false, valList: [] };
+    }
+
+    const isSubsetOfMasterList = subsetValues.every((child) => masterList.includes(child));
+    if (!isSubsetOfMasterList) {
+      console.error(
+        `The ${logKeys.subsetName} mentioned in ${logKeys.location} doesnot exist in ${logKeys.masterName}`,
+      );
+      return { isValid: false, valList: [] };
+    }
+    return { isValid: true, valList: subsetValues };
+  };
+  if (destinationDefinition?.config?.hybridModeCloudEventsFilter) {
+    const { hybridModeCloudEventsFilter, supportedSourceTypes } = destinationDefinition.config;
+
+    const { isValid: isSourceTypeValid, valList: sourceTypes } =
+      checkForValidaObjectAndValidateWithMasterList(
+        hybridModeCloudEventsFilter,
+        supportedSourceTypes,
+        {
+          masterName: 'supportedSourceTypes',
+          location: 'hybridModeCloudEventsFilter.[sourceType]',
+          subsetName: 'source type',
+        },
+      );
+    // no source-types defined
+    if (!isSourceTypeValid) {
+      console.error(
+        'The supported source type mentioned in hybridModeCloudEventsFilter doesnot exist in supportedSourceTypes',
+      );
+      return false;
+    }
+    const supportedEventProperties = ['messageType'];
+
+    return sourceTypes.some((srcType: string) => {
+      const sourceTypeFilterMap = hybridModeCloudEventsFilter[srcType];
+      const { isValid: isValidEventProperties, valList: eventProperties } =
+        checkForValidaObjectAndValidateWithMasterList(
+          sourceTypeFilterMap,
+          supportedEventProperties,
+          {
+            masterName: `${supportedEventProperties}`,
+            location: '',
+            subsetName: `${Object.keys(hybridModeCloudEventsFilter[srcType])}`,
+          },
+        );
+      if (!isValidEventProperties) {
+        return false;
+      }
+
+      // basic-check
+      return eventProperties.some((eventProperty) =>
+        Array.isArray(sourceTypeFilterMap[eventProperty]),
+      );
+    });
+  }
+  return true;
+}
+
+export async function validateDestinationDefinitions(destName: string): Promise<boolean> {
+  // hybridModeCloudEventsFilter check -- STARTS
+  const destDefinition = await import(`../configurations/destinations/${destName}/db-config.json`);
+  const isValidHybridModeCloudConfig = validateHybridModeCloudConfig(destDefinition);
+  // hybridModeCloudEventsFilter check -- ENDS
+  return isValidHybridModeCloudConfig;
+}
+
+export function validateSourceType(sourceDefinition: any) {
+  // currently these are the valid source-types according to the ServiceUtil.getSourceType logic in config-backend
+  const validSourceTypes = [
+    'cloud',
+    'cloudSource',
+    'warehouse',
+    'web',
+    'android',
+    'ios',
+    'unity',
+    'reactnative',
+    'amp',
+    'flutter',
+    'cordova',
+  ];
+  return validSourceTypes.includes(sourceDefinition?.type);
+}
+
+export async function validateSourceDefinitions(srcName: string): Promise<boolean> {
+  const sourceDefinition = await import(`../configurations/sources/${srcName}/db-config.json`);
+  // SourceDefinition.type validation -- STARTS
+  const isValidSourceType = validateSourceType(sourceDefinition);
+  // SourceDefinition.type validation -- ENDS
+  return isValidSourceType;
+}
+
 export async function init() {
   validators = {};
   await initAjvValidators();
