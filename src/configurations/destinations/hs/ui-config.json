@@ -1,232 +1,358 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Hub ID",
-          "value": "hubID",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Hub ID",
-          "required": false,
-          "placeholder": "e.g: 748991",
-          "footerNote": "Your Hub ID (under account name)"
-        },
-        {
-          "type": "singleSelect",
-          "label": "Authorization Type",
-          "value": "authorizationType",
-          "options": [
-            {
-              "name": "API Key (deprecating soon)",
-              "value": "legacyApiKey"
-            },
-            {
-              "name": "Private Apps",
-              "value": "newPrivateAppApi"
-            }
-          ],
-          "defaultOption": {
-            "value": "legacyApiKey"
-          }
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": {
-            "name": "authorizationType",
-            "selectedValue": "legacyApiKey"
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Authorization Type",
+                    "configKey": "authorizationType",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
+                      {
+                        "label": "API Key (deprecating soon)",
+                        "value": "legacyApiKey"
+                      },
+                      {
+                        "label": "Private Apps",
+                        "value": "newPrivateAppApi"
+                      }
+                    ],
+                    "default": "legacyApiKey"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "API Key",
+                    "note": "Your API Key (Settings -> Integrations -> API Key)",
+                    "configKey": "apiKey",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid API Key",
+                    "placeholder": "e.g: 05afa518-132c-40db-830a-de0f688902f7",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "authorizationType",
+                          "value": "legacyApiKey"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Access Token",
+                    "note": "Your private app access token",
+                    "configKey": "accessToken",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Access Token",
+                    "placeholder": "e.g: pat-eu1-kjg875ya-9de4-98uu-8171-62875ht847r9",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "authorizationType",
+                          "value": "newPrivateAppApi"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "API Version",
+                    "configKey": "apiVersion",
+                    "note": "Edit your Amplitude server selection here",
+                    "options": [
+                      {
+                        "label": "Legacy API (v1)",
+                        "value": "legacyApi"
+                      },
+                      {
+                        "label": "New API (v3)",
+                        "value": "newApi"
+                      }
+                    ],
+                    "default": "legacyApi"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Hubspot property name to be used as lookup field",
+                    "note": "Provide unique Hubspot property field, which could be used for contact lookup. The provided lookup field key will be retrieved from traits. eg: traits: { lookupField: 'alex@example.com' }",
+                    "configKey": "lookupField",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Property Name",
+                    "placeholder": "e.g: lookupField",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "apiVersion",
+                          "value": "newApi"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
           },
-          "label": "API Key",
-          "value": "apiKey",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid API Key",
-          "required": true,
-          "placeholder": "e.g: 05afa518-132c-40db-830a-de0f688902f7",
-          "footerNote": "Your API Key (Settings -> Integrations -> API Key)"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": {
-            "name": "authorizationType",
-            "selectedValue": "newPrivateAppApi"
-          },
-          "label": "Access Token",
-          "value": "accessToken",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Access Token",
-          "required": true,
-          "placeholder": "e.g: pat-eu1-kjg875ya-9de4-98uu-8171-62875ht847r9",
-          "footerNote": "Your private app access token"
-        },
-        {
-          "type": "singleSelect",
-          "label": "API Version",
-          "value": "apiVersion",
-          "options": [
-            {
-              "name": "Legacy API (v1)",
-              "value": "legacyApi"
-            },
-            {
-              "name": "New API (v3)",
-              "value": "newApi"
-            }
-          ],
-          "defaultOption": {
-            "value": "legacyApi"
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
           }
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": {
-            "name": "apiVersion",
-            "selectedValue": "newApi"
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Destination specific settings",
+                "note": "Configure your destination specific settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Hub ID",
+                    "note": "Your Hub ID (under account name)",
+                    "configKey": "hubID",
+                    "placeholder": "e.g: 748991",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Hub ID"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Create associations between object records",
+                    "configKey": "doAssociation",
+                    "note": "Any page call with a category will be sent to Amplitude as either a “Loaded {Category} Page” or “Viewed {Category} Screen” event",
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "apiVersion",
+                          "value": "newApi"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
           },
-          "label": "Hubspot property name to be used as lookup field",
-          "value": "lookupField",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Property Name",
-          "required": true,
-          "placeholder": "e.g: lookupField",
-          "footerNote": "Provide unique Hubspot property field, which could be used for contact lookup. The provided lookup field key will be retrieved from traits. eg: traits: { lookupField: 'alex@example.com' }"
-        },
-        {
-          "type": "checkbox",
-          "label": "Create associations between object records",
-          "value": "doAssociation",
-          "default": false,
-          "preRequisiteField": {
-            "name": "apiVersion",
-            "selectedValue": "newApi"
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Client-side event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.webDevice",
+                      "value": true
+                    },
+                    {
+                      "configKey": "connectionModes.mobileDevice",
+                      "value": true
+                    }
+                  ],
+                  "condition": "or"
+                },
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on events filtering:",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
+                      {
+                        "label": "Disabled",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack’s OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
           }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "label": "Map RudderStack event name to HubSpot Custom Behavioral event name",
-          "value": "hubspotEvents",
-          "preRequisiteField": {
-            "name": "apiVersion",
-            "selectedValue": "newApi"
-          },
-          "customFields": [
-            {
-              "type": "textInput",
-              "label": "RudderStack Event Name",
-              "value": "rsEventName",
-              "regex": "^(.{0,100})$",
-              "required": false,
-              "placeholder": "e.g Products Searched",
-              "footerNote": "Enter the RudderStack event name you want to map"
-            },
-            {
-              "type": "textInput",
-              "label": "HubSpot Event Name",
-              "value": "hubspotEventName",
-              "regex": "^(.{0,100})$",
-              "required": false,
-              "placeholder": "e.g Search",
-              "footerNote": "Enter the corresponding Hubspot event name you want to map"
-            },
-            {
-              "type": "dynamicForm",
-              "label": "Map your Event Property",
-              "value": "eventProperties",
-              "labelLeft": "RudderStack Property Name",
-              "labelRight": "HubSpot Property Name",
-              "keyLeft": "from",
-              "keyRight": "to",
-              "placeholderLeft": "e.g firstName",
-              "placeholderRight": "e.g first_name"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": false
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
+        ]
+      },
+      {
+        "title": "Events Mapping",
+        "note": "Map RudderStack to Hubspot events(Only for new newApi version)",
+        "hideEditIcon": false,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "RudderStack to Hubspot event mappings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "RudderStack Event Name",
+                    "note": "Enter the RudderStack event name you want to map",
+                    "configKey": "rsEventName",
+                    "placeholder": "e.g Products Searched",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid RudderStack Event Name",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "apiVersion",
+                          "value": "newApi"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "HubSpot Event Name",
+                    "note": "Enter the corresponding Hubspot event name you want to map",
+                    "configKey": "hubspotEventName",
+                    "placeholder": "e.g Search",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid HubSpot Event Name",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "apiVersion",
+                          "value": "newApi"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "mapping",
+                    "label": "Map your Event Property",
+                    "labelLeft": "RudderStack Property Name",
+                    "labelRight": "HubSpot Property Name",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g firstName",
+                    "placeholderRight": "e.g first_name",
+                    "configKey": "eventProperties",
+                    "default": [],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "apiVersion",
+                          "value": "newApi"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
           }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     }
-  ]
+  }
 }
