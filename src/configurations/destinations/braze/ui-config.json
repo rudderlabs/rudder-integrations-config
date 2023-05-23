@@ -78,10 +78,14 @@
                       {
                         "label": "EU-02",
                         "value": "EU-02"
+                      },
+                      {
+                        "label": "EU-03",
+                        "value": "EU-03"
                       }
                     ],
                     "required": true,
-                    "placeholder": "e.g: EU-01",
+                    "placeholder": "e.g: US-01",
                     "default": "US-01"
                   }
                 ]
@@ -119,28 +123,70 @@
                 "title": "Event Settings",
                 "note": "Set if you want to enable following features",
                 "icon": "file",
-                "preRequisites": {
-                  "fields": [
-                    {
-                      "configKey": "connectionModes.cloud",
-                      "value": true
-                    }
-                  ]
-                },
                 "fields": [
                   {
                     "type": "checkbox",
                     "label": "Enable subscription groups in group call",
                     "configKey": "enableSubscriptionGroupInGroupCall",
                     "default": false,
-                    "note": "Turn on if you want to support subscription group (https://www.braze.com/docs/api/endpoints/subscription_groups) via group call. "
+                    "note": [
+                      "Turn on if you want to support ",
+                      {
+                        "text": "subscription group",
+                        "link": "https://www.braze.com/docs/api/endpoints/subscription_groups"
+                      },
+                      " via group call."
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "checkbox",
                     "label": "Use Custom Attributes Operation",
                     "configKey": "enableNestedArrayOperations",
                     "default": false,
-                    "note": "Turn on if you want to use nested array operations (https://www.braze.com/docs/user_guide/data_and_analytics/custom_data/custom_attributes/array_of_objects/)"
+                    "note": [
+                      "Turn on if you want to use ",
+                      {
+                        "text": "nested array operations",
+                        "link": "https://www.braze.com/docs/user_guide/data_and_analytics/custom_data/custom_attributes/array_of_objects/"
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Track events for anonymous users",
+                    "configKey": "trackAnonymousUser",
+                    "default": false,
+                    "note": "Turn on if you want to track anonymous users"
+                  }
+                ]
+              },
+              {
+                "title": "Deduplication settings",
+                "note": "Configure deduplication settings for user data",
+                "icon": "magnifyingGlass",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Deduplicate Traits (Beta)",
+                    "configKey": "supportDedup",
+                    "default": false,
+                    "note": "Turn on if you want to enable Deduplicate Traits on identify and track"
                   }
                 ]
               }
@@ -270,23 +316,9 @@
       "fields": [
         {
           "type": "checkbox",
-          "label": "Track events for anonymous users",
-          "configKey": "trackAnonymousUser",
-          "default": false,
-          "note": "Turn on if you want to track anonymous users"
-        },
-        {
-          "type": "checkbox",
           "label": "Allow User Supplied Javascript",
           "configKey": "allowUserSuppliedJavascript",
           "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Deduplicate Traits",
-          "configKey": "supportDedup",
-          "default": false,
-          "note": "Turn on if you want to enable Deduplicate Traits on identify, supported only in device mode"
         },
         {
           "type": "checkbox",
