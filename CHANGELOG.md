@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.33.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.32.0...v1.33.0) (2023-05-23)
+
+
+### Features
+
+* **google ads:** enable conversion label option ([#663](https://github.com/rudderlabs/rudder-config-schema/issues/663)) ([94b2858](https://github.com/rudderlabs/rudder-config-schema/commit/94b28581c46a0a12c31e54864fda155deab47a38))
+* onboard dynamic yield destination ([#552](https://github.com/rudderlabs/rudder-config-schema/issues/552)) ([bb23ddd](https://github.com/rudderlabs/rudder-config-schema/commit/bb23ddd284f55818b60aaf858dcbd6bff14bc73a))
+
+
+### Bug Fixes
+
+* **ga4:** update field label and description ([#648](https://github.com/rudderlabs/rudder-config-schema/issues/648)) ([abd4f8c](https://github.com/rudderlabs/rudder-config-schema/commit/abd4f8c7a968bcecd914aa95100167b4f4131425))
+* s3 configs for access keys and iam roles ([2c6e472](https://github.com/rudderlabs/rudder-config-schema/commit/2c6e472cf83abc54433d541f2c4e23217a64e078))
+
 ## [1.32.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.31.1...v1.32.0) (2023-05-18)
 
 
