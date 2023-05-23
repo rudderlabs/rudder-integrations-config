@@ -64,30 +64,16 @@
         },
         "then": {
           "properties": {
+            "iamRoleARN": { "type": "string" },
+            "roleBasedAuth": { "type": "boolean" },
             "bucketName": {
               "type": "string",
               "pattern": "(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
-            }
-          },
-          "required": ["bucketName"],
-          "anyOf": [
-            {
-              "type": "object",
-              "properties": {
-                "accessKeyID": { "type": "string", "pattern": "(^env[.].+)|^(.{0,100})$" },
-                "accessKey": { "type": "string", "pattern": "(^env[.].+)|^(.{0,100})$" }
-              },
-              "required": ["accessKeyID", "accessKey"]
             },
-            {
-              "type": "object",
-              "properties": {
-                "iamRoleARN": { "type": "string" },
-                "roleBasedAuth": { "const": true }
-              },
-              "required": ["iamRoleARN", "roleBasedAuth"]
-            }
-          ]
+            "accessKeyID": { "type": "string", "pattern": "(^env[.].+)|^(.{0,100})$" },
+            "accessKey": { "type": "string", "pattern": "(^env[.].+)|^(.{0,100})$" }
+          },
+          "required": ["bucketName", "accessKeyID", "accessKey"]
         }
       },
       {
