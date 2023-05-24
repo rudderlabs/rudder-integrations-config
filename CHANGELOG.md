@@ -2,6 +2,108 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.33.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.32.0...v1.33.0) (2023-05-23)
+
+
+### Features
+
+* **google ads:** enable conversion label option ([#663](https://github.com/rudderlabs/rudder-config-schema/issues/663)) ([94b2858](https://github.com/rudderlabs/rudder-config-schema/commit/94b28581c46a0a12c31e54864fda155deab47a38))
+* onboard dynamic yield destination ([#552](https://github.com/rudderlabs/rudder-config-schema/issues/552)) ([bb23ddd](https://github.com/rudderlabs/rudder-config-schema/commit/bb23ddd284f55818b60aaf858dcbd6bff14bc73a))
+
+
+### Bug Fixes
+
+* **ga4:** update field label and description ([#648](https://github.com/rudderlabs/rudder-config-schema/issues/648)) ([abd4f8c](https://github.com/rudderlabs/rudder-config-schema/commit/abd4f8c7a968bcecd914aa95100167b4f4131425))
+
+## [1.32.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.31.1...v1.32.0) (2023-05-18)
+
+
+### Features
+
+* move Rockerbox to new UI form builder ([#660](https://github.com/rudderlabs/rudder-config-schema/issues/660)) ([110b690](https://github.com/rudderlabs/rudder-config-schema/commit/110b6900d80a34da07d32d81a5855206ea7cde06))
+
+### [1.31.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.31.0...v1.31.1) (2023-05-17)
+
+
+### Bug Fixes
+
+* fix ui-config and schema for avroSchemas and embedAvroSchemaID fields in kafka destination ([#657](https://github.com/rudderlabs/rudder-config-schema/issues/657)) ([a390cc0](https://github.com/rudderlabs/rudder-config-schema/commit/a390cc041e88d6f4b04cef859689a8c83c7982fc))
+
+## [1.31.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.5...v1.31.0) (2023-05-15)
+
+
+### Features
+
+* custom host for fullstory ([#619](https://github.com/rudderlabs/rudder-config-schema/issues/619)) ([52f1ad1](https://github.com/rudderlabs/rudder-config-schema/commit/52f1ad1e5a51874b8ccbb19ec668993d46219238))
+* **GA4:** override configuration for client_id and session_id in GA hybrid mode ([#607](https://github.com/rudderlabs/rudder-config-schema/issues/607)) ([7d2acf6](https://github.com/rudderlabs/rudder-config-schema/commit/7d2acf6ddcdbe5e13e56f430709b6c8ee82ba84d))
+* mixpanel deletion api ([#631](https://github.com/rudderlabs/rudder-config-schema/issues/631)) ([8c0d632](https://github.com/rudderlabs/rudder-config-schema/commit/8c0d6325de1e7462c00b7d4063278f798477ae78))
+* support event filtering in a scalable way for hybrid mode ([#524](https://github.com/rudderlabs/rudder-config-schema/issues/524)) ([f8ef967](https://github.com/rudderlabs/rudder-config-schema/commit/f8ef9677521752c5bf8060050e22b10d084cb796))
+
+### [1.30.5](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.4...v1.30.5) (2023-05-13)
+
+
+### Bug Fixes
+
+* updates stripe to 6.3.4 ([580ddaa](https://github.com/rudderlabs/rudder-config-schema/commit/580ddaa84c2b8f184792f5eda0a7a74dc68d7309))
+
+### [1.30.4](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.3...v1.30.4) (2023-05-13)
+
+
+### Bug Fixes
+
+* updates stripe image to v6.3.3 ([05cf4f3](https://github.com/rudderlabs/rudder-config-schema/commit/05cf4f3811c9d242c011905537f0aa7ddc9af379))
+
+### [1.30.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.2...v1.30.3) (2023-05-12)
+
+
+### Bug Fixes
+
+* fixes stripe api version issue ([471a8c9](https://github.com/rudderlabs/rudder-config-schema/commit/471a8c9aa5e13d35e37be6bfd6399798db4f360a))
+
+### [1.30.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.1...v1.30.2) (2023-05-12)
+
+
+### Bug Fixes
+
+* resolve discrepancies in amplitude config files ([#637](https://github.com/rudderlabs/rudder-config-schema/issues/637)) ([543a9f6](https://github.com/rudderlabs/rudder-config-schema/commit/543a9f6121c5dae15628994dd92b7fdb90d512bf))
+
+### [1.30.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.30.0...v1.30.1) (2023-05-10)
+
+## [1.30.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.29.0...v1.30.0) (2023-05-09)
+
+
+### Features
+
+* alias call braze ([#625](https://github.com/rudderlabs/rudder-config-schema/issues/625)) ([b15cc40](https://github.com/rudderlabs/rudder-config-schema/commit/b15cc40c54285fa87790b705a9d083d6c1ce679c))
+* onboard new source formsort  ([#606](https://github.com/rudderlabs/rudder-config-schema/issues/606)) ([6560241](https://github.com/rudderlabs/rudder-config-schema/commit/6560241a81818d0490aa0d68e884e6cd04930add))
+
+### [1.28.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.28.2...v1.28.3) (2023-05-05)
+
+
+### Features
+
+* added blank audience support for criteo and fb audience, added warehouse settings for criteo ([#543](https://github.com/rudderlabs/rudder-config-schema/issues/543)) ([e0b64cc](https://github.com/rudderlabs/rudder-config-schema/commit/e0b64ccd2546685a2aa70e9234f43948f00dcfff))
+* conversion label option added for google ads conversion events ([#602](https://github.com/rudderlabs/rudder-config-schema/issues/602)) ([80ffe00](https://github.com/rudderlabs/rudder-config-schema/commit/80ffe00e3900b48eab9ab88d70856a9ac0378741))
+* **destination:** onboard bing ads audience destination ([#525](https://github.com/rudderlabs/rudder-config-schema/issues/525)) ([f7f76f2](https://github.com/rudderlabs/rudder-config-schema/commit/f7f76f26d72ce0ea48290750cc8e75881a90a8a5))
+* enable group for intercom ([#583](https://github.com/rudderlabs/rudder-config-schema/issues/583)) ([0bef2dd](https://github.com/rudderlabs/rudder-config-schema/commit/0bef2ddded00ec95c9800916ab314798c5df1308))
+* enable pinterest cdk ([#603](https://github.com/rudderlabs/rudder-config-schema/issues/603)) ([4465335](https://github.com/rudderlabs/rudder-config-schema/commit/4465335c82d3f12d860376849bd6f3ba663e8392))
+* kafka via ssh redo reverted change ([#610](https://github.com/rudderlabs/rudder-config-schema/issues/610)) ([7dab511](https://github.com/rudderlabs/rudder-config-schema/commit/7dab511f132fe0463ee8aca34236f3d9a37252f8))
+* singer marketo ([#614](https://github.com/rudderlabs/rudder-config-schema/issues/614)) ([6603c79](https://github.com/rudderlabs/rudder-config-schema/commit/6603c798ffa070555084d40ae71f9121e0b0b364))
+
+
+### Bug Fixes
+
+* **fb_custom_audience:** remove skip verify checkbox ([#612](https://github.com/rudderlabs/rudder-config-schema/issues/612)) ([8ddeafd](https://github.com/rudderlabs/rudder-config-schema/commit/8ddeafd76380b886ed901ad5c00db212d5f99dcc))
+* removed adAccountId from shcema ([#618](https://github.com/rudderlabs/rudder-config-schema/issues/618)) ([d074a32](https://github.com/rudderlabs/rudder-config-schema/commit/d074a3279ff6a3aad0cbe86c2b4b17762c8f43ec))
+
+## [1.29.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.28.2...v1.29.0) (2023-05-05)
+
+
+### Features
+
+* added blank audience support for criteo_audience ([8b2f76c](https://github.com/rudderlabs/rudder-config-schema/commit/8b2f76c1e7f153735b5a5e47ced94a8f14bc3597))
+* added key for supporting blank audience for fb audience ([3ad957b](https://github.com/rudderlabs/rudder-config-schema/commit/3ad957b5c52d14721ea789642e09cc05ba332202))
+
 ### [1.28.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.28.1...v1.28.2) (2023-05-03)
 
 

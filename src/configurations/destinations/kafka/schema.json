@@ -62,15 +62,18 @@
         "type": "boolean"
       },
       "avroSchemas": {
-        "type": "object",
-        "properties": {
-          "schemaId": {
-            "type": "string",
-            "pattern": ".*"
-          },
-          "schema": {
-            "type": "string",
-            "pattern": ".*"
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "schemaId": {
+              "type": "string",
+              "pattern": ".*"
+            },
+            "schema": {
+              "type": "string",
+              "pattern": ".*"
+            }
           }
         }
       },
@@ -179,24 +182,24 @@
         "then": {
           "properties": {
             "avroSchemas": {
-              "type": "object",
-              "properties": {
-                "schemaId": {
-                  "type": "string",
-                  "pattern": ".*"
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "schemaId": {
+                    "type": "string",
+                    "pattern": ".*"
+                  },
+                  "schema": {
+                    "type": "string",
+                    "pattern": ".*"
+                  }
                 },
-                "schema": {
-                  "type": "string",
-                  "pattern": ".*"
-                }
-              },
-              "required": ["schemaId", "schema"]
-            },
-            "embedAvroSchemaID": {
-              "boolean": "true"
+                "required": ["schemaId", "schema"]
+              }
             }
           },
-          "required": ["avroSchemas", "embedAvroSchemaID"]
+          "required": ["avroSchemas"]
         }
       }
     ],
