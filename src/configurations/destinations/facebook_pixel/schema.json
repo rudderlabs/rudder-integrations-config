@@ -12,18 +12,23 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,208})$"
       },
-      "standardPageCall": { "type": "boolean" },
-      "valueFieldIdentifier": {
-        "type": "string",
-        "pattern": "^(properties.value|properties.price)$"
+      "categoryToContent": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "to": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
       },
-      "removeExternalId": { "type": "boolean" },
-      "advancedMapping": { "type": "boolean" },
-      "testDestination": { "type": "boolean" },
-      "testEventCode": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
+      "standardPageCall": { "type": "boolean", "default": false },
       "eventsToEvents": {
         "type": "array",
         "items": {
@@ -52,6 +57,12 @@
           }
         }
       },
+      "valueFieldIdentifier": {
+        "type": "string",
+        "pattern": "^(properties.value|properties.price)$",
+        "default": "properties.price"
+      },
+      "advancedMapping": { "type": "boolean" },
       "blacklistPiiProperties": {
         "type": "array",
         "items": {
@@ -61,7 +72,10 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "blacklistPiiHash": { "type": "boolean" }
+            "blacklistPiiHash": {
+              "type": "boolean",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
           }
         }
       },
@@ -77,7 +91,7 @@
           }
         }
       },
-      "categoryToContent": {
+      "legacyConversionPixelId": {
         "type": "array",
         "items": {
           "type": "object",
@@ -93,23 +107,19 @@
           }
         }
       },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
-      "legacyConversionPixelId": {
-        "type": "object",
-        "properties": {
-          "from": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-          },
-          "to": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-          }
-        }
+      "limitedDataUSage": { "type": "boolean" },
+      "testDestination": { "type": "boolean", "default": false },
+      "testEventCode": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
+      "removeExternalId": { "type": "boolean", "default": false },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "useUpdatedMapping": { "type": "boolean", "default": false },
       "eventFilteringOption": {
         "type": "string",
-        "pattern": "^(disable|whitelistedEvents|blacklistedEvents)$"
+        "pattern": "^(disable|whitelistedEvents|blacklistedEvents)$",
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
