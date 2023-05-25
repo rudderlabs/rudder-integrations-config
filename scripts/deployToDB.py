@@ -6,22 +6,21 @@ import sys
 import jsondiff
 
 #########################
-# ENV VARIABLES FOT TESTING
-# CONTROL_PLANE_URL="https://api.rudderstack.com"
-# print(CONTROL_PLANE_URL)
-# USERNAME="cbadmin"
-# print(USERNAME)
-# PASSWORD="testpassword"
-# print(PASSWORD)
+CONTROL_PLANE_URL="http://localhost:5050"
+print(CONTROL_PLANE_URL)
+USERNAME="cbadmin"
+print(USERNAME)
+PASSWORD="xasamelo94"
+print(PASSWORD)
 #########################
 
 #########################
 # ENV VARIABLES
-CONTROL_PLANE_URL=sys.argv[1]
-print(CONTROL_PLANE_URL)
-USERNAME=os.environ['API_USER'] #sys.argv[2]
-print(USERNAME)
-PASSWORD=os.environ['API_PASSWORD'] #sys.argv[3]
+# CONTROL_PLANE_URL=sys.argv[1]
+# print(CONTROL_PLANE_URL)
+# USERNAME=os.environ['API_USER'] #sys.argv[2]
+# print(USERNAME)
+# PASSWORD=os.environ['API_PASSWORD'] #sys.argv[3]
 #print(PASSWORD)
 #########################
 # CONSTANTS
@@ -152,9 +151,9 @@ if __name__ == '__main__':
     print(get_stale_data('source', src_final_report))
 
     print("Running Wht Lib Projects Definitions Updates")
-    wht_final_report = update_diff_db('whtLibProject')
+    wht_final_report = update_diff_db('wht-lib-project')
     print("Wht lib project Definition Update Report")
     print(wht_final_report)
     print("Wht lib project Stale Config Report")
-    print(get_stale_data('whtLibProject', wht_final_report))
+    print(get_stale_data('wht-lib-project', wht_final_report))
     
