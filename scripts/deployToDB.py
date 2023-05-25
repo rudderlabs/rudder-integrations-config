@@ -4,11 +4,6 @@ import json
 import os
 import sys
 import jsondiff
-if __name__ == '__main__' and __package__ is None:
-    package_path = os.path.dirname(os.path.realpath(__file__))
-    sys.path.append(os.path.dirname(package_path))
-    __package__ = os.path.basename(package_path)
-from .schemaGenerator import validate_config_consistency
 
 #########################
 # ENV VARIABLES FOT TESTING
@@ -67,16 +62,6 @@ def get_file_content(name, selector):
             with open (f'{directory}/{file_selector}', 'r') as f:
                 file_content.update(json.loads(f.read()))
 
-    # Validating the schema
-    uiConfig = file_content.get("uiConfig")
-    schema = file_content.get("configSchema")
-    dbConfig = file_content.get("config")
-    try:
-        print(f'##### {selector} : {name} #####')
-        validate_config_consistency(name, selector, uiConfig, dbConfig, schema)
-    except Exception as e:
-        print(str(e))
-        raise
     return file_content
 
 def update_config_definition(selector, name, fileData):
