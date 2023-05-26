@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.33.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.33.1...v1.33.2) (2023-05-26)
+
+
+### Bug Fixes
+
+* update klaviyo to include a back-look window for events stream ([ae57fcc](https://github.com/rudderlabs/rudder-config-schema/commit/ae57fcc138cdfc1e2b44a470282b48e2943e6794))
+
+### [1.33.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.33.0...v1.33.1) (2023-05-23)
+
+
+### Bug Fixes
+
+* hide dynamic yield ([ba9ee70](https://github.com/rudderlabs/rudder-config-schema/commit/ba9ee70882f464ba895fd0bfb5c4d8731ba1eee8))
+
 ## [1.33.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.32.0...v1.33.0) (2023-05-23)
 
 
