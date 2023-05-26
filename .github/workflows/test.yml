@@ -28,3 +28,34 @@ jobs:
 
       - name: Run Unit Tests
         run: npm run test:ci
+      
+      - name: Set up Python
+        run: scripts/setup-python.sh
+  
+      - name: Get changed files
+        id: changed_files
+        uses: tj-actions/changed-files@v36
+      
+      - name: Run schema validation for changed files
+        run: |
+          exit_code=0
+          last_directory=""
+          for file in ${{ steps.changed_files.outputs.all_changed_files }}; do
+            directory=$(dirname "${file}")
+            parent_directory=$(dirname "${directory}")
+            if [[ "$parent_directory" == "src/configurations/destinations" || "$parent_directory" == "src/configurations/sources" ]]; then
+              name=$(echo "$file" | cut -d '/' -f 4)
+              selector=$(echo "$parent_directory" | cut -d '/' -f 3)
+              selector=${selector::-1}
+              if [ "$last_directory" != "${directory}" ]; then
+                warnings=$(python scripts/schemaGenerator.py -name="$name" $selector 2>&1 | grep -i "warning" || true)
+                if [ -n "$warnings" ]; then
+                  echo "Warnings found for name: ${name} selector: ${selector}:"
+                  echo "$warnings"
+                  exit_code=1
+                fi
+              fi
+              last_directory=${directory}
+            fi
+          done
+          exit $exit_code
