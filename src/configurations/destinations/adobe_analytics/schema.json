@@ -16,19 +16,15 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,300})$"
       },
-      "sslHeartbeat": {
-        "type": "boolean"
-      },
+      "sslHeartbeat": { "type": "boolean", "default": true },
       "heartbeatTrackingServerUrl": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$"
       },
-
       "proxyNormalUrl": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$"
       },
-
       "proxyHeartbeatUrl": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$"
@@ -53,22 +49,15 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "dropVisitorId": {
-        "type": "boolean"
-      },
+      "dropVisitorId": { "type": "boolean", "default": true },
       "timestampOption": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disabled|hybrid|optional|enabled)$"
+        "pattern": "^(hybrid|optional|enabled|disabled)$",
+        "default": "disabled"
       },
-      "timestampOptionalReporting": {
-        "type": "boolean"
-      },
-      "noFallbackVisitorId": {
-        "type": "boolean"
-      },
-      "preferVisitorId": {
-        "type": "boolean"
-      },
+      "timestampOptionalReporting": { "type": "boolean", "default": false },
+      "noFallbackVisitorId": { "type": "boolean", "default": false },
+      "preferVisitorId": { "type": "boolean", "default": false },
       "rudderEventsToAdobeEvents": {
         "type": "array",
         "items": {
@@ -85,9 +74,7 @@
           }
         }
       },
-      "trackPageName": {
-        "type": "boolean"
-      },
+      "trackPageName": { "type": "boolean", "default": true },
       "contextDataMapping": {
         "type": "array",
         "items": {
@@ -183,7 +170,7 @@
             },
             "to": {
               "type": "string",
-              "pattern": "^$|(^env[.].+)|^(\\||:|,|;|/)$"
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
         }
@@ -215,7 +202,7 @@
             },
             "to": {
               "type": "string",
-              "pattern": "^$|(^env[.].+)|^(\\||:|,|;|/)$"
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
         }
@@ -292,27 +279,19 @@
           }
         }
       },
-      "productIdentifier": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(name|id|sku)$"
-      },
+      "productIdentifier": { "type": "string", "pattern": "^(name|id|sku)$", "default": "name" },
       "useNativeSDK": {
         "type": "object",
         "properties": {
-          "web": {
-            "type": "boolean"
-          },
-          "ios": {
-            "type": "boolean"
-          },
-          "android": {
-            "type": "boolean"
-          }
+          "android": { "type": "boolean" },
+          "ios": { "type": "boolean" },
+          "web": { "type": "boolean" }
         }
       },
       "eventFilteringOption": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
+        "pattern": "^(disable|whitelistedEvents|blacklistedEvents)$",
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
