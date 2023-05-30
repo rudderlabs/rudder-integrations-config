@@ -10,12 +10,9 @@
       },
       "homePageUrl": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(?!.*\\.ngrok\\.io).*$"
       },
-      "hashMethod": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-      },
+      "hashMethod": { "type": "string", "pattern": "^(none|md5)$", "default": "none" },
       "fieldMapping": {
         "type": "array",
         "items": {
@@ -70,7 +67,8 @@
       },
       "eventFilteringOption": {
         "type": "string",
-        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
+        "pattern": "^(disable|whitelistedEvents|blacklistedEvents)$",
+        "default": "disable"
       },
       "eventsToStandard": {
         "type": "array",
