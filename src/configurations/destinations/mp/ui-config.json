@@ -81,6 +81,41 @@
             "value": "original"
           },
           "required": false
+        },
+        {
+          "type": "singleSelect",
+          "label": "User Deletion",
+          "value": "userDeletionApi",
+          "footerNote": "Select Mixpanel User Deletion API. For more information about difference between the two APIs refer doc (https://www.rudderstack.com/docs/destinations/streaming-destinations/mixpanel/#deleting-a-user)",
+          "options": [
+            {
+              "name": "Delete Profile",
+              "value": "engage"
+            },
+            {
+              "name": "Delete Profile and Associated Events",
+              "value": "task"
+            }
+          ],
+          "defaultOption": {
+            "name": "Delete Profile",
+            "value": "engage"
+          },
+          "required": false
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": {
+            "name": "userDeletionApi",
+            "selectedValue": "task"
+          },
+          "label": "GDPR API Token",
+          "value": "gdprApiToken",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regexErrorMessage": "Invalid GDPR API Token",
+          "required": true,
+          "placeholder": "e.g: 7vwaux7et2tk2ih1o0qtbt1x97n2je",
+          "secret": true
         }
       ]
     },
