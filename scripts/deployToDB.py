@@ -6,7 +6,7 @@ import sys
 import jsondiff
 
 #########################
-# ENV VARIABLES FOT TESTING 
+# ENV VARIABLES FOT TESTING
 # CONTROL_PLANE_URL="https://api.rudderstack.com"
 # print(CONTROL_PLANE_URL)
 # USERNAME="cbadmin"
