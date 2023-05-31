@@ -6,11 +6,12 @@ import sys
 import jsondiff
 
 #########################
-# CONTROL_PLANE_URL="http://localhost:5050"
+# ENV VARIABLES FOT TESTING 
+# CONTROL_PLANE_URL="https://api.rudderstack.com"
 # print(CONTROL_PLANE_URL)
 # USERNAME="cbadmin"
 # print(USERNAME)
-# PASSWORD="xasamelo94"
+# PASSWORD="testpassword"
 # print(PASSWORD)
 #########################
 
