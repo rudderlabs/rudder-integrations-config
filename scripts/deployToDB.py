@@ -150,3 +150,11 @@ if __name__ == '__main__':
     print(src_final_report)
     print("Source Stale Config Report")
     print(get_stale_data('source', src_final_report))
+
+    print("Running Wht Lib Projects Definitions Updates")
+    wht_final_report = update_diff_db('wht-lib-project')
+    print("Wht lib project Definition Update Report")
+    print(wht_final_report)
+    print("Wht lib project Stale Config Report")
+    print(get_stale_data('wht-lib-project', wht_final_report))
+    
