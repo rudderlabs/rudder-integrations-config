@@ -752,7 +752,10 @@ def generate_schema(uiConfig, dbConfig, name, selector):
     if allOfSchemaObj:
         # AnyOf occuring separately, not inside of allOf.
         if len(allOfSchemaObj) == 1:
-            schemaObject['anyOf'] = allOfSchemaObj[0]
+           if isinstance(allOfSchemaObj[0], list):
+               schemaObject['anyOf'] = allOfSchemaObj[0]
+           else:
+               schemaObject['anyOf'] = allOfSchemaObj
         else:
             schemaObject['allOf'] = allOfSchemaObj
     generate_schema_properties(uiConfig, dbConfig, schemaObject,
@@ -865,15 +868,19 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema):
             # call for individual warnings
             for uiType in uiTypetoSchemaFn.keys():
                 generate_warnings_for_each_type(uiConfig, dbConfig, schema, uiType)
-            if "allOf" in schema:
-                curAllOfSchema = schema["allOf"]
-                newAllOfSchema = generate_schema_for_allOf(uiConfig, dbConfig, "value")
+            if "allOf" in generatedSchema["configSchema"]:
+                curAllOfSchema = {}
+                if "allOf" in schema:
+                    curAllOfSchema = schema["allOf"]
+                newAllOfSchema = generatedSchema["configSchema"]["allOf"]
                 allOfSchemaDiff = diff(newAllOfSchema, curAllOfSchema)
                 if allOfSchemaDiff:
                     warnings.warn("For allOf field Difference is :  \n\n {} \n".format(allOfSchemaDiff), UserWarning)
-            if "anyOf" in schema:
-                curAnyOfSchema = schema["anyOf"]
-                newAnyOfSchema = generate_schema_for_allOf(uiConfig, dbConfig, "value")
+            if "anyOf" in generatedSchema["configSchema"]:
+                curAnyOfSchema = {}
+                if "anyOf" in schema:
+                    curAnyOfSchema = schema["anyOf"]
+                newAnyOfSchema = generatedSchema["configSchema"]["anyOf"]
                 anyOfSchemaDiff = diff(newAnyOfSchema, curAnyOfSchema)
                 if anyOfSchemaDiff:
                     warnings.warn("For anyOf field Difference is :  \n\n {} \n".format(anyOfSchemaDiff), UserWarning)
