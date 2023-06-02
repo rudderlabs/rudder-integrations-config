@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.35.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.34.0...v1.35.0) (2023-06-02)
+
+
+### Features
+
+* **shopify:** add disableClientSideIdentifier field in uiConfig ([#698](https://github.com/rudderlabs/rudder-config-schema/issues/698)) ([3f84471](https://github.com/rudderlabs/rudder-config-schema/commit/3f84471a3848d4862013c58eb23a50dd71c5d2c7))
+
 ## [1.34.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.33.2...v1.34.0) (2023-05-30)
 
 
