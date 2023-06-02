@@ -1,8 +1,8 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["accessToken", "eventsToStandard", "eventsToIds"],
     "type": "object",
-    "required": ["accessToken"],
     "properties": {
       "accessToken": {
         "type": "string",
@@ -56,11 +56,9 @@
           }
         }
       },
-      "valueFieldIdentifier": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "isHashRequired": { "type": "boolean" },
+      "valueFieldIdentifier": { "type": "string" },
+      "limitedDataUSage": { "type": "boolean" },
+      "isHashRequired": { "type": "boolean", "default": true },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
