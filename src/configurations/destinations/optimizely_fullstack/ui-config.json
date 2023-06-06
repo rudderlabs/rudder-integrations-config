@@ -1,173 +1,459 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "SDK Key",
-          "value": "sdkKey",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid SDK Key",
-          "placeholder": "e.g. 3Cee2qXeMgVPsqk8Sh5qX",
-          "secret": true,
-          "footerNote": "Your SDK Key From Settings>Environments>SDK Key. **This field is required in cloud-mode only**"
-        },
-        {
-          "type": "textInput",
-          "label": "Base Url",
-          "value": "baseUrl",
-          "regex": "(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
-          "regexErrorMessage": "Invalid Base Url",
-          "placeholder": "e.g. https://example.com",
-          "footerNote": "Url Where Optimizely Agent is running. This url will be used as a base endpoint for track and page calls. **This field is required in cloud-mode only**"
-        }
-      ]
-    },
-    {
-      "title": "Only Track known users",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Track Known Users",
-          "value": "trackKnownUsers",
-          "required": false,
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Sends the experiment and variation information",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Sends the experiment and variation information as properties on a track call",
-          "value": "listen",
-          "required": false,
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Non-Interaction Event",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Specifies the Experiment Viewed as a non-interaction event for Google Analytics",
-          "value": "nonInteraction",
-          "required": false,
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Track Categorized Pages",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Track Categorized Pages",
-          "value": "trackCategorizedPages",
-          "default": false,
-          "footerNote": "Applicable only for cloud-mode"
-        }
-      ]
-    },
-    {
-      "title": "Track Named Pages",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Track Named Pages",
-          "value": "trackNamedPages",
-          "default": false,
-          "footerNote": "Applicable only for cloud-mode"
-        }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection Settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.cloud",
+                      "value": true
+                    }
+                  ]
+                },
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Datafile URL",
+                    "note": "Your datafile url From Settings>Environments",
+                    "configKey": "dataFileUrl",
+                    "regex": "(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+                    "regexErrorMessage": "Invalid Datafile Url",
+                    "placeholder": "e.g. https://cdn.optimizely.com/json/3Cee2qXeMgVPsqk8Sh5qX.json"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Account ID",
+                    "note": [
+                      "Your Optimizely Account ID.",
+                      {
+                        "text": "Lear more here",
+                        "link": "https://docs.developers.optimizely.com/web-experimentation/docs/locate-ids-used-for-apis#account-id"
+                      }
+                    ],
+                    "configKey": "accountId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{1,100})$",
+                    "regexErrorMessage": "Invalid Account ID",
+                    "placeholder": "e.g.18498201456"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Campaign ID",
+                    "configKey": "campaignId",
+                    "note": "You can override this value by passing campaign id in integration object (link here)",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{1,100})$",
+                    "regexErrorMessage": "Invalid Campaign ID",
+                    "placeholder": "e.g. 18230831431"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Experiment ID",
+                    "configKey": "experimentId",
+                    "note": "You can override this value by passing campaign id in integration object (link here)",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{1,100})$",
+                    "regexErrorMessage": "Invalid Experiment ID",
+                    "placeholder": "e.g. 18746220211"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
           }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Page settings",
+                "note": "Set how you want to send your page calls to Optimizely",
+                "icon": "file",
+                "callout": {
+                  "message": "These settings are applicable for Screen call as well",
+                  "type": "info"
+                },
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.cloud",
+                      "value": true
+                    }
+                  ]
+                },
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Track Categorized Pages",
+                    "note": [
+                      "To track categorize pages enable this setting and map the Page Category to the Optimizely event name in 'RudderStack Page Name/Category to Optimizely event mappings' setting. Ensure that the event exists in Optimizely. ",
+                      {
+                        "text": "Lear more here",
+                        "link": "https://docs.developers.optimizely.com/experimentation-data/docs/event-api-getting-started#for-optimizely-feature-experimentation-experimentse"
+                      }
+                    ],
+                    "configKey": "trackCategorizedPages",
+                    "default": false
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Track Named Pages",
+                    "note": [
+                      "To track named pages enable this setting and map the Page Name to the Optimizely event name in 'RudderStack Page Name/Category to Optimizely event mappings' setting. Ensure that the event exists in Optimizely. ",
+                      {
+                        "text": "Lear more here",
+                        "link": "https://docs.developers.optimizely.com/experimentation-data/docs/event-api-getting-started#for-optimizely-feature-experimentation-experimentse"
+                      }
+                    ],
+                    "configKey": "trackNamedPages",
+                    "default": false
+                  }
+                ]
+              },
+              {
+                "title": "RudderStack Page Name/Category to Optimizely event mappings",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.cloud",
+                      "value": true
+                    }
+                  ]
+                },
+                "fields": [
+                  {
+                    "type": "mapping",
+                    "labelLeft": "RudderStack Page Name/Category",
+                    "labelRight": "Optimizely Event Name",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g Index",
+                    "placeholderRight": "e.g Viewed Home Page",
+                    "configKey": "pageMapping",
+                    "default": [],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "trackCategorizedPages",
+                          "value": true
+                        },
+                        {
+                          "configKey": "trackNamedPages",
+                          "value": true
+                        }
+                      ],
+                      "condition": "or"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Track settings",
+                "icon": "magnifyingGlass",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.cloud",
+                      "value": true
+                    }
+                  ]
+                },
+                "fields": [
+                  {
+                    "type": "mapping",
+                    "labelLeft": "RudderStack Event Name",
+                    "labelRight": "Optimizely Event Name",
+                    "label": "RudderStack to Optimizely event mappings",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g Product Searched",
+                    "placeholderRight": "e.g Searched",
+                    "configKey": "eventMapping",
+                    "default": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Attribute mappings",
+                "icon": "sliders",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.cloud",
+                      "value": true
+                    }
+                  ]
+                },
+                "fields": [
+                  {
+                    "type": "mapping",
+                    "labelLeft": "RudderStack Attribute Name",
+                    "labelRight": "Optimizely Attribute Name",
+                    "label": "RudderStack to Optimizely attribute mappings",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g firstName",
+                    "placeholderRight": "e.g first_name",
+                    "configKey": "attributeMapping",
+                    "default": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Optimizely Fullstack IT",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Track Known Users",
+                    "configKey": "trackKnownUsers",
+                    "default": true
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Anonymize IP",
+                    "configKey": "anonymizeIp",
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Enrich Decisions",
+                    "configKey": "enrichDecisions",
+                    "default": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Project ID",
+                    "configKey": "projectId",
+                    "note": "It is recommended to send Project ID",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Project ID",
+                    "placeholder": "e.g. 18498201456",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Datafile Access Token",
+                    "configKey": "dataFileAccessToken",
+                    "note": [
+                      "Fill this if you are running experiment in Secure Environment.",
+                      {
+                        "text": "Lear more here",
+                        "link": "Fill this if you are running experiment in Secure Environment."
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Client-side event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.webDevice",
+                      "value": true
+                    },
+                    {
+                      "configKey": "connectionModes.mobileDevice",
+                      "value": true
+                    }
+                  ],
+                  "condition": "or"
+                },
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on events filtering:",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
+                      {
+                        "label": "Disabled",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack’s OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
       "fields": [
         {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
+          "type": "checkbox",
+          "label": "Sends the experiment and variation information",
+          "configKey": "listen",
+          "note": "Sends the experiment and variation information as properties on a track call",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "label": "Non-Interaction Event",
+          "configKey": "nonInteraction",
+          "note": "Specifies the Experiment Viewed as a non-interaction event for Google Analytics",
+          "default": true
         }
       ]
     }
-  ]
+  }
 }
