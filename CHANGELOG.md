@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.36.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.35.0...v1.36.0) (2023-06-06)
+
+
+### Features
+
+* add support for wht lib project defitions ([#659](https://github.com/rudderlabs/rudder-config-schema/issues/659)) ([337e978](https://github.com/rudderlabs/rudder-config-schema/commit/337e9783ad38e68bbec23ee7343f2764bef6bd94))
+* added Ketch integration for a list of destinations ([#685](https://github.com/rudderlabs/rudder-config-schema/issues/685)) ([526ee90](https://github.com/rudderlabs/rudder-config-schema/commit/526ee90fad75423b724b66c1ffc00b7cc00ffa7c))
+* **pinterest:** update footer note ([9c3165b](https://github.com/rudderlabs/rudder-config-schema/commit/9c3165b36ccc7c01fc07efd6b2f6ce35ab053562))
+
 ## [1.35.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.34.0...v1.35.0) (2023-06-02)
 
 
