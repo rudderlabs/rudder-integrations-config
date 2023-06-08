@@ -8,10 +8,10 @@
           "label": "Access Token",
           "value": "accessToken",
           "regex": ".*",
-          "required": true,
+          "required": false,
           "placeholder": "e.g. 1234ac663758946dfea3520b394bbac611b371f7",
           "secret": true,
-          "footerNote": "TikTok Long Term Access Token"
+          "footerNote": "TikTok Long Term Access Token. Required for Cloud Mode"
         },
         {
           "type": "textInput",
@@ -47,21 +47,129 @@
           "required": false,
           "placeholderLeft": "e.g: Sign up completed",
           "options": [
-            { "name": "Add Payment Info", "value": "AddPaymentInfo" },
-            { "name": "Add To Cart", "value": "AddToCart" },
-            { "name": "Add To Wishlist", "value": "AddToWishlist" },
-            { "name": "Click Button", "value": "ClickButton" },
-            { "name": "Complete Payment", "value": "CompletePayment" },
-            { "name": "Complete Registration", "value": "CompleteRegistration" },
-            { "name": "Contact", "value": "Contact" },
-            { "name": "Download", "value": "Download" },
-            { "name": "Initiate Checkout", "value": "InitiateCheckout" },
-            { "name": "Place An Order", "value": "PlaceAnOrder" },
-            { "name": "Search", "value": "Search" },
-            { "name": "Submit Form", "value": "SubmitForm" },
-            { "name": "Subscribe", "value": "Subscribe" },
-            { "name": "View Content", "value": "ViewContent" }
+            {
+              "name": "Add Payment Info",
+              "value": "AddPaymentInfo"
+            },
+            {
+              "name": "Add To Cart",
+              "value": "AddToCart"
+            },
+            {
+              "name": "Add To Wishlist",
+              "value": "AddToWishlist"
+            },
+            {
+              "name": "Click Button",
+              "value": "ClickButton"
+            },
+            {
+              "name": "Complete Payment",
+              "value": "CompletePayment"
+            },
+            {
+              "name": "Complete Registration",
+              "value": "CompleteRegistration"
+            },
+            {
+              "name": "Contact",
+              "value": "Contact"
+            },
+            {
+              "name": "Download",
+              "value": "Download"
+            },
+            {
+              "name": "Initiate Checkout",
+              "value": "InitiateCheckout"
+            },
+            {
+              "name": "Place An Order",
+              "value": "PlaceAnOrder"
+            },
+            {
+              "name": "Search",
+              "value": "Search"
+            },
+            {
+              "name": "Submit Form",
+              "value": "SubmitForm"
+            },
+            {
+              "name": "Subscribe",
+              "value": "Subscribe"
+            },
+            {
+              "name": "View Content",
+              "value": "ViewContent"
+            }
           ]
+        }
+      ]
+    },
+    {
+      "title": "Client-side Events Filtering",
+      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
+      "fields": [
+        {
+          "type": "singleSelect",
+          "value": "eventFilteringOption",
+          "required": false,
+          "options": [
+            {
+              "name": "Disable",
+              "value": "disable"
+            },
+            {
+              "name": "Allowlist",
+              "value": "whitelistedEvents"
+            },
+            {
+              "name": "Denylist",
+              "value": "blacklistedEvents"
+            }
+          ],
+          "defaultOption": {
+            "name": "Disable",
+            "value": "disable"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "whitelistedEvents",
+          "label": "Allowlist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Anonymous Page Visit"
+            }
+          ]
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "blacklistedEvents",
+          "label": "Denylist",
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Native SDK",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": false
         }
       ]
     },
@@ -78,20 +186,6 @@
               "placeholder": "Marketing",
               "value": "oneTrustCookieCategory",
               "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "ketchPurposes",
-          "label": "Ketch Consent Purposes",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "ketchPurpose",
-              "label": "Purpose ID",
               "required": false
             }
           ]
