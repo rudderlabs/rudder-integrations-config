@@ -9,7 +9,13 @@
             "groups": [
               {
                 "title": "Connection Settings",
-                "note": "Update your connection settings here",
+                "note": [
+                  "Update your connection settings here.",
+                  {
+                    "text": "Follow this guide to get Account ID, Campaign ID and Experiment ID",
+                    "link": "https://docs.developers.optimizely.com/web-experimentation/docs/locate-ids-used-for-apis#account-id"
+                  }
+                ],
                 "icon": "settings",
                 "preRequisites": {
                   "fields": [
@@ -32,13 +38,7 @@
                   {
                     "type": "textInput",
                     "label": "Account ID",
-                    "note": [
-                      "Your Optimizely Account ID.",
-                      {
-                        "text": "Learn more here",
-                        "link": "https://docs.developers.optimizely.com/web-experimentation/docs/locate-ids-used-for-apis#account-id"
-                      }
-                    ],
+                    "note": "Your Optimizely Account ID.",
                     "configKey": "accountId",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{1,100})$",
                     "regexErrorMessage": "Invalid Account ID",
@@ -48,7 +48,7 @@
                     "type": "textInput",
                     "label": "Campaign ID",
                     "configKey": "campaignId",
-                    "note": "You can override this value by passing campaign id in integration object (link here)",
+                    "note": "You can override this field by passing campaign id in integration object (link here)",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{1,100})$",
                     "regexErrorMessage": "Invalid Campaign ID",
                     "placeholder": "e.g. 18230831431"
@@ -57,7 +57,7 @@
                     "type": "textInput",
                     "label": "Experiment ID",
                     "configKey": "experimentId",
-                    "note": "You can override this value by passing campaign id in integration object (link here)",
+                    "note": "You can override this field by passing campaign id in integration object (link here)",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{1,100})$",
                     "regexErrorMessage": "Invalid Experiment ID",
                     "placeholder": "e.g. 18746220211"
@@ -267,6 +267,7 @@
                     "label": "Enrich Decisions",
                     "configKey": "enrichDecisions",
                     "default": true,
+                    "note": "Toggle this option to enable Optimizely Experimentation's Enriched Events Export functionality. Enabling this functionality allows for enhanced data collection and analysis, providing valuable insights for decision-making purposes.",
                     "preRequisites": {
                       "fields": [
                         {
@@ -280,10 +281,10 @@
                     "type": "textInput",
                     "label": "Project ID",
                     "configKey": "projectId",
-                    "note": "It is recommended to send Project ID",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
                     "regexErrorMessage": "Invalid Project ID",
                     "placeholder": "e.g. 18498201456",
+                    "note": "Your Project ID from Experiments>API Names. It is recommended to send Project ID",
                     "preRequisites": {
                       "fields": [
                         {
