@@ -59,14 +59,18 @@ def generalize_regex_pattern(field):
         pattern += ")$"
     # for others
     else:
-        pattern = "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|"
+        defaultSubPattern = "(^\\{\\{.*\\|\\|(.*)\\}\\}$)"
+        defaultEnvPattern = "(^env[.].+)"
+        pattern = ""
         if "regex" in field:
-            if field["regex"].startswith(pattern):
-                pattern = field["regex"]
-            else:
-                pattern += field["regex"]
+            pattern = field["regex"]
+            if defaultSubPattern not in pattern:
+                pattern = "|".join([defaultSubPattern, pattern])
+            if defaultEnvPattern not in pattern:
+                indexToPlace = pattern.find(defaultSubPattern) + len(defaultSubPattern)
+                pattern = pattern[:indexToPlace] + '|' + defaultEnvPattern + pattern[indexToPlace:]
         else:
-            pattern += '^(.{0,100})$'
+            pattern = "|".join([defaultSubPattern, defaultEnvPattern, '^(.{0,100})$']) 
     return pattern
 
 
