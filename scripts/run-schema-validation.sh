@@ -12,11 +12,16 @@ for file in $changed_files; do
         selector=${selector::-1}
         # Storing the last directory to ensure that validation runs only once, even if multiple configuration files are changed for a given source or destination.
         if [ "$last_directory" != "${directory}" ]; then
-            warnings=$(python scripts/schemaGenerator.py -name="$name" $selector 2>&1 | grep -i "warning" || true)
+            output==$(python scripts/schemaGenerator.py -name="$name" $selector 2>&1)
+            warnings=$(echo "$output" | grep -i "warning" || true)
+            recommendations=$(echo "$output" | grep -i "recommendation" || true)
             if [ -n "$warnings" ]; then
                 echo "Warnings found for name: ${name} selector: ${selector}:"
                 echo "$warnings"
                 exit_code=1
+            fi
+            if [ -n "$recommendations" ]; then
+                echo "For name: ${name} selector: ${selector}: $recommendations"
             fi
         fi
         last_directory=${directory}
