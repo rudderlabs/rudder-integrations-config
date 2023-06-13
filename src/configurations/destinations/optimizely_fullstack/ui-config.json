@@ -17,23 +17,23 @@
                   }
                 ],
                 "icon": "settings",
-                "preRequisites": {
-                  "fields": [
-                    {
-                      "configKey": "connectionModes.cloud",
-                      "value": true
-                    }
-                  ]
-                },
                 "fields": [
                   {
                     "type": "textInput",
                     "label": "Datafile URL",
                     "note": "Your datafile url From Settings>Environments",
                     "configKey": "dataFileUrl",
-                    "regex": "(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$|^$",
                     "regexErrorMessage": "Invalid Datafile Url",
-                    "placeholder": "e.g. https://cdn.optimizely.com/json/3Cee2qXeMgVPsqk8Sh5qX.json"
+                    "placeholder": "e.g. https://cdn.optimizely.com/json/3Cee2qXeMgVPsqk8Sh5qX.json",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "textInput",
@@ -42,7 +42,15 @@
                     "configKey": "accountId",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{1,100})$",
                     "regexErrorMessage": "Invalid Account ID",
-                    "placeholder": "e.g.18498201456"
+                    "placeholder": "e.g.18498201456",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "textInput",
@@ -51,7 +59,15 @@
                     "note": "You can override this field by passing campaign id in integration object (link here)",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{1,100})$",
                     "regexErrorMessage": "Invalid Campaign ID",
-                    "placeholder": "e.g. 18230831431"
+                    "placeholder": "e.g. 18230831431",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "textInput",
@@ -60,7 +76,15 @@
                     "note": "You can override this field by passing campaign id in integration object (link here)",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{1,100})$",
                     "regexErrorMessage": "Invalid Experiment ID",
-                    "placeholder": "e.g. 18746220211"
+                    "placeholder": "e.g. 18746220211",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
                   }
                 ]
               }
