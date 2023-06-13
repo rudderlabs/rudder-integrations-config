@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.37.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.36.0...v1.37.0) (2023-06-12)
+
+
+### Features
+
+* **klaviyo:** update ui-config based on new api version ([#710](https://github.com/rudderlabs/rudder-config-schema/issues/710)) ([d1c571e](https://github.com/rudderlabs/rudder-config-schema/commit/d1c571e517a988e8ba49698ff410ab5ea1e02a84))
+* onboard tiktok device mode integration ([#668](https://github.com/rudderlabs/rudder-config-schema/issues/668)) ([3f2e2cd](https://github.com/rudderlabs/rudder-config-schema/commit/3f2e2cdce1f4f97f2f5c01459b376fbe592928c7))
+
+
+### Bug Fixes
+
+* anyOf to be array and schema diff for allOf, anyOf in schema generator script ([#701](https://github.com/rudderlabs/rudder-config-schema/issues/701)) ([6086e4c](https://github.com/rudderlabs/rudder-config-schema/commit/6086e4ce39461c048cc5c4cd8c962692f8f552c7))
+* eventMapping to allow only dropdown values ([#702](https://github.com/rudderlabs/rudder-config-schema/issues/702)) ([d2cece7](https://github.com/rudderlabs/rudder-config-schema/commit/d2cece79d893da8e0ae80483932a676b542f90d6))
+
 ## [1.36.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.35.0...v1.36.0) (2023-06-06)
 
 
