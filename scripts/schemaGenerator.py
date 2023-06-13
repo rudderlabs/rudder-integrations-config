@@ -872,6 +872,18 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema):
             # call for individual warnings
             for uiType in uiTypetoSchemaFn.keys():
                 generate_warnings_for_each_type(uiConfig, dbConfig, schema, uiType)
+            # schema diff for "additionalProperties"
+            if "additionalProperties" not in schema or schema["additionalProperties"] == True:
+                print("\n Recommendation: Please set additionalProperties to False in schema.json. \n")
+            # schema diff for "required"
+            if "required" not in schema:
+                warnings.warn('required field is not in schema \n',  UserWarning)
+            else:
+                curRequiredField = schema["required"]
+                newRequiredField = generatedSchema["configSchema"]["required"]
+                requiredFieldDiff = diff(curRequiredField, newRequiredField)
+                if requiredFieldDiff:
+                    warnings.warn("For required field Difference is :  \n\n {} \n".format(requiredFieldDiff), UserWarning)
             if "allOf" in generatedSchema["configSchema"]:
                 curAllOfSchema = {}
                 if "allOf" in schema:
