@@ -873,7 +873,7 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema):
             for uiType in uiTypetoSchemaFn.keys():
                 generate_warnings_for_each_type(uiConfig, dbConfig, schema, uiType)
             # schema diff for "additionalProperties"
-            if "additionalProperties" not in schema or schema["additionalProperties"] == True:
+            if "additionalProperties" not in schema:
                 print("\n Recommendation: Please set additionalProperties to False in schema.json. \n")
             # schema diff for "required"
             if "required" not in schema:
