@@ -93,13 +93,17 @@ def is_dest_field_dependent_on_source(field, dbConfig, schema_field_name):
     return False
 
 
-def get_list_of_text_input_meta_fields():
-    prop_list_for_text_input = ['label','labelNote','note','default',
-                                'regex','regexErrorMessage','placeholder','footerURL','footerNote','secret']
+def get_list_of_text_input_meta_fields(field):
+    if field['inputFieldType'] == "password":
+        secret_value = field.get('secret',None)
+        if secret_value == False:
+            warnings.warn(f'secret and inputFieldType does not match')
+    prop_list_for_text_input = ['label','labelNote','note','default','inputFieldType',
+                                'regexErrorMessage','placeholder','footerURL','footerNote','secret']
     return prop_list_for_text_input
 
 
-def get_list_of_text_area_input_meta_fields():
+def get_list_of_text_area_input_meta_fields(field):
     prop_list_for_text_area_input = ['label','labelNote','subtype'
                                 'regex','regexErrorMessage','placeholder','footerNote','secret']
     return prop_list_for_text_area_input    
@@ -120,16 +124,14 @@ uiTypetoMetaFn = {
 }
 def generate_meta(textInputSchemaObj,field,dbConfig):
     meta_prop = {}
-    meta_prop['type'] = "object"
-    meta_prop['properties'] = {}
     meta_fn = uiTypetoMetaFn.get(field['type'],None)
 
     if meta_fn:
-        prop_list_for_field = meta_fn()
+        prop_list_for_field = meta_fn(field)
 
         for prop in prop_list_for_field:
             if prop in field:
-                meta_prop['properties'][prop] = field[prop]
+                meta_prop[prop] = field[prop]
         textInputSchemaObj['meta'] = meta_prop
     return textInputSchemaObj
 
