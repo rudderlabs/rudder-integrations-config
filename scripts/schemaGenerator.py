@@ -59,14 +59,18 @@ def generalize_regex_pattern(field):
         pattern += ")$"
     # for others
     else:
-        pattern = "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|"
+        defaultSubPattern = "(^\\{\\{.*\\|\\|(.*)\\}\\}$)"
+        defaultEnvPattern = "(^env[.].+)"
+        pattern = ""
         if "regex" in field:
-            if field["regex"].startswith(pattern):
-                pattern = field["regex"]
-            else:
-                pattern += field["regex"]
+            pattern = field["regex"]
+            if defaultSubPattern not in pattern:
+                pattern = "|".join([defaultSubPattern, pattern])
+            if defaultEnvPattern not in pattern:
+                indexToPlace = pattern.find(defaultSubPattern) + len(defaultSubPattern)
+                pattern = pattern[:indexToPlace] + '|' + defaultEnvPattern + pattern[indexToPlace:]
         else:
-            pattern += '^(.{0,100})$'
+            pattern = "|".join([defaultSubPattern, defaultEnvPattern, '^(.{0,100})$']) 
     return pattern
 
 
@@ -809,7 +813,10 @@ def generate_schema(uiConfig, dbConfig, name, selector):
     if allOfSchemaObj:
         # AnyOf occuring separately, not inside of allOf.
         if len(allOfSchemaObj) == 1:
-            schemaObject['anyOf'] = allOfSchemaObj[0]
+           if isinstance(allOfSchemaObj[0], list):
+               schemaObject['anyOf'] = allOfSchemaObj[0]
+           else:
+               schemaObject['anyOf'] = allOfSchemaObj
         else:
             schemaObject['allOf'] = allOfSchemaObj
     generate_schema_properties(uiConfig, dbConfig, schemaObject,
@@ -923,15 +930,31 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema):
             # call for individual warnings
             for uiType in uiTypetoSchemaFn.keys():
                 generate_warnings_for_each_type(uiConfig, dbConfig, schema, uiType)
-            if "allOf" in schema:
-                curAllOfSchema = schema["allOf"]
-                newAllOfSchema = generate_schema_for_allOf(uiConfig, dbConfig, "value")
+            # schema diff for "additionalProperties"
+            if "additionalProperties" not in schema:
+                print("\n Recommendation: Please set additionalProperties to False in schema.json. \n")
+            # schema diff for "required"
+            if "required" not in schema:
+                warnings.warn('required field is not in schema \n',  UserWarning)
+            else:
+                curRequiredField = schema["required"]
+                newRequiredField = generatedSchema["configSchema"]["required"]
+                requiredFieldDiff = diff(curRequiredField, newRequiredField)
+                if requiredFieldDiff:
+                    warnings.warn("For required field Difference is :  \n\n {} \n".format(requiredFieldDiff), UserWarning)
+            if "allOf" in generatedSchema["configSchema"]:
+                curAllOfSchema = {}
+                if "allOf" in schema:
+                    curAllOfSchema = schema["allOf"]
+                newAllOfSchema = generatedSchema["configSchema"]["allOf"]
                 allOfSchemaDiff = diff(newAllOfSchema, curAllOfSchema)
                 if allOfSchemaDiff:
                     warnings.warn("For allOf field Difference is :  \n\n {} \n".format(allOfSchemaDiff), UserWarning)
-            if "anyOf" in schema:
-                curAnyOfSchema = schema["anyOf"]
-                newAnyOfSchema = generate_schema_for_allOf(uiConfig, dbConfig, "value")
+            if "anyOf" in generatedSchema["configSchema"]:
+                curAnyOfSchema = {}
+                if "anyOf" in schema:
+                    curAnyOfSchema = schema["anyOf"]
+                newAnyOfSchema = generatedSchema["configSchema"]["anyOf"]
                 anyOfSchemaDiff = diff(newAnyOfSchema, curAnyOfSchema)
                 if anyOfSchemaDiff:
                     warnings.warn("For anyOf field Difference is :  \n\n {} \n".format(anyOfSchemaDiff), UserWarning)

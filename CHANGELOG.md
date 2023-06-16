@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.36.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.35.0...v1.36.0) (2023-06-06)
+
+
+### Features
+
+* add support for wht lib project defitions ([#659](https://github.com/rudderlabs/rudder-config-schema/issues/659)) ([337e978](https://github.com/rudderlabs/rudder-config-schema/commit/337e9783ad38e68bbec23ee7343f2764bef6bd94))
+* added Ketch integration for a list of destinations ([#685](https://github.com/rudderlabs/rudder-config-schema/issues/685)) ([526ee90](https://github.com/rudderlabs/rudder-config-schema/commit/526ee90fad75423b724b66c1ffc00b7cc00ffa7c))
+* **pinterest:** update footer note ([9c3165b](https://github.com/rudderlabs/rudder-config-schema/commit/9c3165b36ccc7c01fc07efd6b2f6ce35ab053562))
+
+## [1.35.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.34.0...v1.35.0) (2023-06-02)
+
+
+### Features
+
+* **shopify:** add disableClientSideIdentifier field in uiConfig ([#698](https://github.com/rudderlabs/rudder-config-schema/issues/698)) ([3f84471](https://github.com/rudderlabs/rudder-config-schema/commit/3f84471a3848d4862013c58eb23a50dd71c5d2c7))
+
+## [1.34.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.33.2...v1.34.0) (2023-05-30)
+
+
+### Features
+
+* mixpanel deletion api ([#680](https://github.com/rudderlabs/rudder-config-schema/issues/680)) ([11dac5a](https://github.com/rudderlabs/rudder-config-schema/commit/11dac5a91fd873470eeb0c1cbf7e2ee4bfd19fd1))
+* remove hidden flag for dynamic yield destination ([#687](https://github.com/rudderlabs/rudder-config-schema/issues/687)) ([b89dd82](https://github.com/rudderlabs/rudder-config-schema/commit/b89dd8236f9407fc8839c955b595f191ff347023))
+* remove property mapping for other standard events in fb pixel ([#630](https://github.com/rudderlabs/rudder-config-schema/issues/630)) ([0c71e88](https://github.com/rudderlabs/rudder-config-schema/commit/0c71e88321e192ce9fe9aefca4a6a98cde42e1c6))
+
+
+### Bug Fixes
+
+* **bingads_audience:** add hashEmail field and enable cdkv2 ([#691](https://github.com/rudderlabs/rudder-config-schema/issues/691)) ([9062017](https://github.com/rudderlabs/rudder-config-schema/commit/90620172a58a8feef83c642f172f41ee760be8b4))
+* s3 configs for access keys and iam roles for warehouse destinations ([#677](https://github.com/rudderlabs/rudder-config-schema/issues/677)) ([b48f2b0](https://github.com/rudderlabs/rudder-config-schema/commit/b48f2b0fab282b3c2fec660c70cf2c1e274d6abc))
+
 ### [1.33.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.33.1...v1.33.2) (2023-05-26)
 
 
