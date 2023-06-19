@@ -81,40 +81,98 @@
                   "message": "We suggest checking your event volume setup with Amplitude prior to configuring this section",
                   "type": "info"
                 },
-                "preRequisites": {
-                  "fields": [
-                    {
-                      "configKey": "connectionModes.mobileDevice",
-                      "value": true
-                    },
-                    {
-                      "configKey": "connectionModes.webDevice",
-                      "value": true
-                    }
-                  ],
-                  "condition": "or"
-                },
                 "fields": [
                   {
                     "type": "checkbox",
                     "label": "Track all Pages to Amplitude",
                     "configKey": "trackAllPages",
                     "note": "Send all pageview events to Amplitude with either “Loaded a page” or “Viewed a screen” event names",
-                    "default": false
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.mobileDevice",
+                          "value": true
+                        },
+                        {
+                          "configKey": "connectionModes.webDevice",
+                          "value": true
+                        }
+                      ],
+                      "condition": "or"
+                    }
                   },
                   {
                     "type": "checkbox",
                     "label": "Track Categorized Pages to Amplitude",
                     "configKey": "trackCategorizedPages",
                     "note": "Any page call with a category will be sent to Amplitude as either a “Loaded {Category} Page” or “Viewed {Category} Screen” event",
-                    "default": true
+                    "default": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.mobileDevice",
+                          "value": true
+                        },
+                        {
+                          "configKey": "connectionModes.webDevice",
+                          "value": true
+                        }
+                      ],
+                      "condition": "or"
+                    }
                   },
                   {
                     "type": "checkbox",
                     "label": "Track Named Pages to Amplitude",
                     "configKey": "trackNamedPages",
                     "note": "Any page call with a name will be sent to Amplitude as either a “Loaded {Name} Page” or “Viewed {Name} Screen” event",
-                    "default": true
+                    "default": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.mobileDevice",
+                          "value": true
+                        },
+                        {
+                          "configKey": "connectionModes.webDevice",
+                          "value": true
+                        }
+                      ],
+                      "condition": "or"
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Use Custom Page Event Name",
+                    "note": "Send start and end session events",
+                    "configKey": "useUserDefinedPageEventName",
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Page Event Name Format",
+                    "note": "Assign a page event name for your page calls. $RUDDER_PAGE_NAME_VALUE will be replaced with event payload value",
+                    "configKey": "userProvidedPageEventString",
+                    "regex": "^(.{1,200})$",
+                    "regexErrorMessage": "Invalid Page Event Name",
+                    "placeholder": "e.g: Viewed a $RUDDER_PAGE_EVENT",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useUserDefinedPageEventName",
+                          "value": true
+                        }
+                      ]
+                    }
                   }
                 ]
               }
