@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.37.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.37.0...v1.37.1) (2023-06-19)
+
+
+### Bug Fixes
+
+* updates intercom to v7.0.1 ([a820ae3](https://github.com/rudderlabs/rudder-config-schema/commit/a820ae381e9d6cc068fb14d1f446e26a3a74c186))
+
 ## [1.37.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.36.0...v1.37.0) (2023-06-12)
 
 
