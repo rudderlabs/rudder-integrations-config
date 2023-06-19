@@ -98,50 +98,210 @@ def is_dest_field_dependent_on_source(field, dbConfig, schema_field_name):
 
 
 def get_list_of_text_input_meta_fields(field):
-    if field['inputFieldType'] == "password":
+    """Returns the meta fields for text input.
+
+    Args:
+        field (object): Individual field in ui-config.
+
+    Returns:
+        list: meta fields
+    """    
+    if "inputFieldType" in field and field['inputFieldType'] == "password":
         secret_value = field.get('secret',None)
         if secret_value == False:
             warnings.warn(f'secret and inputFieldType does not match')
-    prop_list_for_text_input = ['label','labelNote','note','default','inputFieldType',
-                                'regexErrorMessage','placeholder','footerURL','footerNote','secret']
+    
+    prop_list_for_text_input = ["addInAccountSummary", "default", "disabledNormalMode", "footerNote", "footerURL",
+                                "infoTooltip", "label", "labelNote", "options", "placeholder", "regexErrorMessage",
+                                "secret"]
     return prop_list_for_text_input
 
-
 def get_list_of_text_area_input_meta_fields(field):
-    prop_list_for_text_area_input = ['label','labelNote','subtype'
-                                'regex','regexErrorMessage','placeholder','footerNote','secret']
+    """Returns the meta fields for textarea input.
+
+    Args:
+        field (object): Individual field in ui-config.
+
+    Returns:
+        list: meta fields
+    """
+    prop_list_for_text_area_input = ["footerNote", "label", "labelNote", "placeholder", "regexErrorMessage", "secret"]
     return prop_list_for_text_area_input    
 
+def get_list_of_default_checkbox_meta_fields(field):
+    """Returns the meta fields for default checkbox.
+
+    Args:
+        field (object): Individual field in ui-config.
+
+    Returns:
+        list: meta fields
+    """    
+    prop_list_for_default_checkbox = ["default", "label"]
+    return prop_list_for_default_checkbox
+
+def get_list_of_checkbox_meta_fields(field):
+    """Returns the meta fields for checkbox.
+
+    Args:
+        field (object): Individual field in ui-config.
+
+    Returns:
+        list: meta fields
+    """
+    prop_list_for_checkbox = ["footerNote", "label"]
+    return prop_list_for_checkbox
+
+def get_list_of_single_select_meta_fields(field):
+    """Returns the meta fields for single select.
+
+    Args:
+        field (object): Individual field in ui-config.
+
+    Returns:
+        list: meta fields
+    """
+    prop_list_for_single_select = ["footerNote", "label", "mode", "options", 
+                                   "placeholder", "regexErrorMessage"]
+    return prop_list_for_single_select
+
+def get_list_of_dynamic_custom_form_meta_fields(field):
+    """Returns the meta fields for dynamic custom form.
+
+    Args:
+        field (object): Individual field in ui-config.
+
+    Returns:
+        list: meta fields
+    """
+    prop_list_for_dynamic_custom_form = ["footerNote", "label", "labelNote"]
+    return prop_list_for_dynamic_custom_form
+
+def get_list_of_dynamic_form_meta_fields(field):
+    """Returns the meta fields for dynamic form.
+
+    Args:
+        field (object): Individual field in ui-config.
+
+    Returns:
+        list: meta fields
+    """
+    prop_list_for_dynamic_form = ["footerNote", "label", "labelLeft", "labelRight", "placeholderLeft", "placeholderRight"]
+    return prop_list_for_dynamic_form
+
+def get_list_of_dynamic_select_form_meta_fields(field):
+    """Returns the meta fields for dynamic select form.
+
+    Args:
+        field (object): Individual field in ui-config.
+
+    Returns:
+        list: meta fields
+    """
+    prop_list_for_dynamic_select_form = ["footerNote", "label", "labelLeft", "labelRight", "options", "placeholderLeft", 
+                                         "placeholderRight"]
+    return prop_list_for_dynamic_select_form
+
+def get_list_of_tag_input_meta_fields(field):
+    """Returns the meta fields for tagInput.
+
+    Args:
+        field (object): Individual field in ui-config.
+
+    Returns:
+        list: meta fields
+    """
+    prop_list_for_tag_input = ["default", "label", "placeholder"]
+    return prop_list_for_tag_input
+
+def get_list_of_time_range_picker_meta_fields(field):
+    """Returns the meta fields for time range picker.
+
+    Args:
+        field (object): Individual field in ui-config.
+
+    Returns:
+        list: meta fields
+    """
+    prop_list_for_time_range_picker = ["endTime", "footerNote", "label", "options", "startTime"]
+    return prop_list_for_time_range_picker
+
+def get_list_of_time_picker_meta_fields(field):
+    """Returns the meta fields for time picker.
+
+    Args:
+        field (object): Individual field in ui-config.
+
+    Returns:
+        list: meta fields
+    """
+    prop_list_for_time_picker = ["footerNote", "label", "options"]
+    return prop_list_for_time_picker
 
 uiTypetoMetaFn = {
-    # "defaultCheckbox": generate_schema_for_default_checkbox,
-    # "checkbox": generate_schema_for_checkbox,
+    "defaultCheckbox": get_list_of_default_checkbox_meta_fields,
+    "checkbox": get_list_of_checkbox_meta_fields,
     "textInput": get_list_of_text_input_meta_fields,
     "textareaInput": get_list_of_text_area_input_meta_fields,
-    # "singleSelect": generate_schema_for_single_select,
-    # "dynamicCustomForm": generate_schema_for_dynamic_custom_form,
-    # 'dynamicForm': generate_schema_for_dynamic_form,
-    # 'dynamicSelectForm': generate_schema_for_dynamic_select_form,
-    # 'tagInput': generate_schema_for_tag_input,
-    # 'timeRangePicker': generate_schema_for_time_range_picker,
-    # 'timePicker': generate_schema_for_time_picker
+    "singleSelect": get_list_of_single_select_meta_fields,
+    "dynamicCustomForm": get_list_of_dynamic_custom_form_meta_fields,
+    'dynamicForm': get_list_of_dynamic_form_meta_fields,
+    'dynamicSelectForm': get_list_of_dynamic_select_form_meta_fields,
+    'tagInput': get_list_of_tag_input_meta_fields,
+    'timeRangePicker': get_list_of_time_range_picker_meta_fields,
+    'timePicker': get_list_of_time_picker_meta_fields
 }
-def generate_meta(textInputSchemaObj,field,dbConfig):
+
+def generate_meta(schemaObj, field):
+    """Takes in the schemaObj of the field and adds the meta field into schemaObj.
+
+    Args:
+        schemaObj (object): schema object for the field
+        field (object): Individual field in ui-config.
+
+    Returns:
+        object: schema object with meta fields
+    """    
     meta_prop = {}
+    # For dynamicForm and dynamicSelectForm, keyLeft and keyRight meta properties
+    meta_prop_right = {}
+    meta_prop_left = {}
+    # For timeRangePicker, startTime and endTime meta properties
+    meta_prop_start = {}
+    meta_prop_end = {}
+    
     meta_fn = uiTypetoMetaFn.get(field['type'],None)
 
     if meta_fn:
         prop_list_for_field = meta_fn(field)
-
         for prop in prop_list_for_field:
             if prop in field:
-                meta_prop[prop] = field[prop]
-        textInputSchemaObj['meta'] = meta_prop
-    return textInputSchemaObj
+                if prop == 'startTime' or prop == 'endTime':
+                    if prop == 'startTime':
+                        meta_prop_start = field[prop].copy()
+                        del meta_prop_start["value"]
+                    else:
+                        meta_prop_end = field[prop].copy()
+                        del meta_prop_end["value"]
+                elif prop.endswith("Left") and "keyLeft" in field:
+                    meta_prop_left[prop[:-4]] = field[prop]
+                elif prop.endswith("Right") and "keyRight" in field:
+                    meta_prop_right[prop[:-5]] = field[prop]
+                else:
+                    meta_prop[prop] = field[prop]
+        if meta_prop_left:
+            schemaObj["items"]["properties"][field["keyLeft"]]["meta"]=meta_prop_left
+        if meta_prop_right:
+            schemaObj["items"]["properties"][field["keyRight"]]["meta"]=meta_prop_right
+        if meta_prop_start:
+            schemaObj["properties"][field["startTime"]["value"]]["meta"]=meta_prop_start
+        if meta_prop_end:
+            schemaObj["properties"][field["endTime"]["value"]]["meta"]=meta_prop_end
+        if meta_prop:
+            schemaObj['meta'] = meta_prop
+    return schemaObj
 
 
-
-defaultCheckboxFieldSet = set()
 def generate_schema_for_default_checkbox(field, dbConfig, schema_field_name):
     """Creates an schema object of defaultCheckbox.
 
@@ -154,7 +314,6 @@ def generate_schema_for_default_checkbox(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    defaultCheckboxFieldSet.update(list(field.keys()))
     defaultCheckboxObj = {
         "type": FieldTypeEnum.OBJECT.value,
         "properties": {
@@ -163,9 +322,9 @@ def generate_schema_for_default_checkbox(field, dbConfig, schema_field_name):
             }
         }
     }
+    defaultCheckboxObj = generate_meta(defaultCheckboxObj, field)
     return defaultCheckboxObj
 
-checkboxFieldSet = set()
 def generate_schema_for_checkbox(field, dbConfig, schema_field_name):
     """Creates an schema object of checkbox.
 
@@ -178,7 +337,6 @@ def generate_schema_for_checkbox(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    checkboxFieldSet.update(list(field.keys()))
     isSourceDependent = is_dest_field_dependent_on_source(field, dbConfig, schema_field_name)
     checkboxSchemaObj = {}
     if isSourceDependent:
@@ -193,9 +351,9 @@ def generate_schema_for_checkbox(field, dbConfig, schema_field_name):
         checkboxSchemaObj["type"] = FieldTypeEnum.BOOLEAN.value
         if "default" in field:
             checkboxSchemaObj["default"] = field["default"]
+    checkboxSchemaObj = generate_meta(checkboxSchemaObj, field)
     return checkboxSchemaObj
 
-textInputFieldSet = set()
 def generate_schema_for_textinput(field, dbConfig, schema_field_name):
     """Creates an schema object of textinput.
 
@@ -208,7 +366,6 @@ def generate_schema_for_textinput(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    textInputFieldSet.update(list(field.keys()))
     textInputSchemaObj = {}
     isSourceDependent = is_dest_field_dependent_on_source(field, dbConfig, schema_field_name)
     if isSourceDependent:
@@ -225,10 +382,9 @@ def generate_schema_for_textinput(field, dbConfig, schema_field_name):
         textInputSchemaObj = {"type": FieldTypeEnum.STRING.value}
         if 'regex' in field:
             textInputSchemaObj["pattern"] = generalize_regex_pattern(field)
-    textInputSchemaObj = generate_meta(textInputSchemaObj,field,dbConfig)
+    textInputSchemaObj = generate_meta(textInputSchemaObj, field)
     return textInputSchemaObj
 
-textareaInputFieldSet = set()
 def generate_schema_for_textarea_input(field, dbConfig, schema_field_name):
     """Creates an schema object of textareaInput.
 
@@ -241,13 +397,12 @@ def generate_schema_for_textarea_input(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    textareaInputFieldSet.update(list(field.keys()))
     textareaInputObj = {"type": FieldTypeEnum.STRING.value}
     if 'regex' in field:
         textareaInputObj["pattern"] = generalize_regex_pattern(field)
+    textareaInputObj = generate_meta(textareaInputObj, field)
     return textareaInputObj
 
-singleSelectFieldSet = set()
 def generate_schema_for_single_select(field, dbConfig, schema_field_name):
     """Creates an schema object of singleSelect.
 
@@ -260,7 +415,6 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    singleSelectFieldSet.update(list(field.keys()))
     singleSelectObj = {"type": FieldTypeEnum.STRING.value}
     singleSelectObj["pattern"] = generalize_regex_pattern(field)
     if "defaultOption" in field:
@@ -275,9 +429,9 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
             if sourceType in dbConfig["destConfig"] and field[schema_field_name] in dbConfig["destConfig"][sourceType]:
                 newSingleSelectObj["properties"][sourceType] = singleSelectObj
         singleSelectObj = newSingleSelectObj
+    singleSelectObj = generate_meta(singleSelectObj, field)
     return singleSelectObj
 
-dynamicCustomFormFieldSet = set()
 def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     """Creates an schema object of dynamicCustomForm.
 
@@ -290,7 +444,6 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    dynamicCustomFormFieldSet.update(list(field.keys()))
     dynamicCustomFormObj = {}
     dynamicCustomFormObj["type"] = FieldTypeEnum.ARRAY.value
     dynamicCustomFormItemObj = {}
@@ -319,9 +472,9 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
             if sourceType in dbConfig["destConfig"] and field[schema_field_name] in dbConfig["destConfig"][sourceType]:
                 newDynamicCustomFormObj["properties"][sourceType] = dynamicCustomFormObj
         dynamicCustomFormObj = newDynamicCustomFormObj
+    dynamicCustomFormObj = generate_meta(dynamicCustomFormObj, field)
     return dynamicCustomFormObj
 
-dynamicFormFieldSet = set()
 def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
     """Creates an schema object of dynamicForm.
 
@@ -334,7 +487,6 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    dynamicFormFieldSet.update(list(field.keys()))
     def generate_key_left():
         obj = {
             "type": FieldTypeEnum.STRING.value,
@@ -353,9 +505,9 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
         dynamicFormItemObject['properties'][dynamicFromItemObjectProp[0]
                                             ] = dynamicFromItemObjectProp[1]()
     dynamicFormSchemaObject['items'] = dynamicFormItemObject
+    dynamicFormSchemaObject = generate_meta(dynamicFormSchemaObject, field)
     return dynamicFormSchemaObject
 
-dynamicSelectFormFieldSet = set()
 def generate_schema_for_dynamic_select_form(field, dbConfig, schema_field_name):
     """Creates an schema object of dynamicSelectForm.
 
@@ -368,10 +520,8 @@ def generate_schema_for_dynamic_select_form(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    dynamicSelectFormFieldSet.update(list(field.keys()))
     return generate_schema_for_dynamic_form(field, dbConfig, schema_field_name)
 
-tagInputFormFieldSet = set()
 def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
     """Creates an schema object of tagInput.
 
@@ -384,7 +534,6 @@ def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    tagInputFormFieldSet.update(list(field.keys()))
     tagObject = {}
     tagObject["type"] = FieldTypeEnum.ARRAY.value
     tagItem = {}
@@ -397,9 +546,9 @@ def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
     }
     tagItem['properties'] = tagItemProps
     tagObject["items"] = tagItem
+    tagObject = generate_meta(tagObject, field)
     return tagObject
 
-timeRangePickerFormFieldSet = set()
 def generate_schema_for_time_range_picker(field, dbConfig, schema_field_name):
     """Creates an schema object of timeRangePicker.
 
@@ -412,7 +561,6 @@ def generate_schema_for_time_range_picker(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    timeRangePickerFormFieldSet.update(list(field.keys()))
     timeRangeObj = {}
     timeRangeObj['type'] = FieldTypeEnum.OBJECT.value
     timeRangeProps = {
@@ -421,9 +569,9 @@ def generate_schema_for_time_range_picker(field, dbConfig, schema_field_name):
     }
     timeRangeObj['properties'] = timeRangeProps
     timeRangeObj['required'] = list(timeRangeProps.keys())
+    timeRangeObj = generate_meta(timeRangeObj, field)
     return timeRangeObj
 
-timePickerFormFieldSet = set()
 def generate_schema_for_time_picker(field, dbConfig, schema_field_name):
     """Creates an schema object of timePicker.
 
@@ -436,10 +584,11 @@ def generate_schema_for_time_picker(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    timePickerFormFieldSet.update(list(field.keys()))
-    return {
+    timePickerObj = {
         "type": FieldTypeEnum.STRING.value
     }
+    timePickerObj = generate_meta(timePickerObj, field)
+    return timePickerObj
 
 def compare_pre_requisite_fields(fieldA, fieldB):
     """Compares two preRequisiteFields fieldA and fieldB for each property and checks if there "selectedValue" match. 
@@ -922,7 +1071,6 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema):
         return
     generatedSchema = generate_schema(uiConfig, dbConfig, name, selector)
     if schema:
-        # print('new schema', json.dumps(generatedSchema,indent=2))
         schemaDiff = diff(schema, generatedSchema["configSchema"])
         if schemaDiff:
             print('-'*50)
@@ -1005,16 +1153,4 @@ if __name__ == '__main__':
     else:
         name = args.name 
         get_schema_diff(name, selector)
-
-    # print(f'"textInputFieldSet" : {textInputFieldSet},')
-    # print(f'"textareaInputFieldSet" : {textareaInputFieldSet},')
-    # print(f'"singleSelecttFieldSet" : {singleSelectFieldSet},')
-    # print(f'"dynamicCustomFormFieldSet" : {dynamicCustomFormFieldSet},')
-    # print(f'"dynamicFormFieldSet" : {dynamicFormFieldSet},')
-    # print(f'"dynamicSelectFormFieldSet" : {dynamicSelectFormFieldSet},')
-    # print(f'"tagInputFormFieldSet" : {tagInputFormFieldSet},')
-    # print(f'"timeRangePickerFormFieldSet" : {timeRangePickerFormFieldSet},')
-    # print(f'"timePickerFormFieldSet" : {timePickerFormFieldSet},')
-    # print(f'"defaultCheckboxFieldSet" : {defaultCheckboxFieldSet},')
-    # print(f'"checkboxFieldSet": {checkboxFieldSet}')
     
