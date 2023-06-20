@@ -21,10 +21,10 @@
                   {
                     "type": "textInput",
                     "label": "Datafile URL",
-                    "note": "Your datafile url From Settings>Environments",
+                    "note": "Your datafile URL From Settings -> Environments",
                     "configKey": "dataFileUrl",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$|^$",
-                    "regexErrorMessage": "Invalid Datafile Url",
+                    "regexErrorMessage": "Invalid Datafile URL",
                     "placeholder": "e.g. https://cdn.optimizely.com/json/3Cee2qXeMgVPsqk8Sh5qX.json",
                     "preRequisites": {
                       "fields": [
@@ -56,7 +56,7 @@
                     "type": "textInput",
                     "label": "Campaign ID",
                     "configKey": "campaignId",
-                    "note": "You can override this field by passing campaign id in integration object (link here)",
+                    "note": "You can override this field by passing Campaign ID in the event's integration object",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{1,100})$",
                     "regexErrorMessage": "Invalid Campaign ID",
                     "placeholder": "e.g. 18230831431",
@@ -73,7 +73,7 @@
                     "type": "textInput",
                     "label": "Experiment ID",
                     "configKey": "experimentId",
-                    "note": "You can override this field by passing campaign id in integration object (link here)",
+                    "note": "You can override this field by passing Experiment ID in the event's integration object",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{1,100})$",
                     "regexErrorMessage": "Invalid Experiment ID",
                     "placeholder": "e.g. 18746220211",
@@ -95,7 +95,7 @@
               {
                 "title": "Connection mode",
                 "note": [
-                  "Update how you want to route events from your source to destination. ",
+                  "Update how you want to route events from your source to destination.",
                   {
                     "text": "Get help deciding",
                     "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
@@ -135,7 +135,7 @@
                     "type": "checkbox",
                     "label": "Track Categorized Pages",
                     "note": [
-                      "To track categorize pages enable this setting and map the Page Category to the Optimizely event name in 'RudderStack Page Name/Category to Optimizely event mappings' setting. Ensure that the event exists in Optimizely. ",
+                      "To track categorized pages enable this setting and map the Page Category to the Optimizely event name in the 'RudderStack Page Name/Category to Optimizely event mappings' setting. Ensure that the event exists in Optimizely.",
                       {
                         "text": "Learn more here",
                         "link": "https://docs.developers.optimizely.com/experimentation-data/docs/event-api-getting-started#for-optimizely-feature-experimentation-experimentse"
@@ -148,7 +148,7 @@
                     "type": "checkbox",
                     "label": "Track Named Pages",
                     "note": [
-                      "To track named pages enable this setting and map the Page Name to the Optimizely event name in 'RudderStack Page Name/Category to Optimizely event mappings' setting. Ensure that the event exists in Optimizely. ",
+                      "To track named pages enable this setting and map the Page Name to the Optimizely event name in the 'RudderStack Page Name/Category to Optimizely event mappings' setting. Ensure that the event exists in Optimizely.",
                       {
                         "text": "Learn more here",
                         "link": "https://docs.developers.optimizely.com/experimentation-data/docs/event-api-getting-started#for-optimizely-feature-experimentation-experimentse"
@@ -319,20 +319,38 @@
                     }
                   },
                   {
-                    "type": "textInput",
-                    "label": "Datafile Access Token",
-                    "configKey": "dataFileAccessToken",
+                    "type": "checkbox",
+                    "label": "Secure Environment",
+                    "configKey": "secureEnvironment",
+                    "default": false,
                     "note": [
-                      "Fill this if you are running experiment in Secure Environment.",
+                      "Enable this if you are running experiment in Secure Environment. ",
                       {
                         "text": "Learn more here",
-                        "link": "Fill this if you are running experiment in Secure Environment."
+                        "link": "https://docs.developers.optimizely.com/feature-experimentation/docs/manage-environments#secure-environments"
                       }
                     ],
                     "preRequisites": {
                       "fields": [
                         {
                           "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Datafile Access Token",
+                    "configKey": "dataFileAccessToken",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,200})$",
+                    "regexErrorMessage": "Invalid Access Token",
+                    "placeholder": "e.g. Ea9N54x3k8mT1qSv7Mf2zBcRn6IyOjGwXuLdH5pVhA0KlFgCtYsP3iU4WxQbZoD7vN2jX1kS8lR6wE",
+                    "note": "Access token of your secure environment. You can find it in Settings -> Environments",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "secureEnvironment",
                           "value": true
                         }
                       ]
@@ -366,7 +384,7 @@
                 "fields": [
                   {
                     "type": "singleSelect",
-                    "label": "Choose if you want to turn on events filtering:",
+                    "label": "Choose if you want to turn on event filtering: ",
                     "configKey": "eventFilteringOption",
                     "note": "You must select either allowlist or denylist to enable events filtering",
                     "options": [
@@ -388,7 +406,7 @@
                   {
                     "type": "tagInput",
                     "label": "Allowlisted events",
-                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
+                    "note": "Input the events you want to allowlist.\nInput separate events by pressing ‘Enter’.",
                     "configKey": "whitelistedEvents",
                     "tagKey": "eventName",
                     "placeholder": "e.g: Anonymous page visit",
@@ -409,7 +427,7 @@
                   {
                     "type": "tagInput",
                     "label": "Denylisted events",
-                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
+                    "note": "Input the events you want to denylist.\nInput separate events by pressing ‘Enter’.",
                     "configKey": "blacklistedEvents",
                     "tagKey": "eventName",
                     "placeholder": "e.g: Anonymous page visit",
@@ -434,10 +452,10 @@
                 "note": [
                   "Enter your OneTrust category names if you have them configured. ",
                   {
-                    "text": "Learnn more ",
+                    "text": "Learn more",
                     "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
                   },
-                  "about RudderStack’s OneTrust Consent Manager feature."
+                  " about RudderStack’s OneTrust Consent Manager feature."
                 ],
                 "fields": [
                   {
@@ -446,7 +464,7 @@
                     "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
                     "configKey": "oneTrustCookieCategories",
                     "tagKey": "oneTrustCookieCategory",
-                    "placeholder": "e.g: Credit card visit",
+                    "placeholder": "e.g: Marketing",
                     "default": [
                       {
                         "oneTrustCookieCategory": ""
@@ -462,7 +480,6 @@
     ],
     "sdkTemplate": {
       "title": "SDK settings",
-      "note": "not visible in the ui",
       "fields": [
         {
           "type": "checkbox",

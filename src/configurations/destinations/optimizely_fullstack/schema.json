@@ -99,11 +99,9 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
       },
-      "dataFileAccessToken": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      "secureEnvironment": {
+        "type": "boolean"
       },
-
       "eventFilteringOption": {
         "type": "string",
         "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
@@ -172,6 +170,24 @@
           }
         }
       }
+    },
+    "if": {
+      "properties": {
+        "secureEnvironment": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "required": ["secureEnvironment"]
+    },
+    "then": {
+      "properties": {
+        "dataFileAccessToken": {
+          "type": "string",
+          "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,200})$"
+        }
+      },
+      "required": ["dataFileAccessToken"]
     }
   }
 }
