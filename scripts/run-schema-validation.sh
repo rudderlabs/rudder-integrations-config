@@ -17,11 +17,12 @@ for file in $changed_files; do
             recommendations=$(echo "$output" | grep -i "recommendation" || true)
             if [ -n "$warnings" ]; then
                 echo "Warnings found for name: ${name} selector: ${selector}:"
-                echo "$warnings"
+                echo "$output"
                 exit_code=1
             fi
-            if [ -n "$recommendations" ]; then
-                echo "For name: ${name} selector: ${selector}: $recommendations"
+            if [ -n "$recommendations" ] && [ -z "$warnings" ]; then
+                echo "For name: ${name} selector: ${selector}:"
+                echo "$output"
             fi
         fi
         last_directory=${directory}
