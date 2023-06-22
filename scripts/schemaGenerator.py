@@ -269,7 +269,7 @@ def generate_meta(schemaObj, field):
     # For timeRangePicker, startTime and endTime meta properties
     meta_prop_start = {}
     meta_prop_end = {}
-    
+
     meta_fn = uiTypetoMetaFn.get(field['type'],None)
 
     if meta_fn:
@@ -993,7 +993,7 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                         curSchemaField = schema["properties"][field["value"]]
                         newSchemaField = uiTypetoSchemaFn.get(
                             curUiType)(field, dbConfig, "value")
-                        schemaDiff = diff(newSchemaField, curSchemaField)
+                        schemaDiff = diff(curSchemaField, newSchemaField)
                         if schemaDiff:
                             warnings.warn("For type:{} field:{} Difference is : \n\n {} \n".format(
                                 curUiType, field["value"], schemaDiff), UserWarning)
@@ -1014,7 +1014,7 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                                 curSchemaField = schema["properties"][field["configKey"]]
                                 newSchemaField = uiTypetoSchemaFn.get(
                                     curUiType)(field, dbConfig, "configKey")
-                                schemaDiff = diff(newSchemaField, curSchemaField)
+                                schemaDiff = diff(curSchemaField, newSchemaField)
                                 if schemaDiff:
                                     warnings.warn("For type:{} field:{} Difference is : \n\n {} \n".format(
                                         curUiType, field["configKey"], schemaDiff), UserWarning)
@@ -1030,7 +1030,7 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                         curSchemaField = schema["properties"][field["configKey"]]
                         newSchemaField = uiTypetoSchemaFn.get(
                             curUiType)(field, dbConfig, "configKey")
-                        schemaDiff = diff(newSchemaField, curSchemaField)
+                        schemaDiff = diff(curSchemaField, newSchemaField)
                         if schemaDiff:
                             warnings.warn("For type:{} field:{} Difference is : \n\n {} \n".format(
                                 curUiType, field["configKey"], schemaDiff), UserWarning)
@@ -1095,7 +1095,7 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema):
                 if "allOf" in schema:
                     curAllOfSchema = schema["allOf"]
                 newAllOfSchema = generatedSchema["configSchema"]["allOf"]
-                allOfSchemaDiff = diff(newAllOfSchema, curAllOfSchema)
+                allOfSchemaDiff = diff(curAllOfSchema, newAllOfSchema)
                 if allOfSchemaDiff:
                     warnings.warn("For allOf field Difference is :  \n\n {} \n".format(allOfSchemaDiff), UserWarning)
             if "anyOf" in generatedSchema["configSchema"]:
@@ -1103,7 +1103,7 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema):
                 if "anyOf" in schema:
                     curAnyOfSchema = schema["anyOf"]
                 newAnyOfSchema = generatedSchema["configSchema"]["anyOf"]
-                anyOfSchemaDiff = diff(newAnyOfSchema, curAnyOfSchema)
+                anyOfSchemaDiff = diff(curAnyOfSchema, newAnyOfSchema)
                 if anyOfSchemaDiff:
                     warnings.warn("For anyOf field Difference is :  \n\n {} \n".format(anyOfSchemaDiff), UserWarning)
             print('-'*50)
