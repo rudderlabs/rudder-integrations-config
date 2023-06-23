@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.37.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.37.2...v1.37.3) (2023-06-21)
+
+
+### Bug Fixes
+
+* updat git URLs and add hidden flag ([a93ce6c](https://github.com/rudderlabs/rudder-config-schema/commit/a93ce6cbd56a35011062ddd460e5c00a29d727fc))
+* updates Profiles project Github URLs ([5e9684a](https://github.com/rudderlabs/rudder-config-schema/commit/5e9684a0426c81e2f7abf24a3a7ba87976f9cbc0))
+
+### [1.37.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.37.1...v1.37.2) (2023-06-20)
+
 ### [1.37.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.37.0...v1.37.1) (2023-06-19)
 
 
