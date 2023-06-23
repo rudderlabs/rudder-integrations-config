@@ -111,9 +111,8 @@ def get_list_of_text_input_meta_fields(field):
         if secret_value == False:
             warnings.warn(f'secret and inputFieldType does not match')
     
-    prop_list_for_text_input = ["addInAccountSummary", "default", "disabledNormalMode", "footerNote", "footerURL",
-                                "infoTooltip", "label", "labelNote", "options", "placeholder", "regexErrorMessage",
-                                "secret"]
+    prop_list_for_text_input = ["default", "footerNote", "footerURL", "infoTooltip", "label", "labelNote", 
+                                "options", "placeholder", "regexErrorMessage","secret"]
     return prop_list_for_text_input
 
 def get_list_of_text_area_input_meta_fields(field):
