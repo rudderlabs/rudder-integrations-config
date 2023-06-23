@@ -96,6 +96,23 @@ def is_dest_field_dependent_on_source(field, dbConfig, schema_field_name):
             return True
     return False
 
+def is_field_present_in_default_config(field, dbConfig, schema_field_name):
+    """Checks if the given field is present in defaultConfig list present in dbConfig.
+
+    Args:
+        field (object): Individual field in ui-config.
+        dbConfig (object): Configurations of db-config.json.
+        schema_field_name (string): Specifies which key has the field's name in schema. 
+            For old schema types, it is 'value' else 'configKey'.
+
+    Returns:
+        boolean: True if field is in defaultConfig else False.
+    """    
+    if not dbConfig:
+        return False
+    if "destConfig" in dbConfig and "defaultConfig" in dbConfig["destConfig"] and field[schema_field_name] in dbConfig["destConfig"]["defaultConfig"]:
+        return True
+    return False
 
 def generate_schema_for_default_checkbox(field, dbConfig, schema_field_name):
     """Creates an schema object of defaultCheckbox.
@@ -679,7 +696,7 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
                 if generateFunction:
                     properties[field['value']] = generateFunction(
                         field, dbConfig, 'value')
-                if field.get('required', False) == True:
+                if field.get('required', False) == True and is_field_present_in_default_config(field, dbConfig, "value"):
                     schemaObject['required'].append(field['value'])
     else:
         if selector == 'destination':
@@ -694,7 +711,7 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
                             if generateFunction:
                                 properties[field['configKey']] = generateFunction(
                                     field, dbConfig, 'configKey')
-                            if template.get('title', "") == "Initial setup":
+                            if template.get('title', "") == "Initial setup" and is_field_present_in_default_config(field, dbConfig, "configKey"):
                                 schemaObject['required'].append(
                                     field['configKey'])
 
@@ -703,7 +720,7 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
                 if generateFunction:
                     properties[field['configKey']] = generateFunction(
                         field, dbConfig, 'configKey')
-                if field.get('required', False) == True:
+                if field.get('required', False) == True and is_field_present_in_default_config(field, dbConfig, "configKey"):
                     schemaObject['required'].append(field['configKey'])
 
             # default properties in new ui-config based schemas.
