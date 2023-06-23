@@ -2,6 +2,58 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.37.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.37.0...v1.37.1) (2023-06-19)
+
+
+### Bug Fixes
+
+* updates intercom to v7.0.1 ([a820ae3](https://github.com/rudderlabs/rudder-config-schema/commit/a820ae381e9d6cc068fb14d1f446e26a3a74c186))
+
+## [1.37.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.36.0...v1.37.0) (2023-06-12)
+
+
+### Features
+
+* **klaviyo:** update ui-config based on new api version ([#710](https://github.com/rudderlabs/rudder-config-schema/issues/710)) ([d1c571e](https://github.com/rudderlabs/rudder-config-schema/commit/d1c571e517a988e8ba49698ff410ab5ea1e02a84))
+* onboard tiktok device mode integration ([#668](https://github.com/rudderlabs/rudder-config-schema/issues/668)) ([3f2e2cd](https://github.com/rudderlabs/rudder-config-schema/commit/3f2e2cdce1f4f97f2f5c01459b376fbe592928c7))
+
+
+### Bug Fixes
+
+* anyOf to be array and schema diff for allOf, anyOf in schema generator script ([#701](https://github.com/rudderlabs/rudder-config-schema/issues/701)) ([6086e4c](https://github.com/rudderlabs/rudder-config-schema/commit/6086e4ce39461c048cc5c4cd8c962692f8f552c7))
+* eventMapping to allow only dropdown values ([#702](https://github.com/rudderlabs/rudder-config-schema/issues/702)) ([d2cece7](https://github.com/rudderlabs/rudder-config-schema/commit/d2cece79d893da8e0ae80483932a676b542f90d6))
+
+## [1.36.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.35.0...v1.36.0) (2023-06-06)
+
+
+### Features
+
+* add support for wht lib project defitions ([#659](https://github.com/rudderlabs/rudder-config-schema/issues/659)) ([337e978](https://github.com/rudderlabs/rudder-config-schema/commit/337e9783ad38e68bbec23ee7343f2764bef6bd94))
+* added Ketch integration for a list of destinations ([#685](https://github.com/rudderlabs/rudder-config-schema/issues/685)) ([526ee90](https://github.com/rudderlabs/rudder-config-schema/commit/526ee90fad75423b724b66c1ffc00b7cc00ffa7c))
+* **pinterest:** update footer note ([9c3165b](https://github.com/rudderlabs/rudder-config-schema/commit/9c3165b36ccc7c01fc07efd6b2f6ce35ab053562))
+
+## [1.35.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.34.0...v1.35.0) (2023-06-02)
+
+
+### Features
+
+* **shopify:** add disableClientSideIdentifier field in uiConfig ([#698](https://github.com/rudderlabs/rudder-config-schema/issues/698)) ([3f84471](https://github.com/rudderlabs/rudder-config-schema/commit/3f84471a3848d4862013c58eb23a50dd71c5d2c7))
+
+## [1.34.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.33.2...v1.34.0) (2023-05-30)
+
+
+### Features
+
+* mixpanel deletion api ([#680](https://github.com/rudderlabs/rudder-config-schema/issues/680)) ([11dac5a](https://github.com/rudderlabs/rudder-config-schema/commit/11dac5a91fd873470eeb0c1cbf7e2ee4bfd19fd1))
+* remove hidden flag for dynamic yield destination ([#687](https://github.com/rudderlabs/rudder-config-schema/issues/687)) ([b89dd82](https://github.com/rudderlabs/rudder-config-schema/commit/b89dd8236f9407fc8839c955b595f191ff347023))
+* remove property mapping for other standard events in fb pixel ([#630](https://github.com/rudderlabs/rudder-config-schema/issues/630)) ([0c71e88](https://github.com/rudderlabs/rudder-config-schema/commit/0c71e88321e192ce9fe9aefca4a6a98cde42e1c6))
+
+
+### Bug Fixes
+
+* **bingads_audience:** add hashEmail field and enable cdkv2 ([#691](https://github.com/rudderlabs/rudder-config-schema/issues/691)) ([9062017](https://github.com/rudderlabs/rudder-config-schema/commit/90620172a58a8feef83c642f172f41ee760be8b4))
+* s3 configs for access keys and iam roles for warehouse destinations ([#677](https://github.com/rudderlabs/rudder-config-schema/issues/677)) ([b48f2b0](https://github.com/rudderlabs/rudder-config-schema/commit/b48f2b0fab282b3c2fec660c70cf2c1e274d6abc))
+
 ### [1.33.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.33.1...v1.33.2) (2023-05-26)
 
 
