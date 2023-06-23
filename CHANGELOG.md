@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.38.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.37.3...v1.38.0) (2023-06-23)
+
+
+### Features
+
+* **ga4:** enhance support for debug_view in device and hybrid connection modes ([#696](https://github.com/rudderlabs/rudder-config-schema/issues/696)) ([135dc81](https://github.com/rudderlabs/rudder-config-schema/commit/135dc81438bbf6cea02ac6fd67c79a6493fddf78))
+* **klaviyo:** update label and footer note for primary identifier toggle ([#721](https://github.com/rudderlabs/rudder-config-schema/issues/721)) ([a364f93](https://github.com/rudderlabs/rudder-config-schema/commit/a364f9349683c4d2862986cbd4f27d653b921fda))
+* **optimizely_fullstack:** update configuration and onboarded on new UI ([#706](https://github.com/rudderlabs/rudder-config-schema/issues/706)) ([af291e3](https://github.com/rudderlabs/rudder-config-schema/commit/af291e3c420bb2789831764f47d4db2838ddb42f))
+* **profiles:** updated Profiles project Github URLs ([#715](https://github.com/rudderlabs/rudder-config-schema/issues/715)) ([646664c](https://github.com/rudderlabs/rudder-config-schema/commit/646664c734d0315552c0fbbf212d3e91b2ddf750))
+* twiiter web conversions ([#694](https://github.com/rudderlabs/rudder-config-schema/issues/694)) ([7f2329b](https://github.com/rudderlabs/rudder-config-schema/commit/7f2329b9bbd4435860f4de2180155b8270f4f561))
+
+
+### Bug Fixes
+
+* diff to be printed properly in schema ci validation ([#727](https://github.com/rudderlabs/rudder-config-schema/issues/727)) ([c3edd76](https://github.com/rudderlabs/rudder-config-schema/commit/c3edd7698885e72a2c87d65196b853bcf1b09be7))
+* pattern generalise function and schema diff in schema generator script ([#712](https://github.com/rudderlabs/rudder-config-schema/issues/712)) ([1115a0a](https://github.com/rudderlabs/rudder-config-schema/commit/1115a0a72e6e7ad8dcfd24bb5f34689d8a3e85f8))
+
 ### [1.37.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.37.2...v1.37.3) (2023-06-21)
 
 
