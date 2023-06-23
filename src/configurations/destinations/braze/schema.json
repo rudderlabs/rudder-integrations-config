@@ -16,71 +16,13 @@
         "type": "string",
         "pattern": "^(US-01|US-02|US-03|US-04|US-05|US-06|US-07|US-08|EU-01|EU-02|EU-03)$"
       },
-      "trackAnonymousUser": {
-        "type": "boolean"
-      },
-      "enableSubscriptionGroupInGroupCall": {
-        "type": "boolean"
-      },
-      "enableNestedArrayOperations": {
-        "type": "boolean"
-      },
-      "supportDedup": {
-        "type": "boolean"
-      },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "boolean"
-          },
-          "ios": {
-            "type": "boolean"
-          },
-          "reactnative": {
-            "type": "boolean"
-          },
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "connectionMode": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "pattern": "^(cloud|device)$"
-          },
-          "ios": {
-            "type": "string",
-            "pattern": "^(cloud|device|hybrid)$"
-          },
-          "android": {
-            "type": "string",
-            "pattern": "^(cloud|device|hybrid)$"
-          },
-          "reactnative": {
-            "type": "string",
-            "pattern": "^(cloud|device)$"
-          },
-          "flutter": {
-            "type": "string",
-            "pattern": "^(cloud|device)$"
-          }
-        }
-      },
-      "enableBrazeLogging": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
+      "enableSubscriptionGroupInGroupCall": { "type": "boolean", "default": false },
+      "enableNestedArrayOperations": { "type": "boolean", "default": false },
+      "trackAnonymousUser": { "type": "boolean", "default": false },
+      "supportDedup": { "type": "boolean", "default": false },
       "eventFilteringOption": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
+        "pattern": "^(disable|whitelistedEvents|blacklistedEvents)$"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -101,7 +43,7 @@
           "properties": {
             "eventName": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,300})$"
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
         }
@@ -116,6 +58,28 @@
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
+        }
+      },
+      "allowUserSuppliedJavascript": { "type": "boolean", "default": false },
+      "enableBrazeLogging": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "android": { "type": "boolean" },
+          "ios": { "type": "boolean" },
+          "web": { "type": "boolean" },
+          "reactnative": { "type": "boolean" },
+          "flutter": { "type": "boolean" }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "android": { "type": "string", "pattern": "^(cloud|device|hybrid)$" },
+          "ios": { "type": "string", "pattern": "^(cloud|device|hybrid)$" },
+          "web": { "type": "string", "pattern": "^(cloud|device)$" },
+          "reactnative": { "type": "string", "pattern": "^(cloud|device)$" },
+          "flutter": { "type": "string", "pattern": "^(cloud|device)$" }
         }
       }
     }
