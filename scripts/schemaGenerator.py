@@ -300,6 +300,8 @@ def generate_meta(schemaObj, field):
                 elif prop == "options":
                     meta_prop["helperStrings"]={}
                     for option in field["options"]:
+                        if isinstance(option, int) or isinstance(option, str):
+                            continue
                         if "name" in option and "value" in option:
                             meta_prop["helperStrings"][option["value"]] = option["name"]
                 elif prop.endswith("Left") and "keyLeft" in field:
