@@ -674,6 +674,107 @@ def generate_connection_mode(dbConfig):
                 connectionObj["properties"][sourceType] = connectionItemObj
     return connectionObj
 
+def convert_prerequisites_object_to_if_block_list(preRequisites):
+    """Creates a list of if block objects for the given preRequisites(Used in new-ui config).
+
+    Args:
+        preRequisites (object): contains list of fields with value
+
+    Returns:
+        list: generated if blocks from given preRequisites
+    """    
+    iBlockList = []
+    mainIfObj = { "properties" : {}, "required" : []}
+    separateIfFlag = False
+    # If condtition is or, each preRequisite field become if block seaparately.
+    if "condition" in preRequisites and preRequisites["condition"] == "or":
+        separateIfFlag = True
+    for field in preRequisites["fields"]:
+        if separateIfFlag:
+            ifObj = {"properties" : { field["configKey"] : {"const": field["value"]}}, "required" : [field["configKey"]]}
+            iBlockList.append(ifObj)
+        # when condition is and
+        else:
+            mainIfObj["properties"][field["configKey"]] = {"const": field["value"]}
+            mainIfObj["required"].append(field["configKey"])
+    if not separateIfFlag:
+        iBlockList.append(mainIfObj)
+    return iBlockList
+
+def generate_conditional_logic(uiConfig, dbConfig, schema_field_name):
+    """Creates a if-then conditions for the preRequisites object in a ui-config.
+
+    Args:
+        uiConfig (object): file content of ui-config.json.
+        dbConfig (object): Configurations of db-config.json.
+        schema_field_name (string): Specifies which key has the field's name in schema. 
+            For old schema types, it is 'value' else 'configKey'.
+    """    
+    # stores if blocks
+    ifBlockObjList = []
+    # stores corresponding then block for if block at same index in ifBlockObjList.
+    thenBlockObjList = []
+
+    def add_then_block_for_given_if(field, curIfBlock):
+        indexOfThen = ifBlockObjList.index(curIfBlock)
+        curThenObj = thenBlockObjList[indexOfThen]
+        generateFunction = uiTypetoSchemaFn.get(field['type'], None)
+        if generateFunction:
+            curThenObj["properties"][field['configKey']] = generateFunction(field, dbConfig, schema_field_name)
+            curThenObj["required"].append(field['configKey'])
+        thenBlockObjList[indexOfThen]=curThenObj
+
+    
+    baseTemplate = uiConfig.get('baseTemplate', [])
+    sdkTemplate = uiConfig.get('sdkTemplate', [])
+    for template in baseTemplate:
+        for section in template.get('sections', []):
+            for group in section.get('groups', []):
+                outerIfBlockList = []
+                if "preRequisites" in group:
+                    outerIfBlockList = convert_prerequisites_object_to_if_block_list(group["preRequisites"])
+                    for outerifItem in outerIfBlockList:
+                        if outerifItem not in ifBlockObjList:
+                            ifBlockObjList.append(outerifItem)
+                            thenBlockObjList.append({"properties": {}, "required": []})
+                for field in group.get('fields', []):
+                    if "preRequisites" in field:
+                        nestedIfBlockList = convert_prerequisites_object_to_if_block_list(field["preRequisites"])
+                        for nestedIfItem in nestedIfBlockList:
+                            if len(outerIfBlockList) != 0:
+                                for outerIfItem in outerIfBlockList:
+                                    # create a merged if object from outer if defined in group and inner if defined in field.
+                                    mergedIfItem = { "properties" : {}, "required": []}
+                                    mergedIfItem["properties"].update(outerIfItem["properties"])
+                                    mergedIfItem["properties"].update(nestedIfItem["properties"])
+                                    mergedIfItem["required"].extend(outerIfItem["required"])
+                                    mergedIfItem["required"].extend(nestedIfItem["required"])
+                                    if mergedIfItem not in ifBlockObjList:
+                                        ifBlockObjList.append(mergedIfItem)
+                                        thenBlockObjList.append({"properties": {}, "required": []})
+                                    add_then_block_for_given_if(field, mergedIfItem)
+                            else:
+                                if nestedIfItem not in ifBlockObjList:
+                                    ifBlockObjList.append(nestedIfItem)
+                                    thenBlockObjList.append({"properties": {}, "required": []})
+                                add_then_block_for_given_if(field, nestedIfItem)
+                    else:
+                        for outerIfItem in outerIfBlockList:
+                            add_then_block_for_given_if(field, outerIfItem)
+    for field in sdkTemplate.get('fields', []):
+        if "preRequisites" in field:
+            ifBlockList = convert_prerequisites_object_to_if_block_list(field["preRequisites"])
+            for curIfBlock in ifBlockList:
+                if curIfBlock not in ifBlockObjList:
+                    ifBlockObjList.append(curIfBlock)
+                    thenBlockObjList.append({"properties": {}, "required": []})
+                add_then_block_for_given_if(field, curIfBlock)
+
+    allOfSchemaObj = []
+    for i in range(0, len(ifBlockObjList)):
+        allOfSchemaItem = { "if": ifBlockObjList[i], "then": thenBlockObjList[i]}
+        allOfSchemaObj.append(allOfSchemaItem)
+    return allOfSchemaObj
 
 def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, name, selector):    
     """Generates corresponding schema properties by iterating over each of the ui-config fields.
@@ -705,7 +806,11 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
             for template in baseTemplate:
                 for section in template.get('sections', []):
                     for group in section.get('groups', []):
+                        if "preRequisites" in group:
+                                continue
                         for field in group.get('fields', []):
+                            if "preRequisites" in field:
+                                continue
                             generateFunction = uiTypetoSchemaFn.get(
                                 field['type'], None)
                             if generateFunction:
@@ -716,6 +821,8 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
                                     field['configKey'])
 
             for field in sdkTemplate.get('fields', []):
+                if "preRequisites" in field:
+                    continue
                 generateFunction = uiTypetoSchemaFn.get(field['type'], None)
                 if generateFunction:
                     properties[field['configKey']] = generateFunction(
@@ -727,6 +834,7 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
             schemaObject['properties']['useNativeSDK'] = generate_schema_for_checkbox({"type":"checkbox", 
                                                                            "value":"useNativeSDK"}, dbConfig, "value")
             schemaObject['properties']['connectionMode'] = generate_connection_mode(dbConfig)
+            schemaObject["allOf"] = generate_conditional_logic(uiConfig, dbConfig, "configKey")
         else:
             # for sources
             def generate_config_props(config):
