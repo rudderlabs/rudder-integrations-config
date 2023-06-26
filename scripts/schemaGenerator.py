@@ -264,7 +264,7 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     for customField in field["customFields"]:
         customeFieldSchemaObj = uiTypetoSchemaFn.get(customField["type"])(customField, dbConfig, schema_field_name)
         isCustomFieldDependentOnSource = is_dest_field_dependent_on_source(customField, dbConfig, schema_field_name)
-        if 'pattern' not in customeFieldSchemaObj and not isCustomFieldDependentOnSource:
+        if 'pattern' not in customeFieldSchemaObj and not isCustomFieldDependentOnSource and customeFieldSchemaObj["type"]!=FieldTypeEnum.BOOLEAN.value:
             customeFieldSchemaObj["pattern"] = generalize_regex_pattern(customField)
         # If the custom field is source dependent, we remove the source keys as it's not required inside custom fields, rather they need to be moved to top.
         if isCustomFieldDependentOnSource:
