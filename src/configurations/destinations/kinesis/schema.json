@@ -1,8 +1,8 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["region", "stream"],
     "type": "object",
-    "required": ["region", "stream", "iamRoleARN"],
     "properties": {
       "region": {
         "type": "string",
@@ -12,7 +12,8 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "roleBasedAuth": { "type": "boolean" },
+      "roleBasedAuth": { "type": "boolean", "default": true },
+      "useMessageId": { "type": "boolean", "default": false },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -26,41 +27,30 @@
         }
       }
     },
-    "allOf": [
+    "anyOf": [
       {
-        "if": {
-          "properties": { "roleBasedAuth": { "const": true } },
-          "required": ["roleBasedAuth"]
-        },
-        "then": {
-          "required": ["iamRoleARN"],
-          "properties": {
-            "iamRoleARN": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
+        "properties": {
+          "accessKeyID": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          },
+          "accessKey": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
           }
-        }
+        },
+        "required": []
       },
       {
-        "if": {
-          "properties": { "roleBasedAuth": { "const": true } },
-          "required": ["roleBasedAuth", "accessKeyID"]
+        "properties": {
+          "iamRoleARN": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          },
+          "roleBasedAuth": { "const": true }
         },
-        "then": {
-          "properties": {
-            "accessKeyID": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "accessKey": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
+        "required": ["iamRoleARN", "roleBasedAuth"]
       }
-    ],
-    "additionalProperties": true
+    ]
   }
 }
