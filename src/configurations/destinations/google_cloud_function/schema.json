@@ -1,13 +1,15 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
     "required": ["triggerType"],
+    "type": "object",
     "properties": {
-      "apiKeyId": { "type": "string" },
-      "enableBatchInput": { "type": "boolean" },
-      "maxBatchSize": { "type": "string", "pattern": "^[1-9]\\d*$" },
       "triggerType": { "type": "string", "pattern": "^(Http|Https)$" },
+      "apiKeyId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "enableBatchInput": { "type": "boolean", "default": false },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -45,9 +47,27 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
             },
-            "gcloudAuthorization": { "type": "string", "pattern": "(^env[.].+)|.+" }
+            "gcloudAuthorization": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
+            }
           },
           "required": ["googleCloudFunctionUrl", "gcloudAuthorization"]
+        }
+      },
+      {
+        "if": {
+          "properties": { "enableBatchInput": { "const": true } },
+          "required": ["enableBatchInput"]
+        },
+        "then": {
+          "properties": {
+            "maxBatchSize": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[1-9]\\d*$"
+            }
+          },
+          "required": []
         }
       }
     ]
