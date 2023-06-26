@@ -297,6 +297,11 @@ def generate_meta(schemaObj, field):
                     else:
                         meta_prop_end = field[prop].copy()
                         del meta_prop_end["value"]
+                elif prop == "options":
+                    meta_prop["helperStrings"]={}
+                    for option in field["options"]:
+                        if "name" in option and "value" in option:
+                            meta_prop["helperStrings"][option["value"]] = option["name"]
                 elif prop.endswith("Left") and "keyLeft" in field:
                     meta_prop_left[prop[:-4]] = field[prop]
                 elif prop.endswith("Right") and "keyRight" in field:
