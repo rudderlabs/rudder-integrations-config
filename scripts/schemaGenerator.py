@@ -59,14 +59,18 @@ def generalize_regex_pattern(field):
         pattern += ")$"
     # for others
     else:
-        pattern = "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|"
+        defaultSubPattern = "(^\\{\\{.*\\|\\|(.*)\\}\\}$)"
+        defaultEnvPattern = "(^env[.].+)"
+        pattern = ""
         if "regex" in field:
-            if field["regex"].startswith(pattern):
-                pattern = field["regex"]
-            else:
-                pattern += field["regex"]
+            pattern = field["regex"]
+            if defaultSubPattern not in pattern:
+                pattern = "|".join([defaultSubPattern, pattern])
+            if defaultEnvPattern not in pattern:
+                indexToPlace = pattern.find(defaultSubPattern) + len(defaultSubPattern)
+                pattern = pattern[:indexToPlace] + '|' + defaultEnvPattern + pattern[indexToPlace:]
         else:
-            pattern += '^(.{0,100})$'
+            pattern = "|".join([defaultSubPattern, defaultEnvPattern, '^(.{0,100})$']) 
     return pattern
 
 
@@ -868,6 +872,18 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema):
             # call for individual warnings
             for uiType in uiTypetoSchemaFn.keys():
                 generate_warnings_for_each_type(uiConfig, dbConfig, schema, uiType)
+            # schema diff for "additionalProperties"
+            if "additionalProperties" not in schema:
+                print("\n Recommendation: Please set additionalProperties to False in schema.json. \n")
+            # schema diff for "required"
+            if "required" not in schema:
+                warnings.warn('required field is not in schema \n',  UserWarning)
+            else:
+                curRequiredField = schema["required"]
+                newRequiredField = generatedSchema["configSchema"]["required"]
+                requiredFieldDiff = diff(curRequiredField, newRequiredField)
+                if requiredFieldDiff:
+                    warnings.warn("For required field Difference is :  \n\n {} \n".format(requiredFieldDiff), UserWarning)
             if "allOf" in generatedSchema["configSchema"]:
                 curAllOfSchema = {}
                 if "allOf" in schema:
