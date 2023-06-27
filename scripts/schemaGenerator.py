@@ -297,13 +297,15 @@ def generate_meta(schemaObj, field):
                     else:
                         meta_prop_end = field[prop].copy()
                         del meta_prop_end["value"]
-                elif prop == "options":
+                elif prop == "options" and (field["type"]=='singleSelect' or field["type"]=='dynamicSelectForm'):
                     meta_prop["helperStrings"]={}
                     for option in field["options"]:
                         if isinstance(option, int) or isinstance(option, str):
                             continue
                         if "name" in option and "value" in option:
                             meta_prop["helperStrings"][option["value"]] = option["name"]
+                        elif "label" in option and "value" in option:
+                            meta_prop["helperStrings"][option["value"]] = option["label"]
                 elif prop.endswith("Left") and "keyLeft" in field:
                     meta_prop_left[prop[:-4]] = field[prop]
                 elif prop.endswith("Right") and "keyRight" in field:
@@ -444,7 +446,10 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
             "enum": get_options_list_for_enum(field)
         }
         if "defaultOption" in field:
-            singleSelectObj["default"] = [field["defaultOption"]["value"]]
+            if isinstance(field["defaultOption"]["value"], list):
+                singleSelectObj["default"] = field["defaultOption"]["value"]
+            else:
+                singleSelectObj["default"] = [field["defaultOption"]["value"]]
     else:
         singleSelectObj = {"type": FieldTypeEnum.STRING.value}
         singleSelectObj["enum"] = get_options_list_for_enum(field)
