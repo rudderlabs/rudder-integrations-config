@@ -235,7 +235,10 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
             "pattern": generalize_regex_pattern(field)
         }
         if "defaultOption" in field:
-            singleSelectObj["default"] = [field["defaultOption"]["value"]]
+            if isinstance(field["defaultOption"]["value"], list):
+                singleSelectObj["default"] = field["defaultOption"]["value"]
+            else:
+                singleSelectObj["default"] = [field["defaultOption"]["value"]]
     else:
         singleSelectObj = {"type": FieldTypeEnum.STRING.value}
         singleSelectObj["pattern"] = generalize_regex_pattern(field)
