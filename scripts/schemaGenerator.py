@@ -56,7 +56,7 @@ def generalize_regex_pattern(field):
 
     Returns:
         string: generated pattern for the field.
-    """  
+    """        
     defaultSubPattern = "(^\\{\\{.*\\|\\|(.*)\\}\\}$)"
     defaultEnvPattern = "(^env[.].+)"
     pattern = ""
@@ -436,10 +436,20 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    singleSelectObj = {"type": FieldTypeEnum.STRING.value}
-    singleSelectObj["enum"] = get_options_list_for_enum(field)
-    if "defaultOption" in field:
-        singleSelectObj["default"] = field["defaultOption"]["value"]
+    singleSelectObj = {}
+    if "mode" in field and field["mode"] == 'multiple':
+        singleSelectObj = {"type": FieldTypeEnum.ARRAY.value} 
+        singleSelectObj["items"] = {
+            "type": FieldTypeEnum.STRING.value,
+            "enum": get_options_list_for_enum(field)
+        }
+        if "defaultOption" in field:
+            singleSelectObj["default"] = [field["defaultOption"]["value"]]
+    else:
+        singleSelectObj = {"type": FieldTypeEnum.STRING.value}
+        singleSelectObj["enum"] = get_options_list_for_enum(field)
+        if "defaultOption" in field:
+            singleSelectObj["default"] = field["defaultOption"]["value"]
 
     isSourceDependent = is_dest_field_dependent_on_source(field, dbConfig, schema_field_name)
     if isSourceDependent:
