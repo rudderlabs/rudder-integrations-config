@@ -317,7 +317,7 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
             "type": FieldTypeEnum.STRING.value,
         }
         if(field["type"] == 'dynamicSelectForm'):
-            if forFieldWithTo != field.get("reverse", False):
+            if (forFieldWithTo != (field.get("reverse", False)==False)):
                 obj["pattern"] = generalize_regex_pattern({"type": "textInput"})
             else:
                 obj["pattern"] = generalize_regex_pattern(field)    
