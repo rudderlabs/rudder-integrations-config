@@ -528,10 +528,10 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
             "type": FieldTypeEnum.STRING.value,
         }
         if(field["type"] == 'dynamicSelectForm'):
-            if forFieldWithTo != field.get("reverse", False):
-                obj["enum"] = get_options_list_for_enum(field)
+            if (forFieldWithTo != (field.get("reverse", False)==False)):
+                obj["pattern"] = generalize_regex_pattern(field)
             else:
-                obj["pattern"] = generalize_regex_pattern(field)    
+                obj["enum"] = get_options_list_for_enum(field) 
         else:
             obj["pattern"] = generalize_regex_pattern(field)
         return obj
