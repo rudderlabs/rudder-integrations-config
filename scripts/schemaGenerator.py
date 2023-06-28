@@ -312,11 +312,17 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    def generate_key_left():
+    def generate_key(forFieldWithTo):
         obj = {
             "type": FieldTypeEnum.STRING.value,
-            "pattern": generalize_regex_pattern(field)
         }
+        if(field["type"] == 'dynamicSelectForm'):
+            if forFieldWithTo != field.get("reverse", False):
+                obj["pattern"] = generalize_regex_pattern({"type": "textInput"})
+            else:
+                obj["pattern"] = generalize_regex_pattern(field)    
+        else:
+            obj["pattern"] = generalize_regex_pattern(field)
         return obj
 
     dynamicFormSchemaObject = {}
@@ -325,10 +331,10 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
     dynamicFormItemObject["type"] = FieldTypeEnum.OBJECT.value
     dynamicFormItemObject['properties'] = {}
     dynamicFormItemObjectProps = [
-        (field['keyLeft'], generate_key_left), (field['keyRight'], generate_key_left)]
+        (field['keyLeft'], generate_key), (field['keyRight'], generate_key)]
     for dynamicFromItemObjectProp in dynamicFormItemObjectProps:
         dynamicFormItemObject['properties'][dynamicFromItemObjectProp[0]
-                                            ] = dynamicFromItemObjectProp[1]()
+                                            ] = dynamicFromItemObjectProp[1](dynamicFromItemObjectProp[0] == "to")
     dynamicFormSchemaObject['items'] = dynamicFormItemObject
     return dynamicFormSchemaObject
 
