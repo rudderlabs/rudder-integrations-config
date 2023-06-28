@@ -684,19 +684,18 @@ def convert_prerequisites_object_to_if_block_list(preRequisites):
         list: generated if blocks from given preRequisites
     """    
     iBlockList = []
-    mainIfObj = { "properties" : {}, "required" : []}
+    mainIfObj = { "properties" : {}}
     separateIfFlag = False
     # If condtition is or, each preRequisite field become if block seaparately.
     if "condition" in preRequisites and preRequisites["condition"] == "or":
         separateIfFlag = True
     for field in preRequisites["fields"]:
         if separateIfFlag:
-            ifObj = {"properties" : { field["configKey"] : {"const": field["value"]}}, "required" : [field["configKey"]]}
+            ifObj = {"properties" : { field["configKey"] : {"const": field["value"]}}}
             iBlockList.append(ifObj)
         # when condition is and
         else:
             mainIfObj["properties"][field["configKey"]] = {"const": field["value"]}
-            mainIfObj["required"].append(field["configKey"])
     if not separateIfFlag:
         iBlockList.append(mainIfObj)
     return iBlockList
@@ -722,10 +721,8 @@ def generate_extended_conditional_for_if(curIfBlock, dbConfig):
                 curMode = curIfBlock["properties"][ifProperty]["const"]
             # deleting properties as they will go in anyOf
             del curIfBlock["properties"][ifProperty]
-            curIfBlock["required"].remove(ifProperty)
-            if len(curIfBlock["required"]) == 0:
+            if curIfBlock["properties"] == {}:
                 del curIfBlock["properties"]
-                del curIfBlock["required"]
             
             # finding source and mode of preRequisite field
             ifProperty = ifProperty.lower()
@@ -745,8 +742,7 @@ def generate_extended_conditional_for_if(curIfBlock, dbConfig):
                         "connectionMode": {
                             'const': {source: curMode}
                         }
-                    }, 
-                    "required": ["connectionMode"]
+                    }
                 })
             elif source == 'mobile':
                 mobileSourceList = ['reactnative', 'android', 'ios', 'flutter']
@@ -756,8 +752,7 @@ def generate_extended_conditional_for_if(curIfBlock, dbConfig):
                             "connectionMode": {
                                 'const': {mobileSource: curMode}
                             }
-                        }, 
-                        "required": ["connectionMode"]
+                        }
                     })
             else:
                 # no source provided hence, all sources which support curMode will be added.
@@ -768,8 +763,7 @@ def generate_extended_conditional_for_if(curIfBlock, dbConfig):
                                 "connectionMode": {
                                     'const': {source: curMode}
                                 }
-                            }, 
-                            "required": ["connectionMode"]
+                            }
                         })
     return curIfBlock
 
@@ -816,11 +810,9 @@ def generate_conditional_logic(uiConfig, dbConfig, schema_field_name):
                             if len(outerIfBlockList) != 0:
                                 for outerIfItem in outerIfBlockList:
                                     # create a merged if object from outer if defined in group and inner if defined in field.
-                                    mergedIfItem = { "properties" : {}, "required": []}
+                                    mergedIfItem = { "properties" : {}}
                                     mergedIfItem["properties"].update(outerIfItem["properties"])
                                     mergedIfItem["properties"].update(nestedIfItem["properties"])
-                                    mergedIfItem["required"].extend(outerIfItem["required"])
-                                    mergedIfItem["required"].extend(nestedIfItem["required"])
                                     if mergedIfItem not in ifBlockObjList:
                                         ifBlockObjList.append(mergedIfItem)
                                         thenBlockObjList.append({"properties": {}, "required": []})
