@@ -701,6 +701,78 @@ def convert_prerequisites_object_to_if_block_list(preRequisites):
         iBlockList.append(mainIfObj)
     return iBlockList
 
+def generate_extended_conditional_for_if(curIfBlock, dbConfig):
+    """Creates the if logic for connection mode preRequisite. It breaks the connectionMode preRequisite field and into source and mode.
+    An anyOf condition is created inside if. Example, For connectionMode.mobileDevice we have ios/android/flutter/reactnative inside anyOf.
+
+    Args:
+        curIfBlock (object): if object with properties and required
+        dbConfig (object): Configurations of db-config.json.
+
+    Returns:
+        object: populates the if block with anyOf conditions for connectionMode prerequisite field.
+    """    
+    supportedModes = ["cloud", "device", "hybrid"]
+    ifPropertiesList = list(curIfBlock["properties"].keys())
+    for ifProperty in ifPropertiesList:
+        if "connectionMode" in ifProperty:
+            curMode = ""
+            # mode as value
+            if curIfBlock["properties"][ifProperty]["const"] in supportedModes:
+                curMode = curIfBlock["properties"][ifProperty]["const"]
+            # deleting properties as they will go in anyOf
+            del curIfBlock["properties"][ifProperty]
+            curIfBlock["required"].remove(ifProperty)
+            if len(curIfBlock["required"]) == 0:
+                del curIfBlock["properties"]
+                del curIfBlock["required"]
+            
+            # finding source and mode of preRequisite field
+            ifProperty = ifProperty.lower()
+            curIfBlock["anyOf"] = []
+            ifProperty = ifProperty.replace("connectionmodes.", "")
+            ifProperty = ifProperty.replace("connectionmode.", "")
+            if curMode == "":
+                for mode in supportedModes:
+                    if mode in ifProperty:
+                        curMode = mode
+                        ifProperty = ifProperty.replace(mode, "")
+                        break
+            source = ifProperty
+            if source == 'web':
+                curIfBlock["anyOf"].append({ 
+                    "properties": { 
+                        "connectionMode": {
+                            'const': {source: curMode}
+                        }
+                    }, 
+                    "required": ["connectionMode"]
+                })
+            elif source == 'mobile':
+                mobileSourceList = ['reactnative', 'android', 'ios', 'flutter']
+                for mobileSource in mobileSourceList:
+                    curIfBlock["anyOf"].append({ 
+                        "properties": { 
+                            "connectionMode": {
+                                'const': {mobileSource: curMode}
+                            }
+                        }, 
+                        "required": ["connectionMode"]
+                    })
+            else:
+                # no source provided hence, all sources which support curMode will be added.
+                for source in dbConfig["supportedSourceTypes"]:
+                    if source in dbConfig["supportedConnectionModes"] and curMode in dbConfig["supportedConnectionModes"][source]:
+                        curIfBlock["anyOf"].append({ 
+                            "properties": { 
+                                "connectionMode": {
+                                    'const': {source: curMode}
+                                }
+                            }, 
+                            "required": ["connectionMode"]
+                        })
+    return curIfBlock
+
 def generate_conditional_logic(uiConfig, dbConfig, schema_field_name):
     """Creates a if-then conditions for the preRequisites object in a ui-config.
 
@@ -772,7 +844,10 @@ def generate_conditional_logic(uiConfig, dbConfig, schema_field_name):
 
     allOfSchemaObj = []
     for i in range(0, len(ifBlockObjList)):
-        allOfSchemaItem = { "if": ifBlockObjList[i], "then": thenBlockObjList[i]}
+        allOfSchemaItem = { 
+            "if": generate_extended_conditional_for_if(ifBlockObjList[i], dbConfig), 
+            "then": thenBlockObjList[i]
+        }
         allOfSchemaObj.append(allOfSchemaItem)
     return allOfSchemaObj
 
