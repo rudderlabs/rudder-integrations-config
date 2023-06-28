@@ -2,17 +2,16 @@
   "name": "OPTIMIZELY_FULLSTACK",
   "displayName": "Optimizely Fullstack",
   "config": {
-    "transformAt": "processor",
-    "transformAtV1": "processor",
+    "cdkV2Enabled": true,
+    "transformAt": "router",
+    "transformAtV1": "router",
     "saveDestinationResponse": true,
     "includeKeys": [
-      "sdkKey",
-      "baseUrl",
       "trackKnownUsers",
       "nonInteraction",
       "listen",
-      "trackCategorizedPages",
-      "trackNamedPages",
+      "connectionMode",
+      "useNativeSDK",
       "blacklistedEvents",
       "whitelistedEvents",
       "eventFilteringOption",
@@ -32,24 +31,35 @@
       "warehouse",
       "shopify"
     ],
-    "supportedMessageTypes": ["track", "page", "screen"],
+    "supportedConnectionModes": {
+      "android": ["cloud", "device"],
+      "ios": ["cloud", "device"]
+    },
+    "supportedMessageTypes": ["identify", "track", "page", "screen"],
     "destConfig": {
       "defaultConfig": [
-        "sdkKey",
-        "baseUrl",
+        "dataFileUrl",
+        "accountId",
+        "projectId",
         "trackKnownUsers",
-        "nonInteraction",
-        "listen",
         "trackCategorizedPages",
         "trackNamedPages",
+        "anonymizeIp",
+        "enrichDecisions",
+        "campaignId",
+        "experimentId",
+        "eventMapping",
+        "pageMapping",
+        "attributeMapping",
+        "secureEnvironment",
+        "dataFileAccessToken",
         "blacklistedEvents",
         "whitelistedEvents",
         "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
-      "android": ["useNativeSDK"],
-      "ios": ["useNativeSDK"]
-    },
-    "secretKeys": ["sdkKey"]
+      "android": ["useNativeSDK", "connectionMode", "listen", "nonInteraction"],
+      "ios": ["useNativeSDK", "connectionMode", "listen", "nonInteraction"]
+    }
   }
 }
