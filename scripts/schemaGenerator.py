@@ -857,6 +857,8 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                                         curUiType, field["configKey"], schemaDiff), UserWarning)
                         
         for field in sdkTemplate.get('fields', []):
+            if "preRequisites" in field:
+                continue
             generateFunction = uiTypetoSchemaFn.get(field['type'], None)
             if generateFunction:
                 if generateFunction and field["type"] == curUiType:
