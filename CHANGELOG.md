@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.38.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.38.0...v1.38.1) (2023-06-28)
+
+
+### Bug Fixes
+
+* gav4 metrics and dimension configuration ([3c11edb](https://github.com/rudderlabs/rudder-config-schema/commit/3c11edbe399ad01c851ad7dbc65f8828c51321ba))
+
 ## [1.38.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.37.3...v1.38.0) (2023-06-23)
 
 
