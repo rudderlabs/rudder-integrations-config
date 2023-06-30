@@ -16,7 +16,7 @@
                     "type": "textInput",
                     "label": "App Key",
                     "configKey": "appKey",
-                    "regex": "^(.{0,100})$",
+                    "regex": "^(.{1,100})$",
                     "regexErrorMessage": "Invalid App Key",
                     "required": true,
                     "placeholder": "e.g: f2c7c97a-48d1-11ea-8e07-faffc22c7c7f",
@@ -26,7 +26,7 @@
                     "type": "textInput",
                     "label": "Rest Api Key",
                     "configKey": "restApiKey",
-                    "regex": "^(.{0,100})$",
+                    "regex": "^(.{1,100})$",
                     "regexErrorMessage": "Invalid Rest Api Key",
                     "required": true,
                     "placeholder": "e.g: 06c19c59-48d2-11ea-b27a-faffc22c7c7f",
@@ -140,10 +140,39 @@
                     "preRequisites": {
                       "fields": [
                         {
-                          "configKey": "connectionModes.cloud",
-                          "value": true
+                          "configKey": "connectionMode.cloud",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.android",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.android",
+                          "value": "hybrid"
+                        },
+                        {
+                          "configKey": "connectionMode.ios",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.ios",
+                          "value": "hybrid"
+                        },
+                        {
+                          "configKey": "connectionMode.flutter",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.reactnative",
+                          "value": "cloud"
                         }
-                      ]
+                      ],
+                      "condition": "or"
                     }
                   },
                   {
@@ -161,10 +190,39 @@
                     "preRequisites": {
                       "fields": [
                         {
-                          "configKey": "connectionModes.cloud",
-                          "value": true
+                          "configKey": "connectionMode.cloud",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.android",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.android",
+                          "value": "hybrid"
+                        },
+                        {
+                          "configKey": "connectionMode.ios",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.ios",
+                          "value": "hybrid"
+                        },
+                        {
+                          "configKey": "connectionMode.flutter",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.reactnative",
+                          "value": "cloud"
                         }
-                      ]
+                      ],
+                      "condition": "or"
                     }
                   },
                   {
@@ -203,12 +261,24 @@
                 "preRequisites": {
                   "fields": [
                     {
-                      "configKey": "connectionModes.webDevice",
-                      "value": true
+                      "configKey": "connectionMode.web",
+                      "value": "device"
                     },
                     {
-                      "configKey": "connectionModes.mobileDevice",
-                      "value": true
+                      "configKey": "connectionMode.android",
+                      "value": "device"
+                    },
+                    {
+                      "configKey": "connectionMode.ios",
+                      "value": "device"
+                    },
+                    {
+                      "configKey": "connectionMode.flutter",
+                      "value": "device"
+                    },
+                    {
+                      "configKey": "connectionMode.reactnative",
+                      "value": "device"
                     }
                   ],
                   "condition": "or"
@@ -242,11 +312,6 @@
                     "configKey": "whitelistedEvents",
                     "tagKey": "eventName",
                     "placeholder": "e.g: Anonymous page visit",
-                    "default": [
-                      {
-                        "eventName": ""
-                      }
-                    ],
                     "preRequisites": {
                       "fields": [
                         {
@@ -263,11 +328,6 @@
                     "configKey": "blacklistedEvents",
                     "tagKey": "eventName",
                     "placeholder": "e.g: Anonymous page visit",
-                    "default": [
-                      {
-                        "eventName": ""
-                      }
-                    ],
                     "preRequisites": {
                       "fields": [
                         {
@@ -314,12 +374,6 @@
       "title": "SDK settings",
       "note": "not visible in the ui",
       "fields": [
-        {
-          "type": "checkbox",
-          "label": "Allow User Supplied Javascript",
-          "configKey": "allowUserSuppliedJavascript",
-          "default": false
-        },
         {
           "type": "checkbox",
           "label": "Show braze logs",
