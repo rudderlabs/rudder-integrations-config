@@ -44,6 +44,9 @@ def get_options_list_for_enum(field):
             options_list.append(field["options"][i])
         else:
             options_list.append(field["options"][i]["value"])
+    # allow empty field in enum if field in not required.
+    if "defaultOption" not in field and field.get("required", False) == False:
+            options_list.append("")
     return options_list
 
 def generalize_regex_pattern(field):
