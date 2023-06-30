@@ -320,6 +320,8 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
             if (forFieldWithTo != (field.get("reverse", False)==False)):
                 obj["pattern"] = generalize_regex_pattern({"type": "textInput"})
             else:
+                if "defaultOption" in field:
+                    obj["default"] = field["defaultOption"]["value"]
                 obj["pattern"] = generalize_regex_pattern(field)    
         else:
             obj["pattern"] = generalize_regex_pattern(field)
