@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.39.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.38.1...v1.39.0) (2023-06-30)
+
+
+### Features
+
+* make twiiter ads visible in destination ([567791d](https://github.com/rudderlabs/rudder-config-schema/commit/567791d0e376f1afb9ec74713d21b4899ca82be7))
+
+
+### Bug Fixes
+
+* update regex to allow digit 0 for accountId ([#745](https://github.com/rudderlabs/rudder-config-schema/issues/745)) ([86c3160](https://github.com/rudderlabs/rudder-config-schema/commit/86c3160c12387ce1db0cd5668194cbd60f598379))
+
 ### [1.38.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.38.0...v1.38.1) (2023-06-28)
 
 
