@@ -534,7 +534,9 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
             if (forFieldWithTo != (field.get("reverse", False)==False)):
                 obj["pattern"] = generalize_regex_pattern(field)
             else:
-                obj["enum"] = get_options_list_for_enum(field) 
+                if "defaultOption" in field:
+                    obj["default"] = field["defaultOption"]["value"]
+                obj["enum"] = get_options_list_for_enum(field)
         else:
             obj["pattern"] = generalize_regex_pattern(field)
         return obj
@@ -1031,6 +1033,8 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
     if is_old_format(uiConfig):
         for uiConfigItem in uiConfig:
             for field in uiConfigItem["fields"]:
+                if "preRequisiteField" in field:
+                    continue
                 if field["type"] == curUiType:
                     if field["value"] not in schema["properties"]:
                         warnings.warn(
@@ -1049,7 +1053,11 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
         for template in baseTemplate:
             for section in template.get('sections', []):
                 for group in section.get('groups', []):
+                    if "preRequisites" in group:
+                        continue
                     for field in group.get('fields', []):
+                        if "preRequisites" in field:
+                            continue
                         generateFunction = uiTypetoSchemaFn.get(
                             field['type'], None)
                         if generateFunction and field["type"] == curUiType:
@@ -1066,6 +1074,8 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                                         curUiType, field["configKey"], schemaDiff), UserWarning)
                         
         for field in sdkTemplate.get('fields', []):
+            if "preRequisites" in field:
+                continue
             generateFunction = uiTypetoSchemaFn.get(field['type'], None)
             if generateFunction:
                 if generateFunction and field["type"] == curUiType:
