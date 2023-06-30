@@ -10,12 +10,9 @@
       },
       "homePageUrl": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$"
       },
-      "hashMethod": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-      },
+      "hashMethod": { "type": "string", "pattern": "^(none|md5)$", "default": "none" },
       "fieldMapping": {
         "type": "array",
         "items": {
@@ -31,6 +28,12 @@
             }
           }
         }
+      },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "eventFilteringOption": {
+        "type": "string",
+        "pattern": "^(disable|whitelistedEvents|blacklistedEvents)$",
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -68,10 +71,6 @@
           }
         }
       },
-      "eventFilteringOption": {
-        "type": "string",
-        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
-      },
       "eventsToStandard": {
         "type": "array",
         "items": {
@@ -87,8 +86,7 @@
             }
           }
         }
-      },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } }
+      }
     }
   }
 }
