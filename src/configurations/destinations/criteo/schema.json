@@ -6,11 +6,11 @@
     "properties": {
       "accountId": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[1-9]+$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
       },
       "homePageUrl": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(?!.*\\.ngrok\\.io).*$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$"
       },
       "hashMethod": { "type": "string", "pattern": "^(none|md5)$", "default": "none" },
       "fieldMapping": {
@@ -28,6 +28,12 @@
             }
           }
         }
+      },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "eventFilteringOption": {
+        "type": "string",
+        "pattern": "^(disable|whitelistedEvents|blacklistedEvents)$",
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -85,8 +91,7 @@
             }
           }
         }
-      },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } }
+      }
     }
   }
 }
