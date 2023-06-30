@@ -805,11 +805,6 @@ def generate_schema(uiConfig, dbConfig, name, selector):
     generate_schema_properties(uiConfig, dbConfig, schemaObject,
                        schemaObject['properties'], name, selector)
     newSchema['configSchema'] = schemaObject
-    file_path = '/Users/rudderstack/workspace/rudder-config-schema/src/configurations/destinations/adobe_analytics/schema.json'
-    new_content = json.dumps(newSchema)
-    with open(file_path, 'w') as file:
-        # Write the new content
-        file.write(new_content)
     return newSchema
 
 def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
