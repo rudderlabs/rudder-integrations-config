@@ -40,7 +40,28 @@
             },
             "to": {
               "type": "string",
-              "pattern": "^(initHeartbeat|heartbeatPlaybackStarted|heartbeatPlaybackPaused|heartbeatPlaybackResumed|heartbeatPlaybackCompleted|heartbeatPlaybackInterrupted|heartbeatContentStarted|heartbeatContentComplete|heartbeatAdBreakStarted|heartbeatAdBreakCompleted|heartbeatAdStarted|heartbeatAdCompleted|heartbeatAdSkipped|heartbeatSeekStarted|heartbeatSeekCompleted|heartbeatBufferStarted|heartbeatBufferCompleted|heartbeatQualityUpdated|heartbeatUpdatePlayhead)$"
+              "enum": [
+                "initHeartbeat",
+                "heartbeatPlaybackStarted",
+                "heartbeatPlaybackPaused",
+                "heartbeatPlaybackResumed",
+                "heartbeatPlaybackCompleted",
+                "heartbeatPlaybackInterrupted",
+                "heartbeatContentStarted",
+                "heartbeatContentComplete",
+                "heartbeatAdBreakStarted",
+                "heartbeatAdBreakCompleted",
+                "heartbeatAdStarted",
+                "heartbeatAdCompleted",
+                "heartbeatAdSkipped",
+                "heartbeatSeekStarted",
+                "heartbeatSeekCompleted",
+                "heartbeatBufferStarted",
+                "heartbeatBufferCompleted",
+                "heartbeatQualityUpdated",
+                "heartbeatUpdatePlayhead",
+                ""
+              ]
             }
           }
         }
@@ -52,7 +73,7 @@
       "dropVisitorId": { "type": "boolean", "default": true },
       "timestampOption": {
         "type": "string",
-        "pattern": "^(hybrid|optional|enabled|disabled)$",
+        "enum": ["hybrid", "optional", "enabled", "disabled"],
         "default": "disabled"
       },
       "timestampOptionalReporting": { "type": "boolean", "default": false },
@@ -168,7 +189,7 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "to": { "type": "string", "pattern": "^(||:|,|;|/)$" }
+            "to": { "type": "string", "enum": ["|", ":", ",", ";", "/", ""] }
           }
         }
       },
@@ -197,7 +218,7 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "to": { "type": "string", "pattern": "^(||:|,|;|/)$" }
+            "to": { "type": "string", "enum": ["|", ":", ",", ";", "/", ""] }
           }
         }
       },
@@ -273,7 +294,7 @@
           }
         }
       },
-      "productIdentifier": { "type": "string", "pattern": "^(name|id|sku)$", "default": "name" },
+      "productIdentifier": { "type": "string", "enum": ["name", "id", "sku"], "default": "name" },
       "useNativeSDK": {
         "type": "object",
         "properties": {
@@ -284,7 +305,7 @@
       },
       "eventFilteringOption": {
         "type": "string",
-        "pattern": "^(disable|whitelistedEvents|blacklistedEvents)$",
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
         "default": "disable"
       },
       "whitelistedEvents": {
