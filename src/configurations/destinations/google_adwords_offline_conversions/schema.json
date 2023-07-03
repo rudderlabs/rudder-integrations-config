@@ -18,10 +18,7 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "to": {
-              "type": "string",
-              "pattern": "^(call|click|store)$"
-            }
+            "to": { "type": "string", "enum": ["click", "call", "store", ""] }
           }
         }
       },
@@ -59,19 +56,15 @@
       },
       "UserIdentifierSource": {
         "type": "string",
-        "pattern": "^(none|UNSPECIFIED|UNKNOWN|FIRST_PARTY|THIRD_PARTY)$",
+        "enum": ["none", "UNSPECIFIED", "UNKNOWN", "FIRST_PARTY", "THIRD_PARTY"],
         "default": "none"
       },
       "conversionEnvironment": {
         "type": "string",
-        "pattern": "^(none|UNSPECIFIED|UNKNOWN|APP|WEB)$",
+        "enum": ["none", "UNSPECIFIED", "UNKNOWN", "APP", "WEB"],
         "default": "none"
       },
-      "defaultUserIdentifier": {
-        "type": "string",
-        "pattern": "^(email|phone)$",
-        "default": "email"
-      },
+      "defaultUserIdentifier": { "type": "string", "enum": ["email", "phone"], "default": "email" },
       "hashUserIdentifier": { "type": "boolean", "default": true },
       "validateOnly": { "type": "boolean", "default": false },
       "oneTrustCookieCategories": {
