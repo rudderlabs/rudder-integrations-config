@@ -29,6 +29,23 @@ def is_old_format(uiConfig):
         return False
     return True
 
+def get_options_list_for_enum(field):
+    """Creates the list of options given in field and return the list
+    Args:
+        field (object): Individual field in ui-config.
+    Returns:
+        list: list of options
+    """    
+    options_list = []
+    for i in range(0, len(field["options"])):
+        if isinstance(field["options"][i], int) or isinstance(field["options"][i], str):
+            options_list.append(field["options"][i])
+        else:
+            options_list.append(field["options"][i]["value"])
+    # allow empty field in enum if field in not required.
+    if "defaultOption" not in field and field.get("required", False) == False:
+            options_list.append("")
+    return options_list
 
 def generalize_regex_pattern(field):
     """Generates the pattern for schema based on the type of field.
@@ -42,35 +59,19 @@ def generalize_regex_pattern(field):
 
     Returns:
         string: generated pattern for the field.
-    """        
+    """  
+    defaultSubPattern = "(^\\{\\{.*\\|\\|(.*)\\}\\}$)"
+    defaultEnvPattern = "(^env[.].+)"
     pattern = ""
-    fieldType = field["type"]
-    # for singleSelect and dynamicSelectForm
-    if fieldType == "singleSelect" or fieldType == "dynamicSelectForm":
-        pattern = "^("
-        for i in range(0, len(field["options"])):
-            if isinstance(field["options"][i], int) or isinstance(field["options"][i], str):
-                pattern += str(field["options"][i])
-            else:
-                pattern += str(field["options"][i]["value"])
-            if i == len(field["options"])-1:
-                break
-            pattern += "|"
-        pattern += ")$"
-    # for others
+    if "regex" in field:
+        pattern = field["regex"]
+        if defaultSubPattern not in pattern:
+            pattern = "|".join([defaultSubPattern, pattern])
+        if defaultEnvPattern not in pattern:
+            indexToPlace = pattern.find(defaultSubPattern) + len(defaultSubPattern)
+            pattern = pattern[:indexToPlace] + '|' + defaultEnvPattern + pattern[indexToPlace:]
     else:
-        defaultSubPattern = "(^\\{\\{.*\\|\\|(.*)\\}\\}$)"
-        defaultEnvPattern = "(^env[.].+)"
-        pattern = ""
-        if "regex" in field:
-            pattern = field["regex"]
-            if defaultSubPattern not in pattern:
-                pattern = "|".join([defaultSubPattern, pattern])
-            if defaultEnvPattern not in pattern:
-                indexToPlace = pattern.find(defaultSubPattern) + len(defaultSubPattern)
-                pattern = pattern[:indexToPlace] + '|' + defaultEnvPattern + pattern[indexToPlace:]
-        else:
-            pattern = "|".join([defaultSubPattern, defaultEnvPattern, '^(.{0,100})$']) 
+        pattern = "|".join([defaultSubPattern, defaultEnvPattern, '^(.{0,100})$']) 
     return pattern
 
 
@@ -232,7 +233,7 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
         singleSelectObj = {"type": FieldTypeEnum.ARRAY.value} 
         singleSelectObj["items"] = {
             "type": FieldTypeEnum.STRING.value,
-            "pattern": generalize_regex_pattern(field)
+            "enum": get_options_list_for_enum(field)
         }
         if "defaultOption" in field:
             if isinstance(field["defaultOption"]["value"], list):
@@ -241,7 +242,7 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
                 singleSelectObj["default"] = [field["defaultOption"]["value"]]
     else:
         singleSelectObj = {"type": FieldTypeEnum.STRING.value}
-        singleSelectObj["pattern"] = generalize_regex_pattern(field)
+        singleSelectObj["enum"] = get_options_list_for_enum(field)
         if "defaultOption" in field:
             singleSelectObj["default"] = field["defaultOption"]["value"]
 
@@ -318,11 +319,11 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
         }
         if(field["type"] == 'dynamicSelectForm'):
             if (forFieldWithTo != (field.get("reverse", False)==False)):
-                obj["pattern"] = generalize_regex_pattern({"type": "textInput"})
+                obj["pattern"] = generalize_regex_pattern(field)
             else:
                 if "defaultOption" in field:
                     obj["default"] = field["defaultOption"]["value"]
-                obj["pattern"] = generalize_regex_pattern(field)    
+                obj["enum"] = get_options_list_for_enum(field)
         else:
             obj["pattern"] = generalize_regex_pattern(field)
         return obj
