@@ -1,7 +1,7 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["apiKey", "packageName"],
+    "required": ["apiKey"],
     "type": "object",
     "properties": {
       "apiKey": {
@@ -46,7 +46,7 @@
       "initialisationIdentifier": {
         "type": "object",
         "properties": {
-          "web": { "type": "string", "pattern": "^(email|userId)$", "default": "email" }
+          "web": { "type": "string", "enum": ["email", "userId"], "default": "email" }
         }
       },
       "sendTrackForInapp": { "type": "object", "properties": { "web": { "type": "boolean" } } },
@@ -61,7 +61,7 @@
         "properties": {
           "web": {
             "type": "string",
-            "pattern": "^(open-all-new-tab|open-all-same-tab|external-new-tab)$"
+            "enum": ["open-all-new-tab", "open-all-same-tab", "external-new-tab", ""]
           }
         }
       },
