@@ -1,17 +1,16 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
     "required": ["region", "lambda"],
+    "type": "object",
     "properties": {
-      "accessKeyId": { "type": "string" },
-      "accessKey": { "type": "string" },
-      "iamRoleARN": { "type": "string" },
-      "roleBasedAuth": { "type": "boolean" },
-      "region": { "type": "string" },
+      "region": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "roleBasedAuth": { "type": "boolean", "default": true },
       "lambda": { "type": "string" },
-      "enableBatchInput": { "type": "boolean" },
-      "maxBatchSize": { "type": "string", "pattern": "^$|^[1-9]\\d*$" },
+      "enableBatchInput": { "type": "boolean", "default": false },
       "clientContext": { "type": "string" },
       "oneTrustCookieCategories": {
         "type": "array",
@@ -25,6 +24,58 @@
           }
         }
       }
-    }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": { "roleBasedAuth": { "const": true } },
+          "required": ["roleBasedAuth"]
+        },
+        "then": {
+          "properties": {
+            "iamRoleARN": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "roleBasedAuth": { "const": true }
+          },
+          "required": ["iamRoleARN", "roleBasedAuth"]
+        }
+      },
+      {
+        "if": {
+          "properties": { "roleBasedAuth": { "const": false } },
+          "required": ["roleBasedAuth"]
+        },
+        "then": {
+          "properties": {
+            "accessKeyId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "accessKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          },
+          "required": []
+        }
+      },
+      {
+        "if": {
+          "properties": { "enableBatchInput": { "const": true } },
+          "required": ["enableBatchInput"]
+        },
+        "then": {
+          "properties": {
+            "maxBatchSize": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[1-9]\\d*$"
+            }
+          },
+          "required": []
+        }
+      }
+    ]
   }
 }
