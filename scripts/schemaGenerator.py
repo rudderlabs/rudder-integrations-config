@@ -227,10 +227,23 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    singleSelectObj = {"type": FieldTypeEnum.STRING.value}
-    singleSelectObj["pattern"] = generalize_regex_pattern(field)
-    if "defaultOption" in field:
-        singleSelectObj["default"] = field["defaultOption"]["value"]
+    singleSelectObj = {}
+    if "mode" in field and field["mode"] == 'multiple':
+        singleSelectObj = {"type": FieldTypeEnum.ARRAY.value} 
+        singleSelectObj["items"] = {
+            "type": FieldTypeEnum.STRING.value,
+            "pattern": generalize_regex_pattern(field)
+        }
+        if "defaultOption" in field:
+            if isinstance(field["defaultOption"]["value"], list):
+                singleSelectObj["default"] = field["defaultOption"]["value"]
+            else:
+                singleSelectObj["default"] = [field["defaultOption"]["value"]]
+    else:
+        singleSelectObj = {"type": FieldTypeEnum.STRING.value}
+        singleSelectObj["pattern"] = generalize_regex_pattern(field)
+        if "defaultOption" in field:
+            singleSelectObj["default"] = field["defaultOption"]["value"]
 
     isSourceDependent = is_dest_field_dependent_on_source(field, dbConfig, schema_field_name)
     if isSourceDependent:
@@ -264,7 +277,7 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     for customField in field["customFields"]:
         customeFieldSchemaObj = uiTypetoSchemaFn.get(customField["type"])(customField, dbConfig, schema_field_name)
         isCustomFieldDependentOnSource = is_dest_field_dependent_on_source(customField, dbConfig, schema_field_name)
-        if 'pattern' not in customeFieldSchemaObj and not isCustomFieldDependentOnSource and customeFieldSchemaObj["type"]!=FieldTypeEnum.BOOLEAN.value:
+        if 'pattern' not in customeFieldSchemaObj and not isCustomFieldDependentOnSource and customeFieldSchemaObj["type"]==FieldTypeEnum.STRING.value:
             customeFieldSchemaObj["pattern"] = generalize_regex_pattern(customField)
         # If the custom field is source dependent, we remove the source keys as it's not required inside custom fields, rather they need to be moved to top.
         if isCustomFieldDependentOnSource:
@@ -299,11 +312,19 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    def generate_key_left():
+    def generate_key(forFieldWithTo):
         obj = {
             "type": FieldTypeEnum.STRING.value,
-            "pattern": generalize_regex_pattern(field)
         }
+        if(field["type"] == 'dynamicSelectForm'):
+            if (forFieldWithTo != (field.get("reverse", False)==False)):
+                obj["pattern"] = generalize_regex_pattern({"type": "textInput"})
+            else:
+                if "defaultOption" in field:
+                    obj["default"] = field["defaultOption"]["value"]
+                obj["pattern"] = generalize_regex_pattern(field)    
+        else:
+            obj["pattern"] = generalize_regex_pattern(field)
         return obj
 
     dynamicFormSchemaObject = {}
@@ -312,10 +333,10 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
     dynamicFormItemObject["type"] = FieldTypeEnum.OBJECT.value
     dynamicFormItemObject['properties'] = {}
     dynamicFormItemObjectProps = [
-        (field['keyLeft'], generate_key_left), (field['keyRight'], generate_key_left)]
+        (field['keyLeft'], generate_key), (field['keyRight'], generate_key)]
     for dynamicFromItemObjectProp in dynamicFormItemObjectProps:
         dynamicFormItemObject['properties'][dynamicFromItemObjectProp[0]
-                                            ] = dynamicFromItemObjectProp[1]()
+                                            ] = dynamicFromItemObjectProp[1](dynamicFromItemObjectProp[0] == "to")
     dynamicFormSchemaObject['items'] = dynamicFormItemObject
     return dynamicFormSchemaObject
 
@@ -797,6 +818,8 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
     if is_old_format(uiConfig):
         for uiConfigItem in uiConfig:
             for field in uiConfigItem["fields"]:
+                if "preRequisiteField" in field:
+                    continue
                 if field["type"] == curUiType:
                     if field["value"] not in schema["properties"]:
                         warnings.warn(
@@ -815,7 +838,11 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
         for template in baseTemplate:
             for section in template.get('sections', []):
                 for group in section.get('groups', []):
+                    if "preRequisites" in group:
+                        continue
                     for field in group.get('fields', []):
+                        if "preRequisites" in field:
+                            continue
                         generateFunction = uiTypetoSchemaFn.get(
                             field['type'], None)
                         if generateFunction and field["type"] == curUiType:
@@ -832,6 +859,8 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                                         curUiType, field["configKey"], schemaDiff), UserWarning)
                         
         for field in sdkTemplate.get('fields', []):
+            if "preRequisites" in field:
+                continue
             generateFunction = uiTypetoSchemaFn.get(field['type'], None)
             if generateFunction:
                 if generateFunction and field["type"] == curUiType:
