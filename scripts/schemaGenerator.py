@@ -43,7 +43,7 @@ def get_options_list_for_enum(field):
         else:
             options_list.append(field["options"][i]["value"])
     # allow empty field in enum if field in not required.
-    if "defaultOption" not in field and field.get("required", False) == False:
+    if "default" not in field and "defaultOption" not in field and field.get("required", False) == False:
             options_list.append("")
     return options_list
 
@@ -65,11 +65,13 @@ def generalize_regex_pattern(field):
     pattern = ""
     if "regex" in field:
         pattern = field["regex"]
-        if defaultSubPattern not in pattern:
+        if defaultSubPattern not in pattern and (('value' not in field or field['value'] != 'purpose') and ('configKey' not in field or field['configKey'] != 'purpose')):
             pattern = "|".join([defaultSubPattern, pattern])
-        if defaultEnvPattern not in pattern:
+        if defaultEnvPattern not in pattern and (('value' not in field or field['value'] != 'purpose') and ('configKey' not in field or field['configKey'] != 'purpose')):
             indexToPlace = pattern.find(defaultSubPattern) + len(defaultSubPattern)
             pattern = pattern[:indexToPlace] + '|' + defaultEnvPattern + pattern[indexToPlace:]
+    elif ('value' in field and field['value'] == 'purpose') or ('configKey' in field and field['configKey'] == 'purpose'):
+        pattern = '^(.{0,100})$'
     else:
         pattern = "|".join([defaultSubPattern, defaultEnvPattern, '^(.{0,100})$']) 
     return pattern
@@ -235,16 +237,21 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
             "type": FieldTypeEnum.STRING.value,
             "enum": get_options_list_for_enum(field)
         }
-        if "defaultOption" in field:
+        if "default" or "defaultOption" in field:
             if isinstance(field["defaultOption"]["value"], list):
                 singleSelectObj["default"] = field["defaultOption"]["value"]
-            else:
+            elif field["defaultOption"]["value"]:
                 singleSelectObj["default"] = [field["defaultOption"]["value"]]
+            else:
+                singleSelectObj["default"] = field["default"]
     else:
         singleSelectObj = {"type": FieldTypeEnum.STRING.value}
         singleSelectObj["enum"] = get_options_list_for_enum(field)
-        if "defaultOption" in field:
-            singleSelectObj["default"] = field["defaultOption"]["value"]
+        if "default" or "defaultOption" in field:
+            if "defaultOption" in field:
+                singleSelectObj["default"] = field["defaultOption"]["value"]
+            else:
+                singleSelectObj["default"] = field["default"]
 
     isSourceDependent = is_dest_field_dependent_on_source(field, dbConfig, schema_field_name)
     if isSourceDependent:
@@ -344,6 +351,20 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
 
 def generate_schema_for_dynamic_select_form(field, dbConfig, schema_field_name):
     """Creates an schema object of dynamicSelectForm.
+
+    Args:
+        field (object): Individual field in ui-config.
+        dbConfig (object): Configurations of db-config.json.
+        schema_field_name (string): Specifies which key has the field's name in schema. 
+            For old schema types, it is 'value' else 'configKey'.
+
+    Returns:
+        object
+    """
+    return generate_schema_for_dynamic_form(field, dbConfig, schema_field_name)
+
+def generate_schema_for_mapping(field, dbConfig, schema_field_name):
+    """Creates an schema object of mapping.
 
     Args:
         field (object): Individual field in ui-config.
@@ -884,6 +905,7 @@ uiTypetoSchemaFn = {
     "singleSelect": generate_schema_for_single_select,
     "dynamicCustomForm": generate_schema_for_dynamic_custom_form,
     'dynamicForm': generate_schema_for_dynamic_form,
+    'mapping': generate_schema_for_mapping,
     'dynamicSelectForm': generate_schema_for_dynamic_select_form,
     'tagInput': generate_schema_for_tag_input,
     'timeRangePicker': generate_schema_for_time_range_picker,
