@@ -1,8 +1,8 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
     "required": ["pipedreamUrl"],
+    "type": "object",
     "properties": {
       "pipedreamUrl": {
         "type": "string",
@@ -10,7 +10,8 @@
       },
       "pipedreamMethod": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^(POST|PUT|PATCH|GET|DELETE)$)"
+        "enum": ["POST", "PUT", "PATCH", "GET", "DELETE"],
+        "default": "POST"
       },
       "headers": {
         "type": "array",
@@ -19,7 +20,7 @@
           "properties": {
             "from": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100000})$"
             },
             "to": {
               "type": "string",
