@@ -706,14 +706,11 @@ def generate_connection_mode(dbConfig):
     for sourceType in dbConfig["supportedSourceTypes"]:
             if sourceType in dbConfig["supportedConnectionModes"]:
                 connectionItemObj = {"type": FieldTypeEnum.STRING.value}
-                pattern = "^("
+                enum=[]
                 length = len(dbConfig["supportedConnectionModes"][sourceType])
                 for i in range(0, length):
-                    pattern += dbConfig["supportedConnectionModes"][sourceType][i]
-                    if i != length - 1:
-                        pattern += '|'
-                pattern += ")$"
-                connectionItemObj["pattern"] = pattern
+                    enum.append(dbConfig["supportedConnectionModes"][sourceType][i])
+                connectionItemObj["enum"] = enum
                 connectionObj["properties"][sourceType] = connectionItemObj
     return connectionObj
 
