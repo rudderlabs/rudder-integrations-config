@@ -7,7 +7,7 @@
           "type": "textInput",
           "label": "Host",
           "value": "host",
-          "regex": "(?!.*\\.ngrok\\.io)^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$",
           "regexErrorMessage": "Invalid Host",
           "placeholder": "e.g: psql.mydomain.com",
           "required": true
@@ -16,7 +16,7 @@
           "type": "textInput",
           "label": "Database",
           "value": "database",
-          "regex": "^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
           "regexErrorMessage": "Invalid Database",
           "placeholder": "e.g: rudderdb",
           "required": true
@@ -25,7 +25,7 @@
           "type": "textInput",
           "label": "User",
           "value": "user",
-          "regex": "^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
           "regexErrorMessage": "Invalid User",
           "placeholder": "e.g: rudder",
           "required": true
@@ -42,7 +42,7 @@
           "type": "textInput",
           "label": "Port",
           "value": "port",
-          "regex": "^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
           "regexErrorMessage": "Invalid Port",
           "placeholder": "5432",
           "required": true
@@ -52,7 +52,7 @@
           "label": "Namespace",
           "labelNote": "Schema name for the warehouse where the tables are created",
           "value": "namespace",
-          "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
           "regexErrorMessage": "Invalid Namespace",
           "required": false,
           "placeholder": "e.g: rudder-schema",
@@ -73,7 +73,7 @@
         {
           "type": "textInput",
           "required": true,
-          "regex": "-----BEGIN RSA PRIVATE KEY-----.*-----END RSA PRIVATE KEY-----",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|-----BEGIN RSA PRIVATE KEY-----.*-----END RSA PRIVATE KEY-----",
           "preRequisiteField": { "name": "sslMode", "selectedValue": "verify-ca" },
           "label": "Client Key Pem File",
           "value": "clientKey"
@@ -81,7 +81,7 @@
         {
           "type": "textInput",
           "required": true,
-          "regex": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
           "preRequisiteField": { "name": "sslMode", "selectedValue": "verify-ca" },
           "label": "Client Cert Pem File",
           "value": "clientCert"
@@ -89,7 +89,7 @@
         {
           "type": "textInput",
           "required": true,
-          "regex": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
           "preRequisiteField": { "name": "sslMode", "selectedValue": "verify-ca" },
           "label": "Server CA Pem File",
           "value": "serverCA"
@@ -107,7 +107,7 @@
             { "name": "Every 24 hours", "value": "1440" }
           ],
           "defaultOption": { "name": "Every 30 minutes", "value": "30" },
-          "required": false
+          "required": true
         },
         {
           "type": "timePicker",
@@ -132,7 +132,7 @@
           "label": "JSON columns (Optional)",
           "labelNote": "Specify required JSON properties in dot notation separated by commas",
           "value": "jsonPaths",
-          "regex": "^(.*)$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.*)$",
           "placeholder": "e.g: testMap.nestedMap, testArray",
           "required": false,
           "footerURL": {
@@ -150,6 +150,7 @@
           "label": "Use RudderStack managed object storage",
           "value": "useRudderStorage",
           "default": false,
+          "required": true,
           "footerNote": "Note: Only available for RudderStack managed data planes"
         },
         {
@@ -175,7 +176,7 @@
           "label": "Staging S3 Storage Bucket Name",
           "labelNote": "S3 Bucket to store data before loading into Postgres",
           "value": "bucketName",
-          "regex": "^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
           "regexErrorMessage": "Invalid Staging S3 Storage Bucket Name",
           "placeholder": "e.g: s3-event-logs",
           "required": true,
@@ -190,7 +191,7 @@
           "label": "Staging GCS Object Storage Bucket Name",
           "labelNote": "GCS Bucket to store data before loading into Postgres",
           "value": "bucketName",
-          "regex": "^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$",
           "regexErrorMessage": "Invalid Staging GCS Object Storage Bucket Name",
           "placeholder": "e.g: gcs-event-logs",
           "required": true,
@@ -205,7 +206,7 @@
           "label": "Staging Azure Blob Storage Container Name",
           "labelNote": "Container to store data before loading into Postgres",
           "value": "containerName",
-          "regex": "^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$",
           "regexErrorMessage": "Invalid Staging Azure Blob Storage Container Name",
           "required": true,
           "placeholder": "e.g: azure-event-logs",
@@ -220,7 +221,7 @@
           "label": "Staging MINIO Storage Bucket Name",
           "labelNote": "MINIO Bucket to store data before loading into Postgres",
           "value": "bucketName",
-          "regex": "^((?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
           "regexErrorMessage": "Invalid Staging MINIO Storage Bucket Name",
           "required": true,
           "placeholder": "e.g: minio-event-logs",
@@ -245,7 +246,7 @@
           ],
           "label": "IAM Role ARN",
           "value": "iamRoleARN",
-          "regex": "^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
           "regexErrorMessage": "Invalid Role ARN",
           "required": true,
           "placeholder": "e.g: arn:aws:iam::123456789012:role/S3Access",
@@ -263,7 +264,7 @@
           ],
           "label": "AWS Access Key ID",
           "value": "accessKeyID",
-          "regex": "^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
           "regexErrorMessage": "Invalid AWS Access Key ID",
           "required": true,
           "placeholder": "e.g: access-key-id"
@@ -277,7 +278,7 @@
           ],
           "label": "AWS Secret Access Key",
           "value": "accessKey",
-          "regex": "^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
           "regexErrorMessage": "Invalid AWS Secret Access Key",
           "required": true,
           "placeholder": "e.g: secret-access-key"
@@ -290,7 +291,7 @@
           ],
           "label": "Azure Blob Storage Account Name",
           "value": "accountName",
-          "regex": "^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
           "regexErrorMessage": "Invalid Azure Blob Storage Account Name",
           "required": true,
           "placeholder": "e.g: account-name"
@@ -304,7 +305,7 @@
           ],
           "label": "Azure Blob Storage Account Key",
           "value": "accountKey",
-          "regex": "^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
           "regexErrorMessage": "Invalid Azure Blob Storage Account Key",
           "required": true,
           "secret": true,
@@ -319,7 +320,7 @@
           ],
           "label": "Azure Blob Storage SAS Token",
           "value": "sasToken",
-          "regex": "^(.+)$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.+)$",
           "regexErrorMessage": "Invalid Azure Blob Storage SAS Token",
           "required": true,
           "placeholder": "e.g: sas-token",
@@ -345,7 +346,7 @@
           "label": "Credentials",
           "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your Google Cloud Storage",
           "value": "credentials",
-          "regex": ".*",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
           "required": true,
           "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'storage.objectCreator'"
         },
@@ -357,7 +358,7 @@
           ],
           "label": "MinIO Endpoint",
           "value": "endPoint",
-          "regex": "(?!.*\\.ngrok\\.io)^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$",
           "regexErrorMessage": "Invalid MinIO Endpoint",
           "required": true,
           "placeholder": "e.g: play.min.io:9000"
@@ -370,7 +371,7 @@
           ],
           "label": "MINIO Access Key ID",
           "value": "accessKeyID",
-          "regex": "^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
           "regexErrorMessage": "Invalid MinIO Access Key ID",
           "required": true,
           "placeholder": "e.g: access-key-id"
@@ -383,7 +384,7 @@
           ],
           "label": "MINIO Secret Access Key",
           "value": "secretAccessKey",
-          "regex": "^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
           "regexErrorMessage": "Invalid MinIO Secret Access Key",
           "required": true,
           "placeholder": "e.g: secret-access-key"
@@ -412,6 +413,7 @@
               "type": "textInput",
               "placeholder": "Marketing",
               "value": "oneTrustCookieCategory",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
               "label": "Category Name/ID",
               "required": false
             }
