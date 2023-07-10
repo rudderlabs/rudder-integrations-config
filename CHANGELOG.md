@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.40.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.39.0...v1.40.0) (2023-07-04)
+
+
+### Features
+
+* ketch config added for a list of destinations ([108012a](https://github.com/rudderlabs/rudder-config-schema/commit/108012ae838f56d22b82782bc7640d287dc2a7f9))
+
 ## [1.39.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.38.1...v1.39.0) (2023-06-30)
 
 
