@@ -676,11 +676,15 @@ def generate_schema_for_anyOf(allOfItemList, schema_field_name):
                         anyOfObj[1]["properties"][oppositeIfProp[k]["key"]] = {"const": True}
                         anyOfObj[1]["required"].append(oppositeIfProp[k]["key"])
                         anyOfObj[0] = thenPropertiesB
+                        anyOfObj[0]["properties"][oppositeIfProp[k]["key"]] = {"const": False}
+                        anyOfObj[0]["required"].append(oppositeIfProp[k]["key"])
                     else:
                         anyOfObj[1] = thenPropertiesB
                         anyOfObj[1]["properties"][oppositeIfProp[k]["key"]] = {"const": True}
                         anyOfObj[1]["required"].append(oppositeIfProp[k]["key"])
                         anyOfObj[0] = thenPropertiesA
+                        anyOfObj[0]["properties"][oppositeIfProp[k]["key"]] = {"const": False}
+                        anyOfObj[0]["required"].append(oppositeIfProp[k]["key"])
                 # AnyOf object is placed at index of "if-then" block having same if properties as of common properties else at end. 
                 indexToPlace = find_index_to_place_anyOf(commonIfProp, allOfItemList, schema_field_name)
                 if indexToPlace == -1:
@@ -826,6 +830,11 @@ def generate_schema(uiConfig, dbConfig, name, selector):
     generate_schema_properties(uiConfig, dbConfig, schemaObject,
                        schemaObject['properties'], name, selector)
     newSchema['configSchema'] = schemaObject
+    file_path = f'/Users/rudderstack/workspace/rudder-config-schema/src/configurations/destinations/{name.lower()}/schema.json'
+    new_content = json.dumps(newSchema)
+    with open(file_path, 'w') as file:
+        # Write the new content
+        file.write(new_content)
     return newSchema
 
 def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
