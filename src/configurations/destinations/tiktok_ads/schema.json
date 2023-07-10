@@ -1,35 +1,51 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["pixelCode"],
     "type": "object",
-    "required": [
-      "pixelCode"
-    ],
     "properties": {
-      "accessToken": {
-        "type": "string",
-        "pattern": ".*"
-      },
+      "accessToken": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*" },
       "pixelCode": {
         "type": "string",
-        "pattern": "^(.{0,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "hashUserProperties": {
-        "type": "boolean"
-      },
+      "hashUserProperties": { "type": "boolean", "default": true },
       "eventsToStandard": {
         "type": "array",
         "items": {
           "type": "object",
           "properties": {
             "from": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
             "to": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "AddPaymentInfo",
+                "AddToCart",
+                "AddToWishlist",
+                "ClickButton",
+                "CompletePayment",
+                "CompleteRegistration",
+                "Contact",
+                "Download",
+                "InitiateCheckout",
+                "PlaceAnOrder",
+                "Search",
+                "SubmitForm",
+                "Subscribe",
+                "ViewContent",
+                ""
+              ]
             }
           }
         }
+      },
+      "eventFilteringOption": {
+        "type": "string",
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -55,14 +71,7 @@
           }
         }
       },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
