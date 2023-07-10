@@ -1,17 +1,31 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["audienceType"],
     "type": "object",
-    "required": [],
     "properties": {
-      "audienceId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+      "adAccountId": {
+        "type": "object",
+        "properties": {
+          "warehouse": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+          }
+        }
       },
-      "audienceType": { "type": "string", "pattern": "^(email|madid|identityLink|gum)$" },
-      "gumCallerId": {
+      "audienceId": {
+        "type": "object",
+        "properties": {
+          "cloud": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+          }
+        }
+      },
+      "audienceType": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+        "enum": ["email", "madid", "identityLink", "gum"],
+        "default": "email"
       },
       "oneTrustCookieCategories": {
         "type": "array",
@@ -25,6 +39,23 @@
           }
         }
       }
-    }
+    },
+    "anyOf": [
+      {
+        "if": {
+          "properties": { "audienceType": { "const": "gum" } },
+          "required": ["audienceType"]
+        },
+        "then": {
+          "properties": {
+            "gumCallerId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+            }
+          },
+          "required": ["gumCallerId"]
+        }
+      }
+    ]
   }
 }
