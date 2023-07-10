@@ -192,7 +192,7 @@ def generate_schema_for_textinput(field, dbConfig, schema_field_name):
                 textInputSchemaObj["properties"][sourceType] = {
                     "type": FieldTypeEnum.STRING.value}
                 if 'regex' in field:
-                    textInputSchemaObj["properties"][sourceType]["pattern"] = field["regex"]
+                    textInputSchemaObj["properties"][sourceType]["pattern"] = generalize_regex_pattern(field)
     else:
         textInputSchemaObj = {"type": FieldTypeEnum.STRING.value}
         if 'regex' in field:

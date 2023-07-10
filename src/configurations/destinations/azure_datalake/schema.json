@@ -40,25 +40,34 @@
         }
       }
     },
-    "anyOf": [
+    "allOf": [
       {
-        "properties": {
-          "accountKey": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-          }
+        "if": {
+          "properties": { "useSASTokens": { "const": false } },
+          "required": ["useSASTokens"]
         },
-        "required": ["accountKey"]
+        "then": {
+          "properties": {
+            "accountKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["accountKey"]
+        }
       },
       {
-        "properties": {
-          "sasToken": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.+)$"
+        "if": { "properties": { "useSASTokens": { "const": true } }, "required": ["useSASTokens"] },
+        "then": {
+          "properties": {
+            "sasToken": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.+)$"
+            },
+            "useSASTokens": { "const": true }
           },
-          "useSASTokens": { "const": true }
-        },
-        "required": ["sasToken", "useSASTokens"]
+          "required": ["sasToken", "useSASTokens"]
+        }
       }
     ]
   }
