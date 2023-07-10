@@ -1,7 +1,6 @@
 {
   "configSchema": {
-    "$schema": "http://json-schema.org/draft-07/schema",
-    "type": "object",
+    "$schema": "http://json-schema.org/draft-07/schema#",
     "required": [
       "host",
       "port",
@@ -11,35 +10,48 @@
       "syncFrequency",
       "useRudderStorage"
     ],
+    "type": "object",
     "properties": {
-      "host": { "type": "string", "pattern": "(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,255})$" },
-      "port": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
-      "database": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
-      "user": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
-      "password": { "type": "string", "pattern": "(^env[.].+)|.+" },
-      "namespace": { "type": "string", "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$" },
+      "host": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,255})$"
+      },
+      "port": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "database": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "user": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "password": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*" },
+      "namespace": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
+      },
       "syncFrequency": {
         "type": "string",
-        "pattern": "^(30|60|180|360|720|1440)$",
+        "enum": ["30", "60", "180", "360", "720", "1440"],
         "default": "30"
       },
       "syncStartAt": { "type": "string" },
       "excludeWindow": {
         "type": "object",
-        "required": ["excludeWindowStartTime", "excludeWindowEndTime"],
         "properties": {
           "excludeWindowStartTime": { "type": "string" },
           "excludeWindowEndTime": { "type": "string" }
-        }
+        },
+        "required": ["excludeWindowStartTime", "excludeWindowEndTime"]
       },
-      "jsonPaths": { "type": "string", "pattern": "(^env[.].*)|.*" },
+      "jsonPaths": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.*)$"
+      },
       "useRudderStorage": { "type": "boolean", "default": false },
-      "prefix": { "type": "string", "pattern": "(^env[.].*)|^(.{0,100})$" },
-      "iamRoleARN": { "type": "string" },
-      "roleBasedAuth": { "type": "boolean" },
-      "accessKeyID": { "type": "string", "pattern": "(^env[.].*)|^(.{0,100})$" },
-      "accessKey": { "type": "string", "pattern": "(^env[.].*)|^(.{0,100})$" },
-      "enableSSE": { "type": "boolean" },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -55,18 +67,6 @@
     },
     "allOf": [
       {
-        "if": { "properties": { "useSSH": { "const": true } }, "required": ["useSSH"] },
-        "then": {
-          "properties": {
-            "sshHost": { "type": "string", "pattern": "(^env[.].+)|^(.{1,255})$" },
-            "sshPort": { "type": "string", "pattern": "(^env[.].+)|^(.{1,255})$" },
-            "sshUser": { "type": "string", "pattern": "(^env[.].+)|^(.{1,255})$" },
-            "sshPublicKey": { "type": "string", "pattern": "(^env[.].+)|^(.{1,10000})$" }
-          },
-          "required": ["sshHost", "sshPort", "sshUser", "sshPublicKey"]
-        }
-      },
-      {
         "if": {
           "properties": { "useRudderStorage": { "const": false } },
           "required": ["useRudderStorage"]
@@ -75,22 +75,53 @@
           "properties": {
             "bucketName": {
               "type": "string",
-              "pattern": "(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$|(^\\{\\{.+\\}\\}$)"
-            }
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$|(^\\{\\{.+\\}\\}$)"
+            },
+            "prefix": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([^\\s]{0,100})$"
+            },
+            "enableSSE": { "type": "boolean", "default": false }
           },
-          "required": ["bucketName"]
+          "required": ["bucketName"],
+          "anyOf": [
+            {
+              "properties": {
+                "accessKeyID": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                },
+                "accessKey": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                },
+                "roleBasedAuth": { "const": false }
+              },
+              "required": ["roleBasedAuth"]
+            },
+            {
+              "properties": {
+                "iamRoleARN": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                },
+                "roleBasedAuth": { "const": true }
+              },
+              "required": ["iamRoleARN", "roleBasedAuth"]
+            }
+          ]
         }
       },
       {
         "if": {
-          "properties": { "roleBasedAuth": { "const": true } },
-          "required": ["roleBasedAuth"]
+          "properties": { "useRudderStorage": { "const": false } },
+          "required": ["useRudderStorage"]
         },
         "then": {
-          "required": ["iamRoleARN"]
+          "properties": { "roleBasedAuth": { "type": "boolean", "default": true } },
+          "required": []
         }
       }
-    ],
-    "additionalProperties": true
+    ]
   }
 }
