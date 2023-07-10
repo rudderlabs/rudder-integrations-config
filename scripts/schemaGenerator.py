@@ -192,7 +192,7 @@ def generate_schema_for_textinput(field, dbConfig, schema_field_name):
                 textInputSchemaObj["properties"][sourceType] = {
                     "type": FieldTypeEnum.STRING.value}
                 if 'regex' in field:
-                    textInputSchemaObj["properties"][sourceType]["pattern"] = field["regex"]
+                    textInputSchemaObj["properties"][sourceType]["pattern"] = generalize_regex_pattern(field)
     else:
         textInputSchemaObj = {"type": FieldTypeEnum.STRING.value}
         if 'regex' in field:
@@ -830,11 +830,6 @@ def generate_schema(uiConfig, dbConfig, name, selector):
     generate_schema_properties(uiConfig, dbConfig, schemaObject,
                        schemaObject['properties'], name, selector)
     newSchema['configSchema'] = schemaObject
-    file_path = f'/Users/rudderstack/workspace/rudder-config-schema/src/configurations/destinations/{name.lower()}/schema.json'
-    new_content = json.dumps(newSchema)
-    with open(file_path, 'w') as file:
-        # Write the new content
-        file.write(new_content)
     return newSchema
 
 def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
