@@ -1,41 +1,46 @@
 {
   "configSchema": {
-    "$schema": "http://json-schema.org/draft-07/schema",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["host", "database", "user", "password", "port", "sslMode"],
     "type": "object",
-    "required": [
-      "host",
-      "database",
-      "user",
-      "password",
-      "port",
-      "sslMode",
-      "syncFrequency",
-      "useRudderStorage"
-    ],
     "properties": {
-      "host": { "type": "string", "pattern": "(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$" },
-      "database": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
-      "user": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
-      "password": { "type": "string", "pattern": "(^env[.].+)|.+" },
-      "port": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
-      "namespace": { "type": "string", "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$" },
-      "sslMode": { "type": "string", "pattern": "^(disable|true|false)$" },
+      "host": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$"
+      },
+      "database": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "user": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "password": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*" },
+      "port": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
+      },
+      "sslMode": { "type": "string", "enum": ["disable", "true", "false"], "default": "disable" },
       "syncFrequency": {
         "type": "string",
-        "pattern": "^(30|60|180|360|720|1440)$",
+        "enum": ["30", "60", "180", "360", "720", "1440"],
         "default": "30"
       },
       "syncStartAt": { "type": "string" },
       "excludeWindow": {
         "type": "object",
-        "required": ["excludeWindowStartTime", "excludeWindowEndTime"],
         "properties": {
           "excludeWindowStartTime": { "type": "string" },
           "excludeWindowEndTime": { "type": "string" }
-        }
+        },
+        "required": ["excludeWindowStartTime", "excludeWindowEndTime"]
       },
       "useRudderStorage": { "type": "boolean", "default": false },
-      "bucketProvider": { "type": "string", "pattern": "^(S3|GCS|AZURE_BLOB|MINIO)$" },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -55,7 +60,16 @@
           "properties": { "useRudderStorage": { "const": false } },
           "required": ["useRudderStorage"]
         },
-        "then": { "required": ["bucketProvider"] }
+        "then": {
+          "properties": {
+            "bucketProvider": {
+              "type": "string",
+              "enum": ["S3", "GCS", "AZURE_BLOB", "MINIO"],
+              "default": "MINIO"
+            }
+          },
+          "required": ["bucketProvider"]
+        }
       },
       {
         "if": {
@@ -69,23 +83,31 @@
           "properties": {
             "bucketName": {
               "type": "string",
-              "pattern": "(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
-            }
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
+            },
+            "roleBasedAuth": { "type": "boolean", "default": true }
           },
           "required": ["bucketName"],
           "anyOf": [
             {
-              "type": "object",
               "properties": {
-                "accessKeyID": { "type": "string", "pattern": "(^env[.].+)|^(.{0,100})$" },
-                "accessKey": { "type": "string", "pattern": "(^env[.].+)|^(.{0,100})$" }
+                "accessKeyID": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                },
+                "accessKey": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
               },
               "required": ["accessKeyID", "accessKey"]
             },
             {
-              "type": "object",
               "properties": {
-                "iamRoleARN": { "type": "string" },
+                "iamRoleARN": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                },
                 "roleBasedAuth": { "const": true }
               },
               "required": ["iamRoleARN", "roleBasedAuth"]
@@ -105,9 +127,12 @@
           "properties": {
             "bucketName": {
               "type": "string",
-              "pattern": "(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$"
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$"
             },
-            "credentials": { "type": "string", "pattern": "(^env[.].+)|.+" }
+            "credentials": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
+            }
           },
           "required": ["bucketName", "credentials"]
         }
@@ -124,24 +149,34 @@
           "properties": {
             "containerName": {
               "type": "string",
-              "pattern": "(^env[.].+)|^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$"
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$"
             },
-            "accountName": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" }
+            "accountName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            },
+            "useSASTokens": { "type": "boolean", "default": false }
           },
           "required": ["containerName", "accountName"],
           "anyOf": [
             {
               "properties": {
-                "accountKey": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" }
+                "accountKey": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+                }
               },
               "required": ["accountKey"]
             },
             {
               "properties": {
-                "sasToken": { "type": "string", "pattern": "(^env[.].+)|^(.+)$" },
+                "sasToken": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.+)$"
+                },
                 "useSASTokens": { "const": true }
               },
-              "required": ["useSASTokens", "sasToken"]
+              "required": ["sasToken", "useSASTokens"]
             }
           ]
         }
@@ -158,17 +193,23 @@
           "properties": {
             "bucketName": {
               "type": "string",
-              "pattern": "(^env[.].+)|^((?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
             },
-            "accessKeyID": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
             "endPoint": {
               "type": "string",
-              "pattern": "(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$"
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$"
             },
-            "secretAccessKey": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
-            "useSSL": { "type": "boolean" }
+            "accessKeyID": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            },
+            "secretAccessKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            },
+            "useSSL": { "type": "boolean", "default": true }
           },
-          "required": ["bucketName", "endPoint", "accessKeyID", "secretAccessKey", "useSSL"]
+          "required": ["bucketName", "endPoint", "accessKeyID", "secretAccessKey"]
         }
       }
     ],
