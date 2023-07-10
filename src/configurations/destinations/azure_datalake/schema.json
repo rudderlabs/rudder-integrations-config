@@ -1,19 +1,29 @@
 {
   "configSchema": {
-    "$schema": "http://json-schema.org/draft-07/schema",
-    "type": "object",
+    "$schema": "http://json-schema.org/draft-07/schema#",
     "required": ["containerName", "accountName"],
+    "type": "object",
     "properties": {
       "containerName": {
         "type": "string",
-        "pattern": "(^env[.].+)|^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$"
       },
-      "prefix": { "type": "string", "pattern": "(^env[.].*)|^(.{0,100})$" },
-      "namespace": { "type": "string", "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$" },
-      "accountName": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
+      "prefix": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
+      },
+      "accountName": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "useSASTokens": { "type": "boolean", "default": false },
       "syncFrequency": {
         "type": "string",
-        "pattern": "^(30|60|180|360|720|1440)$",
+        "enum": ["30", "60", "180", "360", "720", "1440"],
         "default": "30"
       },
       "syncStartAt": { "type": "string" },
@@ -32,17 +42,24 @@
     },
     "anyOf": [
       {
-        "properties": { "accountKey": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" } },
+        "properties": {
+          "accountKey": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+          }
+        },
         "required": ["accountKey"]
       },
       {
         "properties": {
-          "sasToken": { "type": "string", "pattern": "(^env[.].+)|^(.+)$" },
+          "sasToken": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.+)$"
+          },
           "useSASTokens": { "const": true }
         },
-        "required": ["useSASTokens", "sasToken"]
+        "required": ["sasToken", "useSASTokens"]
       }
-    ],
-    "additionalProperties": true
+    ]
   }
 }

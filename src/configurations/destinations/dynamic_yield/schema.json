@@ -1,16 +1,14 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
     "required": ["apiKey"],
+    "type": "object",
     "properties": {
       "apiKey": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "hashEmail": {
-        "type": "boolean"
-      },
+      "hashEmail": { "type": "boolean", "default": false },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -22,7 +20,10 @@
             }
           }
         }
-      }
-    }
+      },
+      "useNativeSDK": { "type": "boolean" },
+      "connectionMode": { "type": "object", "properties": {} }
+    },
+    "additionalProperties": false
   }
 }
