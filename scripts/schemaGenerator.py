@@ -693,12 +693,10 @@ def generate_schema_for_anyOf(allOfItemList, schema_field_name):
                         anyOfObj[0] = thenPropertiesA
                 # AnyOf object is placed at index of "if-then" block having same if properties as of common properties else at end. 
                 indexToPlace = find_index_to_place_anyOf(commonIfProp, allOfItemList, schema_field_name)
-                if indexToPlace == -1:
-                    allOfItemList.append(anyOfObj)
-                else:
+                if indexToPlace != -1:
                     allOfItemList[indexToPlace]["then"]["anyOf"] = anyOfObj
-                delIndices.append(i)
-                delIndices.append(j)
+                    delIndices.append(i)
+                    delIndices.append(j)
     allOfItemList = [allOfItemList[index] for index in range(len(allOfItemList)) if index not in delIndices]
     return allOfItemList
 
