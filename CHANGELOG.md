@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.41.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.40.0...v1.41.0) (2023-07-10)
+
+
+### Features
+
+* add connectionMode check for datafile access token ([#751](https://github.com/rudderlabs/rudder-config-schema/issues/751)) ([2621d53](https://github.com/rudderlabs/rudder-config-schema/commit/2621d53f0ab0925f74135fa4a4f1cf111115bba3))
+* **braze:** update preRequisite condition format based on config values ([#709](https://github.com/rudderlabs/rudder-config-schema/issues/709)) ([5f225b2](https://github.com/rudderlabs/rudder-config-schema/commit/5f225b26b64550f48103066a11a068f2c6e7e6eb))
+* custom page event name amplitude ([#720](https://github.com/rudderlabs/rudder-config-schema/issues/720)) ([0998483](https://github.com/rudderlabs/rudder-config-schema/commit/0998483ef3b30d6d5dff6bce33295ca83754019a))
+* factorsAI page,group support ([#724](https://github.com/rudderlabs/rudder-config-schema/issues/724)) ([957b6b8](https://github.com/rudderlabs/rudder-config-schema/commit/957b6b8b2ea87e44e75d58182edac956691bcf7c))
+
+
+### Bug Fixes
+
+* add enum for connectionMode instead of pattern ([#760](https://github.com/rudderlabs/rudder-config-schema/issues/760)) ([f00715d](https://github.com/rudderlabs/rudder-config-schema/commit/f00715da2f738b6b4400a611fb4049bc79ed1c99))
+* added checks for required fields and pattern in schema ([#730](https://github.com/rudderlabs/rudder-config-schema/issues/730)) ([b1f0d68](https://github.com/rudderlabs/rudder-config-schema/commit/b1f0d68939be07a7c7555b4b442851124ecc1219))
+* dynamicForm structure for sdk specific field ([#762](https://github.com/rudderlabs/rudder-config-schema/issues/762)) ([b6df1fd](https://github.com/rudderlabs/rudder-config-schema/commit/b6df1fd6488c9a67b74b9fc54c4899e455f947c3))
+* fix schema generator script ([#750](https://github.com/rudderlabs/rudder-config-schema/issues/750)) ([f2bb48e](https://github.com/rudderlabs/rudder-config-schema/commit/f2bb48e8583d9c1c9fc1f7da9f238e53ce778765))
+* make schema consistent with ui-config ([#678](https://github.com/rudderlabs/rudder-config-schema/issues/678)) ([50787b9](https://github.com/rudderlabs/rudder-config-schema/commit/50787b951155703f5321e0bee68a8b1301eae04a))
+* schema and ui-config incosistency  ([#752](https://github.com/rudderlabs/rudder-config-schema/issues/752)) ([621c810](https://github.com/rudderlabs/rudder-config-schema/commit/621c8106fd2eb08a3d6aaaa58a6227dc355c2a62))
+* schema generator script  ([#758](https://github.com/rudderlabs/rudder-config-schema/issues/758)) ([b68fb3b](https://github.com/rudderlabs/rudder-config-schema/commit/b68fb3bb7c115bf430cada8acf184676aa425a5e))
+* schema validation inconsistency ([#686](https://github.com/rudderlabs/rudder-config-schema/issues/686)) ([a7434d2](https://github.com/rudderlabs/rudder-config-schema/commit/a7434d2190a5e1850e99c5c36bc28f6722b6892e))
+* single select when mode is multiple and default pattern for dynamic custom form ([#732](https://github.com/rudderlabs/rudder-config-schema/issues/732)) ([2ac6eb9](https://github.com/rudderlabs/rudder-config-schema/commit/2ac6eb9c922ab8b174a25d095bdfb4be6ef18afb))
+
 ## [1.40.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.39.0...v1.40.0) (2023-07-04)
 
 
