@@ -1,17 +1,27 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
     "required": ["region"],
+    "type": "object",
     "properties": {
-      "iamRoleARN": { "type": "string" },
-      "roleBasedAuth": { "type": "boolean" },
-      "accessKeyId": { "type": "string", "pattern": "^(.{0,100})$" },
-      "secretAccessKey": { "type": "string", "pattern": "^(.{0,100})$" },
-      "region": { "type": "string", "pattern": "^(.{0,100})$" },
-      "trackingId": { "type": "string", "pattern": "^(.{0,100})$" },
-      "datasetARN": { "type": "string", "pattern": "arn:([a-z/d-]+):personalize:.*:.*:.+" },
-      "eventChoice": { "type": "string", "pattern": "(^env[.].*)|^(PutEvents|PutUsers|PutItems)$" },
+      "roleBasedAuth": { "type": "boolean", "default": true },
+      "region": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "trackingId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "datasetARN": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|arn:([a-z/d-]+):personalize:.*:.*:.+"
+      },
+      "eventChoice": {
+        "type": "string",
+        "enum": ["PutEvents", "PutUsers", "PutItems"],
+        "default": "PutEvents"
+      },
       "customMappings": {
         "type": "array",
         "items": {
@@ -28,7 +38,7 @@
           }
         }
       },
-      "disableStringify": { "type": "boolean" },
+      "disableStringify": { "type": "boolean", "default": false },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -41,6 +51,43 @@
           }
         }
       }
-    }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": { "roleBasedAuth": { "const": true } },
+          "required": ["roleBasedAuth"]
+        },
+        "then": {
+          "properties": {
+            "iamRoleARN": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "roleBasedAuth": { "const": true }
+          },
+          "required": ["iamRoleARN", "roleBasedAuth"]
+        }
+      },
+      {
+        "if": {
+          "properties": { "roleBasedAuth": { "const": false } },
+          "required": ["roleBasedAuth"]
+        },
+        "then": {
+          "properties": {
+            "accessKeyId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "secretAccessKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          },
+          "required": []
+        }
+      }
+    ]
   }
 }

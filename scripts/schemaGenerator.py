@@ -346,6 +346,16 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
         dynamicFormItemObject['properties'][dynamicFromItemObjectProp[0]
                                             ] = dynamicFromItemObjectProp[1](dynamicFromItemObjectProp[0] == "to")
     dynamicFormSchemaObject['items'] = dynamicFormItemObject
+    
+    isSourceDependent = is_dest_field_dependent_on_source(field, dbConfig, schema_field_name)
+    # If the field is source dependent, new schema object is created by setting the fields inside the source.
+    if isSourceDependent:
+        newDynamicFormFormObj = {"type": FieldTypeEnum.OBJECT.value}
+        newDynamicFormFormObj["properties"] = {}
+        for sourceType in dbConfig["supportedSourceTypes"]:
+            if sourceType in dbConfig["destConfig"] and field[schema_field_name] in dbConfig["destConfig"][sourceType]:
+                newDynamicFormFormObj["properties"][sourceType] = dynamicFormSchemaObject
+        dynamicFormSchemaObject = newDynamicFormFormObj
     return dynamicFormSchemaObject
 
 
@@ -683,12 +693,10 @@ def generate_schema_for_anyOf(allOfItemList, schema_field_name):
                         anyOfObj[0] = thenPropertiesA
                 # AnyOf object is placed at index of "if-then" block having same if properties as of common properties else at end. 
                 indexToPlace = find_index_to_place_anyOf(commonIfProp, allOfItemList, schema_field_name)
-                if indexToPlace == -1:
-                    allOfItemList.append(anyOfObj)
-                else:
+                if indexToPlace != -1:
                     allOfItemList[indexToPlace]["then"]["anyOf"] = anyOfObj
-                delIndices.append(i)
-                delIndices.append(j)
+                    delIndices.append(i)
+                    delIndices.append(j)
     allOfItemList = [allOfItemList[index] for index in range(len(allOfItemList)) if index not in delIndices]
     return allOfItemList
 

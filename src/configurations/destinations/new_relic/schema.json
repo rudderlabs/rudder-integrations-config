@@ -1,8 +1,8 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
     "required": ["accountId", "insertKey"],
+    "type": "object",
     "properties": {
       "accountId": {
         "type": "string",
@@ -12,13 +12,13 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "dataCenter": { "type": "string", "pattern": "^(us|eu)$" },
+      "dataCenter": { "type": "string", "enum": ["us", "eu"], "default": "us" },
       "customEventType": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
       },
-      "sendDeviceContext": { "type": "boolean" },
-      "sendUserIdanonymousId": { "type": "boolean" },
+      "sendDeviceContext": { "type": "boolean", "default": false },
+      "sendUserIdanonymousId": { "type": "boolean", "default": false },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
