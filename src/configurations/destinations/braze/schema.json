@@ -14,7 +14,20 @@
       },
       "dataCenter": {
         "type": "string",
-        "pattern": "^(US-01|US-02|US-03|US-04|US-05|US-06|US-07|US-08|EU-01|EU-02|EU-03)$"
+        "enum": [
+          "US-01",
+          "US-02",
+          "US-03",
+          "US-04",
+          "US-05",
+          "US-06",
+          "US-07",
+          "US-08",
+          "EU-01",
+          "EU-02",
+          "EU-03"
+        ],
+        "default": "US-01"
       },
       "enableSubscriptionGroupInGroupCall": { "type": "boolean", "default": false },
       "enableNestedArrayOperations": { "type": "boolean", "default": false },
@@ -22,7 +35,8 @@
       "supportDedup": { "type": "boolean", "default": false },
       "eventFilteringOption": {
         "type": "string",
-        "pattern": "^(disable|whitelistedEvents|blacklistedEvents)$"
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -74,14 +88,13 @@
       "connectionMode": {
         "type": "object",
         "properties": {
-          "android": { "type": "string", "pattern": "^(cloud|device|hybrid)$" },
-          "ios": { "type": "string", "pattern": "^(cloud|device|hybrid)$" },
-          "web": { "type": "string", "pattern": "^(cloud|device)$" },
-          "reactnative": { "type": "string", "pattern": "^(cloud|device)$" },
-          "flutter": { "type": "string", "pattern": "^(cloud|device)$" }
+          "android": { "type": "string", "enum": ["cloud", "device", "hybrid"] },
+          "ios": { "type": "string", "enum": ["cloud", "device", "hybrid"] },
+          "web": { "type": "string", "enum": ["cloud", "device"] },
+          "reactnative": { "type": "string", "enum": ["cloud", "device"] },
+          "flutter": { "type": "string", "enum": ["cloud", "device"] }
         }
       }
-    },
-    "additionalPorperties": false
+    }
   }
 }
