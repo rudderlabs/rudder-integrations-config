@@ -12,7 +12,7 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$"
       },
-      "hashMethod": { "type": "string", "pattern": "^(none|md5)$", "default": "none" },
+      "hashMethod": { "type": "string", "enum": ["none", "md5"], "default": "none" },
       "fieldMapping": {
         "type": "array",
         "items": {
@@ -32,7 +32,7 @@
       "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "eventFilteringOption": {
         "type": "string",
-        "pattern": "^(disable|whitelistedEvents|blacklistedEvents)$",
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
         "default": "disable"
       },
       "whitelistedEvents": {
@@ -82,7 +82,13 @@
             },
             "to": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+              "enum": [
+                "product viewed",
+                "cart viewed",
+                "order completed",
+                "product list viewed",
+                ""
+              ]
             }
           }
         }
