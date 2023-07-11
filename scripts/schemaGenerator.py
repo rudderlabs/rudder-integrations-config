@@ -242,7 +242,7 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
                 singleSelectObj["default"] = field["defaultOption"]["value"]
             elif field["defaultOption"]["value"]:
                 singleSelectObj["default"] = [field["defaultOption"]["value"]]
-            else:
+            elif 'default' in field:
                 singleSelectObj["default"] = field["default"]
     else:
         singleSelectObj = {"type": FieldTypeEnum.STRING.value}
@@ -250,7 +250,7 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
         if "default" or "defaultOption" in field:
             if "defaultOption" in field:
                 singleSelectObj["default"] = field["defaultOption"]["value"]
-            else:
+            elif 'default' in field:
                 singleSelectObj["default"] = field["default"]
 
     isSourceDependent = is_dest_field_dependent_on_source(field, dbConfig, schema_field_name)
@@ -686,11 +686,13 @@ def generate_schema_for_anyOf(allOfItemList, schema_field_name):
                         anyOfObj[1]["properties"][oppositeIfProp[k]["key"]] = {"const": True}
                         anyOfObj[1]["required"].append(oppositeIfProp[k]["key"])
                         anyOfObj[0] = thenPropertiesB
+                        anyOfObj[0]["properties"][oppositeIfProp[k]["key"]] = {"const": False}
                     else:
                         anyOfObj[1] = thenPropertiesB
                         anyOfObj[1]["properties"][oppositeIfProp[k]["key"]] = {"const": True}
                         anyOfObj[1]["required"].append(oppositeIfProp[k]["key"])
                         anyOfObj[0] = thenPropertiesA
+                        anyOfObj[0]["properties"][oppositeIfProp[k]["key"]] = {"const": False}
                 # AnyOf object is placed at index of "if-then" block having same if properties as of common properties else at end. 
                 indexToPlace = find_index_to_place_anyOf(commonIfProp, allOfItemList, schema_field_name)
                 if indexToPlace != -1:
