@@ -1,16 +1,21 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["apiKey", "residencyServer"],
     "type": "object",
-    "required": ["apiKey"],
     "properties": {
       "apiKey": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "apiSecret": {
+      "residencyServer": { "type": "string", "enum": ["standard", "EU"], "default": "standard" },
+      "trackAllPages": { "type": "boolean", "default": false },
+      "trackCategorizedPages": { "type": "boolean", "default": true },
+      "trackNamedPages": { "type": "boolean", "default": true },
+      "useUserDefinedPageEventName": { "type": "boolean", "default": false },
+      "userProvidedPageEventString": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$"
       },
       "groupTypeTrait": {
         "type": "string",
@@ -19,29 +24,6 @@
       "groupValueTrait": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "trackAllPages": {
-        "type": "boolean"
-      },
-      "trackCategorizedPages": {
-        "type": "boolean"
-      },
-      "trackNamedPages": {
-        "type": "boolean"
-      },
-      "trackProductsOnce": {
-        "type": "boolean"
-      },
-      "trackRevenuePerProduct": {
-        "type": "boolean"
-      },
-      "versionName": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "residencyServer": {
-        "type": "string",
-        "pattern": "(^env[.].*)|^(standard|EU)$"
       },
       "traitsToIncrement": {
         "type": "array",
@@ -91,119 +73,21 @@
           }
         }
       },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          },
-          "ios": {
-            "type": "boolean"
-          },
-          "android": {
-            "type": "boolean"
-          },
-          "reactnative": {
-            "type": "boolean"
-          }
-        }
+      "apiSecret": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "connectionMode": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "pattern": "^(cloud|device)$"
-          },
-          "ios": {
-            "type": "string",
-            "pattern": "^(cloud|device)$"
-          },
-          "android": {
-            "type": "string",
-            "pattern": "^(cloud|device)$"
-          },
-          "reactnative": {
-            "type": "string",
-            "pattern": "^(cloud|device)$"
-          },
-          "flutter": {
-            "type": "string",
-            "pattern": "^(cloud|device)$"
-          }
-        }
+      "versionName": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "preferAnonymousIdForDeviceId": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "deviceIdFromUrlParam": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "forceHttps": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "trackGclid": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "trackReferrer": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "saveParamsReferrerOncePerSession": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "trackUtmProperties": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "unsetParamsReferrerOnNewSession": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "batchEvents": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
+      "mapDeviceBrand": { "type": "boolean", "default": false },
+      "trackProductsOnce": { "type": "boolean", "default": false },
+      "trackRevenuePerProduct": { "type": "boolean", "default": false },
+      "eventFilteringOption": {
+        "type": "string",
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -229,98 +113,6 @@
           }
         }
       },
-      "eventUploadPeriodMillis": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-          },
-          "android": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-          },
-          "ios": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-          },
-          "reactnative": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-          }
-        }
-      },
-      "eventUploadThreshold": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-          },
-          "android": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-          },
-          "ios": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-          },
-          "reactnative": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-          }
-        }
-      },
-      "mapDeviceBrand": {
-        "type": "boolean"
-      },
-      "enableLocationListening": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "boolean"
-          },
-          "reactnative": {
-            "type": "boolean"
-          }
-        }
-      },
-      "trackSessionEvents": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "boolean"
-          },
-          "ios": {
-            "type": "boolean"
-          },
-          "reactnative": {
-            "type": "boolean"
-          }
-        }
-      },
-      "useAdvertisingIdForDeviceId": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "boolean"
-          },
-          "reactnative": {
-            "type": "boolean"
-          }
-        }
-      },
-      "useIdfaAsDeviceId": {
-        "type": "object",
-        "properties": {
-          "ios": {
-            "type": "boolean"
-          },
-          "reactnative": {
-            "type": "boolean"
-          }
-        }
-      },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -331,6 +123,127 @@
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
+        }
+      },
+      "enableLocationListening": {
+        "type": "object",
+        "properties": {
+          "android": { "type": "boolean" },
+          "reactnative": { "type": "boolean" },
+          "flutter": { "type": "boolean" }
+        }
+      },
+      "trackSessionEvents": {
+        "type": "object",
+        "properties": {
+          "android": { "type": "boolean" },
+          "ios": { "type": "boolean" },
+          "reactnative": { "type": "boolean" },
+          "flutter": { "type": "boolean" }
+        }
+      },
+      "useAdvertisingIdForDeviceId": {
+        "type": "object",
+        "properties": {
+          "android": { "type": "boolean" },
+          "reactnative": { "type": "boolean" },
+          "flutter": { "type": "boolean" }
+        }
+      },
+      "useIdfaAsDeviceId": {
+        "type": "object",
+        "properties": {
+          "ios": { "type": "boolean" },
+          "reactnative": { "type": "boolean" },
+          "flutter": { "type": "boolean" }
+        }
+      },
+      "preferAnonymousIdForDeviceId": {
+        "type": "object",
+        "properties": { "web": { "type": "boolean" } }
+      },
+      "deviceIdFromUrlParam": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "forceHttps": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "trackGclid": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "trackReferrer": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "trackUtmProperties": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "saveParamsReferrerOncePerSession": {
+        "type": "object",
+        "properties": { "web": { "type": "boolean" } }
+      },
+      "unsetParamsReferrerOnNewSession": {
+        "type": "object",
+        "properties": { "web": { "type": "boolean" } }
+      },
+      "batchEvents": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "eventUploadPeriodMillis": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          },
+          "ios": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          },
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          },
+          "reactnative": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          },
+          "flutter": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          }
+        }
+      },
+      "eventUploadThreshold": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          },
+          "ios": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          },
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          },
+          "reactnative": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          },
+          "flutter": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          }
+        }
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "android": { "type": "boolean" },
+          "ios": { "type": "boolean" },
+          "web": { "type": "boolean" },
+          "reactnative": { "type": "boolean" },
+          "flutter": { "type": "boolean" }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "android": { "type": "string", "enum": ["cloud", "device"] },
+          "ios": { "type": "string", "enum": ["cloud", "device"] },
+          "web": { "type": "string", "enum": ["cloud", "device"] },
+          "reactnative": { "type": "string", "enum": ["cloud", "device"] },
+          "flutter": { "type": "string", "enum": ["cloud", "device"] }
         }
       }
     }

@@ -1,8 +1,8 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
     "required": ["devKey"],
+    "type": "object",
     "properties": {
       "devKey": {
         "type": "string",
@@ -16,7 +16,7 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "useRichEventName": { "type": "boolean" },
+      "useRichEventName": { "type": "boolean", "default": false },
       "sharingFilter": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
@@ -27,12 +27,14 @@
           "android": { "type": "boolean" },
           "ios": { "type": "boolean" },
           "reactnative": { "type": "boolean" },
+          "flutter": { "type": "boolean" },
           "cordova": { "type": "boolean" }
         }
       },
       "eventFilteringOption": {
         "type": "string",
-        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -58,6 +60,11 @@
           }
         }
       },
+      "statusCallbackUrls": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(?!.*\\.ngrok\\.io).*$"
+      },
+      "apiToken": { "type": "string" },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
