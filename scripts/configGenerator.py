@@ -25,27 +25,24 @@ ui_config = template_ui_config
 
 # Access the necessary location and update the fields array
 
+def appendFieldsInGroups(settings, field):
+    if "sections" in settings and settings["sections"]:
+        groups = settings["sections"][0]["groups"]
+        if groups:
+            first_group = groups[0]
+            if "fields" in first_group:
+                first_group["fields"].append(field)
+
 
 def updateUiConfig(field):
     if "uiConfig" in ui_config and "baseTemplate" in ui_config["uiConfig"]:
         base_template = ui_config["uiConfig"]["baseTemplate"]
         if base_template and field['required'] == True:
             connection_settings = base_template[0]
-            if "sections" in connection_settings and connection_settings["sections"]:
-                groups = connection_settings["sections"][0]["groups"]
-                if groups:
-                    first_group = groups[0]
-                    if "fields" in first_group:
-                        first_group["fields"].append(field)
+            appendFieldsInGroups(connection_settings, field)
         elif base_template:
             configuration_settings = base_template[1]
-            if "sections" in configuration_settings and configuration_settings["sections"]:
-                groups = configuration_settings["sections"][0]["groups"]
-                if groups:
-                    first_group = groups[0]
-                    if "fields" in first_group:
-                        first_group["fields"].append(field)
-
+            appendFieldsInGroups(configuration_settings, field)
         return ui_config
 
 
