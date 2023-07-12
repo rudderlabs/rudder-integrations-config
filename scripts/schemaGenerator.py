@@ -192,7 +192,7 @@ def generate_schema_for_textinput(field, dbConfig, schema_field_name):
                 textInputSchemaObj["properties"][sourceType] = {
                     "type": FieldTypeEnum.STRING.value}
                 if 'regex' in field:
-                    textInputSchemaObj["properties"][sourceType]["pattern"] = field["regex"]
+                    textInputSchemaObj["properties"][sourceType]["pattern"] = generalize_regex_pattern(field)
     else:
         textInputSchemaObj = {"type": FieldTypeEnum.STRING.value}
         if 'regex' in field:
@@ -242,7 +242,7 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
                 singleSelectObj["default"] = field["defaultOption"]["value"]
             elif field["defaultOption"]["value"]:
                 singleSelectObj["default"] = [field["defaultOption"]["value"]]
-            else:
+            elif 'default' in field:
                 singleSelectObj["default"] = field["default"]
     else:
         singleSelectObj = {"type": FieldTypeEnum.STRING.value}
@@ -250,7 +250,7 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
         if "default" or "defaultOption" in field:
             if "defaultOption" in field:
                 singleSelectObj["default"] = field["defaultOption"]["value"]
-            else:
+            elif 'default' in field:
                 singleSelectObj["default"] = field["default"]
 
     isSourceDependent = is_dest_field_dependent_on_source(field, dbConfig, schema_field_name)
@@ -346,6 +346,16 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
         dynamicFormItemObject['properties'][dynamicFromItemObjectProp[0]
                                             ] = dynamicFromItemObjectProp[1](dynamicFromItemObjectProp[0] == "to")
     dynamicFormSchemaObject['items'] = dynamicFormItemObject
+    
+    isSourceDependent = is_dest_field_dependent_on_source(field, dbConfig, schema_field_name)
+    # If the field is source dependent, new schema object is created by setting the fields inside the source.
+    if isSourceDependent:
+        newDynamicFormFormObj = {"type": FieldTypeEnum.OBJECT.value}
+        newDynamicFormFormObj["properties"] = {}
+        for sourceType in dbConfig["supportedSourceTypes"]:
+            if sourceType in dbConfig["destConfig"] and field[schema_field_name] in dbConfig["destConfig"][sourceType]:
+                newDynamicFormFormObj["properties"][sourceType] = dynamicFormSchemaObject
+        dynamicFormSchemaObject = newDynamicFormFormObj
     return dynamicFormSchemaObject
 
 
@@ -676,19 +686,19 @@ def generate_schema_for_anyOf(allOfItemList, schema_field_name):
                         anyOfObj[1]["properties"][oppositeIfProp[k]["key"]] = {"const": True}
                         anyOfObj[1]["required"].append(oppositeIfProp[k]["key"])
                         anyOfObj[0] = thenPropertiesB
+                        anyOfObj[0]["properties"][oppositeIfProp[k]["key"]] = {"const": False}
                     else:
                         anyOfObj[1] = thenPropertiesB
                         anyOfObj[1]["properties"][oppositeIfProp[k]["key"]] = {"const": True}
                         anyOfObj[1]["required"].append(oppositeIfProp[k]["key"])
                         anyOfObj[0] = thenPropertiesA
+                        anyOfObj[0]["properties"][oppositeIfProp[k]["key"]] = {"const": False}
                 # AnyOf object is placed at index of "if-then" block having same if properties as of common properties else at end. 
                 indexToPlace = find_index_to_place_anyOf(commonIfProp, allOfItemList, schema_field_name)
-                if indexToPlace == -1:
-                    allOfItemList.append(anyOfObj)
-                else:
+                if indexToPlace != -1:
                     allOfItemList[indexToPlace]["then"]["anyOf"] = anyOfObj
-                delIndices.append(i)
-                delIndices.append(j)
+                    delIndices.append(i)
+                    delIndices.append(j)
     allOfItemList = [allOfItemList[index] for index in range(len(allOfItemList)) if index not in delIndices]
     return allOfItemList
 
@@ -706,14 +716,11 @@ def generate_connection_mode(dbConfig):
     for sourceType in dbConfig["supportedSourceTypes"]:
             if sourceType in dbConfig["supportedConnectionModes"]:
                 connectionItemObj = {"type": FieldTypeEnum.STRING.value}
-                pattern = "^("
+                connectionModesEnum=[]
                 length = len(dbConfig["supportedConnectionModes"][sourceType])
                 for i in range(0, length):
-                    pattern += dbConfig["supportedConnectionModes"][sourceType][i]
-                    if i != length - 1:
-                        pattern += '|'
-                pattern += ")$"
-                connectionItemObj["pattern"] = pattern
+                    connectionModesEnum.append(dbConfig["supportedConnectionModes"][sourceType][i])
+                connectionItemObj["enum"] = connectionModesEnum
                 connectionObj["properties"][sourceType] = connectionItemObj
     return connectionObj
 
