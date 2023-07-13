@@ -27,30 +27,42 @@
         }
       }
     },
-    "anyOf": [
+    "allOf": [
       {
-        "properties": {
-          "accessKeyID": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-          },
-          "accessKey": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-          },
-          "roleBasedAuth": { "const": false }
+        "if": {
+          "properties": { "roleBasedAuth": { "const": true } },
+          "required": ["roleBasedAuth"]
         },
-        "required": ["roleBasedAuth"]
+        "then": {
+          "properties": {
+            "iamRoleARN": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "roleBasedAuth": { "const": true }
+          },
+          "required": ["roleBasedAuth"]
+        }
       },
       {
-        "properties": {
-          "iamRoleARN": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-          },
-          "roleBasedAuth": { "const": true }
+        "if": {
+          "properties": { "roleBasedAuth": { "const": false } },
+          "required": ["roleBasedAuth"]
         },
-        "required": ["roleBasedAuth"]
+        "then": {
+          "properties": {
+            "accessKeyID": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "accessKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "roleBasedAuth": { "const": false }
+          },
+          "required": []
+        }
       }
     ]
   }
