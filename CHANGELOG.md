@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.42.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.42.0...v1.42.1) (2023-07-14)
+
+
+### Bug Fixes
+
+* updates klaviyo image ([812ff8a](https://github.com/rudderlabs/rudder-config-schema/commit/812ff8a76f5b0d9bafe60e8e01dcb16fe7b1d06a))
+
 ## [1.42.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.41.0...v1.42.0) (2023-07-13)
 
 
