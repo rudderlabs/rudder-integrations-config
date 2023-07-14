@@ -1,20 +1,14 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["customerId"],
     "type": "object",
-    "required": [
-      "customerId"
-    ],
     "properties": {
       "customerId": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "subAccount": { "type": "boolean" },
-      "loginCustomerId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
+      "subAccount": { "type": "boolean", "default": false },
       "eventsToOfflineConversionsTypeMapping": {
         "type": "array",
         "items": {
@@ -24,10 +18,7 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "to": {
-              "type": "string",
-              "pattern": "^(call|click|store)$"
-            }
+            "to": { "type": "string", "enum": ["click", "call", "store", ""] }
           }
         }
       },
@@ -65,18 +56,17 @@
       },
       "UserIdentifierSource": {
         "type": "string",
-        "pattern": "(^env[.].*)|^(none|UNSPECIFIED|UNKNOWN|FIRST_PARTY|THIRD_PARTY)$"
+        "enum": ["none", "UNSPECIFIED", "UNKNOWN", "FIRST_PARTY", "THIRD_PARTY"],
+        "default": "none"
       },
       "conversionEnvironment": {
         "type": "string",
-        "pattern": "(^env[.].*)|^(none|UNSPECIFIED|UNKNOWN|APP|WEB)$"
+        "enum": ["none", "UNSPECIFIED", "UNKNOWN", "APP", "WEB"],
+        "default": "none"
       },
-      "defaultUserIdentifier": {
-        "type": "string",
-        "pattern": "(^env[.].*)|^(email|phone)$"
-      },
-      "enableServerSideIdentify": { "type": "boolean" },
-      "validateOnly": { "type": "boolean" },
+      "defaultUserIdentifier": { "type": "string", "enum": ["email", "phone"], "default": "email" },
+      "hashUserIdentifier": { "type": "boolean", "default": true },
+      "validateOnly": { "type": "boolean", "default": false },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -89,6 +79,20 @@
           }
         }
       }
-    }
+    },
+    "anyOf": [
+      {
+        "if": { "properties": { "subAccount": { "const": true } }, "required": ["subAccount"] },
+        "then": {
+          "properties": {
+            "loginCustomerId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["loginCustomerId"]
+        }
+      }
+    ]
   }
 }

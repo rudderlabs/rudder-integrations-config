@@ -1,10 +1,8 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["conversionID"],
     "type": "object",
-    "required": [
-      "conversionID"
-    ],
     "properties": {
       "conversionID": {
         "type": "string",
@@ -21,101 +19,28 @@
             },
             "to": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+              "enum": [
+                "Lead",
+                "PageVisit",
+                "ViewCategory",
+                "Signup",
+                "WatchVideo",
+                "Checkout",
+                "Search",
+                "AddToCart",
+                ""
+              ]
             }
           }
         }
       },
-      "pageLoadConversions": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "conversionLabel": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "name": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "clickEventConversions": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "conversionLabel": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "name": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "defaultPageConversion": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "conversionLinker": {
-        "type": "boolean"
-      },
-      "allowEnhancedConversions": {
-        "type": "boolean"
-      },
-      "sendPageView": {
-        "type": "boolean"
-      },
-      "trackConversions": {
-        "type": "boolean"
-      },
-      "enableConversionLabel": {
-        "type": "boolean"
-      },
-      "enableConversionEventsFiltering": {
-        "type": "boolean"
-      },
-      "eventsToTrackConversions": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "eventName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            }
-          }
-        }
-      },
-      "trackDynamicRemarketing": {
-        "type": "boolean"
-      },
-      "enableDynamicRemarketingEventsFiltering": {
-        "type": "boolean"
-      },
-      "eventsToTrackDynamicRemarketing": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "eventName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            }
-          }
-        }
-      },
-      "disableAdPersonalization": {
-        "type": "boolean"
-      },
+      "trackConversions": { "type": "boolean", "default": true },
+      "trackDynamicRemarketing": { "type": "boolean", "default": false },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "eventFilteringOption": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^(disable|whitelistedEvents|blacklistedEvents)$)"
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -141,14 +66,47 @@
           }
         }
       },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
+      "pageLoadConversions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "conversionLabel": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "name": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
           }
         }
       },
+      "defaultPageConversion": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "clickEventConversions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "conversionLabel": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "name": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "sendPageView": { "type": "boolean", "default": true },
+      "conversionLinker": { "type": "boolean", "default": true },
+      "disableAdPersonalization": { "type": "boolean", "default": false },
+      "enableConversionLabel": { "type": "boolean", "default": false },
+      "allowEnhancedConversions": { "type": "boolean", "default": false },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -161,6 +119,84 @@
           }
         }
       }
-    }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": { "trackConversions": { "const": true } },
+          "required": ["trackConversions"]
+        },
+        "then": {
+          "properties": {
+            "enableConversionEventsFiltering": { "type": "boolean", "default": false }
+          },
+          "required": []
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "trackConversions": { "const": true },
+            "enableConversionEventsFiltering": { "const": true }
+          },
+          "required": ["trackConversions", "enableConversionEventsFiltering"]
+        },
+        "then": {
+          "properties": {
+            "eventsToTrackConversions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "eventName": {
+                    "type": "string",
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  }
+                }
+              }
+            }
+          },
+          "required": []
+        }
+      },
+      {
+        "if": {
+          "properties": { "trackDynamicRemarketing": { "const": true } },
+          "required": ["trackDynamicRemarketing"]
+        },
+        "then": {
+          "properties": {
+            "enableDynamicRemarketingEventsFiltering": { "type": "boolean", "default": false }
+          },
+          "required": []
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "trackDynamicRemarketing": { "const": true },
+            "enableDynamicRemarketingEventsFiltering": { "const": true }
+          },
+          "required": ["trackDynamicRemarketing", "enableDynamicRemarketingEventsFiltering"]
+        },
+        "then": {
+          "properties": {
+            "eventsToTrackDynamicRemarketing": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "eventName": {
+                    "type": "string",
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  }
+                }
+              }
+            }
+          },
+          "required": []
+        }
+      }
+    ]
   }
 }
