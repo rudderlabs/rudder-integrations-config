@@ -181,17 +181,10 @@
                 "title": "RudderStack to Rockerbox event mappings",
                 "fields": [
                   {
-                    "type": "mapping",
-                    "label": "Map your RudderStack events to Rockerbox events",
-                    "note": "Map RudderStack events/properties to Rockerbox custom events/properties",
-                    "labelLeft": "RudderStack Event",
-                    "labelRight": "Rockerbox Event",
-                    "keyLeft": "from",
-                    "keyRight": "to",
-                    "placeholderLeft": "e.g: Product Added",
-                    "placeholderRight": "e.g: conv.add_to_cart",
-                    "configKey": "eventsMap",
-                    "default": []
+                    "type": "redirect",
+                    "redirectGroupKey": "customEventMapping",
+                    "label": "Event and property mappings",
+                    "note": "Map RudderStack events/properties to Rockerbox custom events/properties"
                   }
                 ]
               }
@@ -230,6 +223,33 @@
           "default": false
         }
       ]
+    },
+    "redirectGroups": {
+      "customEventMapping": {
+        "fields": [
+          {
+            "type": "mapping",
+            "label": "Map your RudderStack events to Rockerbox events",
+            "note": "Map RudderStack events/properties to Rockerbox custom events/properties using either our mapping interface or JSON text editor.  Learn more about mappings in our docs.",
+            "configKey": "eventsMap",
+            "default": [],
+            "columns": [
+              {
+                "type": "textInput",
+                "key": "from",
+                "label": "RudderStack Event",
+                "placeholder": "e.g: Product Added"
+              },
+              {
+                "type": "textInput",
+                "key": "to",
+                "label": "Rockerbox Event",
+                "placeholder": "e.g: conv.add_to_cart"
+              }
+            ]
+          }
+        ]
+      }
     }
   }
 }

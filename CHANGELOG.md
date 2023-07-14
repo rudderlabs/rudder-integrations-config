@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.42.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.41.0...v1.42.0) (2023-07-13)
+
+
+### Features
+
+* **rockerbox:** update rockerBox ui-config with new mapping component schema structure ([8c9505b](https://github.com/rudderlabs/rudder-config-schema/commit/8c9505be3b9075203bcfe5a60cf32073bcc6abdd))
+
+
+### Bug Fixes
+
+* **iterable:** add dashboard config to update preferUserId and mergeNestedObjects ([#771](https://github.com/rudderlabs/rudder-config-schema/issues/771)) ([12f6914](https://github.com/rudderlabs/rudder-config-schema/commit/12f69144caaf4479c6208c873770796d61deaeab))
+
 ## [1.41.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.40.0...v1.41.0) (2023-07-10)
 
 
