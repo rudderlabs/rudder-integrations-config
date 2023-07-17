@@ -110,13 +110,14 @@
                 "fields": [
                   {
                     "type": "checkbox",
-                    "label": "Enable debug mode",
+                    "label": "Debug via Validation Server",
                     "note": [
                       "Enabling this sends events to GA4's validation server. This allows you to check validation responses in Live Events, but note that ",
                       {
-                        "text": "these events will not show up in reports",
+                        "text": "these events will not show up in reports.",
                         "link": "https://developers.google.com/analytics/devguides/collection/protocol/ga4/validating-events?client_type=gtag"
-                      }
+                      },
+                      "For hybrid mode, these would be your track and group calls"
                     ],
                     "preRequisites": {
                       "fields": [
@@ -281,6 +282,20 @@
         },
         {
           "type": "checkbox",
+          "label": "Debug via DebugView",
+          "configKey": "debugView",
+          "default": true,
+          "note": [
+            "Enabling this allows you to monitor your device mode events in ",
+            {
+              "text": "DebugView.",
+              "link": "https://support.google.com/analytics/answer/7201382"
+            },
+            "For hybrid mode, these would be only your page calls"
+          ]
+        },
+        {
+          "type": "checkbox",
           "label": "Include URL and Search as Page View properties",
           "configKey": "extendPageViewParams",
           "note": "Enabling this extends the set of properties automatically collected to include 'URL' and 'search'.  Note that GA4 has a limit on the number of unique properties per event name",
@@ -290,24 +305,21 @@
           "preRequisites": {
             "fields": [
               {
-                "configKey": "connectionModes.cloud",
-                "value": true
-              },
-              {
-                "configKey": "connectionModes.webDevice",
-                "value": true
+                "configKey": "connectionMode.web",
+                "value": "hybrid"
               }
-            ],
-            "condition": "and"
+            ]
           },
           "type": "checkbox",
           "label": "Override gtag client ID & session ID",
           "configKey": "overrideClientAndSessionId",
-          "note": ["Override the gtag clientID & sessionID with RudderStack's to ensure attribution is properly unified across page and track events. We recommend turning on the override function. Otherwise, instrument your RudderStack SDK based on instructions ",
+          "note": [
+            "Override the gtag clientID & sessionID with RudderStack's to ensure attribution is properly unified across page and track events. We recommend turning on the override function. Otherwise, instrument your RudderStack SDK based on instructions ",
             {
               "text": "here",
               "link": "https://www.rudderstack.com/docs/destinations/streaming-destinations/google-analytics-4/setting-up-google-analytics-4-in-rudderstack/#hybrid-mode"
-            }],
+            }
+          ],
           "default": true
         }
       ]

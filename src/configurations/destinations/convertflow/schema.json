@@ -1,33 +1,19 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
     "required": ["websiteId"],
+    "type": "object",
     "properties": {
       "websiteId": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,10})$"
       },
-      "toggleToSendData": { "type": "boolean" },
-      "eventsList": {
+      "toggleToSendData": { "type": "boolean", "default": false },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "eventFilteringOption": {
         "type": "string",
-        "pattern": "^(cfReady|cfView|cfConversion|cfCompletion|cfAddToCart|cfSubmit|cfClose)$"
-      },
-      "eventsMappping": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "from": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "to": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -53,7 +39,6 @@
           }
         }
       },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -66,6 +51,60 @@
           }
         }
       }
-    }
+    },
+    "anyOf": [
+      {
+        "if": {
+          "properties": { "toggleToSendData": { "const": true } },
+          "required": ["toggleToSendData"]
+        },
+        "then": {
+          "properties": {
+            "eventsList": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "cfReady",
+                  "cfView",
+                  "cfConversion",
+                  "cfCompletion",
+                  "cfSubmit",
+                  "cfAddToCart",
+                  "cfClose"
+                ]
+              },
+              "default": ["cfView"]
+            },
+            "eventsMappping": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "from": {
+                    "type": "string",
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  },
+                  "to": {
+                    "type": "string",
+                    "enum": [
+                      "cfReady",
+                      "cfView",
+                      "cfConversion",
+                      "cfCompletion",
+                      "cfSubmit",
+                      "cfAddToCart",
+                      "cfClose",
+                      ""
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "required": []
+        }
+      }
+    ]
   }
 }
