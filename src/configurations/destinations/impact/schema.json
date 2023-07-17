@@ -1,8 +1,8 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["accountSID", "apiKey", "campaignId"],
     "type": "object",
-    "required": ["apiKey", "accountSID", "campaignId"],
     "properties": {
       "accountSID": {
         "type": "string",
@@ -18,13 +18,13 @@
       },
       "impactAppId": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*?)\\}\\}$)|(^env[.].+)|^[0-9]+$|^$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$|^$"
       },
       "eventTypeId": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*?)\\}\\}$)|(^env[.].+)|^[0-9]+$|^$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$|^$"
       },
-      "enableEmailHashing": { "type": "boolean" },
+      "enableEmailHashing": { "type": "boolean", "default": false },
       "rudderToImpactProperty": {
         "type": "array",
         "items": {
@@ -57,9 +57,9 @@
           }
         }
       },
-      "enableIdentifyEvents": { "type": "boolean" },
-      "enablePageEvents": { "type": "boolean" },
-      "enableScreenEvents": { "type": "boolean" },
+      "enableIdentifyEvents": { "type": "boolean", "default": false },
+      "enablePageEvents": { "type": "boolean", "default": false },
+      "enableScreenEvents": { "type": "boolean", "default": false },
       "actionEventNames": {
         "type": "array",
         "items": {
