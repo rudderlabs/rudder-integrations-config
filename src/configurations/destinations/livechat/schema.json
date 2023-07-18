@@ -8,27 +8,12 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "recordLiveChatEvents": { "type": "boolean" },
-      "eventsList": {
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "recordLiveChatEvents": { "type": "boolean", "default": false },
+      "eventFilteringOption": {
         "type": "string",
-        "pattern": "^(onReady|onAvailabilityChanged|onVisibilityChanged|onCustomerStatusChanged|onNewEvent|onFormSubmitted|onRatingSubmitted|onGreetingDisplayed|onGreetingHidden|onRichMessageButtonClicked)$"
-      },
-      "updateEventNames": { "type": "boolean" },
-      "eventsToStandard": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "from": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "to": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -54,7 +39,6 @@
           }
         }
       },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -67,6 +51,90 @@
           }
         }
       }
-    }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": { "recordLiveChatEvents": { "const": true } },
+          "required": ["recordLiveChatEvents"]
+        },
+        "then": {
+          "properties": {
+            "eventsList": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "ready",
+                  "availability_changed",
+                  "visibility_changed",
+                  "customer_status_changed",
+                  "new_event",
+                  "form_submitted",
+                  "rating_submitted",
+                  "greeting_displayed",
+                  "greeting_hidden",
+                  "rich_message_button_clicked"
+                ]
+              },
+              "default": ["new_event"]
+            }
+          },
+          "required": []
+        }
+      },
+      {
+        "if": {
+          "properties": { "recordLiveChatEvents": { "const": true } },
+          "required": ["recordLiveChatEvents"]
+        },
+        "then": {
+          "properties": { "updateEventNames": { "type": "boolean", "default": false } },
+          "required": []
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "recordLiveChatEvents": { "const": true },
+            "updateEventNames": { "const": true }
+          },
+          "required": ["recordLiveChatEvents", "updateEventNames"]
+        },
+        "then": {
+          "properties": {
+            "eventsToStandard": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "from": {
+                    "type": "string",
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  },
+                  "to": {
+                    "type": "string",
+                    "enum": [
+                      "ready",
+                      "availability_changed",
+                      "visibility_changed",
+                      "customer_status_changed",
+                      "new_event",
+                      "form_submitted",
+                      "rating_submitted",
+                      "greeting_displayed",
+                      "greeting_hidden",
+                      "rich_message_button_clicked",
+                      ""
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "required": []
+        }
+      }
+    ]
   }
 }

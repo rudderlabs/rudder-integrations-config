@@ -1,25 +1,38 @@
 {
   "configSchema": {
-    "$schema": "http://json-schema.org/draft-07/schema",
-    "type": "object",
+    "$schema": "http://json-schema.org/draft-07/schema#",
     "required": ["bucketName", "credentials"],
+    "type": "object",
     "properties": {
       "bucketName": {
         "type": "string",
-        "pattern": "(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$"
       },
-      "prefix": { "type": "string", "pattern": "(^env[.].*)|^(.{0,100})$" },
-      "namespace": { "type": "string", "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$" },
-      "tableSuffix": { "type": "string", "pattern": "(^env[.].*)|.*" },
+      "prefix": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
+      },
+      "tableSuffix": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*" },
       "timeWindowLayout": {
         "type": "string",
-        "pattern": "^(2006/01/02/15|dt=2006-01-02|year=2006|year=2006/month=01|year=2006/month=01/day=02|year=2006/month=01/day=02/hour=15)$",
+        "enum": [
+          "2006/01/02/15",
+          "dt=2006-01-02",
+          "year=2006",
+          "year=2006/month=01",
+          "year=2006/month=01/day=02",
+          "year=2006/month=01/day=02/hour=15"
+        ],
         "default": "2006/01/02/15"
       },
-      "credentials": { "type": "string", "pattern": "(^env[.].+)|.+" },
+      "credentials": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*" },
       "syncFrequency": {
         "type": "string",
-        "pattern": "^(30|60|180|360|720|1440)$",
+        "enum": ["30", "60", "180", "360", "720", "1440"],
         "default": "30"
       },
       "syncStartAt": { "type": "string" },
@@ -35,7 +48,6 @@
           }
         }
       }
-    },
-    "additionalProperties": true
+    }
   }
 }
