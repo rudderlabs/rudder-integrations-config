@@ -14,6 +14,24 @@
                 "fields": [
                   {
                     "type": "textInput",
+                    "label": "Public API Key",
+                    "configKey": "publicApiKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "placeholder": "e.g. WPqij9",
+                    "regexErrorMessage": "Invalid Public API Key",
+                    "note": "Your Public API Key",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "device"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
                     "label": "Private API Key",
                     "note": "Your Private API Key",
                     "configKey": "privateApiKey",
@@ -94,12 +112,10 @@
                 "fields": [
                   {
                     "type": "checkbox",
-                    "label": "Enable this option to make email as primary identifier",
+                    "label": "Enable this option to make email or phone as primary identifier",
                     "configKey": "enforceEmailAsPrimary",
                     "default": false,
-                    "note": [
-                      "If this option is enabled, RudderStack will only set a custom attribute _id and email as the primary identifier"
-                    ]
+                    "note": ["Email is prioritized over phone by klaviyo if both are present"]
                   }
                 ]
               }
@@ -151,11 +167,6 @@
                     "configKey": "whitelistedEvents",
                     "tagKey": "eventName",
                     "placeholder": "e.g: Anonymous page visit",
-                    "default": [
-                      {
-                        "eventName": ""
-                      }
-                    ],
                     "preRequisites": {
                       "fields": [
                         {
@@ -172,11 +183,6 @@
                     "configKey": "blacklistedEvents",
                     "tagKey": "eventName",
                     "placeholder": "e.g: Anonymous page visit",
-                    "default": [
-                      {
-                        "eventName": ""
-                      }
-                    ],
                     "preRequisites": {
                       "fields": [
                         {
@@ -205,12 +211,7 @@
                     "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
                     "configKey": "oneTrustCookieCategories",
                     "tagKey": "oneTrustCookieCategory",
-                    "placeholder": "e.g: Credit card visit",
-                    "default": [
-                      {
-                        "oneTrustCookieCategory": ""
-                      }
-                    ]
+                    "placeholder": "e.g: Credit card visit"
                   }
                 ]
               }
