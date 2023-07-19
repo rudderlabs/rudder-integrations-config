@@ -1,34 +1,19 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
     "required": ["trackingID"],
+    "type": "object",
     "properties": {
       "trackingID": {
         "type": "string",
         "pattern": "(^env[.].+)|(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^(UA|YT|MO)-\\d+-\\d{0,100}$)"
       },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "eventFilteringOption": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
       },
-      "doubleClick": { "type": "boolean" },
-      "enhancedLinkAttribution": { "type": "boolean" },
-      "includeSearch": { "type": "boolean" },
-      "enableServerSideIdentify": { "type": "boolean" },
-      "serverSideIdentifyEventCategory": {
-        "type": "string",
-        "pattern": "(^env[.].+)|(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^(.{0,100})$)"
-      },
-      "serverSideIdentifyEventAction": {
-        "type": "string",
-        "pattern": "(^env[.].+)|(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^(.{0,100})$)"
-      },
-      "disableMd5": { "type": "boolean" },
-      "anonymizeIp": { "type": "boolean" },
-      "enhancedEcommerce": { "type": "boolean" },
-      "nonInteraction": { "type": "boolean" },
-      "sendUserId": { "type": "boolean" },
       "whitelistedEvents": {
         "type": "array",
         "items": {
@@ -53,15 +38,18 @@
           }
         }
       },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "doubleClick": { "type": "boolean", "default": false },
+      "enhancedLinkAttribution": { "type": "boolean", "default": false },
+      "includeSearch": { "type": "boolean", "default": false },
       "trackCategorizedPages": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "trackNamedPages": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "useRichEventNames": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "sampleRate": {
         "type": "object",
         "properties": {
           "web": {
             "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^(.{0,100})$)"
           }
         }
       },
@@ -70,7 +58,39 @@
         "properties": {
           "web": {
             "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^(.{0,100})$)"
+          }
+        }
+      },
+      "dimensions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "to": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "metrics": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "to": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
           }
         }
       },
@@ -84,7 +104,7 @@
               "properties": {
                 "resetCustomDimensionsOnPage": {
                   "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^(.{0,100})$)"
                 }
               }
             }
@@ -92,26 +112,6 @@
         }
       },
       "setAllMappedProps": { "type": "object", "properties": { "web": { "type": "boolean" } } },
-      "domain": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^(.{0,100})$)"
-          }
-        }
-      },
-      "optimize": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^(.{0,100})$)"
-          }
-        }
-      },
-      "useGoogleAmpClientId": { "type": "object", "properties": { "web": { "type": "boolean" } } },
-      "namedTracker": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "contentGroupings": {
         "type": "array",
         "items": {
@@ -128,7 +128,41 @@
           }
         }
       },
-      "dimensions": {
+      "enableServerSideIdentify": { "type": "boolean", "default": false },
+      "serverSideIdentifyEventCategory": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^(.{0,100})$)"
+      },
+      "serverSideIdentifyEventAction": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^(.{0,100})$)"
+      },
+      "namedTracker": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "disableMd5": { "type": "boolean", "default": false },
+      "anonymizeIp": { "type": "boolean", "default": false },
+      "domain": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^(.{0,100})$)"
+          }
+        }
+      },
+      "enhancedEcommerce": { "type": "boolean", "default": false },
+      "nonInteraction": { "type": "boolean", "default": false },
+      "optimize": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^(.{0,100})$)"
+          }
+        }
+      },
+      "sendUserId": { "type": "boolean", "default": false },
+      "useGoogleAmpClientId": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "customMappings": {
         "type": "array",
         "items": {
           "type": "object",
@@ -154,6 +188,13 @@
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
+        }
+      },
+      "ketchConsentPurposes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": { "purpose": { "type": "string", "pattern": "^(.{0,100})$" } }
         }
       }
     }
