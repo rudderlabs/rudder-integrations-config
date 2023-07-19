@@ -99,13 +99,21 @@
       "legacyConversionPixelId": {
         "type": "object",
         "properties": {
-          "from": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-          },
-          "to": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "from": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                },
+                "to": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
           }
         }
       },
@@ -163,15 +171,9 @@
         "type": "array",
         "items": {
           "type": "object",
-          "properties": {
-            "purpose": {
-              "type": "string",
-              "pattern": "^(.{0,100})$"
-            }
-          }
+          "properties": { "purpose": { "type": "string", "pattern": "^(.{0,100})$" } }
         }
       }
-    },
-    "additionalProperties": false
+    }
   }
 }
