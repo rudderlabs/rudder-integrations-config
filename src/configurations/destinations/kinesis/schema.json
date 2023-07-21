@@ -1,8 +1,8 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["region", "stream"],
     "type": "object",
-    "required": ["region", "stream", "iamRoleARN"],
     "properties": {
       "region": {
         "type": "string",
@@ -12,7 +12,8 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "roleBasedAuth": { "type": "boolean" },
+      "roleBasedAuth": { "type": "boolean", "default": true },
+      "useMessageId": { "type": "boolean", "default": false },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -33,19 +34,20 @@
           "required": ["roleBasedAuth"]
         },
         "then": {
-          "required": ["iamRoleARN"],
           "properties": {
             "iamRoleARN": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
+            },
+            "roleBasedAuth": { "const": true }
+          },
+          "required": ["iamRoleARN", "roleBasedAuth"]
         }
       },
       {
         "if": {
-          "properties": { "roleBasedAuth": { "const": true } },
-          "required": ["roleBasedAuth", "accessKeyID"]
+          "properties": { "roleBasedAuth": { "const": false } },
+          "required": ["roleBasedAuth"]
         },
         "then": {
           "properties": {
@@ -56,11 +58,12 @@
             "accessKey": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
+            },
+            "roleBasedAuth": { "const": false }
+          },
+          "required": ["accessKeyID", "accessKey"]
         }
       }
-    ],
-    "additionalProperties": true
+    ]
   }
 }
