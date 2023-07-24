@@ -8,30 +8,36 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "captureUncaughtException": { "type": "boolean" },
-      "captureUnhandledRejections": { "type": "boolean" },
-      "guessUncaughtFrames": { "type": "boolean" },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "captureUncaughtException": { "type": "boolean", "default": true },
+      "captureUnhandledRejections": { "type": "boolean", "default": false },
+      "guessUncaughtFrames": { "type": "boolean", "default": false },
       "codeVersion": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "environment": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "ignoredMessages": {
         "type": "array",
         "items": {
           "type": "object",
           "properties": {
-            "eventName": {
+            "singleIgnoredMessage": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
         }
       },
-      "sourceMapEnabled": { "type": "boolean" },
+      "sourceMapEnabled": { "type": "boolean", "default": false },
+      "eventFilteringOption": {
+        "type": "string",
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
+      },
       "whitelistedEvents": {
         "type": "array",
         "items": {
@@ -56,7 +62,6 @@
           }
         }
       },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
