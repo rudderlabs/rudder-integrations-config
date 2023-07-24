@@ -1,9 +1,8 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
-    "additionalProperties": false,
     "required": ["dsn"],
+    "type": "object",
     "properties": {
       "dsn": { "type": "string" },
       "environment": { "type": "string" },
@@ -11,32 +10,60 @@
       "release": { "type": "string" },
       "serverName": { "type": "string" },
       "logger": { "type": "string" },
-      "debugMode": { "type": "boolean" },
       "ignoreErrors": {
         "type": "array",
-        "items": { "type": "object", "properties": { "ignoreErrors": { "type": "string" } } }
+        "items": {
+          "type": "object",
+          "properties": {
+            "ignoreErrors": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
       },
       "includePaths": {
         "type": "array",
-        "items": { "type": "object", "properties": { "includePaths": { "type": "string" } } }
+        "items": {
+          "type": "object",
+          "properties": {
+            "includePaths": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
       },
       "allowUrls": {
         "type": "array",
         "items": {
           "type": "object",
-          "properties": { "allowUrls": { "type": "string", "pattern": "^(?!.*\\.ngrok\\.io).*$" } }
+          "properties": {
+            "allowUrls": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(?!.*\\.ngrok\\.io).*$"
+            }
+          }
         }
       },
       "denyUrls": {
         "type": "array",
         "items": {
           "type": "object",
-          "properties": { "denyUrls": { "type": "string", "pattern": "^(?!.*\\.ngrok\\.io).*$" } }
+          "properties": {
+            "denyUrls": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(?!.*\\.ngrok\\.io).*$"
+            }
+          }
         }
       },
+      "debugMode": { "type": "boolean", "default": false },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "eventFilteringOption": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -62,7 +89,6 @@
           }
         }
       },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -75,6 +101,7 @@
           }
         }
       }
-    }
+    },
+    "additionalProperties": false
   }
 }
