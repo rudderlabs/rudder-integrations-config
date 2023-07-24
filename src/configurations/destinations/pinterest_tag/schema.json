@@ -1,51 +1,17 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": [],
     "type": "object",
     "properties": {
       "tagId": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]*$" },
-      "advertiserId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]*$"
-      },
       "appId": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]*$" },
-      "apiVersion": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(legacyApi|newApi)$"
-      },
-      "adAccountId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]*$"
-      },
-      "conversionToken": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,101})$"
-      },
-      "sendingUnHashedData": { "type": "boolean" },
-      "enableDeduplication": { "type": "boolean" },
-      "deduplicationKey": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "enhancedMatch": { "type": "boolean" },
-      "sendExternalId": { "type": "boolean" },
-      "sendAsCustomEvent": { "type": "boolean" },
-      "eventsMapping": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "from": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "to": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
+      "apiVersion": { "type": "string", "enum": ["legacyApi", "newApi"], "default": "legacyApi" },
+      "sendingUnHashedData": { "type": "boolean", "default": true },
+      "enableDeduplication": { "type": "boolean", "default": false },
+      "enhancedMatch": { "type": "boolean", "default": true },
+      "sendExternalId": { "type": "boolean", "default": false },
+      "sendAsCustomEvent": { "type": "boolean", "default": false },
       "customProperties": {
         "type": "array",
         "items": {
@@ -58,9 +24,38 @@
           }
         }
       },
+      "eventsMapping": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "to": {
+              "type": "string",
+              "enum": [
+                "Lead",
+                "PageVisit",
+                "ViewCategory",
+                "Signup",
+                "WatchVideo",
+                "Checkout",
+                "Search",
+                "AddToCart",
+                "Custom",
+                ""
+              ]
+            }
+          }
+        }
+      },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "eventFilteringOption": {
         "type": "string",
-        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -98,6 +93,54 @@
           }
         }
       }
-    }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": { "apiVersion": { "const": "legacyApi" } },
+          "required": ["apiVersion"]
+        },
+        "then": {
+          "properties": {
+            "advertiserId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]*$"
+            }
+          },
+          "required": []
+        }
+      },
+      {
+        "if": { "properties": { "apiVersion": { "const": "newApi" } }, "required": ["apiVersion"] },
+        "then": {
+          "properties": {
+            "adAccountId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]*$"
+            },
+            "conversionToken": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,101})$"
+            }
+          },
+          "required": ["adAccountId", "conversionToken"]
+        }
+      },
+      {
+        "if": {
+          "properties": { "enableDeduplication": { "const": true } },
+          "required": ["enableDeduplication"]
+        },
+        "then": {
+          "properties": {
+            "deduplicationKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["deduplicationKey"]
+        }
+      }
+    ]
   }
 }
