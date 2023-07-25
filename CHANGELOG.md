@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.43.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.42.2...v1.43.0) (2023-07-24)
+
+
+### Features
+
+* **mixpanel:** add strict mode setting ([#753](https://github.com/rudderlabs/rudder-config-schema/issues/753)) ([626924d](https://github.com/rudderlabs/rudder-config-schema/commit/626924d2597926662d9093698bf20402ee046896))
+* moved adobe analytics to new UI ([#759](https://github.com/rudderlabs/rudder-config-schema/issues/759)) ([fc1569e](https://github.com/rudderlabs/rudder-config-schema/commit/fc1569eab8932586676432f014d0c87333f43119))
+* **stormly:** onboard new destiantion ([#769](https://github.com/rudderlabs/rudder-config-schema/issues/769)) ([f7767ee](https://github.com/rudderlabs/rudder-config-schema/commit/f7767eebef5d03d2a4be47286b5745087ca39a8d))
+* updated db config ([#787](https://github.com/rudderlabs/rudder-config-schema/issues/787)) ([34bb15f](https://github.com/rudderlabs/rudder-config-schema/commit/34bb15f0f85397d6a2cfff2004cc91ca33be7ec5))
+* **intercom:** feat(intercom): add config in dashboard to updateLastRequestAt ([b68bc14](https://github.com/rudderlabs/rudder-config-schema/commit/b68bc1489328cf9dd314a62b0c9a03e7cbbc075d))
+
+### Bug Fixes
+
+* fix schema incosistency ([#697](https://github.com/rudderlabs/rudder-config-schema/issues/697)) ([66e1259](https://github.com/rudderlabs/rudder-config-schema/commit/66e12590d625c879b264e4529f6e6561f3c89408))
+* schema inconsistency ([#761](https://github.com/rudderlabs/rudder-config-schema/issues/761)) ([9c2dfa0](https://github.com/rudderlabs/rudder-config-schema/commit/9c2dfa0ccf17bb0002cff9738dfb4b722771152c))
+
 ### [1.42.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.42.1...v1.42.2) (2023-07-19)
 
 ### [1.42.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.42.0...v1.42.1) (2023-07-14)
