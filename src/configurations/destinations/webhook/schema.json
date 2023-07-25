@@ -1,8 +1,8 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
     "required": ["webhookUrl"],
+    "type": "object",
     "properties": {
       "webhookUrl": {
         "type": "string",
@@ -10,7 +10,8 @@
       },
       "webhookMethod": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^(POST|PUT|PATCH|GET|DELETE)$)"
+        "enum": ["POST", "PUT", "PATCH", "GET", "DELETE"],
+        "default": "POST"
       },
       "headers": {
         "type": "array",
@@ -19,11 +20,11 @@
           "properties": {
             "from": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,1000})$"
             },
             "to": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100000})$"
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,1000})$"
             }
           }
         }
