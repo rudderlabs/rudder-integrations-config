@@ -10,6 +10,7 @@
       "syncFrequency": "30",
       "enableSSE": false,
       "useRudderStorage": false,
+      "roleBasedAuth": false,
       "prefix": "test-prefix",
       "useSTSTokens": false,
       "bucketName": "test-bucket",
@@ -48,6 +49,7 @@
       "syncFrequency": "30",
       "enableSSE": false,
       "useRudderStorage": false,
+      "roleBasedAuth": false,
       "prefix": "test-prefix",
       "useSTSTokens": false,
       "bucketName": "test-bucket"
@@ -57,7 +59,7 @@
       " must have required property 'accessKeyID'",
       " must have required property 'accessKey'",
       " must have required property 'iamRoleARN'",
-      " must have required property 'roleBasedAuth'",
+      "roleBasedAuth must be equal to constant",
       " must match a schema in anyOf",
       " must match \"then\" schema"
     ]
@@ -73,6 +75,7 @@
       "syncFrequency": "30",
       "enableSSE": false,
       "useRudderStorage": false,
+      "roleBasedAuth": false,
       "prefix": "test-prefix",
       "useSTSTokens": false,
       "bucketName": "test-bucket",
@@ -82,7 +85,7 @@
     "err": [
       " must have required property 'accessKey'",
       " must have required property 'iamRoleARN'",
-      " must have required property 'roleBasedAuth'",
+      "roleBasedAuth must be equal to constant",
       " must match a schema in anyOf",
       " must match \"then\" schema"
     ]
@@ -107,6 +110,7 @@
     "err": [
       " must have required property 'accessKeyID'",
       " must have required property 'accessKey'",
+      "roleBasedAuth must be equal to constant",
       " must have required property 'iamRoleARN'",
       " must match a schema in anyOf",
       " must match \"then\" schema"
@@ -124,6 +128,7 @@
       "syncFrequency": "30",
       "enableSSE": false,
       "useRudderStorage": false,
+      "roleBasedAuth": false,
       "prefix": "test-prefix",
       "useSTSTokens": false,
       "bucketName": "test-bucket",
@@ -142,6 +147,8 @@
       "sslMode": "disable",
       "syncFrequency": "30",
       "useRudderStorage": false,
+      "roleBasedAuth": false,
+      "storageIntegration": "gcp_int",
       "prefix": "",
       "cloudProvider": "GCP",
       "bucketName": "test-bucket",
@@ -166,6 +173,10 @@
       "sslMode": "disable",
       "syncFrequency": "30",
       "useRudderStorage": false,
+      "roleBasedAuth": false,
+      "sasToken": "sas-token",
+      "useSASTokens": false,
+      "storageIntegration": "gcp_int",
       "cloudProvider": "AZURE",
       "containerName": "test-container",
       "accountName": "test-account-name",
@@ -184,7 +195,9 @@
       "sslMode": "disable",
       "syncFrequency": "30",
       "useRudderStorage": false,
+      "roleBasedAuth": false,
       "cloudProvider": "AZURE",
+      "storageIntegration": "gcp_int",
       "containerName": "test-container",
       "accountName": "test-account-name",
       "accountKey": "test-azure-account-key",
@@ -204,7 +217,9 @@
       "sslMode": "disable",
       "syncFrequency": "30",
       "useRudderStorage": false,
+      "roleBasedAuth": false,
       "cloudProvider": "AZURE",
+      "storageIntegration": "gcp_int",
       "containerName": "test-container",
       "accountName": "test-account-name",
       "accountKey": "",
@@ -224,7 +239,9 @@
       "sslMode": "disable",
       "syncFrequency": "30",
       "useRudderStorage": false,
+      "roleBasedAuth": false,
       "cloudProvider": "AZURE",
+      "storageIntegration": "gcp_int",
       "containerName": "test-container",
       "accountName": "test-account-name",
       "accountKey": "test-azure-account-key",
@@ -244,6 +261,8 @@
       "sslMode": "disable",
       "syncFrequency": "30",
       "useRudderStorage": false,
+      "roleBasedAuth": false,
+      "storageIntegration": "gcp_int",
       "cloudProvider": "AZURE",
       "containerName": "test-container",
       "accountName": "test-account-name",
@@ -264,6 +283,8 @@
       "sslMode": "disable",
       "syncFrequency": "30",
       "useRudderStorage": false,
+      "roleBasedAuth": false,
+      "storageIntegration": "gcp_int",
       "cloudProvider": "AZURE",
       "containerName": "test-container",
       "accountName": "test-account-name",
@@ -289,6 +310,8 @@
       "cloudProvider": "AWS",
       "enableSSE": false,
       "useRudderStorage": false,
+      "roleBasedAuth": false,
+      "storageIntegration": "gcp_int",
       "prefix": "test-prefix",
       "useSTSTokens": false,
       "syncFrequency": "30",
@@ -298,7 +321,7 @@
     },
     "result": false,
     "err": [
-      "bucketName must match pattern \"(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$\"",
+      "bucketName must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$\"",
       " must match \"then\" schema"
     ]
   },
@@ -312,9 +335,11 @@
       "sslMode": "disable",
       "syncFrequency": "30",
       "useRudderStorage": false,
+      "roleBasedAuth": false,
       "prefix": "test-prefix",
       "cloudProvider": "GCP",
       "bucketName": "test..bucket",
+      "storageIntegration": "gcp_int",
       "endPoint": "",
       "useSSL": true,
       "credentials": "{}",
@@ -326,7 +351,7 @@
     },
     "result": false,
     "err": [
-      "bucketName must match pattern \"(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$\"",
+      "bucketName must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$\"",
       " must match \"then\" schema"
     ]
   },
@@ -340,16 +365,20 @@
       "sslMode": "disable",
       "syncFrequency": "30",
       "useRudderStorage": false,
+      "roleBasedAuth": false,
       "prefix": "test-prefix",
       "cloudProvider": "AZURE",
       "containerName": "test--container",
       "accountName": "test-account-name",
+      "useSASTokens": true,
+      "storageIntegration": "gcp_int",
+      "sasToken": "sas-token",
       "accountKey": "test-azure-account-key",
       "useSSL": true
     },
     "result": false,
     "err": [
-      "containerName must match pattern \"(^env[.].+)|^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$\"",
+      "containerName must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$\"",
       " must match \"then\" schema"
     ]
   }

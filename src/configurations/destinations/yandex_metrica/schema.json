@@ -1,17 +1,17 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
     "required": ["tagId"],
+    "type": "object",
     "properties": {
       "tagId": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "clickMap": { "type": "boolean" },
-      "trackLinks": { "type": "boolean" },
-      "trackBounce": { "type": "boolean" },
-      "webvisor": { "type": "boolean" },
+      "clickMap": { "type": "boolean", "default": false },
+      "trackLinks": { "type": "boolean", "default": false },
+      "trackBounce": { "type": "boolean", "default": false },
+      "webvisor": { "type": "boolean", "default": false },
       "containerName": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
@@ -25,20 +25,19 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "to": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
+            "to": { "type": "string", "enum": ["detail", "add", "remove", "purchase", ""] }
           }
         }
-      },
-      "eventFilteringOption": {
-        "type": "string",
-        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
       },
       "goalId": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+      },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "eventFilteringOption": {
+        "type": "string",
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -64,7 +63,6 @@
           }
         }
       },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
