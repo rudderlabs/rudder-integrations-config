@@ -1,8 +1,8 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
     "required": ["publicApiKey", "privateApiKey"],
+    "type": "object",
     "properties": {
       "publicApiKey": {
         "type": "string",
@@ -16,20 +16,19 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "enforceEmailAsPrimary": { "type": "boolean" },
       "consent": {
         "type": "array",
         "items": {
           "type": "string",
-          "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-        }
+          "enum": ["email", "sms"]
+        },
+        "default": ["email"]
       },
-      "sendPageAsTrack": { "type": "boolean" },
-      "additionalPageInfo": { "type": "boolean" },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "enforceEmailAsPrimary": { "type": "boolean", "default": false },
       "eventFilteringOption": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -66,6 +65,13 @@
             }
           }
         }
+      },
+      "sendPageAsTrack": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "additionalPageInfo": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "connectionMode": {
+        "type": "object",
+        "properties": { "web": { "type": "string", "enum": ["cloud", "device"] } }
       }
     }
   }
