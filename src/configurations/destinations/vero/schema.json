@@ -1,9 +1,13 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
     "required": [],
+    "type": "object",
     "properties": {
+      "authToken": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,150})$"
+      },
       "apiKey": {
         "type": "object",
         "properties": {
@@ -13,7 +17,12 @@
           }
         }
       },
-      "authToken": { "type": "string" },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "eventFilteringOption": {
+        "type": "string",
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
+      },
       "whitelistedEvents": {
         "type": "array",
         "items": {
@@ -38,7 +47,6 @@
           }
         }
       },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {

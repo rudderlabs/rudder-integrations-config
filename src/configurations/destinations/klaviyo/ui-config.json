@@ -1,165 +1,235 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Public API Key",
-          "value": "publicApiKey",
-          "inputFieldType": "text",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "required": true,
-          "placeholder": "e.g. WPqij9",
-          "footerNote": "Your Public API Key",
-          "secret": false
-        },
-        {
-          "type": "textInput",
-          "label": "Private API Key",
-          "value": "privateApiKey",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "required": true,
-          "placeholder": "e.g. c59e3838",
-          "secret": true,
-          "footerNote": "Your Private API Key"
-        },
-        {
-          "type": "textInput",
-          "label": "List Id",
-          "value": "listId",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-          "required": false,
-          "placeholder": "e.g. c59e3838",
-          "secret": true,
-          "footerNote": "The default list that you'd like to subscribe and add users to when you call .identify()"
-        },
-        {
-          "type": "checkbox",
-          "label": "Enable this option to make email or phone as primary identifier",
-          "value": "enforceEmailAsPrimary",
-          "default": false,
-          "footerNote": "Email is prioritized over phone by klaviyo if both are present"
-        },
-        {
-          "type": "singleSelect",
-          "label": "Consent",
-          "value": "consent",
-          "mode": "multiple",
-          "options": [
-            {
-              "name": "E-mail",
-              "value": "email"
-            },
-            {
-              "name": "SMS",
-              "value": "sms"
-            }
-          ],
-          "defaultOption": {
-            "name": "E-Mail",
-            "value": "email"
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection Settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Public API Key",
+                    "configKey": "publicApiKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "placeholder": "e.g. WPqij9",
+                    "regexErrorMessage": "Invalid Public API Key",
+                    "note": "Your Public API Key",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Private API Key",
+                    "note": "Your Private API Key",
+                    "configKey": "privateApiKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Private API Key",
+                    "placeholder": "e.g: QuIUHRj7QhG2L7eZDZiPQU",
+                    "secret": true
+                  }
+                ]
+              }
+            ]
           },
-          "required": false
-        },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "List and subscription settings",
+                "note": "Update your list settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "List Id",
+                    "note": "The default list that you'd like to subscribe and add users to when you call .identify()",
+                    "configKey": "listId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid List Id",
+                    "placeholder": "e.g: c59e3838",
+                    "secret": true
+                  },
+                  {
+                    "type": "multiSelect",
+                    "label": "Consent",
+                    "configKey": "consent",
+                    "note": "Select the identifiers for which you want to provide consent",
+                    "options": [
+                      {
+                        "label": "E-mail",
+                        "value": "email"
+                      },
+                      {
+                        "label": "SMS",
+                        "value": "sms"
+                      }
+                    ],
+                    "default": ["email"]
+                  }
+                ]
+              },
+              {
+                "title": "Event specific settings",
+                "note": "Update your event specific settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Enable this option to make email or phone as primary identifier",
+                    "configKey": "enforceEmailAsPrimary",
+                    "default": false,
+                    "note": ["Email is prioritized over phone by klaviyo if both are present"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Client-side event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.webDevice",
+                      "value": true
+                    }
+                  ]
+                },
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on events filtering:",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
+                      {
+                        "label": "No events filtering",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack’s OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": [
         {
           "type": "checkbox",
           "label": "Send Page As Track",
-          "value": "sendPageAsTrack",
-          "default": false
+          "configKey": "sendPageAsTrack",
+          "default": false,
+          "note": ["Enable this option if you wish sending page events as track events"]
         },
         {
           "type": "checkbox",
           "label": "Additional Page info",
-          "value": "additionalPageInfo",
-          "default": false
-        }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": false
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
+          "configKey": "additionalPageInfo",
+          "default": false,
+          "note": ["Add additional properties for the page events by enabling this field"]
         }
       ]
     }
-  ]
+  }
 }
