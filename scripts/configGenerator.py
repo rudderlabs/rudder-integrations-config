@@ -1,7 +1,11 @@
+from typing import TypedDict
+
 import json
 import os
 
-def generateConfigs(data):
+ConfigData = TypedDict('ConfigData', {'db_config': str, 'ui_config': str})
+
+def generateConfigs(data) -> ConfigData:
     # Read the content of template-db-config.json
     with open('scripts/template-db-config.json', 'r') as file:
         template_db_config = json.load(file)
@@ -56,7 +60,7 @@ def generateConfigs(data):
                     db_config['config']['destConfig']['defaultConfig'][-1])
 
     db_config = json.dumps(db_config)
-    return [db_config, ui_config]
+    return {'db_config':db_config, 'ui_config': ui_config}
 
 
 if __name__ == '__main__':
