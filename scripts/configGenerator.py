@@ -32,6 +32,7 @@ def generateConfigs(data) -> ConfigData:
             if groups:
                 first_group = groups[0]
                 if "fields" in first_group:
+                    del field['required']
                     first_group["fields"].append(field)
 
 
