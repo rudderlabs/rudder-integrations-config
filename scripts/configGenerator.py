@@ -66,7 +66,7 @@ def generateConfigs(data) -> ConfigData:
 
 
 if __name__ == '__main__':
-    file_path = sys.argv[1]
+    file_path = sys.argv[1] if len(sys.argv) > 1 else 'oscontrib/inputFile.json'
     with open(file_path, 'r') as file:
         # Load the JSON data
         data = json.load(file)
