@@ -2,6 +2,7 @@ from typing import TypedDict
 
 import json
 import os
+import sys
 
 ConfigData = TypedDict('ConfigData', {'db_config': str, 'ui_config': str})
 
@@ -65,7 +66,8 @@ def generateConfigs(data) -> ConfigData:
 
 
 if __name__ == '__main__':
-    with open('scripts/data.json', 'r') as file:
+    file_path = sys.argv[1]
+    with open(file_path, 'r') as file:
         # Load the JSON data
         data = json.load(file)
 
