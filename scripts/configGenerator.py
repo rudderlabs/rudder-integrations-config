@@ -60,6 +60,7 @@ def generateConfigs(data) -> ConfigData:
                     db_config['config']['destConfig']['defaultConfig'][-1])
 
     db_config = json.dumps(db_config)
+    ui_config = json.dumps(ui_config)
     return {'db_config':db_config, 'ui_config': ui_config}
 
 
@@ -80,11 +81,10 @@ if __name__ == '__main__':
 
 
     file_path = f'src/configurations/destinations/{data["displayName"]}/ui-config.json'
-    ui_config = json.dumps(configData['ui_config'])
     directory = os.path.dirname(file_path)
     if not os.path.exists(directory):
         os.makedirs(directory)
 
     with open(file_path, 'w') as file:
         # Write the new content
-        file.write(ui_config)
+        file.write(configData['ui_config'])

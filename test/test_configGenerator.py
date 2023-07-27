@@ -23,7 +23,7 @@ class TestConfigGenerator(unittest.TestCase):
     def test_config_generator(self):
         result = generateConfigs(input_data)
         self.assertEqual(result['db_config'], json.dumps(db_config)) 
-        self.assertEqual(json.dumps(result['ui_config']), json.dumps(ui_config))
+        self.assertEqual(result['ui_config'], json.dumps(ui_config))
 
 if __name__ == '__main__':
     unittest.main()
