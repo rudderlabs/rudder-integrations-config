@@ -541,65 +541,31 @@
         },
         {
           "type": "checkbox",
-          "label": "Set Device ID From URL Parameter",
-          "note": "Set the device ID by parsing the URL parameter from amp_device_ID",
-          "configKey": "deviceIdFromUrlParam",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Force HTTPS",
-          "note": "Upload events to the HTTPS endpoint instead of the embedding site’s protocol",
-          "configKey": "forceHttps",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Track GCLID",
-          "note": "Capture GCLID URL parameters along with the user’s initial_gclid parameters",
-          "configKey": "trackGclid",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Track referrer information",
-          "note": "Capture the user’s referrer, initial referrer, and referring domain as user properties",
-          "configKey": "trackReferrer",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Track UTM properties",
-          "note": "Capture UTM parameters as user properties by either parsing the query string or from the _utmz cookie",
-          "configKey": "trackUtmProperties",
+          "label": "Disable Attribution",
+          "note": "Disable the attribution tracking",
+          "configKey": "attribution",
           "default": true
         },
         {
           "type": "checkbox",
           "label": "Save Referrer, URL Params, GCLID only once per session",
           "note": "Track GCLID, referrer, and UTM parameters only once per session, ignoring any new values which may enter a user’s session",
-          "configKey": "saveParamsReferrerOncePerSession",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Reset referrer or UTM params for new sessions",
-          "note": "Set referrer and utm_parameter properties to null upon instantiating a new session; otherwise, existing referrer and utm_parameter values will be passed to each new session",
-          "configKey": "unsetParamsReferrerOnNewSession",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Batch events prior to upload",
-          "note": "Batch events to upload only after the number of queued events is greater than or equal to eventUploadThreshold, or after events to upload after eventUploadPeriodMillis milliseconds have passed since the first unsent event",
-          "configKey": "batchEvents",
-          "default": false
+          "configKey": "trackNewCampaigns",
+          "default": true,
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "attribution",
+                "value": false
+              }
+            ]
+          }
         },
         {
           "type": "textInput",
           "label": "Batch event upload period (ms)",
           "note": "Set the time limit (in ms) between batch uploads",
-          "configKey": "eventUploadPeriodMillis",
+          "configKey": "flushIntervalMillis",
           "default": "30000",
           "regex": "^([0-9]{0,100})$",
           "regexErrorMessage": "Invalid Value",
@@ -609,7 +575,7 @@
           "type": "textInput",
           "label": "Batch event upload threshold",
           "note": "Set the minimum number of events to be sent in a batch",
-          "configKey": "eventUploadThreshold",
+          "configKey": "flushQueueSize",
           "regex": "^([0-9]{0,100})$",
           "regexErrorMessage": "Invalid Value",
           "default": "30",
