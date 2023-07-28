@@ -19,6 +19,7 @@ def generateConfigs(data) -> ConfigData:
     db_config = template_db_config
 
     db_config['displayName'] = data['displayName']
+    db_config['name'] = data['displayName']
     formFields = data['formFields']
 
     # Create db-config object with the same content
@@ -67,7 +68,7 @@ def generateConfigs(data) -> ConfigData:
 
 
 if __name__ == '__main__':
-    file_path = sys.argv[1] if len(sys.argv) > 1 else 'oscontrib/inputFile.json'
+    file_path = sys.argv[1] if len(sys.argv) > 1 else 'test/configData/inputData.json'
     with open(file_path, 'r') as file:
         # Load the JSON data
         data = json.load(file)

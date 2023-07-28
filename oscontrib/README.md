@@ -4,11 +4,16 @@ Thanks for taking the time for contributing to this project!
 
 ## How you can contribute a destination to this project
 
-To contribute a destination, you need to provide the all the required data for all the fields you want as the settings to configure the destination.
+To contribute a destination, you need to provide all the required data for all the fields you want as the settings to configure the destination.
 
 ## How you can provide your destination connection setting details
 
-You can checkout the sample input file [**here**](https://github.com/rudderlabs/rudder-integrations-config/blob/config-generator-script/oscontrib/inputFile.json):
+You can checkout the sample input file [**here**](https://github.com/rudderlabs/rudder-integrations-config/blob/config-generator-script/test/configData/inputData.json):
+
+For the above input data, the UI will look like as shown below:
+
+![](./connectionSettings.svg)
+![](./configurationSettings.svg)
 
 In the input file, you need to provide the destination name you want to display in the UI in the displayName field.
 
@@ -25,6 +30,16 @@ Description of Keys inside each JSON object:
 | placeholder   | This is the the placeholder for this field                                             |
 | secret        | You can provide true as a value to make this field as secret or false                  |
 | preRequisites | You can add the configKey and value if you there is a preRequiste field for this field |
+
+The input field types that you can add are:
+
+| type         | Description                                                               |
+| ------------ | ------------------------------------------------------------------------- |
+| textInput    | This is a simple field for adding text inputs                             |
+| checkbox     | This is used for boolean values (true or false)                           |
+| singleSelect | This is used for choosing one of the option from a set of defined options |
+| multiSelect  | This is used for choosing multiple options from a set of defined options  |
+| tagInput     | This can be used to add multiple text inputs for a field                  |
 
 You can also contribute to any open-source RudderStack project. View our [**GitHub page**](https://github.com/rudderlabs) to see all the different projects.
 
