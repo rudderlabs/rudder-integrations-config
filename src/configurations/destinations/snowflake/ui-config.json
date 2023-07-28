@@ -7,7 +7,7 @@
           "type": "textInput",
           "label": "Account",
           "value": "account",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Account",
           "placeholder": "e.g: qya54180.us-east-1",
           "required": true
@@ -16,7 +16,7 @@
           "type": "textInput",
           "label": "Database",
           "value": "database",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Database",
           "placeholder": "e.g: RUDDER_EVENTS",
           "required": true
@@ -25,7 +25,7 @@
           "type": "textInput",
           "label": "Warehouse",
           "value": "warehouse",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Database",
           "placeholder": "e.g: RUDDER_WAREHOUSE",
           "required": true
@@ -34,7 +34,7 @@
           "type": "textInput",
           "label": "User",
           "value": "user",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid User",
           "placeholder": "e.g: RUDDER_USER",
           "required": true
@@ -43,7 +43,7 @@
           "type": "textInput",
           "label": "Role",
           "value": "role",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+          "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Role",
           "placeholder": "e.g: RUDDER_ROLE",
           "required": false
@@ -52,7 +52,7 @@
           "type": "textInput",
           "label": "Password",
           "value": "password",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
+          "regex": ".*",
           "placeholder": "e.g: RUDDER_PASSWORD",
           "required": true,
           "secret": true
@@ -62,7 +62,7 @@
           "label": "Namespace",
           "labelNote": "Schema name for the warehouse where the tables are created",
           "value": "namespace",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+          "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
           "regexErrorMessage": "Invalid Namespace",
           "required": false,
           "placeholder": "e.g: RUDDER_NAMESPACE",
@@ -102,7 +102,7 @@
             "name": "Every 30 minutes",
             "value": "30"
           },
-          "required": true
+          "required": false
         },
         {
           "type": "timePicker",
@@ -139,7 +139,7 @@
           "label": "JSON columns (Optional)",
           "labelNote": "Specify required JSON properties in dot notation separated by commas",
           "value": "jsonPaths",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.*)$",
+          "regex": "^(.*)$",
           "placeholder": "e.g: testMap.nestedMap, testArray",
           "required": false,
           "footerURL": {
@@ -157,8 +157,7 @@
           "label": "Use RudderStack managed object storage",
           "value": "useRudderStorage",
           "default": false,
-          "footerNote": "Note: Only available for RudderStack managed data planes",
-          "required": true
+          "footerNote": "Note: Only available for RudderStack managed data planes"
         },
         {
           "type": "singleSelect",
@@ -203,7 +202,7 @@
           "label": "Staging S3 Storage Bucket Name",
           "labelNote": "S3 Bucket to store data before loading into Snowflake",
           "value": "bucketName",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
+          "regex": "^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
           "regexErrorMessage": "Invalid Staging S3 Storage Bucket Name",
           "placeholder": "e.g: s3-event-logs",
           "required": true,
@@ -224,7 +223,7 @@
           "label": "Staging GCS Object Storage Bucket Name",
           "labelNote": "GCS Bucket to store data before loading into Snowflake",
           "value": "bucketName",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$",
+          "regex": "^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$",
           "regexErrorMessage": "Invalid Staging GCS Object Storage Bucket Name",
           "required": true,
           "placeholder": "e.g: gcs-event-logs",
@@ -245,7 +244,7 @@
           "label": "Staging Azure Blob Storage Container Name",
           "labelNote": "Container to store data before loading into Snowflake",
           "value": "containerName",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$",
+          "regex": "^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$",
           "regexErrorMessage": "Invalid Staging Azure Blob Storage Container Name",
           "required": true,
           "placeholder": "e.g: azure-event-logs",
@@ -255,7 +254,7 @@
           "type": "textInput",
           "label": "Prefix",
           "value": "prefix",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+          "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Prefix",
           "required": false,
           "placeholder": "e.g: rudder",
@@ -278,7 +277,7 @@
           ],
           "label": "Storage Integration",
           "value": "storageIntegration",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+          "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Storage Integration",
           "placeholder": "e.g: aws_int",
           "footerURL": {
@@ -300,7 +299,7 @@
           ],
           "label": "Storage Integration",
           "value": "storageIntegration",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Storage Integration",
           "required": true,
           "placeholder": "e.g: gcs_int",
@@ -323,7 +322,7 @@
           ],
           "label": "Storage Integration",
           "value": "storageIntegration",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Storage Integration",
           "required": true,
           "placeholder": "e.g: azure_int",
@@ -366,7 +365,7 @@
           ],
           "label": "IAM Role ARN",
           "value": "iamRoleARN",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Role ARN",
           "required": true,
           "placeholder": "e.g: arn:aws:iam::123456789012:role/S3Access",
@@ -393,7 +392,7 @@
           ],
           "label": "AWS Access Key ID",
           "value": "accessKeyID",
-          "regex": "^(.{1,100})$",
+          "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid AWS Access Key ID",
           "required": true,
           "placeholder": "e.g: access-key-id",
@@ -417,7 +416,7 @@
           ],
           "label": "AWS Secret Access Key",
           "value": "accessKey",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid AWS Secret Access Key",
           "required": true,
           "placeholder": "e.g: secret-access-key",
@@ -453,7 +452,7 @@
           ],
           "label": "Azure Blob Storage Account Name",
           "value": "accountName",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Azure Blob Storage Account Name",
           "required": true,
           "placeholder": "e.g: account-name"
@@ -476,7 +475,7 @@
           ],
           "label": "Azure Blob Storage Account Key",
           "value": "accountKey",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Azure Blob Storage Account Key",
           "required": true,
           "secret": true,
@@ -500,7 +499,7 @@
           ],
           "label": "Azure Blob Storage SAS Token",
           "value": "sasToken",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.+)$",
+          "regex": "^(.+)$",
           "regexErrorMessage": "Invalid Azure Blob Storage SAS Token",
           "required": true,
           "placeholder": "e.g: sas-token",
@@ -538,7 +537,7 @@
           "label": "Credentials",
           "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your Google Cloud Storage",
           "value": "credentials",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
+          "regex": ".*",
           "required": true,
           "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'storage.objectCreator'"
         }
@@ -556,7 +555,6 @@
               "type": "textInput",
               "placeholder": "Marketing",
               "value": "oneTrustCookieCategory",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
               "label": "Category Name/ID",
               "required": false
             }

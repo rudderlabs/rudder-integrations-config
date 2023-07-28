@@ -1,8 +1,8 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["bucketName"],
     "type": "object",
+    "required": ["bucketName"],
     "properties": {
       "bucketName": {
         "type": "string",
@@ -12,8 +12,13 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "roleBasedAuth": { "type": "boolean", "default": true },
-      "enableSSE": { "type": "boolean", "default": false },
+      "iamRoleARN": { "type": "string" },
+      "roleBasedAuth": { "type": "boolean" },
+      "accessKeyID": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "enableSSE": { "type": "boolean" },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -26,44 +31,6 @@
           }
         }
       }
-    },
-    "allOf": [
-      {
-        "if": {
-          "properties": { "roleBasedAuth": { "const": true } },
-          "required": ["roleBasedAuth"]
-        },
-        "then": {
-          "properties": {
-            "iamRoleARN": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "roleBasedAuth": { "const": true }
-          },
-          "required": ["roleBasedAuth"]
-        }
-      },
-      {
-        "if": {
-          "properties": { "roleBasedAuth": { "const": false } },
-          "required": ["roleBasedAuth"]
-        },
-        "then": {
-          "properties": {
-            "accessKeyID": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "accessKey": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "roleBasedAuth": { "const": false }
-          },
-          "required": []
-        }
-      }
-    ]
+    }
   }
 }
