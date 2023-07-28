@@ -1,6 +1,7 @@
 {
   "configSchema": {
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
     "required": [
       "account",
       "database",
@@ -10,52 +11,67 @@
       "syncFrequency",
       "useRudderStorage"
     ],
-    "type": "object",
     "properties": {
       "account": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "pattern": "(^env[.].+)|^(.{1,100})$"
       },
       "database": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "pattern": "(^env[.].+)|^(.{1,100})$"
       },
       "warehouse": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "pattern": "(^env[.].+)|^(.{1,100})$"
       },
       "user": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "pattern": "(^env[.].+)|^(.{1,100})$"
       },
       "role": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "pattern": "(^env[.].*)|^(.{0,100})$"
       },
-      "password": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*" },
+      "password": {
+        "type": "string",
+        "pattern": "(^env[.].+)|.+"
+      },
       "namespace": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
+        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
       },
       "syncFrequency": {
         "type": "string",
-        "enum": ["30", "60", "180", "360", "720", "1440"],
+        "pattern": "^(30|60|180|360|720|1440)$",
         "default": "30"
       },
-      "syncStartAt": { "type": "string" },
+      "syncStartAt": {
+        "type": "string"
+      },
       "excludeWindow": {
         "type": "object",
+        "required": ["excludeWindowStartTime", "excludeWindowEndTime"],
         "properties": {
-          "excludeWindowStartTime": { "type": "string" },
-          "excludeWindowEndTime": { "type": "string" }
-        },
-        "required": ["excludeWindowStartTime", "excludeWindowEndTime"]
+          "excludeWindowStartTime": {
+            "type": "string"
+          },
+          "excludeWindowEndTime": {
+            "type": "string"
+          }
+        }
       },
       "jsonPaths": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.*)$"
+        "pattern": "(^env[.].*)|.*"
       },
-      "useRudderStorage": { "type": "boolean", "default": false },
+      "useRudderStorage": {
+        "type": "boolean",
+        "default": false
+      },
+      "cloudProvider": {
+        "type": "string",
+        "pattern": "^(AWS|GCP|AZURE)$"
+      },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -67,41 +83,61 @@
             }
           }
         }
-      },
-      "ketchConsentPurposes": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": { "purpose": { "type": "string", "pattern": "^(.{0,100})$" } }
+      }
+    },
+    "ketchConsentPurposes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "purpose": {
+            "type": "string",
+            "pattern": "^(.{0,100})$"
+          }
         }
       }
     },
     "allOf": [
       {
         "if": {
-          "properties": { "useRudderStorage": { "const": false } },
+          "properties": {
+            "useRudderStorage": {
+              "const": false
+            }
+          },
           "required": ["useRudderStorage"]
         },
         "then": {
-          "properties": {
-            "cloudProvider": {
-              "type": "string",
-              "enum": ["AWS", "GCP", "AZURE"],
-              "default": "AWS"
-            },
-            "prefix": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          },
           "required": ["cloudProvider"]
         }
       },
       {
         "if": {
           "properties": {
-            "cloudProvider": { "const": "AWS" },
-            "useRudderStorage": { "const": false }
+            "useRudderStorage": {
+              "const": false
+            }
+          },
+          "required": ["useRudderStorage"]
+        },
+        "then": {
+          "properties": {
+            "prefix": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "cloudProvider": {
+              "const": "AWS"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
           },
           "required": ["cloudProvider", "useRudderStorage"]
         },
@@ -109,37 +145,26 @@
           "properties": {
             "bucketName": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
+              "pattern": "(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
             },
-            "storageIntegration": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "roleBasedAuth": { "type": "boolean", "default": true },
-            "enableSSE": { "type": "boolean", "default": false }
+            "enableSSE": {
+              "type": "boolean"
+            }
           },
           "required": ["bucketName"],
           "anyOf": [
             {
+              "type": "object",
               "properties": {
-                "accessKeyID": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-                },
-                "accessKey": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-                },
-                "roleBasedAuth": { "const": false }
+                "accessKeyID": { "type": "string", "pattern": "(^env[.].+)|^(.{0,100})$" },
+                "accessKey": { "type": "string", "pattern": "(^env[.].+)|^(.{0,100})$" }
               },
               "required": ["accessKeyID", "accessKey"]
             },
             {
+              "type": "object",
               "properties": {
-                "iamRoleARN": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-                },
+                "iamRoleARN": { "type": "string" },
                 "roleBasedAuth": { "const": true }
               },
               "required": ["iamRoleARN", "roleBasedAuth"]
@@ -150,8 +175,12 @@
       {
         "if": {
           "properties": {
-            "cloudProvider": { "const": "GCP" },
-            "useRudderStorage": { "const": false }
+            "cloudProvider": {
+              "const": "GCP"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
           },
           "required": ["cloudProvider", "useRudderStorage"]
         },
@@ -159,25 +188,28 @@
           "properties": {
             "bucketName": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$"
-            },
-            "storageIntegration": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+              "pattern": "(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$"
             },
             "credentials": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
+              "pattern": "(^env[.].+)|.+"
+            },
+            "storageIntegration": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
             }
-          },
-          "required": ["bucketName", "storageIntegration", "credentials"]
+          }
         }
       },
       {
         "if": {
           "properties": {
-            "cloudProvider": { "const": "AZURE" },
-            "useRudderStorage": { "const": false }
+            "cloudProvider": {
+              "const": "AZURE"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
           },
           "required": ["cloudProvider", "useRudderStorage"]
         },
@@ -185,27 +217,24 @@
           "properties": {
             "containerName": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$"
-            },
-            "storageIntegration": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+              "pattern": "(^env[.].+)|^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$"
             },
             "accountName": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+              "pattern": "(^env[.].+)|^(.{1,100})$"
             },
-            "useSASTokens": { "type": "boolean", "default": false }
+            "storageIntegration": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
+            }
           },
-          "required": ["containerName", "storageIntegration", "accountName"],
           "anyOf": [
             {
               "properties": {
                 "accountKey": {
                   "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-                },
-                "useSASTokens": { "const": false }
+                  "pattern": "(^env[.].+)|^(.{1,100})$"
+                }
               },
               "required": ["accountKey"]
             },
@@ -213,15 +242,18 @@
               "properties": {
                 "sasToken": {
                   "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.+)$"
+                  "pattern": "(^env[.].+)|^(.+)$"
                 },
-                "useSASTokens": { "const": true }
+                "useSASTokens": {
+                  "const": true
+                }
               },
               "required": ["sasToken", "useSASTokens"]
             }
           ]
         }
       }
-    ]
+    ],
+    "additionalProperties": true
   }
 }

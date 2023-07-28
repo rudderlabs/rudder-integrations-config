@@ -1,8 +1,8 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["clientId", "clientSecret", "accountId", "audienceType", "audienceId"],
     "type": "object",
+    "required": ["clientId", "clientSecret", "audienceId", "accountId"],
     "properties": {
       "clientId": {
         "type": "string",
@@ -12,20 +12,17 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "accountId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
-      },
-      "audienceType": {
-        "type": "string",
-        "enum": ["EMAIL", "DEVICE_ID", "IP_ADDRESS"],
-        "default": "EMAIL"
-      },
       "audienceId": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
       },
-      "hashRequired": { "type": "boolean", "default": true },
+      "accountId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+      },
+      "audienceType": { "type": "string", "pattern": "^(EMAIL|DEVICE_ID|IP_ADDRESS)$" },
+      "seedListType": { "type": "string", "pattern": "^(GPADVID|IDFA)$" },
+      "hashRequired": { "type": "boolean" },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -38,20 +35,6 @@
           }
         }
       }
-    },
-    "anyOf": [
-      {
-        "if": {
-          "properties": { "audienceType": { "const": "DEVICE_ID" } },
-          "required": ["audienceType"]
-        },
-        "then": {
-          "properties": {
-            "seedListType": { "type": "string", "enum": ["GPADVID", "IDFA"], "default": "GPADVID" }
-          },
-          "required": ["seedListType"]
-        }
-      }
-    ]
+    }
   }
 }
