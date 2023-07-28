@@ -8,12 +8,27 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
-      "recordLiveChatEvents": { "type": "boolean", "default": false },
+      "recordLiveChatEvents": { "type": "boolean" },
+      "updateEventNames": { "type": "boolean" },
+      "eventsToStandard": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "to": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
       "eventFilteringOption": {
         "type": "string",
-        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
-        "default": "disable"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -51,55 +66,6 @@
           }
         }
       }
-    },
-    "allOf": [
-      {
-        "if": {
-          "properties": { "recordLiveChatEvents": { "const": true } },
-          "required": ["recordLiveChatEvents"]
-        },
-        "then": {
-          "properties": { "updateEventNames": { "type": "boolean", "default": false } },
-          "required": []
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "recordLiveChatEvents": { "const": true },
-            "updateEventNames": { "const": true }
-          },
-          "required": ["recordLiveChatEvents", "updateEventNames"]
-        },
-        "then": {
-          "properties": {
-            "eventsToStandard": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "from": {
-                    "type": "string",
-                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                  },
-                  "to": {
-                    "type": "string",
-                    "enum": [
-                      "startChat",
-                      "close",
-                      "chatMessageSent",
-                      "chatMessageReceived",
-                      "inlineButtonClicked",
-                      ""
-                    ]
-                  }
-                }
-              }
-            }
-          },
-          "required": []
-        }
-      }
-    ]
+    }
   }
 }
