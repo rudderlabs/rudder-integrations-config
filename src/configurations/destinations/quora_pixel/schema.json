@@ -1,8 +1,8 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["pixelId"],
     "type": "object",
+    "required": ["pixelId"],
     "properties": {
       "pixelId": {
         "type": "string",
@@ -19,27 +19,14 @@
             },
             "to": {
               "type": "string",
-              "enum": [
-                "Generic",
-                "Purchase",
-                "GenerateLead",
-                "CompleteRegistration",
-                "AddPaymentInfo",
-                "AddToCart",
-                "AddToWishlist",
-                "InitiateCheckout",
-                "Search",
-                "Custom",
-                ""
-              ]
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
         }
       },
       "eventFilteringOption": {
         "type": "string",
-        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
-        "default": "disable"
+        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
       },
       "whitelistedEvents": {
         "type": "array",
