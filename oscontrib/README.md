@@ -12,8 +12,9 @@ You can checkout the sample input file [**here**](https://github.com/rudderlabs/
 
 For the above input data, the UI will look like as shown below:
 
-![](./connectionSettings.svg)
-![](./configurationSettings.svg)
+<img width="1303" alt="connectionSettings" src="https://github.com/rudderlabs/rudder-integrations-config/assets/63387036/ee28b3fe-5a81-4289-9f6a-54cf5abe0f4c">
+<img width="1292" alt="configurationSettings" src="https://github.com/rudderlabs/rudder-integrations-config/assets/63387036/ce765f0f-b680-46ca-b46d-ed58e39a7667">
+
 
 In the input file, you need to provide the destination name you want to display in the UI in the displayName field.
 
