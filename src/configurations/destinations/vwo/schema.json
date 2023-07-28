@@ -1,21 +1,28 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["accountId"],
     "type": "object",
+    "required": ["accountId"],
     "properties": {
       "accountId": {
         "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "isSPA": { "type": "boolean" },
+      "sendExperimentTrack": { "type": "boolean" },
+      "sendExperimentIdentify": { "type": "boolean" },
+      "libraryTolerance": {
+        "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "isSPA": { "type": "boolean", "default": false },
-      "sendExperimentTrack": { "type": "boolean", "default": false },
-      "sendExperimentIdentify": { "type": "boolean", "default": false },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "settingsTolerance": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "useExistingJquery": { "type": "boolean" },
       "eventFilteringOption": {
         "type": "string",
-        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
-        "default": "disable"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^(disable|whitelistedEvents|blacklistedEvents)$)"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -41,15 +48,7 @@
           }
         }
       },
-      "libraryTolerance": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "settingsTolerance": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "useExistingJquery": { "type": "boolean", "default": false },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
