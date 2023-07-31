@@ -1,24 +1,68 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": [],
     "type": "object",
     "properties": {
+      "authorizationType": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(legacyApiKey|newPrivateAppApi)$"
+      },
       "hubID": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "authorizationType": {
+      "apiKey": {
         "type": "string",
-        "enum": ["legacyApiKey", "newPrivateAppApi"],
-        "default": "legacyApiKey"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "apiVersion": { "type": "string", "enum": ["legacyApi", "newApi"], "default": "legacyApi" },
+      "accessToken": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "apiVersion": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(legacyApi|newApi)$"
+      },
+      "lookupField": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "hubspotEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "rsEventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "hubspotEventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "eventProperties": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "from": {
+                    "type": "string",
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  },
+                  "to": {
+                    "type": "string",
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "eventFilteringOption": {
         "type": "string",
-        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
-        "default": "disable"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -56,83 +100,6 @@
           }
         }
       }
-    },
-    "allOf": [
-      {
-        "if": {
-          "properties": { "authorizationType": { "const": "legacyApiKey" } },
-          "required": ["authorizationType"]
-        },
-        "then": {
-          "properties": {
-            "apiKey": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            }
-          },
-          "required": ["apiKey"]
-        }
-      },
-      {
-        "if": {
-          "properties": { "authorizationType": { "const": "newPrivateAppApi" } },
-          "required": ["authorizationType"]
-        },
-        "then": {
-          "properties": {
-            "accessToken": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            }
-          },
-          "required": ["accessToken"]
-        }
-      },
-      {
-        "if": { "properties": { "apiVersion": { "const": "newApi" } }, "required": ["apiVersion"] },
-        "then": {
-          "properties": {
-            "lookupField": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            },
-            "doAssociation": { "type": "boolean", "default": false },
-            "hubspotEvents": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "rsEventName": {
-                    "type": "string",
-                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                  },
-                  "hubspotEventName": {
-                    "type": "string",
-                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                  },
-                  "eventProperties": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "from": {
-                          "type": "string",
-                          "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                        },
-                        "to": {
-                          "type": "string",
-                          "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "required": ["lookupField"]
-        }
-      }
-    ]
+    }
   }
 }
