@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.43.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.43.1...v1.43.2) (2023-08-01)
+
+
+### Bug Fixes
+
+* **ga4:** firebaseAppId config field issue ([3d1bccc](https://github.com/rudderlabs/rudder-config-schema/commit/3d1bccc3a06d70c5052347c51e4bb34865529727))
+
 ### [1.43.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.43.0...v1.43.1) (2023-07-28)
 
 ## [1.43.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.42.2...v1.43.0) (2023-07-24)
