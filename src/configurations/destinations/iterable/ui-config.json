@@ -1,291 +1,486 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings:",
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "One click checkout",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Iterable Api Key",
+                    "configKey": "apiKey",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Iterable Api Key",
+                    "placeholder": "e.g: 42f187310705012194bd0bd694905664ae"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Package Name",
+                    "configKey": "packageName",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid package name",
+                    "note": "Iterable package name. Applicable to device mode only",
+                    "placeholder": "e.g: my-website"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Page and Screen settings",
+                "note": "Set how you want to send your page and screen calls to Iterable",
+                "icon": "file",
+                "fields": [
+                  {
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "type": "checkbox",
+                    "label": "Map All Pages to Single Event Name",
+                    "configKey": "mapToSingleEvent",
+                    "default": true
+                  },
+                  {
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "type": "checkbox",
+                    "label": "Track All Pages",
+                    "configKey": "trackAllPages",
+                    "default": false
+                  },
+                  {
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "type": "checkbox",
+                    "label": "Track Categorised Pages",
+                    "configKey": "trackCategorisedPages",
+                    "default": true
+                  },
+                  {
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "type": "checkbox",
+                    "label": "Track Named Pages",
+                    "configKey": "trackNamedPages",
+                    "default": true
+                  }
+                ]
+              },
+              {
+                "title": "Identify and Track settings",
+                "icon": "magnifyingGlass",
+                "note": "Configure your Identify and Track calls properties settings here",
+                "fields": [
+                  {
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "type": "textInput",
+                    "label": "Iterable Mobile/Web Api Key",
+                    "configKey": "registerDeviceOrBrowserApiKey",
+                    "placeholder": "e.g: 42f187310705012194bd0bd694905664ae",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Iterable Mobile/Web Api Key",
+                    "note": "Iterable mobile/web key is required when you are sending token information in an identify call. RudderStack will use this key for registerDevice or registerBrowser api call"
+                  },
+                  {
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "type": "checkbox",
+                    "label": "Create new user if userID exists",
+                    "configKey": "preferUserId",
+                    "default": true,
+                    "note": [
+                      "For more information about preferUserId refer ",
+                      {
+                        "text": "this",
+                        "link": "https://api.iterable.com/api/docs#users_updateUser"
+                      },
+                      " link"
+                    ]
+                  },
+                  {
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "type": "checkbox",
+                    "label": "Merge top-level objects",
+                    "configKey": "mergeNestedObjects",
+                    "default": true,
+                    "note": [
+                      "For more information about mergeNestedObjects refer ",
+                      {
+                        "text": "this",
+                        "link": "https://api.iterable.com/api/docs#users_updateUser"
+                      },
+                      " link"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Client-side event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.webDevice",
+                      "value": true
+                    },
+                    {
+                      "configKey": "connectionModes.mobileDevice",
+                      "value": true
+                    }
+                  ],
+                  "condition": "or"
+                },
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on events filtering:",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
+                      {
+                        "label": "Disabled",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack’s OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
       "fields": [
         {
-          "type": "textInput",
-          "label": "Iterable Api Key",
-          "value": "apiKey",
-          "required": true,
-          "placeholder": "e.g: 42f187310705012194bd0bd694905664ae",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "regexErrorMessage": "Invalid Iterable Api Key"
-        }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": true
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "getInAppEventMapping",
+          "type": "tagInput",
           "label": "Mapping to trigger the getInApp messages",
-          "customFields": [
+          "configKey": "getInAppEventMapping",
+          "tagKey": "eventName",
+          "default": [
             {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Trigger inApp"
+              "eventName": ""
             }
           ],
-          "footerNote": "Set the event names for which you want to trigger the web in-app push events"
+          "note": "Set the event names for which you want to trigger the web in-app push events"
         },
         {
-          "type": "dynamicCustomForm",
-          "value": "purchaseEventMapping",
+          "type": "tagInput",
           "label": "Mapping to trigger the purchase events",
-          "customFields": [
+          "configKey": "purchaseEventMapping",
+          "tagKey": "eventName",
+          "default": [
             {
-              "type": "textInput",
-              "value": "eventName",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "required": false,
-              "placeholder": "e.g: Trigger purchase"
+              "eventName": ""
             }
           ],
-          "footerNote": "Set the event names for which you want to trigger the purchase events"
+          "note": "Set the event names for which you want to trigger the purchase events"
         },
         {
           "type": "singleSelect",
           "label": "Identifier to identify a user over a session",
-          "value": "initialisationIdentifier",
+          "configKey": "initialisationIdentifier",
           "options": [
             {
-              "name": "Email",
+              "label": "Email",
               "value": "email"
             },
             {
-              "name": "UserID",
+              "label": "UserID",
               "value": "userId"
             }
           ],
-          "defaultOption": {
-            "name": "Email",
-            "value": "email"
-          }
+          "default": "email"
         },
         {
           "type": "checkbox",
           "label": "Trigger a track event for web in-app push",
-          "value": "sendTrackForInapp",
+          "configKey": "sendTrackForInapp",
           "default": false,
-          "footerNote": "Enable this if you want to track web in-app push notifications."
-        },
-        {
-          "type": "textInput",
-          "label": "Package Name",
-          "value": "packageName",
-          "required": true,
-          "placeholder": "e.g: my-website"
+          "note": "Enable this if you want to track web in-app push notifications"
         },
         {
           "type": "textInput",
           "label": "Time (in ms) for messages to animate in and out",
-          "value": "animationDuration",
-          "required": false,
+          "configKey": "animationDuration",
           "placeholder": "e.g: 400"
         },
         {
           "type": "textInput",
-          "label": "Space (px or %) between screen bottom & messages.",
-          "value": "bottomOffset",
-          "required": false,
+          "label": "Space (px or %) between screen bottom & messages",
+          "configKey": "bottomOffset",
           "placeholder": "e.g: 20%",
-          "footerNote": "Set the spacing between the screen bottom and push notification pop-up. This is not applicable for center, top, or full-screen messages"
+          "note": "Set the spacing between the screen bottom and push notification pop-up. This is not applicable for center, top, or full-screen messages"
         },
         {
           "type": "textInput",
-          "label": "Space (px or %) between screen right & messages.",
-          "value": "rightOffset",
-          "required": false,
+          "label": "Space (px or %) between screen right & messages",
+          "configKey": "rightOffset",
           "placeholder": "e.g: 20%",
-          "footerNote": "Set the spacing between the screen right and push notification pop-up. This is not applicable for center, top, or full-screen messages."
+          "note": "Set the spacing between the screen right and push notification pop-up. This is not applicable for center, top, or full-screen messages"
         },
         {
           "type": "textInput",
-          "label": "Space (px or %) between screen top & messages.",
-          "value": "topOffset",
-          "required": false,
+          "label": "Space (px or %) between screen top & messages",
+          "configKey": "topOffset",
           "placeholder": "e.g: 20%",
-          "footerNote": "Set the spacing between the screen top and push notification pop-up. This is not applicable for center, top, or full-screen messages."
+          "note": "Set the spacing between the screen top and push notification pop-up. This is not applicable for center, top, or full-screen messages"
         },
         {
           "type": "textInput",
           "label": "Wait time for next message",
-          "value": "displayInterval",
-          "required": false,
+          "configKey": "displayInterval",
           "placeholder": "e.g: 25000",
-          "footerNote": "Time (in ms) to wait before showing next in-app message after closing the currently opened one."
+          "note": "Time (in ms) to wait before showing next in-app message after closing the currently opened one"
         },
         {
           "type": "singleSelect",
-          "label": "Control how to open links.",
-          "value": "handleLinks",
-          "required": false,
+          "label": "Control how to open links",
+          "configKey": "handleLinks",
+          "note": "Set how do you want the links present in the push notification to open",
           "options": [
             {
-              "name": "Open all in new tabs",
+              "label": "Open all in new tabs",
               "value": "open-all-new-tab"
             },
             {
-              "name": "Open all in same tabs",
+              "label": "Open all in same tabs",
               "value": "open-all-same-tab"
             },
             {
-              "name": "Open in external new tab",
+              "label": "Open in external new tab",
               "value": "external-new-tab"
             }
           ],
-          "footerNote": "Set how do you want the links present in the push notification to open."
+          "default": "open-all-new-tab"
         },
         {
           "type": "textInput",
           "label": "Screen Reader Text",
-          "value": "onOpenScreenReaderMessage",
-          "required": false,
+          "configKey": "onOpenScreenReaderMessage",
           "placeholder": "e.g: Reader message here",
-          "footerNote": "Text that screen reader should use to announce when opening in-app messages."
+          "note": "Text that screen reader should use to announce when opening in-app messages"
         },
         {
           "type": "textInput",
           "label": "Focus Element",
-          "value": "onOpenNodeToTakeFocus",
-          "required": false,
+          "configKey": "onOpenNodeToTakeFocus",
           "placeholder": "e.g: input",
-          "footerNote": "Specify the DOM element to take keyboard focus when the in-app message opens."
+          "note": "Specify the DOM element to take keyboard focus when the in-app message opens"
         },
         {
           "type": "textInput",
           "label": "Color of Close button",
-          "value": "closeButtonColor",
-          "required": false,
+          "configKey": "closeButtonColor",
           "placeholder": "e.g: cyan"
         },
         {
-          "type": "textInput",
-          "label": "Size of Close button",
-          "value": "closeButtonSize",
-          "required": false,
-          "placeholder": "e.g: 24"
-        },
-        {
-          "type": "textInput",
-          "label": "Position",
-          "value": "closeButtonPosition",
-          "required": false,
-          "footerNote": "Cross button's position relative to the in-app message.",
+          "type": "singleSelect",
+          "label": "Position of Close button",
+          "configKey": "closeButtonPosition",
+          "note": "Cross button's position relative to the in-app message",
           "options": [
             {
-              "name": "Top Right",
-              "value": "otop-right"
+              "label": "Top Right",
+              "value": "top-right"
             },
             {
-              "name": "Top Left",
+              "label": "Top Left",
               "value": "top-left"
             }
-          ]
+          ],
+          "default": "top-right"
         },
         {
           "type": "textInput",
           "label": "Space between button & container top",
-          "value": "closeButtonColorTopOffset",
-          "required": false,
+          "configKey": "closeButtonColorTopOffset",
           "placeholder": "e.g: 4%",
-          "footerNote": "Set the spacing between the cross button and the pop-up notification's top border"
+          "note": "Set the spacing between the cross button and the pop-up notification's top border"
         },
         {
           "type": "textInput",
           "label": "Space between button & container side",
-          "value": "closeButtonColorSideOffset",
-          "required": false,
+          "configKey": "closeButtonColorSideOffset",
           "placeholder": "e.g: 4%",
-          "footerNote": "Set the spacing between the cross button and the pop-up notification's side borders"
+          "note": "Set the spacing between the cross button and the pop-up notification's side borders"
         },
         {
           "type": "textInput",
           "label": "Custom pathname",
-          "value": "iconPath",
-          "required": false,
+          "configKey": "iconPath",
           "placeholder": "e.g: path/to/icon",
-          "footerNote": "image or SVG to show instead of the default X"
+          "note": "image or SVG to show instead of the default X"
         },
         {
           "type": "checkbox",
           "label": "Prevent user dismissing in-app message by clicking outside message",
-          "value": "isRequiredToDismissMessage",
-          "default": false
-        }
-      ]
-    },
-    {
-      "title": "Other Settings",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Map All Pages to Single Event Name",
-          "value": "mapToSingleEvent",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Track All Pages",
-          "value": "trackAllPages",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Track Categorised Pages",
-          "value": "trackCategorisedPages",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Track Named Pages",
-          "value": "trackNamedPages",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Create new user if userID exists",
-          "value": "preferUserId",
-          "footerNote": "For more information refer preferUserId in this link https://api.iterable.com/api/docs#users_updateUser",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Merge top-level objects",
-          "value": "mergeNestedObjects",
-          "footerNote": "For more information refer mergeNestedObjects in this link https://api.iterable.com/api/docs#users_updateUser",
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
+          "configKey": "isRequiredToDismissMessage"
         }
       ]
     }
-  ]
+  }
 }
