@@ -1,8 +1,8 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["accessToken"],
     "type": "object",
+    "required": ["accessToken"],
     "properties": {
       "accessToken": {
         "type": "string",
@@ -19,12 +19,12 @@
             },
             "to": {
               "type": "string",
-              "enum": ["CompletePayment", "Contact", "SubmitForm", "Subscribe", ""]
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
         }
       },
-      "hashUserProperties": { "type": "boolean", "default": true },
+      "hashUserProperties": { "type": "boolean" },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {

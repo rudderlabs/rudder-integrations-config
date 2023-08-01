@@ -1,8 +1,8 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["pixelId"],
     "type": "object",
+    "required": ["pixelId"],
     "properties": {
       "pixelId": {
         "type": "string",
@@ -19,7 +19,7 @@
             },
             "to": {
               "type": "string",
-              "enum": ["lead", "product", "addtocart", "checkout", "purchase", ""]
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
         }
@@ -27,8 +27,7 @@
       "enableAliasCall": { "type": "boolean", "default": false },
       "eventFilteringOption": {
         "type": "string",
-        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
-        "default": "disable"
+        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
       },
       "whitelistedEvents": {
         "type": "array",
