@@ -17,8 +17,6 @@ import argparse
 
 CONFIG_DIR = 'src/configurations'
 
-EXCLUDED_DEST = ['postgres']
-
 class FieldTypeEnum(Enum):
     STRING = "string"
     OBJECT = "object"
@@ -1004,8 +1002,7 @@ def get_schema_diff(name, selector):
     uiConfig = file_content.get("uiConfig")
     schema = file_content.get("configSchema")
     dbConfig = file_content.get("config")
-    if name not in EXCLUDED_DEST:
-        validate_config_consistency(name, selector, uiConfig, dbConfig, schema)
+    validate_config_consistency(name, selector, uiConfig, dbConfig, schema)
 
 
 if __name__ == '__main__':
