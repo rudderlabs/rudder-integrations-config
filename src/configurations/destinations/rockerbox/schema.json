@@ -1,17 +1,35 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["advertiserId"],
     "type": "object",
+    "required": ["advertiserId"],
     "properties": {
-      "advertiserId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      "advertiserId": { "type": "string" },
+      "clientAuthId": { "type": "object", "properties": { "web": { "type": "string" } } },
+      "customDomain": {
+        "type": "object",
+        "properties": { "web": { "type": "string", "pattern": "^(?!.*\\.ngrok\\.io).*$" } }
+      },
+      "enableCookieSync": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "eventsMap": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "to": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
       },
       "eventFilteringOption": {
         "type": "string",
-        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
-        "default": "disable"
+        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -37,6 +55,8 @@
           }
         }
       },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "useNativeSDKToSend": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -48,46 +68,6 @@
             }
           }
         }
-      },
-      "eventsMap": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "from": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "to": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "clientAuthId": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-          }
-        }
-      },
-      "customDomain": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(?!.*\\.ngrok\\.io).*$"
-          }
-        }
-      },
-      "enableCookieSync": { "type": "object", "properties": { "web": { "type": "boolean" } } },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
-      "connectionMode": {
-        "type": "object",
-        "properties": { "web": { "type": "string", "enum": ["cloud", "device", "hybrid"] } }
       }
     }
   }

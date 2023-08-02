@@ -1,42 +1,26 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["apiKey"],
     "type": "object",
+    "required": ["apiKey"],
     "properties": {
-      "apiKey": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[a-zA-Z0-9_]*$"
-      },
-      "apiSecret": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[a-zA-Z0-9]*$"
-      },
+      "apiKey": { "type": "string" },
+      "apiSecret": { "type": "string" },
       "sessionEventList": {
         "type": "array",
         "items": {
           "type": "object",
           "properties": {
-            "sessionEventName": {
+            "eventName": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
         }
       },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "android": { "type": "boolean" },
-          "ios": { "type": "boolean" },
-          "reactnative": { "type": "boolean" },
-          "cordova": { "type": "boolean" }
-        }
-      },
       "eventFilteringOption": {
         "type": "string",
-        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
-        "default": "disable"
+        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -61,6 +45,10 @@
             }
           }
         }
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": { "android": { "type": "boolean" }, "ios": { "type": "boolean" } }
       },
       "oneTrustCookieCategories": {
         "type": "array",
