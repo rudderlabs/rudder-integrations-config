@@ -160,6 +160,7 @@ export function validateSourceType(sourceDefinition: any) {
     'amp',
     'flutter',
     'cordova',
+    'shopify',
   ];
   return validSourceTypes.includes(sourceDefinition?.type);
 }

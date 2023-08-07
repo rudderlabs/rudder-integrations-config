@@ -1,8 +1,8 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["apiKey", "clientKey"],
     "type": "object",
+    "required": ["apiKey", "clientKey"],
     "properties": {
       "apiKey": {
         "type": "string",
@@ -12,10 +12,16 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
-      "doi": { "type": "boolean", "default": false },
-      "sendTraitsInTrack": { "type": "boolean", "default": false },
-      "contactAttributeMapping": {
+      "doi": { "type": "boolean" },
+      "templateId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*?)\\}\\}$)|(^env[.].+)|^[0-9]+$|^$"
+      },
+      "redirectionUrl": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$|^$"
+      },
+      "keyToContactAttributeMapping": {
         "type": "array",
         "items": {
           "type": "object",
@@ -31,10 +37,10 @@
           }
         }
       },
+      "sendTraitsInTrack": { "type": "boolean" },
       "eventFilteringOption": {
         "type": "string",
-        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
-        "default": "disable"
+        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -60,6 +66,7 @@
           }
         }
       },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -72,24 +79,6 @@
           }
         }
       }
-    },
-    "anyOf": [
-      {
-        "if": { "properties": { "doi": { "const": true } }, "required": ["doi"] },
-        "then": {
-          "properties": {
-            "templateId": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
-            },
-            "redirectionUrl": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
-            }
-          },
-          "required": ["redirectionUrl"]
-        }
-      }
-    ]
+    }
   }
 }
