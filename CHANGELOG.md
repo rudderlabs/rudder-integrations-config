@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.44.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.44.0...v1.44.1) (2023-08-08)
+
+
+### Bug Fixes
+
+* remove validation for sendPageAsTrack & additionalPageInfo fields ([#816](https://github.com/rudderlabs/rudder-config-schema/issues/816)) ([ceac681](https://github.com/rudderlabs/rudder-config-schema/commit/ceac681f34dc74ea148cd67c702ae2e5cd0bfddc))
+
 ## [1.44.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.43.2...v1.44.0) (2023-08-07)
 
 
