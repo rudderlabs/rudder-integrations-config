@@ -1,30 +1,20 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
-    "additionalProperties": false,
     "required": ["address"],
+    "type": "object",
     "properties": {
       "address": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$"
       },
       "password": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*" },
-      "clusterMode": { "type": "boolean" },
-      "secure": { "type": "boolean" },
+      "clusterMode": { "type": "boolean", "default": true },
+      "secure": { "type": "boolean", "default": false },
       "prefix": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "database": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "caCertificate": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
-      },
-      "skipVerify": { "type": "boolean" },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -37,6 +27,33 @@
           }
         }
       }
-    }
+    },
+    "allOf": [
+      {
+        "if": { "properties": { "clusterMode": { "const": false } }, "required": ["clusterMode"] },
+        "then": {
+          "properties": {
+            "database": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          },
+          "required": []
+        }
+      },
+      {
+        "if": { "properties": { "secure": { "const": true } }, "required": ["secure"] },
+        "then": {
+          "properties": {
+            "skipVerify": { "type": "boolean", "default": false },
+            "caCertificate": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
+            }
+          },
+          "required": []
+        }
+      }
+    ]
   }
 }
