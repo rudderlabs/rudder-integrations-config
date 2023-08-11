@@ -158,103 +158,6 @@
                     "default": false
                   }
                 ]
-              },
-              {
-                "title": "RudderStack Page Name/Category to Optimizely event mappings",
-                "preRequisites": {
-                  "fields": [
-                    {
-                      "configKey": "connectionModes.cloud",
-                      "value": true
-                    }
-                  ]
-                },
-                "fields": [
-                  {
-                    "type": "mapping",
-                    "labelLeft": "RudderStack Page Name/Category",
-                    "labelRight": "Optimizely Event Name",
-                    "keyLeft": "from",
-                    "keyRight": "to",
-                    "placeholderLeft": "e.g Index",
-                    "placeholderRight": "e.g Viewed Home Page",
-                    "configKey": "pageMapping",
-                    "default": [],
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "trackCategorizedPages",
-                          "value": true
-                        },
-                        {
-                          "configKey": "trackNamedPages",
-                          "value": true
-                        }
-                      ],
-                      "condition": "or"
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "groups": [
-              {
-                "title": "Track settings",
-                "icon": "magnifyingGlass",
-                "preRequisites": {
-                  "fields": [
-                    {
-                      "configKey": "connectionModes.cloud",
-                      "value": true
-                    }
-                  ]
-                },
-                "fields": [
-                  {
-                    "type": "mapping",
-                    "labelLeft": "RudderStack Event Name",
-                    "labelRight": "Optimizely Event Name",
-                    "label": "RudderStack to Optimizely event mappings",
-                    "keyLeft": "from",
-                    "keyRight": "to",
-                    "placeholderLeft": "e.g Product Searched",
-                    "placeholderRight": "e.g Searched",
-                    "configKey": "eventMapping",
-                    "default": []
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "groups": [
-              {
-                "title": "Attribute mappings",
-                "icon": "sliders",
-                "preRequisites": {
-                  "fields": [
-                    {
-                      "configKey": "connectionModes.cloud",
-                      "value": true
-                    }
-                  ]
-                },
-                "fields": [
-                  {
-                    "type": "mapping",
-                    "labelLeft": "RudderStack Attribute Name",
-                    "labelRight": "Optimizely Attribute Name",
-                    "label": "RudderStack to Optimizely attribute mappings",
-                    "keyLeft": "from",
-                    "keyRight": "to",
-                    "placeholderLeft": "e.g firstName",
-                    "placeholderRight": "e.g first_name",
-                    "configKey": "attributeMapping",
-                    "default": []
-                  }
-                ]
               }
             ]
           },
@@ -481,6 +384,55 @@
             ]
           }
         ]
+      },
+      {
+        "title": "Event mapping",
+        "note": "Map RudderStack to Optimizely events",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "RudderStack to Optimizely mappings",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.cloud",
+                      "value": true
+                    }
+                  ]
+                },
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "customEventMapping",
+                    "label": "RudderStack to Optimizely event and attribute mappings",
+                    "note": "Map your RudderStack events/attributes to Optimizely custom events/attributes"
+                  },
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "pageEventMapping",
+                    "label": "RudderStack Page Name/Category to Optimizely event mappings",
+                    "note": "Map your RudderStack page name/Category to Optimizely custom events",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "trackCategorizedPages",
+                          "value": true
+                        },
+                        {
+                          "configKey": "trackNamedPages",
+                          "value": true
+                        }
+                      ],
+                      "condition": "or"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     ],
     "sdkTemplate": {
@@ -501,6 +453,89 @@
           "default": true
         }
       ]
+    },
+    "redirectGroups": {
+      "customEventMapping": {
+        "tabs": [
+          {
+            "name": "Custom events",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map your RudderStack events to Optimizely events",
+                "note": "Map RudderStack events/properties to Optimizely custom events/properties using either our mapping interface or JSON text editor.  Learn more about mappings in our docs.",
+                "configKey": "eventMapping",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "RudderStack Event",
+                    "placeholder": "e.g: Product Searched"
+                  },
+                  {
+                    "type": "textInput",
+                    "key": "to",
+                    "label": "Optimizely Event",
+                    "placeholder": "e.g: Searched"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Custom attributes",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map your RudderStack attributes to Optimizely attributes",
+                "note": "Map RudderStack attributes to Optimizely custom attributes using either our mapping interface or JSON text editor.  Learn more about mappings in our docs.",
+                "configKey": "attributeMapping",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "RudderStack Attribute",
+                    "placeholder": "e.g: firstName"
+                  },
+                  {
+                    "type": "textInput",
+                    "key": "to",
+                    "label": "Optimizely Attribute",
+                    "placeholder": "e.g: first_name"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "pageEventMapping": {
+        "fields": [
+          {
+            "type": "mapping",
+            "label": "Map your RudderStack Page Name/Category to Optimizely events",
+            "note": "Map RudderStack Page Name/Category to Optimizely events using either our mapping interface or JSON text editor.  Learn more about mappings in our docs.",
+            "configKey": "pageMapping",
+            "default": [],
+            "columns": [
+              {
+                "type": "textInput",
+                "key": "from",
+                "label": "RudderStack Page Name/Category",
+                "placeholder": "e.g: Index"
+              },
+              {
+                "type": "textInput",
+                "key": "to",
+                "label": "Optimizely Event",
+                "placeholder": "e.g: Viewed Home Page"
+              }
+            ]
+          }
+        ]
+      }
     }
   }
 }
