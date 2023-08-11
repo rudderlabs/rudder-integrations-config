@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.44.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.44.1...v1.44.2) (2023-08-11)
+
+
+### Bug Fixes
+
+* updated optimizely_fullstack uiConfig to match the latest mapping component structure ([#821](https://github.com/rudderlabs/rudder-config-schema/issues/821)) ([7ceba92](https://github.com/rudderlabs/rudder-config-schema/commit/7ceba92661263dcc084d444e6e1d222a32344884))
+
 ### [1.44.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.44.0...v1.44.1) (2023-08-08)
 
 
