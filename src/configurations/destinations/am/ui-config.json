@@ -551,21 +551,13 @@
           "label": "Save Referrer, URL Params, GCLID only once per session",
           "note": "Track GCLID, referrer, and UTM parameters only once per session, ignoring any new values which may enter a user’s session",
           "configKey": "trackNewCampaigns",
-          "default": true,
-          "preRequisites": {
-            "fields": [
-              {
-                "configKey": "attribution",
-                "value": false
-              }
-            ]
-          }
+          "default": true
         },
         {
           "type": "textInput",
           "label": "Batch event upload period (ms)",
           "note": "Set the time limit (in ms) between batch uploads",
-          "configKey": "flushIntervalMillis",
+          "configKey": "eventUploadPeriodMillis",
           "default": "30000",
           "regex": "^([0-9]{0,100})$",
           "regexErrorMessage": "Invalid Value",
@@ -575,7 +567,7 @@
           "type": "textInput",
           "label": "Batch event upload threshold",
           "note": "Set the minimum number of events to be sent in a batch",
-          "configKey": "flushQueueSize",
+          "configKey": "eventUploadThreshold",
           "regex": "^([0-9]{0,100})$",
           "regexErrorMessage": "Invalid Value",
           "default": "30",
