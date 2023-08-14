@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.45.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.44.2...v1.45.0) (2023-08-14)
+
+
+### Features
+
+* **zendesk:** add source name setting ([#825](https://github.com/rudderlabs/rudder-config-schema/issues/825)) ([51329cc](https://github.com/rudderlabs/rudder-config-schema/commit/51329ccdfcc97d3f0b0f99be76acb99ef4270b43))
+
 ### [1.44.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.44.1...v1.44.2) (2023-08-11)
 
 
