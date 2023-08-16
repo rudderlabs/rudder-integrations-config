@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.44.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.44.1...v1.44.2) (2023-08-11)
+
+
+### Bug Fixes
+
+* updated optimizely_fullstack uiConfig to match the latest mapping component structure ([#821](https://github.com/rudderlabs/rudder-config-schema/issues/821)) ([7ceba92](https://github.com/rudderlabs/rudder-config-schema/commit/7ceba92661263dcc084d444e6e1d222a32344884))
+
+### [1.44.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.44.0...v1.44.1) (2023-08-08)
+
+
+### Bug Fixes
+
+* remove validation for sendPageAsTrack & additionalPageInfo fields ([#816](https://github.com/rudderlabs/rudder-config-schema/issues/816)) ([ceac681](https://github.com/rudderlabs/rudder-config-schema/commit/ceac681f34dc74ea148cd67c702ae2e5cd0bfddc))
+
+## [1.44.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.43.2...v1.44.0) (2023-08-07)
+
+
+### Features
+
+* create config generator script for os contribution ([#742](https://github.com/rudderlabs/rudder-config-schema/issues/742)) ([4d65441](https://github.com/rudderlabs/rudder-config-schema/commit/4d6544160dd14fdcb17806ba8f619d54e87a0fd0))
+* customerio option to send page name ([#789](https://github.com/rudderlabs/rudder-config-schema/issues/789)) ([c68062b](https://github.com/rudderlabs/rudder-config-schema/commit/c68062b3e72594b9b878324a6ef749114adacc15))
+* enhancement adding purchase event for track call ([#810](https://github.com/rudderlabs/rudder-config-schema/issues/810)) ([51b77b7](https://github.com/rudderlabs/rudder-config-schema/commit/51b77b79f196854acf3455b83c6a010ccf8aec5a))
+* new source type shopify changes ([#729](https://github.com/rudderlabs/rudder-config-schema/issues/729)) ([c0475c3](https://github.com/rudderlabs/rudder-config-schema/commit/c0475c3f0d3c29dc8d1c3d8394ed9f4f4e7061ae))
+* update klaviyo ui to new UI layout ([#493](https://github.com/rudderlabs/rudder-config-schema/issues/493)) ([97b6b8f](https://github.com/rudderlabs/rudder-config-schema/commit/97b6b8fd7e48cc8ea92d0a618075dd5e4fd91828))
+
+
+### Bug Fixes
+
+* include sendPageNameInSDK in includeKeys array ([#809](https://github.com/rudderlabs/rudder-config-schema/issues/809)) ([a7b3159](https://github.com/rudderlabs/rudder-config-schema/commit/a7b3159c55f8016a1cf6ebefb75f4896907f686a))
+
 ### [1.43.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.43.1...v1.43.2) (2023-08-01)
 
 
