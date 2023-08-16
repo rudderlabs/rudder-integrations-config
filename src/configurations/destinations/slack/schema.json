@@ -1,13 +1,9 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["webhookUrl"],
     "type": "object",
     "properties": {
-      "webhookUrl": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})"
-      },
-      "identifyTemplate": { "type": "string" },
       "eventChannelSettings": {
         "type": "array",
         "items": {
@@ -21,9 +17,13 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "eventRegex": { "type": "boolean" }
+            "eventRegex": { "type": "boolean", "default": false }
           }
         }
+      },
+      "identifyTemplate": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,1000})$"
       },
       "eventTemplateSettings": {
         "type": "array",
@@ -38,9 +38,13 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,1000})$"
             },
-            "eventRegex": { "type": "boolean" }
+            "eventRegex": { "type": "boolean", "default": false }
           }
         }
+      },
+      "webhookUrl": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$"
       },
       "whitelistedTraitsSettings": {
         "type": "array",
@@ -49,7 +53,7 @@
           "properties": {
             "trait": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})"
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
         }
