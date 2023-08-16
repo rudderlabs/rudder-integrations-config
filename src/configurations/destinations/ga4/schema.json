@@ -1,10 +1,11 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
     "required": [
-      "measurementId"
+      "apiSecret",
+      "typesOfClient"
     ],
+    "type": "object",
     "properties": {
       "apiSecret": {
         "type": "string",
@@ -12,72 +13,24 @@
       },
       "typesOfClient": {
         "type": "string",
-        "pattern": "(^env[.].+)|^(gtag|firebase)$"
+        "enum": [
+          "gtag",
+          "firebase"
+        ],
+        "default": "gtag"
       },
-      "measurementId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(G-.{1,100})$|^$"
-      },
-      "firebaseAppId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      "debugMode": {
+        "type": "boolean",
+        "default": false
       },
       "eventFilteringOption": {
         "type": "string",
-        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
-      },
-      "capturePageView": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "pattern": "(^env[.].+)|^(rs|gtag)$"
-          }
-        }
-      },
-      "extendPageViewParams": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "overrideClientAndSessionId": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "debugMode": {
-        "type": "boolean"
-      },
-      "debugView": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "connectionMode": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "pattern": "^(cloud|device|hybrid)$"
-          },
-          "ios": {
-            "type": "string",
-            "pattern": "^(cloud|device)$"
-          },
-          "android": {
-            "type": "string",
-            "pattern": "^(cloud|device)$"
-          }
-        }
+        "enum": [
+          "disable",
+          "whitelistedEvents",
+          "blacklistedEvents"
+        ],
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -103,14 +56,6 @@
           }
         }
       },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -122,7 +67,133 @@
             }
           }
         }
+      },
+      "capturePageView": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "enum": [
+              "rs",
+              "gtag"
+            ],
+            "default": "rs"
+          }
+        }
+      },
+      "debugView": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "extendPageViewParams": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "overrideClientAndSessionId": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "boolean"
+          },
+          "ios": {
+            "type": "boolean"
+          },
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "string",
+            "enum": [
+              "cloud",
+              "device"
+            ]
+          },
+          "ios": {
+            "type": "string",
+            "enum": [
+              "cloud",
+              "device"
+            ]
+          },
+          "web": {
+            "type": "string",
+            "enum": [
+              "cloud",
+              "device",
+              "hybrid"
+            ]
+          }
+        }
       }
-    }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "typesOfClient": {
+              "const": "gtag"
+            }
+          },
+          "required": [
+            "typesOfClient"
+          ]
+        },
+        "then": {
+          "properties": {
+            "measurementId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(G-.{1,100})$|^$"
+            }
+          },
+          "required": [
+            "measurementId"
+          ]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "typesOfClient": {
+              "const": "firebase"
+            }
+          },
+          "required": [
+            "typesOfClient"
+          ]
+        },
+        "then": {
+          "properties": {
+            "firebaseAppId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": [
+            "firebaseAppId"
+          ]
+        }
+      }
+    ]
   }
 }
