@@ -1,12 +1,12 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
     "required": ["apiKey"],
+    "type": "object",
     "properties": {
       "apiKey": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,300})$"
       },
       "s4ServiceValue": {
         "type": "string",
@@ -26,7 +26,8 @@
       },
       "s4AlertingScenarioValue": {
         "type": "string",
-        "pattern": "^(single_ack|multi_ack|emergency)$"
+        "enum": ["single_ack", "multi_ack", "emergency"],
+        "default": "single_ack"
       },
       "s4AlertingScenarioProperty": {
         "type": "string",
@@ -40,13 +41,17 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "s4StatusValue": { "type": "string", "pattern": "^(new|acknowledged|resolved)$" },
+      "s4StatusValue": {
+        "type": "string",
+        "enum": ["new", "acknowledged", "resolved"],
+        "default": "new"
+      },
       "s4StatusProperty": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "s4Filter": { "type": "boolean" },
-      "columnToPropertyMapping": {
+      "s4Filter": { "type": "boolean", "default": false },
+      "eventToTitleMapping": {
         "type": "array",
         "items": {
           "type": "object",
