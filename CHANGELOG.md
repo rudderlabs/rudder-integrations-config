@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.45.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.45.1...v1.45.2) (2023-08-16)
+
+
+### Bug Fixes
+
+* catalog for databricks ([#840](https://github.com/rudderlabs/rudder-config-schema/issues/840)) ([316a0de](https://github.com/rudderlabs/rudder-config-schema/commit/316a0deffd1ddc1d63231874c35e98df8e248c27))
+* enabling mirror mode for databricks rETL ([#837](https://github.com/rudderlabs/rudder-config-schema/issues/837)) ([7b93ebb](https://github.com/rudderlabs/rudder-config-schema/commit/7b93ebb29ae2a100dec0ab069a7ce925b932c456))
+* releasing databricks to all customers ([#839](https://github.com/rudderlabs/rudder-config-schema/issues/839)) ([5020408](https://github.com/rudderlabs/rudder-config-schema/commit/5020408e8e3d2438236f38e1dee565e34196fec1))
+
 ### [1.45.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.45.0...v1.45.1) (2023-08-16)
 
 
