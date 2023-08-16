@@ -36,7 +36,8 @@
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
             "salesTag": {
-              "type": "boolean"
+              "type": "boolean",
+              "default": false
             },
             "customVariables": {
               "type": "array",
@@ -49,38 +50,10 @@
                   },
                   "to": {
                     "type": "string",
-                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
                   }
                 }
               }
-            }
-          }
-        }
-      },
-      "eventFilteringOption": {
-        "type": "string",
-        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
-      },
-      "whitelistedEvents": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "eventName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "blacklistedEvents": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "eventName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
         }
@@ -98,7 +71,11 @@
         "properties": {
           "web": {
             "type": "string",
-            "pattern": "(^env[.].+)|^(globalSiteTag|iframeTag)$"
+            "enum": [
+              "globalSiteTag",
+              "iframeTag"
+            ],
+            "default": "globalSiteTag"
           }
         }
       },
@@ -132,6 +109,39 @@
           "web": {
             "type": "string",
             "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          }
+        }
+      },
+      "eventFilteringOption": {
+        "type": "string",
+        "enum": [
+          "disable",
+          "whitelistedEvents",
+          "blacklistedEvents"
+        ],
+        "default": "disable"
+      },
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
           }
         }
       },
