@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.45.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.45.0...v1.45.1) (2023-08-16)
+
+
+### Bug Fixes
+
+* **dcmfloodlight:** schema issue ([#833](https://github.com/rudderlabs/rudder-config-schema/issues/833)) ([9f8cede](https://github.com/rudderlabs/rudder-config-schema/commit/9f8cede260f4fd9619609a7fdc6e1500d20d6fc6))
+* make bingAds aud visible and add message type to marketo bulk upload ([#832](https://github.com/rudderlabs/rudder-config-schema/issues/832)) ([e8b0435](https://github.com/rudderlabs/rudder-config-schema/commit/e8b0435aae6b71d59e977ce8e56762a5e3ae0e18))
+
 ## [1.45.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.44.2...v1.45.0) (2023-08-14)
 
 
