@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.45.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.45.1...v1.45.2) (2023-08-16)
+
+
+### Bug Fixes
+
+* catalog for databricks ([#840](https://github.com/rudderlabs/rudder-config-schema/issues/840)) ([316a0de](https://github.com/rudderlabs/rudder-config-schema/commit/316a0deffd1ddc1d63231874c35e98df8e248c27))
+* enabling mirror mode for databricks rETL ([#837](https://github.com/rudderlabs/rudder-config-schema/issues/837)) ([7b93ebb](https://github.com/rudderlabs/rudder-config-schema/commit/7b93ebb29ae2a100dec0ab069a7ce925b932c456))
+* releasing databricks to all customers ([#839](https://github.com/rudderlabs/rudder-config-schema/issues/839)) ([5020408](https://github.com/rudderlabs/rudder-config-schema/commit/5020408e8e3d2438236f38e1dee565e34196fec1))
+
+### [1.45.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.45.0...v1.45.1) (2023-08-16)
+
+
+### Bug Fixes
+
+* **dcmfloodlight:** schema issue ([#833](https://github.com/rudderlabs/rudder-config-schema/issues/833)) ([9f8cede](https://github.com/rudderlabs/rudder-config-schema/commit/9f8cede260f4fd9619609a7fdc6e1500d20d6fc6))
+* make bingAds aud visible and add message type to marketo bulk upload ([#832](https://github.com/rudderlabs/rudder-config-schema/issues/832)) ([e8b0435](https://github.com/rudderlabs/rudder-config-schema/commit/e8b0435aae6b71d59e977ce8e56762a5e3ae0e18))
+
+## [1.45.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.44.2...v1.45.0) (2023-08-14)
+
+
+### Features
+
+* **zendesk:** add source name setting ([#825](https://github.com/rudderlabs/rudder-config-schema/issues/825)) ([51329cc](https://github.com/rudderlabs/rudder-config-schema/commit/51329ccdfcc97d3f0b0f99be76acb99ef4270b43))
+
 ### [1.44.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.44.1...v1.44.2) (2023-08-11)
 
 
