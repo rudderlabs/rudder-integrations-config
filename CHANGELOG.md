@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file. See [standa
 * add flattenProperty field ([3d7c9e7](https://github.com/rudderlabs/rudder-config-schema/commit/3d7c9e7525e4c7e107aeaf9e52dbc1739d92f2a8))
 * re-add removed schema for consent ([421d7c9](https://github.com/rudderlabs/rudder-config-schema/commit/421d7c94d9533b85f4884b3da182da6e3865c403))
 * updated with defaults for boolean fields in zendesk schema.json ([b7df821](https://github.com/rudderlabs/rudder-config-schema/commit/b7df821de6014bb4697620db1c0f19524780a080))
+* update supportedSourceTypes ([b00ab34](https://github.com/rudderlabs/rudder-config-schema/commit/b00ab34899bfe84a5afb71a0a1054c59dd5ddfea))
 
 ### [1.45.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.45.1...v1.45.2) (2023-08-16)
 
