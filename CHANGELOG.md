@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.46.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.46.0...v1.46.1) (2023-08-22)
+
+
+### Bug Fixes
+
+* reverts salesforce to 4.0.5 ([a2e284c](https://github.com/rudderlabs/rudder-config-schema/commit/a2e284c48a6037e29b2e4b680ef44a98279e929c))
+
 ## [1.46.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.45.2...v1.46.0) (2023-08-21)
 
 
