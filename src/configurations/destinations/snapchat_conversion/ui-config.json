@@ -7,7 +7,7 @@
           "type": "textInput",
           "label": "API Token",
           "value": "apiKey",
-          "regex": "^(.{1,500})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,500})$",
           "required": true,
           "placeholder": "e.g. MTp6WHZyNbJXZVNMMm11AlJ1R1BXeVVBOkk0dFk5dkEybUVEWAw5NHk5dXBYUjBIdWp6QzZCNC1TMEFGU9QwYVdnUjg",
           "secret": true,
@@ -17,7 +17,7 @@
           "type": "textInput",
           "label": "Pixel ID",
           "value": "pixelId",
-          "regex": "^(.{0,100})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
           "regexErrorMessage": "Invalid Pixel ID",
           "required": false,
           "placeholder": "e.g: 836d6231-aad6-4e41-9cbb-5854565cad8e",
@@ -29,6 +29,7 @@
           "label": "Snap App ID",
           "value": "snapAppId",
           "required": false,
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
           "placeholder": "e.g: 836d6231-aad6-4e41-9cbb-5854565cad8e",
           "secret": true,
           "footerNote": "Your Snap App ID"
@@ -38,6 +39,7 @@
           "label": "App ID",
           "value": "appId",
           "required": false,
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
           "placeholder": "e.g: 836d6231-aad6-4e41-9cbb-5854565cad8e",
           "secret": true,
           "footerNote": "Your App ID"
@@ -107,8 +109,9 @@
           "preRequisiteField": [{ "name": "enableDeduplication", "selectedValue": true }],
           "label": "Deduplication Key",
           "value": "deduplicationKey",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
           "placeholder": "e.g: messageId",
-          "required": false,
+          "required": true,
           "footerNote": "RudderStack will use this field for deduplication. If nothing is specified, messageId field will be used."
         }
       ]
@@ -125,6 +128,7 @@
               "type": "textInput",
               "placeholder": "Marketing",
               "value": "oneTrustCookieCategory",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
               "label": "Category Name/ID",
               "required": false
             }
