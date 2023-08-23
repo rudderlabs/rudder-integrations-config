@@ -7,6 +7,7 @@
           "type": "textInput",
           "label": "TAG ID",
           "value": "tagId",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]*$",
           "required": false,
           "placeholder": "e.g: 123456789",
           "secret": true
@@ -15,6 +16,7 @@
           "type": "textInput",
           "label": "App Store App ID",
           "value": "appId",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]*$",
           "required": false,
           "placeholder": "e.g: 429047995",
           "secret": false,
@@ -63,7 +65,7 @@
           "value": "adAccountId",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]*$",
           "regexErrorMessage": "Invalid Ad Account ID",
-          "required": false,
+          "required": true,
           "placeholder": "e.g: 549935085302",
           "secret": true,
           "footerNote": "Required field for cloud mode integration. For more information about how to get ad account id refer docs"
@@ -76,9 +78,9 @@
           },
           "label": "Conversion Token",
           "value": "conversionToken",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,101})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,101})$",
           "regexErrorMessage": "Invalid Conversion Token",
-          "required": false,
+          "required": true,
           "placeholder": "e.g: pina_A98DB973KWL8XP1LZ94KJF0BMA5PEZ8C6490FWEI01QJMN32YU",
           "secret": true,
           "footerNote": "Required field for cloud mode integration. For more information about how to get conversion token refer docs"
@@ -88,6 +90,13 @@
     {
       "title": "Other Settings",
       "fields": [
+        {
+          "type": "checkbox",
+          "label": "Send as a test event",
+          "value": "sendAsTestEvent",
+          "default": false,
+          "footerNote": "Send the request as a test request. The events will not be recorded"
+        },
         {
           "type": "checkbox",
           "label": "Enable hashing for user data conversions",
@@ -113,7 +122,8 @@
           "label": "Deduplication Key",
           "value": "deduplicationKey",
           "placeholder": "e.g: messageId",
-          "required": false,
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "required": true,
           "footerNote": "Rudderstack will send this key-value from payload as an event deduplication key"
         },
         {
