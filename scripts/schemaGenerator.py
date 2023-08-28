@@ -763,7 +763,7 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
                             if generateFunction:
                                 properties[field['configKey']] = generateFunction(
                                     field, dbConfig, 'configKey')
-                            if template.get('title', "") == "Initial setup" and is_field_present_in_default_config(field, dbConfig, "configKey"):
+                            if template.get('title', "") == "Initial setup" and is_field_present_in_default_config(field, dbConfig, "configKey") and 'preRequisites' not in field:
                                 schemaObject['required'].append(
                                     field['configKey'])
 
@@ -835,6 +835,11 @@ def generate_schema(uiConfig, dbConfig, name, selector):
     generate_schema_properties(uiConfig, dbConfig, schemaObject,
                        schemaObject['properties'], name, selector)
     newSchema['configSchema'] = schemaObject
+    file_path = f'/Users/rudderstack/workspace/rudder-config-schema/src/configurations/destinations/{name.lower()}/schema.json'
+    new_content = json.dumps(newSchema)
+    with open(file_path, 'w') as file:
+        # Write the new content
+        file.write(new_content)
     return newSchema
 
 def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
