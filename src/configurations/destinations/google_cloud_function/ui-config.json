@@ -4,56 +4,40 @@
       "title": "Connection Settings",
       "fields": [
         {
+          "type": "textInput",
+          "label": "URL",
+          "value": "googleCloudFunctionUrl",
+          "required": true,
+          "placeholder": "http://www.abcd.com",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+          "footerNote": "The Url given under Trigger section when you create Google Cloud Function"
+        },
+        {
           "type": "singleSelect",
-          "label": "Choose your Trigger Type ",
-          "value": "triggerType",
+          "label": "Choose your function environment",
+          "value": "functionEnvironment",
           "options": [
-            { "name": "HTTP", "value": "Http" },
-            { "name": "HTTPS", "value": "Https" }
+            { "name": "gen1", "value": "1st gen" },
+            { "name": "gen2", "value": "2nd gen" }
           ],
           "required": true
         },
         {
-          "type": "textInput",
-          "preRequisiteField": [{ "name": "triggerType", "selectedValue": "Http" }],
-          "label": "URL",
-          "value": "googleCloudFunctionUrl",
-          "required": true,
-          "placeholder": "http://www.abcd.com",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
-          "footerNote": "The Url given under Trigger section when you create Google Cloud Function"
+          "type": "checkbox",
+          "label": "Send to Production Environment on Adjust",
+          "value": "requireAuthentication",
+          "default": true
         },
         {
-          "type": "textInput",
-          "preRequisiteField": [{ "name": "triggerType", "selectedValue": "Https" }],
-          "label": "URL",
-          "value": "googleCloudFunctionUrl",
+          "type": "textareaInput",
+          "label": "Credentials",
+          "labelNote": "Google Cloud Service Account credentials JSON for RudderStack to use in invoking Google Cloud Function",
+          "value": "credentials",
+          "regex": ".*",
           "required": true,
-          "placeholder": "http://www.abcd.com",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
-          "footerNote": "The Url given under Trigger section when you create Google Cloud Function"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [{ "name": "triggerType", "selectedValue": "Https" }],
-          "label": "Gcloud Authorization",
-          "value": "gcloudAuthorization",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
-          "required": true,
-          "placeholder": "e.g. tZrPAgHyn2jMWOVGKrS6gBGLYT8v9kJE",
+          "footerNote": "The credentials JSON is used by the client library to access the Google Cloud Fucction API",
           "secret": true,
-          "footerNote": "Your private Gcloud Authorization Token"
-        },
-        {
-          "type": "textInput",
-          "label": "Api Key Id",
-          "value": "apiKeyId",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-          "regexErrorMessage": "Invalid Api Key Id",
-          "required": false,
-          "placeholder": "e.g: bSjsdGYsOo9sjw23Shj",
-          "secret": true,
-          "footerNote": "Your API Key"
+          "preRequisiteField": { "name": "requireAuthentication", "selectedValue": "true" }
         }
       ]
     },
