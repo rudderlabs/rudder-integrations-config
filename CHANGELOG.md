@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.47.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.46.2...v1.47.0) (2023-08-28)
+
+
+### Features
+
+* **mixpanel:** add persistence name setting ([#865](https://github.com/rudderlabs/rudder-config-schema/issues/865)) ([5c0e99e](https://github.com/rudderlabs/rudder-config-schema/commit/5c0e99e72963c99dce522f8f8db915694448ef5c))
+
 ### [1.46.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.46.1...v1.46.2) (2023-08-23)
 
 
