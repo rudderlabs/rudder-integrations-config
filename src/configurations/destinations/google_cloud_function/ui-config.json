@@ -17,27 +17,26 @@
           "label": "Choose your function environment",
           "value": "functionEnvironment",
           "options": [
-            { "name": "gen1", "value": "1st gen" },
-            { "name": "gen2", "value": "2nd gen" }
+            { "name": "1st gen", "value": "gen1" },
+            { "name": "2nd gen", "value": "gen2" }
           ],
           "required": true
         },
         {
           "type": "checkbox",
-          "label": "Send to Production Environment on Adjust",
+          "label": "Enable it if your function requires authentication",
           "value": "requireAuthentication",
           "default": true
         },
         {
           "type": "textareaInput",
+          "preRequisiteField": [{ "name": "requireAuthentication", "selectedValue": true }],
           "label": "Credentials",
-          "labelNote": "Google Cloud Service Account credentials JSON for RudderStack to use in invoking Google Cloud Function",
+          "labelNote": "GCP Service Account credentials JSON for RudderStack to use in authenticating your Google Cloud Function",
           "value": "credentials",
           "regex": ".*",
           "required": true,
-          "footerNote": "The credentials JSON is used by the client library to access the Google Cloud Fucction API",
-          "secret": true,
-          "preRequisiteField": { "name": "requireAuthentication", "selectedValue": "true" }
+          "footerNote": "The credentials JSON is used by the client library to access the Google Cloud Fucction API"
         }
       ]
     },
