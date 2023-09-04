@@ -1,70 +1,140 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "API Key",
+                    "configKey": "apiKey",
+                    "regex": ".*",
+                    "required": true,
+                    "placeholder": "e.g. c59e3838caa934b535c1fd342dfds23452dfcccf95c16787304e7a0c0e8051b326451bb2",
+                    "secret": true,
+                    "footerNote": "Your API Access Key"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "API Url",
+                    "configKey": "apiUrl",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+                    "regexErrorMessage": "Invalid URL",
+                    "required": true,
+                    "placeholder": "e.g. https://accountname.api-us1.com",
+                    "note": "Your API Access URL"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Event Settings",
+                "icon": "file",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Event Key",
+                    "configKey": "eventKey",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Event Key",
+                    "required": false,
+                    "placeholder": "e.g. c2a856fddc721350dec4fbbc2e5c43a7ddfaaa03",
+                    "secret": true,
+                    "note": "Your Event Key"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "ActID",
+                    "configKey": "actid",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid ActID",
+                    "required": false,
+                    "placeholder": "e.g. 276450567",
+                    "secret": true,
+                    "note": "Your ActId"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack’s OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
       "fields": [
-        {
-          "type": "textInput",
-          "label": "API Url",
-          "value": "apiUrl",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
-          "regexErrorMessage": "Invalid URL",
-          "required": true,
-          "placeholder": "e.g. https://accountname.api-us1.com",
-          "footerNote": "Your API Access URL"
-        },
-        {
-          "type": "textInput",
-          "label": "API Key",
-          "value": "apiKey",
-          "regex": ".*",
-          "required": true,
-          "placeholder": "e.g. c59e3838caa934b535c1fd342dfds23452dfcccf95c16787304e7a0c0e8051b326451bb2",
-          "secret": true,
-          "footerNote": "Your API Access Key"
-        },
-        {
-          "type": "textInput",
-          "label": "Event Key",
-          "value": "eventKey",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Event Key",
-          "required": false,
-          "placeholder": "e.g. c2a856fddc721350dec4fbbc2e5c43a7ddfaaa03",
-          "secret": true,
-          "footerNote": "Your Event Key"
-        },
-        {
-          "type": "textInput",
-          "label": "ActID",
-          "value": "actid",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid ActID",
-          "required": false,
-          "placeholder": "e.g. 276450567",
-          "secret": true,
-          "footerNote": "Your ActId"
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
       ]
     }
-  ]
+  }
 }
+
