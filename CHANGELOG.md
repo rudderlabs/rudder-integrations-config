@@ -2,6 +2,79 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.47.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.47.1...v1.47.2) (2023-09-01)
+
+
+### Bug Fixes
+
+* updates mixpanel to 8.1.7 ([c908562](https://github.com/rudderlabs/rudder-config-schema/commit/c9085621728be32983eea3b1623f5fb66babf241))
+
+### [1.47.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.47.0...v1.47.1) (2023-08-29)
+
+## [1.47.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.46.2...v1.47.0) (2023-08-28)
+
+
+### Features
+
+* **mixpanel:** add persistence name setting ([#865](https://github.com/rudderlabs/rudder-config-schema/issues/865)) ([5c0e99e](https://github.com/rudderlabs/rudder-config-schema/commit/5c0e99e72963c99dce522f8f8db915694448ef5c))
+
+### [1.46.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.46.1...v1.46.2) (2023-08-23)
+
+
+### Bug Fixes
+
+* updates mixpanel to v8.1.5 ([d56d2a6](https://github.com/rudderlabs/rudder-config-schema/commit/d56d2a6b9368e935a7b160c8f3277a25699d749d))
+
+### [1.46.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.46.0...v1.46.1) (2023-08-22)
+
+
+### Bug Fixes
+
+* reverts salesforce to 4.0.5 ([a2e284c](https://github.com/rudderlabs/rudder-config-schema/commit/a2e284c48a6037e29b2e4b680ef44a98279e929c))
+
+## [1.46.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.45.2...v1.46.0) (2023-08-21)
+
+
+### Features
+
+* add flattenproperty field ([3a2b3e1](https://github.com/rudderlabs/rudder-config-schema/commit/3a2b3e191b657b7d2bb2629c6ac882f557c054e4))
+* add support for test events for Pinterest ([#811](https://github.com/rudderlabs/rudder-config-schema/issues/811)) ([85132bb](https://github.com/rudderlabs/rudder-config-schema/commit/85132bb3328468837c85e4225a8a290bc8ed7d6a))
+* enable blueshift for rETL ([#842](https://github.com/rudderlabs/rudder-config-schema/issues/842)) ([34e07a1](https://github.com/rudderlabs/rudder-config-schema/commit/34e07a189f7899c850d4ab14de14bb6b0bc1ac82))
+* **INT-151:** moving clevertap to router ([#831](https://github.com/rudderlabs/rudder-config-schema/issues/831)) ([c8dbf49](https://github.com/rudderlabs/rudder-config-schema/commit/c8dbf4918872acf01abce141e14d107ae2f4b873))
+* **INT-319:** update label to support v2 api token ([#829](https://github.com/rudderlabs/rudder-config-schema/issues/829)) ([b2ddb5d](https://github.com/rudderlabs/rudder-config-schema/commit/b2ddb5d9a7afd8ce87d8840b6f55801dfe49d49a))
+
+
+### Bug Fixes
+
+* add flattenProperty field ([3d7c9e7](https://github.com/rudderlabs/rudder-config-schema/commit/3d7c9e7525e4c7e107aeaf9e52dbc1739d92f2a8))
+* re-add removed schema for consent ([421d7c9](https://github.com/rudderlabs/rudder-config-schema/commit/421d7c94d9533b85f4884b3da182da6e3865c403))
+* updated with defaults for boolean fields in zendesk schema.json ([b7df821](https://github.com/rudderlabs/rudder-config-schema/commit/b7df821de6014bb4697620db1c0f19524780a080))
+* update supportedSourceTypes ([b00ab34](https://github.com/rudderlabs/rudder-config-schema/commit/b00ab34899bfe84a5afb71a0a1054c59dd5ddfea))
+
+### [1.45.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.45.1...v1.45.2) (2023-08-16)
+
+
+### Bug Fixes
+
+* catalog for databricks ([#840](https://github.com/rudderlabs/rudder-config-schema/issues/840)) ([316a0de](https://github.com/rudderlabs/rudder-config-schema/commit/316a0deffd1ddc1d63231874c35e98df8e248c27))
+* enabling mirror mode for databricks rETL ([#837](https://github.com/rudderlabs/rudder-config-schema/issues/837)) ([7b93ebb](https://github.com/rudderlabs/rudder-config-schema/commit/7b93ebb29ae2a100dec0ab069a7ce925b932c456))
+* releasing databricks to all customers ([#839](https://github.com/rudderlabs/rudder-config-schema/issues/839)) ([5020408](https://github.com/rudderlabs/rudder-config-schema/commit/5020408e8e3d2438236f38e1dee565e34196fec1))
+
+### [1.45.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.45.0...v1.45.1) (2023-08-16)
+
+
+### Bug Fixes
+
+* **dcmfloodlight:** schema issue ([#833](https://github.com/rudderlabs/rudder-config-schema/issues/833)) ([9f8cede](https://github.com/rudderlabs/rudder-config-schema/commit/9f8cede260f4fd9619609a7fdc6e1500d20d6fc6))
+* make bingAds aud visible and add message type to marketo bulk upload ([#832](https://github.com/rudderlabs/rudder-config-schema/issues/832)) ([e8b0435](https://github.com/rudderlabs/rudder-config-schema/commit/e8b0435aae6b71d59e977ce8e56762a5e3ae0e18))
+
+## [1.45.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.44.2...v1.45.0) (2023-08-14)
+
+
+### Features
+
+* **zendesk:** add source name setting ([#825](https://github.com/rudderlabs/rudder-config-schema/issues/825)) ([51329cc](https://github.com/rudderlabs/rudder-config-schema/commit/51329ccdfcc97d3f0b0f99be76acb99ef4270b43))
+
 ### [1.44.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.44.1...v1.44.2) (2023-08-11)
 
 
