@@ -1,10 +1,7 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": [
-      "siteID",
-      "apiKey"
-    ],
+    "required": ["siteID", "apiKey"],
     "type": "object",
     "properties": {
       "siteID": {
@@ -19,9 +16,10 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "datacenterEU": {
-        "type": "boolean",
-        "default": false
+      "datacenter": {
+        "type": "string",
+        "enum": ["US", "EU"],
+        "default": "US"
       },
       "sendPageNameInSDK": {
         "type": "object",
@@ -41,11 +39,7 @@
       },
       "eventFilteringOption": {
         "type": "string",
-        "enum": [
-          "disable",
-          "whitelistedEvents",
-          "blacklistedEvents"
-        ],
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
         "default": "disable"
       },
       "whitelistedEvents": {
