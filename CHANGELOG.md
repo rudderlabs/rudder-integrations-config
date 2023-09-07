@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.49.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.48.0...v1.49.0) (2023-09-06)
+
+
+### Features
+
+* eloqua new integration onboarding  ([#893](https://github.com/rudderlabs/rudder-config-schema/issues/893)) ([0f849bd](https://github.com/rudderlabs/rudder-config-schema/commit/0f849bdbd80838714d18bac859986a1ada41cb83))
+
 ## [1.48.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.47.2...v1.48.0) (2023-09-04)
 
 
