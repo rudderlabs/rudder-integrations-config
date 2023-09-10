@@ -1,7 +1,9 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["webhookUrl"],
+    "required": [
+      "webhookUrl"
+    ],
     "type": "object",
     "properties": {
       "eventChannelSettings": {
@@ -13,13 +15,28 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
+            "eventChannel": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
             "eventChannelWebhook": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$"
             },
-            "eventRegex": { "type": "boolean", "default": false }
+            "eventRegex": {
+              "type": "boolean",
+              "default": false
+            }
           }
         }
+      },
+      "incomingWebhooksType": {
+        "type": "string",
+        "enum": [
+          "legacy",
+          "modern"
+        ],
+        "default": "legacy"
       },
       "identifyTemplate": {
         "type": "string",
@@ -38,7 +55,10 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,1000})$"
             },
-            "eventRegex": { "type": "boolean", "default": false }
+            "eventRegex": {
+              "type": "boolean",
+              "default": false
+            }
           }
         }
       },

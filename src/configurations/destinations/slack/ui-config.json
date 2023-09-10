@@ -4,6 +4,27 @@
       "title": "Event Channels",
       "fields": [
         {
+          "type": "singleSelect",
+          "label": "Type of incoming webhooks",
+          "value": "incomingWebhooksType",
+          "mode": "single",
+          "options": [
+            {
+              "name": "Legacy (Will be deprecated soon)",
+              "value": "legacy"
+            },
+            {
+              "name": "Modern (through app)",
+              "value": "modern"
+            }
+          ],
+          "defaultOption": {
+            "name": "US",
+            "value": "legacy"
+          },
+          "footerNote": "If legacy is choosed then channel mapping will be done based on channel name else it will be done based on channel webhook"
+        },
+        {
           "type": "dynamicCustomForm",
           "value": "eventChannelSettings",
           "customFields": [
@@ -24,6 +45,15 @@
               "regexErrorMessage": "Invalid Event Channel Webhook",
               "required": false,
               "placeholder": "e.g: https://hooks.slack.com/services/placeholder_1/placeholder_2/placeholder_3"
+            },
+            {
+              "type": "textInput",
+              "label": "Event Channel Name",
+              "value": "eventChannel",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$",
+              "regexErrorMessage": "Invalid Event Channel Webhook",
+              "required": false,
+              "placeholder": "e.g: ABCDEFG"
             },
             {
               "type": "checkbox",
