@@ -19,7 +19,15 @@
                     "configKey": "apiKey",
                     "regex": "^(.{0,200})$",
                     "regexErrorMessage": "Invalid Api Key",
-                    "placeholder": "e.g: na1.XQdLJo0..."
+                    "placeholder": "e.g: na1.XQdLJo0...",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
                   }
                 ]
               }
@@ -166,7 +174,7 @@
       }
     ],
     "sdkTemplate": {
-      "title": "Web SDK settings",
+      "title": "SDK settings",
       "note": "not visible in the ui",
       "fields": [
         {
@@ -176,7 +184,15 @@
           "configKey": "fs_org",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid FS ORG",
-          "placeholder": "e.g: dd412940"
+          "placeholder": "e.g: dd412940",
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "connectionModes.webDevice",
+                "value": true
+              }
+            ]
+          }
         },
         {
           "type": "textInput",
@@ -185,13 +201,29 @@
           "configKey": "fs_host",
           "regex": "^$|^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$",
           "regexErrorMessage": "Invalid FS HOST",
-          "placeholder": "e.g: fullstory.com"
+          "placeholder": "e.g: fullstory.com",
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "connectionModes.webDevice",
+                "value": true
+              }
+            ]
+          }
         },
         {
           "type": "checkbox",
           "note": "FS debug mode",
           "configKey": "fs_debug_mode",
-          "default": true
+          "default": true,
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "connectionModes.webDevice",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }
