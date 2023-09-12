@@ -2,6 +2,69 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.49.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.49.0...v1.49.1) (2023-09-11)
+
+
+### Bug Fixes
+
+* fb ads account validation ([2e2715b](https://github.com/rudderlabs/rudder-config-schema/commit/2e2715bc453b3de472320a77145afba847aa179e))
+* updates hubspot to 8.1.10 ([c0d3248](https://github.com/rudderlabs/rudder-config-schema/commit/c0d3248b3cfc6d8d596e8f7eb7d6abda2adc6aaf))
+* updates mixpanel to 8.1.10 ([074844c](https://github.com/rudderlabs/rudder-config-schema/commit/074844cd7da72ccf348a11a2aa5dd50f62bf73f3))
+
+## [1.49.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.48.0...v1.49.0) (2023-09-06)
+
+
+### Features
+
+* eloqua new integration onboarding  ([#893](https://github.com/rudderlabs/rudder-config-schema/issues/893)) ([0f849bd](https://github.com/rudderlabs/rudder-config-schema/commit/0f849bdbd80838714d18bac859986a1ada41cb83))
+
+## [1.48.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.47.2...v1.48.0) (2023-09-04)
+
+
+### Features
+
+* active campaign new UI ([#805](https://github.com/rudderlabs/rudder-config-schema/issues/805)) ([624d535](https://github.com/rudderlabs/rudder-config-schema/commit/624d53589e53d9674511623c0ab5f678c09504ca))
+* add eu instance support to kustomer destination ([#863](https://github.com/rudderlabs/rudder-config-schema/issues/863)) ([6c3a9df](https://github.com/rudderlabs/rudder-config-schema/commit/6c3a9df54e39a610b1e7ebf85edf51888f51b5d3))
+* adding trino config to UI ([#853](https://github.com/rudderlabs/rudder-config-schema/issues/853)) ([c74ecf2](https://github.com/rudderlabs/rudder-config-schema/commit/c74ecf20f7889f43b1ed25013b440602ca267955))
+* google ads black audeince feature ([#846](https://github.com/rudderlabs/rudder-config-schema/issues/846)) ([c294c50](https://github.com/rudderlabs/rudder-config-schema/commit/c294c50b09a924b534c5a9210e2d6621e1bc544d))
+* onboard hubspot to new UI ([#770](https://github.com/rudderlabs/rudder-config-schema/issues/770)) ([d40041a](https://github.com/rudderlabs/rudder-config-schema/commit/d40041a0b30e1e38564feaa32b6c408d496959be))
+* trino UI config - update ([#876](https://github.com/rudderlabs/rudder-config-schema/issues/876)) ([9c6d5b4](https://github.com/rudderlabs/rudder-config-schema/commit/9c6d5b4cecf1cec326a00d01457bb0a29d3a3d75))
+
+
+### Bug Fixes
+
+* ac script schema ([#882](https://github.com/rudderlabs/rudder-config-schema/issues/882)) ([3efb3c7](https://github.com/rudderlabs/rudder-config-schema/commit/3efb3c7d8475391b0e4bdccc926aa263ff88569f))
+
+### [1.47.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.47.1...v1.47.2) (2023-09-01)
+
+
+### Bug Fixes
+
+* updates mixpanel to 8.1.7 ([c908562](https://github.com/rudderlabs/rudder-config-schema/commit/c9085621728be32983eea3b1623f5fb66babf241))
+
+### [1.47.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.47.0...v1.47.1) (2023-08-29)
+
+## [1.47.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.46.2...v1.47.0) (2023-08-28)
+
+
+### Features
+
+* **mixpanel:** add persistence name setting ([#865](https://github.com/rudderlabs/rudder-config-schema/issues/865)) ([5c0e99e](https://github.com/rudderlabs/rudder-config-schema/commit/5c0e99e72963c99dce522f8f8db915694448ef5c))
+
+### [1.46.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.46.1...v1.46.2) (2023-08-23)
+
+
+### Bug Fixes
+
+* updates mixpanel to v8.1.5 ([d56d2a6](https://github.com/rudderlabs/rudder-config-schema/commit/d56d2a6b9368e935a7b160c8f3277a25699d749d))
+
+### [1.46.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.46.0...v1.46.1) (2023-08-22)
+
+
+### Bug Fixes
+
+* reverts salesforce to 4.0.5 ([a2e284c](https://github.com/rudderlabs/rudder-config-schema/commit/a2e284c48a6037e29b2e4b680ef44a98279e929c))
+
 ## [1.46.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.45.2...v1.46.0) (2023-08-21)
 
 
