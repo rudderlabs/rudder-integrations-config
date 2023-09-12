@@ -8,6 +8,10 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$"
       },
+      "fs_org": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
       "eventFilteringOption": {
         "type": "string",
         "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
@@ -49,15 +53,6 @@
           }
         }
       },
-      "fs_org": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-          }
-        }
-      },
       "fs_host": {
         "type": "object",
         "properties": {
@@ -84,6 +79,81 @@
           "ios": { "type": "string", "enum": ["cloud", "device"] }
         }
       }
-    }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "fs_org": {
+              "type": "string"
+            }
+          },
+          "required": ["fs_org"]
+        },
+        "then": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "properties": {
+                "web": { "type": "string", "enum": ["device"] }
+              }
+            }
+          },
+          "required": ["connectionMode"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "fs_host": {
+              "type": "object",
+              "properties": {
+                "web": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": ["fs_host"]
+        },
+        "then": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "properties": {
+                "web": { "type": "string", "enum": ["device"] }
+              }
+            }
+          },
+          "required": ["connectionMode"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "fs_debug_mode": {
+              "type": "object",
+              "properties": {
+                "web": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "required": ["fs_debug_mode"]
+        },
+        "then": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "properties": {
+                "web": { "type": "string", "enum": ["device"] }
+              }
+            }
+          },
+          "required": ["connectionMode"]
+        }
+      }
+    ]
   }
 }
