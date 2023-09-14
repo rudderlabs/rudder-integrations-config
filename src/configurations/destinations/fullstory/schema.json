@@ -84,6 +84,53 @@
       {
         "if": {
           "properties": {
+            "apiKey": {
+              "type": "string"
+            }
+          },
+          "required": ["apiKey"]
+        },
+        "then": {
+          "anyOf": [
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "web": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["web"]
+                }
+              }
+            },
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "android": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["android"]
+                }
+              }
+            },
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "ios": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["ios"]
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "if": {
+          "properties": {
             "fs_org": {
               "type": "string"
             }
@@ -95,65 +142,11 @@
             "connectionMode": {
               "type": "object",
               "properties": {
-                "web": { "type": "string", "enum": ["cloud", "device"] },
-                "android": { "type": "string" }
-              }
+                "web": { "type": "string", "enum": ["device"] }
+              },
+              "required": ["web"]
             }
-          },
-          "required": ["connectionMode"]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "fs_host": {
-              "type": "object",
-              "properties": {
-                "web": { "type": "string", "enum": ["cloud", "device"] },
-                "android": { "type": "string" }
-              }
-            }
-          },
-          "required": ["fs_host"]
-        },
-        "then": {
-          "properties": {
-            "connectionMode": {
-              "type": "object",
-              "properties": {
-                "web": { "type": "string", "enum": ["cloud", "device"] },
-                "android": { "type": "string" }
-              }
-            }
-          },
-          "required": ["connectionMode"]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "fs_debug_mode": {
-              "type": "object",
-              "properties": {
-                "web": {
-                  "type": "boolean"
-                }
-              }
-            }
-          },
-          "required": ["fs_debug_mode"]
-        },
-        "then": {
-          "properties": {
-            "connectionMode": {
-              "type": "object",
-              "properties": {
-                "web": { "type": "string", "enum": ["cloud", "device"] },
-                "android": { "type": "string" }
-              }
-            }
-          },
-          "required": ["connectionMode"]
+          }
         }
       }
     ]
