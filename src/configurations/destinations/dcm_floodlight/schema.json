@@ -2,7 +2,9 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "required": ["advertiserId"],
+    "required": [
+      "advertiserId"
+    ],
     "properties": {
       "advertiserId": {
         "type": "string",
@@ -33,7 +35,10 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "salesTag": { "type": "boolean" },
+            "salesTag": {
+              "type": "boolean",
+              "default": false
+            },
             "customVariables": {
               "type": "array",
               "items": {
@@ -45,7 +50,7 @@
                   },
                   "to": {
                     "type": "string",
-                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
                   }
                 }
               }
@@ -53,9 +58,68 @@
           }
         }
       },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "tagFormat": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "enum": [
+              "globalSiteTag",
+              "iframeTag"
+            ],
+            "default": "globalSiteTag"
+          }
+        }
+      },
+      "conversionLinker": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "allowAdPersonalizationSignals": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "doubleclickId": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "googleNetworkId": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          }
+        }
+      },
       "eventFilteringOption": {
         "type": "string",
-        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$"
+        "enum": [
+          "disable",
+          "whitelistedEvents",
+          "blacklistedEvents"
+        ],
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -78,23 +142,6 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
-          }
-        }
-      },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
-      "tagFormat": { "type": "string", "pattern": "(^env[.].+)|^(globalSiteTag|iframeTag)$" },
-      "conversionLinker": { "type": "object", "properties": { "web": { "type": "boolean" } } },
-      "allowAdPersonalizationSignals": {
-        "type": "object",
-        "properties": { "web": { "type": "boolean" } }
-      },
-      "doubleclickId": { "type": "object", "properties": { "web": { "type": "boolean" } } },
-      "googleNetworkId": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
           }
         }
       },

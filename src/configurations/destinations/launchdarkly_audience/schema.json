@@ -1,35 +1,28 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["publicApiKey", "privateApiKey"],
     "type": "object",
+    "required": ["accessToken", "clientSideId", "audienceId", "audienceName"],
     "properties": {
-      "publicApiKey": {
+      "accessToken": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "privateApiKey": {
+      "clientSideId": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "listId": {
+      "audienceId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "audienceName": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "audienceType": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "flattenProperties": { "type": "boolean", "default": false },
-      "consent": {
-        "type": "array",
-        "items": {
-          "type": "string",
-          "enum": ["email", "sms"]
-        },
-        "default": ["email"]
-      },
-      "enforceEmailAsPrimary": { "type": "boolean", "default": false },
-      "eventFilteringOption": {
-        "type": "string",
-        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
-        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -66,13 +59,6 @@
             }
           }
         }
-      },
-      "sendPageAsTrack": { "type": "object", "properties": { "web": { "type": "boolean" } } },
-      "additionalPageInfo": { "type": "object", "properties": { "web": { "type": "boolean" } } },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
-      "connectionMode": {
-        "type": "object",
-        "properties": { "web": { "type": "string", "enum": ["cloud", "device"] } }
       }
     }
   }
