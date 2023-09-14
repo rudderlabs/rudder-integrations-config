@@ -4,14 +4,6 @@
     "required": [],
     "type": "object",
     "properties": {
-      "apiKey": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$"
-      },
-      "fs_org": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
       "eventFilteringOption": {
         "type": "string",
         "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
@@ -83,14 +75,6 @@
     "allOf": [
       {
         "if": {
-          "properties": {
-            "apiKey": {
-              "type": "string"
-            }
-          },
-          "required": ["apiKey"]
-        },
-        "then": {
           "anyOf": [
             {
               "properties": {
@@ -126,18 +110,19 @@
               }
             }
           ]
+        },
+        "then": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$"
+            }
+          },
+          "required": ["apiKey"]
         }
       },
       {
         "if": {
-          "properties": {
-            "fs_org": {
-              "type": "string"
-            }
-          },
-          "required": ["fs_org"]
-        },
-        "then": {
           "properties": {
             "connectionMode": {
               "type": "object",
@@ -147,6 +132,15 @@
               "required": ["web"]
             }
           }
+        },
+        "then": {
+          "properties": {
+            "fs_org": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          },
+          "required": ["fs_org"]
         }
       }
     ]
