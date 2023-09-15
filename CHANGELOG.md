@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.49.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.49.1...v1.49.2) (2023-09-12)
+
+### [1.49.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.49.0...v1.49.1) (2023-09-11)
+
+
+### Bug Fixes
+
+* fb ads account validation ([2e2715b](https://github.com/rudderlabs/rudder-config-schema/commit/2e2715bc453b3de472320a77145afba847aa179e))
+* updates hubspot to 8.1.10 ([c0d3248](https://github.com/rudderlabs/rudder-config-schema/commit/c0d3248b3cfc6d8d596e8f7eb7d6abda2adc6aaf))
+* updates mixpanel to 8.1.10 ([074844c](https://github.com/rudderlabs/rudder-config-schema/commit/074844cd7da72ccf348a11a2aa5dd50f62bf73f3))
+
+## [1.49.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.48.0...v1.49.0) (2023-09-06)
+
+
+### Features
+
+* eloqua new integration onboarding  ([#893](https://github.com/rudderlabs/rudder-config-schema/issues/893)) ([0f849bd](https://github.com/rudderlabs/rudder-config-schema/commit/0f849bdbd80838714d18bac859986a1ada41cb83))
+
 ## [1.48.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.47.2...v1.48.0) (2023-09-04)
 
 
