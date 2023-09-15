@@ -1,75 +1,107 @@
 {
-  "configSchema": {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["webhookUrl"],
-    "type": "object",
-    "properties": {
-      "eventChannelSettings": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "eventName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+    "configSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "required": [
+            "webhookUrl"
+        ],
+        "type": "object",
+        "properties": {
+            "incomingWebhooksType": {
+                "type": "string",
+                "enum": [
+                    "legacy",
+                    "modern"
+                ],
+                "default": "legacy"
             },
-            "eventChannel": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            "eventChannelSettings": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "eventName": {
+                            "type": "string",
+                            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        },
+                        "eventChannelWebhook": {
+                            "type": "string",
+                            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$"
+                        },
+                        "eventChannel": {
+                            "type": "string",
+                            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        },
+                        "eventRegex": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    }
+                }
             },
-            "eventRegex": { "type": "boolean", "default": false }
-          }
-        }
-      },
-      "identifyTemplate": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,1000})$"
-      },
-      "eventTemplateSettings": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "eventName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            "identifyTemplate": {
+                "type": "string",
+                "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,1000})$"
             },
-            "eventTemplate": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,1000})$"
+            "eventTemplateSettings": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "eventName": {
+                            "type": "string",
+                            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        },
+                        "eventTemplate": {
+                            "type": "string",
+                            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,1000})$"
+                        },
+                        "eventRegex": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    }
+                }
             },
-            "eventRegex": { "type": "boolean", "default": false }
-          }
-        }
-      },
-      "webhookUrl": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$"
-      },
-      "whitelistedTraitsSettings": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "trait": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            "webhookUrl": {
+                "type": "string",
+                "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$"
+            },
+            "whitelistedTraitsSettings": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "trait": {
+                            "type": "string",
+                            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        }
+                    }
+                }
+            },
+            "blacklistedEvents": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "eventName": {
+                            "type": "string",
+                            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        }
+                    }
+                }
+            },
+            "oneTrustCookieCategories": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "oneTrustCookieCategory": {
+                            "type": "string",
+                            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        }
+                    }
+                }
             }
-          }
         }
-      },
-      "oneTrustCookieCategories": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "oneTrustCookieCategory": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      }
     }
-  }
 }
