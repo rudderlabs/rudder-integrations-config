@@ -2,6 +2,151 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.49.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.49.1...v1.49.2) (2023-09-12)
+
+### [1.49.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.49.0...v1.49.1) (2023-09-11)
+
+
+### Bug Fixes
+
+* fb ads account validation ([2e2715b](https://github.com/rudderlabs/rudder-config-schema/commit/2e2715bc453b3de472320a77145afba847aa179e))
+* updates hubspot to 8.1.10 ([c0d3248](https://github.com/rudderlabs/rudder-config-schema/commit/c0d3248b3cfc6d8d596e8f7eb7d6abda2adc6aaf))
+* updates mixpanel to 8.1.10 ([074844c](https://github.com/rudderlabs/rudder-config-schema/commit/074844cd7da72ccf348a11a2aa5dd50f62bf73f3))
+
+## [1.49.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.48.0...v1.49.0) (2023-09-06)
+
+
+### Features
+
+* eloqua new integration onboarding  ([#893](https://github.com/rudderlabs/rudder-config-schema/issues/893)) ([0f849bd](https://github.com/rudderlabs/rudder-config-schema/commit/0f849bdbd80838714d18bac859986a1ada41cb83))
+
+## [1.48.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.47.2...v1.48.0) (2023-09-04)
+
+
+### Features
+
+* active campaign new UI ([#805](https://github.com/rudderlabs/rudder-config-schema/issues/805)) ([624d535](https://github.com/rudderlabs/rudder-config-schema/commit/624d53589e53d9674511623c0ab5f678c09504ca))
+* add eu instance support to kustomer destination ([#863](https://github.com/rudderlabs/rudder-config-schema/issues/863)) ([6c3a9df](https://github.com/rudderlabs/rudder-config-schema/commit/6c3a9df54e39a610b1e7ebf85edf51888f51b5d3))
+* adding trino config to UI ([#853](https://github.com/rudderlabs/rudder-config-schema/issues/853)) ([c74ecf2](https://github.com/rudderlabs/rudder-config-schema/commit/c74ecf20f7889f43b1ed25013b440602ca267955))
+* google ads black audeince feature ([#846](https://github.com/rudderlabs/rudder-config-schema/issues/846)) ([c294c50](https://github.com/rudderlabs/rudder-config-schema/commit/c294c50b09a924b534c5a9210e2d6621e1bc544d))
+* onboard hubspot to new UI ([#770](https://github.com/rudderlabs/rudder-config-schema/issues/770)) ([d40041a](https://github.com/rudderlabs/rudder-config-schema/commit/d40041a0b30e1e38564feaa32b6c408d496959be))
+* trino UI config - update ([#876](https://github.com/rudderlabs/rudder-config-schema/issues/876)) ([9c6d5b4](https://github.com/rudderlabs/rudder-config-schema/commit/9c6d5b4cecf1cec326a00d01457bb0a29d3a3d75))
+
+
+### Bug Fixes
+
+* ac script schema ([#882](https://github.com/rudderlabs/rudder-config-schema/issues/882)) ([3efb3c7](https://github.com/rudderlabs/rudder-config-schema/commit/3efb3c7d8475391b0e4bdccc926aa263ff88569f))
+
+### [1.47.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.47.1...v1.47.2) (2023-09-01)
+
+
+### Bug Fixes
+
+* updates mixpanel to 8.1.7 ([c908562](https://github.com/rudderlabs/rudder-config-schema/commit/c9085621728be32983eea3b1623f5fb66babf241))
+
+### [1.47.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.47.0...v1.47.1) (2023-08-29)
+
+## [1.47.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.46.2...v1.47.0) (2023-08-28)
+
+
+### Features
+
+* **mixpanel:** add persistence name setting ([#865](https://github.com/rudderlabs/rudder-config-schema/issues/865)) ([5c0e99e](https://github.com/rudderlabs/rudder-config-schema/commit/5c0e99e72963c99dce522f8f8db915694448ef5c))
+
+### [1.46.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.46.1...v1.46.2) (2023-08-23)
+
+
+### Bug Fixes
+
+* updates mixpanel to v8.1.5 ([d56d2a6](https://github.com/rudderlabs/rudder-config-schema/commit/d56d2a6b9368e935a7b160c8f3277a25699d749d))
+
+### [1.46.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.46.0...v1.46.1) (2023-08-22)
+
+
+### Bug Fixes
+
+* reverts salesforce to 4.0.5 ([a2e284c](https://github.com/rudderlabs/rudder-config-schema/commit/a2e284c48a6037e29b2e4b680ef44a98279e929c))
+
+## [1.46.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.45.2...v1.46.0) (2023-08-21)
+
+
+### Features
+
+* add flattenproperty field ([3a2b3e1](https://github.com/rudderlabs/rudder-config-schema/commit/3a2b3e191b657b7d2bb2629c6ac882f557c054e4))
+* add support for test events for Pinterest ([#811](https://github.com/rudderlabs/rudder-config-schema/issues/811)) ([85132bb](https://github.com/rudderlabs/rudder-config-schema/commit/85132bb3328468837c85e4225a8a290bc8ed7d6a))
+* enable blueshift for rETL ([#842](https://github.com/rudderlabs/rudder-config-schema/issues/842)) ([34e07a1](https://github.com/rudderlabs/rudder-config-schema/commit/34e07a189f7899c850d4ab14de14bb6b0bc1ac82))
+* **INT-151:** moving clevertap to router ([#831](https://github.com/rudderlabs/rudder-config-schema/issues/831)) ([c8dbf49](https://github.com/rudderlabs/rudder-config-schema/commit/c8dbf4918872acf01abce141e14d107ae2f4b873))
+* **INT-319:** update label to support v2 api token ([#829](https://github.com/rudderlabs/rudder-config-schema/issues/829)) ([b2ddb5d](https://github.com/rudderlabs/rudder-config-schema/commit/b2ddb5d9a7afd8ce87d8840b6f55801dfe49d49a))
+
+
+### Bug Fixes
+
+* add flattenProperty field ([3d7c9e7](https://github.com/rudderlabs/rudder-config-schema/commit/3d7c9e7525e4c7e107aeaf9e52dbc1739d92f2a8))
+* re-add removed schema for consent ([421d7c9](https://github.com/rudderlabs/rudder-config-schema/commit/421d7c94d9533b85f4884b3da182da6e3865c403))
+* updated with defaults for boolean fields in zendesk schema.json ([b7df821](https://github.com/rudderlabs/rudder-config-schema/commit/b7df821de6014bb4697620db1c0f19524780a080))
+* update supportedSourceTypes ([b00ab34](https://github.com/rudderlabs/rudder-config-schema/commit/b00ab34899bfe84a5afb71a0a1054c59dd5ddfea))
+
+### [1.45.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.45.1...v1.45.2) (2023-08-16)
+
+
+### Bug Fixes
+
+* catalog for databricks ([#840](https://github.com/rudderlabs/rudder-config-schema/issues/840)) ([316a0de](https://github.com/rudderlabs/rudder-config-schema/commit/316a0deffd1ddc1d63231874c35e98df8e248c27))
+* enabling mirror mode for databricks rETL ([#837](https://github.com/rudderlabs/rudder-config-schema/issues/837)) ([7b93ebb](https://github.com/rudderlabs/rudder-config-schema/commit/7b93ebb29ae2a100dec0ab069a7ce925b932c456))
+* releasing databricks to all customers ([#839](https://github.com/rudderlabs/rudder-config-schema/issues/839)) ([5020408](https://github.com/rudderlabs/rudder-config-schema/commit/5020408e8e3d2438236f38e1dee565e34196fec1))
+
+### [1.45.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.45.0...v1.45.1) (2023-08-16)
+
+
+### Bug Fixes
+
+* **dcmfloodlight:** schema issue ([#833](https://github.com/rudderlabs/rudder-config-schema/issues/833)) ([9f8cede](https://github.com/rudderlabs/rudder-config-schema/commit/9f8cede260f4fd9619609a7fdc6e1500d20d6fc6))
+* make bingAds aud visible and add message type to marketo bulk upload ([#832](https://github.com/rudderlabs/rudder-config-schema/issues/832)) ([e8b0435](https://github.com/rudderlabs/rudder-config-schema/commit/e8b0435aae6b71d59e977ce8e56762a5e3ae0e18))
+
+## [1.45.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.44.2...v1.45.0) (2023-08-14)
+
+
+### Features
+
+* **zendesk:** add source name setting ([#825](https://github.com/rudderlabs/rudder-config-schema/issues/825)) ([51329cc](https://github.com/rudderlabs/rudder-config-schema/commit/51329ccdfcc97d3f0b0f99be76acb99ef4270b43))
+
+### [1.44.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.44.1...v1.44.2) (2023-08-11)
+
+
+### Bug Fixes
+
+* updated optimizely_fullstack uiConfig to match the latest mapping component structure ([#821](https://github.com/rudderlabs/rudder-config-schema/issues/821)) ([7ceba92](https://github.com/rudderlabs/rudder-config-schema/commit/7ceba92661263dcc084d444e6e1d222a32344884))
+
+### [1.44.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.44.0...v1.44.1) (2023-08-08)
+
+
+### Bug Fixes
+
+* remove validation for sendPageAsTrack & additionalPageInfo fields ([#816](https://github.com/rudderlabs/rudder-config-schema/issues/816)) ([ceac681](https://github.com/rudderlabs/rudder-config-schema/commit/ceac681f34dc74ea148cd67c702ae2e5cd0bfddc))
+
+## [1.44.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.43.2...v1.44.0) (2023-08-07)
+
+
+### Features
+
+* create config generator script for os contribution ([#742](https://github.com/rudderlabs/rudder-config-schema/issues/742)) ([4d65441](https://github.com/rudderlabs/rudder-config-schema/commit/4d6544160dd14fdcb17806ba8f619d54e87a0fd0))
+* customerio option to send page name ([#789](https://github.com/rudderlabs/rudder-config-schema/issues/789)) ([c68062b](https://github.com/rudderlabs/rudder-config-schema/commit/c68062b3e72594b9b878324a6ef749114adacc15))
+* enhancement adding purchase event for track call ([#810](https://github.com/rudderlabs/rudder-config-schema/issues/810)) ([51b77b7](https://github.com/rudderlabs/rudder-config-schema/commit/51b77b79f196854acf3455b83c6a010ccf8aec5a))
+* new source type shopify changes ([#729](https://github.com/rudderlabs/rudder-config-schema/issues/729)) ([c0475c3](https://github.com/rudderlabs/rudder-config-schema/commit/c0475c3f0d3c29dc8d1c3d8394ed9f4f4e7061ae))
+* update klaviyo ui to new UI layout ([#493](https://github.com/rudderlabs/rudder-config-schema/issues/493)) ([97b6b8f](https://github.com/rudderlabs/rudder-config-schema/commit/97b6b8fd7e48cc8ea92d0a618075dd5e4fd91828))
+
+
+### Bug Fixes
+
+* include sendPageNameInSDK in includeKeys array ([#809](https://github.com/rudderlabs/rudder-config-schema/issues/809)) ([a7b3159](https://github.com/rudderlabs/rudder-config-schema/commit/a7b3159c55f8016a1cf6ebefb75f4896907f686a))
+
+### [1.43.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.43.1...v1.43.2) (2023-08-01)
+
+
+### Bug Fixes
+
+* **ga4:** firebaseAppId config field issue ([3d1bccc](https://github.com/rudderlabs/rudder-config-schema/commit/3d1bccc3a06d70c5052347c51e4bb34865529727))
+
 ### [1.43.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.43.0...v1.43.1) (2023-07-28)
 
 ## [1.43.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.42.2...v1.43.0) (2023-07-24)

@@ -2,6 +2,7 @@
   "name": "FULLSTORY",
   "displayName": "Fullstory",
   "config": {
+    "cdkV2Enabled": true,
     "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
@@ -15,26 +16,38 @@
       "eventFilteringOption"
     ],
     "excludeKeys": [],
-    "supportedSourceTypes": ["web", "android", "ios"],
+    "supportedSourceTypes": [
+      "web",
+      "android",
+      "ios",
+      "unity",
+      "amp",
+      "cloud",
+      "warehouse",
+      "reactnative",
+      "flutter",
+      "cordova",
+      "shopify"
+    ],
     "supportedConnectionModes": {
-      "web": ["device"],
-      "android": ["device"],
-      "ios": ["device"]
+      "android": ["cloud", "device"],
+      "ios": ["cloud", "device"],
+      "web": ["cloud", "device"]
     },
     "destConfig": {
       "defaultConfig": [
+        "apiKey",
         "fs_org",
-        "fs_host",
-        "fs_debug_mode",
         "blacklistedEvents",
         "whitelistedEvents",
-        "eventFilteringOption",
-        "oneTrustCookieCategories"
+        "oneTrustCookieCategories",
+        "eventFilteringOption"
       ],
-      "web": ["useNativeSDK"],
-      "android": ["useNativeSDK"],
-      "ios": ["useNativeSDK"]
+      "web": ["useNativeSDK", "connectionMode", "fs_debug_mode", "fs_host"],
+      "android": ["useNativeSDK", "connectionMode"],
+      "ios": ["useNativeSDK", "connectionMode"]
     },
-    "secretKeys": []
-  }
+    "secretKeys": ["apiKey"]
+  },
+  "options": { "isBeta": true }
 }

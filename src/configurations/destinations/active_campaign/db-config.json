@@ -6,7 +6,7 @@
     "transformAtV1": "router",
     "saveDestinationResponse": true,
     "isAudienceSupported": true,
-    "includeKeys": ["oneTrustCookieCategories"],
+    "includeKeys": ["oneTrustCookieCategories", "connectionMode", "actid"],
     "excludeKeys": [],
     "supportedSourceTypes": [
       "android",
@@ -18,12 +18,21 @@
       "warehouse",
       "reactnative",
       "flutter",
-      "cordova"
+      "cordova",
+      "shopify"
     ],
-    "supportedConnectionModes": {},
-    "supportedMessageTypes": { "cloud": ["identify", "page", "screen", "track"] },
+    "supportedMessageTypes": ["identify", "page", "screen", "track"],
+    "supportedConnectionModes": {
+      "web": ["cloud", "device", "hybrid"]
+    },
+    "hybridModeCloudEventsFilter": {
+      "web": {
+        "messageType": ["track", "screen", "identify"]
+      }
+    },
     "destConfig": {
-      "defaultConfig": ["apiUrl", "apiKey", "eventKey", "actid", "oneTrustCookieCategories"]
+      "defaultConfig": ["apiUrl", "apiKey", "eventKey", "actid", "oneTrustCookieCategories"],
+      "web": ["useNativeSDK", "connectionMode"]
     },
     "secretKeys": ["apiKey", "eventKey", "actid"]
   }
