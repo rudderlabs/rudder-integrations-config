@@ -19,21 +19,15 @@ import jsondiff
 # ENV VARIABLES
 CONTROL_PLANE_URL=sys.argv[1]
 print(CONTROL_PLANE_URL)
-USERNAME=sys.argv[2]
+USERNAME=os.environ['API_USER'] #sys.argv[2]
 print(USERNAME)
-PASSWORD=sys.argv[3]
-print(PASSWORD)
+PASSWORD=os.environ['API_PASSWORD'] #sys.argv[3]
+#print(PASSWORD)
 #########################
 # CONSTANTS
 HEADER = {"Content-Type": "application/json"}
 AUTH = (USERNAME, PASSWORD)
 CONFIG_DIR = 'src/configurations'
-SELECTOR_KEY_MAP = {
-    'source': 'name',
-    'destination': 'name',
-    'wht-lib-project': 'name',
-    'account': ['category', 'type'],
-}
 #########################
 
 
