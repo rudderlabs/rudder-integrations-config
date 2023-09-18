@@ -100,7 +100,6 @@ def get_account_definition_key(account_definition):
 
 def update_diff_db(selector):
     final_report = []
-    # selector_key = SELECTOR_KEY_MAP.get(selector, 'name')
 
     ## data sets
     current_items = os.listdir(f'./{CONFIG_DIR}/{selector}s')
