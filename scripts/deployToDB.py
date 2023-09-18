@@ -19,15 +19,21 @@ import jsondiff
 # ENV VARIABLES
 CONTROL_PLANE_URL=sys.argv[1]
 print(CONTROL_PLANE_URL)
-USERNAME=os.environ['API_USER'] #sys.argv[2]
+USERNAME=sys.argv[2]
 print(USERNAME)
-PASSWORD=os.environ['API_PASSWORD'] #sys.argv[3]
-#print(PASSWORD)
+PASSWORD=sys.argv[3]
+print(PASSWORD)
 #########################
 # CONSTANTS
 HEADER = {"Content-Type": "application/json"}
 AUTH = (USERNAME, PASSWORD)
 CONFIG_DIR = 'src/configurations'
+SELECTOR_KEY_MAP = {
+    'source': 'name',
+    'destination': 'name',
+    'wht-lib-project': 'name',
+    'account': ['category', 'type'],
+}
 #########################
 
 
@@ -95,15 +101,25 @@ def update_config(data_diff, selector):
 
     return json.dumps(results, indent=2)
 
+def get_account_definition_key(account_definition):
+    return account_definition['category'] + '/' + account_definition['type']
+
 def update_diff_db(selector):
     final_report = []
+    # selector_key = SELECTOR_KEY_MAP.get(selector, 'name')
 
     ## data sets
     current_items = os.listdir(f'./{CONFIG_DIR}/{selector}s')
 
     for item in current_items:
         updated_data = get_file_content(item, selector)
-        persisted_data = get_config_definition(CONTROL_PLANE_URL, selector, updated_data["name"])
+
+        if selector == 'account':
+            selector_key = get_account_definition_key(updated_data)
+        else:
+            selector_key = updated_data["name"]
+
+        persisted_data = get_config_definition(CONTROL_PLANE_URL, selector, selector_key)
 
         if persisted_data.status_code == 200:
             diff = jsondiff.diff(json.loads(persisted_data.text), updated_data, marshal=True)
@@ -113,22 +129,26 @@ def update_diff_db(selector):
 
             if len(diff.keys()) > 0: # changes exist
                 #print(diff)
-                status, response = update_config_definition(selector, updated_data["name"], updated_data)
-                final_report.append({"name": updated_data["name"], "action":"update", "status": status})
+                status, response = update_config_definition(selector, selector_key, updated_data)
+                final_report.append({"name": selector_key, "action":"update", "status": status})
             else:
-                final_report.append({"name": updated_data["name"], "action":"na", "status": ""})
+                final_report.append({"name": selector_key, "action":"na", "status": ""})
 
         else:
             status, response = create_config_definition(selector, updated_data)
-            final_report.append({"name": updated_data["name"], "action":"create", "status": status})
+            final_report.append({"name": selector_key, "action":"create", "status": status})
 
     return final_report
 
 def get_stale_data(selector, report):
     stale_config_report = []
     persisted_data_set = get_persisted_store(CONTROL_PLANE_URL, selector)
-    persisted_items = [item['name'] for item in persisted_data_set]
-    file_items = [item['name'] for item in report]
+    if selector == 'account':
+        persisted_items = [get_account_definition_key(item) for item in persisted_data_set]
+        file_items = [get_account_definition_key(item) for item in report]
+    else:
+        elsepersisted_items = [item['name'] for item in persisted_data_set]
+        file_items = [item['name'] for item in report]
 
     for item in persisted_items:
         if item not in file_items:
@@ -157,4 +177,11 @@ if __name__ == '__main__':
     print(wht_final_report)
     print("Wht lib project Stale Config Report")
     print(get_stale_data('wht-lib-project', wht_final_report))
+
+    print("Running Account Definitions Updates")
+    account_final_report = update_diff_db('account')
+    print("Account Definition Update Report")
+    print(account_final_report)
+    print("Account Stale Config Report")
+    print(get_stale_data('account', account_final_report))
     
