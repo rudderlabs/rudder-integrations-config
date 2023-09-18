@@ -147,7 +147,7 @@ def get_stale_data(selector, report):
         persisted_items = [get_account_definition_key(item) for item in persisted_data_set]
         file_items = [get_account_definition_key(item) for item in report]
     else:
-        elsepersisted_items = [item['name'] for item in persisted_data_set]
+        persisted_items = [item['name'] for item in persisted_data_set]
         file_items = [item['name'] for item in report]
 
     for item in persisted_items:
