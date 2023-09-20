@@ -1,0 +1,31 @@
+[
+  {
+    "config": {
+      "companyName": "someDummyCompany",
+      "userName": "someDummyUserName",
+      "password": "someDummyPassword"
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "companyName": "someDummyCompanywithlengthmorethan100-12345678901234567890123456789012345678901234567890123456789012345678901234567890",
+      "userName": "someDummyUserNamewithlengthmorethan100-12345678901234567890123456789012345678901234567890123456789012345678901234567890",
+      "password": "someDummyPasswordwithlengthmorethan100-12345678901234567890123456789012345678901234567890123456789012345678901234567890"
+    },
+    "result": false,
+    "err": [
+      "companyName must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
+      "userName must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
+      "password must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
+    ]
+  },
+  {
+    "config": {
+      "userName": "someDummyUserName",
+      "password": "someDummyPassword"
+    },
+    "result": false,
+    "err":[" must have required property 'companyName'"]
+  }
+]
