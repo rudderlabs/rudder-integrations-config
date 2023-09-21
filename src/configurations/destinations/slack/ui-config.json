@@ -4,6 +4,27 @@
       "title": "Event Channels",
       "fields": [
         {
+          "type": "singleSelect",
+          "label": "Type of incoming webhooks",
+          "value": "incomingWebhooksType",
+          "mode": "single",
+          "options": [
+            {
+              "name": "Legacy (Will be deprecated soon)",
+              "value": "legacy"
+            },
+            {
+              "name": "Modern (through app)",
+              "value": "modern"
+            }
+          ],
+          "defaultOption": {
+            "name": "Legacy",
+            "value": "legacy"
+          },
+          "footerNote": "If legacy is choosed then channel mapping will be done based on channel name else it will be done based on channel webhook"
+        },
+        {
           "type": "dynamicCustomForm",
           "value": "eventChannelSettings",
           "customFields": [
@@ -18,12 +39,23 @@
             },
             {
               "type": "textInput",
-              "label": "Event Channel",
+              "label": "Event Channel Webhook",
+              "value": "eventChannelWebhook",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$",
+              "regexErrorMessage": "Invalid Event Channel Webhook",
+              "required": false,
+              "placeholder": "e.g: https://hooks.slack.com/services/placeholder_1/placeholder_2/placeholder_3",
+              "footerNote": "Required for Modern API"
+            },
+            {
+              "type": "textInput",
+              "label": "Event Channel Name",
               "value": "eventChannel",
               "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "regexErrorMessage": "Invalid Event Channel",
+              "regexErrorMessage": "Invalid Event Channel Name",
               "required": false,
-              "placeholder": "e.g: ABCDEFG"
+              "placeholder": "e.g: ABCDEFG",
+              "footerNote": "Required for legacy API"
             },
             {
               "type": "checkbox",
@@ -94,7 +126,7 @@
           "regex": "(?!.*\\.ngrok\\.io)^(.{0,100})$",
           "regexErrorMessage": "Invalid Webhook Url",
           "required": true,
-          "placeholder": "e.g: ABCDEFG"
+          "placeholder": "e.g: https://hooks.slack.com/services/placeholder1/placeholder2/placeholder3"
         }
       ]
     },
@@ -112,7 +144,25 @@
               "regex": "^(.{0,100})$",
               "regexErrorMessage": "Invalid Trait",
               "required": false,
-              "placeholder": "e.g: ABCDEFG"
+              "placeholder": "e.g: lastName"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Blacklisted Events",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "blacklistedEvents",
+          "customFields": [
+            {
+              "type": "textInput",
+              "label": "Event Name",
+              "value": "eventName",
+              "required": false,
+              "placeholder": "e.g: Credit Card Added"
             }
           ]
         }
