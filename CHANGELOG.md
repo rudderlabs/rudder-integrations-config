@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.51.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.51.0...v1.51.1) (2023-09-21)
+
+
+### Bug Fixes
+
+* **iterable:** remove enum values for handleLinks and closeButtonPosition ([c6129c1](https://github.com/rudderlabs/rudder-config-schema/commit/c6129c14f4fd28de9f22a59d160382d59a1a620f))
+
+## [1.51.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.50.0...v1.51.0) (2023-09-20)
+
+
+### Features
+
+* **appcues:** added proxyUrl support ([f870b4a](https://github.com/rudderlabs/rudder-config-schema/commit/f870b4aed86ba2dcc77fc58f95f8401e273eff92))
+* **INT-339:** enable mirror mode for marketo static list ([#843](https://github.com/rudderlabs/rudder-config-schema/issues/843)) ([88841c2](https://github.com/rudderlabs/rudder-config-schema/commit/88841c2d4b9081f263ceace003499f7ee873cfe6))
+* **INT-523:** update customerIo UI config to convert datacenter field t dropdown ([#880](https://github.com/rudderlabs/rudder-config-schema/issues/880)) ([c696c2c](https://github.com/rudderlabs/rudder-config-schema/commit/c696c2c1da6ae8450562565837cf11f60b9055ea))
+* **iterable:** move to new ui ([54ac1fe](https://github.com/rudderlabs/rudder-config-schema/commit/54ac1fef3a868c491bcee9deff4b735e6d14edaa))
+* onboard cloud mode support for fullstory on new UI ([#875](https://github.com/rudderlabs/rudder-config-schema/issues/875)) ([33c3d5f](https://github.com/rudderlabs/rudder-config-schema/commit/33c3d5f235cb3b26ed0b4acc5257bb1bd3f55559))
+* onboard launchdarkly audience ([#877](https://github.com/rudderlabs/rudder-config-schema/issues/877)) ([a9deca0](https://github.com/rudderlabs/rudder-config-schema/commit/a9deca09e4df5a3517555e124cddb5ed5febd633))
+
+
+### Bug Fixes
+
+* fb ads account validation (ETL-114) ([#892](https://github.com/rudderlabs/rudder-config-schema/issues/892)) ([3366668](https://github.com/rudderlabs/rudder-config-schema/commit/33666685d667eec4ec72f5043c60e2249940cca0))
+* **INT-568:** slack send event to event specific channel using webhooks ([#895](https://github.com/rudderlabs/rudder-config-schema/issues/895)) ([70a17f6](https://github.com/rudderlabs/rudder-config-schema/commit/70a17f663887377f4e4625091585396ec1521820))
+* **iterable:** schema issues ([e902815](https://github.com/rudderlabs/rudder-config-schema/commit/e902815a7d665445b35394ff8be9f99e10efa1a0))
+
 ## [1.50.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.49.2...v1.50.0) (2023-09-19)
 
 
