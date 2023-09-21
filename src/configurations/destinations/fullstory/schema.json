@@ -1,3 +1,148 @@
 {
-  "configSchema": null
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": [],
+    "type": "object",
+    "properties": {
+      "eventFilteringOption": {
+        "type": "string",
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
+      },
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "oneTrustCookieCategories": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "oneTrustCookieCategory": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "fs_host": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^$|^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
+          }
+        }
+      },
+      "fs_debug_mode": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": { "type": "boolean" },
+          "android": { "type": "boolean" },
+          "ios": { "type": "boolean" }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "web": { "type": "string", "enum": ["cloud", "device"] },
+          "android": { "type": "string", "enum": ["cloud", "device"] },
+          "ios": { "type": "string", "enum": ["cloud", "device"] }
+        }
+      }
+    },
+    "allOf": [
+      {
+        "if": {
+          "anyOf": [
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "web": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["web"]
+                }
+              }
+            },
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "android": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["android"]
+                }
+              }
+            },
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "ios": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["ios"]
+                }
+              }
+            }
+          ]
+        },
+        "then": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$"
+            }
+          },
+          "required": ["apiKey"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "properties": {
+                "web": { "type": "string", "enum": ["device"] }
+              },
+              "required": ["web"]
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "fs_org": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          },
+          "required": ["fs_org"]
+        }
+      }
+    ]
+  }
 }
