@@ -66,7 +66,7 @@ def get_file_content(name, selector):
 
 def update_config_definition(selector, name, fileData):
     url = f'{CONTROL_PLANE_URL}/{selector}-definitions/{name}'
-    resp = requests.post(url=url, headers=HEADER, data=json.dumps(fileData), auth=AUTH)
+    resp = requests.put(url=url, headers=HEADER, data=json.dumps(fileData), auth=AUTH)
     return parse_response(resp)
 
 def create_config_definition(selector, fileData):
@@ -138,10 +138,9 @@ def get_stale_data(selector, report):
     persisted_data_set = get_persisted_store(CONTROL_PLANE_URL, selector)
     if selector == 'account':
         persisted_items = [get_account_definition_key(item) for item in persisted_data_set]
-        file_items = [get_account_definition_key(item) for item in report]
     else:
         persisted_items = [item['name'] for item in persisted_data_set]
-        file_items = [item['name'] for item in report]
+    file_items = [item['name'] for item in report]
 
     for item in persisted_items:
         if item not in file_items:
