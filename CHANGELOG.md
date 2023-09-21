@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.51.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.51.0...v1.51.1) (2023-09-21)
+
+
+### Bug Fixes
+
+* **iterable:** remove enum values for handleLinks and closeButtonPosition ([c6129c1](https://github.com/rudderlabs/rudder-config-schema/commit/c6129c14f4fd28de9f22a59d160382d59a1a620f))
+
 ## [1.51.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.50.0...v1.51.0) (2023-09-20)
 
 
