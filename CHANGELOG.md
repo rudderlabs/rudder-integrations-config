@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.51.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.51.1...v1.51.2) (2023-09-22)
+
 ### [1.51.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.51.0...v1.51.1) (2023-09-21)
 
 
