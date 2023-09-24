@@ -1,3 +1,87 @@
 {
-  "configSchema": null
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["apiKey", "appId"],
+    "type": "object",
+    "properties": {
+      "apiKey": {
+        "type": "string",
+        "pattern": "^(.{0,100})$"
+      },
+      "appId": {
+        "type": "string",
+        "pattern": "^(.{0,100})$"
+      },
+      "mobileApiKeyAndroid": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "string",
+            "pattern": "^(.{0,100})$"
+          }
+        }
+      },
+      "mobileApiKeyIOS": {
+        "type": "object",
+        "properties": {
+          "ios": {
+            "type": "string",
+            "pattern": "^(.{0,100})$"
+          }
+        }
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "android": { "type": "boolean" },
+          "ios": { "type": "boolean" },
+          "web": { "type": "boolean" }
+        }
+      },
+      "collectContext": { "type": "boolean", "default": false },
+      "sendAnonymousId": { "type": "boolean", "default": false },
+      "updateLastRequestAt": { "type": "boolean", "default": true },
+      "eventFilteringOption": {
+        "type": "string",
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
+      },
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "oneTrustCookieCategories": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "oneTrustCookieCategory": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      }
+    }
+  }
 }
