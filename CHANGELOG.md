@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.52.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.51.3...v1.52.0) (2023-09-25)
+
+
+### Features
+
+* **intercom:** add configSchema rules for intercom ([#932](https://github.com/rudderlabs/rudder-config-schema/issues/932)) ([99c9ef8](https://github.com/rudderlabs/rudder-config-schema/commit/99c9ef8da39da644a16cfd5a98e2a88a8c07d384))
+
+
+### Bug Fixes
+
+* update configurations for gcf ([#934](https://github.com/rudderlabs/rudder-config-schema/issues/934)) ([d6e0c92](https://github.com/rudderlabs/rudder-config-schema/commit/d6e0c92dd4ee0242fecadf25924641704c0c99e5))
+
 ### [1.51.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.51.2...v1.51.3) (2023-09-22)
 
 ### [1.51.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.51.1...v1.51.2) (2023-09-22)
