@@ -1,14 +1,14 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["triggerType"],
+    "required": ["googleCloudFunctionUrl"],
     "type": "object",
     "properties": {
-      "triggerType": { "type": "string", "enum": ["Http", "Https"] },
-      "apiKeyId": {
+      "googleCloudFunctionUrl": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
       },
+      "requireAuthentication": { "type": "boolean", "default": true },
       "enableBatchInput": { "type": "boolean", "default": false },
       "oneTrustCookieCategories": {
         "type": "array",
@@ -25,34 +25,18 @@
     },
     "allOf": [
       {
-        "if": { "properties": { "triggerType": { "const": "Http" } }, "required": ["triggerType"] },
-        "then": {
-          "properties": {
-            "googleCloudFunctionUrl": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
-            }
-          },
-          "required": ["googleCloudFunctionUrl"]
-        }
-      },
-      {
         "if": {
-          "properties": { "triggerType": { "const": "Https" } },
-          "required": ["triggerType"]
+          "properties": { "requireAuthentication": { "const": true } },
+          "required": ["requireAuthentication"]
         },
         "then": {
           "properties": {
-            "googleCloudFunctionUrl": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
-            },
-            "gcloudAuthorization": {
+            "credentials": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
             }
           },
-          "required": ["googleCloudFunctionUrl", "gcloudAuthorization"]
+          "required": ["credentials"]
         }
       },
       {
