@@ -160,26 +160,47 @@
                 ]
               },
               {
-                "title": "OneTrust cookie consent settings",
-                "note": [
-                  "Enter your OneTrust category names if you have them configured. ",
+                "type": "dynamicCustomForm",
+                "label": "Consent management settings",
+                "value": "consentManagement",
+                "customFields": [
                   {
-                    "text": "Learn more ",
-                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                    "type": "singleSelect",
+                    "label": "Consent Provider",
+                    "value": "provider",
+                    "options": [
+                      {
+                        "name": "Custom",
+                        "value": "custom"
+                      },
+                      {
+                        "name": "OneTrust",
+                        "value": "oneTrust"
+                      },
+                      {
+                        "name": "Ketch",
+                        "value": "ketch"
+                      }
+                    ],
+                    "required": false
                   },
-                  "about RudderStack’s OneTrust Consent Manager feature."
-                ],
-                "fields": [
                   {
                     "type": "tagInput",
-                    "label": "Cookie category name",
-                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
-                    "configKey": "oneTrustCookieCategories",
-                    "tagKey": "oneTrustCookieCategory",
-                    "placeholder": "e.g: Credit card visit",
+                    "label": "Consents",
+                    "note": "Input your consent entries by pressing ‘Enter’ after each entry",
+                    "configKey": "consents",
+                    "placeholder": "e.g: Marketing",
+                    "tagKey": "consent",
+                    "customFields": [
+                      {
+                        "type": "textInput",
+                        "value": "consent",
+                        "required": false
+                      }
+                    ],
                     "default": [
                       {
-                        "oneTrustCookieCategory": ""
+                        "consent": ""
                       }
                     ]
                   }

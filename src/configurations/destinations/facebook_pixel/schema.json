@@ -155,23 +155,28 @@
           }
         }
       },
-      "oneTrustCookieCategories": {
+      "consentManagement": {
         "type": "array",
         "items": {
           "type": "object",
           "properties": {
-            "oneTrustCookieCategory": {
+            "provider": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+              "enum": ["oneTrust", "ketch", "custom"]
+            },
+            "consents": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "consent": {
+                    "type": "string",
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  }
+                }
+              }
             }
           }
-        }
-      },
-      "ketchConsentPurposes": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": { "purpose": { "type": "string", "pattern": "^(.{0,100})$" } }
         }
       }
     }

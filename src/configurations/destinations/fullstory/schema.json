@@ -33,14 +33,26 @@
           }
         }
       },
-      "oneTrustCookieCategories": {
+      "consentManagement": {
         "type": "array",
         "items": {
           "type": "object",
           "properties": {
-            "oneTrustCookieCategory": {
+            "provider": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+              "enum": ["oneTrust", "ketch", "custom"]
+            },
+            "consents": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "consent": {
+                    "type": "string",
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  }
+                }
+              }
             }
           }
         }
