@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.53.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.52.0...v1.53.0) (2023-09-26)
+
+
+### Features
+
+* enabling vdm label for google remarketting lists ([#939](https://github.com/rudderlabs/rudder-config-schema/issues/939)) ([8ab88fa](https://github.com/rudderlabs/rudder-config-schema/commit/8ab88fa764ce6030ce96f44ca7e5c6f182fb6c46))
+
+
+### Bug Fixes
+
+* move credentials to secret ([#938](https://github.com/rudderlabs/rudder-config-schema/issues/938)) ([e915d65](https://github.com/rudderlabs/rudder-config-schema/commit/e915d65b64afceb6fe7693d8a536bbad91f7c483))
+
 ## [1.52.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.51.3...v1.52.0) (2023-09-25)
 
 
