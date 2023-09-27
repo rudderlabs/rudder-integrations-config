@@ -2,7 +2,7 @@
   {
     "config": {
       "prefix": "",
-      "namespace": "",
+      "namespace": "test-namespace",
       "syncFrequency": "30",
       "bucketName": "test-bucket",
       "credentials": "{}"
@@ -12,7 +12,7 @@
   {
     "config": {
       "prefix": "",
-      "namespace": "",
+      "namespace": "test-namespace",
       "syncFrequency": "30",
       "bucketName": "test-bucket-test-bucket-test-bucket-test-bucket-test-bucket-test-bucket-test-bucket-test-bucket-test-bucket",
       "credentials": "{}"
@@ -25,7 +25,7 @@
   {
     "config": {
       "prefix": "",
-      "namespace": "",
+      "namespace": "test-namespace",
       "syncFrequency": "30",
       "bucketName": "test.bucket",
       "credentials": "{}"
@@ -35,7 +35,7 @@
   {
     "config": {
       "prefix": "",
-      "namespace": "",
+      "namespace": "test-namespace",
       "syncFrequency": "30",
       "bucketName": "testBucket",
       "credentials": "{}"
@@ -48,7 +48,7 @@
   {
     "config": {
       "prefix": "",
-      "namespace": "",
+      "namespace": "test-namespace",
       "syncFrequency": "30",
       "bucketName": "ab",
       "credentials": "{}"
@@ -61,7 +61,7 @@
   {
     "config": {
       "prefix": "",
-      "namespace": "",
+      "namespace": "test-namespace",
       "syncFrequency": "30",
       "bucketName": "ab..ab",
       "credentials": "{}"
@@ -74,7 +74,7 @@
   {
     "config": {
       "prefix": "",
-      "namespace": "",
+      "namespace": "test-namespace",
       "syncFrequency": "30",
       "bucketName": "1.2.3.4",
       "credentials": "{}"
@@ -87,7 +87,7 @@
   {
     "config": {
       "prefix": "",
-      "namespace": "",
+      "namespace": "test-namespace",
       "syncFrequency": "30",
       "bucketName": "googabc",
       "credentials": "{}"
@@ -100,7 +100,7 @@
   {
     "config": {
       "prefix": "",
-      "namespace": "",
+      "namespace": "test-namespace",
       "syncFrequency": "30",
       "bucketName": "abcgoogleabc",
       "credentials": "{}"
@@ -108,6 +108,29 @@
     "result": false,
     "err": [
       "bucketName must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$\""
+    ]
+  },
+  {
+    "config": {
+      "prefix": "",
+      "syncFrequency": "30",
+      "bucketName": "test-bucket",
+      "credentials": "{}"
+    },
+    "result": false,
+    "err": [" must have required property 'namespace'"]
+  },
+  {
+    "config": {
+      "prefix": "",
+      "namespace": "",
+      "syncFrequency": "30",
+      "bucketName": "test-bucket",
+      "credentials": "{}"
+    },
+    "result": false,
+    "err": [
+      "namespace must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{1,64})$\""
     ]
   }
 ]
