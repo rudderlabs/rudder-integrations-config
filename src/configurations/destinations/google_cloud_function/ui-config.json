@@ -4,18 +4,7 @@
       "title": "Connection Settings",
       "fields": [
         {
-          "type": "singleSelect",
-          "label": "Choose your Trigger Type ",
-          "value": "triggerType",
-          "options": [
-            { "name": "HTTP", "value": "Http" },
-            { "name": "HTTPS", "value": "Https" }
-          ],
-          "required": true
-        },
-        {
           "type": "textInput",
-          "preRequisiteField": [{ "name": "triggerType", "selectedValue": "Http" }],
           "label": "URL",
           "value": "googleCloudFunctionUrl",
           "required": true,
@@ -24,36 +13,20 @@
           "footerNote": "The Url given under Trigger section when you create Google Cloud Function"
         },
         {
-          "type": "textInput",
-          "preRequisiteField": [{ "name": "triggerType", "selectedValue": "Https" }],
-          "label": "URL",
-          "value": "googleCloudFunctionUrl",
-          "required": true,
-          "placeholder": "http://www.abcd.com",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
-          "footerNote": "The Url given under Trigger section when you create Google Cloud Function"
+          "type": "checkbox",
+          "label": "Enable it if your function requires authentication",
+          "value": "requireAuthentication",
+          "default": true
         },
         {
-          "type": "textInput",
-          "preRequisiteField": [{ "name": "triggerType", "selectedValue": "Https" }],
-          "label": "Gcloud Authorization",
-          "value": "gcloudAuthorization",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
+          "type": "textareaInput",
+          "preRequisiteField": [{ "name": "requireAuthentication", "selectedValue": true }],
+          "label": "Credentials",
+          "labelNote": "GCP Service Account credentials JSON for RudderStack to use in authenticating your Google Cloud Function",
+          "value": "credentials",
+          "regex": ".*",
           "required": true,
-          "placeholder": "e.g. tZrPAgHyn2jMWOVGKrS6gBGLYT8v9kJE",
-          "secret": true,
-          "footerNote": "Your private Gcloud Authorization Token"
-        },
-        {
-          "type": "textInput",
-          "label": "Api Key Id",
-          "value": "apiKeyId",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-          "regexErrorMessage": "Invalid Api Key Id",
-          "required": false,
-          "placeholder": "e.g: bSjsdGYsOo9sjw23Shj",
-          "secret": true,
-          "footerNote": "Your API Key"
+          "footerNote": "The credentials JSON is used by the client library to access the Google Cloud Function API"
         }
       ]
     },

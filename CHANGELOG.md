@@ -2,6 +2,67 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.53.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.52.0...v1.53.0) (2023-09-26)
+
+
+### Features
+
+* enabling vdm label for google remarketting lists ([#939](https://github.com/rudderlabs/rudder-config-schema/issues/939)) ([8ab88fa](https://github.com/rudderlabs/rudder-config-schema/commit/8ab88fa764ce6030ce96f44ca7e5c6f182fb6c46))
+
+
+### Bug Fixes
+
+* move credentials to secret ([#938](https://github.com/rudderlabs/rudder-config-schema/issues/938)) ([e915d65](https://github.com/rudderlabs/rudder-config-schema/commit/e915d65b64afceb6fe7693d8a536bbad91f7c483))
+
+## [1.52.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.51.3...v1.52.0) (2023-09-25)
+
+
+### Features
+
+* **intercom:** add configSchema rules for intercom ([#932](https://github.com/rudderlabs/rudder-config-schema/issues/932)) ([99c9ef8](https://github.com/rudderlabs/rudder-config-schema/commit/99c9ef8da39da644a16cfd5a98e2a88a8c07d384))
+
+
+### Bug Fixes
+
+* update configurations for gcf ([#934](https://github.com/rudderlabs/rudder-config-schema/issues/934)) ([d6e0c92](https://github.com/rudderlabs/rudder-config-schema/commit/d6e0c92dd4ee0242fecadf25924641704c0c99e5))
+
+### [1.51.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.51.2...v1.51.3) (2023-09-22)
+
+### [1.51.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.51.1...v1.51.2) (2023-09-22)
+
+### [1.51.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.51.0...v1.51.1) (2023-09-21)
+
+
+### Bug Fixes
+
+* **iterable:** remove enum values for handleLinks and closeButtonPosition ([c6129c1](https://github.com/rudderlabs/rudder-config-schema/commit/c6129c14f4fd28de9f22a59d160382d59a1a620f))
+
+## [1.51.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.50.0...v1.51.0) (2023-09-20)
+
+
+### Features
+
+* **appcues:** added proxyUrl support ([f870b4a](https://github.com/rudderlabs/rudder-config-schema/commit/f870b4aed86ba2dcc77fc58f95f8401e273eff92))
+* **INT-339:** enable mirror mode for marketo static list ([#843](https://github.com/rudderlabs/rudder-config-schema/issues/843)) ([88841c2](https://github.com/rudderlabs/rudder-config-schema/commit/88841c2d4b9081f263ceace003499f7ee873cfe6))
+* **INT-523:** update customerIo UI config to convert datacenter field t dropdown ([#880](https://github.com/rudderlabs/rudder-config-schema/issues/880)) ([c696c2c](https://github.com/rudderlabs/rudder-config-schema/commit/c696c2c1da6ae8450562565837cf11f60b9055ea))
+* **iterable:** move to new ui ([54ac1fe](https://github.com/rudderlabs/rudder-config-schema/commit/54ac1fef3a868c491bcee9deff4b735e6d14edaa))
+* onboard cloud mode support for fullstory on new UI ([#875](https://github.com/rudderlabs/rudder-config-schema/issues/875)) ([33c3d5f](https://github.com/rudderlabs/rudder-config-schema/commit/33c3d5f235cb3b26ed0b4acc5257bb1bd3f55559))
+* onboard launchdarkly audience ([#877](https://github.com/rudderlabs/rudder-config-schema/issues/877)) ([a9deca0](https://github.com/rudderlabs/rudder-config-schema/commit/a9deca09e4df5a3517555e124cddb5ed5febd633))
+
+
+### Bug Fixes
+
+* fb ads account validation (ETL-114) ([#892](https://github.com/rudderlabs/rudder-config-schema/issues/892)) ([3366668](https://github.com/rudderlabs/rudder-config-schema/commit/33666685d667eec4ec72f5043c60e2249940cca0))
+* **INT-568:** slack send event to event specific channel using webhooks ([#895](https://github.com/rudderlabs/rudder-config-schema/issues/895)) ([70a17f6](https://github.com/rudderlabs/rudder-config-schema/commit/70a17f663887377f4e4625091585396ec1521820))
+* **iterable:** schema issues ([e902815](https://github.com/rudderlabs/rudder-config-schema/commit/e902815a7d665445b35394ff8be9f99e10efa1a0))
+
+## [1.50.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.49.2...v1.50.0) (2023-09-19)
+
+
+### Features
+
+* **appcues:** proxyurl support ([5883d55](https://github.com/rudderlabs/rudder-config-schema/commit/5883d558b00104e044313d454dc5309813e13916))
+
 ### [1.49.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.49.1...v1.49.2) (2023-09-12)
 
 ### [1.49.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.49.0...v1.49.1) (2023-09-11)

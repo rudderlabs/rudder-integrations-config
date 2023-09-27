@@ -4,6 +4,11 @@
     "required": ["webhookUrl"],
     "type": "object",
     "properties": {
+      "incomingWebhooksType": {
+        "type": "string",
+        "enum": ["legacy", "modern"],
+        "default": "legacy"
+      },
       "eventChannelSettings": {
         "type": "array",
         "items": {
@@ -13,11 +18,18 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
+            "eventChannelWebhook": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$"
+            },
             "eventChannel": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "eventRegex": { "type": "boolean", "default": false }
+            "eventRegex": {
+              "type": "boolean",
+              "default": false
+            }
           }
         }
       },
@@ -38,7 +50,10 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,1000})$"
             },
-            "eventRegex": { "type": "boolean", "default": false }
+            "eventRegex": {
+              "type": "boolean",
+              "default": false
+            }
           }
         }
       },
@@ -52,6 +67,18 @@
           "type": "object",
           "properties": {
             "trait": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "denyListOfEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
