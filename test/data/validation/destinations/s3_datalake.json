@@ -143,5 +143,34 @@
     "err": [
       "bucketName must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$\""
     ]
+  },
+  {
+    "config": {
+      "bucketName": "test-bucket",
+      "useGlue": true,
+      "prefix": "xyzxx",
+      "accessKeyID": "",
+      "accessKey": "",
+      "syncFrequency": "30",
+      "region": "us-east-1"
+    },
+    "result": false,
+    "err": [" must have required property 'namespace'"]
+  },
+  {
+    "config": {
+      "bucketName": "test-bucket",
+      "useGlue": true,
+      "prefix": "xyzxx",
+      "namespace": "",
+      "accessKeyID": "",
+      "accessKey": "",
+      "syncFrequency": "30",
+      "region": "us-east-1"
+    },
+    "result": false,
+    "err": [
+      "namespace must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{1,64})$\""
+    ]
   }
 ]
