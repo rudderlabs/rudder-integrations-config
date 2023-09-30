@@ -32,6 +32,18 @@
         ],
         "default": "disable"
       },
+      "piiPropertiesToIgnore": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "piiProperty": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
       "whitelistedEvents": {
         "type": "array",
         "items": {
@@ -78,6 +90,14 @@
               "gtag"
             ],
             "default": "rs"
+          },
+          "shopify": {
+            "type": "string",
+            "enum": [
+              "rs",
+              "gtag"
+            ],
+            "default": "rs"
           }
         }
       },
@@ -93,6 +113,9 @@
         "type": "object",
         "properties": {
           "web": {
+            "type": "boolean"
+          },
+          "shopify": {
             "type": "boolean"
           }
         }
