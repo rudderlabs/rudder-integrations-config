@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.54.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.53.1...v1.54.0) (2023-09-29)
+
+
+### Features
+
+* **ga4:** support of filter PII user properties ([a196fca](https://github.com/rudderlabs/rudder-config-schema/commit/a196fca71a3b0dc37bc11573c90ba6cab8518fcc))
+* **ga4:** support of sending user_properties as part of init call ([0b2ca93](https://github.com/rudderlabs/rudder-config-schema/commit/0b2ca937f6cad8cd7e3688126f1f82cb1f4c3885))
+
 ### [1.53.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.53.0...v1.53.1) (2023-09-28)
 
 
