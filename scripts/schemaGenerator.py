@@ -763,7 +763,7 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
                             if generateFunction:
                                 properties[field['configKey']] = generateFunction(
                                     field, dbConfig, 'configKey')
-                            if template.get('title', "") == "Initial setup" and is_field_present_in_default_config(field, dbConfig, "configKey"):
+                            if template.get('title', "") == "Initial setup" and is_field_present_in_default_config(field, dbConfig, "configKey") and 'preRequisites' not in field:
                                 schemaObject['required'].append(
                                     field['configKey'])
 
