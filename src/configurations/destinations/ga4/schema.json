@@ -1,206 +1,236 @@
 {
-  "configSchema": {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": [
-      "apiSecret",
-      "typesOfClient"
-    ],
-    "type": "object",
-    "properties": {
-      "apiSecret": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "typesOfClient": {
-        "type": "string",
-        "enum": [
-          "gtag",
-          "firebase"
-        ],
-        "default": "gtag"
-      },
-      "debugMode": {
-        "type": "boolean",
-        "default": false
-      },
-      "eventFilteringOption": {
-        "type": "string",
-        "enum": [
-          "disable",
-          "whitelistedEvents",
-          "blacklistedEvents"
-        ],
-        "default": "disable"
-      },
-      "whitelistedEvents": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "eventName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "blacklistedEvents": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "eventName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "oneTrustCookieCategories": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "oneTrustCookieCategory": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "ketchConsentPurposes": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": { "purpose": { "type": "string", "pattern": "^(.{0,100})$" } }
-        }
-      },
-      "capturePageView": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "enum": [
-              "rs",
-              "gtag"
-            ],
-            "default": "rs"
-          }
-        }
-      },
-      "debugView": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "extendPageViewParams": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "overrideClientAndSessionId": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "boolean"
-          },
-          "ios": {
-            "type": "boolean"
-          },
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "connectionMode": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "string",
-            "enum": [
-              "cloud",
-              "device"
-            ]
-          },
-          "ios": {
-            "type": "string",
-            "enum": [
-              "cloud",
-              "device"
-            ]
-          },
-          "web": {
-            "type": "string",
-            "enum": [
-              "cloud",
-              "device",
-              "hybrid"
-            ]
-          }
-        }
-      }
-    },
-    "allOf": [
-      {
-        "if": {
-          "properties": {
-            "typesOfClient": {
-              "const": "gtag"
-            }
-          },
-          "required": [
+    "configSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "required": [
+            "apiSecret",
             "typesOfClient"
-          ]
-        },
-        "then": {
-          "properties": {
+        ],
+        "type": "object",
+        "properties": {
+            "apiSecret": {
+                "type": "string",
+                "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "typesOfClient": {
+                "type": "string",
+                "enum": [
+                    "gtag",
+                    "firebase"
+                ],
+                "default": "gtag"
+            },
             "measurementId": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(G-.{1,100})$|^$"
-            }
-          },
-          "required": [
-            "measurementId"
-          ]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "typesOfClient": {
-              "const": "firebase"
-            }
-          },
-          "required": [
-            "typesOfClient"
-          ]
-        },
-        "then": {
-          "properties": {
+                "type": "string",
+                "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(G-.{1,100})$|^$"
+            },
             "firebaseAppId": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+                "type": "string",
+                "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            },
+            "debugMode": {
+                "type": "boolean",
+                "default": false
+            },
+            "eventFilteringOption": {
+                "type": "string",
+                "enum": [
+                    "disable",
+                    "whitelistedEvents",
+                    "blacklistedEvents"
+                ],
+                "default": "disable"
+            },
+            "whitelistedEvents": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "eventName": {
+                            "type": "string",
+                            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        }
+                    }
+                }
+            },
+            "blacklistedEvents": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "eventName": {
+                            "type": "string",
+                            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        }
+                    }
+                }
+            },
+            "oneTrustCookieCategories": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "oneTrustCookieCategory": {
+                            "type": "string",
+                            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        }
+                    }
+                }
+            },
+            "ketchConsentPurposes": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "purpose": {
+                            "type": "string",
+                            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        }
+                    }
+                }
+            },
+            "capturePageView": {
+                "type": "object",
+                "properties": {
+                    "web": {
+                        "type": "string",
+                        "enum": [
+                            "rs",
+                            "gtag"
+                        ],
+                        "default": "rs"
+                    },
+                    "shopify": {
+                        "type": "string",
+                        "enum": [
+                            "rs",
+                            "gtag"
+                        ],
+                        "default": "rs"
+                    }
+                }
+            },
+            "debugView": {
+                "type": "object",
+                "properties": {
+                    "web": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "extendPageViewParams": {
+                "type": "object",
+                "properties": {
+                    "web": {
+                        "type": "boolean"
+                    },
+                    "shopify": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "overrideClientAndSessionId": {
+                "type": "object",
+                "properties": {
+                    "web": {
+                        "type": "boolean"
+                    },
+                    "shopify": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "useNativeSDK": {
+                "type": "object",
+                "properties": {
+                    "android": {
+                        "type": "boolean"
+                    },
+                    "ios": {
+                        "type": "boolean"
+                    },
+                    "web": {
+                        "type": "boolean"
+                    },
+                    "shopify": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "connectionMode": {
+                "type": "object",
+                "properties": {
+                    "android": {
+                        "type": "string",
+                        "enum": [
+                            "cloud",
+                            "device"
+                        ]
+                    },
+                    "ios": {
+                        "type": "string",
+                        "enum": [
+                            "cloud",
+                            "device"
+                        ]
+                    },
+                    "web": {
+                        "type": "string",
+                        "enum": [
+                            "cloud",
+                            "device",
+                            "hybrid"
+                        ]
+                    }
+                }
             }
-          },
-          "required": [
-            "firebaseAppId"
-          ]
-        }
-      }
-    ]
-  }
+        },
+        "allOf": [
+            {
+                "if": {
+                    "properties": {
+                        "typesOfClient": {
+                            "const": "gtag"
+                        }
+                    },
+                    "required": [
+                        "typesOfClient"
+                    ]
+                },
+                "then": {
+                    "properties": {
+                        "measurementId": {
+                            "type": "string",
+                            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(G-.{1,100})$|^$"
+                        }
+                    },
+                    "required": [
+                        "measurementId"
+                    ]
+                }
+            },
+            {
+                "if": {
+                    "properties": {
+                        "typesOfClient": {
+                            "const": "firebase"
+                        }
+                    },
+                    "required": [
+                        "typesOfClient"
+                    ]
+                },
+                "then": {
+                    "properties": {
+                        "firebaseAppId": {
+                            "type": "string",
+                            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+                        }
+                    },
+                    "required": [
+                        "firebaseAppId"
+                    ]
+                }
+            }
+        ]
+    }
 }
