@@ -1,10 +1,7 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": [
-      "apiSecret",
-      "typesOfClient"
-    ],
+    "required": ["apiSecret", "typesOfClient"],
     "type": "object",
     "properties": {
       "apiSecret": {
@@ -13,10 +10,7 @@
       },
       "typesOfClient": {
         "type": "string",
-        "enum": [
-          "gtag",
-          "firebase"
-        ],
+        "enum": ["gtag", "firebase"],
         "default": "gtag"
       },
       "debugMode": {
@@ -25,11 +19,7 @@
       },
       "eventFilteringOption": {
         "type": "string",
-        "enum": [
-          "disable",
-          "whitelistedEvents",
-          "blacklistedEvents"
-        ],
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
         "default": "disable"
       },
       "whitelistedEvents": {
@@ -72,7 +62,12 @@
         "type": "array",
         "items": {
           "type": "object",
-          "properties": { "purpose": { "type": "string", "pattern": "^(.{0,100})$" } }
+          "properties": {
+            "purpose": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
         }
       },
       "capturePageView": {
@@ -80,10 +75,7 @@
         "properties": {
           "web": {
             "type": "string",
-            "enum": [
-              "rs",
-              "gtag"
-            ],
+            "enum": ["rs", "gtag"],
             "default": "rs"
           }
         }
@@ -131,25 +123,15 @@
         "properties": {
           "android": {
             "type": "string",
-            "enum": [
-              "cloud",
-              "device"
-            ]
+            "enum": ["cloud", "device"]
           },
           "ios": {
             "type": "string",
-            "enum": [
-              "cloud",
-              "device"
-            ]
+            "enum": ["cloud", "device"]
           },
           "web": {
             "type": "string",
-            "enum": [
-              "cloud",
-              "device",
-              "hybrid"
-            ]
+            "enum": ["cloud", "device", "hybrid"]
           }
         }
       }
@@ -162,9 +144,7 @@
               "const": "gtag"
             }
           },
-          "required": [
-            "typesOfClient"
-          ]
+          "required": ["typesOfClient"]
         },
         "then": {
           "properties": {
@@ -173,9 +153,7 @@
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(G-.{1,100})$|^$"
             }
           },
-          "required": [
-            "measurementId"
-          ]
+          "required": ["measurementId"]
         }
       },
       {
@@ -185,9 +163,7 @@
               "const": "firebase"
             }
           },
-          "required": [
-            "typesOfClient"
-          ]
+          "required": ["typesOfClient"]
         },
         "then": {
           "properties": {
@@ -196,9 +172,7 @@
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
             }
           },
-          "required": [
-            "firebaseAppId"
-          ]
+          "required": ["firebaseAppId"]
         }
       }
     ]

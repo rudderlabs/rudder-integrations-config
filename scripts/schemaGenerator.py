@@ -17,7 +17,7 @@ import argparse
 
 CONFIG_DIR = 'src/configurations'
 
-EXCLUDED_DEST = ['postgres']
+EXCLUDED_DEST = ['postgres', 'ga4']
 
 class FieldTypeEnum(Enum):
     STRING = "string"
