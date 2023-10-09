@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.54.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.53.1...v1.54.0) (2023-09-29)
+
+
+### Features
+
+* **ga4:** support of filter PII user properties ([a196fca](https://github.com/rudderlabs/rudder-config-schema/commit/a196fca71a3b0dc37bc11573c90ba6cab8518fcc))
+* **ga4:** support of sending user_properties as part of init call ([0b2ca93](https://github.com/rudderlabs/rudder-config-schema/commit/0b2ca937f6cad8cd7e3688126f1f82cb1f4c3885))
+
+### [1.53.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.53.0...v1.53.1) (2023-09-28)
+
+
+### Bug Fixes
+
+* add "inputFieldType":"password" in databricks token ([f437a72](https://github.com/rudderlabs/rudder-config-schema/commit/f437a72a37a5dc02ced3e443cf8fac790a618d5e))
+
+## [1.53.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.52.0...v1.53.0) (2023-09-26)
+
+
+### Features
+
+* enabling vdm label for google remarketting lists ([#939](https://github.com/rudderlabs/rudder-config-schema/issues/939)) ([8ab88fa](https://github.com/rudderlabs/rudder-config-schema/commit/8ab88fa764ce6030ce96f44ca7e5c6f182fb6c46))
+
+
+### Bug Fixes
+
+* move credentials to secret ([#938](https://github.com/rudderlabs/rudder-config-schema/issues/938)) ([e915d65](https://github.com/rudderlabs/rudder-config-schema/commit/e915d65b64afceb6fe7693d8a536bbad91f7c483))
+
+## [1.52.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.51.3...v1.52.0) (2023-09-25)
+
+
+### Features
+
+* **intercom:** add configSchema rules for intercom ([#932](https://github.com/rudderlabs/rudder-config-schema/issues/932)) ([99c9ef8](https://github.com/rudderlabs/rudder-config-schema/commit/99c9ef8da39da644a16cfd5a98e2a88a8c07d384))
+
+
+### Bug Fixes
+
+* update configurations for gcf ([#934](https://github.com/rudderlabs/rudder-config-schema/issues/934)) ([d6e0c92](https://github.com/rudderlabs/rudder-config-schema/commit/d6e0c92dd4ee0242fecadf25924641704c0c99e5))
+
 ### [1.51.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.51.2...v1.51.3) (2023-09-22)
 
 ### [1.51.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.51.1...v1.51.2) (2023-09-22)
