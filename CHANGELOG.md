@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.55.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.54.0...v1.55.0) (2023-10-11)
+
+
+### Features
+
+* ketch config added for ga4 ([#963](https://github.com/rudderlabs/rudder-config-schema/issues/963)) ([89faa0e](https://github.com/rudderlabs/rudder-config-schema/commit/89faa0e3e411a8b0fde99fa140d1a199cded6c4b))
+* record event msl ([#968](https://github.com/rudderlabs/rudder-config-schema/issues/968)) ([7026ada](https://github.com/rudderlabs/rudder-config-schema/commit/7026ada8fad0c9a1909c6208c6f448a0b73a9c7d))
+* support page call in snapchat conversion ([#969](https://github.com/rudderlabs/rudder-config-schema/issues/969)) ([b0ea3f3](https://github.com/rudderlabs/rudder-config-schema/commit/b0ea3f31ddbebea63c296609b6ce636938902847))
+
+
+### Bug Fixes
+
+* remove shopify source specific config for ga4 ([#967](https://github.com/rudderlabs/rudder-config-schema/issues/967)) ([3bd29ea](https://github.com/rudderlabs/rudder-config-schema/commit/3bd29eab9f3fad8f7b6779cbafb086f9824e14db))
+
 ## [1.54.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.53.1...v1.54.0) (2023-09-29)
 
 
