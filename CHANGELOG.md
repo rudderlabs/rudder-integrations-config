@@ -7,11 +7,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Features
 
-* [REV-103] trino source enable mirror mode support ([#921](https://github.com/rudderlabs/rudder-config-schema/issues/921)) ([fdbebf1](https://github.com/rudderlabs/rudder-config-schema/commit/fdbebf18ecd82668dff9c2844362b827d4a11c7d))
-* add visual mapper for snapchat ([#911](https://github.com/rudderlabs/rudder-config-schema/issues/911)) ([43641ce](https://github.com/rudderlabs/rudder-config-schema/commit/43641cec8bc1f166311365a855d7d148edc55149))
-* amplitude sdk update ([#796](https://github.com/rudderlabs/rudder-config-schema/issues/796)) ([4e94260](https://github.com/rudderlabs/rudder-config-schema/commit/4e94260f4e071ff0c64dced856f363226b9f624e))
 * ketch config added for ga4 ([#963](https://github.com/rudderlabs/rudder-config-schema/issues/963)) ([89faa0e](https://github.com/rudderlabs/rudder-config-schema/commit/89faa0e3e411a8b0fde99fa140d1a199cded6c4b))
-* **mixpanel:** add support of ignoreDnt ([#917](https://github.com/rudderlabs/rudder-config-schema/issues/917)) ([ef678bd](https://github.com/rudderlabs/rudder-config-schema/commit/ef678bdd8eaac5954c59d9fd408dc1914e77c428))
 * record event msl ([#968](https://github.com/rudderlabs/rudder-config-schema/issues/968)) ([7026ada](https://github.com/rudderlabs/rudder-config-schema/commit/7026ada8fad0c9a1909c6208c6f448a0b73a9c7d))
 * support page call in snapchat conversion ([#969](https://github.com/rudderlabs/rudder-config-schema/issues/969)) ([b0ea3f3](https://github.com/rudderlabs/rudder-config-schema/commit/b0ea3f31ddbebea63c296609b6ce636938902847))
 
