@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.55.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.54.0...v1.55.0) (2023-10-11)
+
+
+### Features
+
+* ketch config added for ga4 ([#963](https://github.com/rudderlabs/rudder-config-schema/issues/963)) ([89faa0e](https://github.com/rudderlabs/rudder-config-schema/commit/89faa0e3e411a8b0fde99fa140d1a199cded6c4b))
+* record event msl ([#968](https://github.com/rudderlabs/rudder-config-schema/issues/968)) ([7026ada](https://github.com/rudderlabs/rudder-config-schema/commit/7026ada8fad0c9a1909c6208c6f448a0b73a9c7d))
+* support page call in snapchat conversion ([#969](https://github.com/rudderlabs/rudder-config-schema/issues/969)) ([b0ea3f3](https://github.com/rudderlabs/rudder-config-schema/commit/b0ea3f31ddbebea63c296609b6ce636938902847))
+
+
+### Bug Fixes
+
+* remove shopify source specific config for ga4 ([#967](https://github.com/rudderlabs/rudder-config-schema/issues/967)) ([3bd29ea](https://github.com/rudderlabs/rudder-config-schema/commit/3bd29eab9f3fad8f7b6779cbafb086f9824e14db))
+
 ## [1.54.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.53.1...v1.54.0) (2023-09-29)
 
 
@@ -12,8 +26,6 @@ All notable changes to this project will be documented in this file. See [standa
 * amplitude sdk update ([#796](https://github.com/rudderlabs/rudder-config-schema/issues/796)) ([4e94260](https://github.com/rudderlabs/rudder-config-schema/commit/4e94260f4e071ff0c64dced856f363226b9f624e))
 * **mixpanel:** add support of ignoreDnt ([#917](https://github.com/rudderlabs/rudder-config-schema/issues/917)) ([ef678bd](https://github.com/rudderlabs/rudder-config-schema/commit/ef678bdd8eaac5954c59d9fd408dc1914e77c428))
 * **ga4:** support of filter PII user properties ([a196fca](https://github.com/rudderlabs/rudder-config-schema/commit/a196fca71a3b0dc37bc11573c90ba6cab8518fcc))
-* **ga4:** support of filter PII user properties ([e5c673d](https://github.com/rudderlabs/rudder-config-schema/commit/e5c673d6ef11c8a7493ec7b56ccf8fdff91d6f7c))
-* **ga4:** support of filter PII user properties ([2ce312b](https://github.com/rudderlabs/rudder-config-schema/commit/2ce312bf1de50fe86419f5d94f92bd19ed93e970))
 * **ga4:** support of sending user_properties as part of init call ([0b2ca93](https://github.com/rudderlabs/rudder-config-schema/commit/0b2ca937f6cad8cd7e3688126f1f82cb1f4c3885))
 
 
