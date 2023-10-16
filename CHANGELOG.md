@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.55.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.55.0...v1.55.1) (2023-10-16)
+
+
+### Bug Fixes
+
+* add ortto source ([#966](https://github.com/rudderlabs/rudder-config-schema/issues/966)) ([595ffb0](https://github.com/rudderlabs/rudder-config-schema/commit/595ffb0642a5b399c33fcaeb8c35d3540077e2b8))
+* improving pinterest UI ([#980](https://github.com/rudderlabs/rudder-config-schema/issues/980)) ([ebee306](https://github.com/rudderlabs/rudder-config-schema/commit/ebee30617f483c3dd2ac5b341c666f90a074a30c))
+
 ## [1.55.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.54.0...v1.55.0) (2023-10-11)
 
 
