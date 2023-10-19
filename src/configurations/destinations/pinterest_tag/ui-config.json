@@ -105,26 +105,13 @@
           "footerNote": "Rudderstack will hash your user data by default. Switch this off if you are already sending hashed data"
         },
         {
-          "type": "checkbox",
-          "label": "Enable Event Deduplication",
-          "value": "enableDeduplication",
-          "default": false,
-          "footerNote": "If not enabled here, Rudderstack will send messageId as event_id field."
-        },
-        {
           "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "enableDeduplication",
-              "selectedValue": true
-            }
-          ],
           "label": "Deduplication Key",
           "value": "deduplicationKey",
-          "placeholder": "e.g: messageId",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "required": true,
-          "footerNote": "Rudderstack will send this key-value from payload as an event deduplication key"
+          "required": false,
+          "placeholder": "e.g: messageId",
+          "footerNote": "By default, RudderStack will send messageId as the event_id field. You can utilize this input, to specify another field value sent via payload, to be used instead"
         },
         {
           "type": "checkbox",
