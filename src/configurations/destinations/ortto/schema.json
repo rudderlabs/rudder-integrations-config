@@ -35,6 +35,94 @@
           "cordova": { "type": "string", "enum": ["cloud"] },
           "shopify": { "type": "string", "enum": ["cloud"] }
         }
+      },
+      "orttoEventsMapping": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "rsEventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "orttoEventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "eventProperties": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "rudderProperty": {
+                    "type": "string",
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  },
+                  "orttoProperty": {
+                    "type": "string",
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "email",
+                      "text",
+                      "longText",
+                      "number",
+                      "decimalNumber",
+                      "currency",
+                      "date",
+                      "timeAndDate",
+                      "boolean",
+                      "phone",
+                      "singleSelect",
+                      "multiSelect",
+                      "link",
+                      "object"
+                    ],
+                    "default": "other"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "orttoPersonAttributes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "rudderTraits": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "orttoAttribute": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "email",
+                "text",
+                "longText",
+                "number",
+                "decimalNumber",
+                "currency",
+                "date",
+                "timeAndDate",
+                "boolean",
+                "phone",
+                "singleSelect",
+                "multiSelect",
+                "link",
+                "object"
+              ],
+              "default": "other"
+            }
+          }
+        }
       }
     }
   }
