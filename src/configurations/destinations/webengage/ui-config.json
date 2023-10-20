@@ -1,58 +1,150 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Api Key",
+                    "configKey": "apiKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "placeholder": "e.g. b4a29aba17jmbad7b6c1a5asjghj",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.webDevice",
+                          "value": false
+                        },
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ],
+                      "condition": "or"
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "License Code",
+                    "configKey": "licenseCode",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "placeholder": "e.g. b4a29aba"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Data Center",
+                    "configKey": "dataCenter",
+                    "options": [
+                      { "name": "Standard", "value": "standard" },
+                      { "name": "IND", "value": "ind" }
+                    ],
+                    "defaultOption": { "name": "Standard", "value": "standard" }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack’s OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
       "fields": [
         {
-          "type": "textInput",
-          "label": "License Code",
-          "value": "licenseCode",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "required": true,
-          "placeholder": "e.g. b4a29aba",
-          "secret": true
+          "type": "checkbox",
+          "note": "Enable this if you are sending hashed email in the event payloads.",
+          "configKey": "hashEmail",
+          "default": false,
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "connectionModes.webDevice",
+                "value": true
+              }
+            ]
+          }
         },
         {
-          "type": "textInput",
-          "label": "Api Key",
-          "value": "apiKey",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "required": true,
-          "placeholder": "e.g. b4a29aba17jmbad7b6c1a5asjghj",
-          "secret": true
-        },
-        {
-          "type": "singleSelect",
-          "label": "Data Center",
-          "value": "dataCenter",
-          "required": true,
-          "options": [
-            { "name": "Standard", "value": "standard" },
-            { "name": "IND", "value": "ind" }
-          ],
-          "defaultOption": { "name": "Standard", "value": "standard" }
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
+          "type": "checkbox",
+          "note": "Enable this if you are sending hashed phone number in the event payloads.",
+          "configKey": "hashPhone",
+          "default": false,
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "connectionModes.webDevice",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }
-  ]
+  }
 }

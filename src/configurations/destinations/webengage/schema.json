@@ -1,14 +1,14 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["licenseCode", "apiKey", "dataCenter"],
+    "required": ["licenseCode", "dataCenter"],
     "type": "object",
     "properties": {
-      "licenseCode": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-      },
       "apiKey": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "licenseCode": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
@@ -24,6 +24,13 @@
             }
           }
         }
+      },
+      "hashEmail": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "hashPhone": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "useNativeSDK": { "type": "boolean" },
+      "connectionMode": {
+        "type": "object",
+        "properties": { "web": { "type": "string", "enum": ["cloud", "device"] } }
       }
     }
   }
