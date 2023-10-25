@@ -1,7 +1,9 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["token"],
+    "required": [
+      "token"
+    ],
     "type": "object",
     "properties": {
       "token": {
@@ -23,12 +25,18 @@
       },
       "dataResidency": {
         "type": "string",
-        "enum": ["us", "eu"],
+        "enum": [
+          "us",
+          "eu"
+        ],
         "default": "us"
       },
       "identityMergeApi": {
         "type": "string",
-        "enum": ["simplified", "original"],
+        "enum": [
+          "simplified",
+          "original"
+        ],
         "default": "original"
       },
       "strictMode": {
@@ -36,21 +44,39 @@
         "default": false
       },
       "ignoreDnt": {
-        "type": "boolean",
-        "default": false
+        "type": "object",
+        "default": false,
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
       },
       "userDeletionApi": {
         "type": "string",
-        "enum": ["engage", "task"],
+        "enum": [
+          "engage",
+          "task"
+        ],
         "default": "engage"
       },
       "people": {
-        "type": "boolean",
-        "default": false
+        "type": "object",
+        "default": false,
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
       },
       "setAllTraitsByDefault": {
-        "type": "boolean",
-        "default": false
+        "type": "object",
+        "default": false,
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
       },
       "superProperties": {
         "type": "array",
@@ -101,33 +127,61 @@
         }
       },
       "consolidatedPageCalls": {
-        "type": "boolean",
-        "default": true
+        "type": "object",
+        "default": true,
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
       },
       "trackCategorizedPages": {
-        "type": "boolean",
-        "default": false
+        "type": "object",
+        "default": false,
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
       },
       "trackNamedPages": {
-        "type": "boolean",
-        "default": false
+        "type": "object",
+        "default": false,
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
       },
       "sourceName": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "crossSubdomainCookie": {
-        "type": "boolean",
-        "default": false
+        "type": "object",
+        "default": false,
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
       },
       "persistence": {
         "type": "string",
-        "enum": ["none", "cookie", "localStorage"],
+        "enum": [
+          "none",
+          "cookie",
+          "localStorage"
+        ],
         "default": "none"
       },
       "persistenceType": {
         "type": "string",
-        "enum": ["none", "cookie", "localStorage"],
+        "enum": [
+          "none",
+          "cookie",
+          "localStorage"
+        ],
         "default": "cookie"
       },
       "persistenceName": {
@@ -135,8 +189,13 @@
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "secureCookie": {
-        "type": "boolean",
-        "default": false
+        "type": "object",
+        "default": false,
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
       },
       "groupKeySettings": {
         "type": "array",
@@ -164,7 +223,11 @@
       },
       "eventFilteringOption": {
         "type": "string",
-        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "enum": [
+          "disable",
+          "whitelistedEvents",
+          "blacklistedEvents"
+        ],
         "default": "disable"
       },
       "whitelistedEvents": {
@@ -212,7 +275,9 @@
               "const": "task"
             }
           },
-          "required": ["userDeletionApi"]
+          "required": [
+            "userDeletionApi"
+          ]
         },
         "then": {
           "properties": {
@@ -221,7 +286,9 @@
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
             }
           },
-          "required": ["gdprApiToken"]
+          "required": [
+            "gdprApiToken"
+          ]
         }
       }
     ]
