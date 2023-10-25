@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.56.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.56.0...v1.56.1) (2023-10-25)
+
+
+### Bug Fixes
+
+* criteo audience audienceId schema fix ([#1012](https://github.com/rudderlabs/rudder-config-schema/issues/1012)) ([53ed5a5](https://github.com/rudderlabs/rudder-config-schema/commit/53ed5a5abf2d14439f2ef6bfa9f88492494a0c95))
+
 ## [1.56.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.55.2...v1.56.0) (2023-10-25)
 
 
