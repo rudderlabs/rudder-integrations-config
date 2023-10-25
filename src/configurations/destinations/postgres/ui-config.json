@@ -92,9 +92,14 @@
                     "type": "textInput",
                     "required": true,
                     "regex": "-----BEGIN RSA PRIVATE KEY-----.*-----END RSA PRIVATE KEY-----",
-                    "preRequisiteField": {
-                      "name": "sslMode",
-                      "selectedValue": "verify-ca"
+                    "regexErrorMessage": "Invalid Client Key Pem File",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "sslMode",
+                          "value": "verify-ca"
+                        }
+                      ]
                     },
                     "label": "Client Key Pem File",
                     "configKey": "clientKey"
@@ -103,9 +108,13 @@
                     "type": "textInput",
                     "required": true,
                     "regex": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
-                    "preRequisiteField": {
-                      "name": "sslMode",
-                      "selectedValue": "verify-ca"
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "sslMode",
+                          "value": "verify-ca"
+                        }
+                      ]
                     },
                     "label": "Client Cert Pem File",
                     "configKey": "clientCert"
@@ -114,9 +123,13 @@
                     "type": "textInput",
                     "required": true,
                     "regex": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
-                    "preRequisiteField": {
-                      "name": "sslMode",
-                      "selectedValue": "verify-ca"
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "sslMode",
+                          "value": "verify-ca"
+                        }
+                      ]
                     },
                     "label": "Server CA Pem File",
                     "configKey": "serverCA"
@@ -125,6 +138,28 @@
               }
             ]
           },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
           {
             "groups": [
               {
@@ -214,19 +249,13 @@
                 ]
               }
             ]
-          }
-        ]
-      },
-      {
-        "title": "Object Storage Configuration",
-        "note": "Manage the Object Storage configuration for your destination",
-        "sections": [
+          },
           {
             "groups": [
               {
-                "title": "Settings",
-                "note": "Object Storage Configuration",
-                "icon": "file",
+                "title": "Object Storage Configuration",
+                "note": "Manage the Object Storage configuration for your destination",
+                "icon": "settings",
                 "fields": [
                   {
                     "type": "checkbox",
@@ -259,23 +288,29 @@
                     ],
                     "default": "MINIO",
                     "required": true,
-                    "preRequisiteField": {
-                      "name": "useRudderStorage",
-                      "selectedValue": false
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": true
+                        }
+                      ]
                     }
                   },
                   {
                     "type": "textInput",
-                    "preRequisiteField": [
-                      {
-                        "name": "bucketProvider",
-                        "selectedValue": "S3"
-                      },
-                      {
-                        "name": "useRudderStorage",
-                        "selectedValue": false
-                      }
-                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "S3"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    },
                     "label": "Staging S3 Storage Bucket Name",
                     "labelNote": "S3 Bucket to store data before loading into Postgres",
                     "configKey": "bucketName",
@@ -287,16 +322,18 @@
                   },
                   {
                     "type": "textInput",
-                    "preRequisiteField": [
-                      {
-                        "name": "bucketProvider",
-                        "selectedValue": "GCS"
-                      },
-                      {
-                        "name": "useRudderStorage",
-                        "selectedValue": false
-                      }
-                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "GCS"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    },
                     "label": "Staging GCS Object Storage Bucket Name",
                     "labelNote": "GCS Bucket to store data before loading into Postgres",
                     "configKey": "bucketName",
@@ -308,16 +345,18 @@
                   },
                   {
                     "type": "textInput",
-                    "preRequisiteField": [
-                      {
-                        "name": "bucketProvider",
-                        "selectedValue": "AZURE_BLOB"
-                      },
-                      {
-                        "name": "useRudderStorage",
-                        "selectedValue": false
-                      }
-                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "AZURE_BLOB"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    },
                     "label": "Staging Azure Blob Storage Container Name",
                     "labelNote": "Container to store data before loading into Postgres",
                     "configKey": "containerName",
@@ -329,16 +368,18 @@
                   },
                   {
                     "type": "textInput",
-                    "preRequisiteField": [
-                      {
-                        "name": "bucketProvider",
-                        "selectedValue": "MINIO"
-                      },
-                      {
-                        "name": "useRudderStorage",
-                        "selectedValue": false
-                      }
-                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "MINIO"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    },
                     "label": "Staging MINIO Storage Bucket Name",
                     "labelNote": "MINIO Bucket to store data before loading into Postgres",
                     "configKey": "bucketName",
@@ -350,36 +391,40 @@
                   },
                   {
                     "type": "checkbox",
-                    "preRequisiteField": [
-                      {
-                        "name": "bucketProvider",
-                        "selectedValue": "S3"
-                      },
-                      {
-                        "name": "useRudderStorage",
-                        "selectedValue": false
-                      }
-                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "S3"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    },
                     "label": "Role Based Authentication",
                     "configKey": "roleBasedAuth",
                     "default": true
                   },
                   {
                     "type": "textInput",
-                    "preRequisiteField": [
-                      {
-                        "name": "bucketProvider",
-                        "selectedValue": "S3"
-                      },
-                      {
-                        "name": "useRudderStorage",
-                        "selectedValue": false
-                      },
-                      {
-                        "name": "roleBasedAuth",
-                        "selectedValue": true
-                      }
-                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "S3"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "roleBasedAuth",
+                          "value": true
+                        }
+                      ]
+                    },
                     "label": "IAM Role ARN",
                     "configKey": "iamRoleARN",
                     "regex": "^(.{0,100})$",
@@ -393,20 +438,22 @@
                   },
                   {
                     "type": "textInput",
-                    "preRequisiteField": [
-                      {
-                        "name": "bucketProvider",
-                        "selectedValue": "S3"
-                      },
-                      {
-                        "name": "useRudderStorage",
-                        "selectedValue": false
-                      },
-                      {
-                        "name": "roleBasedAuth",
-                        "selectedValue": false
-                      }
-                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "S3"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "roleBasedAuth",
+                          "value": false
+                        }
+                      ]
+                    },
                     "label": "AWS Access Key ID",
                     "configKey": "accessKeyID",
                     "regex": "^(.{0,100})$",
@@ -416,20 +463,22 @@
                   },
                   {
                     "type": "textInput",
-                    "preRequisiteField": [
-                      {
-                        "name": "bucketProvider",
-                        "selectedValue": "S3"
-                      },
-                      {
-                        "name": "useRudderStorage",
-                        "selectedValue": false
-                      },
-                      {
-                        "name": "roleBasedAuth",
-                        "selectedValue": false
-                      }
-                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "S3"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "roleBasedAuth",
+                          "value": false
+                        }
+                      ]
+                    },
                     "label": "AWS Secret Access Key",
                     "configKey": "accessKey",
                     "regex": "^(.{0,100})$",
@@ -439,16 +488,18 @@
                   },
                   {
                     "type": "textInput",
-                    "preRequisiteField": [
-                      {
-                        "name": "bucketProvider",
-                        "selectedValue": "AZURE_BLOB"
-                      },
-                      {
-                        "name": "useRudderStorage",
-                        "selectedValue": false
-                      }
-                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "AZURE_BLOB"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    },
                     "label": "Azure Blob Storage Account Name",
                     "configKey": "accountName",
                     "regex": "^(.{0,100})$",
@@ -458,20 +509,22 @@
                   },
                   {
                     "type": "textInput",
-                    "preRequisiteField": [
-                      {
-                        "name": "bucketProvider",
-                        "selectedValue": "AZURE_BLOB"
-                      },
-                      {
-                        "name": "useRudderStorage",
-                        "selectedValue": false
-                      },
-                      {
-                        "name": "useSASTokens",
-                        "selectedValue": false
-                      }
-                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "AZURE_BLOB"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "useSASTokens",
+                          "value": false
+                        }
+                      ]
+                    },
                     "label": "Azure Blob Storage Account Key",
                     "configKey": "accountKey",
                     "regex": "^(.{0,100})$",
@@ -482,20 +535,22 @@
                   },
                   {
                     "type": "textInput",
-                    "preRequisiteField": [
-                      {
-                        "name": "bucketProvider",
-                        "selectedValue": "AZURE_BLOB"
-                      },
-                      {
-                        "name": "useRudderStorage",
-                        "selectedValue": false
-                      },
-                      {
-                        "name": "useSASTokens",
-                        "selectedValue": true
-                      }
-                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "AZURE_BLOB"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "useSASTokens",
+                          "value": true
+                        }
+                      ]
+                    },
                     "label": "Azure Blob Storage SAS Token",
                     "configKey": "sasToken",
                     "regex": "^(.+)$",
@@ -506,16 +561,18 @@
                   },
                   {
                     "type": "checkbox",
-                    "preRequisiteField": [
-                      {
-                        "name": "bucketProvider",
-                        "selectedValue": "AZURE_BLOB"
-                      },
-                      {
-                        "name": "useRudderStorage",
-                        "selectedValue": false
-                      }
-                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "AZURE_BLOB"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    },
                     "label": "Use shared access signature (SAS) Tokens",
                     "configKey": "useSASTokens",
                     "default": false,
@@ -523,16 +580,18 @@
                   },
                   {
                     "type": "textareaInput",
-                    "preRequisiteField": [
-                      {
-                        "name": "bucketProvider",
-                        "selectedValue": "GCS"
-                      },
-                      {
-                        "name": "useRudderStorage",
-                        "selectedValue": false
-                      }
-                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "GCS"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    },
                     "label": "Credentials",
                     "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your Google Cloud Storage",
                     "configKey": "credentials",
@@ -542,16 +601,18 @@
                   },
                   {
                     "type": "textInput",
-                    "preRequisiteField": [
-                      {
-                        "name": "bucketProvider",
-                        "selectedValue": "MINIO"
-                      },
-                      {
-                        "name": "useRudderStorage",
-                        "selectedValue": false
-                      }
-                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "MINIO"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    },
                     "label": "MinIO Endpoint",
                     "configKey": "endPoint",
                     "regex": "(?!.*\\.ngrok\\.io)^(.{0,100})$",
@@ -561,16 +622,18 @@
                   },
                   {
                     "type": "textInput",
-                    "preRequisiteField": [
-                      {
-                        "name": "bucketProvider",
-                        "selectedValue": "MINIO"
-                      },
-                      {
-                        "name": "useRudderStorage",
-                        "selectedValue": false
-                      }
-                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "MINIO"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    },
                     "label": "MINIO Access Key ID",
                     "configKey": "accessKeyID",
                     "regex": "^(.{0,100})$",
@@ -580,16 +643,18 @@
                   },
                   {
                     "type": "textInput",
-                    "preRequisiteField": [
-                      {
-                        "name": "bucketProvider",
-                        "selectedValue": "MINIO"
-                      },
-                      {
-                        "name": "useRudderStorage",
-                        "selectedValue": false
-                      }
-                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "MINIO"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    },
                     "label": "MINIO Secret Access Key",
                     "configKey": "secretAccessKey",
                     "regex": "^(.{0,100})$",
@@ -599,16 +664,18 @@
                   },
                   {
                     "type": "checkbox",
-                    "preRequisiteField": [
-                      {
-                        "name": "bucketProvider",
-                        "selectedValue": "MINIO"
-                      },
-                      {
-                        "name": "useRudderStorage",
-                        "selectedValue": false
-                      }
-                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "MINIO"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    },
                     "label": "Use SSL for connection",
                     "configKey": "useSSL",
                     "default": true
@@ -616,19 +683,13 @@
                 ]
               }
             ]
-          }
-        ]
-      },
-      {
-        "title": "Consent Settings",
-        "note": "",
-        "sections": [
+          },
           {
             "groups": [
               {
-                "title": "Settings",
+                "title": "Consent Settings",
                 "note": "",
-                "icon": "file",
+                "icon": "settings",
                 "fields": [
                   {
                     "type": "dynamicCustomForm",
@@ -650,6 +711,11 @@
           }
         ]
       }
-    ]
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    }
   }
 }
