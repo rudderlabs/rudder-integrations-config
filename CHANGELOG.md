@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.56.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.55.2...v1.56.0) (2023-10-25)
+
+
+### Features
+
+* add new comscore destination ([#1009](https://github.com/rudderlabs/rudder-config-schema/issues/1009)) ([1ee6186](https://github.com/rudderlabs/rudder-config-schema/commit/1ee6186879cd5771176dd7f51c72ff6eb0a3b9f9))
+
 ### [1.55.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.55.1...v1.55.2) (2023-10-19)
 
 ### [1.55.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.55.0...v1.55.1) (2023-10-16)
