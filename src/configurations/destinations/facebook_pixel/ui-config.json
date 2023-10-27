@@ -117,10 +117,13 @@
             ]
           },
           {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
             "groups": [
               {
-                "title": "Destination settings",
-                "note": "Configure advanced destination-specific settings heree",
+                "title": "Destination and event level setting",
+                "note": "Configure advanced destination and event-specific settings here",
                 "fields": [
                   {
                     "type": "checkbox",
@@ -303,7 +306,14 @@
     "sdkTemplate": {
       "title": "SDK settings",
       "note": "not visible in the ui",
-      "fields": []
+      "fields": [
+        {
+          "type": "redirect",
+          "redirectGroupKey": "legacyConversionMapping",
+          "label": "Legacy Conversion Pixel IDs",
+          "note": "Map RudderStack events to Facebook Pixel IDs"
+        }
+      ]
     },
     "redirectGroups": {
       "customEventMapping": {
@@ -464,6 +474,31 @@
                 "tagKey": "whitelistPiiProperties",
                 "placeholder": "e.g: email",
                 "default": []
+              }
+            ]
+          }
+        ]
+      },
+      "legacyConversionMapping": {
+        "fields": [
+          {
+            "type": "mapping",
+            "label": "Map your RudderStack Events to Facebook Pixel IDs",
+            "note": "Input the RudderStack event to map to Facebook's pixel id.",
+            "configKey": "legacyConversionPixelId",
+            "default": [],
+            "columns": [
+              {
+                "type": "textInput",
+                "key": "from",
+                "label": "Event name",
+                "placeholder": "e.g: Product Searched"
+              },
+              {
+                "type": "textInput",
+                "key": "to",
+                "label": "Pixel ID",
+                "placeholder": "e.g: 234567654654"
               }
             ]
           }
