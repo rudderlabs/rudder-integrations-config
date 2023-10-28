@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.56.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.56.1...v1.56.2) (2023-10-28)
+
+
+### Bug Fixes
+
+* pinterest deduplicate UI issue ([#1020](https://github.com/rudderlabs/rudder-config-schema/issues/1020)) ([af1aa7e](https://github.com/rudderlabs/rudder-config-schema/commit/af1aa7e56606a411f02022ca7745191205fb4864))
+
 ### [1.56.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.56.0...v1.56.1) (2023-10-25)
 
 
