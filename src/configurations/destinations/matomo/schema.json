@@ -1,18 +1,26 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["serverUrl", "siteId"],
+    "required": ["matomoVersion", "siteId"],
     "type": "object",
     "properties": {
-      "serverUrl": {
+      "matomoVersion": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$"
+        "enum": ["premise", "cloud"],
+        "default": "cloud"
       },
       "siteId": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,10})$"
       },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
       "eventsMapToGoalId": {
         "type": "array",
         "items": {
@@ -54,16 +62,46 @@
           }
         }
       },
-      "trackAllContentImpressions": { "type": "boolean", "default": false },
-      "trackVisibleContentImpressions": { "type": "boolean", "default": false },
-      "logAllContentBlocksOnPage": { "type": "boolean", "default": false },
-      "enableHeartBeatTimer": { "type": "boolean", "default": false },
-      "enableLinkTracking": { "type": "boolean", "default": false },
-      "disablePerformanceTracking": { "type": "boolean", "default": false },
-      "enableCrossDomainLinking": { "type": "boolean", "default": false },
-      "setCrossDomainLinkingTimeout": { "type": "boolean", "default": false },
-      "getCrossDomainLinkingUrlParameter": { "type": "boolean", "default": false },
-      "disableBrowserFeatureDetection": { "type": "boolean", "default": false },
+      "trackAllContentImpressions": {
+        "type": "boolean",
+        "default": false
+      },
+      "trackVisibleContentImpressions": {
+        "type": "boolean",
+        "default": false
+      },
+      "logAllContentBlocksOnPage": {
+        "type": "boolean",
+        "default": false
+      },
+      "enableHeartBeatTimer": {
+        "type": "boolean",
+        "default": false
+      },
+      "enableLinkTracking": {
+        "type": "boolean",
+        "default": false
+      },
+      "disablePerformanceTracking": {
+        "type": "boolean",
+        "default": false
+      },
+      "enableCrossDomainLinking": {
+        "type": "boolean",
+        "default": false
+      },
+      "setCrossDomainLinkingTimeout": {
+        "type": "boolean",
+        "default": false
+      },
+      "getCrossDomainLinkingUrlParameter": {
+        "type": "boolean",
+        "default": false
+      },
+      "disableBrowserFeatureDetection": {
+        "type": "boolean",
+        "default": false
+      },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -80,12 +118,57 @@
     "allOf": [
       {
         "if": {
-          "properties": { "trackVisibleContentImpressions": { "const": true } },
+          "properties": {
+            "matomoVersion": {
+              "const": "premise"
+            }
+          },
+          "required": ["matomoVersion"]
+        },
+        "then": {
+          "properties": {
+            "premiseUrl": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$"
+            }
+          },
+          "required": ["premiseUrl"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "matomoVersion": {
+              "const": "cloud"
+            }
+          },
+          "required": ["matomoVersion"]
+        },
+        "then": {
+          "properties": {
+            "serverUrl": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$"
+            }
+          },
+          "required": ["serverUrl"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "trackVisibleContentImpressions": {
+              "const": true
+            }
+          },
           "required": ["trackVisibleContentImpressions"]
         },
         "then": {
           "properties": {
-            "checkOnScroll": { "type": "boolean", "default": true },
+            "checkOnScroll": {
+              "type": "boolean",
+              "default": true
+            },
             "timeIntervalInMs": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
@@ -96,7 +179,11 @@
       },
       {
         "if": {
-          "properties": { "enableHeartBeatTimer": { "const": true } },
+          "properties": {
+            "enableHeartBeatTimer": {
+              "const": true
+            }
+          },
           "required": ["enableHeartBeatTimer"]
         },
         "then": {
@@ -111,7 +198,11 @@
       },
       {
         "if": {
-          "properties": { "setCrossDomainLinkingTimeout": { "const": true } },
+          "properties": {
+            "setCrossDomainLinkingTimeout": {
+              "const": true
+            }
+          },
           "required": ["setCrossDomainLinkingTimeout"]
         },
         "then": {
