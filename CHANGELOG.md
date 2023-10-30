@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.57.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.56.2...v1.57.0) (2023-10-30)
+
+
+### Features
+
+* deprecate GA and Facebook Offline Conversions destinations using options flag ([#1016](https://github.com/rudderlabs/rudder-config-schema/issues/1016)) ([b3a1567](https://github.com/rudderlabs/rudder-config-schema/commit/b3a1567f27a78d1088758f91ad8cfa786bd7e049))
+* **facebook_pixel:** move facebook pixel to new UI from-builder ([#1004](https://github.com/rudderlabs/rudder-config-schema/issues/1004)) ([f6ff024](https://github.com/rudderlabs/rudder-config-schema/commit/f6ff024fcac22a88bb8b71b539b40b0bf19a6842))
+* **fb:** move fb app events to new UI form-builder ([#1007](https://github.com/rudderlabs/rudder-config-schema/issues/1007)) ([7e8e3d1](https://github.com/rudderlabs/rudder-config-schema/commit/7e8e3d16da2cec375de144a99203358a377a31f5))
+* matomo: support premise version ([#989](https://github.com/rudderlabs/rudder-config-schema/issues/989)) ([f2d149d](https://github.com/rudderlabs/rudder-config-schema/commit/f2d149d707f5cdc234009e5f512f073da8f9f99b))
+* onboard facebook conversions destination ([#982](https://github.com/rudderlabs/rudder-config-schema/issues/982)) ([8c23561](https://github.com/rudderlabs/rudder-config-schema/commit/8c23561a90d6b9819af783ad1081103df775a613))
+* onboard ortto destination ([#979](https://github.com/rudderlabs/rudder-config-schema/issues/979)) ([09ef62e](https://github.com/rudderlabs/rudder-config-schema/commit/09ef62eb09c6550f3d6a9428b77edca45e0b27d4))
+
+
+### Bug Fixes
+
+* change value of a config in ui ([#1003](https://github.com/rudderlabs/rudder-config-schema/issues/1003)) ([de2cc4e](https://github.com/rudderlabs/rudder-config-schema/commit/de2cc4e1e66c74de54aebe01267ebc3fc9714f28))
+
 ### [1.56.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.56.1...v1.56.2) (2023-10-28)
 
 
