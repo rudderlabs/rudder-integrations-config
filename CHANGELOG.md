@@ -13,6 +13,8 @@ All notable changes to this project will be documented in this file. See [standa
 * matomo: support premise version ([#989](https://github.com/rudderlabs/rudder-config-schema/issues/989)) ([f2d149d](https://github.com/rudderlabs/rudder-config-schema/commit/f2d149d707f5cdc234009e5f512f073da8f9f99b))
 * onboard facebook conversions destination ([#982](https://github.com/rudderlabs/rudder-config-schema/issues/982)) ([8c23561](https://github.com/rudderlabs/rudder-config-schema/commit/8c23561a90d6b9819af783ad1081103df775a613))
 * onboard ortto destination ([#979](https://github.com/rudderlabs/rudder-config-schema/issues/979)) ([09ef62e](https://github.com/rudderlabs/rudder-config-schema/commit/09ef62eb09c6550f3d6a9428b77edca45e0b27d4))
+* refactor supportedMessageTypes and supportedConnectionModes ([#1026](https://github.com/rudderlabs/rudder-config-schema/issues/1026)) ([a2b7438](https://github.com/rudderlabs/rudder-config-schema/commit/a2b74388fb7b349381df1a9b52ef9ba53e0bdcee))
+
 
 
 ### Bug Fixes
