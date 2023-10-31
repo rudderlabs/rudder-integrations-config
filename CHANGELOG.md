@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.57.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.57.1...v1.57.2) (2023-10-31)
+
+
+### Bug Fixes
+
+* add throttling cost parameters for group and identify for gainsightPX ([#1041](https://github.com/rudderlabs/rudder-config-schema/issues/1041)) ([717e274](https://github.com/rudderlabs/rudder-config-schema/commit/717e274908736e679aca4a22d182706fc0d04ec3))
+
 ### [1.57.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.57.0...v1.57.1) (2023-10-31)
 
 
