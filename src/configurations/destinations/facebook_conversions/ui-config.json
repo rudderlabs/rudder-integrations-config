@@ -14,11 +14,11 @@
                 "fields": [
                   {
                     "type": "textInput",
-                    "label": "Pixel ID",
-                    "note": "Your Pixel ID, from the snippet created on the Facebook Pixel creation page.",
-                    "configKey": "pixelId",
+                    "label": "Dataset ID",
+                    "note": "Your Dataset ID, from the snippet created on the Facebook Dataset creation page.",
+                    "configKey": "datasetId",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-                    "regexErrorMessage": "Invalid Pixel ID",
+                    "regexErrorMessage": "Invalid Dataset ID",
                     "placeholder": "e.g: 1234567898765"
                   },
                   {
@@ -26,7 +26,7 @@
                     "label": "Business Access Token",
                     "note": "Your Business Access token from your Business Account. Required for cloud-mode.",
                     "configKey": "accessToken",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,300})$",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,500})$",
                     "regexErrorMessage": "Invalid Business Access Token",
                     "placeholder": "e.g: EAALPFdyOVl4BAKEXmVR...",
                     "secret": true
@@ -47,11 +47,7 @@
                   }
                 ],
                 "icon": "sliders",
-                "fields": [],
-                "callout": {
-                  "message": "Cloud mode for this destination will be deprecated soon. Please migrate to Facebook Conversions destination for cloud mode.",
-                  "type": "info"
-                }
+                "fields": []
               }
             ]
           }
@@ -59,7 +55,7 @@
       },
       {
         "title": "Configuration settings",
-        "note": "Manage the settings for your destination",
+        "note": "Manage the settings for your \ndestination",
         "sections": [
           {
             "groups": [
@@ -69,61 +65,55 @@
                 "icon": "settings",
                 "fields": [
                   {
-                    "type": "checkbox",
-                    "label": "Enable Standard Event (PageView) for all Page and Screen Calls",
-                    "configKey": "standardPageCall",
-                    "default": false
-                  },
-                  {
                     "type": "singleSelect",
-                    "label": "Value Field Identifier",
-                    "note": "RudderStack sets Revenue from below selected field.",
-                    "configKey": "valueFieldIdentifier",
+                    "label": "Action Source",
+                    "note": "Choose the fallback action_source value you want to set if action_source is not found in event properties",
+                    "configKey": "actionSource",
                     "options": [
                       {
-                        "name": "properties.value",
-                        "value": "properties.value"
+                        "label": "website",
+                        "value": "website"
                       },
                       {
-                        "name": "properties.price",
-                        "value": "properties.price"
+                        "label": "email",
+                        "value": "email"
+                      },
+                      {
+                        "label": "app",
+                        "value": "app"
+                      },
+                      {
+                        "label": "phone_call",
+                        "value": "phone_call"
+                      },
+                      {
+                        "label": "chat",
+                        "value": "chat"
+                      },
+                      {
+                        "label": "physical_store",
+                        "value": "physical_store"
+                      },
+                      {
+                        "label": "system_generated",
+                        "value": "system_generated"
+                      },
+                      {
+                        "label": "other",
+                        "value": "other"
                       }
                     ],
-                    "default": "properties.price"
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "Enable Advanced Matching",
-                    "value": "advancedMapping",
-                    "default": false
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "Use Updated Mapping",
-                    "note": "It is recomended to set this to on as we are deprecating support for the old mapping soon.",
-                    "value": "useUpdatedMapping",
-                    "default": false,
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "connectionModes.webDevice",
-                          "value": "true"
-                        }
-                      ]
-                    }
+                    "default": "website"
                   }
                 ]
               }
             ]
           },
           {
-            "title": "Destination settings",
-            "note": "Configure advanced destination-specific settings here",
-            "icon": "settings",
             "groups": [
               {
-                "title": "Destination and event level setting",
-                "note": "Configure advanced destination and event-specific settings here",
+                "title": "Destination settings",
+                "note": "Configure advanced destination-specific settings heree",
                 "fields": [
                   {
                     "type": "checkbox",
@@ -306,14 +296,7 @@
     "sdkTemplate": {
       "title": "SDK settings",
       "note": "not visible in the ui",
-      "fields": [
-        {
-          "type": "redirect",
-          "redirectGroupKey": "legacyConversionMapping",
-          "label": "Legacy Conversion Pixel IDs",
-          "note": "Map RudderStack events to Facebook Pixel IDs"
-        }
-      ]
+      "fields": []
     },
     "redirectGroups": {
       "customEventMapping": {
@@ -474,31 +457,6 @@
                 "tagKey": "whitelistPiiProperties",
                 "placeholder": "e.g: email",
                 "default": []
-              }
-            ]
-          }
-        ]
-      },
-      "legacyConversionMapping": {
-        "fields": [
-          {
-            "type": "mapping",
-            "label": "Map your RudderStack Events to Facebook Pixel IDs",
-            "note": "Input the RudderStack event to map to Facebook's pixel id.",
-            "configKey": "legacyConversionPixelId",
-            "default": [],
-            "columns": [
-              {
-                "type": "textInput",
-                "key": "from",
-                "label": "Event name",
-                "placeholder": "e.g: Product Searched"
-              },
-              {
-                "type": "textInput",
-                "key": "to",
-                "label": "Pixel ID",
-                "placeholder": "e.g: 234567654654"
               }
             ]
           }

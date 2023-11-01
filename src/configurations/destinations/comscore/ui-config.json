@@ -1,72 +1,62 @@
 {
   "uiConfig": [
     {
-      "title": "Brand Id",
+      "title": "Connection Settings",
       "fields": [
         {
           "type": "textInput",
-          "label": "Brand Id",
-          "value": "brandId",
+          "label": "Publisher Id",
+          "value": "publisherId",
           "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Brand Id",
+          "regexErrorMessage": "Invalid Publisher Id value",
           "required": true,
-          "placeholder": "TV-54xxxx18-1"
+          "placeholder": "1234567",
+          "secret": true,
+          "footerNote": "Publisher ID is commonly referred as Client Id/ C2 Value."
         }
       ]
     },
     {
-      "title": "Client Id",
       "fields": [
         {
           "type": "textInput",
-          "label": "Client ID",
-          "value": "clientId",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Client ID",
-          "required": true,
-          "placeholder": "4659"
+          "label": "App Name",
+          "value": "appName",
+          "placeholder": "News Magazine",
+          "footerNote": "This parameter will be included in the payloads to specify the source app for the tags and data."
         }
       ]
     },
     {
-      "title": "Event Whitelist",
       "fields": [
         {
-          "type": "dynamicCustomForm",
-          "value": "eventWhiteList",
-          "labelNote": "Add the events you want to pass to TVSquared",
-          "customFields": [
-            {
-              "type": "textInput",
-              "label": "Event Name",
-              "value": "event",
-              "regex": "^(.{0,100})$",
-              "regexErrorMessage": "Invalid Event Name",
-              "required": false,
-              "placeholder": "e.g: Order Completed"
-            }
-          ]
+          "type": "checkbox",
+          "label": "Only Auto Update when app in foreground.",
+          "value": "foregroundOnly",
+          "default": true,
+          "footerNote": "This setting update usage times only when the application is in the foreground. This is the default mode."
         }
       ]
     },
     {
-      "title": "Custom Metrics",
       "fields": [
         {
-          "type": "dynamicCustomForm",
-          "value": "customMetrics",
-          "labelNote": "List of Properties you want to pass with the event. Default properties are already sent.",
-          "customFields": [
-            {
-              "type": "textInput",
-              "label": "Property Name",
-              "value": "propertyName",
-              "regex": "^(.{0,100})$",
-              "regexErrorMessage": "Invalid Property Name",
-              "required": false,
-              "placeholder": "e.g: browser"
-            }
-          ]
+          "type": "checkbox",
+          "label": "Auto Update when app is in foreground and background.",
+          "value": "foregroundAndBackground",
+          "default": false,
+          "footerNote": "This setting update usage times when the application is in the foreground and background."
+        }
+      ]
+    },
+    {
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Auto Update Interval",
+          "value": "autoUpdateInterval",
+          "placeholder": "60",
+          "footerNote": "If Auto Update is enabled, this sets how many seconds in between auto updates."
         }
       ]
     },
