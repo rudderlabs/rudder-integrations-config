@@ -18,8 +18,7 @@
                     "configKey": "host",
                     "regex": "(?!.*\\.ngrok\\.io)^(.{0,100})$",
                     "regexErrorMessage": "Invalid Host",
-                    "placeholder": "e.g: psql.mydomain.com",
-                    "required": true
+                    "placeholder": "e.g: psql.mydomain.com"
                   },
                   {
                     "type": "textInput",
@@ -27,8 +26,7 @@
                     "configKey": "database",
                     "regex": "^(.{0,100})$",
                     "regexErrorMessage": "Invalid Database",
-                    "placeholder": "e.g: rudderdb",
-                    "required": true
+                    "placeholder": "e.g: rudderdb"
                   },
                   {
                     "type": "textInput",
@@ -36,16 +34,14 @@
                     "configKey": "user",
                     "regex": "^(.{0,100})$",
                     "regexErrorMessage": "Invalid User",
-                    "placeholder": "e.g: rudder",
-                    "required": true
+                    "placeholder": "e.g: rudder"
                   },
                   {
                     "type": "textInput",
                     "label": "Password",
                     "configKey": "password",
                     "placeholder": "e.g: rudder-password",
-                    "regex": ".*",
-                    "required": true
+                    "regex": ".*"
                   },
                   {
                     "type": "textInput",
@@ -53,8 +49,7 @@
                     "configKey": "port",
                     "regex": "^(.{0,100})$",
                     "regexErrorMessage": "Invalid Port",
-                    "placeholder": "5432",
-                    "required": true
+                    "placeholder": "5432"
                   },
                   {
                     "type": "textInput",
@@ -63,7 +58,6 @@
                     "configKey": "namespace",
                     "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
                     "regexErrorMessage": "Invalid Namespace",
-                    "required": false,
                     "placeholder": "e.g: rudder-schema",
                     "note": "Default will be the source name"
                   },
@@ -85,12 +79,10 @@
                         "value": "verify-ca"
                       }
                     ],
-                    "default": "disable",
-                    "required": true
+                    "default": "disable"
                   },
                   {
                     "type": "textInput",
-                    "required": true,
                     "regex": "-----BEGIN RSA PRIVATE KEY-----.*-----END RSA PRIVATE KEY-----",
                     "regexErrorMessage": "Invalid Client Key Pem File",
                     "preRequisites": {
@@ -106,7 +98,6 @@
                   },
                   {
                     "type": "textInput",
-                    "required": true,
                     "regex": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
                     "preRequisites": {
                       "fields": [
@@ -121,7 +112,6 @@
                   },
                   {
                     "type": "textInput",
-                    "required": true,
                     "regex": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
                     "preRequisites": {
                       "fields": [
@@ -197,8 +187,7 @@
                         "configKey": "1440"
                       }
                     ],
-                    "default": "30",
-                    "required": false
+                    "default": "30"
                   },
                   {
                     "type": "timePicker",
@@ -208,7 +197,6 @@
                       "omitSeconds": true,
                       "minuteStep": 15
                     },
-                    "required": false,
                     "note": "Note: Please specify time in UTC"
                   },
                   {
@@ -227,7 +215,6 @@
                       "omitSeconds": true,
                       "minuteStep": 1
                     },
-                    "required": false,
                     "note": "Note: Please specify time in UTC"
                   },
                   {
@@ -237,7 +224,6 @@
                     "configKey": "jsonPaths",
                     "regex": "^(.*)$",
                     "placeholder": "e.g: testMap.nestedMap, testArray",
-                    "required": false,
                     "note": [
                       {
                         "text": "Instructions",
@@ -685,23 +671,113 @@
             ]
           },
           {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
             "groups": [
               {
-                "title": "Consent Settings",
-                "note": "",
-                "icon": "settings",
+                "title": "Client-side event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.webDevice",
+                      "value": true
+                    },
+                    {
+                      "configKey": "connectionModes.mobileDevice",
+                      "value": true
+                    }
+                  ],
+                  "condition": "or"
+                },
                 "fields": [
                   {
-                    "type": "dynamicCustomForm",
-                    "value": "oneTrustCookieCategories",
-                    "label": "OneTrust Cookie Categories",
-                    "customFields": [
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on events filtering:",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
                       {
-                        "type": "textInput",
-                        "placeholder": "Marketing",
-                        "value": "oneTrustCookieCategory",
-                        "label": "Category Name/ID",
-                        "required": false
+                        "label": "Disabled",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack’s OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
                       }
                     ]
                   }
