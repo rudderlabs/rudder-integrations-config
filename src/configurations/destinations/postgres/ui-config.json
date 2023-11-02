@@ -273,12 +273,11 @@
                       }
                     ],
                     "default": "MINIO",
-                    "required": true,
                     "preRequisites": {
                       "fields": [
                         {
                           "configKey": "useRudderStorage",
-                          "value": true
+                          "value": false
                         }
                       ]
                     }
@@ -303,7 +302,6 @@
                     "regex": "^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
                     "regexErrorMessage": "Invalid Staging S3 Storage Bucket Name",
                     "placeholder": "e.g: s3-event-logs",
-                    "required": true,
                     "note": "Please make sure the bucket exists in your S3"
                   },
                   {
@@ -326,7 +324,6 @@
                     "regex": "^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$",
                     "regexErrorMessage": "Invalid Staging GCS Object Storage Bucket Name",
                     "placeholder": "e.g: gcs-event-logs",
-                    "required": true,
                     "note": "Please make sure the bucket exists in your GCS"
                   },
                   {
@@ -348,7 +345,6 @@
                     "configKey": "containerName",
                     "regex": "^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$",
                     "regexErrorMessage": "Invalid Staging Azure Blob Storage Container Name",
-                    "required": true,
                     "placeholder": "e.g: azure-event-logs",
                     "note": "Please make sure the container exists in your Azure Blob Storage"
                   },
@@ -371,9 +367,86 @@
                     "configKey": "bucketName",
                     "regex": "^((?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
                     "regexErrorMessage": "Invalid Staging MINIO Storage Bucket Name",
-                    "required": true,
                     "placeholder": "e.g: minio-event-logs",
                     "note": "Please make sure the bucket exists in your MINIO"
+                  },
+                  {
+                    "type": "textInput",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "MINIO"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    },
+                    "label": "MinIO Endpoint",
+                    "configKey": "endPoint",
+                    "regex": "(?!.*\\.ngrok\\.io)^(.{0,100})$",
+                    "regexErrorMessage": "Invalid MinIO Endpoint",
+                    "placeholder": "e.g: play.min.io:9000"
+                  },
+                  {
+                    "type": "textInput",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "MINIO"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    },
+                    "label": "MINIO Access Key ID",
+                    "configKey": "accessKeyID",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid MinIO Access Key ID",
+                    "placeholder": "e.g: access-key-id"
+                  },
+                  {
+                    "type": "textInput",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "MINIO"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    },
+                    "label": "MINIO Secret Access Key",
+                    "configKey": "secretAccessKey",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid MinIO Secret Access Key",
+                    "placeholder": "e.g: secret-access-key"
+                  },
+                  {
+                    "type": "checkbox",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "MINIO"
+                        },
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    },
+                    "label": "Use SSL for connection",
+                    "configKey": "useSSL",
+                    "default": true
                   },
                   {
                     "type": "checkbox",
@@ -415,7 +488,6 @@
                     "configKey": "iamRoleARN",
                     "regex": "^(.{0,100})$",
                     "regexErrorMessage": "Invalid Role ARN",
-                    "required": true,
                     "placeholder": "e.g: arn:aws:iam::123456789012:role/S3Access",
                     "footerURL": {
                       "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/",
@@ -444,7 +516,6 @@
                     "configKey": "accessKeyID",
                     "regex": "^(.{0,100})$",
                     "regexErrorMessage": "Invalid AWS Access Key ID",
-                    "required": true,
                     "placeholder": "e.g: access-key-id"
                   },
                   {
@@ -469,7 +540,6 @@
                     "configKey": "accessKey",
                     "regex": "^(.{0,100})$",
                     "regexErrorMessage": "Invalid AWS Secret Access Key",
-                    "required": true,
                     "placeholder": "e.g: secret-access-key"
                   },
                   {
@@ -488,9 +558,8 @@
                     },
                     "label": "Azure Blob Storage Account Name",
                     "configKey": "accountName",
-                    "regex": "^(.{0,100})$",
+                    "regex": "^(.{1,100})$",
                     "regexErrorMessage": "Invalid Azure Blob Storage Account Name",
-                    "required": true,
                     "placeholder": "e.g: account-name"
                   },
                   {
@@ -513,9 +582,8 @@
                     },
                     "label": "Azure Blob Storage Account Key",
                     "configKey": "accountKey",
-                    "regex": "^(.{0,100})$",
+                    "regex": "^(.{1,100})$",
                     "regexErrorMessage": "Invalid Azure Blob Storage Account Key",
-                    "required": true,
                     "secret": true,
                     "placeholder": "e.g: account-key"
                   },
@@ -541,7 +609,6 @@
                     "configKey": "sasToken",
                     "regex": "^(.+)$",
                     "regexErrorMessage": "Invalid Azure Blob Storage SAS Token",
-                    "required": true,
                     "placeholder": "e.g: sas-token",
                     "secret": true
                   },
@@ -582,89 +649,7 @@
                     "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your Google Cloud Storage",
                     "configKey": "credentials",
                     "regex": ".*",
-                    "required": true,
                     "note": "Create a service account in your GCP Project for RudderStack with roles of 'storage.objectCreator'"
-                  },
-                  {
-                    "type": "textInput",
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "bucketProvider",
-                          "value": "MINIO"
-                        },
-                        {
-                          "configKey": "useRudderStorage",
-                          "value": false
-                        }
-                      ]
-                    },
-                    "label": "MinIO Endpoint",
-                    "configKey": "endPoint",
-                    "regex": "(?!.*\\.ngrok\\.io)^(.{0,100})$",
-                    "regexErrorMessage": "Invalid MinIO Endpoint",
-                    "required": true,
-                    "placeholder": "e.g: play.min.io:9000"
-                  },
-                  {
-                    "type": "textInput",
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "bucketProvider",
-                          "value": "MINIO"
-                        },
-                        {
-                          "configKey": "useRudderStorage",
-                          "value": false
-                        }
-                      ]
-                    },
-                    "label": "MINIO Access Key ID",
-                    "configKey": "accessKeyID",
-                    "regex": "^(.{0,100})$",
-                    "regexErrorMessage": "Invalid MinIO Access Key ID",
-                    "required": true,
-                    "placeholder": "e.g: access-key-id"
-                  },
-                  {
-                    "type": "textInput",
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "bucketProvider",
-                          "value": "MINIO"
-                        },
-                        {
-                          "configKey": "useRudderStorage",
-                          "value": false
-                        }
-                      ]
-                    },
-                    "label": "MINIO Secret Access Key",
-                    "configKey": "secretAccessKey",
-                    "regex": "^(.{0,100})$",
-                    "regexErrorMessage": "Invalid MinIO Secret Access Key",
-                    "required": true,
-                    "placeholder": "e.g: secret-access-key"
-                  },
-                  {
-                    "type": "checkbox",
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "bucketProvider",
-                          "value": "MINIO"
-                        },
-                        {
-                          "configKey": "useRudderStorage",
-                          "value": false
-                        }
-                      ]
-                    },
-                    "label": "Use SSL for connection",
-                    "configKey": "useSSL",
-                    "default": true
                   }
                 ]
               }
