@@ -405,17 +405,25 @@
               "label": "Category Name/ID",
               "required": false
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              }
+            ]
+          }
         },
         {
           "type": "dynamicCustomForm",
-          "value": "gcm",
-          "label": "Generic Consent Management",
+          "value": "consentManagement",
+          "label": "Consent management settings",
           "customFields": [
             {
               "type": "singleSelect",
               "label": "Consent Management Provider",
-              "value": "gcmProvider",
+              "value": "provider",
               "options": [
                 {
                   "name": "Custom",
@@ -426,7 +434,7 @@
                   "value": "ketch"
                 },
                 {
-                  "name": "One trust",
+                  "name": "OneTrust",
                   "value": "oneTrust"
                 }
               ],
@@ -438,7 +446,7 @@
             {
               "type": "singleSelect",
               "label": "Required Consents logic",
-              "value": "gcmLogic",
+              "value": "resolutionStrategy",
               "options": [
                 {
                   "name": "AND",
@@ -456,7 +464,7 @@
               "preRequisites": {
                 "fields": [
                   {
-                    "configKey": "gcmProvider",
+                    "configKey": "provider",
                     "value": "custom"
                   }
                 ]
@@ -464,15 +472,14 @@
             },
             {
               "type": "dynamicCustomForm",
-              "value": "gcmCategories",
-              "label": "Consent Management Category Ids",
+              "value": "consents",
+              "label": "Consent Category Ids",
               "customFields": [
                 {
                   "type": "textInput",
                   "placeholder": "Marketing",
-                  "value": "gcmCategory",
+                  "value": "consent",
                   "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "label": "Category ID",
                   "required": false
                 }
               ]
@@ -481,15 +488,10 @@
           "preRequisites": {
             "featureFlags": [
               {
-                "configKey": "AMP_prerequisite_test",
-                "value": true
-              },
-              {
-                "configKey": "AMP_non_existent",
+                "configKey": "AMP_enable-gcm",
                 "value": true
               }
-            ],
-            "featureFlagsCondition": "or"
+            ]
           }
         }
       ]

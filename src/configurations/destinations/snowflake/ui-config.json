@@ -560,7 +560,94 @@
               "label": "Category Name/ID",
               "required": false
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              }
+            ]
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "consentManagement",
+          "label": "Consent management settings",
+          "customFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent Management Provider",
+              "value": "provider",
+              "options": [
+                {
+                  "name": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "name": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "name": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "defaultOption": {
+                "name": "Custom",
+                "value": "custom"
+              }
+            },
+            {
+              "type": "singleSelect",
+              "label": "Required Consents logic",
+              "value": "resolutionStrategy",
+              "options": [
+                {
+                  "name": "AND",
+                  "value": "and"
+                },
+                {
+                  "name": "OR",
+                  "value": "or"
+                }
+              ],
+              "defaultOption": {
+                "name": "AND",
+                "value": "and"
+              },
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "dynamicCustomForm",
+              "value": "consents",
+              "label": "Consent Category Ids",
+              "customFields": [
+                {
+                  "type": "textInput",
+                  "placeholder": "Marketing",
+                  "value": "consent",
+                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "required": false
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }
