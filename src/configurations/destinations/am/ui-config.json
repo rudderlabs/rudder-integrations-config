@@ -488,6 +488,86 @@
                     ]
                   }
                 ]
+              },
+              {
+                "title": "Generic cookie consent settings",
+                "note": ["Enter your consent provider configuration."],
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Consent Management Provider",
+                    "configKey": "gcmProvider",
+                    "options": [
+                      {
+                        "name": "Custom",
+                        "value": "custom"
+                      },
+                      {
+                        "name": "Ketch",
+                        "value": "ketch"
+                      },
+                      {
+                        "name": "One trust",
+                        "value": "oneTrust"
+                      }
+                    ],
+                    "default": "custom"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Required Consents logic",
+                    "configKey": "gcmLogic",
+                    "options": [
+                      {
+                        "name": "AND",
+                        "value": "and"
+                      },
+                      {
+                        "name": "OR",
+                        "value": "or"
+                      }
+                    ],
+                    "default": "and",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "gcmProvider",
+                          "value": "custom"
+                        },
+                        {
+                          "configKey": "gcmProvider"
+                        }
+                      ],
+                      "condition": "or"
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category id",
+                    "note": "Input your consent category ids by pressing ‘Enter’ after each entry",
+                    "configKey": "gcmCategories",
+                    "tagKey": "gcmCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "gcmCategory": ""
+                      }
+                    ]
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_prerequisite_test",
+                      "value": true
+                    },
+                    {
+                      "configKey": "AMP_non_existent",
+                      "value": true
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
               }
             ]
           }

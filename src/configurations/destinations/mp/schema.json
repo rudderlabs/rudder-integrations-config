@@ -202,6 +202,36 @@
             }
           }
         }
+      },
+      "gcm": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "gcmProvider": {
+              "type": "string",
+              "enum": ["custom", "ketch", "oneTrust"],
+              "default": "custom"
+            },
+            "gcmLogic": {
+              "type": "string",
+              "enum": ["and", "or"],
+              "default": "and"
+            },
+            "gcmCategories": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "gcmCategory": {
+                    "type": "string",
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "anyOf": [

@@ -406,6 +406,91 @@
               "required": false
             }
           ]
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "gcm",
+          "label": "Generic Consent Management",
+          "customFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent Management Provider",
+              "value": "gcmProvider",
+              "options": [
+                {
+                  "name": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "name": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "name": "One trust",
+                  "value": "oneTrust"
+                }
+              ],
+              "defaultOption": {
+                "name": "Custom",
+                "value": "custom"
+              }
+            },
+            {
+              "type": "singleSelect",
+              "label": "Required Consents logic",
+              "value": "gcmLogic",
+              "options": [
+                {
+                  "name": "AND",
+                  "value": "and"
+                },
+                {
+                  "name": "OR",
+                  "value": "or"
+                }
+              ],
+              "defaultOption": {
+                "name": "AND",
+                "value": "and"
+              },
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "gcmProvider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "dynamicCustomForm",
+              "value": "gcmCategories",
+              "label": "Consent Management Category Ids",
+              "customFields": [
+                {
+                  "type": "textInput",
+                  "placeholder": "Marketing",
+                  "value": "gcmCategory",
+                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "label": "Category ID",
+                  "required": false
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_prerequisite_test",
+                "value": true
+              },
+              {
+                "configKey": "AMP_non_existent",
+                "value": true
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
         }
       ]
     }
