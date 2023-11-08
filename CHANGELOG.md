@@ -2,13 +2,118 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.58.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.57.2...v1.58.0) (2023-11-06)
+
+
+### Features
+
+* add new destination tiktok_audience ([#964](https://github.com/rudderlabs/rudder-config-schema/issues/964)) ([6c5ac5f](https://github.com/rudderlabs/rudder-config-schema/commit/6c5ac5fd08389232b9ab4b8dee61e6f9d1d82b4d))
+* onboard one signal router transform ([#1046](https://github.com/rudderlabs/rudder-config-schema/issues/1046)) ([3478987](https://github.com/rudderlabs/rudder-config-schema/commit/3478987c8ee0ffa04d5d099f288a65b3aedbd247))
+* onboard revenuecat source ([#1023](https://github.com/rudderlabs/rudder-config-schema/issues/1023)) ([011be8c](https://github.com/rudderlabs/rudder-config-schema/commit/011be8c787e80dc616caa5f2304cdef8bc3f9748))
+
+
+### Bug Fixes
+
+* broken URL for configuring warehouse destinations ([#1018](https://github.com/rudderlabs/rudder-config-schema/issues/1018)) ([f6344ce](https://github.com/rudderlabs/rudder-config-schema/commit/f6344cefa4ef49feb5a15c484f6eb63e6e19d4a0))
+* make domain url fully configurable from the UI for freshsales and freshmarketer ([#1025](https://github.com/rudderlabs/rudder-config-schema/issues/1025)) ([9e8f18a](https://github.com/rudderlabs/rudder-config-schema/commit/9e8f18a401bf7bf513d9753e02e50b41f6a2d2cb))
+* marketo ui config to group custom activity mappings ([#1049](https://github.com/rudderlabs/rudder-config-schema/issues/1049)) ([b0d6a80](https://github.com/rudderlabs/rudder-config-schema/commit/b0d6a800dd93c18dddf302d6e0d0f49b6027a8c0))
+
+### [1.57.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.57.1...v1.57.2) (2023-10-31)
+
+
+### Bug Fixes
+
+* add throttling cost parameters for group and identify for gainsightPX ([#1041](https://github.com/rudderlabs/rudder-config-schema/issues/1041)) ([717e274](https://github.com/rudderlabs/rudder-config-schema/commit/717e274908736e679aca4a22d182706fc0d04ec3))
+
+### [1.57.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.57.0...v1.57.1) (2023-10-31)
+
+
+### Bug Fixes
+
+* **ortto:** add privateApiKey to secret fields ([#1036](https://github.com/rudderlabs/rudder-config-schema/issues/1036)) ([d2a9bb9](https://github.com/rudderlabs/rudder-config-schema/commit/d2a9bb9b205f606f0d5270f8657ac9b4b29673e4))
+* rename launchdarky audience to launchdarkly segment destination ([#1037](https://github.com/rudderlabs/rudder-config-schema/issues/1037)) ([83c536f](https://github.com/rudderlabs/rudder-config-schema/commit/83c536f21952aae189548b1018d02a04f5c87bc5))
+
+## [1.57.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.56.2...v1.57.0) (2023-10-30)
+
+
+### Features
+
+* deprecate GA and Facebook Offline Conversions destinations using options flag ([#1016](https://github.com/rudderlabs/rudder-config-schema/issues/1016)) ([b3a1567](https://github.com/rudderlabs/rudder-config-schema/commit/b3a1567f27a78d1088758f91ad8cfa786bd7e049))
+* **facebook_pixel:** move facebook pixel to new UI from-builder ([#1004](https://github.com/rudderlabs/rudder-config-schema/issues/1004)) ([f6ff024](https://github.com/rudderlabs/rudder-config-schema/commit/f6ff024fcac22a88bb8b71b539b40b0bf19a6842))
+* **fb:** move fb app events to new UI form-builder ([#1007](https://github.com/rudderlabs/rudder-config-schema/issues/1007)) ([7e8e3d1](https://github.com/rudderlabs/rudder-config-schema/commit/7e8e3d16da2cec375de144a99203358a377a31f5))
+* matomo: support premise version ([#989](https://github.com/rudderlabs/rudder-config-schema/issues/989)) ([f2d149d](https://github.com/rudderlabs/rudder-config-schema/commit/f2d149d707f5cdc234009e5f512f073da8f9f99b))
+* onboard facebook conversions destination ([#982](https://github.com/rudderlabs/rudder-config-schema/issues/982)) ([8c23561](https://github.com/rudderlabs/rudder-config-schema/commit/8c23561a90d6b9819af783ad1081103df775a613))
+* onboard ortto destination ([#979](https://github.com/rudderlabs/rudder-config-schema/issues/979)) ([09ef62e](https://github.com/rudderlabs/rudder-config-schema/commit/09ef62eb09c6550f3d6a9428b77edca45e0b27d4))
+* refactor supportedMessageTypes and supportedConnectionModes ([#1026](https://github.com/rudderlabs/rudder-config-schema/issues/1026)) ([a2b7438](https://github.com/rudderlabs/rudder-config-schema/commit/a2b74388fb7b349381df1a9b52ef9ba53e0bdcee))
+
+
+
+### Bug Fixes
+
+* change value of a config in ui ([#1003](https://github.com/rudderlabs/rudder-config-schema/issues/1003)) ([de2cc4e](https://github.com/rudderlabs/rudder-config-schema/commit/de2cc4e1e66c74de54aebe01267ebc3fc9714f28))
+
+### [1.56.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.56.1...v1.56.2) (2023-10-28)
+
+
+### Bug Fixes
+
+* pinterest deduplicate UI issue ([#1020](https://github.com/rudderlabs/rudder-config-schema/issues/1020)) ([af1aa7e](https://github.com/rudderlabs/rudder-config-schema/commit/af1aa7e56606a411f02022ca7745191205fb4864))
+
+### [1.56.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.56.0...v1.56.1) (2023-10-25)
+
+
+### Bug Fixes
+
+* criteo audience audienceId schema fix ([#1012](https://github.com/rudderlabs/rudder-config-schema/issues/1012)) ([53ed5a5](https://github.com/rudderlabs/rudder-config-schema/commit/53ed5a5abf2d14439f2ef6bfa9f88492494a0c95))
+
+## [1.56.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.55.2...v1.56.0) (2023-10-25)
+
+
+### Features
+
+* add new comscore destination ([#1009](https://github.com/rudderlabs/rudder-config-schema/issues/1009)) ([1ee6186](https://github.com/rudderlabs/rudder-config-schema/commit/1ee6186879cd5771176dd7f51c72ff6eb0a3b9f9))
+
+### [1.55.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.55.1...v1.55.2) (2023-10-19)
+
+### [1.55.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.55.0...v1.55.1) (2023-10-16)
+
+
+### Features
+
+* onboard facebook conversions destination ([#987](https://github.com/rudderlabs/rudder-config-schema/issues/987)) ([ce5c893](https://github.com/rudderlabs/rudder-config-schema/commit/ce5c893712aeb6c67023a8c7d25ef965e21556ba))
+
+
+### Bug Fixes
+
+* add ortto source ([#966](https://github.com/rudderlabs/rudder-config-schema/issues/966)) ([595ffb0](https://github.com/rudderlabs/rudder-config-schema/commit/595ffb0642a5b399c33fcaeb8c35d3540077e2b8))
+* improving pinterest UI ([#980](https://github.com/rudderlabs/rudder-config-schema/issues/980)) ([ebee306](https://github.com/rudderlabs/rudder-config-schema/commit/ebee30617f483c3dd2ac5b341c666f90a074a30c))
+
+## [1.55.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.54.0...v1.55.0) (2023-10-11)
+
+
+### Features
+
+* ketch config added for ga4 ([#963](https://github.com/rudderlabs/rudder-config-schema/issues/963)) ([89faa0e](https://github.com/rudderlabs/rudder-config-schema/commit/89faa0e3e411a8b0fde99fa140d1a199cded6c4b))
+* record event msl ([#968](https://github.com/rudderlabs/rudder-config-schema/issues/968)) ([7026ada](https://github.com/rudderlabs/rudder-config-schema/commit/7026ada8fad0c9a1909c6208c6f448a0b73a9c7d))
+* support page call in snapchat conversion ([#969](https://github.com/rudderlabs/rudder-config-schema/issues/969)) ([b0ea3f3](https://github.com/rudderlabs/rudder-config-schema/commit/b0ea3f31ddbebea63c296609b6ce636938902847))
+
+
+### Bug Fixes
+
+* remove shopify source specific config for ga4 ([#967](https://github.com/rudderlabs/rudder-config-schema/issues/967)) ([3bd29ea](https://github.com/rudderlabs/rudder-config-schema/commit/3bd29eab9f3fad8f7b6779cbafb086f9824e14db))
+
 ## [1.54.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.53.1...v1.54.0) (2023-09-29)
 
 
 ### Features
 
+* [REV-103] trino source enable mirror mode support ([#921](https://github.com/rudderlabs/rudder-config-schema/issues/921)) ([fdbebf1](https://github.com/rudderlabs/rudder-config-schema/commit/fdbebf18ecd82668dff9c2844362b827d4a11c7d))
+* add visual mapper for snapchat ([#911](https://github.com/rudderlabs/rudder-config-schema/issues/911)) ([43641ce](https://github.com/rudderlabs/rudder-config-schema/commit/43641cec8bc1f166311365a855d7d148edc55149))
+* amplitude sdk update ([#796](https://github.com/rudderlabs/rudder-config-schema/issues/796)) ([4e94260](https://github.com/rudderlabs/rudder-config-schema/commit/4e94260f4e071ff0c64dced856f363226b9f624e))
+* **mixpanel:** add support of ignoreDnt ([#917](https://github.com/rudderlabs/rudder-config-schema/issues/917)) ([ef678bd](https://github.com/rudderlabs/rudder-config-schema/commit/ef678bdd8eaac5954c59d9fd408dc1914e77c428))
 * **ga4:** support of filter PII user properties ([a196fca](https://github.com/rudderlabs/rudder-config-schema/commit/a196fca71a3b0dc37bc11573c90ba6cab8518fcc))
 * **ga4:** support of sending user_properties as part of init call ([0b2ca93](https://github.com/rudderlabs/rudder-config-schema/commit/0b2ca937f6cad8cd7e3688126f1f82cb1f4c3885))
+
 
 ### [1.53.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.53.0...v1.53.1) (2023-09-28)
 
