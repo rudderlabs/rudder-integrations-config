@@ -12,6 +12,7 @@
 - [ ] I have made corresponding changes to the documentation
 - [ ] The code changed/added as part of this pull request has been covered with tests
 - [ ] All tests related to the changed code pass in development
+- [ ] I have executed schemaGenerator tests and updated schema if needed
 
 ### Code review
 
