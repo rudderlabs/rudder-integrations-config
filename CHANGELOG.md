@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.58.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.58.0...v1.58.1) (2023-11-09)
+
+
+### Bug Fixes
+
+* removed mobile from supportedSourceTypes ([81110d4](https://github.com/rudderlabs/rudder-config-schema/commit/81110d4174dc18f0b99f93e988b696627715c587))
+
 ## [1.58.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.57.2...v1.58.0) (2023-11-06)
 
 
