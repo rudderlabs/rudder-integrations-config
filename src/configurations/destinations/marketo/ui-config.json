@@ -16,9 +16,8 @@
                     "type": "textInput",
                     "label": "Munchkin Account Id",
                     "configKey": "accountId",
-                    "regex": "^(.{0,100})$",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
                     "regexErrorMessage": "Invalid Munchkin Account Id",
-                    "required": true,
                     "note": "Your Marketo Accound ID from Admin settings section",
                     "placeholder": "e.g: 585-AXP-446"
                   },
@@ -26,9 +25,8 @@
                     "type": "textInput",
                     "label": "Client ID",
                     "configKey": "clientId",
-                    "regex": "^(.{0,100})$",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
                     "regexErrorMessage": "Invalid Client ID",
-                    "required": true,
                     "placeholder": "e.g: 53b1934e-51dd-4599-b24b-92612c71515f",
                     "note": "Your REST API Client ID"
                   },
@@ -36,9 +34,8 @@
                     "type": "textInput",
                     "label": "Client Secret",
                     "configKey": "clientSecret",
-                    "regex": "^(.{0,100})$",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
                     "regexErrorMessage": "Invalid Client Secret",
-                    "required": true,
                     "placeholder": "e.g: oxzXtNhcuw9YGsdhplKUeEMi8765dsfw",
                     "secret": true,
                     "note": "Your REST API Client Secret"
@@ -136,13 +133,7 @@
                   {
                     "type": "redirect",
                     "redirectGroupKey": "eventMapping",
-                    "label": "Event and property mappings",
-                    "note": "Map RudderStack events/properties to Marketo custom Activity ID/Primary Key"
-                  },
-                  {
-                    "type": "redirect",
-                    "redirectGroupKey": "fieldMapping",
-                    "label": "Field Mapping"
+                    "label": "Event and property mappings"
                   }
                 ]
               }
@@ -161,6 +152,7 @@
         "tabs": [
           {
             "name": "Custom events",
+            "note": "Map RudderStack events/properties to Marketo custom Activity ID/Primary Key",
             "fields": [
               {
                 "type": "mapping",
@@ -193,11 +185,7 @@
                 ]
               }
             ]
-          }
-        ]
-      },
-      "fieldMapping": {
-        "tabs": [
+          },
           {
             "name": "Lead trait Mapping",
             "fields": [
@@ -254,5 +242,4 @@
       }
     }
   }
-
 }
