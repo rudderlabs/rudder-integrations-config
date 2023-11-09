@@ -1,8 +1,9 @@
 '''
-    Usage: schemaGenerator.py [-h] [-name name | -all] selector
+    Usage: schemaGenerator.py [-h] [-name name | -all] [-update] selector
         1. selector - “source” or “destination”
         2. all - runs the validator for all the selector.
         3. name - any particular source or destination name such as `google_analytics`
+        3. update - updates existing schema with detected changes
     Example:
         1. python3 scripts/schemaGenerator.py -name="adobe_analytics" destination
         2. python3 scripts/schemaGenerator.py -all source
@@ -802,7 +803,7 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
             generate_config_props(config)
 
 
-def generate_schema(uiConfig, dbConfig, name, selector):
+def generate_schema(uiConfig, dbConfig, name, selector, shouldUpdateSchema):
     """Returns the schema generated from given uiConfig and dbConfig.
 
     Args:
@@ -810,6 +811,7 @@ def generate_schema(uiConfig, dbConfig, name, selector):
         dbConfig (object): Configurations of db-config.json.
         name (string): name of the source or destination.
         selector (string): either 'source' or 'destination'
+        shouldUpdateSchema (boolean): if it should update the existing schema with generated one
 
     Returns:
         object: schema
@@ -824,7 +826,7 @@ def generate_schema(uiConfig, dbConfig, name, selector):
     if is_old_format(uiConfig):
         allOfSchemaObj = generate_schema_for_allOf(uiConfig, dbConfig, "value")
     if allOfSchemaObj:
-        # AnyOf occuring separately, not inside of allOf.
+        # AnyOf occurring separately, not inside allOf.
         if len(allOfSchemaObj) == 1:
            if isinstance(allOfSchemaObj[0], list):
                schemaObject['anyOf'] = allOfSchemaObj[0]
@@ -835,6 +837,19 @@ def generate_schema(uiConfig, dbConfig, name, selector):
     generate_schema_properties(uiConfig, dbConfig, schemaObject,
                        schemaObject['properties'], name, selector)
     newSchema['configSchema'] = schemaObject
+
+    if shouldUpdateSchema:
+        # Get the parent directory (one level up)
+        script_directory = os.path.dirname(os.path.abspath(__file__))
+        directory = os.path.dirname(script_directory)
+        # Define the relative path
+        relative_path = f'src/configurations/{selector}s/{name.lower()}/schema.json'
+        file_path = os.path.join(directory, relative_path)
+        new_content = json.dumps(newSchema)
+        # Write the new content
+        with open(file_path, 'w') as file:
+            file.write(new_content)
+
     return newSchema
 
 def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
@@ -924,7 +939,7 @@ uiTypetoSchemaFn = {
 }
 
 
-def validate_config_consistency(name, selector, uiConfig, dbConfig, schema):
+def validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shouldUpdateSchema):
     """Generates a schema and compares it with an existing one. 
     If schemaDiff is present, it calls for individual warnings by iterating over each ui-type.
 
@@ -934,6 +949,7 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema):
         uiConfig (object): file content of ui-config.json.
         dbConfig (object): Configurations of db-config.json.
         schema (object): Existing schema in schema.json.
+        shouldUpdateSchema (boolean): if it should update the existing schema with generated one
     """    
     if schema == None and uiConfig == None:
         return
@@ -942,7 +958,7 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema):
         warnings.warn(f"Ui-Config is null for {name} in {selector} \n",UserWarning)
         print('-'*50)
         return
-    generatedSchema = generate_schema(uiConfig, dbConfig, name, selector)
+    generatedSchema = generate_schema(uiConfig, dbConfig, name, selector, shouldUpdateSchema)
     if schema:
         schemaDiff = diff(schema, generatedSchema["configSchema"])
         if schemaDiff:
@@ -986,12 +1002,13 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema):
         print(json.dumps(generatedSchema,indent=2))
         print('-'*50)
 
-def get_schema_diff(name, selector):
+def get_schema_diff(name, selector, shouldUpdateSchema=False):
     """ Validates the schema for the given name and selector.
 
     Args:
         name (string): name of the source or destination.
         selector (string): either 'source' or 'destination'.
+        shouldUpdateSchema (boolean): if it should update the existing schema with generated one
     """    
     file_selectors = ['db-config.json', 'ui-config.json', 'schema.json']
     directory = f'./{CONFIG_DIR}/{selector}s/{name}'
@@ -1005,25 +1022,27 @@ def get_schema_diff(name, selector):
     schema = file_content.get("configSchema")
     dbConfig = file_content.get("config")
     if name not in EXCLUDED_DEST:
-        validate_config_consistency(name, selector, uiConfig, dbConfig, schema)
+        validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shouldUpdateSchema)
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Generates schema.json from ui-cofing.json and db-config.json and validates against actual scheme.json')
+    parser = argparse.ArgumentParser(description='Generates schema.json from ui-config.json and db-config.json and validates against actual scheme.json')
     group = parser.add_mutually_exclusive_group()
-    parser.add_argument('selector',metavar='selector',type=str,help='Enter wheather -name is a source or destination')
-    group.add_argument('-name',metavar='name',type=str,help='Enter the folder name under selector')
-    group.add_argument('-all',action='store_true', help='will run validation for all entites under selector')
-    
+    parser.add_argument('selector', metavar='selector', type=str, help='Enter whether -name is a source or destination')
+    parser.add_argument('-update', action='store_true', help='Will update existing schema with any changes')
+    group.add_argument('-name', metavar='name', type=str, help='Enter the folder name under selector')
+    group.add_argument('-all', action='store_true', help='Will run validation for all entities under selector')
     
     args = parser.parse_args()
     selector = args.selector
+    shouldUpdateSchema = args.update
+
     if args.all:
         CONFIG_DIR = 'src/configurations'
         current_items = os.listdir(f'./{CONFIG_DIR}/{selector}s')
         for name in current_items:
-            get_schema_diff(name,selector)
+            get_schema_diff(name, selector)
         
     else:
         name = args.name 
-        get_schema_diff(name, selector)
+        get_schema_diff(name, selector, shouldUpdateSchema)
