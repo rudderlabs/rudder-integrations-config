@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.58.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.57.2...v1.58.0) (2023-11-06)
+
+
+### Features
+
+* add new destination tiktok_audience ([#964](https://github.com/rudderlabs/rudder-config-schema/issues/964)) ([6c5ac5f](https://github.com/rudderlabs/rudder-config-schema/commit/6c5ac5fd08389232b9ab4b8dee61e6f9d1d82b4d))
+* onboard one signal router transform ([#1046](https://github.com/rudderlabs/rudder-config-schema/issues/1046)) ([3478987](https://github.com/rudderlabs/rudder-config-schema/commit/3478987c8ee0ffa04d5d099f288a65b3aedbd247))
+* onboard revenuecat source ([#1023](https://github.com/rudderlabs/rudder-config-schema/issues/1023)) ([011be8c](https://github.com/rudderlabs/rudder-config-schema/commit/011be8c787e80dc616caa5f2304cdef8bc3f9748))
+
+
+### Bug Fixes
+
+* broken URL for configuring warehouse destinations ([#1018](https://github.com/rudderlabs/rudder-config-schema/issues/1018)) ([f6344ce](https://github.com/rudderlabs/rudder-config-schema/commit/f6344cefa4ef49feb5a15c484f6eb63e6e19d4a0))
+* make domain url fully configurable from the UI for freshsales and freshmarketer ([#1025](https://github.com/rudderlabs/rudder-config-schema/issues/1025)) ([9e8f18a](https://github.com/rudderlabs/rudder-config-schema/commit/9e8f18a401bf7bf513d9753e02e50b41f6a2d2cb))
+* marketo ui config to group custom activity mappings ([#1049](https://github.com/rudderlabs/rudder-config-schema/issues/1049)) ([b0d6a80](https://github.com/rudderlabs/rudder-config-schema/commit/b0d6a800dd93c18dddf302d6e0d0f49b6027a8c0))
+
+### [1.57.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.57.1...v1.57.2) (2023-10-31)
+
+
+### Bug Fixes
+
+* add throttling cost parameters for group and identify for gainsightPX ([#1041](https://github.com/rudderlabs/rudder-config-schema/issues/1041)) ([717e274](https://github.com/rudderlabs/rudder-config-schema/commit/717e274908736e679aca4a22d182706fc0d04ec3))
+
 ### [1.57.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.57.0...v1.57.1) (2023-10-31)
 
 
