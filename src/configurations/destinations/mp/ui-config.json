@@ -1,428 +1,579 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "API Token",
-          "value": "token",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "regexErrorMessage": "Invalid API Token",
-          "required": true,
-          "placeholder": "c24f56ed817221606de5a5f0befe8b92",
-          "secret": true
-        },
-        {
-          "type": "textInput",
-          "label": "API Secret",
-          "value": "apiSecret",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-          "regexErrorMessage": "Invalid API Secret",
-          "required": false,
-          "placeholder": "f8a911adfbb6546cc43cdfe29e912a90",
-          "secret": true
-        },
-        {
-          "type": "textInput",
-          "label": "Service Account Username",
-          "value": "serviceAccountUserName",
-          "required": false
-        },
-        {
-          "type": "textInput",
-          "label": "Service Account Secret",
-          "value": "serviceAccountSecret",
-          "required": false
-        },
-        {
-          "type": "textInput",
-          "label": "Project ID",
-          "value": "projectId",
-          "required": false
-        },
-        {
-          "type": "singleSelect",
-          "label": "Data Residency",
-          "value": "dataResidency",
-          "options": [
-            {
-              "name": "US",
-              "value": "us"
-            },
-            {
-              "name": "EU",
-              "value": "eu"
-            }
-          ],
-          "defaultOption": {
-            "name": "US",
-            "value": "us"
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Project Token",
+                    "configKey": "token",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Project Token",
+                    "required": true,
+                    "placeholder": "c24f56ed817221606de5a5f0befe8b92",
+                    "secret": true,
+                    "note": [
+                      "Obtain the Project Token by navigating to Project > Project Settings > Access Key. For detailed instructions",
+                      {
+                        "text": "Learn more here",
+                        "link": "https://docs.mixpanel.com/docs/tracking/how-tos/api-credentials#project-token"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Data Residency",
+                    "configKey": "dataResidency",
+                    "options": [
+                      {
+                        "label": "US",
+                        "value": "us"
+                      },
+                      {
+                        "label": "EU",
+                        "value": "eu"
+                      }
+                    ],
+                    "default": "us"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Identity Merge",
+                    "configKey": "identityMergeApi",
+                    "note": [
+                      "Select Identity Merge API.",
+                      {
+                        "text": "Learn more",
+                        "link": "https://help.mixpanel.com/hc/en-us/articles/14383975110292"
+                      },
+                      " about Simplified vs Original ID Merge API."
+                    ],
+                    "options": [
+                      {
+                        "label": "Simplified ID Merge",
+                        "value": "simplified"
+                      },
+                      {
+                        "label": "Original ID Merge",
+                        "value": "original"
+                      }
+                    ],
+                    "default": "original"
+                  }
+                ]
+              }
+            ]
           },
-          "required": false
-        },
-        {
-          "type": "singleSelect",
-          "label": "Identity Merge",
-          "value": "identityMergeApi",
-          "footerNote": "Select Identity Merge API. For more information about Simplified vs Original ID Merge API refer doc (https://help.mixpanel.com/hc/en-us/articles/14383975110292)",
-          "options": [
-            {
-              "name": "Simplified ID Merge",
-              "value": "simplified"
-            },
-            {
-              "name": "Original ID Merge",
-              "value": "original"
-            }
-          ],
-          "defaultOption": {
-            "name": "Original ID Merge",
-            "value": "original"
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination.",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Mixpanel Fullstack IT",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "API Secret",
+                    "configKey": "apiSecret",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid API Secret",
+                    "required": false,
+                    "placeholder": "f8a911adfbb6546cc43cdfe29e912a90",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "note": [
+                      "Obtain the API Secret by navigating to Project > Project Settings > Access Key. For detailed instructions",
+                      {
+                        "text": "Learn more here",
+                        "link": "https://docs.mixpanel.com/docs/tracking/how-tos/api-credentials#api-secret"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Service Account Username",
+                    "configKey": "serviceAccountUserName",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "note": [
+                      "Refer to ",
+                      {
+                        "text": "this",
+                        "link": "https://docs.mixpanel.com/docs/tracking/how-tos/api-credentials#api-secret"
+                      },
+                      " Mixpanel guide for managing service account and obtaining the username."
+                    ]
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Service Account Secret",
+                    "configKey": "serviceAccountSecret",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "note": [
+                      "Refer to ",
+                      {
+                        "text": "this",
+                        "link": "https://docs.mixpanel.com/docs/tracking/how-tos/api-credentials#api-secret"
+                      },
+                      " Mixpanel guide for managing service account and obtaining the secret."
+                    ]
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Project ID",
+                    "configKey": "projectId",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "note": [
+                      "Obtain the Project ID by navigating to Project > Project Settings > Project Details. For detailed instructions",
+                      {
+                        "text": "Learn more here",
+                        "link": "https://docs.mixpanel.com/docs/admin/organizations-projects/manage-projects#viewing-project-information"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Strict Mode",
+                    "configKey": "strictMode",
+                    "default": false,
+                    "note": "If enabled, Mixpanel will validate the request and return errors per event that failed",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "configKey": "propIncrements",
+                    "label": "Properties to increment in People",
+                    "tagKey": "property",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Property Name",
+                    "placeholder": "e.g: Cart-Value"
+                  }
+                ]
+              },
+              {
+                "title": "Event Map Setting",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "configKey": "useNewMapping",
+                    "label": "Use New Mapping",
+                    "default": false,
+                    "note": "It is recommended to set this to on as we are deprecating support for the old mapping soon.",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "Group Key Settings",
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "configKey": "groupKeySettings",
+                    "tagKey": "groupKey",
+                    "label": "Group Keys",
+                    "placeholder": "e.g: company",
+                    "default": [
+                      {
+                        "groupKey": ""
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "User Deletion Setting",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "User Deletion",
+                    "configKey": "userDeletionApi",
+                    "note": [
+                      "Select Mixpanel User Deletion API.",
+                      {
+                        "text": "Learn more",
+                        "link": "https://www.rudderstack.com/docs/destinations/streaming-destinations/mixpanel/#deleting-a-user"
+                      },
+                      " about difference between the two APIs"
+                    ],
+                    "options": [
+                      {
+                        "label": "Delete Profile",
+                        "value": "engage"
+                      },
+                      {
+                        "label": "Delete Profile and Associated Events",
+                        "value": "task"
+                      }
+                    ],
+                    "default": "engage",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        },
+                        {
+                          "configKey": "userDeletionApi",
+                          "value": "task"
+                        }
+                      ],
+                      "condition": "and"
+                    },
+                    "label": "GDPR API Token",
+                    "configKey": "gdprApiToken",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid GDPR API Token",
+                    "required": true,
+                    "placeholder": "e.g: 7vwaux7et2tk2ih1o0qtbt1x97n2je",
+                    "secret": true
+                  }
+                ]
+              }
+            ]
           },
-          "required": false
-        },
-        {
-          "type": "singleSelect",
-          "label": "User Deletion",
-          "value": "userDeletionApi",
-          "footerNote": "Select Mixpanel User Deletion API. For more information about difference between the two APIs refer doc (https://www.rudderstack.com/docs/destinations/streaming-destinations/mixpanel/#deleting-a-user)",
-          "options": [
-            {
-              "name": "Delete Profile",
-              "value": "engage"
-            },
-            {
-              "name": "Delete Profile and Associated Events",
-              "value": "task"
-            }
-          ],
-          "defaultOption": {
-            "name": "Delete Profile",
-            "value": "engage"
-          },
-          "required": false
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": {
-            "name": "userDeletionApi",
-            "selectedValue": "task"
-          },
-          "label": "GDPR API Token",
-          "value": "gdprApiToken",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "regexErrorMessage": "Invalid GDPR API Token",
-          "required": true,
-          "placeholder": "e.g: 7vwaux7et2tk2ih1o0qtbt1x97n2je",
-          "secret": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Strict Mode",
-          "value": "strictMode",
-          "default": false,
-          "footerNote": "If enabled, Mixpanel will validate the request and return errors per event that failed"
-        },
-        {
-          "type": "checkbox",
-          "label": "Ignore \"Do Not Track\"",
-          "value": "ignoreDnt",
-          "default": false,
-          "footerNote": "If enabled, Mixpanel will ignore \"Do Not Track\" setting of browser"
-        }
-      ]
-    },
-    {
-      "title": "Device Mode Settings",
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Client-side event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.webDevice",
+                      "value": true
+                    },
+                    {
+                      "configKey": "connectionModes.mobileDevice",
+                      "value": true
+                    }
+                  ],
+                  "condition": "or"
+                },
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on event filtering: ",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
+                      {
+                        "label": "Disabled",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input the events you want to allowlist.\nInput separate events by pressing ‘Enter’.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input the events you want to denylist.\nInput separate events by pressing ‘Enter’.",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs or names if you have them configured. We recommend providing category IDs over names, as the category names only work in the device connection mode. So, you can seamlessly switch between the connection modes.",
+                  {
+                    "text": "Learn more",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  " about RudderStack’s OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Consent categories",
+                    "note": "Input your OneTrust consent category IDs or names by pressing ‘Enter’ after each entry. You should prefer category IDs over names. Refer to this section's note.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: C0001",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "Ketch Consent Purposes",
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Purpose ID",
+                    "configKey": "ketchConsentPurposes",
+                    "tagKey": "purpose",
+                    "regex": "^(.{0,100})$",
+                    "default": [
+                      {
+                        "purpose": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
       "fields": [
         {
           "type": "checkbox",
           "label": "Use Mixpanel People",
-          "value": "people",
+          "configKey": "people",
           "default": false,
-          "footerNote": "This will send all of your identify calls to Mixpanel's People feature."
+          "note": "This will send all of your identify calls to Mixpanel's People feature."
         },
         {
           "type": "checkbox",
           "label": "Automatically set all Traits as Super Properties and People Properties",
-          "value": "setAllTraitsByDefault",
+          "configKey": "setAllTraitsByDefault",
           "default": false,
-          "footerNote": "While this is checked, our integration automatically sets all traits on identify calls as super properties and people properties if Mixpanel People is checked as well."
+          "note": "While this is checked, our integration automatically sets all traits on identify calls as super properties and people properties if Mixpanel People is checked as well."
         },
         {
-          "type": "dynamicCustomForm",
-          "value": "superProperties",
-          "customFields": [
-            {
-              "type": "textInput",
-              "label": "Property to send as super Properties",
-              "value": "property",
-              "regex": "^(.{0,100})$",
-              "regexErrorMessage": "Invalid Property Name",
-              "required": false,
-              "placeholder": "e.g: residence"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "peopleProperties",
-          "customFields": [
-            {
-              "type": "textInput",
-              "label": "Traits to set as People Properties",
-              "value": "property",
-              "regex": "^(.{0,100})$",
-              "regexErrorMessage": "Invalid Property Name",
-              "required": false,
-              "placeholder": "e.g: address"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "eventIncrements",
-          "customFields": [
-            {
-              "type": "textInput",
-              "label": "Events to increment in People",
-              "value": "property",
-              "regex": "^(.{0,100})$",
-              "regexErrorMessage": "Invalid Property Name",
-              "required": false,
-              "placeholder": "e.g: Added-to-cart"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "propIncrements",
-          "customFields": [
-            {
-              "type": "textInput",
-              "label": "Properties to increment in People",
-              "value": "property",
-              "regex": "^(.{0,100})$",
-              "regexErrorMessage": "Invalid Property Name",
-              "required": false,
-              "placeholder": "e.g: Cart-Value"
-            }
-          ]
+          "type": "checkbox",
+          "label": "Ignore \"Do Not Track\"",
+          "configKey": "ignoreDnt",
+          "default": false,
+          "note": "If enabled, Mixpanel will ignore \"Do Not Track\" setting of browser"
         },
         {
           "type": "checkbox",
           "label": "Track All Pages to Mixpanel with a Consolidated Event Name",
-          "value": "consolidatedPageCalls",
+          "configKey": "consolidatedPageCalls",
           "default": true,
-          "footerNote": "This will track Loaded a Page events to Mixpanel for all page method calls. We enable this by default as it's how Mixpanel suggests sending these calls."
+          "note": "This will track Loaded a Page events to Mixpanel for all page method calls. We enable this by default as it's how Mixpanel suggests sending these calls."
         },
         {
           "type": "checkbox",
           "label": "Track Categorized Pages to Mixpanel",
-          "value": "trackCategorizedPages",
+          "configKey": "trackCategorizedPages",
           "default": false,
-          "footerNote": "This will track events to Mixpanel for page method calls that have a category associated with them. For example page('Docs', 'Index') would translate to Viewed Docs Index Page."
+          "note": "This will track events to Mixpanel for page method calls that have a category associated with them. For example page('Docs', 'Index') would translate to Viewed Docs Index Page."
         },
         {
           "type": "checkbox",
           "label": "Track Named Pages to Mixpanel",
-          "value": "trackNamedPages",
+          "configKey": "trackNamedPages",
           "default": false,
-          "footerNote": "This will track events to Mixpanel for page method calls that have a name associated with them. For example page('Signup') would translate to Viewed Signup Page."
+          "note": "This will track events to Mixpanel for page method calls that have a name associated with them. For example page('Signup') would translate to Viewed Signup Page."
         },
         {
           "type": "textInput",
           "label": "Source Name",
-          "value": "sourceName",
+          "configKey": "sourceName",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
           "regexErrorMessage": "Invalid Source Name",
           "required": false,
           "placeholder": "e.g: Rudder-JS",
-          "footerNote": "This value, if it's not blank, will be sent as rudderstack_source_name to Mixpanel for every event/page/screen call."
+          "note": "This value, if it's not blank, will be sent as rudderstack_source_name to Mixpanel for every event/page/screen call."
         },
         {
           "type": "checkbox",
           "label": "Cross Subdomain Cookie",
-          "value": "crossSubdomainCookie",
+          "configKey": "crossSubdomainCookie",
           "default": false,
-          "footerNote": "This will allow the Mixpanel cookie to persist between different pages of your application."
+          "note": "This will allow the Mixpanel cookie to persist between different pages of your application."
         },
         {
           "type": "singleSelect",
           "label": "Persistence Type",
-          "value": "persistenceType",
+          "configKey": "persistenceType",
           "options": [
             {
-              "name": "None",
+              "label": "None",
               "value": "none"
             },
             {
-              "name": "Cookie",
+              "label": "Cookie",
               "value": "cookie"
             },
             {
-              "name": "Local Storage",
+              "label": "Local Storage",
               "value": "localStorage"
             }
           ],
-          "defaultOption": {
-            "name": "Cookie",
-            "value": "cookie"
-          },
-          "footerNote": "Choose the persistence type for Mixpanel cookie. If 'Local Storage' is selected, then any existing Mixpanel cookie value with the same persistence name will be transferred to 'Local Storage' and deleted."
+          "default": "cookie",
+          "note": "Choose the persistence type for Mixpanel cookie. If 'Local Storage' is selected, then any existing Mixpanel cookie value with the same persistence name will be transferred to 'Local Storage' and deleted."
         },
         {
           "type": "textInput",
           "label": "Persistence Name",
-          "value": "persistenceName",
+          "configKey": "persistenceName",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-          "footerNote": "Enter a persistence name for the Mixpanel cookie."
+          "note": "Enter a persistence name for the Mixpanel cookie."
         },
         {
           "type": "checkbox",
           "label": "Secure Cookie",
-          "value": "secureCookie",
+          "configKey": "secureCookie",
           "default": false,
-          "footerNote": "This will mark the Mixpanel cookie as secure, meaning it will only be transmitted over https"
-        }
-      ]
-    },
-    {
-      "title": "Group Key Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "groupKeySettings",
-          "label": "Group Keys",
-          "customFields": [
-            {
-              "type": "textInput",
-              "label": "Group Key",
-              "value": "groupKey",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "regexErrorMessage": "Invalid Group Key",
-              "required": false,
-              "placeholder": "company"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": false
-        }
-      ]
-    },
-    {
-      "title": "Event Map Setting",
-      "fields": [
-        {
-          "type": "checkbox",
-          "value": "useNewMapping",
-          "label": "Use New Mapping",
-          "default": false,
-          "footerNote": "It is recomended to set this to on as we are deprecating support for the old mapping soon."
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          }
+          "note": "This will mark the Mixpanel cookie as secure, meaning it will only be transmitted over https"
         },
         {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
+          "type": "tagInput",
+          "configKey": "superProperties",
+          "label": "Property to send as super Properties",
+          "tagKey": "property",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Property Name",
+          "placeholder": "e.g: residence"
         },
         {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
+          "type": "tagInput",
+          "configKey": "peopleProperties",
+          "label": "Traits to set as People Properties",
+          "tagKey": "property",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Property Name",
+          "placeholder": "e.g: address"
         },
         {
-          "type": "dynamicCustomForm",
-          "value": "ketchConsentPurposes",
-          "label": "Ketch Consent Purposes",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "purpose",
-              "label": "Purpose ID",
-              "regex": "^(.{0,100})$",
-              "required": false
-            }
-          ]
+          "type": "tagInput",
+          "configKey": "eventIncrements",
+          "label": "Events to increment in People",
+          "tagKey": "property",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Property Name",
+          "placeholder": "e.g: Added-to-cart"
         }
       ]
     }
-  ]
+  }
 }
