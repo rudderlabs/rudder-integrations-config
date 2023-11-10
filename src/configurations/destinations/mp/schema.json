@@ -1,93 +1,27 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["token"],
+    "required": ["token", "dataResidency", "identityMergeApi"],
     "type": "object",
     "properties": {
       "token": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "apiSecret": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "serviceAccountUserName": {
-        "type": "string"
-      },
-      "serviceAccountSecret": {
-        "type": "string"
-      },
-      "projectId": {
-        "type": "string"
-      },
-      "dataResidency": {
-        "type": "string",
-        "enum": ["us", "eu"],
-        "default": "us"
-      },
+      "dataResidency": { "type": "string", "enum": ["us", "eu"], "default": "us" },
       "identityMergeApi": {
         "type": "string",
         "enum": ["simplified", "original"],
         "default": "original"
       },
-      "strictMode": {
-        "type": "boolean",
-        "default": false
-      },
-      "ignoreDnt": {
-        "type": "boolean",
-        "default": false
-      },
-      "userDeletionApi": {
+      "apiSecret": {
         "type": "string",
-        "enum": ["engage", "task"],
-        "default": "engage"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "people": {
-        "type": "boolean",
-        "default": false
-      },
-      "setAllTraitsByDefault": {
-        "type": "boolean",
-        "default": false
-      },
-      "superProperties": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "property": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "peopleProperties": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "property": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "eventIncrements": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "property": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
+      "serviceAccountUserName": { "type": "string" },
+      "serviceAccountSecret": { "type": "string" },
+      "projectId": { "type": "string" },
+      "strictMode": { "type": "boolean", "default": false },
       "propIncrements": {
         "type": "array",
         "items": {
@@ -100,44 +34,7 @@
           }
         }
       },
-      "consolidatedPageCalls": {
-        "type": "boolean",
-        "default": true
-      },
-      "trackCategorizedPages": {
-        "type": "boolean",
-        "default": false
-      },
-      "trackNamedPages": {
-        "type": "boolean",
-        "default": false
-      },
-      "sourceName": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "crossSubdomainCookie": {
-        "type": "boolean",
-        "default": false
-      },
-      "persistence": {
-        "type": "string",
-        "enum": ["none", "cookie", "localStorage"],
-        "default": "none"
-      },
-      "persistenceType": {
-        "type": "string",
-        "enum": ["none", "cookie", "localStorage"],
-        "default": "cookie"
-      },
-      "persistenceName": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "secureCookie": {
-        "type": "boolean",
-        "default": false
-      },
+      "useNewMapping": { "type": "boolean", "default": false },
       "groupKeySettings": {
         "type": "array",
         "items": {
@@ -150,17 +47,10 @@
           }
         }
       },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "useNewMapping": {
-        "type": "boolean",
-        "default": false
+      "userDeletionApi": { "type": "string", "enum": ["engage", "task"], "default": "engage" },
+      "gdprApiToken": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
       "eventFilteringOption": {
         "type": "string",
@@ -203,57 +93,120 @@
           }
         }
       },
-      "consentManagement": {
+      "ketchConsentPurposes": {
         "type": "array",
         "items": {
           "type": "object",
           "properties": {
-            "provider": {
+            "purpose": {
               "type": "string",
-              "enum": ["custom", "ketch", "oneTrust"],
-              "default": "custom"
-            },
-            "resolutionStrategy": {
-              "type": "string",
-              "enum": ["and", "or"],
-              "default": "and"
-            },
-            "consents": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "consent": {
-                    "type": "string",
-                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                  }
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "people": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "setAllTraitsByDefault": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "ignoreDnt": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "consolidatedPageCalls": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "trackCategorizedPages": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "trackNamedPages": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "sourceName": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          }
+        }
+      },
+      "crossSubdomainCookie": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "persistenceType": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "enum": ["none", "cookie", "localStorage"],
+            "default": "cookie"
+          }
+        }
+      },
+      "persistenceName": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          }
+        }
+      },
+      "secureCookie": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "superProperties": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "property": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
                 }
               }
             }
           }
         }
-      }
-    },
-    "anyOf": [
-      {
-        "if": {
-          "properties": {
-            "userDeletionApi": {
-              "const": "task"
+      },
+      "peopleProperties": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "property": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
             }
-          },
-          "required": ["userDeletionApi"]
-        },
-        "then": {
-          "properties": {
-            "gdprApiToken": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+          }
+        }
+      },
+      "eventIncrements": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "property": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
             }
-          },
-          "required": ["gdprApiToken"]
+          }
+        }
+      },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "android": { "type": "string", "enum": ["cloud"] },
+          "ios": { "type": "string", "enum": ["cloud"] },
+          "web": { "type": "string", "enum": ["cloud", "device"] },
+          "unity": { "type": "string", "enum": ["cloud"] },
+          "amp": { "type": "string", "enum": ["cloud"] },
+          "reactnative": { "type": "string", "enum": ["cloud"] },
+          "flutter": { "type": "string", "enum": ["cloud"] },
+          "cordova": { "type": "string", "enum": ["cloud"] },
+          "shopify": { "type": "string", "enum": ["cloud"] }
         }
       }
-    ]
+    }
   }
 }

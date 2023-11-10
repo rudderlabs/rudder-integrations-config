@@ -68,6 +68,13 @@
           }
         }
       },
+      "ketchConsentPurposes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": { "purpose": { "type": "string", "pattern": "^(.{0,100})$" } }
+        }
+      },
       "consentManagement": {
         "type": "array",
         "items": {
@@ -76,12 +83,14 @@
             "provider": {
               "type": "string",
               "enum": ["custom", "ketch", "oneTrust"],
-              "default": "custom"
+              "default": "custom",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
             "resolutionStrategy": {
               "type": "string",
               "enum": ["and", "or"],
-              "default": "and"
+              "default": "and",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
             "consents": {
               "type": "array",
