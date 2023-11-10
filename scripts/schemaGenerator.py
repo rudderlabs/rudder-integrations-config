@@ -415,6 +415,15 @@ def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
     }
     tagItem['properties'] = tagItemProps
     tagObject["items"] = tagItem
+    isSourceDependent = is_dest_field_dependent_on_source(field, dbConfig, schema_field_name)
+    if isSourceDependent:
+        tagObjectCopy = tagObject
+        tagObject = {}
+        tagObject = {"type": FieldTypeEnum.OBJECT.value}
+        tagObject["properties"] = {}
+        for sourceType in dbConfig["supportedSourceTypes"]:
+            if sourceType in dbConfig["destConfig"] and field[schema_field_name] in dbConfig["destConfig"][sourceType]:
+                tagObject["properties"][sourceType] = tagObjectCopy
     return tagObject
 
 
