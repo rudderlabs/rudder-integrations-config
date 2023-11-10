@@ -36,8 +36,13 @@
         "default": false
       },
       "ignoreDnt": {
-        "type": "boolean",
-        "default": false
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean",
+            "default": false
+          }
+        }
       },
       "userDeletionApi": {
         "type": "string",
@@ -45,45 +50,70 @@
         "default": "engage"
       },
       "people": {
-        "type": "boolean",
-        "default": false
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean",
+            "default": false
+          }
+        }
       },
       "setAllTraitsByDefault": {
-        "type": "boolean",
-        "default": false
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean",
+            "default": false
+          }
+        }
       },
       "superProperties": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "property": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "property": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
             }
           }
         }
       },
       "peopleProperties": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "property": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "property": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
             }
           }
         }
       },
       "eventIncrements": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "property": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "property": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
             }
           }
         }
@@ -101,42 +131,87 @@
         }
       },
       "consolidatedPageCalls": {
-        "type": "boolean",
-        "default": true
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean",
+            "default": true
+          }
+        }
       },
       "trackCategorizedPages": {
-        "type": "boolean",
-        "default": false
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean",
+            "default": false
+          }
+        }
       },
       "trackNamedPages": {
-        "type": "boolean",
-        "default": false
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean",
+            "default": false
+          }
+        }
       },
       "sourceName": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          }
+        }
       },
       "crossSubdomainCookie": {
-        "type": "boolean",
-        "default": false
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean",
+            "default": false
+          }
+        }
       },
       "persistence": {
-        "type": "string",
-        "enum": ["none", "cookie", "localStorage"],
-        "default": "none"
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "enum": ["none", "cookie", "localStorage"],
+            "default": "none"
+          }
+        }
       },
       "persistenceType": {
-        "type": "string",
-        "enum": ["none", "cookie", "localStorage"],
-        "default": "cookie"
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "enum": ["none", "cookie", "localStorage"],
+            "default": "cookie"
+          }
+        }
       },
       "persistenceName": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          }
+        }
       },
       "secureCookie": {
-        "type": "boolean",
-        "default": false
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean",
+            "default": false
+          }
+        }
       },
       "groupKeySettings": {
         "type": "array",
@@ -199,6 +274,18 @@
             "oneTrustCookieCategory": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "ketchConsentPurposes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "purpose": {
+              "type": "string",
+              "pattern": "^(.{0,100})$"
             }
           }
         }
