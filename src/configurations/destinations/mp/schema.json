@@ -105,6 +105,38 @@
           }
         }
       },
+      "consentManagement": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "provider": {
+              "type": "string",
+              "enum": ["custom", "ketch", "oneTrust"],
+              "default": "custom",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "resolutionStrategy": {
+              "type": "string",
+              "enum": ["and", "or"],
+              "default": "and",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "consents": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "consent": {
+                    "type": "string",
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "people": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "setAllTraitsByDefault": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "ignoreDnt": { "type": "object", "properties": { "web": { "type": "boolean" } } },

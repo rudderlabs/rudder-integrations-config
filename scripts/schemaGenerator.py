@@ -121,7 +121,7 @@ def is_field_present_in_default_config(field, dbConfig, schema_field_name):
     return False
 
 def generate_schema_for_default_checkbox(field, dbConfig, schema_field_name):
-    """Creates an schema object of defaultCheckbox.
+    """Creates a schema object of defaultCheckbox.
 
     Args:
         field (object): Individual field in ui-config.
@@ -144,7 +144,7 @@ def generate_schema_for_default_checkbox(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_checkbox(field, dbConfig, schema_field_name):
-    """Creates an schema object of checkbox.
+    """Creates a schema object of checkbox.
 
     Args:
         field (object): Individual field in ui-config.
@@ -173,7 +173,7 @@ def generate_schema_for_checkbox(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_textinput(field, dbConfig, schema_field_name):
-    """Creates an schema object of textinput.
+    """Creates a schema object of textinput.
 
     Args:
         field (object): Individual field in ui-config.
@@ -204,7 +204,7 @@ def generate_schema_for_textinput(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_textarea_input(field, dbConfig, schema_field_name):
-    """Creates an schema object of textareaInput.
+    """Creates a schema object of textareaInput.
 
     Args:
         field (object): Individual field in ui-config.
@@ -222,7 +222,7 @@ def generate_schema_for_textarea_input(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_single_select(field, dbConfig, schema_field_name):
-    """Creates an schema object of singleSelect.
+    """Creates a schema object of singleSelect.
 
     Args:
         field (object): Individual field in ui-config.
@@ -269,7 +269,7 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
-    """Creates an schema object of dynamicCustomForm.
+    """Creates a schema object of dynamicCustomForm.
 
     Args:
         field (object): Individual field in ui-config.
@@ -285,18 +285,24 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     dynamicCustomFormItemObj = {}
     dynamicCustomFormItemObj["type"] = FieldTypeEnum.OBJECT.value
     dynamicCustomFormItemObj["properties"] = {}
-    for customField in field["customFields"]:
-        customeFieldSchemaObj = uiTypetoSchemaFn.get(customField["type"])(customField, dbConfig, schema_field_name)
+
+    # For old schema types customFields contains the children, for v2 its is rowFields
+    customFieldsKey = "customFields"
+    if "rowFields" in field:
+        customFieldsKey = "rowFields"
+
+    for customField in field[customFieldsKey]:
+        customFieldSchemaObj = uiTypetoSchemaFn.get(customField["type"])(customField, dbConfig, schema_field_name)
         isCustomFieldDependentOnSource = is_dest_field_dependent_on_source(customField, dbConfig, schema_field_name)
-        if 'pattern' not in customeFieldSchemaObj and not isCustomFieldDependentOnSource and customeFieldSchemaObj["type"]==FieldTypeEnum.STRING.value:
-            customeFieldSchemaObj["pattern"] = generalize_regex_pattern(customField)
+        if 'pattern' not in customFieldSchemaObj and not isCustomFieldDependentOnSource and customFieldSchemaObj["type"]==FieldTypeEnum.STRING.value:
+            customFieldSchemaObj["pattern"] = generalize_regex_pattern(customField)
         # If the custom field is source dependent, we remove the source keys as it's not required inside custom fields, rather they need to be moved to top.
         if isCustomFieldDependentOnSource:
             for sourceType in dbConfig["supportedSourceTypes"]:
                 if sourceType in dbConfig["destConfig"] and field[schema_field_name] in dbConfig["destConfig"][sourceType]:
-                    customeFieldSchemaObj = customeFieldSchemaObj["properties"][sourceType]
+                    customFieldSchemaObj = customFieldSchemaObj["properties"][sourceType]
                     break
-        dynamicCustomFormItemObj["properties"][customField[schema_field_name]] =  customeFieldSchemaObj
+        dynamicCustomFormItemObj["properties"][customField[schema_field_name]] =  customFieldSchemaObj
 
     dynamicCustomFormObj["items"] = dynamicCustomFormItemObj
     isSourceDependent = is_dest_field_dependent_on_source(field, dbConfig, schema_field_name)
@@ -312,7 +318,7 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
-    """Creates an schema object of dynamicForm.
+    """Creates a schema object of dynamicForm.
 
     Args:
         field (object): Individual field in ui-config.
@@ -363,7 +369,7 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_dynamic_select_form(field, dbConfig, schema_field_name):
-    """Creates an schema object of dynamicSelectForm.
+    """Creates a schema object of dynamicSelectForm.
 
     Args:
         field (object): Individual field in ui-config.
@@ -377,7 +383,7 @@ def generate_schema_for_dynamic_select_form(field, dbConfig, schema_field_name):
     return generate_schema_for_dynamic_form(field, dbConfig, schema_field_name)
 
 def generate_schema_for_mapping(field, dbConfig, schema_field_name):
-    """Creates an schema object of mapping.
+    """Creates a schema object of mapping.
 
     Args:
         field (object): Individual field in ui-config.
@@ -392,7 +398,7 @@ def generate_schema_for_mapping(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
-    """Creates an schema object of tagInput.
+    """Creates a schema object of tagInput.
 
     Args:
         field (object): Individual field in ui-config.
@@ -428,7 +434,7 @@ def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_time_range_picker(field, dbConfig, schema_field_name):
-    """Creates an schema object of timeRangePicker.
+    """Creates a schema object of timeRangePicker.
 
     Args:
         field (object): Individual field in ui-config.
@@ -451,7 +457,7 @@ def generate_schema_for_time_range_picker(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_time_picker(field, dbConfig, schema_field_name):
-    """Creates an schema object of timePicker.
+    """Creates a schema object of timePicker.
 
     Args:
         field (object): Individual field in ui-config.
