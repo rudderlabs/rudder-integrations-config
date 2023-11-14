@@ -1,7 +1,7 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["token", "dataResidency", "identityMergeApi"],
+    "required": ["token"],
     "type": "object",
     "properties": {
       "token": {
@@ -39,19 +39,22 @@
         "type": "object",
         "properties": {
           "web": {
-            "type": "boolean"
+            "type": "boolean",
+            "default": false
           }
         }
       },
       "userDeletionApi": {
         "type": "string",
-        "enum": ["engage", "task"]
+        "enum": ["engage", "task"],
+        "default": "engage"
       },
       "people": {
         "type": "object",
         "properties": {
           "web": {
-            "type": "boolean"
+            "type": "boolean",
+            "default": false
           }
         }
       },
@@ -59,7 +62,8 @@
         "type": "object",
         "properties": {
           "web": {
-            "type": "boolean"
+            "type": "boolean",
+            "default": false
           }
         }
       },
@@ -130,7 +134,8 @@
         "type": "object",
         "properties": {
           "web": {
-            "type": "boolean"
+            "type": "boolean",
+            "default": true
           }
         }
       },
@@ -138,7 +143,8 @@
         "type": "object",
         "properties": {
           "web": {
-            "type": "boolean"
+            "type": "boolean",
+            "default": false
           }
         }
       },
@@ -146,7 +152,8 @@
         "type": "object",
         "properties": {
           "web": {
-            "type": "boolean"
+            "type": "boolean",
+            "default": false
           }
         }
       },
@@ -163,7 +170,8 @@
         "type": "object",
         "properties": {
           "web": {
-            "type": "boolean"
+            "type": "boolean",
+            "default": false
           }
         }
       },
@@ -172,7 +180,8 @@
         "properties": {
           "web": {
             "type": "string",
-            "enum": ["none", "cookie", "localStorage"]
+            "enum": ["none", "cookie", "localStorage"],
+            "default": "none"
           }
         }
       },
@@ -199,7 +208,8 @@
         "type": "object",
         "properties": {
           "web": {
-            "type": "boolean"
+            "type": "boolean",
+            "default": false
           }
         }
       },
@@ -229,7 +239,8 @@
       },
       "eventFilteringOption": {
         "type": "string",
-        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"]
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -274,7 +285,7 @@
           "properties": {
             "purpose": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+              "pattern": "^(.{0,100})$"
             }
           }
         }
