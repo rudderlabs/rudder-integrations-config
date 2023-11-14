@@ -176,6 +176,45 @@
                     }
                   }
                 ]
+              },
+              {
+                "title": "Screen settings",
+                "note": "Set how you want to send your screen calls to Amplitude",
+                "icon": "file",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Use Custom Screen Event Name",
+                    "configKey": "useUserDefinedScreenEventName",
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Screen Event Name Format",
+                    "note": "Assign a event name for your screen calls. Text {{ }} will be replaced with event payload value",
+                    "configKey": "userProvidedScreenEventString",
+                    "regex": "^(.{0,200})$",
+                    "regexErrorMessage": "Invalid Screen Event Name",
+                    "placeholder": "e.g: Viewed a {{ name }}",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useUserDefinedScreenEventName",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                ]
               }
             ]
           },
