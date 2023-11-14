@@ -14,7 +14,6 @@ All notable changes to this project will be documented in this file. See [standa
 * **INT-503:** hybrid mode braze ([#1030](https://github.com/rudderlabs/rudder-config-schema/issues/1030)) ([4bf4f48](https://github.com/rudderlabs/rudder-config-schema/commit/4bf4f48ae1a312b20aa9493d6c455d157c79b823))
 * **INT-901:** onboard sprig destination ([#1052](https://github.com/rudderlabs/rudder-config-schema/issues/1052)) ([62f089d](https://github.com/rudderlabs/rudder-config-schema/commit/62f089d4741c4b7d7d398412affcd17b886fd35f))
 * marketo: migrate to new UI layout ([#1044](https://github.com/rudderlabs/rudder-config-schema/issues/1044)) ([968310a](https://github.com/rudderlabs/rudder-config-schema/commit/968310a5f72e8480e2e38106b0be8e7b98e531d6))
-* onboard mixpanel on new ui ([#1008](https://github.com/rudderlabs/rudder-config-schema/issues/1008)) ([0874512](https://github.com/rudderlabs/rudder-config-schema/commit/08745124a3279695c1242919c216f8eef3dbe5cb))
 * onboarding salesforce with oauth ([#998](https://github.com/rudderlabs/rudder-config-schema/issues/998)) ([f774dfd](https://github.com/rudderlabs/rudder-config-schema/commit/f774dfdc371e12bf8545fc17672fa8420667d4f5))
 
 
