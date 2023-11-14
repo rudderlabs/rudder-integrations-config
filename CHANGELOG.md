@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file. See [standa
 * remove web from Singular supported source ([#1051](https://github.com/rudderlabs/rudder-config-schema/issues/1051)) ([dee78f5](https://github.com/rudderlabs/rudder-config-schema/commit/dee78f54873b00a5802fbc3e34a33e65558b8933))
 * schema generator script for updating tagInput fiel schema ([#1066](https://github.com/rudderlabs/rudder-config-schema/issues/1066)) ([688aa0b](https://github.com/rudderlabs/rudder-config-schema/commit/688aa0b67f2c70da37915407bdc7fc6f18281ebb))
 
+
 ### [1.58.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.58.0...v1.58.1) (2023-11-09)
 
 
