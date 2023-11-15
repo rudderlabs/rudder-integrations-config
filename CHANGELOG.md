@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.59.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.58.1...v1.59.0) (2023-11-13)
+
+
+### Features
+
+* add Ketch for Mixpanel, CustomerIO & Snowflake ([#1054](https://github.com/rudderlabs/rudder-config-schema/issues/1054)) ([e1964fb](https://github.com/rudderlabs/rudder-config-schema/commit/e1964fbf74372761c076be00df9eedb285f036ed))
+* added allowUserSuppliedJavascript for braze ([#1070](https://github.com/rudderlabs/rudder-config-schema/issues/1070)) ([6b10504](https://github.com/rudderlabs/rudder-config-schema/commit/6b105041274efbf5e02a8af64c6b212a4910afec))
+* **analytics-js-integrations:** add in-app message in customerIo ([#1017](https://github.com/rudderlabs/rudder-config-schema/issues/1017)) ([7cf7385](https://github.com/rudderlabs/rudder-config-schema/commit/7cf7385d0e019a8844dd10d006f841adb4aae062))
+* custom screen call amplitude ([#1069](https://github.com/rudderlabs/rudder-config-schema/issues/1069)) ([c78780e](https://github.com/rudderlabs/rudder-config-schema/commit/c78780e2be5b3603457ff6c4cd80e027f8a07e04))
+* **INT-503:** hybrid mode braze ([#1030](https://github.com/rudderlabs/rudder-config-schema/issues/1030)) ([4bf4f48](https://github.com/rudderlabs/rudder-config-schema/commit/4bf4f48ae1a312b20aa9493d6c455d157c79b823))
+* **INT-901:** onboard sprig destination ([#1052](https://github.com/rudderlabs/rudder-config-schema/issues/1052)) ([62f089d](https://github.com/rudderlabs/rudder-config-schema/commit/62f089d4741c4b7d7d398412affcd17b886fd35f))
+* marketo: migrate to new UI layout ([#1044](https://github.com/rudderlabs/rudder-config-schema/issues/1044)) ([968310a](https://github.com/rudderlabs/rudder-config-schema/commit/968310a5f72e8480e2e38106b0be8e7b98e531d6))
+* onboarding salesforce with oauth ([#998](https://github.com/rudderlabs/rudder-config-schema/issues/998)) ([f774dfd](https://github.com/rudderlabs/rudder-config-schema/commit/f774dfdc371e12bf8545fc17672fa8420667d4f5))
+
+
+### Bug Fixes
+
+* eventFiltering options key and schema ([#1064](https://github.com/rudderlabs/rudder-config-schema/issues/1064)) ([8e0cf6a](https://github.com/rudderlabs/rudder-config-schema/commit/8e0cf6a362b4dae4e3361a8a0789a34c35f0fa28))
+* mp schema inconsistency ([#1068](https://github.com/rudderlabs/rudder-config-schema/issues/1068)) ([ee7cbed](https://github.com/rudderlabs/rudder-config-schema/commit/ee7cbed52b26927c95f9b5204c93b0b2e0a9106a))
+* remove web from Singular supported source ([#1051](https://github.com/rudderlabs/rudder-config-schema/issues/1051)) ([dee78f5](https://github.com/rudderlabs/rudder-config-schema/commit/dee78f54873b00a5802fbc3e34a33e65558b8933))
+* schema generator script for updating tagInput fiel schema ([#1066](https://github.com/rudderlabs/rudder-config-schema/issues/1066)) ([688aa0b](https://github.com/rudderlabs/rudder-config-schema/commit/688aa0b67f2c70da37915407bdc7fc6f18281ebb))
+
+
 ### [1.58.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.58.0...v1.58.1) (2023-11-09)
 
 
