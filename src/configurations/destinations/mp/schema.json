@@ -18,18 +18,23 @@
       "serviceAccountSecret": {
         "type": "string"
       },
-      "projectId": {
-        "type": "string"
-      },
       "dataResidency": {
         "type": "string",
         "enum": ["us", "eu"],
         "default": "us"
       },
+      "projectId": {
+        "type": "string"
+      },
       "identityMergeApi": {
         "type": "string",
         "enum": ["simplified", "original"],
         "default": "original"
+      },
+      "userDeletionApi": {
+        "type": "string",
+        "enum": ["engage", "task"],
+        "default": "engage"
       },
       "strictMode": {
         "type": "boolean",
@@ -38,11 +43,6 @@
       "ignoreDnt": {
         "type": "boolean",
         "default": false
-      },
-      "userDeletionApi": {
-        "type": "string",
-        "enum": ["engage", "task"],
-        "default": "engage"
       },
       "people": {
         "type": "boolean",
@@ -120,11 +120,6 @@
         "type": "boolean",
         "default": false
       },
-      "persistence": {
-        "type": "string",
-        "enum": ["none", "cookie", "localStorage"],
-        "default": "none"
-      },
       "persistenceType": {
         "type": "string",
         "enum": ["none", "cookie", "localStorage"],
@@ -199,6 +194,18 @@
             "oneTrustCookieCategory": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "ketchConsentPurposes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "purpose": {
+              "type": "string",
+              "pattern": "^(.{0,100})$"
             }
           }
         }
