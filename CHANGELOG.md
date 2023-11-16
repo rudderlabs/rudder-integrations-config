@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.59.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.59.0...v1.59.1) (2023-11-16)
+
+
+### Bug Fixes
+
+* spring default connection mode ([#1082](https://github.com/rudderlabs/rudder-config-schema/issues/1082)) ([acb0468](https://github.com/rudderlabs/rudder-config-schema/commit/acb0468d61d0c9da5ad7cde04635043dedc9576b))
+
 ## [1.59.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.58.1...v1.59.0) (2023-11-13)
 
 
