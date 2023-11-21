@@ -82,6 +82,38 @@
           }
         }
       },
+      "consentManagement": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "gdprApiToken": {
+              "provider": {
+                "type": "string",
+                "enum": ["custom", "ketch", "oneTrust"],
+                "default": "custom"
+              },
+              "resolutionStrategy": {
+                "type": "string",
+                "enum": ["and", "or"],
+                "default": "and"
+              },
+              "consents": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "consent": {
+                      "type": "string",
+                      "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "capturePageView": {
         "type": "object",
         "properties": {

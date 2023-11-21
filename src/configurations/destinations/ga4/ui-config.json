@@ -284,6 +284,83 @@
                     ]
                   }
                 ]
+              },
+              {
+                "title": "Consent management settings",
+                "note": ["Enter your consent provider configuration."],
+                "fields": [
+                  {
+                    "type": "dynamicCustomForm",
+                    "configKey": "consentManagement",
+                    "rowFields": [
+                      {
+                        "type": "singleSelect",
+                        "label": "Consent Management Provider",
+                        "configKey": "provider",
+                        "options": [
+                          {
+                            "label": "Custom",
+                            "value": "custom"
+                          },
+                          {
+                            "label": "Ketch",
+                            "value": "ketch"
+                          },
+                          {
+                            "label": "OneTrust",
+                            "value": "oneTrust"
+                          }
+                        ],
+                        "default": "custom"
+                      },
+                      {
+                        "type": "singleSelect",
+                        "label": "Required Consents logic",
+                        "configKey": "resolutionStrategy",
+                        "options": [
+                          {
+                            "label": "AND",
+                            "value": "and"
+                          },
+                          {
+                            "label": "OR",
+                            "value": "or"
+                          }
+                        ],
+                        "default": "and",
+                        "preRequisites": {
+                          "fields": [
+                            {
+                              "configKey": "provider",
+                              "value": "custom"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "tagInput",
+                        "label": "Consent Category Ids",
+                        "note": "Input your consent category ids by pressing ‘Enter’ after each entry",
+                        "configKey": "consents",
+                        "tagKey": "consent",
+                        "placeholder": "e.g: Marketing",
+                        "default": [
+                          {
+                            "consent": ""
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": true
+                    }
+                  ]
+                }
               }
             ]
           }
