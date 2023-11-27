@@ -313,7 +313,7 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
         dynamicCustomFormItemObj["properties"][customField[schema_field_name]] = customFieldSchemaObj
 
     if allOfSchemaObj:
-        dynamicCustomFormItemObj["properties"]['allOf'] = allOfSchemaObj
+        dynamicCustomFormItemObj['allOf'] = allOfSchemaObj
 
     dynamicCustomFormObj["items"] = dynamicCustomFormItemObj
     isSourceDependent = is_dest_field_dependent_on_source(field, dbConfig, schema_field_name)
