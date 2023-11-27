@@ -75,7 +75,6 @@
           "properties": { "purpose": { "type": "string", "pattern": "^(.{0,100})$" } }
         }
       },
-
       "consentManagement": {
         "type": "object",
         "properties": {
@@ -90,12 +89,6 @@
                   "default": "custom",
                   "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
                 },
-                "resolutionStrategy": {
-                  "type": "string",
-                  "enum": ["and", "or"],
-                  "default": "and",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                },
                 "consents": {
                   "type": "array",
                   "items": {
@@ -107,7 +100,29 @@
                       }
                     }
                   }
-                }
+                },
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "provider": {
+                          "const": "custom"
+                        }
+                      },
+                      "required": ["provider"]
+                    },
+                    "then": {
+                      "properties": {
+                        "resolutionStrategy": {
+                          "type": "string",
+                          "enum": ["and", "or"],
+                          "default": "and"
+                        }
+                      },
+                      "required": ["resolutionStrategy"]
+                    }
+                  }
+                ]
               }
             }
           },
@@ -122,12 +137,6 @@
                   "default": "custom",
                   "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
                 },
-                "resolutionStrategy": {
-                  "type": "string",
-                  "enum": ["and", "or"],
-                  "default": "and",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                },
                 "consents": {
                   "type": "array",
                   "items": {
@@ -139,7 +148,29 @@
                       }
                     }
                   }
-                }
+                },
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "provider": {
+                          "const": "custom"
+                        }
+                      },
+                      "required": ["provider"]
+                    },
+                    "then": {
+                      "properties": {
+                        "resolutionStrategy": {
+                          "type": "string",
+                          "enum": ["and", "or"],
+                          "default": "and"
+                        }
+                      },
+                      "required": ["resolutionStrategy"]
+                    }
+                  }
+                ]
               }
             }
           },
@@ -154,10 +185,52 @@
                   "default": "custom",
                   "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
                 },
-                "resolutionStrategy": {
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                },
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "provider": {
+                          "const": "custom"
+                        }
+                      },
+                      "required": ["provider"]
+                    },
+                    "then": {
+                      "properties": {
+                        "resolutionStrategy": {
+                          "type": "string",
+                          "enum": ["and", "or"],
+                          "default": "and"
+                        }
+                      },
+                      "required": ["resolutionStrategy"]
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "reactnative": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
                   "type": "string",
-                  "enum": ["and", "or"],
-                  "default": "and",
+                  "enum": ["custom", "ketch", "oneTrust"],
+                  "default": "custom",
                   "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
                 },
                 "consents": {
@@ -171,7 +244,77 @@
                       }
                     }
                   }
-                }
+                },
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "provider": {
+                          "const": "custom"
+                        }
+                      },
+                      "required": ["provider"]
+                    },
+                    "then": {
+                      "properties": {
+                        "resolutionStrategy": {
+                          "type": "string",
+                          "enum": ["and", "or"],
+                          "default": "and"
+                        }
+                      },
+                      "required": ["resolutionStrategy"]
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "flutter": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "ketch", "oneTrust"],
+                  "default": "custom",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                },
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "provider": {
+                          "const": "custom"
+                        }
+                      },
+                      "required": ["provider"]
+                    },
+                    "then": {
+                      "properties": {
+                        "resolutionStrategy": {
+                          "type": "string",
+                          "enum": ["and", "or"],
+                          "default": "and"
+                        }
+                      },
+                      "required": ["resolutionStrategy"]
+                    }
+                  }
+                ]
               }
             }
           }
