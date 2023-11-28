@@ -73,6 +73,8 @@ def generalize_regex_pattern(field):
         if defaultEnvPattern not in pattern and (('value' not in field or field['value'] != 'purpose') and ('configKey' not in field or field['configKey'] != 'purpose')):
             indexToPlace = pattern.find(defaultSubPattern) + len(defaultSubPattern)
             pattern = pattern[:indexToPlace] + '|' + defaultEnvPattern + pattern[indexToPlace:]
+    # TODO: we should not use a case here for the individual properties. Just pass the desired pattern as regex property
+    #  in ketch purpose fields and delete next case
     elif ('value' in field and field['value'] == 'purpose') or ('configKey' in field and field['configKey'] == 'purpose'):
         pattern = '^(.{0,100})$'
     else:
@@ -301,7 +303,7 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
         if "preRequisites" in customField:
             continue
 
-        if 'pattern' not in customFieldSchemaObj and not isCustomFieldDependentOnSource and customFieldSchemaObj["type"] == FieldTypeEnum.STRING.value:
+        if 'pattern' not in customFieldSchemaObj and not isCustomFieldDependentOnSource and customFieldSchemaObj["type"] == FieldTypeEnum.STRING.value and customField["type"] != "singleSelect" and customField["type"] != "dynamicSelectForm":
             customFieldSchemaObj["pattern"] = generalize_regex_pattern(customField)
 
         # If the custom field is source dependent, we remove the source keys as it's not required inside custom fields, rather they need to be moved to top.

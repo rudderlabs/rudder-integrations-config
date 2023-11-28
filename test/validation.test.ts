@@ -110,7 +110,7 @@ describe('Validation Tests', () => {
   Object.keys(destTcData).forEach((dest: string, destIdx: number) => {
     describe(`${destIdx + 1}. Destination - ${dest}`, () => {
       destTcData[dest].forEach((td: Record<string, unknown>, tcIdx: number) => {
-        it(`TC ${tcIdx + 1}`, async () => {
+        it(`TC ${tcIdx + 1}${td.testTitle ? ` - ${td.testTitle}` : ''}`, async () => {
           if (td.result === true) {
             expect(
               validateConfig(dest, td.config as Record<string, unknown>, 'destinations', true),
@@ -129,7 +129,7 @@ describe('Validation Tests', () => {
   Object.keys(srcTcData).forEach((src: string, srcIdx: number) => {
     describe(`${srcIdx + 1}. Source - ${src}`, () => {
       srcTcData[src].forEach((td: Record<string, unknown>, tcIdx: number) => {
-        it(`TC ${tcIdx + 1}`, async () => {
+        it(`TC ${tcIdx + 1}${td.testTitle ? ` - ${td.testTitle}` : ''}`, async () => {
           if (td.result === true) {
             expect(
               validateConfig(src, td.config as Record<string, unknown>, 'sources', true),
