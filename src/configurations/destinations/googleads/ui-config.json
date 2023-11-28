@@ -15,7 +15,6 @@
                   {
                     "type": "textInput",
                     "label": "Conversion ID",
-                    "note": "Enter the API secret associated with your GA4 data stream.  Create this in your GA UI under Admin > Data Streams > choose your stream > Measurement Protocol API Secrets > Create",
                     "configKey": "conversionID",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^AW-(.{0,100})$",
                     "regexErrorMessage": "Invalid Conversion ID",
@@ -37,7 +36,10 @@
                   }
                 ],
                 "icon": "sliders",
-                "fields": []
+                "fields": [],
+                "defaultConnectionModes": {
+                  "web": "device"
+                }
               }
             ]
           }
@@ -102,7 +104,7 @@
                     "type": "checkbox",
                     "label": "Enable Conversion Events Filtering",
                     "configKey": "enableConversionEventsFiltering",
-                    "note": "If enabled, specified list of events is considered as conversion events else all events is considered as conversion events",
+                    "note": "When enabled, only the specified list of events is considered as conversion events. Otherwise, all events will be considered as conversion events",
                     "default": false
                   },
                   {
@@ -153,7 +155,7 @@
                     "type": "checkbox",
                     "label": "Enable Dynamic Remarketing Events Filtering",
                     "configKey": "enableDynamicRemarketingEventsFiltering",
-                    "note": "If enabled, specified list of events is considered as dynamic remarketing events else all the events is considered as dynamic remarketing events",
+                    "note": "When enabled, only the specified list of events is considered as dynamic remarketing events. Otherwise, all events will be considered as dynamic remarketing events",
                     "default": false
                   },
                   {
@@ -329,7 +331,7 @@
                     "type": "redirect",
                     "redirectGroupKey": "conversionEventMapping",
                     "label": "Map Google Ads conversion label with Rudderstack event",
-                    "note": "Mapping is applicable to conversion events only",
+                    "note": "Mapping applies exclusively to conversion events",
                     "preRequisites": {
                       "fields": [
                         {
@@ -343,7 +345,7 @@
                     "type": "redirect",
                     "redirectGroupKey": "dynamicRemarketingEventMapping",
                     "label": "Mapping to trigger the Rudderstack events with standard Google Ads events",
-                    "note": "Mapping is applicable to dynamic remarketing events only. If no mapping is provided then rudderstack will send event name as it is to google ads",
+                    "note": "Mapping is exclusive to dynamic remarketing events. If no mapping is provided, RudderStack will directly send the event name to Google Ads as is",
                     "preRequisites": {
                       "fields": [
                         {
@@ -375,7 +377,7 @@
                 "type": "checkbox",
                 "label": "Send all conversion events name as conversion",
                 "configKey": "enableConversionLabel",
-                "note": "If enabled, all the conversion events name will be 'conversion' else it will be respective event name",
+                "note": "When enabled, all conversion events will be labeled as 'conversion'; otherwise, they will retain their respective event names",
                 "default": false
               },
               {
@@ -385,7 +387,7 @@
                 "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
                 "regexErrorMessage": "Invalid Default Conversion Label",
                 "placeholder": "e.g: bpg3CMiIjLMBELXBp8wC",
-                "note": "If no mapping is provided for 'Map Google Ads conversion label with Rudderstack event' then Rudderstack will use this field for conversion label value and event name as 'Viewed a Page'"
+                "note": "If no mapping is specified for 'Map Google Ads conversion label with RudderStack event', RudderStack will default to using this field for the conversion label value, while setting the event name as 'Viewed a Page'"
               },
               {
                 "type": "mapping",
