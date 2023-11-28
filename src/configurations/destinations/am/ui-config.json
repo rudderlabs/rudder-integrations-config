@@ -145,7 +145,7 @@
                   {
                     "type": "checkbox",
                     "label": "Use Custom Page Event Name",
-                    "note": "Send start and end session events",
+                    "note": "Send custom event name in page call",
                     "configKey": "useUserDefinedPageEventName",
                     "default": false,
                     "preRequisites": {
@@ -170,6 +170,46 @@
                       "fields": [
                         {
                           "configKey": "useUserDefinedPageEventName",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "Screen settings",
+                "note": "Set how you want to send your screen calls to Amplitude",
+                "icon": "file",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Use Custom Screen Event Name",
+                    "note": "Send custom event name in screen call",
+                    "configKey": "useUserDefinedScreenEventName",
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Screen Event Name Format",
+                    "note": "Assign a event name for your screen calls. Text {{ }} will be replaced with event payload value",
+                    "configKey": "userProvidedScreenEventString",
+                    "regex": "^(.{0,200})$",
+                    "regexErrorMessage": "Invalid Screen Event Name",
+                    "placeholder": "e.g: Viewed a {{ name }}",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useUserDefinedScreenEventName",
                           "value": true
                         }
                       ]

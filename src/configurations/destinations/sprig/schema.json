@@ -1,33 +1,12 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["siteID", "apiKey"],
+    "required": ["apiKey"],
     "type": "object",
     "properties": {
-      "siteID": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-      },
       "apiKey": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-      },
-      "deviceTokenEventName": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "datacenter": {
-        "type": "string",
-        "enum": ["US", "EU"],
-        "default": "US"
-      },
-      "sendPageNameInSDK": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
       },
       "useNativeSDK": {
         "type": "object",
@@ -37,18 +16,14 @@
           }
         }
       },
-      "dataUseInApp": {
+      "connectionMode": {
         "type": "object",
         "properties": {
           "web": {
-            "type": "boolean"
+            "type": "string",
+            "enum": ["device"]
           }
         }
-      },
-      "eventFilteringOption": {
-        "type": "string",
-        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
-        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -84,13 +59,6 @@
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
-        }
-      },
-      "ketchConsentPurposes": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": { "purpose": { "type": "string", "pattern": "^(.{0,100})$" } }
         }
       }
     }
