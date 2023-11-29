@@ -18,102 +18,84 @@
       "serviceAccountSecret": {
         "type": "string"
       },
-      "projectId": {
-        "type": "string"
-      },
       "dataResidency": {
         "type": "string",
         "enum": ["us", "eu"],
         "default": "us"
+      },
+      "projectId": {
+        "type": "string"
       },
       "identityMergeApi": {
         "type": "string",
         "enum": ["simplified", "original"],
         "default": "original"
       },
-      "strictMode": {
-        "type": "boolean",
-        "default": false
-      },
-      "ignoreDnt": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean",
-            "default": false
-          }
-        }
-      },
       "userDeletionApi": {
         "type": "string",
         "enum": ["engage", "task"],
         "default": "engage"
       },
+      "strictMode": {
+        "type": "boolean",
+        "default": false
+      },
+      "ignoreDnt": {
+        "type": "boolean",
+        "default": false
+      },
       "people": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean",
-            "default": false
-          }
-        }
+        "type": "boolean",
+        "default": false
       },
       "setAllTraitsByDefault": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean",
-            "default": false
+        "type": "boolean",
+        "default": false
+      },
+      "superProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "property": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
           }
         }
       },
-      "superProperties": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "property": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
+      "setOnceProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "property": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
         }
       },
       "peopleProperties": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "property": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "property": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
         }
       },
       "eventIncrements": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "property": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "property": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
         }
@@ -131,87 +113,37 @@
         }
       },
       "consolidatedPageCalls": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean",
-            "default": true
-          }
-        }
+        "type": "boolean",
+        "default": true
       },
       "trackCategorizedPages": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean",
-            "default": false
-          }
-        }
+        "type": "boolean",
+        "default": false
       },
       "trackNamedPages": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean",
-            "default": false
-          }
-        }
+        "type": "boolean",
+        "default": false
       },
       "sourceName": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-          }
-        }
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "crossSubdomainCookie": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean",
-            "default": false
-          }
-        }
-      },
-      "persistence": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "enum": ["none", "cookie", "localStorage"],
-            "default": "none"
-          }
-        }
+        "type": "boolean",
+        "default": false
       },
       "persistenceType": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "enum": ["none", "cookie", "localStorage"],
-            "default": "cookie"
-          }
-        }
+        "type": "string",
+        "enum": ["none", "cookie", "localStorage"],
+        "default": "cookie"
       },
       "persistenceName": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-          }
-        }
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "secureCookie": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean",
-            "default": false
-          }
-        }
+        "type": "boolean",
+        "default": false
       },
       "groupKeySettings": {
         "type": "array",
