@@ -1,0 +1,160 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["name", "displayName", "config"],
+  "title": "Destination definition schema",
+  "description": "The schema for a destination definition. This is used to validate the destination definition configuration files (db-config.json).",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Name",
+      "description": "A unique name for a destination without any whitespace or special characters.",
+      "$comment": "Typically, all the characters are in uppercase with words separated by underscores.",
+      "pattern": "^[a-zA-Z0-9_-]+$",
+      "examples": ["BING_ADS", "GOOGLE_ANALYTICS", "FACEBOOK_ADS"]
+    },
+    "displayName": {
+      "type": "string",
+      "title": "Display Name",
+      "description": "A human-readable name for a destination, typically, derived from the branding of the destination.",
+      "$comment": "This will be used in the front-end (web app), docs, etc. to identify a destination. As this will also be used in the 'integrations' object interpreted by SDKs and the server, it should also be a unique identifier for a destination.",
+      "pattern": "^[a-zA-Z0-9_ .\\-\\(\\)/]+$",
+      "examples": [
+        "Bing Ads",
+        "Split.io",
+        "Google Ads Remarketing Lists (Customer Match)",
+        "Google Cloud Pub/Sub"
+      ]
+    },
+    "category": {
+      "type": "string",
+      "title": "Category",
+      "description": "The category of the destination.",
+      "$comment": "Typically, needs to be defined only for warehouse destinations.",
+      "enum": ["warehouse"],
+      "examples": ["warehouse"]
+    },
+    "config": {
+      "type": "object",
+      "title": "Configuration",
+      "description": "The configuration of the plugin. This is used to configure the plugin in the UI."
+    },
+    "options": {
+      "type": "object",
+      "title": "Options",
+      "description": "The options for the destination.",
+      "$comment": "This hosts miscellaneous information about the destination.",
+      "additionalProperties": false,
+      "properties": {
+        "isBeta": {
+          "type": "boolean",
+          "title": "Is Beta",
+          "description": "Whether the destination is in beta.",
+          "$comment": "This is used to display a 'beta' badge in the UI.",
+          "default": false
+        },
+        "hidden": {
+          "type": "boolean",
+          "title": "Hidden",
+          "description": "Whether the destination is hidden.",
+          "$comment": "This is used to hide the destination from the UI.",
+          "default": false
+        },
+        "deprecated": {
+          "type": "boolean",
+          "title": "Deprecated",
+          "description": "Whether the destination is deprecated.",
+          "$comment": "This is used to display a 'deprecated' badge in the UI.",
+          "default": false
+        },
+        "deprecationLabel": {
+          "type": "string",
+          "title": "Deprecation Label",
+          "description": "The deprecation label for the destination.",
+          "$comment": "This is used to display a deprecation label in the UI when options.deprecated is 'true'.",
+          "default": "Deprecated"
+        },
+        "destinationFeatures": {
+          "type": "object",
+          "title": "Destination Features",
+          "description": "The features supported by the destination.",
+          "additionalProperties": false,
+          "properties": {
+            "vdmLabels": {
+              "type": "object",
+              "title": "VDM Labels",
+              "description": "The VDM labels supported by the destination.",
+              "additionalProperties": false,
+              "properties": {
+                "newAudienceAlternateLabel": {
+                  "type": "string",
+                  "title": "New Audience Alternate Label",
+                  "description": "The alternate label for the 'New Audience' VDM label.",
+                  "$comment": "This is used to display the alternate label in the UI when the destination supports the 'New Audience' VDM label."
+                },
+                "existingAudienceAlternateLabel": {
+                  "type": "string",
+                  "title": "Existing Audience Alternate Label",
+                  "description": "The alternate label for the 'Existing Audience' VDM label.",
+                  "$comment": "This is used to display the alternate label in the UI when the destination supports the 'Existing Audience' VDM label."
+                },
+                "audienceAlternateLabel": {
+                  "type": "string",
+                  "title": "Audience Alternate Label",
+                  "description": "The alternate label for the 'Audience' VDM label.",
+                  "$comment": "This is used to display the alternate label in the UI when the destination supports the 'Audience' VDM label."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "responseRules": {
+      "type": "object",
+      "title": "Response Rules",
+      "description": "Some destinations send 2xx as status code even when the request has some errors. Hence, we have to parse the response body to determine the actual status.",
+      "$comment": "This method of parsing the response is DEPRECATED now.",
+      "properties": {
+        "responseType": {
+          "type": "string",
+          "title": "Response Type",
+          "description": "The response type from the destination.",
+          "$comment": "This indicates the type of response returned by the destination.",
+          "enum": ["JSON"]
+        },
+        "rules": {
+          "type": "object",
+          "title": "Rules",
+          "description": "The parsing rules to be applied on the response from the destination.",
+          "properties": {
+            "abortable": {
+              "type": "array",
+              "title": "Abortable",
+              "description": "The rules to declare the request as aborted.",
+              "items": {
+                "type": "object"
+              }
+            },
+            "retryable": {
+              "type": "array",
+              "title": "Retryable",
+              "description": "The rules to declare the request as retryable.",
+              "items": {
+                "type": "object"
+              }
+            },
+            "throttled": {
+              "type": "array",
+              "title": "Throttled",
+              "description": "The rules to declare the request as throttled.",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
