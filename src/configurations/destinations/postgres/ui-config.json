@@ -1,423 +1,737 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Credentials",
-      "fields": [
+    "uiConfig": {
+      "baseTemplate": [
         {
-          "type": "textInput",
-          "label": "Host",
-          "value": "host",
-          "regex": "(?!.*\\.ngrok\\.io)^(.{0,100})$",
-          "regexErrorMessage": "Invalid Host",
-          "placeholder": "e.g: psql.mydomain.com",
-          "required": true
-        },
-        {
-          "type": "textInput",
-          "label": "Database",
-          "value": "database",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Database",
-          "placeholder": "e.g: rudderdb",
-          "required": true
-        },
-        {
-          "type": "textInput",
-          "label": "User",
-          "value": "user",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid User",
-          "placeholder": "e.g: rudder",
-          "required": true
-        },
-        {
-          "type": "textInput",
-          "label": "Password",
-          "value": "password",
-          "placeholder": "e.g: rudder-password",
-          "regex": ".*",
-          "required": true
-        },
-        {
-          "type": "textInput",
-          "label": "Port",
-          "value": "port",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Port",
-          "placeholder": "5432",
-          "required": true
-        },
-        {
-          "type": "textInput",
-          "label": "Namespace",
-          "labelNote": "Schema name for the warehouse where the tables are created",
-          "value": "namespace",
-          "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
-          "regexErrorMessage": "Invalid Namespace",
-          "required": false,
-          "placeholder": "e.g: rudder-schema",
-          "footerNote": "Default will be the source name"
-        },
-        {
-          "type": "singleSelect",
-          "label": "SSL Mode",
-          "value": "sslMode",
-          "options": [
-            { "name": "disable", "value": "disable" },
-            { "name": "require", "value": "require" },
-            { "name": "verify ca", "value": "verify-ca" }
-          ],
-          "defaultOption": { "name": "disable", "value": "disable" },
-          "required": true
-        },
-        {
-          "type": "textInput",
-          "required": true,
-          "regex": "-----BEGIN RSA PRIVATE KEY-----.*-----END RSA PRIVATE KEY-----",
-          "preRequisiteField": { "name": "sslMode", "selectedValue": "verify-ca" },
-          "label": "Client Key Pem File",
-          "value": "clientKey"
-        },
-        {
-          "type": "textInput",
-          "required": true,
-          "regex": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
-          "preRequisiteField": { "name": "sslMode", "selectedValue": "verify-ca" },
-          "label": "Client Cert Pem File",
-          "value": "clientCert"
-        },
-        {
-          "type": "textInput",
-          "required": true,
-          "regex": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
-          "preRequisiteField": { "name": "sslMode", "selectedValue": "verify-ca" },
-          "label": "Server CA Pem File",
-          "value": "serverCA"
-        },
-        {
-          "type": "singleSelect",
-          "label": "Sync Frequency",
-          "value": "syncFrequency",
-          "options": [
-            { "name": "Every 30 minutes", "value": "30" },
-            { "name": "Every 1 hour", "value": "60" },
-            { "name": "Every 3 hours", "value": "180" },
-            { "name": "Every 6 hours", "value": "360" },
-            { "name": "Every 12 hours", "value": "720" },
-            { "name": "Every 24 hours", "value": "1440" }
-          ],
-          "defaultOption": { "name": "Every 30 minutes", "value": "30" },
-          "required": false
-        },
-        {
-          "type": "timePicker",
-          "label": "Sync Starting At (Optional)",
-          "value": "syncStartAt",
-          "options": { "omitSeconds": true, "minuteStep": 15 },
-          "required": false,
-          "footerNote": "Note: Please specify time in UTC"
-        },
-        {
-          "type": "timeRangePicker",
-          "label": "Exclude window (Optional)",
-          "value": "excludeWindow",
-          "startTime": { "label": "start time", "value": "excludeWindowStartTime" },
-          "endTime": { "label": "end time", "value": "excludeWindowEndTime" },
-          "options": { "omitSeconds": true, "minuteStep": 1 },
-          "required": false,
-          "footerNote": "Note: Please specify time in UTC"
-        },
-        {
-          "type": "textInput",
-          "label": "JSON columns (Optional)",
-          "labelNote": "Specify required JSON properties in dot notation separated by commas",
-          "value": "jsonPaths",
-          "regex": "^(.*)$",
-          "placeholder": "e.g: testMap.nestedMap, testArray",
-          "required": false,
-          "footerURL": {
-            "link": "https://www.rudderstack.com/docs/destinations/warehouse-destinations/postgresql/#configuring-postgresql-destination-in-rudderstack",
-            "text": "Instructions for setting up the JSON columns"
-          }
-        }
-      ]
-    },
-    {
-      "title": "Object Storage Configuration",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use RudderStack managed object storage",
-          "value": "useRudderStorage",
-          "default": false,
-          "footerNote": "Note: Only available for RudderStack managed data planes"
-        },
-        {
-          "type": "singleSelect",
-          "label": "Choose your Storage Provider",
-          "value": "bucketProvider",
-          "options": [
-            { "name": "S3", "value": "S3" },
-            { "name": "GCS", "value": "GCS" },
-            { "name": "AZURE_BLOB", "value": "AZURE_BLOB" },
-            { "name": "MINIO", "value": "MINIO" }
-          ],
-          "defaultOption": { "name": "MINIO", "value": "MINIO" },
-          "required": true,
-          "preRequisiteField": { "name": "useRudderStorage", "selectedValue": false }
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "S3" },
-            { "name": "useRudderStorage", "selectedValue": false }
-          ],
-          "label": "Staging S3 Storage Bucket Name",
-          "labelNote": "S3 Bucket to store data before loading into Postgres",
-          "value": "bucketName",
-          "regex": "^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
-          "regexErrorMessage": "Invalid Staging S3 Storage Bucket Name",
-          "placeholder": "e.g: s3-event-logs",
-          "required": true,
-          "footerNote": "Please make sure the bucket exists in your S3"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "GCS" },
-            { "name": "useRudderStorage", "selectedValue": false }
-          ],
-          "label": "Staging GCS Object Storage Bucket Name",
-          "labelNote": "GCS Bucket to store data before loading into Postgres",
-          "value": "bucketName",
-          "regex": "^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$",
-          "regexErrorMessage": "Invalid Staging GCS Object Storage Bucket Name",
-          "placeholder": "e.g: gcs-event-logs",
-          "required": true,
-          "footerNote": "Please make sure the bucket exists in your GCS"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "AZURE_BLOB" },
-            { "name": "useRudderStorage", "selectedValue": false }
-          ],
-          "label": "Staging Azure Blob Storage Container Name",
-          "labelNote": "Container to store data before loading into Postgres",
-          "value": "containerName",
-          "regex": "^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$",
-          "regexErrorMessage": "Invalid Staging Azure Blob Storage Container Name",
-          "required": true,
-          "placeholder": "e.g: azure-event-logs",
-          "footerNote": "Please make sure the container exists in your Azure Blob Storage"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "MINIO" },
-            { "name": "useRudderStorage", "selectedValue": false }
-          ],
-          "label": "Staging MINIO Storage Bucket Name",
-          "labelNote": "MINIO Bucket to store data before loading into Postgres",
-          "value": "bucketName",
-          "regex": "^((?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
-          "regexErrorMessage": "Invalid Staging MINIO Storage Bucket Name",
-          "required": true,
-          "placeholder": "e.g: minio-event-logs",
-          "footerNote": "Please make sure the bucket exists in your MINIO"
-        },
-        {
-          "type": "checkbox",
-          "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "S3" },
-            { "name": "useRudderStorage", "selectedValue": false }
-          ],
-          "label": "Role Based Authentication",
-          "value": "roleBasedAuth",
-          "default": true
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "S3" },
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "roleBasedAuth", "selectedValue": true }
-          ],
-          "label": "IAM Role ARN",
-          "value": "iamRoleARN",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Role ARN",
-          "required": true,
-          "placeholder": "e.g: arn:aws:iam::123456789012:role/S3Access",
-          "footerURL": {
-            "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/",
-            "text": "Instructions for creating IAM Role"
-          }
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "S3" },
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "roleBasedAuth", "selectedValue": false }
-          ],
-          "label": "AWS Access Key ID",
-          "value": "accessKeyID",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid AWS Access Key ID",
-          "required": true,
-          "placeholder": "e.g: access-key-id"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "S3" },
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "roleBasedAuth", "selectedValue": false }
-          ],
-          "label": "AWS Secret Access Key",
-          "value": "accessKey",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid AWS Secret Access Key",
-          "required": true,
-          "placeholder": "e.g: secret-access-key"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "AZURE_BLOB" },
-            { "name": "useRudderStorage", "selectedValue": false }
-          ],
-          "label": "Azure Blob Storage Account Name",
-          "value": "accountName",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Azure Blob Storage Account Name",
-          "required": true,
-          "placeholder": "e.g: account-name"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "AZURE_BLOB" },
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "useSASTokens", "selectedValue": false }
-          ],
-          "label": "Azure Blob Storage Account Key",
-          "value": "accountKey",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Azure Blob Storage Account Key",
-          "required": true,
-          "secret": true,
-          "placeholder": "e.g: account-key"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "AZURE_BLOB" },
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "useSASTokens", "selectedValue": true }
-          ],
-          "label": "Azure Blob Storage SAS Token",
-          "value": "sasToken",
-          "regex": "^(.+)$",
-          "regexErrorMessage": "Invalid Azure Blob Storage SAS Token",
-          "required": true,
-          "placeholder": "e.g: sas-token",
-          "secret": true
-        },
-        {
-          "type": "checkbox",
-          "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "AZURE_BLOB" },
-            { "name": "useRudderStorage", "selectedValue": false }
-          ],
-          "label": "Use shared access signature (SAS) Tokens",
-          "value": "useSASTokens",
-          "default": false,
-          "footerNote": "Use this to Grant limited access to Azure Storage resources using shared access signatures (SAS)"
-        },
-        {
-          "type": "textareaInput",
-          "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "GCS" },
-            { "name": "useRudderStorage", "selectedValue": false }
-          ],
-          "label": "Credentials",
-          "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your Google Cloud Storage",
-          "value": "credentials",
-          "regex": ".*",
-          "required": true,
-          "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'storage.objectCreator'"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "MINIO" },
-            { "name": "useRudderStorage", "selectedValue": false }
-          ],
-          "label": "MinIO Endpoint",
-          "value": "endPoint",
-          "regex": "(?!.*\\.ngrok\\.io)^(.{0,100})$",
-          "regexErrorMessage": "Invalid MinIO Endpoint",
-          "required": true,
-          "placeholder": "e.g: play.min.io:9000"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "MINIO" },
-            { "name": "useRudderStorage", "selectedValue": false }
-          ],
-          "label": "MINIO Access Key ID",
-          "value": "accessKeyID",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid MinIO Access Key ID",
-          "required": true,
-          "placeholder": "e.g: access-key-id"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "MINIO" },
-            { "name": "useRudderStorage", "selectedValue": false }
-          ],
-          "label": "MINIO Secret Access Key",
-          "value": "secretAccessKey",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid MinIO Secret Access Key",
-          "required": true,
-          "placeholder": "e.g: secret-access-key"
-        },
-        {
-          "type": "checkbox",
-          "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "MINIO" },
-            { "name": "useRudderStorage", "selectedValue": false }
-          ],
-          "label": "Use SSL for connection",
-          "value": "useSSL",
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
+          "title": "Warehouse Setup",
+          "note": "Review how this destination is set up",
+          "sections": [
             {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
+              "groups": [
+                {
+                  "title": "Connection Credentials",
+                  "note": "Update your connection credentials here",
+                  "icon": "settings",
+                  "fields": [
+                    {
+                      "type": "textInput",
+                      "label": "Host",
+                      "configKey": "host",
+                      "regex": "(?!.*.ngrok.io)^(.{0,100})$",
+                      "regexErrorMessage": "Invalid Host",
+                      "placeholder": "e.g: psql.mydomain.com",
+                      "secret": false
+                    },
+                    {
+                      "type": "textInput",
+                      "label": "Database",
+                      "configKey": "database",
+                      "regex": "^(.{0,100})$",
+                      "regexErrorMessage": "Invalid Database",
+                      "placeholder": "e.g: rudderdb",
+                      "secret": false
+                    },
+                    {
+                      "type": "textInput",
+                      "label": "User",
+                      "configKey": "user",
+                      "regex": "^(.{0,100})$",
+                      "regexErrorMessage": "Invalid User",
+                      "placeholder": "e.g: rudder",
+                      "secret": false
+                    },
+                    {
+                      "type": "textInput",
+                      "label": "Password",
+                      "configKey": "password",
+                      "regex": ".*",
+                      "placeholder": "e.g: rudder-password",
+                      "secret": true
+                    },
+                    {
+                      "type": "textInput",
+                      "label": "Port",
+                      "configKey": "port",
+                      "regex": "^(.{0,100})$",
+                      "regexErrorMessage": "Invalid Port",
+                      "placeholder": "5432",
+                      "secret": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "groups": [
+                {
+                  "title": "Security Settings",
+                  "note": "Security requirements for your warehouse",
+                  "fields": [
+                    {
+                      "type": "singleSelect",
+                      "label": "SSL Mode",
+                      "configKey": "sslMode",
+                      "note": "Edit your Amplitude server selection here",
+                      "options": [
+                        {
+                          "name": "disable",
+                          "value": "disable"
+                        },
+                        {
+                          "name": "require",
+                          "value": "require"
+                        },
+                        {
+                          "name": "verify ca",
+                          "value": "verify-ca"
+                        }
+                      ],
+                      "default": "disable"
+                    },
+                    {
+                      "type": "textInput",
+                      "label": "Client Key Pem File",
+                      "configKey": "clientKey",
+                      "regex": "-----BEGIN RSA PRIVATE KEY-----.*-----END RSA PRIVATE KEY-----",
+                      "secret": false,
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "name": "sslMode",
+                            "selectedValue": "verify-ca"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "textInput",
+                      "label": "Client Cert Pem File",
+                      "configKey": "clientCert",
+                      "regex": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
+                      "secret": false,
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "name": "sslMode",
+                            "selectedValue": "verify-ca"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "textInput",
+                      "label": "Server CA Pem File",
+                      "configKey": "serverCA",
+                      "regex": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
+                      "secret": false,
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "name": "sslMode",
+                            "selectedValue": "verify-ca"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "groups": [
+                {
+                  "title": "Object Storage Configuration",
+                  "note": "Update where do you want the data staged to be stored",
+                  "fields": [
+                    {
+                      "type": "checkbox",
+                      "label": "Use RudderStack managed object storage",
+                      "configKey": "useRudderStorage",
+                      "note": "All the Data is Staged in Rudderstack Managed Object Storage",
+                      "default": false
+                    },
+                    {
+                      "type": "singleSelect",
+                      "label": "Choose your Storage Provider",
+                      "configKey": "bucketProvider",
+                      "note": "You must select either allowlist or denylist to enable events filtering",
+                      "options": [
+                        { "name": "S3", "value": "S3" },
+                        { "name": "GCS", "value": "GCS" },
+                        { "name": "AZURE_BLOB", "value": "AZURE_BLOB" },
+                        { "name": "MINIO", "value": "MINIO" }
+                      ],
+                      "default": "MINIO",
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "configKey": "useRudderStorage",
+                            "value": "false"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "textInput",
+                      "label": "Host",
+                      "configKey": "host",
+                      "regex": "(?!.*.ngrok.io)^(.{0,100})$",
+                      "regexErrorMessage": "Invalid Host",
+                      "placeholder": "e.g: psql.mydomain.com",
+                      "secret": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Configuration settings",
+          "note": "Manage the settings for your destination",
+          "sections": [
+            {
+              "groups": [
+                {
+                  "title": "Page settings",
+                  "note": "Set how you want to send your page calls to Amplitude",
+                  "icon": "file",
+                  "callout": {
+                    "message": "We suggest checking your event volume setup with Amplitude prior to configuring this section",
+                    "type": "info"
+                  },
+                  "fields": [
+                    {
+                      "type": "checkbox",
+                      "label": "Track all Pages to Amplitude",
+                      "configKey": "trackAllPages",
+                      "note": "Send all pageview events to Amplitude with either “Loaded a page” or “Viewed a screen” event names",
+                      "default": false,
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "configKey": "connectionModes.mobileDevice",
+                            "value": true
+                          },
+                          {
+                            "configKey": "connectionModes.webDevice",
+                            "value": true
+                          }
+                        ],
+                        "condition": "or"
+                      }
+                    },
+                    {
+                      "type": "checkbox",
+                      "label": "Track Categorized Pages to Amplitude",
+                      "configKey": "trackCategorizedPages",
+                      "note": "Any page call with a category will be sent to Amplitude as either a “Loaded {Category} Page” or “Viewed {Category} Screen” event",
+                      "default": true,
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "configKey": "connectionModes.mobileDevice",
+                            "value": true
+                          },
+                          {
+                            "configKey": "connectionModes.webDevice",
+                            "value": true
+                          }
+                        ],
+                        "condition": "or"
+                      }
+                    },
+                    {
+                      "type": "checkbox",
+                      "label": "Track Named Pages to Amplitude",
+                      "configKey": "trackNamedPages",
+                      "note": "Any page call with a name will be sent to Amplitude as either a “Loaded {Name} Page” or “Viewed {Name} Screen” event",
+                      "default": true,
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "configKey": "connectionModes.mobileDevice",
+                            "value": true
+                          },
+                          {
+                            "configKey": "connectionModes.webDevice",
+                            "value": true
+                          }
+                        ],
+                        "condition": "or"
+                      }
+                    },
+                    {
+                      "type": "checkbox",
+                      "label": "Use Custom Page Event Name",
+                      "note": "Send custom event name in page call",
+                      "configKey": "useUserDefinedPageEventName",
+                      "default": false,
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "configKey": "connectionModes.cloud",
+                            "value": true
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "textInput",
+                      "label": "Page Event Name Format",
+                      "note": "Assign a page event name for your page calls. Text {{ }} will be replaced with event payload value",
+                      "configKey": "userProvidedPageEventString",
+                      "regex": "^(.{0,200})$",
+                      "regexErrorMessage": "Invalid Page Event Name",
+                      "placeholder": "e.g: Viewed a {{ name }}",
+                      "secret": false,
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "configKey": "useUserDefinedPageEventName",
+                            "value": true
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "title": "Screen settings",
+                  "note": "Set how you want to send your screen calls to Amplitude",
+                  "icon": "file",
+                  "fields": [
+                    {
+                      "type": "checkbox",
+                      "label": "Use Custom Screen Event Name",
+                      "note": "Send custom event name in screen call",
+                      "configKey": "useUserDefinedScreenEventName",
+                      "default": false,
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "configKey": "connectionModes.cloud",
+                            "value": true
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "textInput",
+                      "label": "Screen Event Name Format",
+                      "note": "Assign a event name for your screen calls. Text {{ }} will be replaced with event payload value",
+                      "configKey": "userProvidedScreenEventString",
+                      "regex": "^(.{0,200})$",
+                      "regexErrorMessage": "Invalid Screen Event Name",
+                      "placeholder": "e.g: Viewed a {{ name }}",
+                      "secret": false,
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "configKey": "useUserDefinedScreenEventName",
+                            "value": true
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Identify and Group settings",
+              "note": "Set how you want your Group or Identify call user properties to be sent to Amplitude",
+              "icon": "magnifyingGlass",
+              "groups": [
+                {
+                  "title": "Group: traits",
+                  "note": "Set the properties of particular groups. A group is an object that a set of users belong to (e.g., organization, company, team)",
+                  "fields": [
+                    {
+                      "type": "textInput",
+                      "label": "Group name trait",
+                      "note": "Specify the type of group (group_type) for your group calls to Amplitude. Examples of a group_type could be: Org ID, Org Name, or Industry",
+                      "configKey": "groupTypeTrait",
+                      "placeholder": "e.g: company_id",
+                      "regex": "^(.{0,100})$",
+                      "regexErrorMessage": "Invalid Group Name Trait"
+                    },
+                    {
+                      "type": "textInput",
+                      "label": "Group value trait",
+                      "note": "Specify the group value (group_value) for your group calls to Amplitude. For example, if you set group_type: “industry”, group_value might be “retail”",
+                      "configKey": "groupValueTrait",
+                      "placeholder": "e.g: company_name",
+                      "regex": "^(.{0,100})$",
+                      "regexErrorMessage": "Invalid Group Name Trait"
+                    }
+                  ]
+                },
+                {
+                  "title": "Identify: traits",
+                  "note": "Customize how you want to send your Identify traits",
+                  "fields": [
+                    {
+                      "type": "tagInput",
+                      "label": "Traits to increment",
+                      "note": "Input separate traits by pressing ‘Enter’ after each trait. Set the traits to increment on an identify call. These traits will then be incremented by the numerical value associated with the trait in your identify call.",
+                      "configKey": "traitsToIncrement",
+                      "tagKey": "traits",
+                      "placeholder": "e.g: Revenue",
+                      "default": [
+                        {
+                          "traits": ""
+                        }
+                      ]
+                    },
+                    {
+                      "type": "tagInput",
+                      "label": "Traits to set once",
+                      "note": "Input separate traits by pressing ‘Enter’ after each trait. Specify the traits that should be set once. This prevents overriding the property value.",
+                      "configKey": "traitsToSetOnce",
+                      "tagKey": "traits",
+                      "placeholder": "e.g: lastName",
+                      "default": [
+                        {
+                          "traits": ""
+                        }
+                      ]
+                    },
+                    {
+                      "type": "tagInput",
+                      "label": "Traits to append",
+                      "note": "Input separate traits by pressing ‘Enter’ after each trait. Append a value or multiple values to a user property array",
+                      "configKey": "traitsToAppend",
+                      "tagKey": "traits",
+                      "placeholder": "e.g: createdAt",
+                      "default": [
+                        {
+                          "traits": ""
+                        }
+                      ],
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "configKey": "connectionModes.cloud",
+                            "value": true
+                          },
+                          {
+                            "configKey": "connectionModes.mobileDevice",
+                            "value": true
+                          }
+                        ],
+                        "condition": "or"
+                      }
+                    },
+                    {
+                      "type": "tagInput",
+                      "label": "Traits to prepend",
+                      "note": "Input separate traits by pressing ‘Enter’ after each trait. Prepend a value or multiple values to a user property array",
+                      "configKey": "traitsToPrepend",
+                      "tagKey": "traits",
+                      "placeholder": "e.g: createdAt",
+                      "default": [
+                        {
+                          "traits": ""
+                        }
+                      ],
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "configKey": "connectionModes.cloud",
+                            "value": true
+                          },
+                          {
+                            "configKey": "connectionModes.mobileDevice",
+                            "value": true
+                          }
+                        ],
+                        "condition": "or"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Destination settings",
+              "note": "Configure advanced destination-specific settings here",
+              "icon": "settings",
+              "groups": [
+                {
+                  "title": "Amplitude IT",
+                  "note": "Configure a few advanced Amplitude settings here",
+                  "fields": [
+                    {
+                      "type": "textInput",
+                      "label": "Secret key",
+                      "configKey": "apiSecret",
+                      "note": [
+                        "Enter your Amplitude Secret Key to delete users. To find your Secret Key, go to your project in Amplitude and look in the ",
+                        {
+                          "text": "general tab",
+                          "link": "https://help.amplitude.com/hc/en-us/articles/360058073772-Create-and-manage-organizations-and-projects#view-and-edit-your-project-information"
+                        }
+                      ],
+                      "regex": "^(.{0,100})$",
+                      "regexErrorMessage": "Invalid Api Key",
+                      "placeholder": "e.g: bSjsdGYsOo9sjw23Shj",
+                      "secret": true
+                    },
+                    {
+                      "type": "textInput",
+                      "label": "Version Name",
+                      "note": "Assign a version name for your page, and we’ll send it to Amplitude for more detailed events",
+                      "configKey": "versionName",
+                      "regex": "^(.{0,100})$",
+                      "regexErrorMessage": "Invalid Version Name",
+                      "placeholder": "e.g: 1.12.3",
+                      "secret": false,
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "configKey": "connectionModes.webDevice",
+                            "value": true
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "checkbox",
+                      "label": "Map device brand",
+                      "note": "Capture brand, manufacturer, and model information for mobile devices",
+                      "configKey": "mapDeviceBrand",
+                      "default": false,
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "configKey": "connectionModes.mobileDevice",
+                            "value": true
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "title": "eCommerce settings",
+                  "note": "Define how you want your ‘Order Completed’ events to be passed to Amplitude",
+                  "fields": [
+                    {
+                      "type": "checkbox",
+                      "label": "Track products as a single event",
+                      "note": "An array of products will be tracked as a single event. The event will be passed as the original event name, and all the products as properties",
+                      "configKey": "trackProductsOnce",
+                      "default": false
+                    },
+                    {
+                      "type": "checkbox",
+                      "label": "Track Revenue per product",
+                      "note": "Track the revenue of each product in an event individually. Otherwise, the event will be sent as an aggregate revenue of all products",
+                      "configKey": "trackRevenuePerProduct",
+                      "default": false
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Other settings",
+              "note": "Configure advanced RudderStack features here",
+              "icon": "otherSettings",
+              "groups": [
+                {
+                  "title": "Client-side event filtering",
+                  "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                  "preRequisites": {
+                    "fields": [
+                      {
+                        "configKey": "connectionModes.webDevice",
+                        "value": true
+                      },
+                      {
+                        "configKey": "connectionModes.mobileDevice",
+                        "value": true
+                      }
+                    ],
+                    "condition": "or"
+                  },
+                  "fields": [
+                    {
+                      "type": "singleSelect",
+                      "label": "Choose if you want to turn on events filtering:",
+                      "configKey": "eventFilteringOption",
+                      "note": "You must select either allowlist or denylist to enable events filtering",
+                      "options": [
+                        {
+                          "label": "Disabled",
+                          "value": "disable"
+                        },
+                        {
+                          "label": "Filter via allowlist",
+                          "value": "whitelistedEvents"
+                        },
+                        {
+                          "label": "Filter via denylist",
+                          "value": "blacklistedEvents"
+                        }
+                      ],
+                      "default": "disable"
+                    },
+                    {
+                      "type": "tagInput",
+                      "label": "Allowlisted events",
+                      "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
+                      "configKey": "whitelistedEvents",
+                      "tagKey": "eventName",
+                      "placeholder": "e.g: Anonymous page visit",
+                      "default": [
+                        {
+                          "eventName": ""
+                        }
+                      ],
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "configKey": "eventFilteringOption",
+                            "value": "whitelistedEvents"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "tagInput",
+                      "label": "Denylisted events",
+                      "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
+                      "configKey": "blacklistedEvents",
+                      "tagKey": "eventName",
+                      "placeholder": "e.g: Anonymous page visit",
+                      "default": [
+                        {
+                          "eventName": ""
+                        }
+                      ],
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "configKey": "eventFilteringOption",
+                            "value": "blacklistedEvents"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "title": "OneTrust cookie consent settings",
+                  "note": [
+                    "Enter your OneTrust category names if you have them configured. ",
+                    {
+                      "text": "Learn more ",
+                      "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                    },
+                    "about RudderStack’s OneTrust Consent Manager feature."
+                  ],
+                  "fields": [
+                    {
+                      "type": "tagInput",
+                      "label": "Cookie category name",
+                      "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                      "configKey": "oneTrustCookieCategories",
+                      "tagKey": "oneTrustCookieCategory",
+                      "placeholder": "e.g: Credit card visit",
+                      "default": [
+                        {
+                          "oneTrustCookieCategory": ""
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "sdkTemplate": {
+        "title": "SDK settings",
+        "note": "not visible in the ui",
+        "fields": [
+          {
+            "type": "checkbox",
+            "label": "Enable location listening",
+            "note": "Capture user location information for anyone who has granted app location permission",
+            "configKey": "enableLocationListening",
+            "default": true
+          },
+          {
+            "type": "checkbox",
+            "label": "Track session events",
+            "note": "Send start and end session events",
+            "configKey": "trackSessionEvents",
+            "default": false
+          },
+          {
+            "type": "checkbox",
+            "label": "Use Advertising ID for Device ID",
+            "note": "Send Advertising ID instead of Device ID to Amplitude",
+            "configKey": "useAdvertisingIdForDeviceId",
+            "default": false
+          },
+          {
+            "type": "checkbox",
+            "label": "Use IDFA for Device ID",
+            "note": "Send the IDFA instead of device ID to Amplitude",
+            "configKey": "useIdfaAsDeviceId",
+            "default": false
+          },
+          {
+            "type": "checkbox",
+            "label": "Replace Device ID with Anonymous ID",
+            "note": [
+              "Use anonymous ID instead of device ID. The anonymous ID can be generated by RudderStack’s SDK. Or, you can set it yourselves using the ",
+              {
+                "text": "setAnonymousID() method.",
+                "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/supported-api/#overriding-anonymous-id"
+              }
+            ],
+            "configKey": "preferAnonymousIdForDeviceId",
+            "default": false
+          },
+          {
+            "type": "checkbox",
+            "label": "Disable Attribution",
+            "note": "Disable the attribution tracking",
+            "configKey": "attribution",
+            "default": false
+          },
+          {
+            "type": "checkbox",
+            "label": "Save Referrer, URL Params, GCLID only once per session",
+            "note": "Track GCLID, referrer, and UTM parameters only once per session, ignoring any new values which may enter a user’s session",
+            "configKey": "trackNewCampaigns",
+            "default": true
+          },
+          {
+            "type": "textInput",
+            "label": "Batch event upload period (ms)",
+            "note": "Set the time limit (in ms) between batch uploads",
+            "configKey": "eventUploadPeriodMillis",
+            "default": "1000",
+            "regex": "^([0-9]{0,100})$",
+            "regexErrorMessage": "Invalid Value",
+            "placeholder": "e.g: 1000"
+          },
+          {
+            "type": "textInput",
+            "label": "Batch event upload threshold",
+            "note": "Set the minimum number of events to be sent in a batch",
+            "configKey": "eventUploadThreshold",
+            "regex": "^([0-9]{0,100})$",
+            "regexErrorMessage": "Invalid Value",
+            "default": "30",
+            "placeholder": "e.g: 30"
+          }
+        ]
+      }
     }
-  ]
-}
+  }
