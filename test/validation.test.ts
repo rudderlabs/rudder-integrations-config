@@ -72,11 +72,17 @@ srcList.forEach((s) => {
   if (intgData) srcTcData[s] = intgData;
 });
 
+async function getDestinationDefinitionConfig(destName: string) {
+  const dirPath = path.resolve(`src/configurations/destinations/${destName}`);
+  const configPath = `${dirPath}/db-config.json`;
+  return import(configPath);
+}
+
 const dests = getIntegrationNames('destinations');
 const sources = getIntegrationNames('sources');
 
 describe('Core Tests', () => {
-  it('If invalid integration name is provide, throw error', async () => {
+  it('If invalid integration name is provide, throw error', () => {
     expect(() => {
       validateConfig('', {}, 'destinations', true);
     }).toThrow('Missing definitionName');
@@ -110,7 +116,7 @@ describe('Validation Tests', () => {
   Object.keys(destTcData).forEach((dest: string, destIdx: number) => {
     describe(`${destIdx + 1}. Destination - ${dest}`, () => {
       destTcData[dest].forEach((td: Record<string, unknown>, tcIdx: number) => {
-        it(`TC ${tcIdx + 1}`, async () => {
+        it(`TC ${tcIdx + 1}`, () => {
           if (td.result === true) {
             expect(
               validateConfig(dest, td.config as Record<string, unknown>, 'destinations', true),
@@ -129,7 +135,7 @@ describe('Validation Tests', () => {
   Object.keys(srcTcData).forEach((src: string, srcIdx: number) => {
     describe(`${srcIdx + 1}. Source - ${src}`, () => {
       srcTcData[src].forEach((td: Record<string, unknown>, tcIdx: number) => {
-        it(`TC ${tcIdx + 1}`, async () => {
+        it(`TC ${tcIdx + 1}`, () => {
           if (td.result === true) {
             expect(
               validateConfig(src, td.config as Record<string, unknown>, 'sources', true),
@@ -148,12 +154,33 @@ describe('Validation Tests', () => {
 describe('Destination Definition validation tests', () => {
   dests.forEach((dest) => {
     it(`${dest} - destination definition test`, async () => {
-      expect(validateDestinationDefinitions(dest)).resolves.toEqual(true);
+      const destDefConfig = await getDestinationDefinitionConfig(dest);
+      await expect(validateDestinationDefinitions(destDefConfig)).resolves.toEqual(true);
     });
+  });
+
+  const malformedDestDefConfigs = [
+    {
+      description: 'missing "name" and "displayName" properties',
+      input: {
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {},
+        },
+      },
+      expected:
+        '[" must have required property \'name\'"," must have required property \'displayName\'"]',
+    },
+  ];
+
+  it.each(malformedDestDefConfigs)('$description', async (testCase) => {
+    await expect(validateDestinationDefinitions(testCase.input)).rejects.toThrow(
+      new Error(testCase.expected),
+    );
   });
 });
 
-describe('Destination Definition wrong configuration tests', () => {
+describe('Destination Definition wrong hybrid mode configuration tests', () => {
   const supportedSourceTypes = ['web', 'android', 'amp', 'cloud', 'flutter'];
   const destinationDefinition = {
     config: {
@@ -246,7 +273,7 @@ describe('Destination Definition wrong configuration tests', () => {
 describe('Source Definition validation tests', () => {
   sources.forEach((src) => {
     it(`${src} - source definition test`, async () => {
-      expect(validateSourceDefinitions(src)).resolves.toEqual(true);
+      await expect(validateSourceDefinitions(src)).resolves.toEqual(true);
     });
   });
 

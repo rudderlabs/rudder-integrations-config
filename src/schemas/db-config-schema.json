@@ -37,7 +37,325 @@
     "config": {
       "type": "object",
       "title": "Configuration",
-      "description": "The configuration of the plugin. This is used to configure the plugin in the UI."
+      "description": "This hosts all the destination parameters.",
+      "required": ["supportedSourceTypes", "destConfig"],
+      "additionalProperties": false,
+      "properties": {
+        "transformAtV1": {
+          "type": "string",
+          "title": "Transform At V1",
+          "description": "The module in the server that should initiate destination transformation.",
+          "$comment": "This field deprecates 'transformAt'.",
+          "enum": ["processor", "router", "none"],
+          "default": "processor"
+        },
+        "transformAt": {
+          "type": "string",
+          "title": "Transform At",
+          "description": "The module in the server that should initiate destination transformation.",
+          "$comment": "This field is deprecated in favor of 'transformAtV1'.",
+          "enum": ["processor", "router", "none"],
+          "default": "processor"
+        },
+        "saveDestinationResponse": {
+          "type": "boolean",
+          "title": "Save Destination Response",
+          "description": "Whether the destination response should be saved for successful jobs in the jobs database.",
+          "$comment": "By default, the response data is saved for the failed jobs. This flag can be used to control the behavior for successful jobs.",
+          "default": false
+        },
+        "isAudienceSupported": {
+          "type": "boolean",
+          "title": "Is Audience Supported",
+          "description": "TBD",
+          "default": false
+        },
+        "throttlingCost": {
+          "type": "object",
+          "title": "Throttling Cost",
+          "description": "Defines the throttling parameters for the destination that can have intermediate API calls during transformation.",
+          "$comment": "The server uses this information while picking the events from the jobs database during router transformation. This must be defined only for destinations with different rate limits per event type, as the endpoints usually differ.",
+          "additionalProperties": false,
+          "properties": {
+            "eventType": {
+              "type": "object",
+              "title": "Event Type",
+              "description": "The throttling parameters for each event type.",
+              "patternProperties": {
+                "^(track|identify|page|screen|alias|group|audiencelist|record)$": {
+                  "type": "number",
+                  "title": "The maximum number of external API calls that can happen during the destination transformation for the event type."
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "supportedSourceTypes": {
+          "type": "array",
+          "title": "Supported Source Types",
+          "description": "The source types supported by the destination for connection.",
+          "$comment": "This is used to display the supported source types in the UI and mandatorily specified.",
+          "items": {
+            "type": "string",
+            "enum": [
+              "android",
+              "ios",
+              "web",
+              "unity",
+              "amp",
+              "cloud",
+              "warehouse",
+              "reactnative",
+              "flutter",
+              "cordova",
+              "shopify",
+              "cloudSource"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "supportedMessageTypes": {
+          "title": "Supported Message Types",
+          "description": "The message types supported by the destination.",
+          "$comment": "Define this field only to filter out unsupported event types early in the data pipeline. The server (processor) will drop these events and log them in the proc_error tables instead of destination transformation. If the value is an empty array, all the event types are dropped.",
+          "oneOf": [
+            {
+              "type": "array",
+              "description": "An array of event types supported in the cloud mode.",
+              "$comment": "This needs to be mandatorily defined if a destination supports cloud mode.",
+              "items": {
+                "$ref": "#/definitions/eventType"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            {
+              "type": "object",
+              "description": "An object with connection modes as keys. This is the new format for defining the supported message types and will also allow client SDKs to filter out unsupported event types early. However, this is not yet supported by the SDKs.",
+              "patternProperties": {
+                "^(cloud|device|hybrid)$": {
+                  "oneOf": [
+                    {
+                      "type": "array",
+                      "description": "An array of event types.",
+                      "items": {
+                        "$ref": "#/definitions/eventType"
+                      },
+                      "minItems": 1,
+                      "uniqueItems": true
+                    },
+                    {
+                      "type": "object",
+                      "description": "An object with source types as keys.",
+                      "patternProperties": {
+                        "^(android|ios|web|unity|amp|cloud|warehouse|reactnative|flutter|cordova|shopify|cloudSource)$": {
+                          "type": "array",
+                          "description": "An array of event types.",
+                          "items": {
+                            "$ref": "#/definitions/eventType"
+                          },
+                          "minItems": 1,
+                          "uniqueItems": true
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "supportedConnectionModes": {
+          "title": "Supported Connection Modes",
+          "description": "The map of connection modes supported by the destination per source type.",
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/connectionMode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            {
+              "type": "object",
+              "patternProperties": {
+                "^(android|ios|web|unity|amp|cloud|warehouse|reactnative|flutter|cordova|shopify|cloudSource)$": {
+                  "type": "array",
+                  "title": "Connection Modes",
+                  "description": "The connection modes supported by the destination for the source type.",
+                  "$comment": "This is used to display the supported connection modes in the UI.",
+                  "items": {
+                    "$ref": "#/definitions/connectionMode"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "hybridModeCloudEventsFilter": {
+          "type": "object",
+          "title": "Hybrid Mode Cloud Events Filter",
+          "description": "This is a map of event types supported by destination per source type in the hybrid connection mode.",
+          "$comment": "This is used to filter out cloud events in hybrid mode. This is used only for destinations that support hybrid mode.",
+          "patternProperties": {
+            "^(android|ios|web|unity|amp|cloud|warehouse|reactnative|flutter|cordova|shopify|cloudSource)$": {
+              "type": "object",
+              "title": "Source Type Filter Map",
+              "description": "The event types supported by the destination for the source type.",
+              "properties": {
+                "messageType": {
+                  "type": "array",
+                  "title": "Message Types",
+                  "description": "The event types supported by the destination for the source type.",
+                  "items": {
+                    "$ref": "#/definitions/eventType"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "cdkV2Enabled": {
+          "type": "boolean",
+          "title": "CDK V2 Enabled",
+          "description": "Whether to use CDK V2 implementation for destination transformation.",
+          "default": false
+        },
+        "cdkEnabled": {
+          "type": "boolean",
+          "title": "CDK V1 Enabled",
+          "description": "Whether to use CDK V2 implementation for destination transformation.",
+          "default": false
+        },
+        "destConfig": {
+          "type": "object",
+          "title": "Destination Configuration",
+          "description": "The parameters for the destination that the user can configure.",
+          "$comment": "This is used to display default and source type specific destination configuration in the UI.",
+          "patternProperties": {
+            "^(android|ios|web|unity|amp|cloud|warehouse|reactnative|flutter|cordova|shopify|cloudSource|defaultConfig)$": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          }
+        },
+        "includeKeys": {
+          "type": "array",
+          "title": "Include Keys",
+          "description": "The only keys that are to be included in the destination configuration sent to the SDKs.",
+          "$comment": "For destinations that support device mode, this should be mandatorily defined. No fields will be included in the source configuration response if this field is not defined or empty.",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "excludeKeys": {
+          "type": "array",
+          "title": "Exclude Keys",
+          "description": "The keys to be excluded in the destination configuration sent to the SDKs.",
+          "$comment": "This field needs to be mandatorily defined if the destination supports device mode. The filter is applied after the 'includeKeys' filtering logic. So, if a key is included in both lists, it'll be eventually dropped.",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "secretKeys": {
+          "type": "array",
+          "title": "Secret Keys",
+          "description": "The keys that are to be treated as secrets in the destination configuration.",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "auth": {
+          "type": "object",
+          "title": "Authentication",
+          "description": "The authentication parameters for the destination.",
+          "required": ["type"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "title": "Type",
+              "description": "The mechanism of authentication active for the destination.",
+              "enum": ["OAuth"]
+            },
+            "provider": {
+              "type": "string",
+              "title": "Provider",
+              "description": "The authentication provider's name.",
+              "enum": ["Google"]
+            },
+            "role": {
+              "type": "string",
+              "title": "Role",
+              "description": "This is a unique identifier for the authentication.",
+              "$comment": "Typically, it is the destination 'name' field but can changed to something else."
+            },
+            "rudderScopes": {
+              "type": "array",
+              "title": "Rudder Scopes",
+              "description": "The operations for which authentication should be used.",
+              "$comment": "'delivery' - event delivery requests. 'delete' - user deletion requests",
+              "items": {
+                "type": "string",
+                "enum": ["delivery", "delete"]
+              }
+            }
+          }
+        },
+        "configFilters": {
+          "type": "array",
+          "title": "Config Filters",
+          "description": "TBD",
+          "items": {
+            "type": "string"
+          }
+        },
+        "supportsBlankAudienceCreation": {
+          "type": "boolean",
+          "title": "Supports Blank Audience Creation",
+          "description": "TBD"
+        },
+        "supportsVisualMapper": {
+          "type": "boolean",
+          "title": "Supports Visual Mapper",
+          "description": "TBD"
+        },
+        "disableJsonMapper": {
+          "type": "boolean",
+          "title": "Disable JSON Mapper",
+          "description": "TBD"
+        },
+        "syncBehaviours": {
+          "type": "array",
+          "title": "Sync Behaviours",
+          "description": "TBD",
+          "items": {
+            "type": "string",
+            "enum": ["mirror", "upsert"]
+          },
+          "uniqueItems": true
+        }
+      }
     },
     "options": {
       "type": "object",
@@ -115,6 +433,7 @@
       "title": "Response Rules",
       "description": "Some destinations send 2xx as status code even when the request has some errors. Hence, we have to parse the response body to determine the actual status.",
       "$comment": "This method of parsing the response is DEPRECATED now.",
+      "additionalProperties": false,
       "properties": {
         "responseType": {
           "type": "string",
@@ -155,6 +474,33 @@
           }
         }
       }
+    }
+  },
+  "definitions": {
+    "eventType": {
+      "type": "string",
+      "enum": ["track", "identify", "page", "screen", "alias", "group", "audiencelist", "record"]
+    },
+    "connectionMode": {
+      "type": "string",
+      "enum": ["cloud", "device", "hybrid"]
+    },
+    "sourceType": {
+      "type": "string",
+      "enum": [
+        "android",
+        "ios",
+        "web",
+        "unity",
+        "amp",
+        "cloud",
+        "warehouse",
+        "reactnative",
+        "flutter",
+        "cordova",
+        "shopify",
+        "cloudSource"
+      ]
     }
   }
 }
