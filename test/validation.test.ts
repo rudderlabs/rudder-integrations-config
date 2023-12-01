@@ -72,6 +72,12 @@ srcList.forEach((s) => {
   if (intgData) srcTcData[s] = intgData;
 });
 
+async function getSourceDefinitionConfig(srcName: string) {
+  const dirPath = path.resolve(`src/configurations/sources/${srcName}`);
+  const configPath = `${dirPath}/db-config.json`;
+  return import(configPath);
+}
+
 async function getDestinationDefinitionConfig(destName: string) {
   const dirPath = path.resolve(`src/configurations/destinations/${destName}`);
   const configPath = `${dirPath}/db-config.json`;
@@ -273,14 +279,26 @@ describe('Destination Definition wrong hybrid mode configuration tests', () => {
 describe('Source Definition validation tests', () => {
   sources.forEach((src) => {
     it(`${src} - source definition test`, async () => {
-      await expect(validateSourceDefinitions(src)).resolves.toEqual(true);
+      const srcDefConfig = await getSourceDefinitionConfig(src);
+      await expect(validateSourceDefinitions(srcDefConfig)).resolves.toEqual(true);
     });
   });
 
-  it('sourceDefinition does not have valid type', () => {
-    expect(validateSourceType({ type: 'someSource' })).toEqual(false);
-  });
-  it('sourceDefinition undefined', () => {
-    expect(validateSourceType(undefined)).toEqual(false);
+  const malformedSrcDefConfigs = [
+    {
+      description: 'missing "name" and "displayName" properties',
+      input: {
+        type: 'cloud',
+        category: 'webhook',
+      },
+      expected:
+        '[" must have required property \'name\'"," must have required property \'displayName\'"]',
+    },
+  ];
+
+  it.each(malformedSrcDefConfigs)('$description', async (testCase) => {
+    await expect(validateSourceDefinitions(testCase.input)).rejects.toThrow(
+      new Error(testCase.expected),
+    );
   });
 });

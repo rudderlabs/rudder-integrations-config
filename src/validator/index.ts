@@ -139,8 +139,19 @@ export function validateHybridModeCloudConfig(destinationDefinition: any): boole
 }
 
 export async function validateDestinationDefinitions(destDefConfig: any): Promise<boolean> {
-  const validator = ajv.compile(
-    await importJsonFromFile(path.join(__dirname, '../schemas/db-config-schema.json')),
+  const ddAjv = new Ajv({
+    allErrors: true,
+    useDefaults: true,
+    strict: true,
+    strictSchema: true,
+    strictRequired: true,
+    strictNumbers: true,
+    strictTypes: true,
+    strictTuples: true,
+  });
+
+  const validator = ddAjv.compile(
+    await importJsonFromFile(path.join(__dirname, '../schemas/destinations/db-config-schema.json')),
   );
 
   if (validator && !validator(destDefConfig) && validator.errors) {
@@ -158,31 +169,31 @@ export async function validateDestinationDefinitions(destDefConfig: any): Promis
   return isValidHybridModeCloudConfig;
 }
 
-export function validateSourceType(sourceDefinition: any) {
-  // currently these are the valid source-types according to the ServiceUtil.getSourceType logic in config-backend
-  const validSourceTypes = [
-    'cloud',
-    'cloudSource',
-    'warehouse',
-    'web',
-    'android',
-    'ios',
-    'unity',
-    'reactnative',
-    'amp',
-    'flutter',
-    'cordova',
-    'shopify',
-  ];
-  return validSourceTypes.includes(sourceDefinition?.type);
-}
+export async function validateSourceDefinitions(srcDefConfig: any): Promise<boolean> {
+  const ddAjv = new Ajv({
+    allErrors: true,
+    useDefaults: true,
+    strict: true,
+    strictSchema: true,
+    strictRequired: true,
+    strictNumbers: true,
+    strictTypes: true,
+    strictTuples: true,
+  });
 
-export async function validateSourceDefinitions(srcName: string): Promise<boolean> {
-  const sourceDefinition = await import(`../configurations/sources/${srcName}/db-config.json`);
-  // SourceDefinition.type validation -- STARTS
-  const isValidSourceType = validateSourceType(sourceDefinition);
-  // SourceDefinition.type validation -- ENDS
-  return isValidSourceType;
+  const validator = ddAjv.compile(
+    await importJsonFromFile(path.join(__dirname, '../schemas/sources/db-config-schema.json')),
+  );
+
+  if (validator && !validator(srcDefConfig) && validator.errors) {
+    const errorMessages: string[] = validator.errors.map((e) => {
+      const propertyName = e.instancePath.slice(1).replace(/\//g, '.');
+      return `${propertyName} ${e.message}`;
+    });
+
+    throw new Error(JSON.stringify(errorMessages));
+  }
+  return true;
 }
 
 export async function init() {
