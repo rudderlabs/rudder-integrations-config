@@ -276,6 +276,7 @@
           "type": "array",
           "title": "Secret Keys",
           "description": "The keys that are to be treated as secrets in the destination configuration.",
+          "$comment": "In the UI, these fields will be masked and only allowed to be edited (not viewed) on the destination configuration page. Moreover, the values for these fields are stored in a separate database.",
           "items": {
             "type": "string"
           },
@@ -427,7 +428,7 @@
       "type": "object",
       "title": "Response Rules",
       "description": "Some destinations send 2xx as status code even when the request has some errors. Hence, we have to parse the response body to determine the actual status.",
-      "$comment": "This method of parsing the response is DEPRECATED now.",
+      "$comment": "This method of parsing the response is DEPRECATED now in lieu of transformer proxy.",
       "additionalProperties": false,
       "properties": {
         "responseType": {
@@ -435,7 +436,7 @@
           "title": "Response Type",
           "description": "The response type from the destination.",
           "$comment": "This indicates the type of response returned by the destination.",
-          "enum": ["JSON"]
+          "enum": ["JSON", "TXT"]
         },
         "rules": {
           "type": "object",
