@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.60.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.59.1...v1.60.0) (2023-12-04)
+
+
+### Features
+
+* add supported connectionModes and updated supportedMessageTypes to destination definitions ([#801](https://github.com/rudderlabs/rudder-config-schema/issues/801)) ([09f13fe](https://github.com/rudderlabs/rudder-config-schema/commit/09f13fe83868af7d54e33f137496980261415e55))
+* adding set_once feature for mixpanel ([#1063](https://github.com/rudderlabs/rudder-config-schema/issues/1063)) ([065f8ce](https://github.com/rudderlabs/rudder-config-schema/commit/065f8ce9a16229e88408a7dddbd41b0caa8f07d8))
+* **INT-305:** onboard gladly destination ([#1045](https://github.com/rudderlabs/rudder-config-schema/issues/1045)) ([6f3a37f](https://github.com/rudderlabs/rudder-config-schema/commit/6f3a37fd550acdba85cad9a120dff4d5d520c085))
+* marketo: migrate to new UI layout ([#1081](https://github.com/rudderlabs/rudder-config-schema/issues/1081)) ([7126939](https://github.com/rudderlabs/rudder-config-schema/commit/71269390372abbf1d4c240b081bd37e619e51718))
+* onboard destination gaec to new UI ([#983](https://github.com/rudderlabs/rudder-config-schema/issues/983)) ([5f0aea5](https://github.com/rudderlabs/rudder-config-schema/commit/5f0aea50a70d6aa629f29f872b49b2a279b4dfb2))
+
+
+### Bug Fixes
+
+* formatting issue ([#1094](https://github.com/rudderlabs/rudder-config-schema/issues/1094)) ([4df90af](https://github.com/rudderlabs/rudder-config-schema/commit/4df90afed75881bdec9d216a69944775e9958c27))
+* **gladly:** added Beta flag for destination ([#1085](https://github.com/rudderlabs/rudder-config-schema/issues/1085)) ([1800d8d](https://github.com/rudderlabs/rudder-config-schema/commit/1800d8d71f222cbf2f7a62e1f0555a9b38f3fd63))
+* **iterable:** schema validations ([#1088](https://github.com/rudderlabs/rudder-config-schema/issues/1088)) ([d7a91c8](https://github.com/rudderlabs/rudder-config-schema/commit/d7a91c854a96076e3b1306afa272bc03531c63f2))
+
 ### [1.59.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.59.0...v1.59.1) (2023-11-16)
 
 
