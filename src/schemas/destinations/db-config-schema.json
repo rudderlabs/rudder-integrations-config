@@ -86,9 +86,11 @@
                   "title": "The maximum number of external API calls that can happen during the destination transformation for the event type."
                 }
               },
-              "additionalProperties": false
+              "additionalProperties": false,
+              "minProperties": 1
             }
-          }
+          },
+          "minProperties": 1
         },
         "supportedSourceTypes": {
           "type": "array",
@@ -127,7 +129,8 @@
               "items": {
                 "$ref": "#/definitions/eventType"
               },
-              "uniqueItems": true
+              "uniqueItems": true,
+              "minItems": 1
             },
             {
               "type": "object",
@@ -156,12 +159,14 @@
                           "uniqueItems": true
                         }
                       },
-                      "additionalProperties": false
+                      "additionalProperties": false,
+                      "minProperties": 1
                     }
                   ]
                 }
               },
-              "additionalProperties": false
+              "additionalProperties": false,
+              "minProperties": 1
             }
           ]
         },
@@ -192,7 +197,8 @@
                   "uniqueItems": true
                 }
               },
-              "additionalProperties": false
+              "additionalProperties": false,
+              "minProperties": 1
             }
           ]
         },
@@ -201,11 +207,13 @@
           "title": "Hybrid Mode Cloud Events Filter",
           "description": "This is a map of event types supported by destination per source type in the hybrid connection mode.",
           "$comment": "This is used to filter out cloud events in hybrid mode. This is used only for destinations that support hybrid mode.",
+          "required": [],
           "patternProperties": {
             "^(android|ios|web|unity|amp|cloud|warehouse|reactnative|flutter|cordova|shopify|cloudSource)$": {
               "type": "object",
               "title": "Source Type Filter Map",
               "description": "The event types supported by the destination for the source type.",
+              "required": ["messageType"],
               "properties": {
                 "messageType": {
                   "type": "array",
@@ -221,7 +229,8 @@
               "additionalProperties": false
             }
           },
-          "additionalProperties": false
+          "additionalProperties": false,
+          "minProperties": 1
         },
         "cdkV2Enabled": {
           "type": "boolean",
@@ -249,7 +258,9 @@
               "minItems": 1,
               "uniqueItems": true
             }
-          }
+          },
+          "additionalProperties": false,
+          "minProperties": 1
         },
         "includeKeys": {
           "type": "array",
@@ -314,7 +325,9 @@
               "items": {
                 "type": "string",
                 "enum": ["delivery", "delete"]
-              }
+              },
+              "minItems": 1,
+              "uniqueItems": true
             }
           }
         },
@@ -359,6 +372,7 @@
       "description": "The options for the destination.",
       "$comment": "This hosts miscellaneous information about the destination.",
       "additionalProperties": false,
+      "minProperties": 1,
       "properties": {
         "isBeta": {
           "type": "boolean",
@@ -393,12 +407,14 @@
           "title": "Destination Features",
           "description": "The features supported by the destination.",
           "additionalProperties": false,
+          "minProperties": 1,
           "properties": {
             "vdmLabels": {
               "type": "object",
               "title": "VDM Labels",
               "description": "The VDM labels supported by the destination.",
               "additionalProperties": false,
+              "minProperties": 1,
               "properties": {
                 "newAudienceAlternateLabel": {
                   "type": "string",
@@ -430,6 +446,7 @@
       "description": "Some destinations send 2xx as status code even when the request has some errors. Hence, we have to parse the response body to determine the actual status.",
       "$comment": "This method of parsing the response is DEPRECATED now in lieu of transformer proxy.",
       "additionalProperties": false,
+      "required": ["responseType", "rules"],
       "properties": {
         "responseType": {
           "type": "string",
@@ -448,26 +465,34 @@
               "title": "Abortable",
               "description": "The rules to declare the request as aborted.",
               "items": {
-                "type": "object"
-              }
+                "type": "object",
+                "minProperties": 1
+              },
+              "minItems": 1
             },
             "retryable": {
               "type": "array",
               "title": "Retryable",
               "description": "The rules to declare the request as retryable.",
               "items": {
-                "type": "object"
-              }
+                "type": "object",
+                "minProperties": 1
+              },
+              "minItems": 1
             },
             "throttled": {
               "type": "array",
               "title": "Throttled",
               "description": "The rules to declare the request as throttled.",
               "items": {
-                "type": "object"
-              }
+                "type": "object",
+                "minProperties": 1
+              },
+              "minItems": 1
             }
-          }
+          },
+          "additionalProperties": false,
+          "minProperties": 1
         }
       }
     }

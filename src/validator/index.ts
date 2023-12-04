@@ -59,85 +59,6 @@ export function validateConfig(
   }
 }
 
-export function validateHybridModeCloudConfig(destinationDefinition: any): boolean {
-  const isObject = (val: any): boolean => {
-    // invalid types condition check
-    if (!val || typeof val !== 'object' || Array.isArray(val)) {
-      return false;
-    }
-    return true;
-  };
-
-  const checkForValidObjectAndValidateWithMasterList = (
-    inputValues: any,
-    masterList: string[],
-    logKeys: { location: string; subsetName: string; masterName: string },
-  ): { isValid: boolean; valList: string[] } => {
-    if (!isObject(inputValues)) {
-      return { isValid: false, valList: [] };
-    }
-    const subsetValues = Object.keys(inputValues);
-    // no subset defined
-    if (subsetValues.length === 0) {
-      return { isValid: false, valList: [] };
-    }
-
-    const isSubsetOfMasterList = subsetValues.every((child) => masterList.includes(child));
-    if (!isSubsetOfMasterList) {
-      console.error(
-        `The ${logKeys.subsetName} mentioned in ${logKeys.location} does not exist in ${logKeys.masterName}`,
-      );
-      return { isValid: false, valList: [] };
-    }
-    return { isValid: true, valList: subsetValues };
-  };
-  if (destinationDefinition?.config?.hybridModeCloudEventsFilter) {
-    const { hybridModeCloudEventsFilter, supportedSourceTypes } = destinationDefinition.config;
-
-    const { isValid: isSourceTypeValid, valList: sourceTypes } =
-      checkForValidObjectAndValidateWithMasterList(
-        hybridModeCloudEventsFilter,
-        supportedSourceTypes,
-        {
-          masterName: 'supportedSourceTypes',
-          location: 'hybridModeCloudEventsFilter.[sourceType]',
-          subsetName: 'source type',
-        },
-      );
-    // no source-types defined
-    if (!isSourceTypeValid) {
-      console.error(
-        'The supported source type mentioned in hybridModeCloudEventsFilter does not exist in supportedSourceTypes',
-      );
-      return false;
-    }
-    const supportedEventProperties = ['messageType'];
-
-    return sourceTypes.some((srcType: string) => {
-      const sourceTypeFilterMap = hybridModeCloudEventsFilter[srcType];
-      const { isValid: isValidEventProperties, valList: eventProperties } =
-        checkForValidObjectAndValidateWithMasterList(
-          sourceTypeFilterMap,
-          supportedEventProperties,
-          {
-            masterName: `${supportedEventProperties}`,
-            location: '',
-            subsetName: `${Object.keys(hybridModeCloudEventsFilter[srcType])}`,
-          },
-        );
-      if (!isValidEventProperties) {
-        return false;
-      }
-
-      // basic-check
-      return eventProperties.some((eventProperty) =>
-        Array.isArray(sourceTypeFilterMap[eventProperty]),
-      );
-    });
-  }
-  return true;
-}
-
 export async function validateDestinationDefinitions(destDefConfig: any): Promise<boolean> {
   const ddAjv = new Ajv({
     allErrors: true,
@@ -163,10 +84,7 @@ export async function validateDestinationDefinitions(destDefConfig: any): Promis
     throw new Error(JSON.stringify(errorMessages));
   }
 
-  // hybridModeCloudEventsFilter check -- STARTS
-  const isValidHybridModeCloudConfig = validateHybridModeCloudConfig(destDefConfig);
-  // hybridModeCloudEventsFilter check -- ENDS
-  return isValidHybridModeCloudConfig;
+  return true;
 }
 
 export async function validateSourceDefinitions(srcDefConfig: any): Promise<boolean> {

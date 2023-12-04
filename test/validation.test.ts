@@ -7,9 +7,7 @@ import {
   init,
   validateConfig,
   validateSourceDefinitions,
-  validateSourceType,
   validateDestinationDefinitions,
-  validateHybridModeCloudConfig,
 } from '../src';
 
 const command = new Commander.Command();
@@ -171,11 +169,123 @@ describe('Destination Definition validation tests', () => {
       input: {
         config: {
           supportedSourceTypes: ['web'],
-          destConfig: {},
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
         },
       },
       expected:
         '[" must have required property \'name\'"," must have required property \'displayName\'"]',
+    },
+    {
+      description: 'hybridModeCloudEventsFilter is not a valid map',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        config: {
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+          supportedSourceTypes: ['web'],
+          hybridModeCloudEventsFilter: [],
+        },
+      },
+      expected: '["config.hybridModeCloudEventsFilter must be object"]',
+    },
+    {
+      description: 'hybridModeCloudEventsFilter is empty map',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        config: {
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+          supportedSourceTypes: ['web'],
+          hybridModeCloudEventsFilter: {},
+        },
+      },
+      expected: '["config.hybridModeCloudEventsFilter must NOT have fewer than 1 properties"]',
+    },
+    {
+      description: 'hybridModeCloudEventsFilter has unsupported source types',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        config: {
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+          supportedSourceTypes: ['web'],
+          hybridModeCloudEventsFilter: {
+            web: {
+              messageType: ['track'],
+            },
+            differentSourceType: {
+              messageType: ['page', 'group'],
+            },
+          },
+        },
+      },
+      expected: '["config.hybridModeCloudEventsFilter must NOT have additional properties"]',
+    },
+    {
+      description: 'hybridModeCloudEventsFilter has empty map for web source type',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        config: {
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+          supportedSourceTypes: ['web'],
+          hybridModeCloudEventsFilter: {
+            web: {},
+          },
+        },
+      },
+      expected:
+        '["config.hybridModeCloudEventsFilter.web must have required property \'messageType\'"]',
+    },
+    {
+      description: 'hybridModeCloudEventsFilter has invalid fields for web source type',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        config: {
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+          supportedSourceTypes: ['web'],
+          hybridModeCloudEventsFilter: {
+            web: {
+              randomType: ['random_1', 'random_2'],
+            },
+          },
+        },
+      },
+      expected:
+        '["config.hybridModeCloudEventsFilter.web must have required property \'messageType\'","config.hybridModeCloudEventsFilter.web must NOT have additional properties"]',
+    },
+    {
+      description:
+        'hybridModeCloudEventsFilter has invalid values for "messageType" for web source type',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        config: {
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+          supportedSourceTypes: ['web'],
+          hybridModeCloudEventsFilter: {
+            web: {
+              messageType: 'track',
+            },
+          },
+        },
+      },
+      expected: '["config.hybridModeCloudEventsFilter.web.messageType must be array"]',
     },
   ];
 
@@ -183,96 +293,6 @@ describe('Destination Definition validation tests', () => {
     await expect(validateDestinationDefinitions(testCase.input)).rejects.toThrow(
       new Error(testCase.expected),
     );
-  });
-});
-
-describe('Destination Definition wrong hybrid mode configuration tests', () => {
-  const supportedSourceTypes = ['web', 'android', 'amp', 'cloud', 'flutter'];
-  const destinationDefinition = {
-    config: {
-      supportedSourceTypes,
-      hybridModeCloudEventsFilter: {},
-    },
-  };
-  const testCases = [
-    {
-      caseName:
-        'should return false, when destinationDefinition.config.hybridModeCloudEventsFilter is not a valid map',
-      hybridModeCloudEventsFilter: [],
-      expected: false,
-    },
-    {
-      caseName:
-        'should return false, when destinationDefinition.config.hybridModeCloudEventsFilter is empty map',
-      hybridModeCloudEventsFilter: {},
-      expected: false,
-    },
-    {
-      caseName:
-        'should return false, when destinationDefinition.config.hybridModeCloudEventsFilter has sourceType that is not present in supportedSourceTypes',
-      hybridModeCloudEventsFilter: {
-        web: {
-          messageType: ['track'],
-        },
-        differentSourceType: {
-          messageType: ['page', 'group'],
-        },
-      },
-      expected: false,
-    },
-    {
-      caseName:
-        'should return false, destinationDefinition.config.hybridModeCloudEventsFilter[web] = {}',
-      hybridModeCloudEventsFilter: {
-        web: {},
-      },
-      expected: false,
-    },
-    {
-      caseName:
-        'should return false, when destinationDefinition.config.hybridModeCloudEventsFilter[web] = { randomType: ["random_1", "random_2"] }',
-      hybridModeCloudEventsFilter: {
-        web: {
-          randomType: ['random_1', 'random_2'],
-        },
-      },
-      expected: false,
-    },
-    {
-      caseName:
-        'should return false, when destinationDefinition.config.hybridModeCloudEventsFilter[web] = { messageType: "track" }',
-      hybridModeCloudEventsFilter: {
-        web: {
-          messageType: 'track',
-        },
-      },
-      expected: false,
-    },
-  ];
-
-  it.each(testCases)('$caseName', (testCase) => {
-    destinationDefinition.config.hybridModeCloudEventsFilter = testCase.hybridModeCloudEventsFilter;
-    const isValid = validateHybridModeCloudConfig(destinationDefinition);
-    expect(isValid).toBe(testCase.expected);
-  });
-
-  it('should return true, when destinationDefinition is undefined', () => {
-    expect(validateHybridModeCloudConfig(undefined)).toEqual(true);
-  });
-  it('should return true, when destinationDefinition.config is undefined', () => {
-    expect(validateHybridModeCloudConfig({ config: undefined })).toEqual(true);
-  });
-  it('should return true, when destinationDefinition.config.supportedSourceTypes is undefined', () => {
-    expect(validateHybridModeCloudConfig({ config: { supportedSourceTypes: undefined } })).toEqual(
-      true,
-    );
-  });
-  it('should return true, when destinationDefinition.config.hybridModeCloudEventsFilter is undefined', () => {
-    expect(
-      validateHybridModeCloudConfig({
-        config: { supportedSourceTypes, hybridModeCloudEventsFilter: undefined },
-      }),
-    ).toEqual(true);
   });
 });
 
