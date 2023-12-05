@@ -74,7 +74,8 @@
               "description": "The throttling parameters for each event type.",
               "patternProperties": {
                 "^(track|identify|page|screen|alias|group|audiencelist|record)$": {
-                  "type": "number",
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
                   "title": "The maximum number of external API calls that can happen during the destination transformation for the event type."
                 }
               },
@@ -458,8 +459,7 @@
               "title": "Abortable",
               "description": "The rules to declare the request as aborted.",
               "items": {
-                "type": "object",
-                "minProperties": 1
+                "$ref": "#/definitions/responseRule"
               },
               "minItems": 1
             },
@@ -468,8 +468,7 @@
               "title": "Retryable",
               "description": "The rules to declare the request as retryable.",
               "items": {
-                "type": "object",
-                "minProperties": 1
+                "$ref": "#/definitions/responseRule"
               },
               "minItems": 1
             },
@@ -478,8 +477,7 @@
               "title": "Throttled",
               "description": "The rules to declare the request as throttled.",
               "items": {
-                "type": "object",
-                "minProperties": 1
+                "$ref": "#/definitions/responseRule"
               },
               "minItems": 1
             }
@@ -515,6 +513,26 @@
         "shopify",
         "cloudSource"
       ]
+    },
+    "responseRule": {
+      "type": "object",
+      "title": "Response Rule",
+      "description": "The rule to be applied on the response from the destination.",
+      "patternProperties": {
+        "^errors\\.[a-zA-Z0-9_]+$": {
+          "type": "integer",
+          "exclusiveMinimum": 0
+        }
+      },
+      "properties": {
+        "success": {
+          "type": "string",
+          "title": "Success",
+          "enum": ["true", "false"]
+        }
+      },
+      "minProperties": 1,
+      "maxProperties": 2
     }
   }
 }
