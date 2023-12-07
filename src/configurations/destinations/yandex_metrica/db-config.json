@@ -2,7 +2,6 @@
   "name": "YANDEX_METRICA",
   "displayName": "Yandex.Metrica",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -21,7 +20,12 @@
     ],
     "excludeKeys": [],
     "supportedSourceTypes": ["web"],
-    "supportedMessageTypes": ["identify", "track", "page"],
+    "supportedMessageTypes": {
+      "device": { "web": ["identify", "track", "page"] }
+    },
+    "supportedConnectionModes": {
+      "web": ["device"]
+    },
     "destConfig": {
       "defaultConfig": [
         "tagId",

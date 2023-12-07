@@ -2,7 +2,6 @@
   "name": "FB",
   "displayName": "Facebook App Events",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -28,10 +27,23 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": ["page", "screen", "track"],
+    "supportedMessageTypes": {
+      "cloud": ["page", "screen", "track"],
+      "device": {
+        "android": ["identify", "page", "screen", "track"],
+        "ios": ["identify", "page", "screen", "track"]
+      }
+    },
     "supportedConnectionModes": {
       "android": ["cloud", "device"],
-      "ios": ["cloud", "device"]
+      "ios": ["cloud", "device"],
+      "web": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"]
     },
     "destConfig": {
       "defaultConfig": [
