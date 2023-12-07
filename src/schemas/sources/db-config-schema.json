@@ -1,0 +1,153 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["name", "displayName", "type"],
+  "title": "Source definition schema",
+  "description": "The schema for a source definition. This is used to validate the source definition configuration files (db-config.json).",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Name",
+      "description": "A unique name for a source without any whitespace or special characters.",
+      "$comment": "Typically, all the characters are in lowercase with words separated by underscores.",
+      "pattern": "^[a-zA-Z0-9_-]+$",
+      "examples": ["bigquery", "active_campaign"]
+    },
+    "displayName": {
+      "type": "string",
+      "title": "Display Name",
+      "description": "A human-readable name for a source, typically, derived from the branding of the source.",
+      "$comment": "This will be used in the front-end (web app), docs, etc. to identify a source.",
+      "pattern": "^[a-zA-Z0-9_ .\\-\\(\\)/]+$",
+      "examples": ["Active campaign", "Zendesk Chat"]
+    },
+    "category": {
+      "type": "string",
+      "title": "Category",
+      "description": "The category of the source.",
+      "enum": ["webhook", "cloud", "warehouse", "singer-protocol"]
+    },
+    "type": {
+      "type": "string",
+      "title": "Type",
+      "description": "The type of the source.",
+      "enum": [
+        "cloud",
+        "cloudSource",
+        "amp",
+        "android",
+        "warehouse",
+        "cordova",
+        "flutter",
+        "ios",
+        "web",
+        "reactnative",
+        "shopify",
+        "unity"
+      ]
+    },
+    "options": {
+      "type": "object",
+      "title": "Options",
+      "description": "The options for the source.",
+      "$comment": "This hosts miscellaneous information about the source.",
+      "properties": {
+        "isBeta": {
+          "type": "boolean",
+          "title": "Is Beta",
+          "description": "Whether the source is in beta.",
+          "$comment": "This is used to display a 'beta' badge in the UI.",
+          "default": false
+        },
+        "hidden": {
+          "type": "boolean",
+          "title": "Hidden",
+          "description": "Whether the source is hidden.",
+          "$comment": "This is used to hide the source from the UI.",
+          "default": false
+        },
+        "syncBehaviours": {
+          "type": "array",
+          "title": "Sync Behaviours",
+          "description": "TBD",
+          "items": {
+            "type": "string",
+            "enum": ["mirror", "upsert"]
+          },
+          "uniqueItems": true
+        },
+        "isSqlModelSupported": {
+          "type": "boolean",
+          "title": "Is SQL Model Supported",
+          "description": "TBD"
+        },
+        "isAudienceSupported": {
+          "type": "boolean",
+          "title": "Is Audience Supported",
+          "description": "TBD"
+        },
+        "isCredentialsValidationSupported": {
+          "type": "boolean",
+          "title": "Is Credentials Validation Supported",
+          "description": "TBD"
+        },
+        "skipWarehouseSchemaConfig": {
+          "type": "boolean",
+          "title": "Skip Warehouse Schema Config",
+          "description": "TBD"
+        },
+        "image": {
+          "type": "string",
+          "title": "Image",
+          "description": "TBD"
+        },
+        "digest": {
+          "type": "string",
+          "title": "Digest",
+          "description": "TBD"
+        },
+        "auth": {
+          "type": "object",
+          "title": "Auth",
+          "description": "TBD",
+          "properties": {
+            "provider": {
+              "type": "string",
+              "title": "Provider",
+              "description": "TBD",
+              "enum": ["Google", "Xero"]
+            },
+            "oauthRole": {
+              "type": "string",
+              "title": "OAuth Role",
+              "description": "TBD"
+            }
+          }
+        },
+        "gaMetricIds": {
+          "type": "array",
+          "title": "GA Metric IDs",
+          "description": "TBD",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "gaDimensionIds": {
+          "type": "array",
+          "title": "GA Dimension IDs",
+          "description": "TBD",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "supportsDestinationSyncMode": {
+          "type": "boolean",
+          "title": "Supports Destination Sync Mode",
+          "description": "TBD"
+        }
+      }
+    }
+  }
+}

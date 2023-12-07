@@ -4,7 +4,6 @@
   "config": {
     "isAudienceSupported": true,
     "supportsVisualMapper": true,
-    "transformAt": "router",
     "transformAtV1": "router",
     "saveDestinationResponse": true,
     "throttlingCost": {
@@ -28,7 +27,20 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": ["identify", "track"],
+    "supportedMessageTypes": {
+      "cloud": ["identify", "track"]
+    },
+    "supportedConnectionModes": {
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "web": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "accountId",
@@ -36,9 +48,8 @@
         "clientSecret",
         "trackAnonymousEvents",
         "createIfNotExist",
-        "customActivityEventMap",
+        "rudderEventsMapping",
         "customActivityPropertyMap",
-        "customActivityPrimaryKeyMap",
         "leadTraitMapping",
         "oneTrustCookieCategories"
       ]

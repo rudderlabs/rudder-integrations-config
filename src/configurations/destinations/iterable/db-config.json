@@ -4,7 +4,6 @@
   "config": {
     "isAudienceSupported": true,
     "supportsVisualMapper": true,
-    "transformAt": "router",
     "transformAtV1": "router",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -45,18 +44,22 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": [
-      "identify",
-      "page",
-      "screen",
-      "track",
-      "alias"
-    ],
+    "supportedMessageTypes": {
+      "cloud": ["identify", "page", "screen", "track", "alias"],
+      "device": {
+        "web": ["identify", "track"]
+      }
+    },
     "supportedConnectionModes": {
-      "web": [
-        "cloud",
-        "device"
-      ]
+      "web": ["cloud", "device"],
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"]
     },
     "destConfig": {
       "defaultConfig": [

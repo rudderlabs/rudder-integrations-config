@@ -2,7 +2,6 @@
   "name": "MOENGAGE",
   "displayName": "MoEngage",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -28,7 +27,26 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": ["identify", "track", "alias"],
+    "supportedMessageTypes": {
+      "cloud": ["identify", "track", "alias"],
+      "device": {
+        "web": ["identify", "track"],
+        "android": ["identify", "track"],
+        "ios": ["identify", "track"],
+        "reactnative": ["identify", "track"]
+      }
+    },
+    "supportedConnectionModes": {
+      "web": ["cloud", "device"],
+      "android": ["cloud", "device"],
+      "ios": ["cloud", "device"],
+      "reactnative": ["cloud", "device"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "apiId",

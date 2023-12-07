@@ -2,7 +2,6 @@
   "name": "DCM_FLOODLIGHT",
   "displayName": "DCM Floodlight",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "cdkEnabled": true,
     "saveDestinationResponse": true,
@@ -35,7 +34,21 @@
       "warehouse",
       "shopify"
     ],
-    "supportedMessageTypes": ["track", "page"],
+    "supportedMessageTypes": {
+      "cloud": ["track", "page"],
+      "device": { "web": ["identify", "track", "page"] }
+    },
+    "supportedConnectionModes": {
+      "web": ["cloud", "device"],
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "advertiserId",
