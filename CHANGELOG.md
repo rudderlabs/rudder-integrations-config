@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.60.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.60.1...v1.60.2) (2023-12-07)
+
+
+### Bug Fixes
+
+* remove supportedMessageTypes for azure_event_hub ([65ca229](https://github.com/rudderlabs/rudder-config-schema/commit/65ca22993ec8fe58153336066a02f002c56d4b27))
+* remove supportedMessageTypes for variance ([c5942b1](https://github.com/rudderlabs/rudder-config-schema/commit/c5942b1c309656a797a026080b712341cca8b549))
+
 ### [1.60.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.60.0...v1.60.1) (2023-12-07)
 
 
