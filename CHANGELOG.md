@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.60.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.60.0...v1.60.1) (2023-12-07)
+
+
+### Bug Fixes
+
+* remove supportedMessageTypes for webhook ([4548721](https://github.com/rudderlabs/rudder-config-schema/commit/4548721c07daab8952366aea4ef1d5deae0243aa))
+
 ## [1.60.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.59.1...v1.60.0) (2023-12-04)
 
 
