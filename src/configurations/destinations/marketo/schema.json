@@ -1,3 +1,97 @@
 {
-  "configSchema": null
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": [
+      "accountId",
+      "clientId",
+      "clientSecret"
+    ],
+    "type": "object",
+    "properties": {
+      "accountId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "clientId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "clientSecret": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "trackAnonymousEvents": {
+        "type": "boolean",
+        "default": false
+      },
+      "createIfNotExist": {
+        "type": "boolean",
+        "default": true
+      },
+      "leadTraitMapping": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string"
+            },
+            "to": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "customActivityPropertyMap": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string"
+            },
+            "to": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "rudderEventsMapping": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "event": {
+              "type": "string"
+            },
+            "marketoPrimarykey": {
+              "type": "string"
+            },
+            "marketoActivityId": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "oneTrustCookieCategories": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "oneTrustCookieCategory": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "useNativeSDK": {
+        "type": "boolean"
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {}
+      }
+    }
+  }
 }
