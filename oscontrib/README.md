@@ -15,7 +15,6 @@ For the above input data, the UI will look like as shown below:
 <img width="1303" alt="connectionSettings" src="https://github.com/rudderlabs/rudder-integrations-config/assets/63387036/ee28b3fe-5a81-4289-9f6a-54cf5abe0f4c">
 <img width="1292" alt="configurationSettings" src="https://github.com/rudderlabs/rudder-integrations-config/assets/63387036/ce765f0f-b680-46ca-b46d-ed58e39a7667">
 
-
 In the input file, you need to provide the destination name you want to display in the UI in the displayName field.
 
 Each json object inside the formFields represents a field you want to add as a connection/configuration settings to the destination.
