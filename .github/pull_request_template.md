@@ -1,21 +1,57 @@
-## Description of the change
+## What are the changes introduced in this PR?
 
-< Description >
+Write a brief explainer on your code changes.
 
-## Checklists
+## Please explain the objectives of your changes below
 
-### Development
+Put down any required details on the broader aspect of your changes. If there are any dependent changes, **mandatorily** mention them here
 
-- [ ] My code follows the style guidelines of this project
-- [ ] I have performed a self-review of my own code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] The code changed/added as part of this pull request has been covered with tests
-- [ ] All tests related to the changed code pass in development
-- [ ] I have executed schemaGenerator tests and updated schema if needed
+### Type of change
 
-### Code review
+If the pull request is a **bug-fix**, **enhancement** or a **refactor**, please fill in the details on the changes made.
 
-- [ ] This pull request has a descriptive title and information useful to a reviewer. There may be a screenshot or screencast attached
-- [ ] Changes have been reviewed by at least one other engineer
-- [ ] Issue from task tracker has a link to this pull request
+- Existing capabilities/behavior
+
+- New capabilities/behavior
+
+If the pull request is a **new feature**,
+
+### Any technical or performance related pointers to consider with the change?
+
+N/A
+
+### Any new dependencies introduced with this change?
+
+N/A
+
+### Any new generic utility introduced or modified. Please explain the changes.
+
+N/A
+
+### If the PR has changes in more than 10 files, please mention why the changes were not split into multiple PRs.
+
+N/A
+
+### If multiple linear tasks are associated with the PR changes, please elaborate on the reason:
+
+N/A
+
+<hr>
+
+### Developer checklist
+
+- [ ] **No breaking changes are being introduced.**
+
+- [ ] Are all related docs linked with the PR?
+
+- [ ] Are all changes manually tested?
+
+- [ ] Does this change require any documentation changes?
+
+- [ ] Are relevant schema tests added or updated?
+
+### Reviewer checklist
+
+- [ ] Is the type of change in the PR title appropriate as per the changes?
+
+- [ ] Verified that there are no credentials or confidential data exposed with the changes.
