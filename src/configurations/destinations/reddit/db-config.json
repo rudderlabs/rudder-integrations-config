@@ -1,11 +1,13 @@
 {
-  "name": "AZURE_EVENT_HUB",
-  "displayName": "Azure Event Hubs",
+  "name": "REDDIT",
+  "displayName": "Reddit",
   "config": {
-    "transformAtV1": "processor",
+    "cdkV2Enabled": true,
+    "transformAtV1": "router",
     "saveDestinationResponse": true,
-    "includeKeys": ["oneTrustCookieCategories"],
-    "excludeKeys": [],
+    "auth": {
+      "type": "OAuth"
+    },
     "supportedSourceTypes": [
       "android",
       "ios",
@@ -19,10 +21,13 @@
       "cordova",
       "shopify"
     ],
+    "supportedMessageTypes": {
+      "cloud": ["track"]
+    },
     "supportedConnectionModes": {
+      "web": ["cloud"],
       "android": ["cloud"],
       "ios": ["cloud"],
-      "web": ["cloud"],
       "unity": ["cloud"],
       "amp": ["cloud"],
       "reactnative": ["cloud"],
@@ -31,12 +36,7 @@
       "shopify": ["cloud"]
     },
     "destConfig": {
-      "defaultConfig": [
-        "bootstrapServer",
-        "topic",
-        "eventHubsConnectionString",
-        "oneTrustCookieCategories"
-      ]
+      "defaultConfig": ["rudderAccountId", "accountId", "eventsMapping", "oneTrustCookieCategories"]
     },
     "secretKeys": []
   }
