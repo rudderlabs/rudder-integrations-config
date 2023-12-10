@@ -2,7 +2,6 @@
   "name": "MARKETO_STATIC_LIST",
   "displayName": "Marketo Static List",
   "config": {
-    "transformAt": "router",
     "transformAtV1": "router",
     "saveDestinationResponse": true,
     "isAudienceSupported": true,
@@ -14,18 +13,12 @@
       "oneTrustCookieCategories"
     ],
     "excludeKeys": [],
-    "supportedSourceTypes": [
-      "cloud",
-      "warehouse",
-      "shopify"
-    ],
-    "supportedMessageTypes": [
-      "record",
-      "audiencelist"
-    ],
-    "syncBehaviours": [
-      "mirror"
-    ],
+    "supportedSourceTypes": ["cloud", "warehouse", "shopify"],
+    "supportedMessageTypes": { "cloud": ["record", "audiencelist"] },
+    "supportedConnectionModes": {
+      "shopify": ["cloud"]
+    },
+    "syncBehaviours": ["mirror"],
     "disableJsonMapper": true,
     "supportsVisualMapper": true,
     "destConfig": {
@@ -37,11 +30,7 @@
         "oneTrustCookieCategories"
       ]
     },
-    "secretKeys": [
-      "clientId",
-      "clientSecret",
-      "accountId"
-    ]
+    "secretKeys": ["clientId", "clientSecret", "accountId"]
   },
   "options": {
     "isBeta": true

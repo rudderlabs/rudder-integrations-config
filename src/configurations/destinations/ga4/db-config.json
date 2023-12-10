@@ -2,7 +2,6 @@
   "name": "GA4",
   "displayName": "Google Analytics 4 (GA4)",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": false,
     "includeKeys": [
@@ -34,32 +33,28 @@
       "warehouse",
       "shopify"
     ],
-    "supportedMessageTypes": [
-      "track",
-      "group",
-      "page"
-    ],
+    "supportedMessageTypes": {
+      "cloud": ["track", "group", "page"],
+      "device": {
+        "web": ["identify", "track", "page", "group"],
+        "android": ["identify", "track", "page", "group"],
+        "ios": ["identify", "track", "page", "group"]
+      }
+    },
     "supportedConnectionModes": {
-      "android": [
-        "cloud",
-        "device"
-      ],
-      "web": [
-        "cloud",
-        "device",
-        "hybrid"
-      ],
-      "ios": [
-        "cloud",
-        "device"
-      ]
+      "android": ["cloud", "device"],
+      "web": ["cloud", "device", "hybrid"],
+      "ios": ["cloud", "device"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"]
     },
     "hybridModeCloudEventsFilter": {
       "web": {
-        "messageType": [
-          "track",
-          "group"
-        ]
+        "messageType": ["track", "group"]
       }
     },
     "destConfig": {
@@ -85,18 +80,10 @@
         "extendPageViewParams",
         "overrideClientAndSessionId"
       ],
-      "android": [
-        "useNativeSDK",
-        "connectionMode"
-      ],
-      "ios": [
-        "useNativeSDK",
-        "connectionMode"
-      ]
+      "android": ["useNativeSDK", "connectionMode"],
+      "ios": ["useNativeSDK", "connectionMode"]
     },
-    "secretKeys": [
-      "apiSecret"
-    ]
+    "secretKeys": ["apiSecret"]
   },
   "options": {
     "isBeta": true

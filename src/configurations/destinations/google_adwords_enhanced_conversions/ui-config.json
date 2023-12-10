@@ -1,78 +1,146 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Customer ID",
-          "value": "customerId",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid Customer Id",
-          "required": true,
-          "placeholder": "e.g: 9693429833"
-        },
-        {
-          "type": "checkbox",
-          "label": "Sub Account",
-          "value": "subAccount",
-          "required": false,
-          "default": false
-        },
-        {
-          "type": "textInput",
-          "label": "Login Customer ID",
-          "preRequisiteField": [{ "name": "subAccount", "selectedValue": true }],
-          "value": "loginCustomerId",
-          "regex": "^(.{1,100})$",
-          "required": true,
-          "footerNote": "If Customer-Id is from a sub account then provide customerId of manager account"
-        }
-      ]
-    },
-    {
-      "title": "Event Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "listOfConversions",
-          "label": "List of Conversion",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "conversions",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        },
-        {
-          "type": "checkbox",
-          "label": "Hashing required",
-          "value": "requireHash",
-          "default": true,
-          "footerNote": "If this option is set to on we will encrypt mail, phoneNumber, firstName, lastName and streetAddress"
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection Settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Customer ID",
+                    "note": "Enter the Customer ID",
+                    "configKey": "customerId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Customer Id",
+                    "placeholder": "e.g: 9693429833"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Sub Account",
+                    "configKey": "subAccount",
+                    "default": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Login Customer ID",
+                    "note": "Enter the Login Customer ID",
+                    "configKey": "loginCustomerId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Login Customer Id",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "subAccount",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Event settings",
+            "note": "Configure your event level settings",
+            "groups": [
+              {
+                "title": "Conversion settings",
+                "note": "Enter your list of Conversions",
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "List of Conversion",
+                    "note": "Add your conversions names",
+                    "configKey": "listOfConversions",
+                    "tagKey": "conversions",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "conversions": ""
+                      }
+                    ]
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Hashing required",
+                    "configKey": "requireHash",
+                    "default": true,
+                    "footerNote": "If this option is set to on we will encrypt mail, phoneNumber, firstName, lastName and streetAddress"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack’s OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     }
-  ]
+  }
 }
