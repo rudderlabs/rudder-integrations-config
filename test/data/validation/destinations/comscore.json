@@ -1,43 +1,15 @@
 [
   {
     "config": {
-      "apiKey": "",
-      "oneTrustCookieCategories": [
-        {
-          "oneTrustCookieCategory": "C0001"
-        },
-        {
-          "oneTrustCookieCategory": "C0002"
-        }
-      ]
-    },
-    "result": false,
-    "err": [
-      "apiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
-      "oneTrustCookieCategories must be object"
-    ]
-  },
-  {
-    "config": {
-      "apiKey": "pk_prod_1BR12G4ZH94WNXMYFCTZR8ES62GP",
+      "publisherId": "1234567890",
       "oneTrustCookieCategories": {
-        "web": [
+        "android": [
           {
             "oneTrustCookieCategory": "C0001"
           },
           {
             "oneTrustCookieCategory": "C0002"
-          }
-        ],
-        "flutter": [
-          {
-            "oneTrustCookieCategory": "C0003"
           },
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ],
-        "android": [
           {
             "oneTrustCookieCategory": ""
           }
@@ -45,9 +17,7 @@
         "ios": [
           {
             "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
-          }
-        ],
-        "cordova": [
+          },
           {
             "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
           }
@@ -58,7 +28,22 @@
   },
   {
     "config": {
-      "apiKey": "pk_prod_1BR12G4ZH94WNXMYFCTZR8ES62GP",
+      "publisherId": "1234567890",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        },
+        {
+          "oneTrustCookieCategory": "C0002"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["oneTrustCookieCategories must be object"]
+  },
+  {
+    "config": {
+      "publisherId": "1234567890",
       "oneTrustCookieCategories": {
         "someunsupportedsourcetype": [
           {
@@ -68,18 +53,12 @@
             "oneTrustCookieCategory": "C0002"
           }
         ],
-        "web": [
-          {
-            "someunsupportedkey": "C0001"
-          },
-          {
-            "oneTrustCookieCategory": "C0002"
-          }
-        ],
-        "flutter": [],
         "android": [
           {
             "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "someunsupportedkey": "C0001"
           },
           {
             "oneTrustCookieCategory": "C0004"
@@ -93,28 +72,34 @@
           },
           {
             "oneTrustCookieCategory": "C0004"
-          }
-        ],
-        "cordova": {
-          "not": "an array"
-        },
-        "reactnative": [
-          "not an object",
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
+          },
+          "not an object"
         ]
       }
     },
     "result": false,
     "err": [
       "oneTrustCookieCategories must NOT have additional properties",
-      "oneTrustCookieCategories.web.0 must NOT have additional properties",
       "oneTrustCookieCategories.android.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.android.1 must NOT have additional properties",
       "oneTrustCookieCategories.ios.0.oneTrustCookieCategory must be string",
-      "oneTrustCookieCategories.reactnative.0 must be object",
-      "oneTrustCookieCategories.flutter must NOT have fewer than 1 items",
-      "oneTrustCookieCategories.cordova must be array"
+      "oneTrustCookieCategories.ios.2 must be object"
+    ]
+  },
+  {
+    "config": {
+      "publisherId": "1234567890",
+      "oneTrustCookieCategories": {
+        "android": [],
+        "ios": {
+          "not": "an array"
+        }
+      }
+    },
+    "result": false,
+    "err": [
+      "oneTrustCookieCategories.android must NOT have fewer than 1 items",
+      "oneTrustCookieCategories.ios must be array"
     ]
   }
 ]
