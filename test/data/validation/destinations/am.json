@@ -85,6 +85,21 @@
           {
             "oneTrustCookieCategory": "C0004"
           }
+        ],
+        "android": [
+          {
+            "oneTrustCookieCategory": ""
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "cordova": [
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
+          }
         ]
       }
     },
@@ -528,27 +543,20 @@
           "eventName": "AM allowed customer check"
         }
       ],
-      "oneTrustCookieCategories": {
-        "web": [
-          {
-            "oneTrustCookieCategory": "C0001"
-          },
-          {
-            "oneTrustCookieCategory": "C0002"
-          }
-        ],
-        "flutter": [
-          {
-            "oneTrustCookieCategory": "C0003"
-          },
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ]
-      }
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        },
+        {
+          "oneTrustCookieCategory": "C0002"
+        }
+      ]
     },
     "result": false,
-    "err": ["connectionMode.web must be equal to one of the allowed values"]
+    "err": [
+      "oneTrustCookieCategories must be object",
+      "connectionMode.web must be equal to one of the allowed values"
+    ]
   },
   {
     "config": {
@@ -621,7 +629,7 @@
         }
       ],
       "oneTrustCookieCategories": {
-        "web": [
+        "someunsupportedsourcetype": [
           {
             "oneTrustCookieCategory": "C0001"
           },
@@ -629,10 +637,38 @@
             "oneTrustCookieCategory": "C0002"
           }
         ],
-        "flutter": [
+        "web": [
           {
-            "oneTrustCookieCategory": "C0003"
+            "someunsupportedkey": "C0001"
           },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "flutter": [],
+        "android": [
+          {
+            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "cordova": {
+          "not": "an array"
+        },
+        "reactnative": [
+          "not an object",
           {
             "oneTrustCookieCategory": "C0004"
           }
@@ -640,6 +676,15 @@
       }
     },
     "result": false,
-    "err": ["attribution.web must be boolean"]
+    "err": [
+      "oneTrustCookieCategories must NOT have additional properties",
+      "oneTrustCookieCategories.web.0 must NOT have additional properties",
+      "oneTrustCookieCategories.android.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.ios.0.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.reactnative.0 must be object",
+      "oneTrustCookieCategories.flutter must NOT have fewer than 1 items",
+      "oneTrustCookieCategories.cordova must be array",
+      "attribution.web must be boolean"
+    ]
   }
 ]

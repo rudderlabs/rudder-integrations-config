@@ -13,6 +13,18 @@
           },
           {
             "oneTrustCookieCategory": "C0002"
+          },
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
+          },
+          {
+            "oneTrustCookieCategory": ""
+          },
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          },
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
           }
         ]
       },
@@ -27,20 +39,21 @@
       "eventFilteringOption": "disable",
       "whitelistedEvents": [{ "eventName": "" }],
       "blacklistedEvents": [{ "eventName": "" }],
-      "oneTrustCookieCategories": {
-        "web": [
-          {
-            "oneTrustCookieCategory": "C0001"
-          },
-          {
-            "oneTrustCookieCategory": "C0002"
-          }
-        ]
-      },
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        },
+        {
+          "oneTrustCookieCategory": "C0002"
+        }
+      ],
       "useNativeSDK": { "web": false }
     },
     "result": false,
-    "err": ["clientId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""]
+    "err": [
+      "clientId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
+      "oneTrustCookieCategories must be object"
+    ]
   },
   {
     "config": {
@@ -50,18 +63,71 @@
       "whitelistedEvents": [{ "eventName": "" }],
       "blacklistedEvents": [{ "eventName": "" }],
       "oneTrustCookieCategories": {
-        "web": [
+        "someunsupportedsourcetype": [
           {
             "oneTrustCookieCategory": "C0001"
           },
           {
             "oneTrustCookieCategory": "C0002"
           }
+        ],
+        "web": [
+          {
+            "someunsupportedkey": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          "not an object"
         ]
       },
       "useNativeSDK": { "web": false }
     },
     "result": false,
-    "err": ["toggleToActivateCallback must be boolean"]
+    "err": [
+      "toggleToActivateCallback must be boolean",
+      "oneTrustCookieCategories must NOT have additional properties",
+      "oneTrustCookieCategories.web.0 must NOT have additional properties",
+      "oneTrustCookieCategories.web.1.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.web.2.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.web.3 must be object"
+    ]
+  },
+  {
+    "config": {
+      "clientId": "dskh4ryfhc347896ryfh",
+      "toggleToActivateCallback": false,
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [{ "eventName": "" }],
+      "blacklistedEvents": [{ "eventName": "" }],
+      "oneTrustCookieCategories": {
+        "web": []
+      },
+      "useNativeSDK": { "web": false }
+    },
+    "result": false,
+    "err": ["oneTrustCookieCategories.web must NOT have fewer than 1 items"]
+  },
+  {
+    "config": {
+      "clientId": "dskh4ryfhc347896ryfh",
+      "toggleToActivateCallback": false,
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [{ "eventName": "" }],
+      "blacklistedEvents": [{ "eventName": "" }],
+      "oneTrustCookieCategories": {
+        "web": {
+          "not": "an array"
+        }
+      },
+      "useNativeSDK": { "web": false }
+    },
+    "result": false,
+    "err": ["oneTrustCookieCategories.web must be array"]
   }
 ]
