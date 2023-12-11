@@ -17,7 +17,40 @@
         {
           "trait": ""
         }
-      ]
+      ],
+      "oneTrustCookieCategories": {
+        "web": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "flutter": [
+          {
+            "oneTrustCookieCategory": "C0003"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "android": [
+          {
+            "oneTrustCookieCategory": ""
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "cordova": [
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
+          }
+        ]
+      }
     },
     "result": true
   },
@@ -47,11 +80,20 @@
       "embedTitleTemplate": "Rudderstack Message",
       "embedDescriptionTemplate": " {{name}}",
       "embedFlag": true,
-      "webhookUrl": ""
+      "webhookUrl": "",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        },
+        {
+          "oneTrustCookieCategory": "C0002"
+        }
+      ]
     },
     "result": false,
     "err": [
-      "webhookUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(https?|ftp)://[^\\s/$.?#].[^\\s]*$\""
+      "webhookUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(https?|ftp)://[^\\s/$.?#].[^\\s]*$\"",
+      "oneTrustCookieCategories must be object"
     ]
   },
   {
@@ -75,6 +117,83 @@
     "err": [
       "eventTemplateSettings.0.eventName must be string",
       "eventTemplateSettings.0.eventRegex must be boolean"
+    ]
+  },
+  {
+    "config": {
+      "identifyTemplate": "",
+      "webhookUrl": "https://api.discord.com/1234/5678/1457",
+      "embedTitleTemplate": "",
+      "embedDescriptionTemplate": "",
+      "embedFlag": true,
+      "eventTemplateSettings": [
+        {
+          "eventName": "",
+          "eventTemplate": "",
+          "eventRegex": false
+        }
+      ],
+      "whitelistedTraitsSettings": [
+        {
+          "trait": ""
+        }
+      ],
+      "oneTrustCookieCategories": {
+        "someunsupportedsourcetype": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "web": [
+          {
+            "someunsupportedkey": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "flutter": [],
+        "android": [
+          {
+            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "cordova": {
+          "not": "an array"
+        },
+        "reactnative": [
+          "not an object",
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "oneTrustCookieCategories must NOT have additional properties",
+      "oneTrustCookieCategories.web.0 must NOT have additional properties",
+      "oneTrustCookieCategories.android.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.ios.0.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.reactnative.0 must be object",
+      "oneTrustCookieCategories.flutter must NOT have fewer than 1 items",
+      "oneTrustCookieCategories.cordova must be array"
     ]
   }
 ]
