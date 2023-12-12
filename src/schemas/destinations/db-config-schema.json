@@ -488,6 +488,40 @@
       }
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "config": {
+            "type": "object",
+            "properties": {
+              "supportedConnectionModes": {
+                "type": "object",
+                "properties": {
+                  "web": { "type": "array", "contains": { "const": "hybrid" } }
+                },
+                "required": []
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "required": ["config"],
+        "properties": {
+          "config": {
+            "type": "object",
+            "required": ["hybridModeCloudEventsFilter"],
+            "properties": {
+              "hybridModeCloudEventsFilter": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
   "definitions": {
     "eventType": {
       "type": "string",
