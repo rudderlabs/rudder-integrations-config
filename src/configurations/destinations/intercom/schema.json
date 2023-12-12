@@ -1,21 +1,13 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["apiKey", "apiServer"],
+    "required": [],
     "type": "object",
     "properties": {
-      "apiKey": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-      },
       "apiServer": {
         "type": "string",
         "enum": ["standard", "eu", "au"],
         "default": "standard"
-      },
-      "appId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "mobileApiKeyAndroid": {
         "type": "string",
@@ -101,6 +93,74 @@
           }
         }
       }
-    }
+    },
+    "anyOf": [
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "web": {
+                "const": "device"
+              }
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "appId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["appId"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "web": {
+                "const": "cloud"
+              },
+              "ios": {
+                "const": "cloud"
+              },
+              "android": {
+                "const": "cloud"
+              },
+              "unity": {
+                "const": "cloud"
+              },
+              "amp": {
+                "const": "cloud"
+              },
+              "reactnative": {
+                "const": "cloud"
+              },
+              "flutter": {
+                "const": "cloud"
+              },
+              "cordova": {
+                "const": "cloud"
+              },
+              "shopify": {
+                "const": "cloud"
+              }
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["apiKey"]
+        }
+      }
+    ]
   }
 }

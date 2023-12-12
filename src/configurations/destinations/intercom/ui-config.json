@@ -18,7 +18,15 @@
                     "configKey": "apiKey",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid Access Token",
-                    "placeholder": "e.g: FGHrOjU4ZDc0MjEyXzhjYmNfNDZmYl85ODUxX2RjZDk0Mzk1M2VlMDoxOjA="
+                    "placeholder": "e.g: FGHrOjU4ZDc0MjEyXzhjYmNfNDZmYl85ODUxX2RjZDk0Mzk1M2VlMDoxOjA=",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "singleSelect",
@@ -39,7 +47,15 @@
                       }
                     ],
                     "default": "standard",
-                    "note": "Select your Intercom API Server"
+                    "note": "Select your Intercom API Server",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "textInput",
@@ -53,38 +69,6 @@
                       "fields": [
                         {
                           "configKey": "connectionModes.webDevice",
-                          "value": true
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "Android API Key",
-                    "configKey": "mobileApiKeyAndroid",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                    "regexErrorMessage": "Invalid Android API Key",
-                    "placeholder": "e.g: android_sdk-67f114561f2267e242466e6687bc7a9ba455cf90",
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "connectionModes.mobileDevice",
-                          "value": true
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "iOS API Key",
-                    "configKey": "mobileApiKeyIOS",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                    "regexErrorMessage": "Invalid iOS API Key",
-                    "placeholder": "e.g: ios_sdk-5fe73e0bb7fcae17a1a75fdbad227191a69f6c00",
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "connectionModes.mobileDevice",
                           "value": true
                         }
                       ]
@@ -134,6 +118,38 @@
                         {
                           "configKey": "connectionModes.cloud",
                           "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "iOS API Key",
+                    "configKey": "mobileApiKeyIOS",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid iOS API Key",
+                    "placeholder": "e.g: ios_sdk-5fe73e0bb7fcae17a1a75fdbad227191a69f6c00",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.ios",
+                          "value": "device"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Android API Key",
+                    "configKey": "mobileApiKeyAndroid",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Android API Key",
+                    "placeholder": "e.g: android_sdk-67f114561f2267e242466e6687bc7a9ba455cf90",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.android",
+                          "value": "device"
                         }
                       ]
                     }
