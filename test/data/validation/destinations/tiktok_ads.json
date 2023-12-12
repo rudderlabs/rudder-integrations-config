@@ -24,6 +24,29 @@
             "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
           }
         ]
+      },
+      "ketchConsentPurposes": {
+        "web": [
+          {
+            "purpose": "P1"
+          },
+          {
+            "purpose": "P2"
+          }
+        ],
+        "android": [
+          {
+            "purpose": ""
+          }
+        ],
+        "ios": [
+          {
+            "purpose": "env.ENVIRONMENT_VARIABLE"
+          },
+          {
+            "purpose": "{{ event.properties.prop1 || 333 }}"
+          }
+        ]
       }
     },
     "result": true
@@ -38,10 +61,18 @@
         {
           "oneTrustCookieCategory": "C0002"
         }
+      ],
+      "ketchConsentPurposes": [
+        {
+          "purpose": "P1"
+        },
+        {
+          "purpose": "P2"
+        }
       ]
     },
     "result": false,
-    "err": ["oneTrustCookieCategories must be object"]
+    "err": ["oneTrustCookieCategories must be object", "ketchConsentPurposes must be object"]
   },
   {
     "config": {
@@ -80,6 +111,41 @@
         "ios": {
           "not": "an array"
         }
+      },
+      "ketchConsentPurposes": {
+        "someunsupportedsourcetype": [
+          {
+            "purpose": "P1"
+          },
+          {
+            "purpose": "P2"
+          }
+        ],
+        "web": [
+          {
+            "someunsupportedkey": "P1"
+          },
+          {
+            "purpose": "P2"
+          }
+        ],
+        "android": [
+          {
+            "purpose": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "purpose": "P4"
+          },
+          {
+            "purpose": {
+              "not": "a string"
+            }
+          },
+          "not an object"
+        ],
+        "ios": {
+          "not": "an array"
+        }
       }
     },
     "result": false,
@@ -89,7 +155,13 @@
       "oneTrustCookieCategories.android.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
       "oneTrustCookieCategories.android.2.oneTrustCookieCategory must be string",
       "oneTrustCookieCategories.android.3 must be object",
-      "oneTrustCookieCategories.ios must be array"
+      "oneTrustCookieCategories.ios must be array",
+      "ketchConsentPurposes must NOT have additional properties",
+      "ketchConsentPurposes.web.0 must NOT have additional properties",
+      "ketchConsentPurposes.android.0.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "ketchConsentPurposes.android.2.purpose must be string",
+      "ketchConsentPurposes.android.3 must be object",
+      "ketchConsentPurposes.ios must be array"
     ]
   },
   {
@@ -97,9 +169,15 @@
       "pixelCode": "1234567890",
       "oneTrustCookieCategories": {
         "ios": []
+      },
+      "ketchConsentPurposes": {
+        "ios": []
       }
     },
     "result": false,
-    "err": ["oneTrustCookieCategories.ios must NOT have fewer than 1 items"]
+    "err": [
+      "oneTrustCookieCategories.ios must NOT have fewer than 1 items",
+      "ketchConsentPurposes.ios must NOT have fewer than 1 items"
+    ]
   }
 ]
