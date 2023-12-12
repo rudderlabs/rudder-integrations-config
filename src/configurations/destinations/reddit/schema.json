@@ -1,13 +1,14 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["accountId"],
+    "required": ["accountId", "hashData"],
     "type": "object",
     "properties": {
       "accountId": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
+      "hashData": { "type": "boolean", "default": true },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -33,22 +34,6 @@
           "flutter": { "type": "string", "enum": ["cloud"] },
           "cordova": { "type": "string", "enum": ["cloud"] },
           "shopify": { "type": "string", "enum": ["cloud"] }
-        }
-      },
-      "eventsMapping": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "from": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "to": {
-              "type": "string",
-              "enum": ["ViewContent", "Search", "AddToCart", "AddToWishlist", "Purchase", ""]
-            }
-          }
         }
       }
     }
