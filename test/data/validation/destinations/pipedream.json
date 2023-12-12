@@ -16,7 +16,40 @@
           "from": "c",
           "to": "c"
         }
-      ]
+      ],
+      "oneTrustCookieCategories": {
+        "web": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "flutter": [
+          {
+            "oneTrustCookieCategory": "C0003"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "android": [
+          {
+            "oneTrustCookieCategory": ""
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "cordova": [
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
+          }
+        ]
+      }
     },
     "result": true
   },
@@ -36,10 +69,21 @@
           "from": "c",
           "to": "c"
         }
+      ],
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        },
+        {
+          "oneTrustCookieCategory": "C0002"
+        }
       ]
     },
     "result": false,
-    "err": [" must have required property 'pipedreamUrl'"]
+    "err": [
+      " must have required property 'pipedreamUrl'",
+      "oneTrustCookieCategories must be object"
+    ]
   },
   {
     "config": {
@@ -86,5 +130,81 @@
       ]
     },
     "result": true
+  },
+  {
+    "config": {
+      "pipedreamUrl": "http://sample.com/url",
+      "pipedreamMethod": "GET",
+      "headers": [
+        {
+          "from": "a",
+          "to": "a"
+        },
+        {
+          "from": "b",
+          "to": "b"
+        },
+        {
+          "from": "c",
+          "to": "c"
+        }
+      ],
+      "oneTrustCookieCategories": {
+        "someunsupportedsourcetype": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "web": [
+          {
+            "someunsupportedkey": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "flutter": [],
+        "android": [
+          {
+            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "cordova": {
+          "not": "an array"
+        },
+        "reactnative": [
+          "not an object",
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "oneTrustCookieCategories must NOT have additional properties",
+      "oneTrustCookieCategories.web.0 must NOT have additional properties",
+      "oneTrustCookieCategories.android.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.ios.0.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.reactnative.0 must be object",
+      "oneTrustCookieCategories.flutter must NOT have fewer than 1 items",
+      "oneTrustCookieCategories.cordova must be array"
+    ]
   }
 ]

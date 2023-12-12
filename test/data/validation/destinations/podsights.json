@@ -10,10 +10,21 @@
       ],
       "eventFilteringOption": "disable",
       "whitelistedEvents": [{ "eventName": "" }],
-      "blacklistedEvents": [{ "eventName": "" }]
+      "blacklistedEvents": [{ "eventName": "" }],
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        },
+        {
+          "oneTrustCookieCategory": "C0002"
+        }
+      ]
     },
     "result": false,
-    "err": ["pixelId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""]
+    "err": [
+      "pixelId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
+      "oneTrustCookieCategories must be object"
+    ]
   },
   {
     "config": {
@@ -59,8 +70,76 @@
       ],
       "eventFilteringOption": "disable",
       "whitelistedEvents": [{ "eventName": "" }],
-      "blacklistedEvents": [{ "eventName": "" }]
+      "blacklistedEvents": [{ "eventName": "" }],
+      "oneTrustCookieCategories": {
+        "web": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          },
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
+          },
+          {
+            "oneTrustCookieCategory": ""
+          },
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          },
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
+          }
+        ]
+      }
     },
     "result": true
+  },
+  {
+    "config": {
+      "pixelId": "qwerty1234qwerty",
+      "eventsToQPEvents": [
+        {
+          "from": "Order Completed",
+          "to": "Purchase"
+        }
+      ],
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [{ "eventName": "" }],
+      "blacklistedEvents": [{ "eventName": "" }],
+      "oneTrustCookieCategories": {
+        "someunsupportedsourcetype": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "web": [
+          {
+            "someunsupportedkey": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          "not an object"
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "oneTrustCookieCategories must NOT have additional properties",
+      "oneTrustCookieCategories.web.0 must NOT have additional properties",
+      "oneTrustCookieCategories.web.1.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.web.2.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.web.3 must be object"
+    ]
   }
 ]

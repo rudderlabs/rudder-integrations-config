@@ -22,7 +22,40 @@
           "from": "Track Ping",
           "to": "Lead"
         }
-      ]
+      ],
+      "oneTrustCookieCategories": {
+        "web": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "flutter": [
+          {
+            "oneTrustCookieCategory": "C0003"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "android": [
+          {
+            "oneTrustCookieCategory": ""
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "cordova": [
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
+          }
+        ]
+      }
     },
     "result": true
   },
@@ -47,10 +80,21 @@
           "from": "Track Ping",
           "to": "Lead"
         }
+      ],
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        },
+        {
+          "oneTrustCookieCategory": "C0002"
+        }
       ]
     },
     "result": false,
-    "err": ["tagId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]*$\""]
+    "err": [
+      "tagId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]*$\"",
+      "oneTrustCookieCategories must be object"
+    ]
   },
   {
     "config": {
@@ -196,6 +240,88 @@
     "err": [
       "conversionToken must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,101})$\"",
       " must match \"then\" schema"
+    ]
+  },
+  {
+    "config": {
+      "tagId": "123456789",
+      "advertiserId": "429047995",
+      "appId": "429047995",
+      "enhancedMatch": true,
+      "sendingUnHashedData": true,
+      "deduplicationKey": "messageId",
+      "sendExternalId": true,
+      "sendAsCustomEvent": true,
+      "customProperties": [
+        {
+          "properties": "customProperty.customValue"
+        },
+        {
+          "properties": "randomValue"
+        }
+      ],
+      "eventsMapping": [
+        {
+          "from": "Track Ping",
+          "to": "Lead"
+        }
+      ],
+      "oneTrustCookieCategories": {
+        "someunsupportedsourcetype": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "web": [
+          {
+            "someunsupportedkey": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "flutter": [],
+        "android": [
+          {
+            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "cordova": {
+          "not": "an array"
+        },
+        "reactnative": [
+          "not an object",
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "oneTrustCookieCategories must NOT have additional properties",
+      "oneTrustCookieCategories.web.0 must NOT have additional properties",
+      "oneTrustCookieCategories.android.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.ios.0.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.reactnative.0 must be object",
+      "oneTrustCookieCategories.flutter must NOT have fewer than 1 items",
+      "oneTrustCookieCategories.cordova must be array"
     ]
   }
 ]
