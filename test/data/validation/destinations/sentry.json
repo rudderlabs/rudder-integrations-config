@@ -16,7 +16,28 @@
       "whitelistedEvents": [{ "eventName": "" }],
       "blacklistedEvents": [{ "eventName": "" }],
       "useNativeSDK": { "web": true },
-      "oneTrustCookieCategories": [{ "oneTrustCookieCategory": "Debugging" }]
+      "oneTrustCookieCategories": {
+        "web": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          },
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
+          },
+          {
+            "oneTrustCookieCategory": ""
+          },
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          },
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
+          }
+        ]
+      }
     },
     "result": true
   },
@@ -36,10 +57,21 @@
       "useNativeSDK": { "web": true },
       "blacklistedEvents": {},
       "whitelistedEvents": {},
-      "oneTrustCookieCategories": [{ "oneTrustCookieCategory": "" }]
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        },
+        {
+          "oneTrustCookieCategory": "C0002"
+        }
+      ]
     },
     "result": false,
-    "err": ["whitelistedEvents must be array", "blacklistedEvents must be array"]
+    "err": [
+      "whitelistedEvents must be array",
+      "blacklistedEvents must be array",
+      "oneTrustCookieCategories must be object"
+    ]
   },
   {
     "config": {
@@ -56,10 +88,60 @@
       "denyUrls": [{ "denyUrls": "" }],
       "useNativeSDK": { "web": true },
       "blackListedEvents": {},
-      "whiteListedEvents": {},
-      "oneTrustCookieCategories": [{ "oneTrustCookieCategory": "" }]
+      "whiteListedEvents": {}
     },
     "result": false,
     "err": [" must NOT have additional properties", " must NOT have additional properties"]
+  },
+  {
+    "config": {
+      "dsn": "https://42152b1ac22647378fd808fbdb442798@o1142740.ingest.sentry.io/6201791",
+      "environment": "production",
+      "customVersionProperty": "window.kaholo.version",
+      "release": "window.kaholo.version",
+      "serverName": "server",
+      "logger": "sentry",
+      "debugMode": false,
+      "eventFilteringOption": "disable",
+      "ignoreErrors": [{ "ignoreErrors": "" }],
+      "includePaths": [{ "includePaths": "" }],
+      "allowUrls": [{ "allowUrls": "" }],
+      "denyUrls": [{ "denyUrls": "" }],
+      "whitelistedEvents": [{ "eventName": "" }],
+      "blacklistedEvents": [{ "eventName": "" }],
+      "useNativeSDK": { "web": true },
+      "oneTrustCookieCategories": {
+        "someunsupportedsourcetype": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "web": [
+          {
+            "someunsupportedkey": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          "not an object"
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "oneTrustCookieCategories must NOT have additional properties",
+      "oneTrustCookieCategories.web.0 must NOT have additional properties",
+      "oneTrustCookieCategories.web.1.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.web.2.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.web.3 must be object"
+    ]
   }
 ]
