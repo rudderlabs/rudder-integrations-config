@@ -1,0 +1,38 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["advertiserID", "advertiserSecretKey", "segmentName", "dataServer"],
+    "type": "object",
+    "properties": {
+      "advertiserID": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "advertiserSecretKey": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "segmentName": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,256})$"
+      },
+      "dataServer": {
+        "type": "string",
+        "enum": ["apac", "tokyo", "usEastCoast", "usWestCoast", "ukEu", "china"],
+        "default": "usEastCoast"
+      },
+      "oneTrustCookieCategories": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "oneTrustCookieCategory": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      }
+    }
+  }
+}

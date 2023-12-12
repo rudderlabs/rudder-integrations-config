@@ -1,0 +1,144 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Advertiser ID",
+                    "note": "Enter your Advertiser Id from advertiser preferences page in The Trade Desk platform UI.",
+                    "configKey": "advertiserID",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Advertiser ID",
+                    "placeholder": "e.g: jxzqkph"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Advertiser Secret Key",
+                    "note": "Enter your advertiser secret key from the Advertiser Preferences page in The Trade Desk platform UI. If you can't find your secret key, please contact your Technical Account Manager.",
+                    "configKey": "advertiserSecretKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Advertiser Secret Key",
+                    "placeholder": "e.g: u8a7f3k9p2n6w1l0x4q5r2m8d7z1o9",
+                    "secret": true
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Segment Name",
+                    "note": "Enter the segment name that you want to send data to",
+                    "configKey": "segmentName",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,256})$",
+                    "regexErrorMessage": "Invalid Segment Name",
+                    "placeholder": "e.g: test-segment"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Data Server",
+                    "configKey": "dataServer",
+                    "note": "For reduce latency, select the data server closes to the location of the users targeted by your campaign.",
+                    "options": [
+                      {
+                        "label": "APAC",
+                        "value": "apac"
+                      },
+                      {
+                        "label": "Tokyo",
+                        "value": "tokyo"
+                      },
+                      {
+                        "label": "US East Coast",
+                        "value": "usEastCoast"
+                      },
+                      {
+                        "label": "US West Coast",
+                        "value": "usWestCoast"
+                      },
+                      {
+                        "label": "UK/EU",
+                        "value": "ukEu"
+                      },
+                      {
+                        "label": "China",
+                        "value": "china"
+                      }
+                    ],
+                    "default": "usEastCoast"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack's OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing 'Enter' after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    }
+  }
+}

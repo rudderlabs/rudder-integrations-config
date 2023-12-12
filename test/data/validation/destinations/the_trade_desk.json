@@ -1,0 +1,62 @@
+[
+  {
+    "config": {
+      "advertiserID": "test-advertiserID",
+      "advertiserSecretKey": "test-advertiserSecretKey",
+      "segmentName": "test-segment",
+      "dataServer": "usEastCoast",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "advertiserID": "",
+      "advertiserSecretKey": "test-advertiserSecretKey",
+      "segmentName": "test-segment",
+      "dataServer": "usEastCoast",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "advertiserID must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
+    ]
+  },
+  {
+    "config": {
+      "advertiserID": "test-advertiserID",
+      "advertiserSecretKey": "test-advertiserSecretKey",
+      "segmentName": "test-segment",
+      "dataServer": "test-server",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["dataServer must be equal to one of the allowed values"]
+  },
+  {
+    "config": {
+      "advertiserID": "test-advertiserID",
+      "segmentName": "test-segment",
+      "dataServer": "usEastCoast",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
+      ]
+    },
+    "result": false,
+    "err": [" must have required property 'advertiserSecretKey'"]
+  }
+]
