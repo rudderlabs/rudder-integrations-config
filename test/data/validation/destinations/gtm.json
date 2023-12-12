@@ -7,7 +7,28 @@
       "whitelistedEvents": [{ "eventName": "registration" }],
       "blacklistedEvents": [{ "eventName": "" }],
       "useNativeSDK": { "web": true },
-      "oneTrustCookieCategories": []
+      "oneTrustCookieCategories": {
+        "web": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          },
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
+          },
+          {
+            "oneTrustCookieCategory": ""
+          },
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          },
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
+          }
+        ]
+      }
     },
     "result": true
   },
@@ -18,10 +39,17 @@
       "whitelistedEvents": [{ "eventName": "registration" }],
       "blacklistedEvents": [{ "eventName": "" }],
       "useNativeSDK": { "web": true },
-      "oneTrustCookieCategories": []
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        },
+        {
+          "oneTrustCookieCategory": "C0002"
+        }
+      ]
     },
     "result": false,
-    "err": [" must have required property 'containerID'"]
+    "err": [" must have required property 'containerID'", "oneTrustCookieCategories must be object"]
   },
   {
     "config": {
@@ -30,8 +58,7 @@
       "eventFilteringOption": "whitelistedEvents",
       "whitelistedEvents": [{ "eventName": "registration" }],
       "blacklistedEvents": [{ "eventName": "" }],
-      "useNativeSDK": { "web": true },
-      "oneTrustCookieCategories": []
+      "useNativeSDK": { "web": true }
     },
     "result": false,
     "err": [
@@ -45,8 +72,7 @@
       "eventFilteringOption": "whitelistedEvents",
       "whitelistedEvents": [{ "eventName": "registration" }],
       "blacklistedEvents": [{ "eventName": "" }],
-      "useNativeSDK": { "web": true },
-      "oneTrustCookieCategories": []
+      "useNativeSDK": { "web": true }
     },
     "result": true
   },
@@ -57,12 +83,53 @@
       "eventFilteringOption": "whitelistedEvents",
       "whitelistedEvents": [{ "eventName": "registration" }],
       "blacklistedEvents": [{ "eventName": "" }],
-      "useNativeSDK": { "web": true },
-      "oneTrustCookieCategories": []
+      "useNativeSDK": { "web": true }
     },
     "result": false,
     "err": [
       "serverUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]*|^$\""
+    ]
+  },
+  {
+    "config": {
+      "containerID": "GTM-ADDA",
+      "serverUrl": "https://gtm.rudder.com",
+      "eventFilteringOption": "whitelistedEvents",
+      "whitelistedEvents": [{ "eventName": "registration" }],
+      "blacklistedEvents": [{ "eventName": "" }],
+      "useNativeSDK": { "web": true },
+      "oneTrustCookieCategories": {
+        "someunsupportedsourcetype": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "web": [
+          {
+            "someunsupportedkey": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          "not an object"
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "oneTrustCookieCategories must NOT have additional properties",
+      "oneTrustCookieCategories.web.0 must NOT have additional properties",
+      "oneTrustCookieCategories.web.1.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.web.2.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.web.3 must be object"
     ]
   }
 ]

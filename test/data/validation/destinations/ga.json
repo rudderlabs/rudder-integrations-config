@@ -35,7 +35,40 @@
         {
           "eventName": "untested110"
         }
-      ]
+      ],
+      "oneTrustCookieCategories": {
+        "web": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "flutter": [
+          {
+            "oneTrustCookieCategory": "C0003"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "android": [
+          {
+            "oneTrustCookieCategory": ""
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "cordova": [
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
+          }
+        ]
+      }
     },
     "result": true
   },
@@ -102,10 +135,18 @@
         }
       ],
       "blacklistedEvents": [],
-      "whitelistedEvents": []
+      "whitelistedEvents": [],
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        },
+        {
+          "oneTrustCookieCategory": "C0002"
+        }
+      ]
     },
     "result": false,
-    "err": [" must have required property 'trackingID'"]
+    "err": [" must have required property 'trackingID'", "oneTrustCookieCategories must be object"]
   },
   {
     "config": {
@@ -299,6 +340,101 @@
     "result": false,
     "err": [
       "serverSideIdentifyEventAction must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(^(.{0,100})$)\""
+    ]
+  },
+  {
+    "config": {
+      "trackingID": "UA-152564043-4",
+      "eventFilteringOption": "whitelistedEvents",
+      "doubleClick": false,
+      "enhancedLinkAttribution": false,
+      "includeSearch": false,
+      "enableServerSideIdentify": false,
+      "serverSideIdentifyEventCategory": "",
+      "serverSideIdentifyEventAction": "",
+      "disableMd5": false,
+      "anonymizeIp": false,
+      "enhancedEcommerce": false,
+      "nonInteraction": false,
+      "sendUserId": true,
+      "contentGroupings": [
+        {
+          "from": "topic",
+          "to": "contentGroup1"
+        }
+      ],
+      "dimensions": [
+        {
+          "from": "topic",
+          "to": "contentGroup1"
+        }
+      ],
+      "whitelistedEvents": [
+        {
+          "eventName": "testing01"
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": "untested110"
+        }
+      ],
+      "oneTrustCookieCategories": {
+        "someunsupportedsourcetype": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "web": [
+          {
+            "someunsupportedkey": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "flutter": [],
+        "android": [
+          {
+            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "cordova": {
+          "not": "an array"
+        },
+        "reactnative": [
+          "not an object",
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "oneTrustCookieCategories must NOT have additional properties",
+      "oneTrustCookieCategories.web.0 must NOT have additional properties",
+      "oneTrustCookieCategories.android.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.ios.0.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.reactnative.0 must be object",
+      "oneTrustCookieCategories.flutter must NOT have fewer than 1 items",
+      "oneTrustCookieCategories.cordova must be array"
     ]
   }
 ]

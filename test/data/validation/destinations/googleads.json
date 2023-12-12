@@ -14,7 +14,28 @@
       "clickEventConversions": [{ "conversionLabel": "1qinqwqoqewfnoewqo9", "name": "clickTest" }],
       "useNativeSDK": { "web": true },
       "dynamicRemarketing": { "web": true },
-      "oneTrustCookieCategories": [{ "oneTrustCookieCategory": "Sales" }]
+      "oneTrustCookieCategories": {
+        "web": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          },
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
+          },
+          {
+            "oneTrustCookieCategory": ""
+          },
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          },
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
+          }
+        ]
+      }
     },
     "result": true
   },
@@ -38,8 +59,7 @@
         { "conversionLabel": "qwertyasagehrstshregs", "name": "clickedPrev" }
       ],
       "useNativeSDK": { "web": true },
-      "dynamicRemarketing": { "web": true },
-      "oneTrustCookieCategories": [{ "oneTrustCookieCategory": "Business Tool" }]
+      "dynamicRemarketing": { "web": true }
     },
     "result": true
   },
@@ -65,10 +85,20 @@
       "clickEventConversions": [{ "conversionLabel": "1qinqwqoqewfnoewqo9", "name": "clickTest" }],
       "useNativeSDK": { "web": true },
       "dynamicRemarketing": { "web": true },
-      "oneTrustCookieCategories": [{ "oneTrustCookieCategory": "Sales" }]
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        },
+        {
+          "oneTrustCookieCategory": "C0002"
+        }
+      ]
     },
     "result": false,
-    "err": [" must have required property 'conversionID'"]
+    "err": [
+      " must have required property 'conversionID'",
+      "oneTrustCookieCategories must be object"
+    ]
   },
   {
     "config": {
@@ -83,10 +113,58 @@
       "pageLoadConversions": [{ "conversionLabel": "ofwinqeoqwefnoewqo9", "name": "test" }],
       "clickEventConversions": [{ "conversionLabel": "1qinqwqoqewfnoewqo9", "name": "clickTest" }],
       "useNativeSDK": { "web": true },
-      "dynamicRemarketing": { "web": true },
-      "oneTrustCookieCategories": [{ "oneTrustCookieCategory": "Marketing" }]
+      "dynamicRemarketing": { "web": true }
     },
     "result": false,
     "err": ["sendPageView must be boolean"]
+  },
+  {
+    "config": {
+      "conversionID": "AW-12321",
+      "eventFilteringOption": "whitelistedEvents",
+      "defaultPageConversion": "poiiopqwewqwwqewq",
+      "sendPageView": true,
+      "conversionLinker": true,
+      "disableAdPersonalization": true,
+      "allowEnhancedConversions": false,
+      "whitelistedEvents": [{ "eventName": "login page" }],
+      "blacklistedEvents": [{ "eventName": "" }],
+      "pageLoadConversions": [{ "conversionLabel": "ofwinqeoqwefnoewqo9", "name": "test" }],
+      "clickEventConversions": [{ "conversionLabel": "1qinqwqoqewfnoewqo9", "name": "clickTest" }],
+      "useNativeSDK": { "web": true },
+      "dynamicRemarketing": { "web": true },
+      "oneTrustCookieCategories": {
+        "someunsupportedsourcetype": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "web": [
+          {
+            "someunsupportedkey": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          "not an object"
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "oneTrustCookieCategories must NOT have additional properties",
+      "oneTrustCookieCategories.web.0 must NOT have additional properties",
+      "oneTrustCookieCategories.web.1.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.web.2.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.web.3 must be object"
+    ]
   }
 ]
