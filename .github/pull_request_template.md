@@ -16,15 +16,11 @@ If the pull request is a **bug-fix**, **enhancement** or a **refactor**, please 
 
 If the pull request is a **new feature**,
 
-### Any technical or performance related pointers to consider with the change?
-
-N/A
-
 ### Any new dependencies introduced with this change?
 
 N/A
 
-### Any new generic utility introduced or modified. Please explain the changes.
+### Any new checks got introduced or modified in test suites. Please explain the changes.
 
 N/A
 
@@ -40,15 +36,19 @@ N/A
 
 ### Developer checklist
 
+- [ ] My code follows the style guidelines of this project
+
 - [ ] **No breaking changes are being introduced.**
 
-- [ ] Are all related docs linked with the PR?
+- [ ] Are all related docs & task tracker issues linked with the PR?
 
 - [ ] Are all changes manually tested?
 
 - [ ] Does this change require any documentation changes?
 
-- [ ] Are relevant schema tests added or updated?
+- [ ] I have executed schemaGenerator tests and updated schema if needed
+
+- [ ] Are sensitive fields marked as secret in definition config ?
 
 ### Reviewer checklist
 
