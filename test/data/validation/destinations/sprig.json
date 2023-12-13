@@ -24,7 +24,7 @@
       ]
     },
     "result": false,
-    "err": [" must have required property 'apiKey'", "oneTrustCookieCategories must be object"]
+    "err": ["oneTrustCookieCategories must be object"]
   },
   {
     "config": {
@@ -34,8 +34,8 @@
           "eventName": ""
         }
       ],
-      "useNativeSDK": {
-        "web": true
+      "connectionMode": {
+        "web": "device"
       },
       "blacklistedEvents": [
         {
@@ -44,7 +44,13 @@
       ]
     },
     "result": false,
-    "err": ["apiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""]
+    "err": [
+      " must have required property 'environmentId'",
+      " must match \"then\" schema",
+      "apiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
+      " must match \"then\" schema",
+      " must match a schema in anyOf"
+    ]
   },
   {
     "config": {
@@ -69,16 +75,27 @@
           },
           {
             "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "flutter": [
+          {
+            "oneTrustCookieCategory": "C0003"
           },
           {
-            "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
-          },
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "android": [
           {
             "oneTrustCookieCategory": ""
-          },
+          }
+        ],
+        "ios": [
           {
             "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
-          },
+          }
+        ],
+        "cordova": [
           {
             "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
           }
@@ -117,14 +134,36 @@
             "someunsupportedkey": "C0001"
           },
           {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "flutter": [],
+        "android": [
+          {
             "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "ios": [
           {
             "oneTrustCookieCategory": {
               "not": "a string"
             }
           },
-          "not an object"
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "cordova": {
+          "not": "an array"
+        },
+        "reactnative": [
+          "not an object",
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
         ]
       }
     },
@@ -132,9 +171,11 @@
     "err": [
       "oneTrustCookieCategories must NOT have additional properties",
       "oneTrustCookieCategories.web.0 must NOT have additional properties",
-      "oneTrustCookieCategories.web.1.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
-      "oneTrustCookieCategories.web.2.oneTrustCookieCategory must be string",
-      "oneTrustCookieCategories.web.3 must be object"
+      "oneTrustCookieCategories.android.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.ios.0.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.reactnative.0 must be object",
+      "oneTrustCookieCategories.flutter must NOT have fewer than 1 items",
+      "oneTrustCookieCategories.cordova must be array"
     ]
   }
 ]

@@ -14,13 +14,37 @@
                 "fields": [
                   {
                     "type": "textInput",
-                    "label": "API Key",
-                    "note": "Enter your sprig api key. Find this under your sprig dashboard > integrations > installation > javascript",
+                    "label": "Public API Key",
+                    "note": "Enter your sprig Public API Key. Find this under your sprig dashboard > integrations > Enrichment > Data Import API",
                     "configKey": "apiKey",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-                    "regexErrorMessage": "Invalid API Key",
+                    "regexErrorMessage": "Invalid Public API Key",
+                    "placeholder": "e.g: cc8de3fb-e4ff-40d9-81ec-5588967a980c",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Environment ID",
+                    "note": "Enter your sprig Environment ID. Find this under your sprig dashboard > integrations > installation > javascript",
+                    "configKey": "environmentId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Environment ID",
                     "placeholder": "e.g: EKfGdrD2IbPr",
-                    "secret": true
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.webDevice",
+                          "value": true
+                        }
+                      ]
+                    }
                   }
                 ]
               }
@@ -38,10 +62,7 @@
                   }
                 ],
                 "icon": "sliders",
-                "fields": [],
-                "defaultConnectionModes": {
-                  "web": "device"
-                }
+                "fields": []
               }
             ]
           }
