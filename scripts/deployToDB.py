@@ -19,9 +19,9 @@ import jsondiff
 # ENV VARIABLES
 CONTROL_PLANE_URL=sys.argv[1]
 print(CONTROL_PLANE_URL)
-USERNAME=os.environ['API_USER'] #sys.argv[2]
+USERNAME=sys.argv[2]
 print(USERNAME)
-PASSWORD=os.environ['API_PASSWORD'] #sys.argv[3]
+PASSWORD=sys.argv[3]
 #print(PASSWORD)
 #########################
 # CONSTANTS
@@ -157,4 +157,3 @@ if __name__ == '__main__':
     print(wht_final_report)
     print("Wht lib project Stale Config Report")
     print(get_stale_data('wht-lib-project', wht_final_report))
-    
