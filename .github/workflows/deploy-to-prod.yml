@@ -39,7 +39,7 @@ jobs:
           echo "version=$version" >> $GITHUB_OUTPUT
 
   deploy:
-    needs: [ extract-version ]
+    needs: [extract-version]
     name: Deployment To Production DB
     # Only merged pull requests from release candidate branches and external workflow calls must trigger
     if: (((startsWith(github.event.pull_request.head.ref, 'release/') || startsWith(github.event.pull_request.head.ref, 'hotfix-release/')) && github.event.pull_request.merged == true) || github.event_name == 'workflow_call')
