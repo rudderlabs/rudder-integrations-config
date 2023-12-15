@@ -18,7 +18,7 @@ import argparse
 
 CONFIG_DIR = 'src/configurations'
 
-EXCLUDED_DEST = ['postgres', 'bq', 'azure_synapse', 'clickhouse', 'deltalake', 'kafka']
+EXCLUDED_DEST = ['postgres', 'bq']
 
 class FieldTypeEnum(Enum):
     STRING = "string"
@@ -73,6 +73,8 @@ def generalize_regex_pattern(field):
         if defaultEnvPattern not in pattern and (('value' not in field or field['value'] != 'purpose') and ('configKey' not in field or field['configKey'] != 'purpose')):
             indexToPlace = pattern.find(defaultSubPattern) + len(defaultSubPattern)
             pattern = pattern[:indexToPlace] + '|' + defaultEnvPattern + pattern[indexToPlace:]
+    # TODO: we should not use a case here for the individual properties. Just pass the desired pattern as regex property
+    #  in ketch purpose fields and delete next case
     elif ('value' in field and field['value'] == 'purpose') or ('configKey' in field and field['configKey'] == 'purpose'):
         pattern = '^(.{0,100})$'
     else:
@@ -102,6 +104,25 @@ def is_dest_field_dependent_on_source(field, dbConfig, schema_field_name):
             return True
     return False
 
+def is_key_present_in_dest_config(dbConfig, key):
+    """Checks if the given key is present in destConfig of dbConfig.
+
+    Args:
+        dbConfig (object): Configurations of db-config.json.
+        key (string): key to be searched in destConfig.
+
+    Returns:
+        boolean: True if the key is present in destConfig else, False.
+    """    
+    if not dbConfig:
+        return False
+    
+    if "destConfig" in dbConfig:
+        for configSection in dbConfig["destConfig"]:
+            if key in dbConfig["destConfig"][configSection]:
+                return True
+    return False
+
 def is_field_present_in_default_config(field, dbConfig, schema_field_name):
     """Checks if the given field is present in defaultConfig list present in dbConfig.
 
@@ -121,7 +142,7 @@ def is_field_present_in_default_config(field, dbConfig, schema_field_name):
     return False
 
 def generate_schema_for_default_checkbox(field, dbConfig, schema_field_name):
-    """Creates an schema object of defaultCheckbox.
+    """Creates a schema object of defaultCheckbox.
 
     Args:
         field (object): Individual field in ui-config.
@@ -144,7 +165,7 @@ def generate_schema_for_default_checkbox(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_checkbox(field, dbConfig, schema_field_name):
-    """Creates an schema object of checkbox.
+    """Creates a schema object of checkbox.
 
     Args:
         field (object): Individual field in ui-config.
@@ -173,7 +194,7 @@ def generate_schema_for_checkbox(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_textinput(field, dbConfig, schema_field_name):
-    """Creates an schema object of textinput.
+    """Creates a schema object of textinput.
 
     Args:
         field (object): Individual field in ui-config.
@@ -204,7 +225,7 @@ def generate_schema_for_textinput(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_textarea_input(field, dbConfig, schema_field_name):
-    """Creates an schema object of textareaInput.
+    """Creates a schema object of textareaInput.
 
     Args:
         field (object): Individual field in ui-config.
@@ -222,7 +243,7 @@ def generate_schema_for_textarea_input(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_single_select(field, dbConfig, schema_field_name):
-    """Creates an schema object of singleSelect.
+    """Creates a schema object of singleSelect.
 
     Args:
         field (object): Individual field in ui-config.
@@ -269,7 +290,7 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
-    """Creates an schema object of dynamicCustomForm.
+    """Creates a schema object of dynamicCustomForm.
 
     Args:
         field (object): Individual field in ui-config.
@@ -285,34 +306,106 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     dynamicCustomFormItemObj = {}
     dynamicCustomFormItemObj["type"] = FieldTypeEnum.OBJECT.value
     dynamicCustomFormItemObj["properties"] = {}
-    for customField in field["customFields"]:
-        customeFieldSchemaObj = uiTypetoSchemaFn.get(customField["type"])(customField, dbConfig, schema_field_name)
+    dynamicCustomFormItemObj["additionalProperties"] = False
+    allOfSchemaObj = {}
+
+    # For old schema types customFields contains the children, for v2 its is rowFields
+    customFieldsKey = "customFields"
+    if "rowFields" in field:
+        customFieldsKey = "rowFields"
+
+    allOfSchemaObj = generate_schema_for_dynamic_custom_form_allOf(field[customFieldsKey], dbConfig, schema_field_name)
+
+    for customField in field[customFieldsKey]:
+        customFieldSchemaObj = uiTypetoSchemaFn.get(customField["type"])(customField, dbConfig, schema_field_name)
         isCustomFieldDependentOnSource = is_dest_field_dependent_on_source(customField, dbConfig, schema_field_name)
-        if 'pattern' not in customeFieldSchemaObj and not isCustomFieldDependentOnSource and customeFieldSchemaObj["type"]==FieldTypeEnum.STRING.value:
-            customeFieldSchemaObj["pattern"] = generalize_regex_pattern(customField)
+
+        if "preRequisites" in customField:
+            continue
+
+        if 'pattern' not in customFieldSchemaObj and not isCustomFieldDependentOnSource and customFieldSchemaObj["type"] == FieldTypeEnum.STRING.value and customField["type"] != "singleSelect" and customField["type"] != "dynamicSelectForm":
+            customFieldSchemaObj["pattern"] = generalize_regex_pattern(customField)
+
         # If the custom field is source dependent, we remove the source keys as it's not required inside custom fields, rather they need to be moved to top.
         if isCustomFieldDependentOnSource:
             for sourceType in dbConfig["supportedSourceTypes"]:
                 if sourceType in dbConfig["destConfig"] and field[schema_field_name] in dbConfig["destConfig"][sourceType]:
-                    customeFieldSchemaObj = customeFieldSchemaObj["properties"][sourceType]
+                    customFieldSchemaObj = customFieldSchemaObj["properties"][sourceType]
                     break
-        dynamicCustomFormItemObj["properties"][customField[schema_field_name]] =  customeFieldSchemaObj
+        dynamicCustomFormItemObj["properties"][customField[schema_field_name]] = customFieldSchemaObj
+
+    if allOfSchemaObj:
+        dynamicCustomFormItemObj['allOf'] = allOfSchemaObj
 
     dynamicCustomFormObj["items"] = dynamicCustomFormItemObj
+    dynamicCustomFormObj["minItems"] = 1
     isSourceDependent = is_dest_field_dependent_on_source(field, dbConfig, schema_field_name)
+
     # If the field is source dependent, new schema object is created by setting the fields inside the source.
     if isSourceDependent:
         newDynamicCustomFormObj = {"type": FieldTypeEnum.OBJECT.value}
         newDynamicCustomFormObj["properties"] = {}
+        newDynamicCustomFormObj["additionalProperties"] = False
         for sourceType in dbConfig["supportedSourceTypes"]:
             if sourceType in dbConfig["destConfig"] and field[schema_field_name] in dbConfig["destConfig"][sourceType]:
                 newDynamicCustomFormObj["properties"][sourceType] = dynamicCustomFormObj
         dynamicCustomFormObj = newDynamicCustomFormObj
+
     return dynamicCustomFormObj
 
 
+
+def generate_schema_for_dynamic_custom_form_allOf(customFields, dbConfig, schema_field_name):
+    """Creates the allOf structure of schema, empty if not required.
+    - Finds the list of unique preRequisites.
+    - For each unique preRequisites, the properties are found by matching the current preRequisites.
+    - preRequisites becomes if block and corresponding properties become then block.
+
+    Args:
+        customFields (collection): child fields from file content of ui-config.json.
+        dbConfig (object): Configurations of db-config.json.
+        schema_field_name (string): Specifies which key has the field's name in schema.
+            For old schema types, it is 'value' else 'configKey'.
+
+    Returns:
+        object: allOf object of schema
+    """
+    allOfItemList = []
+    preRequisitesList = []
+
+    for field in customFields:
+        if "preRequisites" not in field:
+            continue
+        isPresent = False
+        for preRequisites in preRequisitesList:
+            if compare_pre_requisite_fields(preRequisites, field["preRequisites"]["fields"], True):
+                isPresent = True
+                break
+        if not isPresent:
+            preRequisitesList.append(field["preRequisites"]["fields"])
+
+    for preRequisites in preRequisitesList:
+        ifObj = generate_if_object(preRequisites, True)
+        thenObj = {"properties": {}, "required": []}
+        allOfItemObj = {"if": ifObj}
+
+        for field in customFields:
+            if "preRequisites" not in field:
+                continue
+            if compare_pre_requisite_fields(field["preRequisites"]["fields"], preRequisites, True):
+                thenObj["properties"][field[schema_field_name]] = uiTypetoSchemaFn.get(field["type"])(field, dbConfig, schema_field_name)
+                if "required" in field and field["required"] == True:
+                    thenObj["required"].append(field[schema_field_name])
+        allOfItemObj["then"] = thenObj
+        allOfItemList.append(allOfItemObj)
+
+    # Calling anyOf to check if two conditions can be grouped as anyOf.
+    allOfItemList = generate_schema_for_anyOf(allOfItemList, schema_field_name)
+    return allOfItemList
+
+
 def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
-    """Creates an schema object of dynamicForm.
+    """Creates a schema object of dynamicForm.
 
     Args:
         field (object): Individual field in ui-config.
@@ -363,7 +456,7 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_dynamic_select_form(field, dbConfig, schema_field_name):
-    """Creates an schema object of dynamicSelectForm.
+    """Creates a schema object of dynamicSelectForm.
 
     Args:
         field (object): Individual field in ui-config.
@@ -377,7 +470,7 @@ def generate_schema_for_dynamic_select_form(field, dbConfig, schema_field_name):
     return generate_schema_for_dynamic_form(field, dbConfig, schema_field_name)
 
 def generate_schema_for_mapping(field, dbConfig, schema_field_name):
-    """Creates an schema object of mapping.
+    """Creates a schema object of mapping.
 
     Args:
         field (object): Individual field in ui-config.
@@ -392,7 +485,7 @@ def generate_schema_for_mapping(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
-    """Creates an schema object of tagInput.
+    """Creates a schema object of tagInput.
 
     Args:
         field (object): Individual field in ui-config.
@@ -414,13 +507,16 @@ def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
         }
     }
     tagItem['properties'] = tagItemProps
+    tagItem['additionalProperties'] = False
     tagObject["items"] = tagItem
+    tagObject["minItems"] = 1
     isSourceDependent = is_dest_field_dependent_on_source(field, dbConfig, schema_field_name)
     if isSourceDependent:
         tagObjectCopy = tagObject
         tagObject = {}
         tagObject = {"type": FieldTypeEnum.OBJECT.value}
         tagObject["properties"] = {}
+        tagObject["additionalProperties"] = False
         for sourceType in dbConfig["supportedSourceTypes"]:
             if sourceType in dbConfig["destConfig"] and field[schema_field_name] in dbConfig["destConfig"][sourceType]:
                 tagObject["properties"][sourceType] = tagObjectCopy
@@ -428,7 +524,7 @@ def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_time_range_picker(field, dbConfig, schema_field_name):
-    """Creates an schema object of timeRangePicker.
+    """Creates a schema object of timeRangePicker.
 
     Args:
         field (object): Individual field in ui-config.
@@ -451,7 +547,7 @@ def generate_schema_for_time_range_picker(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_time_picker(field, dbConfig, schema_field_name):
-    """Creates an schema object of timePicker.
+    """Creates a schema object of timePicker.
 
     Args:
         field (object): Individual field in ui-config.
@@ -466,26 +562,35 @@ def generate_schema_for_time_picker(field, dbConfig, schema_field_name):
         "type": FieldTypeEnum.STRING.value
     }
 
-def compare_pre_requisite_fields(fieldA, fieldB):
-    """Compares two preRequisiteFields fieldA and fieldB for each property and checks if there "selectedValue" match. 
+
+def compare_pre_requisite_fields(fieldA, fieldB, isV2 = False):
+    """Compares two preRequisiteFields fieldA and fieldB for each property and checks if their value matches.
 
     Args:
-        fieldA (list or object): contains two properties, 'name' and 'selectedValue'.
-        fieldB (list or object):
+        fieldA (list or object): contains two properties representing 'name' and 'selectedValue'.
+        fieldB (list or object): contains two properties representing 'name' and 'selectedValue'.
+        isV2 (bool): determines if new property names should be used
 
     Returns:
         boolean: If all the properties have the same 'name' and 'selectedValue', then it returns True else False.
-    """    
+    """
+    valueKey = 'selectedValue'
+    nameKey = 'name'
+
+    if isV2:
+        valueKey = 'value'
+        nameKey = 'configKey'
+
     if type(fieldA) != type(fieldB):
         return False
     elif type(fieldA) == list:
         if len(fieldA) != len(fieldB):
             return False
         for i in range(0, len(fieldA)):
-            if fieldA[i]['name'] != fieldB[i]['name'] or fieldA[i]['selectedValue'] != fieldB[i]['selectedValue']:
+            if fieldA[i][nameKey] != fieldB[i][nameKey] or fieldA[i][valueKey] != fieldB[i][valueKey]:
                 return False
     else:
-        if fieldA['name'] != fieldB['name'] or fieldA['selectedValue'] != fieldB['selectedValue']:
+        if fieldA[nameKey] != fieldB[nameKey] or fieldA[valueKey] != fieldB[valueKey]:
                 return False
     return True
 
@@ -514,27 +619,35 @@ def get_unique_pre_requisite_fields(uiConfig):
     return preRequisiteFieldsList
 
 
-def generate_if_object(preRequisiteField):
+def generate_if_object(preRequisiteField, isV2 = False):
     """Creates an if object for the given preRequisiteField. The preRequisiteField becomes an if condition in the schema.
 
     Args:
         preRequisiteField (list or object): contains two properties, 'name' and 'selectedValue'.
+        isV2 (bool): if it should use the v2 or the legacy property key names
 
     Returns:
         object: if block for given preRequisiteField.
-    """    
+    """
     ifObj = {"properties": {}, "required": []}
+    valueKey = 'selectedValue'
+    nameKey = 'name'
+
+    if isV2:
+        valueKey = 'value'
+        nameKey = 'configKey'
+
     if type(preRequisiteField) == list:
         for field in preRequisiteField:
-            ifObj["properties"][field["name"]] = {
-                "const": field["selectedValue"]
+            ifObj["properties"][field[nameKey]] = {
+                "const": field[valueKey]
             }
-            ifObj["required"].append(field["name"])
+            ifObj["required"].append(field[nameKey])
     else:
-        ifObj["properties"][preRequisiteField["name"]] = {
-            "const": preRequisiteField["selectedValue"]
+        ifObj["properties"][preRequisiteField[nameKey]] = {
+            "const": preRequisiteField[valueKey]
         }
-        ifObj["required"].append(preRequisiteField["name"])
+        ifObj["required"].append(preRequisiteField[nameKey])
     return ifObj
 
 
@@ -786,7 +899,8 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
                     schemaObject['required'].append(field['configKey'])
 
             # default properties in new ui-config based schemas.
-            schemaObject['properties']['useNativeSDK'] = generate_schema_for_checkbox({"type":"checkbox", 
+            if is_key_present_in_dest_config(dbConfig, 'useNativeSDK'):
+                schemaObject['properties']['useNativeSDK'] = generate_schema_for_checkbox({"type":"checkbox", 
                                                                            "value":"useNativeSDK"}, dbConfig, "value")
             schemaObject['properties']['connectionMode'] = generate_connection_mode(dbConfig)
         else:
@@ -1021,6 +1135,9 @@ def get_schema_diff(name, selector, shouldUpdateSchema=False):
     """    
     file_selectors = ['db-config.json', 'ui-config.json', 'schema.json']
     directory = f'./{CONFIG_DIR}/{selector}s/{name}'
+    if not os.path.isdir(directory):
+        return
+
     available_files = os.listdir(directory)
     file_content = {}
     for file_selector in file_selectors:
@@ -1050,7 +1167,7 @@ if __name__ == '__main__':
         CONFIG_DIR = 'src/configurations'
         current_items = os.listdir(f'./{CONFIG_DIR}/{selector}s')
         for name in current_items:
-            get_schema_diff(name, selector)
+            get_schema_diff(name, selector, shouldUpdateSchema)
         
     else:
         name = args.name 
