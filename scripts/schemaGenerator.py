@@ -968,7 +968,7 @@ def generate_schema(uiConfig, dbConfig, name, selector, shouldUpdateSchema):
         # Define the relative path
         relative_path = f'src/configurations/{selector}s/{name.lower()}/schema.json'
         file_path = os.path.join(directory, relative_path)
-        new_content = json.dumps(newSchema)
+        new_content = json.dumps(newSchema, indent=2)
         # Write the new content
         with open(file_path, 'w') as file:
             file.write(new_content)
