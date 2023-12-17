@@ -28,7 +28,10 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "password": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*" },
+      "password": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
+      },
       "namespace": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
@@ -38,12 +41,18 @@
         "enum": ["30", "60", "180", "360", "720", "1440"],
         "default": "30"
       },
-      "syncStartAt": { "type": "string" },
+      "syncStartAt": {
+        "type": "string"
+      },
       "excludeWindow": {
         "type": "object",
         "properties": {
-          "excludeWindowStartTime": { "type": "string" },
-          "excludeWindowEndTime": { "type": "string" }
+          "excludeWindowStartTime": {
+            "type": "string"
+          },
+          "excludeWindowEndTime": {
+            "type": "string"
+          }
         },
         "required": ["excludeWindowStartTime", "excludeWindowEndTime"]
       },
@@ -51,7 +60,10 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.*)$"
       },
-      "useRudderStorage": { "type": "boolean", "default": false },
+      "useRudderStorage": {
+        "type": "boolean",
+        "default": false
+      },
       "oneTrustCookieCategories": {
         "type": "object",
         "properties": {
@@ -160,7 +172,11 @@
     "allOf": [
       {
         "if": {
-          "properties": { "useRudderStorage": { "const": false } },
+          "properties": {
+            "useRudderStorage": {
+              "const": false
+            }
+          },
           "required": ["useRudderStorage"]
         },
         "then": {
@@ -173,7 +189,10 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([^\\s]{0,100})$"
             },
-            "enableSSE": { "type": "boolean", "default": false }
+            "enableSSE": {
+              "type": "boolean",
+              "default": false
+            }
           },
           "required": ["bucketName"],
           "anyOf": [
@@ -187,7 +206,9 @@
                   "type": "string",
                   "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
                 },
-                "roleBasedAuth": { "const": false }
+                "roleBasedAuth": {
+                  "const": false
+                }
               },
               "required": []
             },
@@ -197,7 +218,9 @@
                   "type": "string",
                   "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
                 },
-                "roleBasedAuth": { "const": true }
+                "roleBasedAuth": {
+                  "const": true
+                }
               },
               "required": ["iamRoleARN", "roleBasedAuth"]
             }
@@ -206,11 +229,20 @@
       },
       {
         "if": {
-          "properties": { "useRudderStorage": { "const": false } },
+          "properties": {
+            "useRudderStorage": {
+              "const": false
+            }
+          },
           "required": ["useRudderStorage"]
         },
         "then": {
-          "properties": { "roleBasedAuth": { "type": "boolean", "default": true } },
+          "properties": {
+            "roleBasedAuth": {
+              "type": "boolean",
+              "default": true
+            }
+          },
           "required": []
         }
       }

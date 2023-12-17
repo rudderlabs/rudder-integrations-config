@@ -12,8 +12,18 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
-      "recordQualarooEvents": { "type": "boolean", "default": false },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "recordQualarooEvents": {
+        "type": "boolean",
+        "default": false
+      },
       "eventFilteringOption": {
         "type": "string",
         "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
@@ -67,14 +77,21 @@
     "allOf": [
       {
         "if": {
-          "properties": { "recordQualarooEvents": { "const": true } },
+          "properties": {
+            "recordQualarooEvents": {
+              "const": true
+            }
+          },
           "required": ["recordQualarooEvents"]
         },
         "then": {
           "properties": {
             "eventsList": {
               "type": "array",
-              "items": { "type": "string", "enum": ["show", "close", "submit", "noTargetMatch"] },
+              "items": {
+                "type": "string",
+                "enum": ["show", "close", "submit", "noTargetMatch"]
+              },
               "default": ["show"]
             }
           },
@@ -83,19 +100,32 @@
       },
       {
         "if": {
-          "properties": { "recordQualarooEvents": { "const": true } },
+          "properties": {
+            "recordQualarooEvents": {
+              "const": true
+            }
+          },
           "required": ["recordQualarooEvents"]
         },
         "then": {
-          "properties": { "updateEventNames": { "type": "boolean", "default": false } },
+          "properties": {
+            "updateEventNames": {
+              "type": "boolean",
+              "default": false
+            }
+          },
           "required": []
         }
       },
       {
         "if": {
           "properties": {
-            "recordQualarooEvents": { "const": true },
-            "updateEventNames": { "const": true }
+            "recordQualarooEvents": {
+              "const": true
+            },
+            "updateEventNames": {
+              "const": true
+            }
           },
           "required": ["recordQualarooEvents", "updateEventNames"]
         },

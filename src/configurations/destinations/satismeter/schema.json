@@ -8,9 +8,22 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
-      "identifyAnonymousUsers": { "type": "boolean", "default": false },
-      "recordSatismeterEvents": { "type": "boolean", "default": false },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "identifyAnonymousUsers": {
+        "type": "boolean",
+        "default": false
+      },
+      "recordSatismeterEvents": {
+        "type": "boolean",
+        "default": false
+      },
       "eventFilteringOption": {
         "type": "string",
         "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
@@ -64,14 +77,21 @@
     "allOf": [
       {
         "if": {
-          "properties": { "recordSatismeterEvents": { "const": true } },
+          "properties": {
+            "recordSatismeterEvents": {
+              "const": true
+            }
+          },
           "required": ["recordSatismeterEvents"]
         },
         "then": {
           "properties": {
             "eventsList": {
               "type": "array",
-              "items": { "type": "string", "enum": ["display", "dismiss", "progress", "complete"] },
+              "items": {
+                "type": "string",
+                "enum": ["display", "dismiss", "progress", "complete"]
+              },
               "default": ["display"]
             }
           },
@@ -80,19 +100,32 @@
       },
       {
         "if": {
-          "properties": { "recordSatismeterEvents": { "const": true } },
+          "properties": {
+            "recordSatismeterEvents": {
+              "const": true
+            }
+          },
           "required": ["recordSatismeterEvents"]
         },
         "then": {
-          "properties": { "updateEventNames": { "type": "boolean", "default": false } },
+          "properties": {
+            "updateEventNames": {
+              "type": "boolean",
+              "default": false
+            }
+          },
           "required": []
         }
       },
       {
         "if": {
           "properties": {
-            "recordSatismeterEvents": { "const": true },
-            "updateEventNames": { "const": true }
+            "recordSatismeterEvents": {
+              "const": true
+            },
+            "updateEventNames": {
+              "const": true
+            }
           },
           "required": ["recordSatismeterEvents", "updateEventNames"]
         },

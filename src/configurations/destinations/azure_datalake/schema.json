@@ -20,13 +20,18 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "useSASTokens": { "type": "boolean", "default": false },
+      "useSASTokens": {
+        "type": "boolean",
+        "default": false
+      },
       "syncFrequency": {
         "type": "string",
         "enum": ["30", "60", "180", "360", "720", "1440"],
         "default": "30"
       },
-      "syncStartAt": { "type": "string" },
+      "syncStartAt": {
+        "type": "string"
+      },
       "oneTrustCookieCategories": {
         "type": "object",
         "properties": {
@@ -135,7 +140,11 @@
     "allOf": [
       {
         "if": {
-          "properties": { "useSASTokens": { "const": false } },
+          "properties": {
+            "useSASTokens": {
+              "const": false
+            }
+          },
           "required": ["useSASTokens"]
         },
         "then": {
@@ -144,20 +153,31 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
             },
-            "useSASTokens": { "const": false }
+            "useSASTokens": {
+              "const": false
+            }
           },
           "required": ["accountKey"]
         }
       },
       {
-        "if": { "properties": { "useSASTokens": { "const": true } }, "required": ["useSASTokens"] },
+        "if": {
+          "properties": {
+            "useSASTokens": {
+              "const": true
+            }
+          },
+          "required": ["useSASTokens"]
+        },
         "then": {
           "properties": {
             "sasToken": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.+)$"
             },
-            "useSASTokens": { "const": true }
+            "useSASTokens": {
+              "const": true
+            }
           },
           "required": ["sasToken", "useSASTokens"]
         }
