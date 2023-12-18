@@ -1085,7 +1085,7 @@ if __name__ == '__main__':
         CONFIG_DIR = 'src/configurations'
         current_items = os.listdir(f'./{CONFIG_DIR}/{selector}s')
         for name in current_items:
-            get_schema_diff(name, selector)
+            get_schema_diff(name, selector, shouldUpdateSchema)
         
     else:
         name = args.name 
