@@ -305,18 +305,35 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     dynamicCustomFormItemObj = {}
     dynamicCustomFormItemObj["type"] = FieldTypeEnum.OBJECT.value
     dynamicCustomFormItemObj["properties"] = {}
-    for customField in field["customFields"]:
-        customeFieldSchemaObj = uiTypetoSchemaFn.get(customField["type"])(customField, dbConfig, schema_field_name)
+    allOfSchemaObj = {}
+
+    # For old schema types customFields contains the children, for v2 its is rowFields
+    customFieldsKey = "customFields"
+    if "rowFields" in field:
+        customFieldsKey = "rowFields"
+
+    allOfSchemaObj = generate_schema_for_dynamic_custom_form_allOf(field[customFieldsKey], dbConfig, schema_field_name)
+
+    for customField in field[customFieldsKey]:
+        customFieldSchemaObj = uiTypetoSchemaFn.get(customField["type"])(customField, dbConfig, schema_field_name)
         isCustomFieldDependentOnSource = is_dest_field_dependent_on_source(customField, dbConfig, schema_field_name)
-        if 'pattern' not in customeFieldSchemaObj and not isCustomFieldDependentOnSource and customeFieldSchemaObj["type"]==FieldTypeEnum.STRING.value:
-            customeFieldSchemaObj["pattern"] = generalize_regex_pattern(customField)
+
+        if "preRequisites" in customField:
+            continue
+
+        if 'pattern' not in customFieldSchemaObj and not isCustomFieldDependentOnSource and customFieldSchemaObj["type"] == FieldTypeEnum.STRING.value and customField["type"] != "singleSelect" and customField["type"] != "dynamicSelectForm":
+            customFieldSchemaObj["pattern"] = generalize_regex_pattern(customField)
+
         # If the custom field is source dependent, we remove the source keys as it's not required inside custom fields, rather they need to be moved to top.
         if isCustomFieldDependentOnSource:
             for sourceType in dbConfig["supportedSourceTypes"]:
                 if sourceType in dbConfig["destConfig"] and field[schema_field_name] in dbConfig["destConfig"][sourceType]:
-                    customeFieldSchemaObj = customeFieldSchemaObj["properties"][sourceType]
+                    customFieldSchemaObj = customFieldSchemaObj["properties"][sourceType]
                     break
-        dynamicCustomFormItemObj["properties"][customField[schema_field_name]] =  customeFieldSchemaObj
+        dynamicCustomFormItemObj["properties"][customField[schema_field_name]] = customFieldSchemaObj
+
+    if allOfSchemaObj:
+        dynamicCustomFormItemObj['allOf'] = allOfSchemaObj
 
     dynamicCustomFormObj["items"] = dynamicCustomFormItemObj
     isSourceDependent = is_dest_field_dependent_on_source(field, dbConfig, schema_field_name)
@@ -329,6 +346,56 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
                 newDynamicCustomFormObj["properties"][sourceType] = dynamicCustomFormObj
         dynamicCustomFormObj = newDynamicCustomFormObj
     return dynamicCustomFormObj
+
+
+
+def generate_schema_for_dynamic_custom_form_allOf(customFields, dbConfig, schema_field_name):
+    """Creates the allOf structure of schema, empty if not required.
+    - Finds the list of unique preRequisites.
+    - For each unique preRequisites, the properties are found by matching the current preRequisites.
+    - preRequisites becomes if block and corresponding properties become then block.
+
+    Args:
+        customFields (collection): child fields from file content of ui-config.json.
+        dbConfig (object): Configurations of db-config.json.
+        schema_field_name (string): Specifies which key has the field's name in schema.
+            For old schema types, it is 'value' else 'configKey'.
+
+    Returns:
+        object: allOf object of schema
+    """
+    allOfItemList = []
+    preRequisitesList = []
+
+    for field in customFields:
+        if "preRequisites" not in field:
+            continue
+        isPresent = False
+        for preRequisites in preRequisitesList:
+            if compare_pre_requisite_fields(preRequisites, field["preRequisites"]["fields"], True):
+                isPresent = True
+                break
+        if not isPresent:
+            preRequisitesList.append(field["preRequisites"]["fields"])
+
+    for preRequisites in preRequisitesList:
+        ifObj = generate_if_object(preRequisites, True)
+        thenObj = {"properties": {}, "required": []}
+        allOfItemObj = {"if": ifObj}
+
+        for field in customFields:
+            if "preRequisites" not in field:
+                continue
+            if compare_pre_requisite_fields(field["preRequisites"]["fields"], preRequisites, True):
+                thenObj["properties"][field[schema_field_name]] = uiTypetoSchemaFn.get(field["type"])(field, dbConfig, schema_field_name)
+                if "required" in field and field["required"] == True:
+                    thenObj["required"].append(field[schema_field_name])
+        allOfItemObj["then"] = thenObj
+        allOfItemList.append(allOfItemObj)
+
+    # Calling anyOf to check if two conditions can be grouped as anyOf.
+    allOfItemList = generate_schema_for_anyOf(allOfItemList, schema_field_name)
+    return allOfItemList
 
 
 def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
@@ -486,26 +553,34 @@ def generate_schema_for_time_picker(field, dbConfig, schema_field_name):
         "type": FieldTypeEnum.STRING.value
     }
 
-def compare_pre_requisite_fields(fieldA, fieldB):
-    """Compares two preRequisiteFields fieldA and fieldB for each property and checks if there "selectedValue" match. 
+def compare_pre_requisite_fields(fieldA, fieldB, isV2 = False):
+    """Compares two preRequisiteFields fieldA and fieldB for each property and checks if their value matches.
 
     Args:
-        fieldA (list or object): contains two properties, 'name' and 'selectedValue'.
-        fieldB (list or object):
+        fieldA (list or object): contains two properties representing 'name' and 'selectedValue'.
+        fieldB (list or object): contains two properties representing 'name' and 'selectedValue'.
+        isV2 (bool): determines if new property names should be used
 
     Returns:
         boolean: If all the properties have the same 'name' and 'selectedValue', then it returns True else False.
-    """    
+    """
+    valueKey = 'selectedValue'
+    nameKey = 'name'
+
+    if isV2:
+        valueKey = 'value'
+        nameKey = 'configKey'
+
     if type(fieldA) != type(fieldB):
         return False
     elif type(fieldA) == list:
         if len(fieldA) != len(fieldB):
             return False
         for i in range(0, len(fieldA)):
-            if fieldA[i]['name'] != fieldB[i]['name'] or fieldA[i]['selectedValue'] != fieldB[i]['selectedValue']:
+            if fieldA[i][nameKey] != fieldB[i][nameKey] or fieldA[i][valueKey] != fieldB[i][valueKey]:
                 return False
     else:
-        if fieldA['name'] != fieldB['name'] or fieldA['selectedValue'] != fieldB['selectedValue']:
+        if fieldA[nameKey] != fieldB[nameKey] or fieldA[valueKey] != fieldB[valueKey]:
                 return False
     return True
 
@@ -534,27 +609,35 @@ def get_unique_pre_requisite_fields(uiConfig):
     return preRequisiteFieldsList
 
 
-def generate_if_object(preRequisiteField):
+def generate_if_object(preRequisiteField, isV2 = False):
     """Creates an if object for the given preRequisiteField. The preRequisiteField becomes an if condition in the schema.
 
     Args:
         preRequisiteField (list or object): contains two properties, 'name' and 'selectedValue'.
+        isV2 (bool): if it should use the v2 or the legacy property key names
 
     Returns:
         object: if block for given preRequisiteField.
-    """    
+    """
     ifObj = {"properties": {}, "required": []}
+    valueKey = 'selectedValue'
+    nameKey = 'name'
+
+    if isV2:
+        valueKey = 'value'
+        nameKey = 'configKey'
+
     if type(preRequisiteField) == list:
         for field in preRequisiteField:
-            ifObj["properties"][field["name"]] = {
-                "const": field["selectedValue"]
+            ifObj["properties"][field[nameKey]] = {
+                "const": field[valueKey]
             }
-            ifObj["required"].append(field["name"])
+            ifObj["required"].append(field[nameKey])
     else:
-        ifObj["properties"][preRequisiteField["name"]] = {
-            "const": preRequisiteField["selectedValue"]
+        ifObj["properties"][preRequisiteField[nameKey]] = {
+            "const": preRequisiteField[valueKey]
         }
-        ifObj["required"].append(preRequisiteField["name"])
+        ifObj["required"].append(preRequisiteField[nameKey])
     return ifObj
 
 
