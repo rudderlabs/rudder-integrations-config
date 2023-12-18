@@ -817,7 +817,8 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
                     schemaObject['required'].append(field['configKey'])
 
             # default properties in new ui-config based schemas.
-            schemaObject['properties']['useNativeSDK'] = generate_schema_for_checkbox({"type":"checkbox", 
+            if is_key_present_in_dest_config(dbConfig, 'useNativeSDK'):
+                schemaObject['properties']['useNativeSDK'] = generate_schema_for_checkbox({"type":"checkbox", 
                                                                            "value":"useNativeSDK"}, dbConfig, "value")
             schemaObject['properties']['connectionMode'] = generate_connection_mode(dbConfig)
         else:
