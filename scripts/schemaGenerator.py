@@ -594,18 +594,42 @@ def get_unique_pre_requisite_fields(uiConfig):
         list: containing unique preRequisiteFields.
     """    
     preRequisiteFieldsList = []
-    for group in uiConfig:
-        fields = group.get('fields', [])
-        for field in fields:
-            if "preRequisiteField" not in field:
-                continue
-            isPresent = False
-            for preRequisiteField in preRequisiteFieldsList:
-                if compare_pre_requisite_fields(preRequisiteField, field["preRequisiteField"]):
-                    isPresent = True
-                    break
-            if not isPresent:
-                preRequisiteFieldsList.append(field["preRequisiteField"])
+    if not is_old_format(uiConfig):
+        for template in uiConfig:
+            for templateEntry in uiConfig.get(template, []):
+                if "sections" not in templateEntry:
+                    continue
+                for section in templateEntry.get('sections', []):
+                    for group in section.get('groups', []):
+                        for field in group.get('fields', []):
+                            if "preRequisites" not in field or "fields" not in field["preRequisites"]:
+                                continue
+
+                            for preRequisite in field["preRequisites"]["fields"]:
+                                isPresent = False
+
+                                if '.' in preRequisite['configKey']:
+                                    continue
+
+                                for preRequisiteField in preRequisiteFieldsList:
+                                    if compare_pre_requisite_fields(preRequisiteField, preRequisite, True):
+                                        isPresent = True
+                                        break
+                                if not isPresent:
+                                    preRequisiteFieldsList.append(preRequisite)
+    else:
+        for group in uiConfig:
+            fields = group.get('fields', [])
+            for field in fields:
+                if "preRequisiteField" not in field:
+                    continue
+                isPresent = False
+                for preRequisiteField in preRequisiteFieldsList:
+                    if compare_pre_requisite_fields(preRequisiteField, field["preRequisiteField"]):
+                        isPresent = True
+                        break
+                if not isPresent:
+                    preRequisiteFieldsList.append(field["preRequisiteField"])
     return preRequisiteFieldsList
 
 
@@ -641,7 +665,7 @@ def generate_if_object(preRequisiteField, isV2 = False):
     return ifObj
 
 
-def generate_schema_for_allOf(uiConfig, dbConfig, schema_field_name):
+def generate_schema_for_allOf(uiConfig, dbConfig):
     """Creates the allOf structure of schema, empty if not required.
     - Finds the list of unique preRequisiteFields.
     - For each unique preRequisiteField, the properties are found by matching the current preRequisiteField.
@@ -650,27 +674,53 @@ def generate_schema_for_allOf(uiConfig, dbConfig, schema_field_name):
     Args:
         uiConfig (object): file content of ui-config.json.
         dbConfig (object): Configurations of db-config.json.
-        schema_field_name (string): Specifies which key has the field's name in schema. 
-            For old schema types, it is 'value' else 'configKey'.
 
     Returns:
         object: allOf object of schema
     """    
     allOfItemList = []
     preRequisiteFieldsList = get_unique_pre_requisite_fields(uiConfig)
+    schema_field_name = 'configKey'
     for preRequisiteField in preRequisiteFieldsList:
-        ifObj = generate_if_object(preRequisiteField)
-        thenObj = {"properties": {}, "required": []}
-        allOfItemObj = {"if": ifObj}
-        for group in uiConfig:
-            fields = group.get('fields', [])
-            for field in fields:
-                if "preRequisiteField" not in field:
-                    continue
-                if compare_pre_requisite_fields(field["preRequisiteField"], preRequisiteField):
-                    thenObj["properties"][field[schema_field_name]] = uiTypetoSchemaFn.get(field["type"])(field, dbConfig, schema_field_name)
-                    if "required" in field and field["required"] == True:
-                        thenObj["required"].append(field[schema_field_name])
+        if not is_old_format(uiConfig):
+            schema_field_name = 'configKey'
+            ifObj = generate_if_object(preRequisiteField, True)
+            thenObj = {"properties": {}, "required": []}
+            allOfItemObj = {"if": ifObj}
+            for template in uiConfig:
+                for templateEntry in uiConfig.get(template, []):
+                    if "sections" not in templateEntry:
+                        continue
+                    for section in templateEntry.get('sections', []):
+                        for group in section.get('groups', []):
+                            for field in group.get('fields', []):
+                                if "preRequisites" not in field or "fields" not in field["preRequisites"]:
+                                    continue
+
+                                generateFn = uiTypetoSchemaFn.get(field["type"])
+                                if not generateFn:
+                                    continue
+
+                                for preRequisite in field["preRequisites"]["fields"]:
+                                    if compare_pre_requisite_fields(preRequisite, preRequisiteField, True):
+                                        thenObj["properties"][field[schema_field_name]] = generateFn(field, dbConfig, schema_field_name)
+                                        if "required" in field and field["required"] == True:
+                                            thenObj["required"].append(field[schema_field_name])
+        else:
+            schema_field_name = 'value'
+            ifObj = generate_if_object(preRequisiteField)
+            thenObj = {"properties": {}, "required": []}
+            allOfItemObj = {"if": ifObj}
+
+            for group in uiConfig:
+                fields = group.get('fields', [])
+                for field in fields:
+                    if "preRequisiteField" not in field:
+                        continue
+                    if compare_pre_requisite_fields(field["preRequisiteField"], preRequisiteField):
+                        thenObj["properties"][field[schema_field_name]] = uiTypetoSchemaFn.get(field["type"])(field, dbConfig, schema_field_name)
+                        if "required" in field and field["required"] == True:
+                            thenObj["required"].append(field[schema_field_name])
         allOfItemObj["then"] = thenObj
         allOfItemList.append(allOfItemObj)
     # Calling anyOf to check if two conditions can be grouped as anyOf.
@@ -874,8 +924,7 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, sel
                 for section in template.get('sections', []):
                     for group in section.get('groups', []):
                         for field in group.get('fields', []):
-                            # TODO: Handle feature flags
-                            if "preRequisites" in field:
+                            if "preRequisites" in field and "fields" in field["preRequisites"]:
                                 continue
                             generateFunction = uiTypetoSchemaFn.get(
                                 field['type'], None)
@@ -951,8 +1000,7 @@ def generate_schema(uiConfig, dbConfig, name, selector):
     schemaObject['properties'] = {}
     allOfSchemaObj = {}
     print(f'Generating schema for {name} {selector}')
-    if is_old_format(uiConfig):
-        allOfSchemaObj = generate_schema_for_allOf(uiConfig, dbConfig, "value")
+    allOfSchemaObj = generate_schema_for_allOf(uiConfig, dbConfig)
     if allOfSchemaObj:
         # AnyOf occurring separately, not inside allOf.
         if len(allOfSchemaObj) == 1:
@@ -962,6 +1010,7 @@ def generate_schema(uiConfig, dbConfig, name, selector):
                schemaObject['anyOf'] = allOfSchemaObj
         else:
             schemaObject['allOf'] = allOfSchemaObj
+
     generate_schema_properties(uiConfig, dbConfig, schemaObject,
                        schemaObject['properties'], selector)
     newSchema['configSchema'] = schemaObject
