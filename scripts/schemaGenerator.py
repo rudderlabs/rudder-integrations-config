@@ -104,11 +104,11 @@ def is_dest_field_dependent_on_source(field, dbConfig, schema_field_name):
     return False
 
 def is_key_present_in_dest_config(dbConfig, key):
-    """Checks if the given key is present in destConfig of dbConfig.
+    """Checks if the given key is present in destConfig across all source types.
 
     Args:
-        dbConfig (object): Configurations of db-config.json.
-        key (string): key to be searched in destConfig.
+        dbConfig (object): Destination configuration in db-config.json.
+        key (string): key to be searched in destConfig tree.
 
     Returns:
         boolean: True if the key is present in destConfig else, False.
@@ -1215,7 +1215,12 @@ if __name__ == '__main__':
 
     if args.all:
         CONFIG_DIR = 'src/configurations'
-        current_items = os.listdir(f'./{CONFIG_DIR}/{selector}s')
+        dir_path = f'./{CONFIG_DIR}/{selector}s'
+        if not os.path.isdir(dir_path):
+            print(f'No {selector}s folder found')
+            exit(1)
+        
+        current_items = os.listdir(dir_path)
         for name in current_items:
             get_schema_diff(name, selector, shouldUpdateSchema)
         
