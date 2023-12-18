@@ -9,10 +9,9 @@
         2. python3 scripts/schemaGenerator.py -all source
 '''
 import os
-import sys
 import warnings
 import json
-from jsondiff import diff
+from jsondiff import JsonDiffer
 from enum import Enum
 import argparse
 
@@ -975,18 +974,6 @@ def generate_schema(uiConfig, dbConfig, name, selector, shouldUpdateSchema):
                        schemaObject['properties'], name, selector)
     newSchema['configSchema'] = schemaObject
 
-    if shouldUpdateSchema:
-        # Get the parent directory (one level up)
-        script_directory = os.path.dirname(os.path.abspath(__file__))
-        directory = os.path.dirname(script_directory)
-        # Define the relative path
-        relative_path = f'src/configurations/{selector}s/{name.lower()}/schema.json'
-        file_path = os.path.join(directory, relative_path)
-        new_content = json.dumps(newSchema, indent=2)
-        # Write the new content
-        with open(file_path, 'w') as file:
-            file.write(new_content)
-
     return newSchema
 
 def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
@@ -1011,10 +998,10 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                         curSchemaField = schema["properties"][field["value"]]
                         newSchemaField = uiTypetoSchemaFn.get(
                             curUiType)(field, dbConfig, "value")
-                        schemaDiff = diff(newSchemaField, curSchemaField)
+                        schemaDiff = get_json_diff(curSchemaField, newSchemaField)
                         if schemaDiff:
                             warnings.warn("For type:{} field:{} Difference is : \n\n {} \n".format(
-                                curUiType, field["value"], schemaDiff), UserWarning)
+                                curUiType, field["value"], get_formatted_json(schemaDiff)), UserWarning)
     else:
         baseTemplate = uiConfig.get('baseTemplate', [])
         sdkTemplate = uiConfig.get('sdkTemplate', {})
@@ -1036,10 +1023,10 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                                 curSchemaField = schema["properties"][field["configKey"]]
                                 newSchemaField = uiTypetoSchemaFn.get(
                                     curUiType)(field, dbConfig, "configKey")
-                                schemaDiff = diff(newSchemaField, curSchemaField)
+                                schemaDiff = get_json_diff(curSchemaField, newSchemaField)
                                 if schemaDiff:
                                     warnings.warn("For type:{} field:{} Difference is : \n\n {} \n".format(
-                                        curUiType, field["configKey"], schemaDiff), UserWarning)
+                                        curUiType, field["configKey"], get_formatted_json(schemaDiff)), UserWarning)
                         
         for field in sdkTemplate.get('fields', []):
             if "preRequisites" in field:
@@ -1054,10 +1041,10 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                         curSchemaField = schema["properties"][field["configKey"]]
                         newSchemaField = uiTypetoSchemaFn.get(
                             curUiType)(field, dbConfig, "configKey")
-                        schemaDiff = diff(newSchemaField, curSchemaField)
+                        schemaDiff = get_json_diff(curSchemaField, newSchemaField)
                         if schemaDiff:
                             warnings.warn("For type:{} field:{} Difference is : \n\n {} \n".format(
-                                curUiType, field["configKey"], schemaDiff), UserWarning)
+                                curUiType, field["configKey"], get_formatted_json(schemaDiff)), UserWarning)
 
 
 uiTypetoSchemaFn = {
@@ -1075,6 +1062,42 @@ uiTypetoSchemaFn = {
     'timePicker': generate_schema_for_time_picker
 }
 
+def get_json_diff(oldJson, newJson):
+    """Returns the difference between two JSONs.
+
+    Args:
+        oldJson (object): old json.
+        newJson (object): new json.
+
+    Returns:
+        object: difference between oldJson and newJson.
+    """    
+    differ = JsonDiffer(marshal=True)
+    return differ.diff(oldJson, newJson)
+
+def apply_json_diff(oldJson, diff):
+    """Applies the difference on oldJson and returns the newJson.
+
+    Args:
+        oldJson (object): old json.
+        diff (object): difference between oldJson and newJson.
+
+    Returns:
+        object: new json.
+    """    
+    differ = JsonDiffer(marshal=True)
+    return differ.patch(oldJson, diff)
+
+def get_formatted_json(jsonObj):
+    """Formats the json object.
+
+    Args:
+        jsonObj (object): json object.
+
+    Returns:
+        string: formatted json.
+    """    
+    return json.dumps(jsonObj, indent=2)
 
 def validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shouldUpdateSchema):
     """Generates a schema and compares it with an existing one. 
@@ -1097,7 +1120,20 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shou
         return
     generatedSchema = generate_schema(uiConfig, dbConfig, name, selector, shouldUpdateSchema)
     if schema:
-        schemaDiff = diff(schema, generatedSchema["configSchema"])
+        schemaDiff = get_json_diff(schema, generatedSchema["configSchema"])
+        if shouldUpdateSchema:
+            # Get the parent directory (one level up)
+            script_directory = os.path.dirname(os.path.abspath(__file__))
+            directory = os.path.dirname(script_directory)
+            # Define the relative path
+            relative_path = f'src/configurations/{selector}s/{name.lower()}/schema.json'
+            file_path = os.path.join(directory, relative_path)
+            finalSchema = {}
+            finalSchema["configSchema"] = apply_json_diff(schema, schemaDiff)
+            # Write the new content
+            with open(file_path, 'w') as file:
+                file.write(get_formatted_json(finalSchema))
+
         if schemaDiff:
             print('-'*50)
             print(f'Schema diff for {name} in {selector}s')
@@ -1113,30 +1149,30 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shou
             else:
                 curRequiredField = schema["required"]
                 newRequiredField = generatedSchema["configSchema"]["required"]
-                requiredFieldDiff = diff(curRequiredField, newRequiredField)
+                requiredFieldDiff = get_json_diff(curRequiredField, newRequiredField)
                 if requiredFieldDiff:
-                    warnings.warn("For required field Difference is :  \n\n {} \n".format(requiredFieldDiff), UserWarning)
+                    warnings.warn("For required field Difference is :  \n\n {} \n".format(get_formatted_json(requiredFieldDiff)), UserWarning)
             if "allOf" in generatedSchema["configSchema"]:
                 curAllOfSchema = {}
                 if "allOf" in schema:
                     curAllOfSchema = schema["allOf"]
                 newAllOfSchema = generatedSchema["configSchema"]["allOf"]
-                allOfSchemaDiff = diff(newAllOfSchema, curAllOfSchema)
+                allOfSchemaDiff = get_json_diff(curAllOfSchema, newAllOfSchema)
                 if allOfSchemaDiff:
-                    warnings.warn("For allOf field Difference is :  \n\n {} \n".format(allOfSchemaDiff), UserWarning)
+                    warnings.warn("For allOf field Difference is :  \n\n {} \n".format(get_formatted_json(allOfSchemaDiff)), UserWarning)
             if "anyOf" in generatedSchema["configSchema"]:
                 curAnyOfSchema = {}
                 if "anyOf" in schema:
                     curAnyOfSchema = schema["anyOf"]
                 newAnyOfSchema = generatedSchema["configSchema"]["anyOf"]
-                anyOfSchemaDiff = diff(newAnyOfSchema, curAnyOfSchema)
+                anyOfSchemaDiff = get_json_diff(curAnyOfSchema, newAnyOfSchema)
                 if anyOfSchemaDiff:
-                    warnings.warn("For anyOf field Difference is :  \n\n {} \n".format(anyOfSchemaDiff), UserWarning)
+                    warnings.warn("For anyOf field Difference is :  \n\n {} \n".format(get_formatted_json(anyOfSchemaDiff)), UserWarning)
             print('-'*50)
     else:
         print('-'*50)
         print(f'Generated Schema for {name} in {selector}s')
-        print(json.dumps(generatedSchema,indent=2))
+        print(get_formatted_json(generatedSchema))
         print('-'*50)
 
 def get_schema_diff(name, selector, shouldUpdateSchema=False):
