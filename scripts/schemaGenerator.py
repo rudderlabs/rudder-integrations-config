@@ -874,6 +874,9 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, sel
                 for section in template.get('sections', []):
                     for group in section.get('groups', []):
                         for field in group.get('fields', []):
+                            # TODO: Handle feature flags
+                            if "preRequisites" in field:
+                                continue
                             generateFunction = uiTypetoSchemaFn.get(
                                 field['type'], None)
                             if generateFunction:
@@ -1108,6 +1111,14 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shou
         print('-'*50)
         return
     generatedSchema = generate_schema(uiConfig, dbConfig, name, selector)
+
+    # TODO: This is a hack to ensure we don't lose any existing schema validations
+    if schema:
+        if "allOf" in schema and "allOf" not in generatedSchema["configSchema"]:
+            generatedSchema["configSchema"]["allOf"] = schema["allOf"]
+        if "anyOf" in schema and "anyOf" not in generatedSchema["configSchema"]:
+            generatedSchema["configSchema"]["anyOf"] = schema["anyOf"]
+
     if schema:
         schemaDiff = get_json_diff(schema, generatedSchema["configSchema"])
         if shouldUpdateSchema:
