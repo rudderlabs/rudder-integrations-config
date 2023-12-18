@@ -1058,6 +1058,18 @@ def get_schema_diff(name, selector, shouldUpdateSchema=False):
     directory = f'./{CONFIG_DIR}/{selector}s/{name}'
     if not os.path.isdir(directory):
         return
+
+    if name not in EXCLUDED_DEST:
+        available_files = os.listdir(directory)
+        file_content = {}
+        for file_selector in file_selectors:
+            if file_selector in available_files:
+                with open (f'{directory}/{file_selector}', 'r') as f:
+                    file_content.update(json.loads(f.read()))
+        uiConfig = file_content.get("uiConfig")
+        schema = file_content.get("configSchema")
+        dbConfig = file_content.get("config")
+
         validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shouldUpdateSchema)
 
 
