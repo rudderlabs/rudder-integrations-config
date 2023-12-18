@@ -101,6 +101,25 @@ def is_dest_field_dependent_on_source(field, dbConfig, schema_field_name):
             return True
     return False
 
+def is_key_present_in_dest_config(dbConfig, key):
+    """Checks if the given key is present in destConfig across all source types.
+
+    Args:
+        dbConfig (object): Destination configuration in db-config.json.
+        key (string): key to be searched in destConfig tree.
+
+    Returns:
+        boolean: True if the key is present in destConfig else, False.
+    """    
+    if not dbConfig:
+        return False
+    
+    if "destConfig" in dbConfig:
+        for configSection in dbConfig["destConfig"]:
+            if key in dbConfig["destConfig"][configSection]:
+                return True
+    return False
+
 def is_field_present_in_default_config(field, dbConfig, schema_field_name):
     """Checks if the given field is present in defaultConfig list present in dbConfig.
 
@@ -755,8 +774,12 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
                     continue
                 generateFunction = uiTypetoSchemaFn.get(field['type'], None)
                 if generateFunction:
-                    properties[field['value']] = generateFunction(
-                        field, dbConfig, 'value')
+                    # Generate schema for the field if it is defined in the destination config
+                    if is_key_present_in_dest_config(dbConfig, field['value']):
+                        properties[field['value']] = generateFunction(
+                            field, dbConfig, 'value')
+                    else:
+                        warnings.warn(f'The field {field["value"]} is defined in ui-config.json but not in db-config.json\n', UserWarning)
                 if field.get('required', False) == True and is_field_present_in_default_config(field, dbConfig, "value"):
                     schemaObject['required'].append(field['value'])
     else:
@@ -770,8 +793,12 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
                             generateFunction = uiTypetoSchemaFn.get(
                                 field['type'], None)
                             if generateFunction:
-                                properties[field['configKey']] = generateFunction(
+                                # Generate schema for the field if it is defined in the destination config
+                                if is_key_present_in_dest_config(dbConfig, field['configKey']):
+                                    properties[field['configKey']] = generateFunction(
                                     field, dbConfig, 'configKey')
+                                else:
+                                    warnings.warn(f'The field {field["configKey"]} is defined in ui-config.json but not in db-config.json\n', UserWarning)
                             if template.get('title', "") == "Initial setup" and is_field_present_in_default_config(field, dbConfig, "configKey") and 'preRequisites' not in field:
                                 schemaObject['required'].append(
                                     field['configKey'])
@@ -779,8 +806,13 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
             for field in sdkTemplate.get('fields', []):
                 generateFunction = uiTypetoSchemaFn.get(field['type'], None)
                 if generateFunction:
-                    properties[field['configKey']] = generateFunction(
+                    # Generate schema for the field if it is defined in the destination config
+                    if is_key_present_in_dest_config(dbConfig, field['configKey']):
+                        properties[field['configKey']] = generateFunction(
                         field, dbConfig, 'configKey')
+                    else:
+                        warnings.warn(f'The field {field["configKey"]} is defined in ui-config.json but not in db-config.json\n', UserWarning)
+
                 if field.get('required', False) == True and is_field_present_in_default_config(field, dbConfig, "configKey"):
                     schemaObject['required'].append(field['configKey'])
 
