@@ -72,6 +72,8 @@ def generalize_regex_pattern(field):
         if defaultEnvPattern not in pattern and (('value' not in field or field['value'] != 'purpose') and ('configKey' not in field or field['configKey'] != 'purpose')):
             indexToPlace = pattern.find(defaultSubPattern) + len(defaultSubPattern)
             pattern = pattern[:indexToPlace] + '|' + defaultEnvPattern + pattern[indexToPlace:]
+    # TODO: we should not use a case here for the individual properties. Just pass the desired pattern as regex property
+    #  in ketch purpose fields and delete next case
     elif ('value' in field and field['value'] == 'purpose') or ('configKey' in field and field['configKey'] == 'purpose'):
         pattern = '^(.{0,100})$'
     else:
@@ -139,7 +141,7 @@ def is_field_present_in_default_config(field, dbConfig, schema_field_name):
     return False
 
 def generate_schema_for_default_checkbox(field, dbConfig, schema_field_name):
-    """Creates an schema object of defaultCheckbox.
+    """Creates a schema object of defaultCheckbox.
 
     Args:
         field (object): Individual field in ui-config.
@@ -162,7 +164,7 @@ def generate_schema_for_default_checkbox(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_checkbox(field, dbConfig, schema_field_name):
-    """Creates an schema object of checkbox.
+    """Creates a schema object of checkbox.
 
     Args:
         field (object): Individual field in ui-config.
@@ -191,7 +193,7 @@ def generate_schema_for_checkbox(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_textinput(field, dbConfig, schema_field_name):
-    """Creates an schema object of textinput.
+    """Creates a schema object of textinput.
 
     Args:
         field (object): Individual field in ui-config.
@@ -222,7 +224,7 @@ def generate_schema_for_textinput(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_textarea_input(field, dbConfig, schema_field_name):
-    """Creates an schema object of textareaInput.
+    """Creates a schema object of textareaInput.
 
     Args:
         field (object): Individual field in ui-config.
@@ -240,7 +242,7 @@ def generate_schema_for_textarea_input(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_single_select(field, dbConfig, schema_field_name):
-    """Creates an schema object of singleSelect.
+    """Creates a schema object of singleSelect.
 
     Args:
         field (object): Individual field in ui-config.
@@ -287,7 +289,7 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
-    """Creates an schema object of dynamicCustomForm.
+    """Creates a schema object of dynamicCustomForm.
 
     Args:
         field (object): Individual field in ui-config.
@@ -330,7 +332,7 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
-    """Creates an schema object of dynamicForm.
+    """Creates a schema object of dynamicForm.
 
     Args:
         field (object): Individual field in ui-config.
@@ -381,7 +383,7 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_dynamic_select_form(field, dbConfig, schema_field_name):
-    """Creates an schema object of dynamicSelectForm.
+    """Creates a schema object of dynamicSelectForm.
 
     Args:
         field (object): Individual field in ui-config.
@@ -395,7 +397,7 @@ def generate_schema_for_dynamic_select_form(field, dbConfig, schema_field_name):
     return generate_schema_for_dynamic_form(field, dbConfig, schema_field_name)
 
 def generate_schema_for_mapping(field, dbConfig, schema_field_name):
-    """Creates an schema object of mapping.
+    """Creates a schema object of mapping.
 
     Args:
         field (object): Individual field in ui-config.
@@ -410,7 +412,7 @@ def generate_schema_for_mapping(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
-    """Creates an schema object of tagInput.
+    """Creates a schema object of tagInput.
 
     Args:
         field (object): Individual field in ui-config.
@@ -446,7 +448,7 @@ def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_time_range_picker(field, dbConfig, schema_field_name):
-    """Creates an schema object of timeRangePicker.
+    """Creates a schema object of timeRangePicker.
 
     Args:
         field (object): Individual field in ui-config.
@@ -469,7 +471,7 @@ def generate_schema_for_time_range_picker(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_time_picker(field, dbConfig, schema_field_name):
-    """Creates an schema object of timePicker.
+    """Creates a schema object of timePicker.
 
     Args:
         field (object): Individual field in ui-config.
