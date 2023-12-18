@@ -17,7 +17,7 @@ import argparse
 
 CONFIG_DIR = 'src/configurations'
 
-EXCLUDED_DEST = ['postgres', 'bq']
+EXCLUDED_DEST = ['postgres', 'bq', 'azure_synapse', 'clickhouse', 'deltalake', 'kafka']
 
 class FieldTypeEnum(Enum):
     STRING = "string"
