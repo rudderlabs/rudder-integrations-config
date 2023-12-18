@@ -840,7 +840,7 @@ def generate_connection_mode(dbConfig):
     return connectionObj
 
 
-def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, name, selector):    
+def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, selector):    
     """Generates corresponding schema properties by iterating over each of the ui-config fields.
 
     Args:
@@ -848,7 +848,6 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
         dbConfig (object): Configurations of db-config.json.
         schemaObject (object): schema being generated
         properties (object): properties of schema
-        name (string): name of the source or destination.
         selector (string): either 'source' or 'destination'
     """    
     if is_old_format(uiConfig):
@@ -929,7 +928,7 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
             generate_config_props(config)
 
 
-def generate_schema(uiConfig, dbConfig, name, selector, shouldUpdateSchema):
+def generate_schema(uiConfig, dbConfig, name, selector):
     """Returns the schema generated from given uiConfig and dbConfig.
 
     Args:
@@ -937,7 +936,6 @@ def generate_schema(uiConfig, dbConfig, name, selector, shouldUpdateSchema):
         dbConfig (object): Configurations of db-config.json.
         name (string): name of the source or destination.
         selector (string): either 'source' or 'destination'
-        shouldUpdateSchema (boolean): if it should update the existing schema with generated one
 
     Returns:
         object: schema
@@ -949,6 +947,7 @@ def generate_schema(uiConfig, dbConfig, name, selector, shouldUpdateSchema):
     schemaObject['type'] = "object"
     schemaObject['properties'] = {}
     allOfSchemaObj = {}
+    print(f'Generating schema for {name} {selector}')
     if is_old_format(uiConfig):
         allOfSchemaObj = generate_schema_for_allOf(uiConfig, dbConfig, "value")
     if allOfSchemaObj:
@@ -961,20 +960,8 @@ def generate_schema(uiConfig, dbConfig, name, selector, shouldUpdateSchema):
         else:
             schemaObject['allOf'] = allOfSchemaObj
     generate_schema_properties(uiConfig, dbConfig, schemaObject,
-                       schemaObject['properties'], name, selector)
+                       schemaObject['properties'], selector)
     newSchema['configSchema'] = schemaObject
-
-    if shouldUpdateSchema:
-        # Get the parent directory (one level up)
-        script_directory = os.path.dirname(os.path.abspath(__file__))
-        directory = os.path.dirname(script_directory)
-        # Define the relative path
-        relative_path = f'src/configurations/{selector}s/{name.lower()}/schema.json'
-        file_path = os.path.join(directory, relative_path)
-        new_content = json.dumps(newSchema)
-        # Write the new content
-        with open(file_path, 'w') as file:
-            file.write(new_content)
 
     return newSchema
 
@@ -1117,12 +1104,25 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shou
         return
     if uiConfig == None:
         print('-'*50)
-        warnings.warn(f"Ui-Config is null for {name} in {selector} \n",UserWarning)
+        warnings.warn(f"Ui-Config is null for {name} in {selector} \n", UserWarning)
         print('-'*50)
         return
-    generatedSchema = generate_schema(uiConfig, dbConfig, name, selector, shouldUpdateSchema)
+    generatedSchema = generate_schema(uiConfig, dbConfig, name, selector)
     if schema:
-        schemaDiff = diff(schema, generatedSchema["configSchema"])
+        schemaDiff = get_json_diff(schema, generatedSchema["configSchema"])
+        if shouldUpdateSchema:
+            # Get the parent directory (one level up)
+            script_directory = os.path.dirname(os.path.abspath(__file__))
+            directory = os.path.dirname(script_directory)
+            # Define the relative path
+            relative_path = f'src/configurations/{selector}s/{name.lower()}/schema.json'
+            file_path = os.path.join(directory, relative_path)
+            finalSchema = {}
+            finalSchema["configSchema"] = apply_json_diff(schema, schemaDiff)
+            # Write the new content
+            with open(file_path, 'w') as file:
+                file.write(get_formatted_json(finalSchema))
+
         if schemaDiff:
             print('-'*50)
             print(f'Schema diff for {name} in {selector}s')
