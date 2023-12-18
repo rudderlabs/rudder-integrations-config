@@ -869,8 +869,12 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
                     continue
                 generateFunction = uiTypetoSchemaFn.get(field['type'], None)
                 if generateFunction:
-                    properties[field['value']] = generateFunction(
-                        field, dbConfig, 'value')
+                    # Generate schema for the field if it is defined in the destination config
+                    if is_key_present_in_dest_config(dbConfig, field['value']):
+                        properties[field['value']] = generateFunction(
+                            field, dbConfig, 'value')
+                    else:
+                        warnings.warn(f'The field {field["value"]} is defined in ui-config.json but not in db-config.json\n', UserWarning)
                 if field.get('required', False) == True and is_field_present_in_default_config(field, dbConfig, "value"):
                     schemaObject['required'].append(field['value'])
     else:
@@ -884,8 +888,12 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
                             generateFunction = uiTypetoSchemaFn.get(
                                 field['type'], None)
                             if generateFunction:
-                                properties[field['configKey']] = generateFunction(
+                                # Generate schema for the field if it is defined in the destination config
+                                if is_key_present_in_dest_config(dbConfig, field['configKey']):
+                                    properties[field['configKey']] = generateFunction(
                                     field, dbConfig, 'configKey')
+                                else:
+                                    warnings.warn(f'The field {field["configKey"]} is defined in ui-config.json but not in db-config.json\n', UserWarning)
                             if template.get('title', "") == "Initial setup" and is_field_present_in_default_config(field, dbConfig, "configKey") and 'preRequisites' not in field:
                                 schemaObject['required'].append(
                                     field['configKey'])
@@ -893,8 +901,13 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
             for field in sdkTemplate.get('fields', []):
                 generateFunction = uiTypetoSchemaFn.get(field['type'], None)
                 if generateFunction:
-                    properties[field['configKey']] = generateFunction(
+                    # Generate schema for the field if it is defined in the destination config
+                    if is_key_present_in_dest_config(dbConfig, field['configKey']):
+                        properties[field['configKey']] = generateFunction(
                         field, dbConfig, 'configKey')
+                    else:
+                        warnings.warn(f'The field {field["configKey"]} is defined in ui-config.json but not in db-config.json\n', UserWarning)
+
                 if field.get('required', False) == True and is_field_present_in_default_config(field, dbConfig, "configKey"):
                     schemaObject['required'].append(field['configKey'])
 
@@ -946,6 +959,7 @@ def generate_schema(uiConfig, dbConfig, name, selector, shouldUpdateSchema):
     schemaObject['type'] = "object"
     schemaObject['properties'] = {}
     allOfSchemaObj = {}
+    print(f'Generating schema for {name} {selector}')
     if is_old_format(uiConfig):
         allOfSchemaObj = generate_schema_for_allOf(uiConfig, dbConfig, "value")
     if allOfSchemaObj:
