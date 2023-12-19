@@ -19,7 +19,14 @@
           "value": "audienceId",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$",
           "regexErrorMessage": "Invalid Audience Id",
-          "required": true,
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "connectionMode.cloud",
+                "value": "cloud"
+              }
+            ]
+          },
           "placeholder": "e.g. 53XX45",
           "secret": false,
           "footerNote": "The audience id of the audience to which you want to sync the data"
