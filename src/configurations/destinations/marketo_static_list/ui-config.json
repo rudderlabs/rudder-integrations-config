@@ -12,7 +12,7 @@
           "secret": true,
           "required": true,
           "footerNote": "Your Marketo Accound ID from Admin settings section",
-          "placeholder": "e.g: 585-AXP-446"
+          "placeholder": "e.g: 5X5-AXP-4X6"
         },
         {
           "type": "textInput",
@@ -22,7 +22,7 @@
           "regexErrorMessage": "Invalid Client ID",
           "secret": true,
           "required": true,
-          "placeholder": "e.g: 53b1934e-51dd-4599-b24b-92612c71515f",
+          "placeholder": "e.g: 53b1934e-XXXX-XXXX-XXXX-92612c71515f",
           "footerNote": "Your REST API Client ID"
         },
         {
@@ -32,7 +32,7 @@
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
           "regexErrorMessage": "Invalid Client Secret",
           "required": true,
-          "placeholder": "e.g: oxzXtNhcuw9YGsdhplKUeEMi8765dsfw",
+          "placeholder": "e.g: oxzXtNhcuw9YGXXXXlKUeEMi8765dsfw",
           "secret": true,
           "footerNote": "Your REST API Client Secret"
         },
@@ -43,7 +43,7 @@
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
           "regexErrorMessage": "Invalid Client Secret",
           "required": true,
-          "placeholder": "e.g: 3027",
+          "placeholder": "e.g: 30X7",
           "secret": false,
           "footerNote": "This Static list Id would be used as a default Static List Id (if not provided in externalId) to add/remove leads to/from. "
         }
@@ -55,13 +55,15 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
           ]
