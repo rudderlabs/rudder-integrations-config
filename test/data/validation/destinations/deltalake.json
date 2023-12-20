@@ -12,40 +12,7 @@
       "useSTSTokens": false,
       "bucketName": "test-bucket",
       "accessKeyID": "test-access-key-id",
-      "accessKey": "test-access-key",
-      "oneTrustCookieCategories": {
-        "web": [
-          {
-            "oneTrustCookieCategory": "C0001"
-          },
-          {
-            "oneTrustCookieCategory": "C0002"
-          }
-        ],
-        "flutter": [
-          {
-            "oneTrustCookieCategory": "C0003"
-          },
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ],
-        "android": [
-          {
-            "oneTrustCookieCategory": ""
-          }
-        ],
-        "ios": [
-          {
-            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
-          }
-        ],
-        "cordova": [
-          {
-            "oneTrustCookieCategory": "{{ event.properties.prop1 || 333 }}"
-          }
-        ]
-      }
+      "accessKey": "test-access-key"
     },
     "result": true
   },
@@ -94,15 +61,7 @@
       "enableSSE": false,
       "useRudderStorage": false,
       "useSTSTokens": true,
-      "bucketName": "test-bucket",
-      "oneTrustCookieCategories": [
-        {
-          "oneTrustCookieCategory": "C0001"
-        },
-        {
-          "oneTrustCookieCategory": "C0002"
-        }
-      ]
+      "bucketName": "test-bucket"
     },
     "result": false,
     "err": [
@@ -111,8 +70,7 @@
       " must have required property 'iamRoleARN'",
       " must have required property 'roleBasedAuth'",
       " must match a schema in anyOf",
-      " must match \"then\" schema",
-      "oneTrustCookieCategories must be object"
+      " must match \"then\" schema"
     ]
   },
   {
@@ -415,77 +373,5 @@
       "useRudderStorage": true
     },
     "result": true
-  },
-  {
-    "config": {
-      "host": "test-host",
-      "path": "test-path",
-      "token": "test-token",
-      "port": "0000",
-      "bucketProvider": "S3",
-      "syncFrequency": "30",
-      "enableSSE": false,
-      "useRudderStorage": false,
-      "useSTSTokens": true,
-      "bucketName": "test-bucket",
-      "accessKeyID": "test-access-key-id",
-      "accessKey": "test-access-key",
-      "oneTrustCookieCategories": {
-        "someunsupportedsourcetype": [
-          {
-            "oneTrustCookieCategory": "C0001"
-          },
-          {
-            "oneTrustCookieCategory": "C0002"
-          }
-        ],
-        "web": [
-          {
-            "someunsupportedkey": "C0001"
-          },
-          {
-            "oneTrustCookieCategory": "C0002"
-          }
-        ],
-        "flutter": [],
-        "android": [
-          {
-            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-          },
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ],
-        "ios": [
-          {
-            "oneTrustCookieCategory": {
-              "not": "a string"
-            }
-          },
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ],
-        "cordova": {
-          "not": "an array"
-        },
-        "reactnative": [
-          "not an object",
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ]
-      }
-    },
-    "result": false,
-    "err": [
-      "oneTrustCookieCategories must NOT have additional properties",
-      "oneTrustCookieCategories.web.0 must NOT have additional properties",
-      "oneTrustCookieCategories.android.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
-      "oneTrustCookieCategories.ios.0.oneTrustCookieCategory must be string",
-      "oneTrustCookieCategories.reactnative.0 must be object",
-      "oneTrustCookieCategories.flutter must NOT have fewer than 1 items",
-      "oneTrustCookieCategories.cordova must be array"
-    ]
   }
 ]
