@@ -1163,10 +1163,17 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shou
 
     # TODO: This is a hack to ensure we don't lose any existing schema validations
     if schema:
-        if "allOf" in schema and "allOf" not in generatedSchema["configSchema"]:
-            generatedSchema["configSchema"]["allOf"] = schema["allOf"]
-        if "anyOf" in schema and "anyOf" not in generatedSchema["configSchema"]:
-            generatedSchema["configSchema"]["anyOf"] = schema["anyOf"]
+        if "allOf" in schema:
+            if "allOf" not in generatedSchema["configSchema"]:
+                generatedSchema["configSchema"]["allOf"] = []
+            generatedSchema["configSchema"]["allOf"].extend(schema["allOf"])
+            generatedSchema["configSchema"]["allOf"] = [i for n, i in enumerate(generatedSchema["configSchema"]["allOf"]) if i not in generatedSchema["configSchema"]["allOf"][n + 1:]]
+
+        if "anyOf" in schema:
+            if "anyOf" not in generatedSchema["configSchema"]:
+                generatedSchema["configSchema"]["anyOf"] = []
+            generatedSchema["configSchema"]["anyOf"].extend(schema["anyOf"])
+            generatedSchema["configSchema"]["anyOf"] = [i for n, i in enumerate(generatedSchema["configSchema"]["anyOf"]) if i not in generatedSchema["configSchema"]["anyOf"][n + 1:]]
 
     if schema:
         schemaDiff = get_json_diff(schema, generatedSchema["configSchema"])
