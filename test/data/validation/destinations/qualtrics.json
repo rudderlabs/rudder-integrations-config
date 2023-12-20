@@ -1,1 +1,234 @@
-[]
+[
+  {
+    "config": {
+      "oneTrustCookieCategories": {
+        "web": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "android": [
+          {
+            "oneTrustCookieCategory": "C0003"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": ""
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "web": [
+          {
+            "purpose": "P1"
+          },
+          {
+            "purpose": "P2"
+          }
+        ],
+        "android": [
+          {
+            "purpose": "P3"
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "ios": [
+          {
+            "purpose": ""
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "oneTrustCookieCategories": {
+        "web": [
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "android": [
+          {
+            "oneTrustCookieCategory": "\\{\\{ event.properties.prop1 || 'val' \\}\\}"
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "web": [
+          {
+            "purpose": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "android": [
+          {
+            "purpose": "\\{\\{ event.properties.prop1 || 'val' \\}\\}"
+          }
+        ],
+        "ios": [
+          {
+            "purpose": "P1"
+          },
+          {
+            "purpose": "P2"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        },
+        {
+          "oneTrustCookieCategory": "C0002"
+        }
+      ],
+      "ketchConsentPurposes": [
+        {
+          "purpose": "P1"
+        },
+        {
+          "purpose": "P2"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["oneTrustCookieCategories must be object", "ketchConsentPurposes must be object"]
+  },
+  {
+    "config": {
+      "oneTrustCookieCategories": {
+        "someunsupportedsourcetype": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "web": [],
+        "android": [
+          {
+            "someunsupportedkey": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "someunsupportedsourcetype": [
+          {
+            "purpose": "P1"
+          },
+          {
+            "purpose": "P2"
+          }
+        ],
+        "web": [],
+        "android": [
+          {
+            "someunsupportedkey": "P1"
+          },
+          {
+            "purpose": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "ios": [
+          {
+            "purpose": {
+              "not": "a string"
+            }
+          },
+          {
+            "purpose": "P4"
+          }
+        ]
+      }
+    },
+    "err": [
+      "oneTrustCookieCategories must NOT have additional properties",
+      "oneTrustCookieCategories.web must NOT have fewer than 1 items",
+      "oneTrustCookieCategories.android.0 must NOT have additional properties",
+      "oneTrustCookieCategories.android.1.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.ios.0.oneTrustCookieCategory must be string",
+      "ketchConsentPurposes must NOT have additional properties",
+      "ketchConsentPurposes.web must NOT have fewer than 1 items",
+      "ketchConsentPurposes.android.0 must NOT have additional properties",
+      "ketchConsentPurposes.android.1.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "ketchConsentPurposes.ios.0.purpose must be string"
+    ],
+    "result": false
+  },
+  {
+    "config": {
+      "oneTrustCookieCategories": {
+        "web": {
+          "not": "an array"
+        },
+        "android": [
+          "not an object",
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "web": {
+          "not": "an array"
+        },
+        "android": [
+          "not an object",
+          {
+            "purpose": "P4"
+          }
+        ]
+      }
+    },
+    "err": [
+      "oneTrustCookieCategories.web must be array",
+      "oneTrustCookieCategories.android.0 must be object",
+      "ketchConsentPurposes.web must be array",
+      "ketchConsentPurposes.android.0 must be object"
+    ],
+    "result": false
+  }
+]

@@ -58,5 +58,272 @@
       "gumCallerId": "14245"
     },
     "result": true
+  },
+  {
+    "config": {
+      "audienceId": {
+        "cloud": "138383"
+      },
+      "audienceType": "email",
+      "adAccountId": {
+        "warehouse": "4343434"
+      },
+      "oneTrustCookieCategories": {
+        "cloud": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "warehouse": [
+          {
+            "oneTrustCookieCategory": "C0003"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "shopify": [
+          {
+            "oneTrustCookieCategory": ""
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "cloud": [
+          {
+            "purpose": "P1"
+          },
+          {
+            "purpose": "P2"
+          }
+        ],
+        "warehouse": [
+          {
+            "purpose": "P3"
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "shopify": [
+          {
+            "purpose": ""
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "audienceId": {
+        "cloud": "138383"
+      },
+      "audienceType": "email",
+      "adAccountId": {
+        "warehouse": "4343434"
+      },
+      "oneTrustCookieCategories": {
+        "cloud": [
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "warehouse": [
+          {
+            "oneTrustCookieCategory": "\\{\\{ event.properties.prop1 || 'val' \\}\\}"
+          }
+        ],
+        "shopify": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "cloud": [
+          {
+            "purpose": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "warehouse": [
+          {
+            "purpose": "\\{\\{ event.properties.prop1 || 'val' \\}\\}"
+          }
+        ],
+        "shopify": [
+          {
+            "purpose": "P1"
+          },
+          {
+            "purpose": "P2"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "audienceId": {
+        "cloud": "138383"
+      },
+      "audienceType": "email",
+      "adAccountId": {
+        "warehouse": "4343434"
+      },
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        },
+        {
+          "oneTrustCookieCategory": "C0002"
+        }
+      ],
+      "ketchConsentPurposes": [
+        {
+          "purpose": "P1"
+        },
+        {
+          "purpose": "P2"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["oneTrustCookieCategories must be object", "ketchConsentPurposes must be object"]
+  },
+  {
+    "config": {
+      "audienceId": {
+        "cloud": "138383"
+      },
+      "audienceType": "email",
+      "adAccountId": {
+        "warehouse": "4343434"
+      },
+      "oneTrustCookieCategories": {
+        "someunsupportedsourcetype": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "cloud": [],
+        "warehouse": [
+          {
+            "someunsupportedkey": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "shopify": [
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "someunsupportedsourcetype": [
+          {
+            "purpose": "P1"
+          },
+          {
+            "purpose": "P2"
+          }
+        ],
+        "cloud": [],
+        "warehouse": [
+          {
+            "someunsupportedkey": "P1"
+          },
+          {
+            "purpose": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "shopify": [
+          {
+            "purpose": {
+              "not": "a string"
+            }
+          },
+          {
+            "purpose": "P4"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "oneTrustCookieCategories must NOT have additional properties",
+      "oneTrustCookieCategories.cloud must NOT have fewer than 1 items",
+      "oneTrustCookieCategories.warehouse.0 must NOT have additional properties",
+      "oneTrustCookieCategories.warehouse.1.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.shopify.0.oneTrustCookieCategory must be string",
+      "ketchConsentPurposes must NOT have additional properties",
+      "ketchConsentPurposes.cloud must NOT have fewer than 1 items",
+      "ketchConsentPurposes.warehouse.0 must NOT have additional properties",
+      "ketchConsentPurposes.warehouse.1.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "ketchConsentPurposes.shopify.0.purpose must be string"
+    ]
+  },
+  {
+    "config": {
+      "audienceId": {
+        "cloud": "138383"
+      },
+      "audienceType": "email",
+      "adAccountId": {
+        "warehouse": "4343434"
+      },
+      "oneTrustCookieCategories": {
+        "cloud": {
+          "not": "an array"
+        },
+        "warehouse": [
+          "not an object",
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "cloud": {
+          "not": "an array"
+        },
+        "warehouse": [
+          "not an object",
+          {
+            "purpose": "P4"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "oneTrustCookieCategories.cloud must be array",
+      "oneTrustCookieCategories.warehouse.0 must be object",
+      "ketchConsentPurposes.cloud must be array",
+      "ketchConsentPurposes.warehouse.0 must be object"
+    ]
   }
 ]

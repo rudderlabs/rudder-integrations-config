@@ -2,7 +2,7 @@
   {
     "config": {
       "oneTrustCookieCategories": {
-        "android": [
+        "cloud": [
           {
             "oneTrustCookieCategory": "C0001"
           },
@@ -10,32 +10,17 @@
             "oneTrustCookieCategory": "C0002"
           }
         ],
-        "ios": [
+        "warehouse": [
           {
             "oneTrustCookieCategory": "C0003"
           },
           {
             "oneTrustCookieCategory": "C0004"
           }
-        ],
-        "unity": [
-          {
-            "oneTrustCookieCategory": ""
-          }
-        ],
-        "reactnative": [
-          {
-            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
-          }
-        ],
-        "flutter": [
-          {
-            "oneTrustCookieCategory": "\\{\\{ event.properties.prop1 || 'val' \\}\\}"
-          }
         ]
       },
       "ketchConsentPurposes": {
-        "android": [
+        "cloud": [
           {
             "purpose": "P1"
           },
@@ -43,27 +28,76 @@
             "purpose": "P2"
           }
         ],
-        "ios": [
+        "warehouse": [
           {
             "purpose": "P3"
           },
           {
             "purpose": "P4"
           }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "oneTrustCookieCategories": {
+        "cloud": [
+          {
+            "oneTrustCookieCategory": ""
+          }
         ],
-        "unity": [
+        "warehouse": [
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "cloud": [
           {
             "purpose": ""
           }
         ],
-        "reactnative": [
+        "warehouse": [
           {
             "purpose": "env.ENVIRONMENT_VARIABLE"
           }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "oneTrustCookieCategories": {
+        "cloud": [
+          {
+            "oneTrustCookieCategory": "\\{\\{ event.properties.prop1 || 'val' \\}\\}"
+          }
         ],
-        "flutter": [
+        "warehouse": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "cloud": [
           {
             "purpose": "\\{\\{ event.properties.prop1 || 'val' \\}\\}"
+          }
+        ],
+        "warehouse": [
+          {
+            "purpose": "P1"
+          },
+          {
+            "purpose": "P2"
           }
         ]
       }
@@ -103,33 +137,14 @@
             "oneTrustCookieCategory": "C0002"
           }
         ],
-        "android": [],
-        "ios": [
+        "cloud": [],
+        "warehouse": [
           {
             "someunsupportedkey": "C0001"
           },
           {
             "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           },
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ],
-        "unity": [
-          {
-            "oneTrustCookieCategory": {
-              "not": "a string"
-            }
-          },
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ],
-        "reactnative": {
-          "not": "an array"
-        },
-        "flutter": [
-          "not an object",
           {
             "oneTrustCookieCategory": "C0004"
           }
@@ -144,8 +159,8 @@
             "purpose": "P2"
           }
         ],
-        "android": [],
-        "ios": [
+        "cloud": [],
+        "warehouse": [
           {
             "someunsupportedkey": "P1"
           },
@@ -155,8 +170,40 @@
           {
             "purpose": "P4"
           }
+        ]
+      }
+    },
+    "err": [
+      "oneTrustCookieCategories must NOT have additional properties",
+      "oneTrustCookieCategories.cloud must NOT have fewer than 1 items",
+      "oneTrustCookieCategories.warehouse.0 must NOT have additional properties",
+      "oneTrustCookieCategories.warehouse.1.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "ketchConsentPurposes must NOT have additional properties",
+      "ketchConsentPurposes.cloud must NOT have fewer than 1 items",
+      "ketchConsentPurposes.warehouse.0 must NOT have additional properties",
+      "ketchConsentPurposes.warehouse.1.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\""
+    ],
+    "result": false
+  },
+  {
+    "config": {
+      "oneTrustCookieCategories": {
+        "cloud": [
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
         ],
-        "unity": [
+        "warehouse": {
+          "not": "an array"
+        }
+      },
+      "ketchConsentPurposes": {
+        "cloud": [
           {
             "purpose": {
               "not": "a string"
@@ -166,10 +213,31 @@
             "purpose": "P4"
           }
         ],
-        "reactnative": {
+        "warehouse": {
           "not": "an array"
-        },
-        "flutter": [
+        }
+      }
+    },
+    "err": [
+      "oneTrustCookieCategories.cloud.0.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.warehouse must be array",
+      "ketchConsentPurposes.cloud.0.purpose must be string",
+      "ketchConsentPurposes.warehouse must be array"
+    ],
+    "result": false
+  },
+  {
+    "config": {
+      "oneTrustCookieCategories": {
+        "cloud": [
+          "not an object",
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "cloud": [
           "not an object",
           {
             "purpose": "P4"
@@ -178,20 +246,8 @@
       }
     },
     "err": [
-      "oneTrustCookieCategories must NOT have additional properties",
-      "oneTrustCookieCategories.android must NOT have fewer than 1 items",
-      "oneTrustCookieCategories.ios.0 must NOT have additional properties",
-      "oneTrustCookieCategories.ios.1.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
-      "oneTrustCookieCategories.unity.0.oneTrustCookieCategory must be string",
-      "oneTrustCookieCategories.reactnative must be array",
-      "oneTrustCookieCategories.flutter.0 must be object",
-      "ketchConsentPurposes must NOT have additional properties",
-      "ketchConsentPurposes.android must NOT have fewer than 1 items",
-      "ketchConsentPurposes.ios.0 must NOT have additional properties",
-      "ketchConsentPurposes.ios.1.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
-      "ketchConsentPurposes.unity.0.purpose must be string",
-      "ketchConsentPurposes.reactnative must be array",
-      "ketchConsentPurposes.flutter.0 must be object"
+      "oneTrustCookieCategories.cloud.0 must be object",
+      "ketchConsentPurposes.cloud.0 must be object"
     ],
     "result": false
   }
