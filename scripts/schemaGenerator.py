@@ -1035,47 +1035,23 @@ def get_schema_diff(name, selector, shouldUpdateSchema=False):
 
 
 if __name__ == '__main__':
-    # parser = argparse.ArgumentParser(description='Generates schema.json from ui-config.json and db-config.json and validates against actual scheme.json')
-    # group = parser.add_mutually_exclusive_group()
-    # parser.add_argument('selector', metavar='selector', type=str, help='Enter whether -name is a source or destination')
-    # parser.add_argument('-update', action='store_true', help='Will update existing schema with any changes')
-    # group.add_argument('-name', metavar='name', type=str, help='Enter the folder name under selector')
-    # group.add_argument('-all', action='store_true', help='Will run validation for all entities under selector')
+    parser = argparse.ArgumentParser(description='Generates schema.json from ui-config.json and db-config.json and validates against actual scheme.json')
+    group = parser.add_mutually_exclusive_group()
+    parser.add_argument('selector', metavar='selector', type=str, help='Enter whether -name is a source or destination')
+    parser.add_argument('-update', action='store_true', help='Will update existing schema with any changes')
+    group.add_argument('-name', metavar='name', type=str, help='Enter the folder name under selector')
+    group.add_argument('-all', action='store_true', help='Will run validation for all entities under selector')
     
-    # args = parser.parse_args()
-    # selector = args.selector
-    # shouldUpdateSchema = args.update
+    args = parser.parse_args()
+    selector = args.selector
+    shouldUpdateSchema = args.update
 
-    # if args.all:
-    #     CONFIG_DIR = 'src/configurations'
-    #     current_items = os.listdir(f'./{CONFIG_DIR}/{selector}s')
-    #     for name in current_items:
-    #         get_schema_diff(name, selector)
+    if args.all:
+        CONFIG_DIR = 'src/configurations'
+        current_items = os.listdir(f'./{CONFIG_DIR}/{selector}s')
+        for name in current_items:
+            get_schema_diff(name, selector)
         
-    # else:
-    #     name = args.name 
-    #     get_schema_diff(name, selector, shouldUpdateSchema)
-
-    include_dirs = ['./src', './test', './scripts', './migration']
-    # Recursively find all json files from the root directory
-    for include_dir in include_dirs:
-        for root, dirs, files in os.walk(include_dir):
-            for file in files:
-                if file.endswith('.json'):
-                    with open(os.path.join(root, file)) as f:
-                        file_content = ''
-                        try:
-                            file_content = f.read()
-                        except:
-                            print(f'Error reading file: {os.path.join(root, file)}')
-                            continue
-
-                        if not file_content:
-                            continue
-                    
-                    try:
-                        with open(os.path.join(root, file), 'w') as f:
-                            f.write(json.dumps(json.loads(file_content.encode('utf-8', 'ignore')), indent=2, ensure_ascii=False))
-                    except:
-                        print(f'Error writing file: {os.path.join(root, file)}')
-                        continue
+    else:
+        name = args.name 
+        get_schema_diff(name, selector, shouldUpdateSchema)
