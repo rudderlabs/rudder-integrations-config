@@ -8,34 +8,20 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
       },
-      "useGlue": {
-        "type": "boolean",
-        "default": false
-      },
-      "prefix": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
-      },
+      "useGlue": { "type": "boolean", "default": false },
+      "prefix": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*" },
       "namespace": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
       },
-      "roleBasedAuth": {
-        "type": "boolean",
-        "default": true
-      },
-      "enableSSE": {
-        "type": "boolean",
-        "default": false
-      },
+      "roleBasedAuth": { "type": "boolean", "default": true },
+      "enableSSE": { "type": "boolean", "default": false },
       "syncFrequency": {
         "type": "string",
         "enum": ["30", "60", "180", "360", "720", "1440"],
         "default": "30"
       },
-      "syncStartAt": {
-        "type": "string"
-      },
+      "syncStartAt": { "type": "string" },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -51,31 +37,17 @@
     },
     "allOf": [
       {
-        "if": {
-          "properties": {
-            "useGlue": {
-              "const": true
-            }
-          },
-          "required": ["useGlue"]
-        },
+        "if": { "properties": { "useGlue": { "const": true } }, "required": ["useGlue"] },
         "then": {
           "properties": {
-            "region": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
-            }
+            "region": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*" }
           },
           "required": ["region"]
         }
       },
       {
         "if": {
-          "properties": {
-            "roleBasedAuth": {
-              "const": true
-            }
-          },
+          "properties": { "roleBasedAuth": { "const": true } },
           "required": ["roleBasedAuth"]
         },
         "then": {
@@ -84,20 +56,14 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
             },
-            "roleBasedAuth": {
-              "const": true
-            }
+            "roleBasedAuth": { "const": true }
           },
           "required": ["iamRoleARN", "roleBasedAuth"]
         }
       },
       {
         "if": {
-          "properties": {
-            "roleBasedAuth": {
-              "const": false
-            }
-          },
+          "properties": { "roleBasedAuth": { "const": false } },
           "required": ["roleBasedAuth"]
         },
         "then": {
@@ -110,9 +76,7 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
             },
-            "roleBasedAuth": {
-              "const": false
-            }
+            "roleBasedAuth": { "const": false }
           },
           "required": []
         }

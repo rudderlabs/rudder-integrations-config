@@ -4,43 +4,18 @@
     "required": [],
     "type": "object",
     "properties": {
-      "tagId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]*$"
-      },
-      "appId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]*$"
-      },
-      "apiVersion": {
-        "type": "string",
-        "enum": ["legacyApi", "newApi"],
-        "default": "legacyApi"
-      },
+      "tagId": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]*$" },
+      "appId": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]*$" },
+      "apiVersion": { "type": "string", "enum": ["legacyApi", "newApi"], "default": "legacyApi" },
       "deduplicationKey": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "sendingUnHashedData": {
-        "type": "boolean",
-        "default": true
-      },
-      "enhancedMatch": {
-        "type": "boolean",
-        "default": true
-      },
-      "sendExternalId": {
-        "type": "boolean",
-        "default": false
-      },
-      "sendAsCustomEvent": {
-        "type": "boolean",
-        "default": false
-      },
-      "sendAsTestEvent": {
-        "type": "boolean",
-        "default": false
-      },
+      "sendingUnHashedData": { "type": "boolean", "default": true },
+      "enhancedMatch": { "type": "boolean", "default": true },
+      "sendExternalId": { "type": "boolean", "default": false },
+      "sendAsCustomEvent": { "type": "boolean", "default": false },
+      "sendAsTestEvent": { "type": "boolean", "default": false },
       "customProperties": {
         "type": "array",
         "items": {
@@ -80,14 +55,7 @@
           }
         }
       },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "eventFilteringOption": {
         "type": "string",
         "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
@@ -133,11 +101,7 @@
     "allOf": [
       {
         "if": {
-          "properties": {
-            "apiVersion": {
-              "const": "legacyApi"
-            }
-          },
+          "properties": { "apiVersion": { "const": "legacyApi" } },
           "required": ["apiVersion"]
         },
         "then": {
@@ -151,14 +115,7 @@
         }
       },
       {
-        "if": {
-          "properties": {
-            "apiVersion": {
-              "const": "newApi"
-            }
-          },
-          "required": ["apiVersion"]
-        },
+        "if": { "properties": { "apiVersion": { "const": "newApi" } }, "required": ["apiVersion"] },
         "then": {
           "properties": {
             "adAccountId": {
