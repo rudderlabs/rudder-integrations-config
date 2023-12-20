@@ -8,9 +8,18 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{0,100})$"
       },
-      "password": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*" },
-      "clusterMode": { "type": "boolean", "default": true },
-      "secure": { "type": "boolean", "default": false },
+      "password": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
+      },
+      "clusterMode": {
+        "type": "boolean",
+        "default": true
+      },
+      "secure": {
+        "type": "boolean",
+        "default": false
+      },
       "prefix": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
@@ -30,7 +39,14 @@
     },
     "allOf": [
       {
-        "if": { "properties": { "clusterMode": { "const": false } }, "required": ["clusterMode"] },
+        "if": {
+          "properties": {
+            "clusterMode": {
+              "const": false
+            }
+          },
+          "required": ["clusterMode"]
+        },
         "then": {
           "properties": {
             "database": {
@@ -42,10 +58,20 @@
         }
       },
       {
-        "if": { "properties": { "secure": { "const": true } }, "required": ["secure"] },
+        "if": {
+          "properties": {
+            "secure": {
+              "const": true
+            }
+          },
+          "required": ["secure"]
+        },
         "then": {
           "properties": {
-            "skipVerify": { "type": "boolean", "default": false },
+            "skipVerify": {
+              "type": "boolean",
+              "default": false
+            },
             "caCertificate": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
