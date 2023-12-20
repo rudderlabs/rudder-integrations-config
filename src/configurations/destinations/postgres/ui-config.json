@@ -63,18 +63,33 @@
           "label": "SSL Mode",
           "value": "sslMode",
           "options": [
-            { "name": "disable", "value": "disable" },
-            { "name": "require", "value": "require" },
-            { "name": "verify ca", "value": "verify-ca" }
+            {
+              "name": "disable",
+              "value": "disable"
+            },
+            {
+              "name": "require",
+              "value": "require"
+            },
+            {
+              "name": "verify ca",
+              "value": "verify-ca"
+            }
           ],
-          "defaultOption": { "name": "disable", "value": "disable" },
+          "defaultOption": {
+            "name": "disable",
+            "value": "disable"
+          },
           "required": true
         },
         {
           "type": "textInput",
           "required": true,
           "regex": "-----BEGIN RSA PRIVATE KEY-----.*-----END RSA PRIVATE KEY-----",
-          "preRequisiteField": { "name": "sslMode", "selectedValue": "verify-ca" },
+          "preRequisiteField": {
+            "name": "sslMode",
+            "selectedValue": "verify-ca"
+          },
           "label": "Client Key Pem File",
           "value": "clientKey"
         },
@@ -82,7 +97,10 @@
           "type": "textInput",
           "required": true,
           "regex": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
-          "preRequisiteField": { "name": "sslMode", "selectedValue": "verify-ca" },
+          "preRequisiteField": {
+            "name": "sslMode",
+            "selectedValue": "verify-ca"
+          },
           "label": "Client Cert Pem File",
           "value": "clientCert"
         },
@@ -90,7 +108,10 @@
           "type": "textInput",
           "required": true,
           "regex": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
-          "preRequisiteField": { "name": "sslMode", "selectedValue": "verify-ca" },
+          "preRequisiteField": {
+            "name": "sslMode",
+            "selectedValue": "verify-ca"
+          },
           "label": "Server CA Pem File",
           "value": "serverCA"
         },
@@ -99,21 +120,45 @@
           "label": "Sync Frequency",
           "value": "syncFrequency",
           "options": [
-            { "name": "Every 30 minutes", "value": "30" },
-            { "name": "Every 1 hour", "value": "60" },
-            { "name": "Every 3 hours", "value": "180" },
-            { "name": "Every 6 hours", "value": "360" },
-            { "name": "Every 12 hours", "value": "720" },
-            { "name": "Every 24 hours", "value": "1440" }
+            {
+              "name": "Every 30 minutes",
+              "value": "30"
+            },
+            {
+              "name": "Every 1 hour",
+              "value": "60"
+            },
+            {
+              "name": "Every 3 hours",
+              "value": "180"
+            },
+            {
+              "name": "Every 6 hours",
+              "value": "360"
+            },
+            {
+              "name": "Every 12 hours",
+              "value": "720"
+            },
+            {
+              "name": "Every 24 hours",
+              "value": "1440"
+            }
           ],
-          "defaultOption": { "name": "Every 30 minutes", "value": "30" },
+          "defaultOption": {
+            "name": "Every 30 minutes",
+            "value": "30"
+          },
           "required": false
         },
         {
           "type": "timePicker",
           "label": "Sync Starting At (Optional)",
           "value": "syncStartAt",
-          "options": { "omitSeconds": true, "minuteStep": 15 },
+          "options": {
+            "omitSeconds": true,
+            "minuteStep": 15
+          },
           "required": false,
           "footerNote": "Note: Please specify time in UTC"
         },
@@ -121,9 +166,18 @@
           "type": "timeRangePicker",
           "label": "Exclude window (Optional)",
           "value": "excludeWindow",
-          "startTime": { "label": "start time", "value": "excludeWindowStartTime" },
-          "endTime": { "label": "end time", "value": "excludeWindowEndTime" },
-          "options": { "omitSeconds": true, "minuteStep": 1 },
+          "startTime": {
+            "label": "start time",
+            "value": "excludeWindowStartTime"
+          },
+          "endTime": {
+            "label": "end time",
+            "value": "excludeWindowEndTime"
+          },
+          "options": {
+            "omitSeconds": true,
+            "minuteStep": 1
+          },
           "required": false,
           "footerNote": "Note: Please specify time in UTC"
         },
@@ -157,20 +211,44 @@
           "label": "Choose your Storage Provider",
           "value": "bucketProvider",
           "options": [
-            { "name": "S3", "value": "S3" },
-            { "name": "GCS", "value": "GCS" },
-            { "name": "AZURE_BLOB", "value": "AZURE_BLOB" },
-            { "name": "MINIO", "value": "MINIO" }
+            {
+              "name": "S3",
+              "value": "S3"
+            },
+            {
+              "name": "GCS",
+              "value": "GCS"
+            },
+            {
+              "name": "AZURE_BLOB",
+              "value": "AZURE_BLOB"
+            },
+            {
+              "name": "MINIO",
+              "value": "MINIO"
+            }
           ],
-          "defaultOption": { "name": "MINIO", "value": "MINIO" },
+          "defaultOption": {
+            "name": "MINIO",
+            "value": "MINIO"
+          },
           "required": true,
-          "preRequisiteField": { "name": "useRudderStorage", "selectedValue": false }
+          "preRequisiteField": {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
         },
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "S3" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "S3"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "Staging S3 Storage Bucket Name",
           "labelNote": "S3 Bucket to store data before loading into Postgres",
@@ -184,8 +262,14 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "GCS" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "GCS"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "Staging GCS Object Storage Bucket Name",
           "labelNote": "GCS Bucket to store data before loading into Postgres",
@@ -199,8 +283,14 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "AZURE_BLOB" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "AZURE_BLOB"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "Staging Azure Blob Storage Container Name",
           "labelNote": "Container to store data before loading into Postgres",
@@ -214,8 +304,14 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "MINIO" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "MINIO"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "Staging MINIO Storage Bucket Name",
           "labelNote": "MINIO Bucket to store data before loading into Postgres",
@@ -229,8 +325,14 @@
         {
           "type": "checkbox",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "S3" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "S3"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "Role Based Authentication",
           "value": "roleBasedAuth",
@@ -239,9 +341,18 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "S3" },
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "roleBasedAuth", "selectedValue": true }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "S3"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            },
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": true
+            }
           ],
           "label": "IAM Role ARN",
           "value": "iamRoleARN",
@@ -257,9 +368,18 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "S3" },
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "roleBasedAuth", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "S3"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            },
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": false
+            }
           ],
           "label": "AWS Access Key ID",
           "value": "accessKeyID",
@@ -271,9 +391,18 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "S3" },
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "roleBasedAuth", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "S3"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            },
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": false
+            }
           ],
           "label": "AWS Secret Access Key",
           "value": "accessKey",
@@ -285,8 +414,14 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "AZURE_BLOB" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "AZURE_BLOB"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "Azure Blob Storage Account Name",
           "value": "accountName",
@@ -298,9 +433,18 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "AZURE_BLOB" },
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "useSASTokens", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "AZURE_BLOB"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            },
+            {
+              "name": "useSASTokens",
+              "selectedValue": false
+            }
           ],
           "label": "Azure Blob Storage Account Key",
           "value": "accountKey",
@@ -313,9 +457,18 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "AZURE_BLOB" },
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "useSASTokens", "selectedValue": true }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "AZURE_BLOB"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            },
+            {
+              "name": "useSASTokens",
+              "selectedValue": true
+            }
           ],
           "label": "Azure Blob Storage SAS Token",
           "value": "sasToken",
@@ -328,8 +481,14 @@
         {
           "type": "checkbox",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "AZURE_BLOB" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "AZURE_BLOB"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "Use shared access signature (SAS) Tokens",
           "value": "useSASTokens",
@@ -339,8 +498,14 @@
         {
           "type": "textareaInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "GCS" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "GCS"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "Credentials",
           "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your Google Cloud Storage",
@@ -352,8 +517,14 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "MINIO" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "MINIO"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "MinIO Endpoint",
           "value": "endPoint",
@@ -365,8 +536,14 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "MINIO" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "MINIO"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "MINIO Access Key ID",
           "value": "accessKeyID",
@@ -378,8 +555,14 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "MINIO" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "MINIO"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "MINIO Secret Access Key",
           "value": "secretAccessKey",
@@ -391,8 +574,14 @@
         {
           "type": "checkbox",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "MINIO" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "MINIO"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "Use SSL for connection",
           "value": "useSSL",

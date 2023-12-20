@@ -8,7 +8,10 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "subAccount": { "type": "boolean", "default": false },
+      "subAccount": {
+        "type": "boolean",
+        "default": false
+      },
       "eventsToOfflineConversionsTypeMapping": {
         "type": "array",
         "items": {
@@ -18,7 +21,10 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "to": { "type": "string", "enum": ["click", "call", "store", ""] }
+            "to": {
+              "type": "string",
+              "enum": ["click", "call", "store", ""]
+            }
           }
         }
       },
@@ -64,9 +70,19 @@
         "enum": ["none", "UNSPECIFIED", "UNKNOWN", "APP", "WEB"],
         "default": "none"
       },
-      "defaultUserIdentifier": { "type": "string", "enum": ["email", "phone"], "default": "email" },
-      "hashUserIdentifier": { "type": "boolean", "default": true },
-      "validateOnly": { "type": "boolean", "default": false },
+      "defaultUserIdentifier": {
+        "type": "string",
+        "enum": ["email", "phone"],
+        "default": "email"
+      },
+      "hashUserIdentifier": {
+        "type": "boolean",
+        "default": true
+      },
+      "validateOnly": {
+        "type": "boolean",
+        "default": false
+      },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -82,7 +98,14 @@
     },
     "anyOf": [
       {
-        "if": { "properties": { "subAccount": { "const": true } }, "required": ["subAccount"] },
+        "if": {
+          "properties": {
+            "subAccount": {
+              "const": true
+            }
+          },
+          "required": ["subAccount"]
+        },
         "then": {
           "properties": {
             "loginCustomerId": {
