@@ -1138,7 +1138,7 @@ def get_formatted_json(jsonObj):
     Returns:
         string: formatted json.
     """    
-    return json.dumps(jsonObj, indent=2)
+    return json.dumps(jsonObj, indent=2, ensure_ascii=False)
 
 def validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shouldUpdateSchema):
     """Generates a schema and compares it with an existing one. 
@@ -1243,7 +1243,7 @@ def get_schema_diff(name, selector, shouldUpdateSchema=False):
         for file_selector in file_selectors:
             if file_selector in available_files:
                 with open (f'{directory}/{file_selector}', 'r') as f:
-                    file_content.update(json.loads(f.read()))
+                    file_content.update(json.loads(f.read().encode('utf-8', 'ignore')))
         uiConfig = file_content.get("uiConfig")
         schema = file_content.get("configSchema")
         dbConfig = file_content.get("config")
