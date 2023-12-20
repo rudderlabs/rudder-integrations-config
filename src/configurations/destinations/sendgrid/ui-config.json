@@ -9,7 +9,7 @@
           "value": "apiKey",
           "regex": ".*",
           "required": true,
-          "placeholder": "e.g. tZrPAgHyn2jMWOVGKrS6gBGLYT8v9kJE",
+          "placeholder": "e.g. tZrPAgHyn2jMWXXXrS6gBGLYT8v9kJE",
           "secret": true
         },
         {
@@ -58,7 +58,7 @@
           "label": "SendGrid Contact List Id",
           "value": "listId",
           "required": false,
-          "placeholder": "e.g: 737af8d4-25b4-496e-adee-2fded15ed0c6",
+          "placeholder": "e.g: 737af8d4-XXXX-XXXX-XXXX-2fded15ed0c6",
           "footerNote": "SendGrid contact list id where contacts will be created"
         },
         {
@@ -275,13 +275,15 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
           ]
