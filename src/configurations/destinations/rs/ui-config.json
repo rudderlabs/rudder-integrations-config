@@ -64,21 +64,45 @@
           "label": "Sync Frequency",
           "value": "syncFrequency",
           "options": [
-            { "name": "Every 30 minutes", "value": "30" },
-            { "name": "Every 1 hour", "value": "60" },
-            { "name": "Every 3 hours", "value": "180" },
-            { "name": "Every 6 hours", "value": "360" },
-            { "name": "Every 12 hours", "value": "720" },
-            { "name": "Every 24 hours", "value": "1440" }
+            {
+              "name": "Every 30 minutes",
+              "value": "30"
+            },
+            {
+              "name": "Every 1 hour",
+              "value": "60"
+            },
+            {
+              "name": "Every 3 hours",
+              "value": "180"
+            },
+            {
+              "name": "Every 6 hours",
+              "value": "360"
+            },
+            {
+              "name": "Every 12 hours",
+              "value": "720"
+            },
+            {
+              "name": "Every 24 hours",
+              "value": "1440"
+            }
           ],
-          "defaultOption": { "name": "Every 30 minutes", "value": "30" },
+          "defaultOption": {
+            "name": "Every 30 minutes",
+            "value": "30"
+          },
           "required": true
         },
         {
           "type": "timePicker",
           "label": "Sync Starting At (Optional)",
           "value": "syncStartAt",
-          "options": { "omitSeconds": true, "minuteStep": 15 },
+          "options": {
+            "omitSeconds": true,
+            "minuteStep": 15
+          },
           "required": false,
           "footerNote": "Note: Please specify time in UTC"
         },
@@ -86,9 +110,18 @@
           "type": "timeRangePicker",
           "label": "Exclude window (Optional)",
           "value": "excludeWindow",
-          "startTime": { "label": "start time", "value": "excludeWindowStartTime" },
-          "endTime": { "label": "end time", "value": "excludeWindowEndTime" },
-          "options": { "omitSeconds": true, "minuteStep": 1 },
+          "startTime": {
+            "label": "start time",
+            "value": "excludeWindowStartTime"
+          },
+          "endTime": {
+            "label": "end time",
+            "value": "excludeWindowEndTime"
+          },
+          "options": {
+            "omitSeconds": true,
+            "minuteStep": 1
+          },
           "required": false,
           "footerNote": "Note: Please specify time in UTC"
         },
@@ -128,7 +161,10 @@
           "required": true,
           "placeholder": "e.g: event-bucket",
           "footerNote": "Please make sure the bucket exists in your S3",
-          "preRequisiteField": { "name": "useRudderStorage", "selectedValue": false }
+          "preRequisiteField": {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
         },
         {
           "type": "textInput",
@@ -138,11 +174,19 @@
           "regexErrorMessage": "Invalid Prefix",
           "required": false,
           "placeholder": "e.g: rudder",
-          "preRequisiteField": { "name": "useRudderStorage", "selectedValue": false }
+          "preRequisiteField": {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
         },
         {
           "type": "checkbox",
-          "preRequisiteField": [{ "name": "useRudderStorage", "selectedValue": false }],
+          "preRequisiteField": [
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
+          ],
           "label": "Role Based Authentication",
           "value": "roleBasedAuth",
           "default": true
@@ -150,15 +194,21 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "roleBasedAuth", "selectedValue": true }
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            },
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": true
+            }
           ],
           "label": "IAM Role ARN",
           "value": "iamRoleARN",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
           "regexErrorMessage": "Invalid Role ARN",
           "required": true,
-          "placeholder": "e.g: arn:aws:iam::123456789012:role/S3Access",
+          "placeholder": "e.g: arn:aws:iam::12345X789012:role/S3Access",
           "footerURL": {
             "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/",
             "text": "Instructions for creating IAM Role"
@@ -174,8 +224,14 @@
           "placeholder": "e.g: access-key-id",
           "secret": true,
           "preRequisiteField": [
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "roleBasedAuth", "selectedValue": false }
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            },
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": false
+            }
           ]
         },
         {
@@ -188,8 +244,14 @@
           "placeholder": "e.g: secret-access-key",
           "secret": true,
           "preRequisiteField": [
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "roleBasedAuth", "selectedValue": false }
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            },
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": false
+            }
           ]
         },
         {
@@ -197,7 +259,10 @@
           "label": "Enable Server Side Encryption For S3?",
           "value": "enableSSE",
           "default": false,
-          "preRequisiteField": { "name": "useRudderStorage", "selectedValue": false }
+          "preRequisiteField": {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
         }
       ]
     },
@@ -207,14 +272,15 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
               "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category Name/ID",
+              "label": "Category ID",
               "required": false
             }
           ]

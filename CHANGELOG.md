@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.61.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.60.2...v1.61.0) (2023-12-12)
+
+
+### Features
+
+* onboard reddit cloud mode destination ([#1080](https://github.com/rudderlabs/rudder-config-schema/issues/1080)) ([a3abe96](https://github.com/rudderlabs/rudder-config-schema/commit/a3abe9622fd32b0c13c834b9b9cdfc06a48b06be))
+* re-add removed supportedConnectionModes for eloqua and launchdarkly audience ([#1112](https://github.com/rudderlabs/rudder-config-schema/issues/1112)) ([89294dd](https://github.com/rudderlabs/rudder-config-schema/commit/89294dd3706b0de5f1dac9490351a71777eaf298))
+* **reddit:** add support for hashData field ([#1107](https://github.com/rudderlabs/rudder-config-schema/issues/1107)) ([d875c96](https://github.com/rudderlabs/rudder-config-schema/commit/d875c9619c0150ab678f4730a7f408ab02194639))
+* **sprig:** cloud mode ([#1089](https://github.com/rudderlabs/rudder-config-schema/issues/1089)) ([c3c06b0](https://github.com/rudderlabs/rudder-config-schema/commit/c3c06b00415b20d9ed79f0d979f6eac7e4ce837e))
+* tiktok_ads: add support for custom events ([#1109](https://github.com/rudderlabs/rudder-config-schema/issues/1109)) ([a7cdf3d](https://github.com/rudderlabs/rudder-config-schema/commit/a7cdf3dae4a06c2a3f3488358cee482bd88ebe1b))
+
+
+### Bug Fixes
+
+* destination definition files and add schema ([#1092](https://github.com/rudderlabs/rudder-config-schema/issues/1092)) ([e205d16](https://github.com/rudderlabs/rudder-config-schema/commit/e205d16eb12db2d7921b49c09c9d450e4483b15e))
+
 ### [1.60.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.60.1...v1.60.2) (2023-12-07)
 
 
