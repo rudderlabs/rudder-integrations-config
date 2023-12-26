@@ -121,7 +121,7 @@ def update_diff_db(selector):
                 status, response = update_config_definition(selector, updated_data["name"], updated_data)
                 final_report.append({"name": updated_data["name"], "action":"update", "status": status})
             else:
-                final_report.append({"name": updated_data["name"], "action":"na", "status": ""})
+                final_report.append({"name": updated_data["name"], "action":"N/A", "status": "N/A"})
 
         else:
             status, response = create_config_definition(selector, updated_data)
