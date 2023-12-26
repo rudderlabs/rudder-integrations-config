@@ -28,6 +28,7 @@ PASSWORD=os.environ['API_PASSWORD'] #sys.argv[3]
 HEADER = {"Content-Type": "application/json"}
 AUTH = (USERNAME, PASSWORD)
 CONFIG_DIR = 'src/configurations'
+REQUEST_TIMEOUT = 10 # seconds
 #########################
 
 
@@ -41,12 +42,12 @@ def parse_response(resp):
 
 def get_persisted_store(base_url, selector):
     request_url = f'{base_url}/{selector}-definitions'
-    response = requests.get(request_url)
+    response = requests.get(request_url, timeout=REQUEST_TIMEOUT)
     return json.loads(response.text)
 
 def get_config_definition(base_url, selector, name):
     request_url = f'{base_url}/{selector}-definitions/{name}'
-    response = requests.get(request_url)
+    response = requests.get(request_url, timeout=REQUEST_TIMEOUT)
     return response
 
 def get_file_content(name, selector):
@@ -66,12 +67,12 @@ def get_file_content(name, selector):
 
 def update_config_definition(selector, name, fileData):
     url = f'{CONTROL_PLANE_URL}/{selector}-definitions/{name}'
-    resp = requests.post(url=url, headers=HEADER, data=json.dumps(fileData), auth=AUTH)
+    resp = requests.post(url=url, headers=HEADER, data=json.dumps(fileData), auth=AUTH, timeout=REQUEST_TIMEOUT)
     return parse_response(resp)
 
 def create_config_definition(selector, fileData):
     url = f'{CONTROL_PLANE_URL}/{selector}-definitions/'
-    resp = requests.post(url=url, headers=HEADER, data=json.dumps(fileData), auth=AUTH)
+    resp = requests.post(url=url, headers=HEADER, data=json.dumps(fileData), auth=AUTH, timeout=REQUEST_TIMEOUT)
     return parse_response(resp)
 
 def update_config(data_diff, selector):
@@ -86,7 +87,7 @@ def update_config(data_diff, selector):
         else:
             url = f'{CONTROL_PLANE_URL}/{selector}-definitions/{nameInConfig}'
 
-        resp = requests.post(url=url, headers=HEADER, data=json.dumps(fileData), auth=AUTH)
+        resp = requests.post(url=url, headers=HEADER, data=json.dumps(fileData), auth=AUTH, timeout=REQUEST_TIMEOUT)
         status, response = parse_response(resp)
         diff['update'] = {"status": status, "response": response}
         # results.append(diff)
