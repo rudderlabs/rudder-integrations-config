@@ -1,6 +1,28 @@
 [
   {
     "config": {
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        },
+        {
+          "oneTrustCookieCategory": "C0002"
+        }
+      ],
+      "ketchConsentPurposes": [
+        {
+          "purpose": "P1"
+        },
+        {
+          "purpose": "P2"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["oneTrustCookieCategories must be object", "ketchConsentPurposes must be object"]
+  },
+  {
+    "config": {
       "oneTrustCookieCategories": {
         "android": [
           {
@@ -23,14 +45,10 @@
             "oneTrustCookieCategory": ""
           }
         ],
-        "cordova": [
-          {
-            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
-          }
-        ],
+        "cordova": [],
         "flutter": [
           {
-            "oneTrustCookieCategory": "\\{\\{ event.properties.prop1 || 'val' \\}\\}"
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
           }
         ]
       },
@@ -56,16 +74,75 @@
             "purpose": ""
           }
         ],
-        "cordova": [
+        "cordova": [],
+        "flutter": [
           {
             "purpose": "env.ENVIRONMENT_VARIABLE"
           }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "oneTrustCookieCategories": {
+        "android": [
+          {
+            "oneTrustCookieCategory": "\\{\\{ event.properties.prop1 || 'val' \\}\\}"
+          }
         ],
-        "flutter": [
+        "ios": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "reactnative": [
+          {
+            "oneTrustCookieCategory": "C0003"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "cordova": [
+          {
+            "oneTrustCookieCategory": ""
+          }
+        ],
+        "flutter": []
+      },
+      "ketchConsentPurposes": {
+        "android": [
           {
             "purpose": "\\{\\{ event.properties.prop1 || 'val' \\}\\}"
           }
-        ]
+        ],
+        "ios": [
+          {
+            "purpose": "P1"
+          },
+          {
+            "purpose": "P2"
+          }
+        ],
+        "reactnative": [
+          {
+            "purpose": "P3"
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "cordova": [
+          {
+            "purpose": ""
+          }
+        ],
+        "flutter": []
       }
     },
     "result": true
@@ -103,7 +180,7 @@
             "oneTrustCookieCategory": "C0002"
           }
         ],
-        "ios": [
+        "android": [
           {
             "someunsupportedkey": "C0001"
           },
@@ -114,7 +191,7 @@
             "oneTrustCookieCategory": "C0004"
           }
         ],
-        "reactnative": [
+        "ios": [
           {
             "oneTrustCookieCategory": {
               "not": "a string"
@@ -124,10 +201,10 @@
             "oneTrustCookieCategory": "C0004"
           }
         ],
-        "cordova": {
+        "reactnative": {
           "not": "an array"
         },
-        "flutter": [
+        "cordova": [
           "not an object",
           {
             "oneTrustCookieCategory": "C0004"
@@ -143,7 +220,7 @@
             "purpose": "P2"
           }
         ],
-        "ios": [
+        "android": [
           {
             "someunsupportedkey": "P1"
           },
@@ -154,7 +231,7 @@
             "purpose": "P4"
           }
         ],
-        "reactnative": [
+        "ios": [
           {
             "purpose": {
               "not": "a string"
@@ -164,10 +241,10 @@
             "purpose": "P4"
           }
         ],
-        "cordova": {
+        "reactnative": {
           "not": "an array"
         },
-        "flutter": [
+        "cordova": [
           "not an object",
           {
             "purpose": "P4"
@@ -177,17 +254,17 @@
     },
     "err": [
       "oneTrustCookieCategories must NOT have additional properties",
-      "oneTrustCookieCategories.ios.0 must NOT have additional properties",
-      "oneTrustCookieCategories.ios.1.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
-      "oneTrustCookieCategories.reactnative.0.oneTrustCookieCategory must be string",
-      "oneTrustCookieCategories.cordova must be array",
-      "oneTrustCookieCategories.flutter.0 must be object",
+      "oneTrustCookieCategories.android.0 must NOT have additional properties",
+      "oneTrustCookieCategories.android.1.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.ios.0.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.reactnative must be array",
+      "oneTrustCookieCategories.cordova.0 must be object",
       "ketchConsentPurposes must NOT have additional properties",
-      "ketchConsentPurposes.ios.0 must NOT have additional properties",
-      "ketchConsentPurposes.ios.1.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
-      "ketchConsentPurposes.reactnative.0.purpose must be string",
-      "ketchConsentPurposes.cordova must be array",
-      "ketchConsentPurposes.flutter.0 must be object"
+      "ketchConsentPurposes.android.0 must NOT have additional properties",
+      "ketchConsentPurposes.android.1.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "ketchConsentPurposes.ios.0.purpose must be string",
+      "ketchConsentPurposes.reactnative must be array",
+      "ketchConsentPurposes.cordova.0 must be object"
     ],
     "result": false
   }
