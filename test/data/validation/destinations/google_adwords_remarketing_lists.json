@@ -4,128 +4,6 @@
       "oneTrustCookieCategories": {
         "cloud": [
           {
-            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
-          }
-        ],
-        "warehouse": [
-          {
-            "oneTrustCookieCategory": "{{ event.properties.prop1 || 'val' }}"
-          }
-        ],
-        "shopify": [
-          {
-            "oneTrustCookieCategory": "C0001"
-          },
-          {
-            "oneTrustCookieCategory": "C0002"
-          }
-        ]
-      },
-      "ketchConsentPurposes": {
-        "cloud": [
-          {
-            "purpose": "env.ENVIRONMENT_VARIABLE"
-          }
-        ],
-        "warehouse": [
-          {
-            "purpose": "{{ event.properties.prop1 || 'val' }}"
-          }
-        ],
-        "shopify": [
-          {
-            "purpose": "P1"
-          },
-          {
-            "purpose": "P2"
-          }
-        ]
-      }
-    },
-    "result": true
-  },
-  {
-    "config": {
-      "oneTrustCookieCategories": {
-        "someunsupportedsourcetype": [
-          {
-            "oneTrustCookieCategory": "C0001"
-          },
-          {
-            "oneTrustCookieCategory": "C0002"
-          }
-        ],
-        "warehouse": [
-          {
-            "someunsupportedkey": "C0001"
-          },
-          {
-            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-          },
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ],
-        "shopify": [
-          {
-            "oneTrustCookieCategory": {
-              "not": "a string"
-            }
-          },
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ]
-      },
-      "ketchConsentPurposes": {
-        "someunsupportedsourcetype": [
-          {
-            "purpose": "P1"
-          },
-          {
-            "purpose": "P2"
-          }
-        ],
-        "warehouse": [
-          {
-            "someunsupportedkey": "P1"
-          },
-          {
-            "purpose": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-          },
-          {
-            "purpose": "P4"
-          }
-        ],
-        "shopify": [
-          {
-            "purpose": {
-              "not": "a string"
-            }
-          },
-          {
-            "purpose": "P4"
-          }
-        ]
-      }
-    },
-    "err": [
-      "oneTrustCookieCategories must NOT have additional properties",
-      "oneTrustCookieCategories.warehouse.0 must NOT have additional properties",
-      "oneTrustCookieCategories.warehouse.1.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
-      "oneTrustCookieCategories.shopify.0.oneTrustCookieCategory must be string",
-      "ketchConsentPurposes must NOT have additional properties",
-      "ketchConsentPurposes.warehouse.0 must NOT have additional properties",
-      "ketchConsentPurposes.warehouse.1.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
-      "ketchConsentPurposes.shopify.0.purpose must be string"
-    ],
-    "result": false
-  },
-  {
-    "config": {
-      "oneTrustCookieCategories": {
-        "cloud": [
-          {
             "oneTrustCookieCategory": "C0001"
           },
           {
@@ -296,7 +174,6 @@
         }
       }
     },
-    "result": false,
     "err": [
       "oneTrustCookieCategories must NOT have additional properties",
       "oneTrustCookieCategories.cloud.0 must NOT have additional properties",
@@ -308,7 +185,8 @@
       "ketchConsentPurposes.cloud.1.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
       "ketchConsentPurposes.warehouse.0.purpose must be string",
       "ketchConsentPurposes.shopify must be array"
-    ]
+    ],
+    "result": false
   },
   {
     "config": {
@@ -329,10 +207,10 @@
         ]
       }
     },
-    "result": false,
     "err": [
       "oneTrustCookieCategories.cloud.0 must be object",
       "ketchConsentPurposes.cloud.0 must be object"
-    ]
+    ],
+    "result": false
   }
 ]
