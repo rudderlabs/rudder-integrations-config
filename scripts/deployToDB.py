@@ -129,6 +129,9 @@ def update_diff_db(selector):
 
     return final_report
 
+def get_formatted_json(data):
+    return json.dumps(data, indent=2)
+
 def get_stale_data(selector, report):
     stale_config_report = []
     persisted_data_set = get_persisted_store(CONTROL_PLANE_URL, selector)
@@ -142,24 +145,48 @@ def get_stale_data(selector, report):
     return stale_config_report
 
 if __name__ == '__main__':
+    print('\n')
+    print('#'*50)
     print("Running Destination Definitions Updates")
     dest_final_report = update_diff_db('destination')
-    print("Destination Definition Update Report")
-    print(dest_final_report)
-    print("Destination Stale Config Report")
-    print(get_stale_data('destination', dest_final_report))
 
+    print('\n')
+    print('#'*50)
+    print("Destination Definition Update Report")
+    print(get_formatted_json(dest_final_report))
+
+    print('\n')
+    print('#'*50)
+    print("Stale Destinations Report")
+    print(get_formatted_json(get_stale_data('destination', dest_final_report)))
+
+    print('\n')
+    print('#'*50)
     print("Running Source Definitions Updates")
     src_final_report = update_diff_db('source')
-    print("Source Definition Update Report")
-    print(src_final_report)
-    print("Source Stale Config Report")
-    print(get_stale_data('source', src_final_report))
 
-    print("Running Wht Lib Projects Definitions Updates")
+    print('\n')
+    print('#'*50)
+    print("Source Definition Update Report")
+    print(get_formatted_json(src_final_report))
+
+    print('\n')
+    print('#'*50)
+    print("Stale Sources Report")
+    print(get_formatted_json(get_stale_data('source', src_final_report)))
+
+    print('\n')
+    print('#'*50)
+    print("Running Wht Lib Project Definitions Updates")
     wht_final_report = update_diff_db('wht-lib-project')
-    print("Wht lib project Definition Update Report")
-    print(wht_final_report)
-    print("Wht lib project Stale Config Report")
-    print(get_stale_data('wht-lib-project', wht_final_report))
+
+    print('\n')
+    print('#'*50)
+    print("Wht Lib Project Definition Update Report")
+    print(get_formatted_json(wht_final_report))
+
+    print('\n')
+    print('#'*50)
+    print("Stale Wht Lib Projects Report")
+    print(get_formatted_json(get_stale_data('wht-lib-project', wht_final_report)))
     
