@@ -12,7 +12,7 @@ Put down any required details on the broader aspect of your changes. If there ar
 
 ### Type of change
 
-Any changes to existing capabilities/behaviour, mention the reason & what are the changes ?
+<strong>Any changes to existing capabilities/behaviour, mention the reason & what are the changes ?</strong>
 
 ### Any new dependencies introduced with this change?
 
