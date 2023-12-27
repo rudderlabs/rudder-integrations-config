@@ -30,11 +30,11 @@ N/A
 
 - [ ] **No breaking changes are being introduced.**
 
-- [ ] Are all related docs & task tracker issues linked with the PR?
+- [ ] All related docs linked with the PR?
 
-- [ ] Are all changes manually tested?
+- [ ] All changes manually tested?
 
-- [ ] Does this change require any documentation changes?
+- [ ] Any documentation changes needed with this change?
 
 - [ ] I have executed schemaGenerator tests and updated schema if needed
 
