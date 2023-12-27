@@ -2,33 +2,23 @@
 
 Write a brief explainer on your code changes.
 
+## What is the related Linear task?
+
+Resolves INT-<>
+
 ## Please explain the objectives of your changes below
 
 Put down any required details on the broader aspect of your changes. If there are any dependent changes, **mandatorily** mention them here
 
 ### Type of change
 
-If the pull request is a **bug-fix**, **enhancement** or a **refactor**, please fill in the details on the changes made.
-
-- Existing capabilities/behavior
-
-- New capabilities/behavior
-
-If the pull request is a **new feature**,
+Any changes to existing capabilities/behaviour, mention the reason & what are the changes ?
 
 ### Any new dependencies introduced with this change?
 
 N/A
 
 ### Any new checks got introduced or modified in test suites. Please explain the changes.
-
-N/A
-
-### If the PR has changes in more than 10 files, please mention why the changes were not split into multiple PRs.
-
-N/A
-
-### If multiple linear tasks are associated with the PR changes, please elaborate on the reason:
 
 N/A
 
@@ -48,7 +38,11 @@ N/A
 
 - [ ] I have executed schemaGenerator tests and updated schema if needed
 
-- [ ] Are sensitive fields marked as secret in definition config ?
+- [ ] Are sensitive fields marked as secret in definition config?
+
+- [ ] Is the PR limited to 10 file changes?
+
+- [ ] Is the PR limited to one linear task?
 
 ### Reviewer checklist
 
