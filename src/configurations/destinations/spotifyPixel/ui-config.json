@@ -1,0 +1,159 @@
+{
+    "uiConfig": [
+      {
+        "title": "Connection Settings",
+        "fields": [
+          {
+            "type": "textInput",
+            "label": "Pixel ID",
+            "value": "pixelId",
+            "regex": "^(.{1,100})$",
+            "regexErrorMessage": "Invalid Pixel ID",
+            "required": true,
+            "placeholder": "e.g. dzq1p89h2bnpXXXX9x65hyx2hf5q1k3v",
+            "secret": true,
+            "footerNote": "Spotify Pixel dashboard > Manage > Your Pixels"
+          }
+        ]
+      },
+      {
+        "title": "Event Mapping",
+        "fields": [
+          {
+            "type": "dynamicSelectForm",
+            "label": "Map Rudder events to Spotify Pixel events",
+            "labelLeft": "Event Name",
+            "labelRight": "Spotify Pixel Event",
+            "value": "eventsToSpotifyPixelEvents",
+            "keyLeft": "from",
+            "keyRight": "to",
+            "required": false,
+            "placeholderLeft": "e.g: Order Completed",
+            "placeholderRight": "e.g: Initiate Checkout",
+            "footerNote": "Multiple Spotify Pixel events can be mapped with single RudderStack event and vice versa. e.g. `ABC` can be mapped with `Product` and `Purchase`.",
+            "options": [
+              {
+                "name": "Lead",
+                "value": "lead"
+              },
+              {
+                "name": "Product",
+                "value": "product"
+              },
+              {
+                "name": "Add to Cart",
+                "value": "addtocart"
+              },
+              {
+                "name": "Check out",
+                "value": "checkout"
+              },
+              {
+                "name": "Purchase",
+                "value": "purchase"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Spotify Pixel Alias Event Setting",
+        "fields": [
+          {
+            "type": "checkbox",
+            "label": "Pass Internal Id",
+            "value": "enableAliasCall",
+            "default": false,
+            "footerNote": "Spotify Pixel dashboard > Manage > Your Pixels > Alias Events. Enable this option to pass the hashed internal ID with each event to match the Spotify Pixel conversions attribute with your internal systems. RudderStack uses sha256 for hashing the Id. "
+          }
+        ]
+      },
+      {
+        "title": "Client-side Events Filtering",
+        "fields": [
+          {
+            "type": "singleSelect",
+            "value": "eventFilteringOption",
+            "required": false,
+            "options": [
+              {
+                "name": "Disable",
+                "value": "disable"
+              },
+              {
+                "name": "Allowlist",
+                "value": "whitelistedEvents"
+              },
+              {
+                "name": "Denylist",
+                "value": "blacklistedEvents"
+              }
+            ],
+            "defaultOption": {
+              "name": "Disable",
+              "value": "disable"
+            }
+          },
+          {
+            "type": "dynamicCustomForm",
+            "value": "whitelistedEvents",
+            "label": "Allowlist",
+            "customFields": [
+              {
+                "type": "textInput",
+                "value": "eventName",
+                "required": false,
+                "placeholder": "e.g: Anonymous Page Visit"
+              }
+            ]
+          },
+          {
+            "type": "dynamicCustomForm",
+            "value": "blacklistedEvents",
+            "label": "Denylist",
+            "customFields": [
+              {
+                "type": "textInput",
+                "value": "eventName",
+                "required": false,
+                "placeholder": "e.g: Credit Card Added"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Native SDK",
+        "fields": [
+          {
+            "type": "defaultCheckbox",
+            "label": "Use device-mode to send events",
+            "value": "useNativeSDK",
+            "default": true
+          }
+        ]
+      },
+      {
+        "title": "Consent Settings",
+        "fields": [
+          {
+            "type": "dynamicCustomForm",
+            "value": "oneTrustCookieCategories",
+            "label": "OneTrust Consent Categories",
+            "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+            "customFields": [
+              {
+                "type": "textInput",
+                "placeholder": "C0001",
+                "value": "oneTrustCookieCategory",
+                "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                "label": "Category ID",
+                "required": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  
