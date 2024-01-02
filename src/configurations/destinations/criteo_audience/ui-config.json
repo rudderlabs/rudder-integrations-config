@@ -1,95 +1,137 @@
 {
-  "uiConfig": [
-    {
-      "title": "Audience Settings",
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Audience Type",
+                    "configKey": "audienceType",
+                    "placeholder": "email",
+                    "options": [
+                      {
+                        "name": "email",
+                        "value": "email"
+                      },
+                      {
+                        "name": "madid",
+                        "value": "madid"
+                      },
+                      {
+                        "name": "identityLink",
+                        "value": "identityLink"
+                      },
+                      {
+                        "name": "gum",
+                        "value": "gum"
+                      }
+                    ],
+                    "default": "email"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "GUM Caller Id",
+                    "configKey": "gumCallerId",
+                    "regex": "^[0-9]+$",
+                    "regexErrorMessage": "Invalid GUM Caller Id",
+                    "placeholder": "e.g. 532XX445",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "audienceType",
+                          "value": "gum"
+                        }
+                      ]
+                    },
+                    "footerNote": "GUM cookie identifier"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "OneTrust consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
+                  },
+                  "about RudderStack's OneTrust Consent Management feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category ID",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "empty",
       "fields": [
-        {
-          "type": "textInput",
-          "label": "Advertiser Id",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$",
-          "value": "adAccountId",
-          "secret": false,
-          "required": true,
-          "placeholder": "e.g. 34X67",
-          "regexErrorMessage": "Invalid Advertiser Id"
-        },
         {
           "type": "textInput",
           "label": "Audience Id",
-          "value": "audienceId",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$",
-          "regexErrorMessage": "Invalid Audience Id",
-          "required": true,
-          "placeholder": "e.g. 53XX45",
-          "secret": false,
-          "footerNote": "The audience id of the audience to which you want to sync the data"
-        },
-        {
-          "type": "singleSelect",
-          "label": "Audience Type",
-          "value": "audienceType",
-          "required": true,
-          "placeholder": "email",
-          "options": [
-            {
-              "name": "email",
-              "value": "email"
-            },
-            {
-              "name": "madid",
-              "value": "madid"
-            },
-            {
-              "name": "identityLink",
-              "value": "identityLink"
-            },
-            {
-              "name": "gum",
-              "value": "gum"
-            }
-          ],
-          "defaultOption": {
-            "name": "email",
-            "value": "email"
-          }
+          "regexErrorMessage": "Invalid Advertiser Id",
+          "configKey": "audienceId",
+          "placeholder": "238476XXXX5910030"
         },
         {
           "type": "textInput",
-          "label": "GUM Caller Id",
-          "value": "gumCallerId",
-          "regex": "^[0-9]+$",
-          "regexErrorMessage": "Invalid GUM Caller Id",
-          "required": true,
-          "placeholder": "e.g. 532XX445",
-          "secret": false,
-          "preRequisiteField": {
-            "name": "audienceType",
-            "selectedValue": "gum"
-          },
-          "footerNote": "GUM cookie identifier"
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Consent Categories",
-          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "C0001",
-              "value": "oneTrustCookieCategory",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category ID",
-              "required": false
-            }
-          ]
+          "label": "Ad Account id",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$",
+          "regexErrorMessage": "Invalid Audience Id",
+          "value": "adAccountId",
+          "placeholder": "2309XXX5483"
         }
       ]
     }
-  ]
+  }
 }

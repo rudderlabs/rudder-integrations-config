@@ -1,3 +1,66 @@
 {
-  "configSchema": null
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["customerId", "audienceId"],
+    "type": "object",
+    "properties": {
+      "customerId": {
+        "type": "string",
+        "pattern": "^(.{1,100})$"
+      },
+      "audienceId": {
+        "type": "object",
+        "properties": {
+          "cloud": {
+            "type": "string"
+          }
+        }
+      },
+      "subAccount": {
+        "type": "boolean",
+        "default": false
+      },
+      "loginCustomerId": {
+        "type": "string",
+        "pattern": "^(.{1,100})$"
+      },
+      "typeOfList": {
+        "type": "string",
+        "enum": ["General", "userID", "mobileDeviceID"],
+        "default": "General"
+      },
+      "userSchema": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": ["email", "phone", "addressInfo"]
+        },
+        "default": ["email"]
+      },
+      "isHashRequired": {
+        "type": "boolean",
+        "default": true
+      },
+
+      "oneTrustCookieCategories": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "oneTrustCookieCategory": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "useNativeSDK": {
+        "type": "boolean"
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {}
+      }
+    }
+  }
 }
