@@ -1,159 +1,266 @@
 {
-    "uiConfig": [
-      {
-        "title": "Connection Settings",
-        "fields": [
-          {
-            "type": "textInput",
-            "label": "Pixel ID",
-            "value": "pixelId",
-            "regex": "^(.{1,100})$",
-            "regexErrorMessage": "Invalid Pixel ID",
-            "required": true,
-            "placeholder": "e.g. dzq1p89h2bnpXXXX9x65hyx2hf5q1k3v",
-            "secret": true,
-            "footerNote": "Spotify Pixel dashboard > Manage > Your Pixels"
-          }
-        ]
-      },
-      {
-        "title": "Event Mapping",
-        "fields": [
-          {
-            "type": "dynamicSelectForm",
-            "label": "Map Rudder events to Spotify Pixel events",
-            "labelLeft": "Event Name",
-            "labelRight": "Spotify Pixel Event",
-            "value": "eventsToSpotifyPixelEvents",
-            "keyLeft": "from",
-            "keyRight": "to",
-            "required": false,
-            "placeholderLeft": "e.g: Order Completed",
-            "placeholderRight": "e.g: Initiate Checkout",
-            "footerNote": "Multiple Spotify Pixel events can be mapped with single RudderStack event and vice versa. e.g. `ABC` can be mapped with `Product` and `Purchase`.",
-            "options": [
-              {
-                "name": "Lead",
-                "value": "lead"
-              },
-              {
-                "name": "Product",
-                "value": "product"
-              },
-              {
-                "name": "Add to Cart",
-                "value": "addtocart"
-              },
-              {
-                "name": "Check out",
-                "value": "checkout"
-              },
-              {
-                "name": "Purchase",
-                "value": "purchase"
+    "uiConfig": {
+      "baseTemplate": [
+        {
+          "title": "Initial setup",
+          "note": "Review how this destination is set up",
+          "sections": [
+            {
+              "groups": [
+                {
+                  "title": "Connection Settings",
+                  "note": "Update your connection settings here",
+                  "icon": "settings",
+                  "fields": [
+                    {
+                      "type": "textInput",
+                      "label": "Pixel ID",
+                      "note": "Spotify Pixel dashboard > Manage > Your Pixels",
+                      "configKey": "pixelId",
+                      "regex": "^(.{1,100})$",
+                      "secret": true,
+                      "regexErrorMessage": "Invalid Pixel ID",
+                      "placeholder": "e.g. dzq1p89h2bnpXXXX9x65hyx2hf5q1k3v"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "groups": [
+                {
+                  "title": "Connection mode",
+                  "note": [
+                    "Update how you want to route events from your source to destination. ",
+                    {
+                      "text": "Get help deciding",
+                      "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                    }
+                  ],
+                  "icon": "sliders",
+                  "fields": []
+                }
+              ]
+            },
+            {
+                "title": "Mappings",
+                "hideEditIcon": true,
+                "sections": [
+                  {
+                    "groups": [
+                      {
+                        "title": "Rudderstack to Spotify Pixel Event Mappings",
+                        "fields": [
+                          {
+                            "type": "redirect",
+                            "redirectGroupKey": "spotifyPixelEventMapping",
+                            "label": "Event and property mappings"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
               }
-            ]
-          }
-        ]
-      },
-      {
-        "title": "Spotify Pixel Alias Event Setting",
-        "fields": [
-          {
-            "type": "checkbox",
-            "label": "Pass Internal Id",
-            "value": "enableAliasCall",
-            "default": false,
-            "footerNote": "Spotify Pixel dashboard > Manage > Your Pixels > Alias Events. Enable this option to pass the hashed internal ID with each event to match the Spotify Pixel conversions attribute with your internal systems. RudderStack uses sha256 for hashing the Id. "
-          }
-        ]
-      },
-      {
-        "title": "Client-side Events Filtering",
-        "fields": [
-          {
-            "type": "singleSelect",
-            "value": "eventFilteringOption",
-            "required": false,
-            "options": [
-              {
-                "name": "Disable",
-                "value": "disable"
-              },
-              {
-                "name": "Allowlist",
-                "value": "whitelistedEvents"
-              },
-              {
-                "name": "Denylist",
-                "value": "blacklistedEvents"
-              }
-            ],
-            "defaultOption": {
-              "name": "Disable",
-              "value": "disable"
+          ]
+        },
+        {
+          "title": "Configuration settings",
+          "note": "Manage the settings for your destination",
+          "sections": [
+            {
+              "title": "Destination settings",
+              "note": "Configure advanced destination-specific settings here",
+              "icon": "settings",
+              "groups": [
+                {
+                  "title": "Spotify Pixel Alias Event Setting",
+                  "fields": [
+                    {
+                      "type": "checkbox",
+                      "label": "Pass Internal Id",
+                      "configKey": "enableAliasCall",
+                      "default": false
+                    }
+                  ]
             }
-          },
-          {
-            "type": "dynamicCustomForm",
-            "value": "whitelistedEvents",
-            "label": "Allowlist",
-            "customFields": [
-              {
-                "type": "textInput",
-                "value": "eventName",
-                "required": false,
-                "placeholder": "e.g: Anonymous Page Visit"
-              }
-            ]
-          },
-          {
-            "type": "dynamicCustomForm",
-            "value": "blacklistedEvents",
-            "label": "Denylist",
-            "customFields": [
-              {
-                "type": "textInput",
-                "value": "eventName",
-                "required": false,
-                "placeholder": "e.g: Credit Card Added"
-              }
-            ]
-          }
-        ]
+              ]
+            },
+            {
+              "title": "Other settings",
+              "note": "Configure advanced RudderStack features here",
+              "icon": "otherSettings",
+              "groups": [
+                {
+                  "title": "Client-side event filtering",
+                  "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                  "preRequisites": {
+                    "fields": [
+                      {
+                        "configKey": "connectionModes.webDevice",
+                        "value": true
+                      },
+                      {
+                        "configKey": "connectionModes.mobileDevice",
+                        "value": true
+                      }
+                    ],
+                    "condition": "or"
+                  },
+                  "fields": [
+                    {
+                      "type": "singleSelect",
+                      "label": "Choose if you want to turn on events filtering:",
+                      "configKey": "eventFilteringOption",
+                      "note": "You must select either allowlist or denylist to enable events filtering",
+                      "options": [
+                        {
+                          "label": "No events filtering",
+                          "value": "disable"
+                        },
+                        {
+                          "label": "Filter via allowlist",
+                          "value": "whitelistedEvents"
+                        },
+                        {
+                          "label": "Filter via denylist",
+                          "value": "blacklistedEvents"
+                        }
+                      ],
+                      "default": "disable"
+                    },
+                    {
+                      "type": "tagInput",
+                      "label": "Allowlisted events",
+                      "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
+                      "configKey": "whitelistedEvents",
+                      "tagKey": "eventName",
+                      "placeholder": "e.g: Anonymous page visit",
+                      "default": [
+                        {
+                          "eventName": ""
+                        }
+                      ],
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "configKey": "eventFilteringOption",
+                            "value": "whitelistedEvents"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "tagInput",
+                      "label": "Denylisted events",
+                      "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
+                      "configKey": "blacklistedEvents",
+                      "tagKey": "eventName",
+                      "placeholder": "e.g: Anonymous page visit",
+                      "default": [
+                        {
+                          "eventName": ""
+                        }
+                      ],
+                      "preRequisites": {
+                        "fields": [
+                          {
+                            "configKey": "eventFilteringOption",
+                            "value": "blacklistedEvents"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "title": "OneTrust cookie consent settings",
+                  "note": [
+                    "Enter your OneTrust category names if you have them configured. ",
+                    {
+                      "text": "Learn more ",
+                      "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                    },
+                    "about RudderStack’s OneTrust Consent Manager feature."
+                  ],
+                  "fields": [
+                    {
+                      "type": "tagInput",
+                      "label": "Cookie category name",
+                      "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                      "configKey": "oneTrustCookieCategories",
+                      "tagKey": "oneTrustCookieCategory",
+                      "placeholder": "e.g: Credit card visit",
+                      "default": [
+                        {
+                          "oneTrustCookieCategory": ""
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "redirectGroups": {
+        "spotifyPixelEventMapping": {
+          "tabs": [
+            {
+              "name": "Spotify Pixel event mapping",
+              "fields": [
+                {
+                  "type": "mapping",
+                  "label": "Mapping to trigger the Rudderstack events with standard Spotify Pixel events",
+                  "configKey": "eventsToSpotifyPixelEvents",
+                  "default": [],
+                  "columns": [
+                    {
+                      "type": "textInput",
+                      "key": "from",
+                      "label": "Event Name",
+                      "placeholder": "e.g: Order Completed"
+                    },
+                    {
+                      "type": "singleSelect",
+                      "key": "to",
+                      "label": "Spotify Pixel Standard Event",
+                      "placeholder": "e.g: Checkout",
+                      "options": [
+                        {
+                          "name": "Lead",
+                          "value": "lead"
+                        },
+                        {
+                          "name": "Product",
+                          "value": "product"
+                        },
+                        {
+                          "name": "Add to Cart",
+                          "value": "addtocart"
+                        },
+                        {
+                          "name": "Check out",
+                          "value": "checkout"
+                        },
+                        {
+                          "name": "Purchase",
+                          "value": "purchase"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
       },
-      {
-        "title": "Native SDK",
-        "fields": [
-          {
-            "type": "defaultCheckbox",
-            "label": "Use device-mode to send events",
-            "value": "useNativeSDK",
-            "default": true
-          }
-        ]
-      },
-      {
-        "title": "Consent Settings",
-        "fields": [
-          {
-            "type": "dynamicCustomForm",
-            "value": "oneTrustCookieCategories",
-            "label": "OneTrust Consent Categories",
-            "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-            "customFields": [
-              {
-                "type": "textInput",
-                "placeholder": "C0001",
-                "value": "oneTrustCookieCategory",
-                "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                "label": "Category ID",
-                "required": false
-              }
-            ]
-          }
-        ]
+      "sdkTemplate": {
+        "title": "Web SDK settings",
+        "note": "not visible in the ui",
+        "fields": []
       }
-    ]
+    }
   }
-  
