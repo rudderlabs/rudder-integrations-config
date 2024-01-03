@@ -32,7 +32,12 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": [{ "name": "useSASTokens", "selectedValue": false }],
+          "preRequisiteField": [
+            {
+              "name": "useSASTokens",
+              "selectedValue": false
+            }
+          ],
           "label": "Azure Blob Storage Account Key",
           "value": "accountKey",
           "regex": "^(.{0,100})$",
@@ -43,7 +48,12 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": [{ "name": "useSASTokens", "selectedValue": true }],
+          "preRequisiteField": [
+            {
+              "name": "useSASTokens",
+              "selectedValue": true
+            }
+          ],
           "label": "Azure Blob Storage SAS Token",
           "value": "sasToken",
           "regex": "^(.+)$",
@@ -67,13 +77,15 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
           ]

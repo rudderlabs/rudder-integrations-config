@@ -10,7 +10,7 @@
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid API Key",
           "required": true,
-          "placeholder": "e.g: 99ba062d-22de-4dd0-a65f-0b064495f74f",
+          "placeholder": "e.g: 99bX062d-XXXX-XXXX-XXXX-0b06X495f74f",
           "secret": true
         }
       ]
@@ -21,13 +21,15 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
           ]

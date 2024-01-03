@@ -9,7 +9,7 @@
           "value": "apiToken",
           "regex": ".*",
           "required": true,
-          "placeholder": "e.g: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwian..",
+          "placeholder": "e.g: eyJ0eXAiOiJKV1QiLCJhbGXXXXJSUzI1NiJ9.eyJhdWQiOiIxIiwian..",
           "secret": true
         }
       ]
@@ -23,17 +23,26 @@
           "value": "channelId",
           "regex": ".*",
           "required": true,
-          "placeholder": "e.g: 89002"
+          "placeholder": "e.g: 89X02"
         },
         {
           "type": "singleSelect",
           "label": "Channel Identifier",
           "value": "channelIdentifier",
           "options": [
-            { "name": "Email", "value": "email" },
-            { "name": "Phone", "value": "phone" }
+            {
+              "name": "Email",
+              "value": "email"
+            },
+            {
+              "name": "Phone",
+              "value": "phone"
+            }
           ],
-          "defaultOption": { "name": "Email", "value": "email" },
+          "defaultOption": {
+            "name": "Email",
+            "value": "email"
+          },
           "required": true
         },
         {
@@ -63,13 +72,15 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
           ]

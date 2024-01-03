@@ -10,7 +10,7 @@
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$",
           "regexErrorMessage": "Invalid Customer Account Id",
           "required": true,
-          "placeholder": "e.g. 532144445",
+          "placeholder": "e.g. 532XXXX45",
           "secret": false,
           "footerNote": "Your Customer Account Id (account identifier)"
         },
@@ -21,7 +21,7 @@
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$",
           "regexErrorMessage": "Invalid Customer Id",
           "required": true,
-          "placeholder": "e.g. 343434598",
+          "placeholder": "e.g. 343XXX598",
           "secret": false,
           "footerNote": "Your Customer Id"
         },
@@ -32,7 +32,7 @@
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$",
           "regexErrorMessage": "Invalid Audience Id",
           "required": true,
-          "placeholder": "e.g. 532145",
+          "placeholder": "e.g. 53XXXX5",
           "secret": false,
           "footerNote": "The audience id of the audience to which you want to sync the data"
         },
@@ -51,13 +51,15 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
           ]
