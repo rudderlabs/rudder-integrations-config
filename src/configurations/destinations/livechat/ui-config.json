@@ -10,7 +10,7 @@
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
           "regexErrorMessage": "License ID length should be less than 100 characters",
           "required": true,
-          "placeholder": "e.g: 0c739ebb-2016-44a0-b1da-a5b5eb272474",
+          "placeholder": "e.g: 0c739ebb-XXXX-XXXX-XXXX-a5b5eb272474",
           "secret": true
         }
       ]
@@ -233,13 +233,15 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
           ]

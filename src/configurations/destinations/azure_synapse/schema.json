@@ -13,29 +13,62 @@
       "useRudderStorage"
     ],
     "properties": {
-      "host": { "type": "string", "pattern": "(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$" },
-      "database": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
-      "user": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
-      "password": { "type": "string", "pattern": "(^env[.].+)|.+" },
-      "port": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
-      "namespace": { "type": "string", "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$" },
-      "sslMode": { "type": "string", "pattern": "^(disable|true|false)$" },
+      "host": {
+        "type": "string",
+        "pattern": "(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$"
+      },
+      "database": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "user": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "password": {
+        "type": "string",
+        "pattern": "(^env[.].+)|.+"
+      },
+      "port": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
+      },
+      "sslMode": {
+        "type": "string",
+        "pattern": "^(disable|true|false)$"
+      },
       "syncFrequency": {
         "type": "string",
         "pattern": "^(30|60|180|360|720|1440)$",
         "default": "30"
       },
-      "syncStartAt": { "type": "string" },
+      "syncStartAt": {
+        "type": "string"
+      },
       "excludeWindow": {
         "type": "object",
         "required": ["excludeWindowStartTime", "excludeWindowEndTime"],
         "properties": {
-          "excludeWindowStartTime": { "type": "string" },
-          "excludeWindowEndTime": { "type": "string" }
+          "excludeWindowStartTime": {
+            "type": "string"
+          },
+          "excludeWindowEndTime": {
+            "type": "string"
+          }
         }
       },
-      "useRudderStorage": { "type": "boolean", "default": false },
-      "bucketProvider": { "type": "string", "pattern": "^(S3|GCS|AZURE_BLOB|MINIO)$" },
+      "useRudderStorage": {
+        "type": "boolean",
+        "default": false
+      },
+      "bucketProvider": {
+        "type": "string",
+        "pattern": "^(S3|GCS|AZURE_BLOB|MINIO)$"
+      },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -52,16 +85,26 @@
     "allOf": [
       {
         "if": {
-          "properties": { "useRudderStorage": { "const": false } },
+          "properties": {
+            "useRudderStorage": {
+              "const": false
+            }
+          },
           "required": ["useRudderStorage"]
         },
-        "then": { "required": ["bucketProvider"] }
+        "then": {
+          "required": ["bucketProvider"]
+        }
       },
       {
         "if": {
           "properties": {
-            "bucketProvider": { "const": "S3" },
-            "useRudderStorage": { "const": false }
+            "bucketProvider": {
+              "const": "S3"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
           },
           "required": ["bucketProvider", "useRudderStorage"]
         },
@@ -77,16 +120,26 @@
             {
               "type": "object",
               "properties": {
-                "accessKeyID": { "type": "string", "pattern": "(^env[.].+)|^(.{0,100})$" },
-                "accessKey": { "type": "string", "pattern": "(^env[.].+)|^(.{0,100})$" }
+                "accessKeyID": {
+                  "type": "string",
+                  "pattern": "(^env[.].+)|^(.{0,100})$"
+                },
+                "accessKey": {
+                  "type": "string",
+                  "pattern": "(^env[.].+)|^(.{0,100})$"
+                }
               },
               "required": ["accessKeyID", "accessKey"]
             },
             {
               "type": "object",
               "properties": {
-                "iamRoleARN": { "type": "string" },
-                "roleBasedAuth": { "const": true }
+                "iamRoleARN": {
+                  "type": "string"
+                },
+                "roleBasedAuth": {
+                  "const": true
+                }
               },
               "required": ["iamRoleARN", "roleBasedAuth"]
             }
@@ -96,8 +149,12 @@
       {
         "if": {
           "properties": {
-            "bucketProvider": { "const": "GCS" },
-            "useRudderStorage": { "const": false }
+            "bucketProvider": {
+              "const": "GCS"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
           },
           "required": ["bucketProvider", "useRudderStorage"]
         },
@@ -107,7 +164,10 @@
               "type": "string",
               "pattern": "(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$"
             },
-            "credentials": { "type": "string", "pattern": "(^env[.].+)|.+" }
+            "credentials": {
+              "type": "string",
+              "pattern": "(^env[.].+)|.+"
+            }
           },
           "required": ["bucketName", "credentials"]
         }
@@ -115,8 +175,12 @@
       {
         "if": {
           "properties": {
-            "bucketProvider": { "const": "AZURE_BLOB" },
-            "useRudderStorage": { "const": false }
+            "bucketProvider": {
+              "const": "AZURE_BLOB"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
           },
           "required": ["bucketProvider", "useRudderStorage"]
         },
@@ -126,20 +190,31 @@
               "type": "string",
               "pattern": "(^env[.].+)|^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$"
             },
-            "accountName": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" }
+            "accountName": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
+            }
           },
           "required": ["containerName", "accountName"],
           "anyOf": [
             {
               "properties": {
-                "accountKey": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" }
+                "accountKey": {
+                  "type": "string",
+                  "pattern": "(^env[.].+)|^(.{1,100})$"
+                }
               },
               "required": ["accountKey"]
             },
             {
               "properties": {
-                "sasToken": { "type": "string", "pattern": "(^env[.].+)|^(.+)$" },
-                "useSASTokens": { "const": true }
+                "sasToken": {
+                  "type": "string",
+                  "pattern": "(^env[.].+)|^(.+)$"
+                },
+                "useSASTokens": {
+                  "const": true
+                }
               },
               "required": ["useSASTokens", "sasToken"]
             }
@@ -149,8 +224,12 @@
       {
         "if": {
           "properties": {
-            "bucketProvider": { "const": "MINIO" },
-            "useRudderStorage": { "const": false }
+            "bucketProvider": {
+              "const": "MINIO"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
           },
           "required": ["bucketProvider", "useRudderStorage"]
         },
@@ -160,13 +239,21 @@
               "type": "string",
               "pattern": "(^env[.].+)|^((?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
             },
-            "accessKeyID": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
+            "accessKeyID": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
+            },
             "endPoint": {
               "type": "string",
               "pattern": "(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$"
             },
-            "secretAccessKey": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
-            "useSSL": { "type": "boolean" }
+            "secretAccessKey": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
+            },
+            "useSSL": {
+              "type": "boolean"
+            }
           },
           "required": ["bucketName", "endPoint", "accessKeyID", "secretAccessKey", "useSSL"]
         }
