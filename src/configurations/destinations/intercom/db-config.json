@@ -3,8 +3,7 @@
   "displayName": "Intercom",
   "config": {
     "supportsVisualMapper": true,
-    "transformAt": "processor",
-    "transformAtV1": "processor",
+    "transformAtV1": "router",
     "saveDestinationResponse": true,
     "isAudienceSupported": true,
     "includeKeys": [
@@ -31,7 +30,25 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": ["identify", "track", "group"],
+    "supportedMessageTypes": {
+      "cloud": ["identify", "track", "group"],
+      "device": {
+        "web": ["identify", "track", "page"],
+        "android": ["identify", "track"],
+        "ios": ["identify", "track"]
+      }
+    },
+    "supportedConnectionModes": {
+      "web": ["cloud", "device"],
+      "android": ["cloud", "device"],
+      "ios": ["cloud", "device"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "apiKey",

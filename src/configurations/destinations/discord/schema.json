@@ -8,18 +8,31 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(https?|ftp)://[^\\s/$.?#].[^\\s]*$"
       },
-      "identifyTemplate": { "type": "string", "pattern": "^(.{0,1000})$" },
-      "embedFlag": { "type": "boolean" },
-      "embedTitleTemplate": { "type": "string", "pattern": "^(.{0,1000})$" },
-      "embedDescriptionTemplate": { "type": "string", "pattern": "^(.{0,1000})$" },
+      "identifyTemplate": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,1000})$"
+      },
+      "embedFlag": {
+        "type": "boolean",
+        "default": false
+      },
       "eventTemplateSettings": {
         "type": "array",
         "items": {
           "type": "object",
           "properties": {
-            "eventName": { "type": "string", "pattern": "^(.{0,100})$" },
-            "eventTemplate": { "type": "string", "pattern": "^(.{0,100})$" },
-            "eventRegex": { "type": "boolean" }
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "eventTemplate": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,1000})$"
+            },
+            "eventRegex": {
+              "type": "boolean",
+              "default": false
+            }
           }
         }
       },
@@ -47,6 +60,31 @@
           }
         }
       }
-    }
+    },
+    "anyOf": [
+      {
+        "if": {
+          "properties": {
+            "embedFlag": {
+              "const": true
+            }
+          },
+          "required": ["embedFlag"]
+        },
+        "then": {
+          "properties": {
+            "embedTitleTemplate": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "embedDescriptionTemplate": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          },
+          "required": []
+        }
+      }
+    ]
   }
 }

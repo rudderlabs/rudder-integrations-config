@@ -9,7 +9,7 @@
           "value": "apiKey",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
           "required": true,
-          "placeholder": "e.g. b4a29aba5e75dkjc8a18acd921e2e",
+          "placeholder": "e.g. b4a29aba5eXXXXXa18acd921e2e",
           "secret": true
         },
         {
@@ -38,8 +38,14 @@
           "required": false,
           "placeholderLeft": "e.g. Sales Activities",
           "options": [
-            { "name": "Sales Activities", "value": "sales_activity" },
-            { "name": "Lifecycle Stage", "value": "lifecycle_stage" }
+            {
+              "name": "Sales Activities",
+              "value": "sales_activity"
+            },
+            {
+              "name": "Lifecycle Stage",
+              "value": "lifecycle_stage"
+            }
           ]
         }
       ]
@@ -50,13 +56,15 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
           ]

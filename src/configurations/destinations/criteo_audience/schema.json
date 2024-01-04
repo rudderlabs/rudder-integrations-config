@@ -13,6 +13,15 @@
           }
         }
       },
+      "audienceId": {
+        "type": "object",
+        "properties": {
+          "cloud": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+          }
+        }
+      },
       "audienceType": {
         "type": "string",
         "enum": ["email", "madid", "identityLink", "gum"],
@@ -34,7 +43,11 @@
     "anyOf": [
       {
         "if": {
-          "properties": { "audienceType": { "const": "gum" } },
+          "properties": {
+            "audienceType": {
+              "const": "gum"
+            }
+          },
           "required": ["audienceType"]
         },
         "then": {

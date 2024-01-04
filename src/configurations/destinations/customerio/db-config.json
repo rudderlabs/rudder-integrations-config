@@ -4,7 +4,6 @@
   "config": {
     "supportsVisualMapper": true,
     "isAudienceSupported": true,
-    "transformAt": "router",
     "transformAtV1": "router",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -33,7 +32,15 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": ["identify", "page", "screen", "track", "alias", "group"],
+    "supportedMessageTypes": {
+      "cloud": ["identify", "page", "screen", "track", "alias", "group"],
+      "device": {
+        "web": ["identify", "track", "page"]
+      }
+    },
+    "supportedConnectionModes": {
+      "web": ["cloud", "device"]
+    },
     "destConfig": {
       "defaultConfig": [
         "apiKey",

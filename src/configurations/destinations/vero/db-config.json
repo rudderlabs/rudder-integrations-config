@@ -2,7 +2,6 @@
   "name": "VERO",
   "displayName": "Vero",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -26,7 +25,23 @@
       "web",
       "shopify"
     ],
-    "supportedMessageTypes": ["identify", "track", "page", "screen", "alias"],
+    "supportedMessageTypes": {
+      "cloud": ["identify", "track", "page", "screen", "alias"],
+      "device": {
+        "web": ["identify", "track", "page", "alias"]
+      }
+    },
+    "supportedConnectionModes": {
+      "web": ["cloud", "device"],
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "authToken",

@@ -1,37 +1,93 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Secret Key",
-          "value": "secretKey",
-          "regex": ".*",
-          "required": true,
-          "placeholder": "e.g. secret-tHe5ecr37",
-          "secret": true
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Secret Key",
+                    "note": "Server Secret Key can be found in your Project settings under API Keys tab.",
+                    "configKey": "secretKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,200})$",
+                    "regexErrorMessage": "Invalid input",
+                    "placeholder": "e.g: secret-tHe5ecr37",
+                    "secret": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "OneTrust consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
+                  },
+                  "about RudderStack's OneTrust Consent Management feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Consent categories",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: C0001",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     }
-  ]
+  }
 }

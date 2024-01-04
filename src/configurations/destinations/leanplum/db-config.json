@@ -2,7 +2,6 @@
   "name": "LEANPLUM",
   "displayName": "Leanplum",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -33,9 +32,33 @@
     "supportedConnectionModes": {
       "android": ["cloud", "device", "hybrid"],
       "ios": ["cloud", "device", "hybrid"],
-      "flutter": ["cloud", "device", "hybrid"]
+      "flutter": ["cloud", "device", "hybrid"],
+      "web": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"]
     },
-    "supportedMessageTypes": ["identify", "page", "screen", "track"],
+    "hybridModeCloudEventsFilter": {
+      "android": {
+        "messageType": ["identify", "page", "screen", "track", "group"]
+      },
+      "ios": {
+        "messageType": ["identify", "page", "screen", "track", "group"]
+      },
+      "flutter": {
+        "messageType": ["identify", "page", "screen", "track", "group"]
+      }
+    },
+    "supportedMessageTypes": {
+      "cloud": ["identify", "page", "screen", "track"],
+      "device": {
+        "android": ["identify", "track", "screen"],
+        "ios": ["identify", "track", "screen"],
+        "flutter": ["identify", "track", "screen"]
+      }
+    },
     "destConfig": {
       "defaultConfig": [
         "applicationId",
