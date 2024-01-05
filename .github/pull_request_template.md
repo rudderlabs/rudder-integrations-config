@@ -38,7 +38,9 @@ N/A
 
 - [ ] I have executed schemaGenerator tests and updated schema if needed
 
-- [ ] Are sensitive fields marked as secret in definition config?
+- [ ] Are sensitive fields marked as secret in definition config and related sample values obfuscated in the tests ?
+
+- [ ] Is the change terraform compatible?
 
 - [ ] Is the PR limited to 10 file changes?
 
