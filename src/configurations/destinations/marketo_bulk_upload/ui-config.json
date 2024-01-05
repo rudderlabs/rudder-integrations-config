@@ -11,7 +11,7 @@
           "regexErrorMessage": "Invalid Munchkin Account Id",
           "required": true,
           "footerNote": "Your Marketo Accound ID from Admin settings section",
-          "placeholder": "e.g: 585-AXP-446"
+          "placeholder": "e.g: 5X5-AXP-4X6"
         },
         {
           "type": "textInput",
@@ -20,7 +20,7 @@
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Client ID",
           "required": true,
-          "placeholder": "e.g: 53b1934e-51dd-4599-b24b-92612c71515f",
+          "placeholder": "e.g: 53b1934e-XXXX-XXXX-XXXX-92612X71515f",
           "footerNote": "Your REST API Client ID"
         },
         {
@@ -30,7 +30,7 @@
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Client Secret",
           "required": true,
-          "placeholder": "e.g: oxzXtNhcuw9YGsdhplKUeEMi8765dsfw",
+          "placeholder": "e.g: oxzXtNhcuw9YGsXXXlKUeEMi8765dsfw",
           "secret": true,
           "footerNote": "Your REST API Client Secret"
         },
@@ -48,11 +48,23 @@
           "label": "Upload Interval",
           "value": "uploadInterval",
           "options": [
-            { "name": "Every 10 minutes", "value": "10" },
-            { "name": "Every 20 minutes", "value": "20" },
-            { "name": "Every 30 minutes", "value": "30" }
+            {
+              "name": "Every 10 minutes",
+              "value": "10"
+            },
+            {
+              "name": "Every 20 minutes",
+              "value": "20"
+            },
+            {
+              "name": "Every 30 minutes",
+              "value": "30"
+            }
           ],
-          "defaultOption": { "name": "Every 10 minutes", "value": "10" }
+          "defaultOption": {
+            "name": "Every 10 minutes",
+            "value": "10"
+          }
         }
       ]
     },
@@ -79,13 +91,15 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
           ]
