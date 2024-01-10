@@ -66,7 +66,7 @@
         "note": "Manage the settings for your destination",
         "sections": [
           {
-            "title": "SSL and SASL Settings",
+            "title": "Destination settings",
             "note": "Set your SSL and SASL authentication related settings.",
             "icon": "magnifyingGlass",
             "groups": [
@@ -179,82 +179,6 @@
             ]
           },
           {
-            "title": "Destination settings",
-            "note": "Configure advanced destination-specific settings here",
-            "icon": "settings",
-            "groups": [
-              {
-                "title": "AVRO Schema settings",
-                "note": "Configure settings related to AVRO Schema",
-                "fields": [
-                  {
-                    "type": "checkbox",
-                    "label": "Convert Data to AVRO format",
-                    "note": "If this option is turned on we will convert the data to avro",
-                    "configKey": "convertToAvro",
-                    "default": false
-                  },
-                  {
-                    "type": "redirect",
-                    "redirectGroupKey": "avroSettings",
-                    "label": "AVRO schema mapping",
-                    "note": "Enter your ARVO schema and ID related settings",
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "convertToAvro",
-                          "value": true
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "Embed Schema ID in Event Data",
-                    "note": "This embeds the Avro schema ID in the payload to enable Confluent consumers to automatically know the schema ID used to encode.",
-                    "configKey": "embedAvroSchemaID",
-                    "default": false,
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "convertToAvro",
-                          "value": true
-                        }
-                      ]
-                    }
-                  }
-                ]
-              },
-              {
-                "title": "Topic related settings",
-                "note": "Configure settings related to Topic",
-                "fields": [
-                  {
-                    "type": "checkbox",
-                    "label": "Enable multiple topic support for event types and event names",
-                    "note": "Enable this option to deliver events to multiple topics",
-                    "configKey": "enableMultiTopic",
-                    "default": false
-                  },
-                  {
-                    "type": "redirect",
-                    "redirectGroupKey": "topicMapping",
-                    "label": "Event to Topic mapping ",
-                    "note": "Enter your RudderStack event to Topic",
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "enableMultiTopic",
-                          "value": true
-                        }
-                      ]
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          {
             "title": "Other settings",
             "note": "Configure advanced RudderStack features here",
             "icon": "otherSettings",
@@ -314,6 +238,28 @@
             ]
           }
         ]
+      },
+      {
+        "title": "AVRO Schema and Topic mapping",
+        "note": "Configure settings related to AVRO Schema and Topics",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "AVRO Schema and Topic settings",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "avroAndTopicSettings",
+                    "label": "AVRO schema and Topic mappings",
+                    "note": "Enter your ARVO schema and Topics related settings"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     ],
     "sdkTemplate": {
@@ -322,36 +268,58 @@
       "fields": []
     },
     "redirectGroups": {
-      "avroSettings": {
-        "fields": [
+      "avroAndTopicSettings": {
+        "tabs": [
           {
-            "type": "mapping",
-            "label": "AVRO Schema Lists",
-            "note": "Enter your AVRO schema settings",
-            "configKey": "avroSchemas",
-            "default": [],
-            "columns": [
+            "name": "AVRO Schema",
+            "fields": [
               {
-                "type": "textInput",
-                "key": "schemaId",
-                "label": "Schema Id",
-                "placeholder": "e.g: schema-id"
+                "type": "checkbox",
+                "label": "Convert Data to AVRO format",
+                "note": "If this option is turned on we will convert the data to avro",
+                "configKey": "convertToAvro",
+                "default": false
               },
               {
-                "type": "textInput",
-                "key": "schema",
-                "label": "Schema",
-                "placeholder": "schema object..."
+                "type": "mapping",
+                "label": "AVRO Schema Lists",
+                "note": "Enter your AVRO schema settings",
+                "configKey": "avroSchemas",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "schemaId",
+                    "label": "Schema Id",
+                    "placeholder": "e.g: schema-id"
+                  },
+                  {
+                    "type": "textInput",
+                    "key": "schema",
+                    "label": "Schema",
+                    "placeholder": "schema object..."
+                  }
+                ]
+              },
+              {
+                "type": "checkbox",
+                "label": "Embed Schema ID in Event Data",
+                "note": "This embeds the Avro schema ID in the payload to enable Confluent consumers to automatically know the schema ID used to encode.",
+                "configKey": "embedAvroSchemaID",
+                "default": false
               }
             ]
-          }
-        ]
-      },
-      "topicMapping": {
-        "tabs": [
+          },
           {
             "name": "Event type to Topic",
             "fields": [
+              {
+                "type": "checkbox",
+                "label": "Enable multiple topic support for event types and event names",
+                "note": "Enable this option to deliver events to multiple topics",
+                "configKey": "enableMultiTopic",
+                "default": false
+              },
               {
                 "type": "mapping",
                 "label": "Map your RudderStack event type to Topic",
@@ -391,7 +359,7 @@
                     "type": "textInput",
                     "key": "to",
                     "label": "Topic",
-                    "placeholder": "schema object..."
+                    "placeholder": "sample topic"
                   }
                 ]
               }
