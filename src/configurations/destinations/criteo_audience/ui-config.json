@@ -10,7 +10,7 @@
           "value": "adAccountId",
           "secret": false,
           "required": true,
-          "placeholder": "e.g. 34567",
+          "placeholder": "e.g. 34X67",
           "regexErrorMessage": "Invalid Advertiser Id"
         },
         {
@@ -20,7 +20,7 @@
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$",
           "regexErrorMessage": "Invalid Audience Id",
           "required": true,
-          "placeholder": "e.g. 532145",
+          "placeholder": "e.g. 53XX45",
           "secret": false,
           "footerNote": "The audience id of the audience to which you want to sync the data"
         },
@@ -31,12 +31,27 @@
           "required": true,
           "placeholder": "email",
           "options": [
-            { "name": "email", "value": "email" },
-            { "name": "madid", "value": "madid" },
-            { "name": "identityLink", "value": "identityLink" },
-            { "name": "gum", "value": "gum" }
+            {
+              "name": "email",
+              "value": "email"
+            },
+            {
+              "name": "madid",
+              "value": "madid"
+            },
+            {
+              "name": "identityLink",
+              "value": "identityLink"
+            },
+            {
+              "name": "gum",
+              "value": "gum"
+            }
           ],
-          "defaultOption": { "name": "email", "value": "email" }
+          "defaultOption": {
+            "name": "email",
+            "value": "email"
+          }
         },
         {
           "type": "textInput",
@@ -45,9 +60,12 @@
           "regex": "^[0-9]+$",
           "regexErrorMessage": "Invalid GUM Caller Id",
           "required": true,
-          "placeholder": "e.g. 53213445",
+          "placeholder": "e.g. 532XX445",
           "secret": false,
-          "preRequisiteField": { "name": "audienceType", "selectedValue": "gum" },
+          "preRequisiteField": {
+            "name": "audienceType",
+            "selectedValue": "gum"
+          },
           "footerNote": "GUM cookie identifier"
         }
       ]
@@ -58,13 +76,15 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
           ]

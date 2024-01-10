@@ -102,6 +102,10 @@ def update_diff_db(selector):
     current_items = os.listdir(f'./{CONFIG_DIR}/{selector}s')
 
     for item in current_items:
+        # check if item is a directory
+        if not os.path.isdir(f'./{CONFIG_DIR}/{selector}s/{item}'):
+            continue
+        
         updated_data = get_file_content(item, selector)
         persisted_data = get_config_definition(CONTROL_PLANE_URL, selector, updated_data["name"])
 
