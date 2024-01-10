@@ -65,7 +65,10 @@
           "footerNote": "Toggle it on if you want a embed message on the discord. Refer To docs for more details"
         },
         {
-          "preRequisiteField": { "name": "embedFlag", "selectedValue": true },
+          "preRequisiteField": {
+            "name": "embedFlag",
+            "selectedValue": true
+          },
           "type": "textInput",
           "label": "Title Template",
           "value": "embedTitleTemplate",
@@ -76,7 +79,10 @@
           "footerNote": "This template will be used to build title for embed message"
         },
         {
-          "preRequisiteField": { "name": "embedFlag", "selectedValue": true },
+          "preRequisiteField": {
+            "name": "embedFlag",
+            "selectedValue": true
+          },
           "type": "textInput",
           "label": "Description Template",
           "value": "embedDescriptionTemplate",
@@ -98,7 +104,7 @@
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(https?|ftp)://[^\\s/$.?#].[^\\s]*$",
           "regexErrorMessage": "Invalid Webhook Url",
           "required": true,
-          "placeholder": "e.g: https://discord.com/api/webhooks/12rf2v29038y3234gr34/78319yrgfb284q3130",
+          "placeholder": "e.g: https://discord.com/api/webhooks/12rf2vXXX38y3234gr34/7831XXXgfb284q3130",
           "footerNote": "The url mapped to discord channel where you want to send the message. Refer to docs for more."
         }
       ]
@@ -130,13 +136,15 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
           ]

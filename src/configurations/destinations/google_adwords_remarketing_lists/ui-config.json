@@ -10,7 +10,7 @@
           "regex": "^(.{1,100})$",
           "regexErrorMessage": "Invalid Google remarketing list ID",
           "required": true,
-          "placeholder": "e.g: 7692349833"
+          "placeholder": "e.g: 7692X49833"
         },
         {
           "type": "textInput",
@@ -19,7 +19,7 @@
           "regex": "^(.{1,100})$",
           "regexErrorMessage": "Invalid Customer ID",
           "required": true,
-          "placeholder": "e.g: 9693429833"
+          "placeholder": "e.g: 9693X29833"
         },
         {
           "type": "checkbox",
@@ -31,7 +31,12 @@
         {
           "type": "textInput",
           "label": "Login Customer ID",
-          "preRequisiteField": [{ "name": "subAccount", "selectedValue": true }],
+          "preRequisiteField": [
+            {
+              "name": "subAccount",
+              "selectedValue": true
+            }
+          ],
           "value": "loginCustomerId",
           "regex": "^(.{0,100})$",
           "required": true,
@@ -48,11 +53,22 @@
           "value": "typeOfList",
           "mode": "single",
           "options": [
-            { "name": "General", "value": "General" },
-            { "name": "User ID", "value": "userID" },
-            { "name": "Mobile Device ID", "value": "mobileDeviceID" }
+            {
+              "name": "General",
+              "value": "General"
+            },
+            {
+              "name": "User ID",
+              "value": "userID"
+            },
+            {
+              "name": "Mobile Device ID",
+              "value": "mobileDeviceID"
+            }
           ],
-          "defaultOption": { "value": "General" }
+          "defaultOption": {
+            "value": "General"
+          }
         },
         {
           "type": "checkbox",
@@ -63,15 +79,32 @@
         {
           "type": "singleSelect",
           "label": "Schema Fields",
-          "preRequisiteField": [{ "name": "typeOfList", "selectedValue": "General" }],
+          "preRequisiteField": [
+            {
+              "name": "typeOfList",
+              "selectedValue": "General"
+            }
+          ],
           "value": "userSchema",
           "mode": "multiple",
           "options": [
-            { "name": "Email", "value": "email" },
-            { "name": "Phone Number", "value": "phone" },
-            { "name": "Address Info", "value": "addressInfo" }
+            {
+              "name": "Email",
+              "value": "email"
+            },
+            {
+              "name": "Phone Number",
+              "value": "phone"
+            },
+            {
+              "name": "Address Info",
+              "value": "addressInfo"
+            }
           ],
-          "defaultOption": { "name": "Email", "value": ["email"] }
+          "defaultOption": {
+            "name": "Email",
+            "value": ["email"]
+          }
         }
       ]
     },
@@ -81,13 +114,15 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
           ]

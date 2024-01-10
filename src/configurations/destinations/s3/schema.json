@@ -12,8 +12,14 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "roleBasedAuth": { "type": "boolean", "default": true },
-      "enableSSE": { "type": "boolean", "default": false },
+      "roleBasedAuth": {
+        "type": "boolean",
+        "default": true
+      },
+      "enableSSE": {
+        "type": "boolean",
+        "default": false
+      },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -30,7 +36,11 @@
     "allOf": [
       {
         "if": {
-          "properties": { "roleBasedAuth": { "const": true } },
+          "properties": {
+            "roleBasedAuth": {
+              "const": true
+            }
+          },
           "required": ["roleBasedAuth"]
         },
         "then": {
@@ -39,14 +49,20 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "roleBasedAuth": { "const": true }
+            "roleBasedAuth": {
+              "const": true
+            }
           },
           "required": ["roleBasedAuth"]
         }
       },
       {
         "if": {
-          "properties": { "roleBasedAuth": { "const": false } },
+          "properties": {
+            "roleBasedAuth": {
+              "const": false
+            }
+          },
           "required": ["roleBasedAuth"]
         },
         "then": {
@@ -59,7 +75,9 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "roleBasedAuth": { "const": false }
+            "roleBasedAuth": {
+              "const": false
+            }
           },
           "required": []
         }
