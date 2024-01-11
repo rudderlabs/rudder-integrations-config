@@ -9,7 +9,7 @@
           "value": "advertiserId",
           "regex": "^([0-9]{0,100})$",
           "required": true,
-          "placeholder": "e.g. 22114552",
+          "placeholder": "e.g. 22XXX552",
           "secret": true,
           "footerNote": "Enter your Floodlight advertiser ID by going to the Campaigns or Activities tab in your dashboard."
         },
@@ -203,13 +203,15 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
           ]

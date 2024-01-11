@@ -2,7 +2,6 @@
   "name": "WOOPRA",
   "displayName": "WOOPRA",
   "config": {
-    "transformAt": "router",
     "transformAtV1": "router",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -36,7 +35,15 @@
       "warehouse",
       "shopify"
     ],
-    "supportedMessageTypes": ["identify", "track", "page"],
+    "supportedMessageTypes": {
+      "cloud": ["identify", "track", "page"],
+      "device": {
+        "web": ["identify", "track", "page"]
+      }
+    },
+    "supportedConnectionModes": {
+      "web": ["cloud", "device"]
+    },
     "destConfig": {
       "defaultConfig": [
         "projectName",

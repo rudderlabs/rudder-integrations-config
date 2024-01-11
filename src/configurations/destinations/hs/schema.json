@@ -13,8 +13,19 @@
         "enum": ["legacyApiKey", "newPrivateAppApi"],
         "default": "legacyApiKey"
       },
-      "apiVersion": { "type": "string", "enum": ["legacyApi", "newApi"], "default": "legacyApi" },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "apiVersion": {
+        "type": "string",
+        "enum": ["legacyApi", "newApi"],
+        "default": "legacyApi"
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
       "eventFilteringOption": {
         "type": "string",
         "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
@@ -60,7 +71,11 @@
     "allOf": [
       {
         "if": {
-          "properties": { "authorizationType": { "const": "legacyApiKey" } },
+          "properties": {
+            "authorizationType": {
+              "const": "legacyApiKey"
+            }
+          },
           "required": ["authorizationType"]
         },
         "then": {
@@ -75,7 +90,11 @@
       },
       {
         "if": {
-          "properties": { "authorizationType": { "const": "newPrivateAppApi" } },
+          "properties": {
+            "authorizationType": {
+              "const": "newPrivateAppApi"
+            }
+          },
           "required": ["authorizationType"]
         },
         "then": {
@@ -89,14 +108,24 @@
         }
       },
       {
-        "if": { "properties": { "apiVersion": { "const": "newApi" } }, "required": ["apiVersion"] },
+        "if": {
+          "properties": {
+            "apiVersion": {
+              "const": "newApi"
+            }
+          },
+          "required": ["apiVersion"]
+        },
         "then": {
           "properties": {
             "lookupField": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
             },
-            "doAssociation": { "type": "boolean", "default": false },
+            "doAssociation": {
+              "type": "boolean",
+              "default": false
+            },
             "hubspotEvents": {
               "type": "array",
               "items": {

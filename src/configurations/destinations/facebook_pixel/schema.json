@@ -10,7 +10,7 @@
       },
       "accessToken": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,208})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,300})$"
       },
       "categoryToContent": {
         "type": "array",
@@ -28,7 +28,10 @@
           }
         }
       },
-      "standardPageCall": { "type": "boolean", "default": false },
+      "standardPageCall": {
+        "type": "boolean",
+        "default": false
+      },
       "eventsToEvents": {
         "type": "array",
         "items": {
@@ -70,7 +73,10 @@
         "enum": ["properties.value", "properties.price"],
         "default": "properties.price"
       },
-      "advancedMapping": { "type": "boolean" },
+      "advancedMapping": {
+        "type": "boolean",
+        "default": false
+      },
       "blacklistPiiProperties": {
         "type": "array",
         "items": {
@@ -80,7 +86,9 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "blacklistPiiHash": { "type": "boolean" }
+            "blacklistPiiHash": {
+              "type": "boolean"
+            }
           }
         }
       },
@@ -117,21 +125,43 @@
           }
         }
       },
-      "limitedDataUSage": { "type": "boolean" },
-      "testDestination": { "type": "boolean", "default": false },
+      "limitedDataUSage": {
+        "type": "boolean",
+        "default": false
+      },
+      "testDestination": {
+        "type": "boolean",
+        "default": false
+      },
       "testEventCode": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "removeExternalId": { "type": "boolean", "default": false },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "removeExternalId": {
+        "type": "boolean",
+        "default": false
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
       "connectionMode": {
         "type": "object",
         "properties": {
-          "web": { "type": "string", "enum": ["cloud", "device"] }
+          "web": {
+            "type": "string",
+            "enum": ["cloud", "device"]
+          }
         }
       },
-      "useUpdatedMapping": { "type": "boolean", "default": false },
+      "useUpdatedMapping": {
+        "type": "boolean",
+        "default": false
+      },
       "eventFilteringOption": {
         "type": "string",
         "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
@@ -177,7 +207,12 @@
         "type": "array",
         "items": {
           "type": "object",
-          "properties": { "purpose": { "type": "string", "pattern": "^(.{0,100})$" } }
+          "properties": {
+            "purpose": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
         }
       }
     }

@@ -29,13 +29,16 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": { "name": "roleBasedAuth", "selectedValue": true },
+          "preRequisiteField": {
+            "name": "roleBasedAuth",
+            "selectedValue": true
+          },
           "label": "IAM Role ARN",
           "value": "iamRoleARN",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
           "regexErrorMessage": "Invalid Role ARN",
           "required": true,
-          "placeholder": "e.g: arn:aws:iam::123456789012:role/Kinesis",
+          "placeholder": "e.g: arn:aws:iam::12345XX89012:role/Kinesis",
           "footerURL": {
             "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/",
             "text": "Instructions for creating IAM Role"
@@ -43,7 +46,10 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": { "name": "roleBasedAuth", "selectedValue": false },
+          "preRequisiteField": {
+            "name": "roleBasedAuth",
+            "selectedValue": false
+          },
           "label": "AWS Access Key ID",
           "value": "accessKeyID",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
@@ -54,7 +60,10 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": { "name": "roleBasedAuth", "selectedValue": false },
+          "preRequisiteField": {
+            "name": "roleBasedAuth",
+            "selectedValue": false
+          },
           "label": "AWS Secret Access Key",
           "value": "accessKey",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
@@ -77,14 +86,15 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
               "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category Name/ID",
+              "label": "Category ID",
               "required": false
             }
           ]

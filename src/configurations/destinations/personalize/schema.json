@@ -4,7 +4,10 @@
     "required": ["region"],
     "type": "object",
     "properties": {
-      "roleBasedAuth": { "type": "boolean", "default": true },
+      "roleBasedAuth": {
+        "type": "boolean",
+        "default": true
+      },
       "region": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
@@ -38,7 +41,10 @@
           }
         }
       },
-      "disableStringify": { "type": "boolean", "default": false },
+      "disableStringify": {
+        "type": "boolean",
+        "default": false
+      },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -55,7 +61,11 @@
     "allOf": [
       {
         "if": {
-          "properties": { "roleBasedAuth": { "const": true } },
+          "properties": {
+            "roleBasedAuth": {
+              "const": true
+            }
+          },
           "required": ["roleBasedAuth"]
         },
         "then": {
@@ -64,14 +74,20 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "roleBasedAuth": { "const": true }
+            "roleBasedAuth": {
+              "const": true
+            }
           },
           "required": ["iamRoleARN", "roleBasedAuth"]
         }
       },
       {
         "if": {
-          "properties": { "roleBasedAuth": { "const": false } },
+          "properties": {
+            "roleBasedAuth": {
+              "const": false
+            }
+          },
           "required": ["roleBasedAuth"]
         },
         "then": {
@@ -84,7 +100,9 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "roleBasedAuth": { "const": false }
+            "roleBasedAuth": {
+              "const": false
+            }
           },
           "required": []
         }

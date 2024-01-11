@@ -2,6 +2,82 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.62.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.61.0...v1.62.0) (2024-01-08)
+
+
+### Features
+
+* deprecate category name for onetrust consent management ([#1125](https://github.com/rudderlabs/rudder-config-schema/issues/1125)) ([9a4b830](https://github.com/rudderlabs/rudder-config-schema/commit/9a4b830fe3eb43839831c54f1fbdbc783efecedb))
+* disable clickhouse warehous source ([#1130](https://github.com/rudderlabs/rudder-config-schema/issues/1130)) ([bd0e35c](https://github.com/rudderlabs/rudder-config-schema/commit/bd0e35cf5aacec46f3b95dbdb4605d49e21c1a08))
+* **INT-780:** move intercom to routerTransform ([#1143](https://github.com/rudderlabs/rudder-config-schema/issues/1143)) ([9e662ed](https://github.com/rudderlabs/rudder-config-schema/commit/9e662ed525a5253883b958c198e45a542c79234d))
+* move Kafka destination to new UI form-builder ([#1090](https://github.com/rudderlabs/rudder-config-schema/issues/1090)) ([9ef698a](https://github.com/rudderlabs/rudder-config-schema/commit/9ef698a9447f16c15c9abc5e7c644e52ed986886))
+* move statsig to new UI form builder ([#1108](https://github.com/rudderlabs/rudder-config-schema/issues/1108)) ([e909562](https://github.com/rudderlabs/rudder-config-schema/commit/e909562c6a195be8af89053f79ddd3a554b32cc5))
+* onboard new destination the trade desk ([#1116](https://github.com/rudderlabs/rudder-config-schema/issues/1116)) ([a1b1e97](https://github.com/rudderlabs/rudder-config-schema/commit/a1b1e975488bf3276eae118b092457e758f25289))
+* onboard reddit cloud mode destination ([#1080](https://github.com/rudderlabs/rudder-config-schema/issues/1080)) ([a3abe96](https://github.com/rudderlabs/rudder-config-schema/commit/a3abe9622fd32b0c13c834b9b9cdfc06a48b06be))
+* re-add removed supportedConnectionModes for eloqua and launchdarkly audience ([#1112](https://github.com/rudderlabs/rudder-config-schema/issues/1112)) ([89294dd](https://github.com/rudderlabs/rudder-config-schema/commit/89294dd3706b0de5f1dac9490351a71777eaf298))
+* **reddit:** add support for hashData field ([#1107](https://github.com/rudderlabs/rudder-config-schema/issues/1107)) ([d875c96](https://github.com/rudderlabs/rudder-config-schema/commit/d875c9619c0150ab678f4730a7f408ab02194639))
+* **sprig:** cloud mode ([#1089](https://github.com/rudderlabs/rudder-config-schema/issues/1089)) ([c3c06b0](https://github.com/rudderlabs/rudder-config-schema/commit/c3c06b00415b20d9ed79f0d979f6eac7e4ce837e))
+* tiktok_ads: add support for custom events ([#1109](https://github.com/rudderlabs/rudder-config-schema/issues/1109)) ([a7cdf3d](https://github.com/rudderlabs/rudder-config-schema/commit/a7cdf3dae4a06c2a3f3488358cee482bd88ebe1b))
+
+
+### Bug Fixes
+
+* add check for requirement of hybridModeCloudEventsFilter property ([#1115](https://github.com/rudderlabs/rudder-config-schema/issues/1115)) ([eaa58a3](https://github.com/rudderlabs/rudder-config-schema/commit/eaa58a3861544bb96984814088379ec5c3c01204))
+* blank aud flow in criteo ([#1144](https://github.com/rudderlabs/rudder-config-schema/issues/1144)) ([2f118da](https://github.com/rudderlabs/rudder-config-schema/commit/2f118da1f5542198416feb58a35c80c5357aab25))
+* destination definition files and add schema ([#1092](https://github.com/rudderlabs/rudder-config-schema/issues/1092)) ([e205d16](https://github.com/rudderlabs/rudder-config-schema/commit/e205d16eb12db2d7921b49c09c9d450e4483b15e))
+* **ortto:** updated default for orttoPersonAttributes.type to "text" from ["text"] ([#1137](https://github.com/rudderlabs/rudder-config-schema/issues/1137)) ([4fc2062](https://github.com/rudderlabs/rudder-config-schema/commit/4fc2062b965e0d591e64a845855b29496ef98e43))
+* **PRO-1448:** update wht library definititons to reflect updated repository names [PRO- ([#1124](https://github.com/rudderlabs/rudder-config-schema/issues/1124)) ([de8928f](https://github.com/rudderlabs/rudder-config-schema/commit/de8928f7f3d22f95276f32bbb06e21743c2ba722))
+* **sprig:** schema issues ([#1141](https://github.com/rudderlabs/rudder-config-schema/issues/1141)) ([fffe907](https://github.com/rudderlabs/rudder-config-schema/commit/fffe907c541892d1f8e5b59fe9027d3c7248b461))
+
+## [1.61.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.60.2...v1.61.0) (2023-12-12)
+
+
+### Features
+
+* onboard reddit cloud mode destination ([#1080](https://github.com/rudderlabs/rudder-config-schema/issues/1080)) ([a3abe96](https://github.com/rudderlabs/rudder-config-schema/commit/a3abe9622fd32b0c13c834b9b9cdfc06a48b06be))
+* re-add removed supportedConnectionModes for eloqua and launchdarkly audience ([#1112](https://github.com/rudderlabs/rudder-config-schema/issues/1112)) ([89294dd](https://github.com/rudderlabs/rudder-config-schema/commit/89294dd3706b0de5f1dac9490351a71777eaf298))
+* **reddit:** add support for hashData field ([#1107](https://github.com/rudderlabs/rudder-config-schema/issues/1107)) ([d875c96](https://github.com/rudderlabs/rudder-config-schema/commit/d875c9619c0150ab678f4730a7f408ab02194639))
+* **sprig:** cloud mode ([#1089](https://github.com/rudderlabs/rudder-config-schema/issues/1089)) ([c3c06b0](https://github.com/rudderlabs/rudder-config-schema/commit/c3c06b00415b20d9ed79f0d979f6eac7e4ce837e))
+* tiktok_ads: add support for custom events ([#1109](https://github.com/rudderlabs/rudder-config-schema/issues/1109)) ([a7cdf3d](https://github.com/rudderlabs/rudder-config-schema/commit/a7cdf3dae4a06c2a3f3488358cee482bd88ebe1b))
+
+
+### Bug Fixes
+
+* destination definition files and add schema ([#1092](https://github.com/rudderlabs/rudder-config-schema/issues/1092)) ([e205d16](https://github.com/rudderlabs/rudder-config-schema/commit/e205d16eb12db2d7921b49c09c9d450e4483b15e))
+
+### [1.60.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.60.1...v1.60.2) (2023-12-07)
+
+
+### Bug Fixes
+
+* remove supportedMessageTypes for azure_event_hub ([65ca229](https://github.com/rudderlabs/rudder-config-schema/commit/65ca22993ec8fe58153336066a02f002c56d4b27))
+* remove supportedMessageTypes for variance ([c5942b1](https://github.com/rudderlabs/rudder-config-schema/commit/c5942b1c309656a797a026080b712341cca8b549))
+
+### [1.60.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.60.0...v1.60.1) (2023-12-07)
+
+
+### Bug Fixes
+
+* remove supportedMessageTypes for webhook ([4548721](https://github.com/rudderlabs/rudder-config-schema/commit/4548721c07daab8952366aea4ef1d5deae0243aa))
+
+## [1.60.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.59.1...v1.60.0) (2023-12-04)
+
+
+### Features
+
+* add supported connectionModes and updated supportedMessageTypes to destination definitions ([#801](https://github.com/rudderlabs/rudder-config-schema/issues/801)) ([09f13fe](https://github.com/rudderlabs/rudder-config-schema/commit/09f13fe83868af7d54e33f137496980261415e55))
+* adding set_once feature for mixpanel ([#1063](https://github.com/rudderlabs/rudder-config-schema/issues/1063)) ([065f8ce](https://github.com/rudderlabs/rudder-config-schema/commit/065f8ce9a16229e88408a7dddbd41b0caa8f07d8))
+* **INT-305:** onboard gladly destination ([#1045](https://github.com/rudderlabs/rudder-config-schema/issues/1045)) ([6f3a37f](https://github.com/rudderlabs/rudder-config-schema/commit/6f3a37fd550acdba85cad9a120dff4d5d520c085))
+* marketo: migrate to new UI layout ([#1081](https://github.com/rudderlabs/rudder-config-schema/issues/1081)) ([7126939](https://github.com/rudderlabs/rudder-config-schema/commit/71269390372abbf1d4c240b081bd37e619e51718))
+* onboard destination gaec to new UI ([#983](https://github.com/rudderlabs/rudder-config-schema/issues/983)) ([5f0aea5](https://github.com/rudderlabs/rudder-config-schema/commit/5f0aea50a70d6aa629f29f872b49b2a279b4dfb2))
+
+
+### Bug Fixes
+
+* formatting issue ([#1094](https://github.com/rudderlabs/rudder-config-schema/issues/1094)) ([4df90af](https://github.com/rudderlabs/rudder-config-schema/commit/4df90afed75881bdec9d216a69944775e9958c27))
+* **gladly:** added Beta flag for destination ([#1085](https://github.com/rudderlabs/rudder-config-schema/issues/1085)) ([1800d8d](https://github.com/rudderlabs/rudder-config-schema/commit/1800d8d71f222cbf2f7a62e1f0555a9b38f3fd63))
+* **iterable:** schema validations ([#1088](https://github.com/rudderlabs/rudder-config-schema/issues/1088)) ([d7a91c8](https://github.com/rudderlabs/rudder-config-schema/commit/d7a91c854a96076e3b1306afa272bc03531c63f2))
+
 ### [1.59.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.59.0...v1.59.1) (2023-11-16)
 
 

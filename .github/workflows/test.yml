@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.5.0
+        uses: actions/checkout@v4.1.1
         with:
           fetch-depth: 1
 
       - name: Setup Node
-        uses: actions/setup-node@v3.6.0
+        uses: actions/setup-node@v4.0.1
         with:
           node-version-file: '.nvmrc'
           cache: 'npm'
@@ -28,16 +28,16 @@ jobs:
 
       - name: Run Unit Tests
         run: npm run test:ci
-      
+
       - name: Set up Python
         run: scripts/setup-python.sh
-  
+
       - name: Get changed files
         id: changed_files
-        uses: tj-actions/changed-files@v36
+        uses: tj-actions/changed-files@v41
         with:
           sha: ${{ github.event.pull_request.head.sha }}
-      
+
       - name: Run schema validation for changed files
         run: |
           chmod +x scripts/run-schema-validation.sh
