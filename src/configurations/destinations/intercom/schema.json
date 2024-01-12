@@ -10,12 +10,22 @@
         "default": "standard"
       },
       "mobileApiKeyAndroid": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          }
+        }
       },
       "mobileApiKeyIOS": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "type": "object",
+        "properties": {
+          "ios": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          }
+        }
       },
       "sendAnonymousId": {
         "type": "boolean",
@@ -103,6 +113,12 @@
               "additionalProperties": false,
               "properties": {
                 "web": {
+                  "const": "device"
+                },
+                "ios": {
+                  "const": "device"
+                },
+                "android": {
                   "const": "device"
                 }
               }
