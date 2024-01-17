@@ -422,7 +422,19 @@
               "label": "Category ID",
               "required": false
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
         },
         {
           "type": "dynamicCustomForm",
@@ -437,16 +449,29 @@
               "regex": "^(.{0,100})$",
               "required": false
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
         },
         {
           "type": "dynamicCustomForm",
           "value": "consentManagement",
           "label": "Consent management settings",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "singleSelect",
-              "label": "Consent Management Provider",
+              "label": "Consent management provider",
               "value": "provider",
               "options": [
                 {
@@ -470,7 +495,7 @@
             },
             {
               "type": "singleSelect",
-              "label": "Required consents logic",
+              "label": "the required consent logic",
               "value": "resolutionStrategy",
               "options": [
                 {
@@ -487,6 +512,7 @@
                 "value": "and"
               },
               "required": true,
+              "variant": "badge",
               "preRequisites": {
                 "fields": [
                   {
@@ -499,7 +525,7 @@
             {
               "type": "dynamicCustomForm",
               "value": "consents",
-              "label": "Consent IDs",
+              "label": "Enter consent category ID’s",
               "customFields": [
                 {
                   "type": "textInput",
