@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.62.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.62.0...v1.62.1) (2024-01-16)
+
+
+### Bug Fixes
+
+* update stripe image to fix subscription sync [ETL-239] ([#1151](https://github.com/rudderlabs/rudder-config-schema/issues/1151)) ([ec443f7](https://github.com/rudderlabs/rudder-config-schema/commit/ec443f7db5f6f22a8bea2cf9a042dfeb750bcec5))
+
 ## [1.62.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.61.0...v1.62.0) (2024-01-08)
 
 
