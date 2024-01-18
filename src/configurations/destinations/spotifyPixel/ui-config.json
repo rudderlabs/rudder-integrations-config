@@ -61,7 +61,7 @@
                                 "fields": [
                                     {
                                         "type": "checkbox",
-                                        "label": "Pass Internal Id",
+                                        "label": "Enhance attribution with externalIDs for conversion matching",
                                         "configKey": "enableAliasCall",
                                         "default": false
                                     }
@@ -208,57 +208,52 @@
             }
         ],
         "redirectGroups": {
-            "spotifyPixelEventMapping": {
-                "tabs": [
+            "spotifyPixelEventMapping":{
+                "fields":  [
                     {
-                        "name": "Spotify Pixel event mapping",
-                        "fields": [
+                        "type": "mapping",
+                        "label": "Mapping to trigger the Rudderstack events with standard Spotify Pixel events",
+                        "configKey": "eventsToSpotifyPixelEvents",
+                        "default": [],
+                        "columns": [
                             {
-                                "type": "mapping",
-                                "label": "Mapping to trigger the Rudderstack events with standard Spotify Pixel events",
-                                "configKey": "eventsToSpotifyPixelEvents",
-                                "default": [],
-                                "columns": [
+                                "type": "textInput",
+                                "key": "from",
+                                "label": "Event Name",
+                                "placeholder": "e.g: Order Completed"
+                            },
+                            {
+                                "type": "singleSelect",
+                                "key": "to",
+                                "label": "Spotify Pixel Standard Event",
+                                "placeholder": "e.g: Checkout",
+                                "options": [
                                     {
-                                        "type": "textInput",
-                                        "key": "from",
-                                        "label": "Event Name",
-                                        "placeholder": "e.g: Order Completed"
+                                        "name": "Lead",
+                                        "value": "lead"
                                     },
                                     {
-                                        "type": "singleSelect",
-                                        "key": "to",
-                                        "label": "Spotify Pixel Standard Event",
-                                        "placeholder": "e.g: Checkout",
-                                        "options": [
-                                            {
-                                                "name": "Lead",
-                                                "value": "lead"
-                                            },
-                                            {
-                                                "name": "Product",
-                                                "value": "product"
-                                            },
-                                            {
-                                                "name": "Add to Cart",
-                                                "value": "addtocart"
-                                            },
-                                            {
-                                                "name": "Check out",
-                                                "value": "checkout"
-                                            },
-                                            {
-                                                "name": "Purchase",
-                                                "value": "purchase"
-                                            }
-                                        ]
+                                        "name": "Product",
+                                        "value": "product"
+                                    },
+                                    {
+                                        "name": "Add to Cart",
+                                        "value": "addtocart"
+                                    },
+                                    {
+                                        "name": "Check out",
+                                        "value": "checkout"
+                                    },
+                                    {
+                                        "name": "Purchase",
+                                        "value": "purchase"
                                     }
                                 ]
                             }
                         ]
                     }
-                ]
-            }
+                ] 
+            }    
         },
         "sdkTemplate": {
             "title": "Web SDK settings",
