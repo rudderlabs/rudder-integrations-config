@@ -419,7 +419,7 @@
     "result": true
   },
   {
-    "testTitle": "With consent management custom provider config invalid resolutionStrategy value",
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
     "config": {
       "account": "test-account",
       "database": "test-database",
@@ -431,6 +431,29 @@
           {
             "provider": "custom",
             "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "account": "test-account",
+      "database": "test-database",
+      "warehouse": "test-warehouse",
+      "user": "test-user",
+      "password": "test-password",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": ""
           }
         ]
       }
