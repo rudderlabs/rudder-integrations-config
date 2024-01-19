@@ -852,6 +852,7 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
         if selector == 'destination':
             baseTemplate = uiConfig.get('baseTemplate', [])
             sdkTemplate = uiConfig.get('sdkTemplate', {})
+            consentSettingsTemplate = uiConfig.get('consentSettingsTemplate', {})
             for template in baseTemplate:
                 for section in template.get('sections', []):
                     for group in section.get('groups', []):
@@ -866,6 +867,14 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, nam
                                     field['configKey'])
 
             for field in sdkTemplate.get('fields', []):
+                generateFunction = uiTypetoSchemaFn.get(field['type'], None)
+                if generateFunction:
+                    properties[field['configKey']] = generateFunction(
+                        field, dbConfig, 'configKey')
+                if field.get('required', False) == True and is_field_present_in_default_config(field, dbConfig, "configKey"):
+                    schemaObject['required'].append(field['configKey'])
+
+            for field in consentSettingsTemplate.get('fields', []):
                 generateFunction = uiTypetoSchemaFn.get(field['type'], None)
                 if generateFunction:
                     properties[field['configKey']] = generateFunction(
@@ -978,6 +987,7 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
     else:
         baseTemplate = uiConfig.get('baseTemplate', [])
         sdkTemplate = uiConfig.get('sdkTemplate', {})
+        consentSettingsTemplate = uiConfig.get('consentSettingsTemplate', {})
         for template in baseTemplate:
             for section in template.get('sections', []):
                 for group in section.get('groups', []):
@@ -1002,6 +1012,24 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                                         curUiType, field["configKey"], schemaDiff), UserWarning)
                         
         for field in sdkTemplate.get('fields', []):
+            if "preRequisites" in field:
+                continue
+            generateFunction = uiTypetoSchemaFn.get(field['type'], None)
+            if generateFunction:
+                if generateFunction and field["type"] == curUiType:
+                    if field["configKey"] not in schema["properties"]:
+                        warnings.warn(
+                            f'{field["configKey"]} field is not in schema \n',  UserWarning)
+                    else:
+                        curSchemaField = schema["properties"][field["configKey"]]
+                        newSchemaField = uiTypetoSchemaFn.get(
+                            curUiType)(field, dbConfig, "configKey")
+                        schemaDiff = diff(newSchemaField, curSchemaField)
+                        if schemaDiff:
+                            warnings.warn("For type:{} field:{} Difference is : \n\n {} \n".format(
+                                curUiType, field["configKey"], schemaDiff), UserWarning)
+
+        for field in consentSettingsTemplate.get('fields', []):
             if "preRequisites" in field:
                 continue
             generateFunction = uiTypetoSchemaFn.get(field['type'], None)
