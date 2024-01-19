@@ -1,92 +1,117 @@
 {
-    "configSchema": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "required": ["pixelId"],
-      "type": "object",
-      "properties": {
-        "pixelId": {
-          "type": "string",
-          "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-        },
-        "eventsToSpotifyPixelEvents": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "from": {
-                "type": "string",
-                "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-              },
-              "to": {
-                "type": "string",
-                "enum": ["lead", "product", "addtocart", "checkout", "purchase", ""]
-              }
-            }
-          }
-        },
-        "enableAliasCall": {
-          "type": "boolean",
-          "default": false
-        },
-        "eventFilteringOption": {
-          "type": "string",
-          "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
-          "default": "disable"
-        },
-        "whitelistedEvents": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "eventName": {
-                "type": "string",
-                "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-              }
-            }
-          }
-        },
-        "blacklistedEvents": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "eventName": {
-                "type": "string",
-                "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-              }
-            }
-          }
-        },
-        "useNativeSDK": {
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["pixelId"],
+    "type": "object",
+    "properties": {
+      "pixelId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "eventsToSpotifyPixelEvents": {
+        "type": "array",
+        "items": {
           "type": "object",
           "properties": {
-            "web": {
-              "type": "boolean"
-            }
-          }
-        },
-        "oneTrustCookieCategories": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "oneTrustCookieCategory": {
-                "type": "string",
-                "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-              }
-            }
-          }
-        },
-        "connectionMode": {
-          "type": "object",
-          "properties": {
-            "web": {
+            "from": {
               "type": "string",
-              "enum": ["device"]
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "to": {
+              "type": "string",
+              "enum": ["lead", "product", "addtocart", "checkout", "purchase", ""]
             }
+          }
+        }
+      },
+      "enableAliasCall": {
+        "type": "boolean",
+        "default": false
+      },
+      "eventFilteringOption": {
+        "type": "string",
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
+      },
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "oneTrustCookieCategories": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "ketchConsentPurposes": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "enum": ["device"]
           }
         }
       }
     }
   }
-  
+}
