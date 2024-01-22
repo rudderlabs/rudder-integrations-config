@@ -8,10 +8,20 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "roleBasedAuth": { "type": "boolean", "default": true },
-      "lambda": { "type": "string" },
-      "enableBatchInput": { "type": "boolean", "default": false },
-      "clientContext": { "type": "string" },
+      "roleBasedAuth": {
+        "type": "boolean",
+        "default": true
+      },
+      "lambda": {
+        "type": "string"
+      },
+      "enableBatchInput": {
+        "type": "boolean",
+        "default": false
+      },
+      "clientContext": {
+        "type": "string"
+      },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -28,7 +38,11 @@
     "allOf": [
       {
         "if": {
-          "properties": { "roleBasedAuth": { "const": true } },
+          "properties": {
+            "roleBasedAuth": {
+              "const": true
+            }
+          },
           "required": ["roleBasedAuth"]
         },
         "then": {
@@ -37,14 +51,20 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "roleBasedAuth": { "const": true }
+            "roleBasedAuth": {
+              "const": true
+            }
           },
           "required": ["iamRoleARN", "roleBasedAuth"]
         }
       },
       {
         "if": {
-          "properties": { "roleBasedAuth": { "const": false } },
+          "properties": {
+            "roleBasedAuth": {
+              "const": false
+            }
+          },
           "required": ["roleBasedAuth"]
         },
         "then": {
@@ -57,14 +77,20 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "roleBasedAuth": { "const": false }
+            "roleBasedAuth": {
+              "const": false
+            }
           },
           "required": ["accessKeyId", "accessKey"]
         }
       },
       {
         "if": {
-          "properties": { "enableBatchInput": { "const": true } },
+          "properties": {
+            "enableBatchInput": {
+              "const": true
+            }
+          },
           "required": ["enableBatchInput"]
         },
         "then": {

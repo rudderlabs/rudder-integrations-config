@@ -1,204 +1,348 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Host Name(s)",
-          "value": "hostName",
-          "regex": "^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\\.[A-Za-z0-9-]{1,63})*(,\\s*(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\\.[A-Za-z0-9-]{1,63})*)*$",
-          "regexErrorMessage": "Invalid Host Name(s)",
-          "required": true,
-          "placeholder": "e.g: localhost",
-          "footerNote": "For multiple host names, provide them in comma separated string format"
-        },
-        {
-          "type": "textInput",
-          "label": "Port",
-          "value": "port",
-          "regex": "^([1-9]|[1-9][0-9]{1,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$",
-          "regexErrorMessage": "Invalid Port",
-          "required": true,
-          "placeholder": "e.g: 9092"
-        },
-        {
-          "type": "textInput",
-          "label": "Topic Name",
-          "value": "topic",
-          "regex": "^[a-zA-Z0-9_\\-]{1,249}$",
-          "regexErrorMessage": "Invalid Topic Name",
-          "required": true,
-          "placeholder": "e.g: test-topic"
-        },
-        {
-          "type": "checkbox",
-          "label": "SSL Enabled",
-          "value": "sslEnabled",
-          "default": true
-        },
-        {
-          "type": "textareaInput",
-          "preRequisiteField": { "name": "sslEnabled", "selectedValue": true },
-          "label": "CA certificate",
-          "value": "caCertificate",
-          "regex": ".*",
-          "required": false,
-          "placeholder": "CA Certificate"
-        }
-      ]
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Host Name(s)",
+                    "note": "For multiple host names, provide them in comma separated string format",
+                    "configKey": "hostName",
+                    "regex": "^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\\.[A-Za-z0-9-]{1,63})*(,\\s*(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\\.[A-Za-z0-9-]{1,63})*)*$",
+                    "regexErrorMessage": "Invalid Host Name(s)",
+                    "placeholder": "e.g: localhost"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Port",
+                    "note": "Please enter the port as a numeric value",
+                    "configKey": "port",
+                    "regex": "^([1-9]|[1-9][0-9]{1,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$",
+                    "regexErrorMessage": "Invalid Port",
+                    "placeholder": "e.g: 9092"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Topic Name",
+                    "note": "Please enter the topic name",
+                    "configKey": "topic",
+                    "regex": "^[a-zA-Z0-9_\\-]{1,249}$",
+                    "regexErrorMessage": "Invalid Topic Name",
+                    "placeholder": "e.g: test-topic"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Set your SSL and SASL authentication related settings.",
+            "icon": "magnifyingGlass",
+            "groups": [
+              {
+                "title": "SSL settings",
+                "note": "Enter the settings related to SSL",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "SSL Enabled",
+                    "note": "Enable SSL",
+                    "configKey": "sslEnabled",
+                    "default": true
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "CA certificate",
+                    "note": "Please enter your CA certification.",
+                    "configKey": "caCertificate",
+                    "regex": ".*",
+                    "placeholder": "CA Certificate",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "sslEnabled",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "SASL Authentication settings",
+                "note": "Enter the settings related to SASL Authentication",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Enable SASL with SSL",
+                    "note": "Enable if you want to use SASL Authentication along with SSL",
+                    "configKey": "useSASL",
+                    "default": false
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "SASL Type",
+                    "note": "Type of SASL authentication",
+                    "configKey": "saslType",
+                    "options": [
+                      { "name": "Plain", "value": "plain" },
+                      { "name": "SCRAM SHA-512", "value": "sha512" },
+                      { "name": "SCRAM SHA-256", "value": "sha256" }
+                    ],
+                    "default": "plain",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useSASL",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Username",
+                    "note": "SASL Authentication username",
+                    "configKey": "username",
+                    "regex": "^[a-zA-Z0-9_-]{1,32}$",
+                    "regexErrorMessage": "Invalid User Name",
+                    "placeholder": "e.g: userjohn",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useSASL",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Password",
+                    "note": "SASL Authentication password",
+                    "configKey": "password",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Password",
+                    "placeholder": "e.g: 1jdu2XXnasfa",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useSASL",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "OneTrust consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack's OneTrust Consent Management feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Consent categories",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: C0001",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "AVRO Schema and Topic mapping",
+        "note": "Configure settings related to AVRO Schema and Topics",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "AVRO Schema and Topic settings",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "avroAndTopicSettings",
+                    "label": "AVRO schema and Topic mappings",
+                    "note": "Enter your ARVO schema and Topics related settings"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     },
-    {
-      "title": "SASL Authentication",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Enable SASL with SSL",
-          "value": "useSASL",
-          "default": false
-        },
-        {
-          "type": "singleSelect",
-          "preRequisiteField": { "name": "useSASL", "selectedValue": true },
-          "label": "SASL Type",
-          "value": "saslType",
-          "options": [
-            { "name": "Plain", "value": "plain" },
-            { "name": "SCRAM SHA-512", "value": "sha512" },
-            { "name": "SCRAM SHA-256", "value": "sha256" }
-          ],
-          "defaultOption": { "name": "Plain", "value": "plain" },
-          "required": true
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": { "name": "useSASL", "selectedValue": true },
-          "label": "Username",
-          "value": "username",
-          "regex": "^[a-zA-Z0-9_-]{1,32}$",
-          "regexErrorMessage": "Invalid User Name",
-          "required": true,
-          "placeholder": "e.g: userjohn"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": { "name": "useSASL", "selectedValue": true },
-          "label": "Password",
-          "value": "password",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Password",
-          "required": true,
-          "placeholder": "e.g: 1jdu234nasfa",
-          "secret": true
-        }
-      ]
-    },
-    {
-      "title": "Event Settings",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Convert Data to AVRO format",
-          "value": "convertToAvro",
-          "default": false,
-          "footerNote": "If this option is turned on we will convert the data to avro"
-        },
-        {
-          "preRequisiteField": { "name": "convertToAvro", "selectedValue": true },
-          "label": "AVRO Schema Lists",
-          "value": "avroSchemas",
-          "required": true,
-          "type": "dynamicCustomForm",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "schemaId",
-              "required": true,
-              "label": "Schema Id",
-              "placeholder": "e.g: schema-id"
-            },
-            {
-              "type": "textareaInput",
-              "value": "schema",
-              "label": "Schema",
-              "required": true,
-              "placeholder": "schema object"
-            }
-          ]
-        },
-        {
-          "preRequisiteField": { "name": "convertToAvro", "selectedValue": true },
-          "type": "checkbox",
-          "label": "Embed Schema ID in Event Data",
-          "value": "embedAvroSchemaID",
-          "default": false,
-          "footerNote": "This embeds the Avro schema ID in the payload to enable Confluent consumers to automatically know the schema ID used to encode."
-        }
-      ]
-    },
-    {
-      "title": "Topic Settings",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Enable multiple topic support for event types and event names",
-          "value": "enableMultiTopic",
-          "default": false,
-          "footerNote": "Enable this option to deliver events to multiple topics"
-        },
-        {
-          "preRequisiteField": { "name": "enableMultiTopic", "selectedValue": true },
-          "type": "dynamicSelectForm",
-          "label": "Map event type to topic",
-          "labelLeft": "Event Type",
-          "labelRight": "Topic",
-          "value": "eventTypeToTopicMap",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "reverse": true,
-          "required": true,
-          "placeholderRight": "e.g. Sample-topic",
-          "options": [
-            { "name": "Identify", "value": "identify" },
-            { "name": "Page", "value": "page" },
-            { "name": "Screen", "value": "screen" },
-            { "name": "Group", "value": "group" },
-            { "name": "Alias", "value": "alias" }
-          ]
-        },
-        {
-          "preRequisiteField": { "name": "enableMultiTopic", "selectedValue": true },
-          "type": "dynamicForm",
-          "label": "Map Track events to topic",
-          "required": true,
-          "placeholderLeft": "e.g. Product Searched",
-          "placeholderRight": "Sample-topic",
-          "labelLeft": "Event Name",
-          "labelRight": "Topic",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "value": "eventToTopicMap"
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        }
-      ]
+    "redirectGroups": {
+      "avroAndTopicSettings": {
+        "tabs": [
+          {
+            "name": "AVRO Schema",
+            "fields": [
+              {
+                "type": "checkbox",
+                "label": "Convert Data to AVRO format",
+                "note": "If this option is turned on we will convert the data to avro",
+                "configKey": "convertToAvro",
+                "default": false
+              },
+              {
+                "type": "mapping",
+                "label": "AVRO Schema Lists",
+                "note": "Enter your AVRO schema settings",
+                "configKey": "avroSchemas",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "schemaId",
+                    "label": "Schema Id",
+                    "placeholder": "e.g: schema-id"
+                  },
+                  {
+                    "type": "textInput",
+                    "key": "schema",
+                    "label": "Schema",
+                    "placeholder": "schema object..."
+                  }
+                ]
+              },
+              {
+                "type": "checkbox",
+                "label": "Embed Schema ID in Event Data",
+                "note": "This embeds the Avro schema ID in the payload to enable Confluent consumers to automatically know the schema ID used to encode.",
+                "configKey": "embedAvroSchemaID",
+                "default": false
+              }
+            ]
+          },
+          {
+            "name": "Event type to Topic",
+            "fields": [
+              {
+                "type": "checkbox",
+                "label": "Enable multiple topic support for event types and event names",
+                "note": "Enable this option to deliver events to multiple topics",
+                "configKey": "enableMultiTopic",
+                "default": false
+              },
+              {
+                "type": "mapping",
+                "label": "Map your RudderStack event type to Topic",
+                "note": "Input the RudderStack event type to map to Kafka's Topic",
+                "configKey": "eventTypeToTopicMap",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "singleSelect",
+                    "key": "from",
+                    "label": "Event Type",
+                    "options": [
+                      { "name": "Identify", "value": "identify" },
+                      { "name": "Page", "value": "page" },
+                      { "name": "Screen", "value": "screen" },
+                      { "name": "Group", "value": "group" },
+                      { "name": "Alias", "value": "alias" }
+                    ],
+                    "default": "identify"
+                  },
+                  {
+                    "type": "textInput",
+                    "key": "to",
+                    "label": "Topic",
+                    "placeholder": "sample topic"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Track event to Topic",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map your RudderStack track events to Topic",
+                "note": "Input the RudderStack track event to map to Kafka's Topic",
+                "configKey": "eventToTopicMap",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "Event Name",
+                    "placeholder": "Sample event Name"
+                  },
+                  {
+                    "type": "textInput",
+                    "key": "to",
+                    "label": "Topic",
+                    "placeholder": "sample topic"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     }
-  ]
+  }
 }

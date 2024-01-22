@@ -1,171 +1,258 @@
 {
-  "uiConfig": [
-    {
-      "title": "1. Connection Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Site ID",
-          "value": "siteID",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid Site ID",
-          "required": true,
-          "placeholder": "e.g: ABCDEFG"
-        },
-        {
-          "type": "textInput",
-          "label": "API Key",
-          "value": "apiKey",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid API Key",
-          "required": true,
-          "placeholder": "e.g: ABCDEFG"
-        },
-        {
-          "type": "textInput",
-          "label": "Event Sent After Setting Device Token",
-          "value": "deviceTokenEventName",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Event Name",
-          "placeholder": "e.g: device_token_registered",
-          "footerNote": "This event should be fired just after setting device token to enable sending device tokens to Customer.io immediately."
-        },
-        {
-          "type": "singleSelect",
-          "label": "Data Center",
-          "value": "datacenter",
-          "mode": "single",
-          "options": [
-            {
-              "name": "US",
-              "value": "US"
-            },
-            {
-              "name": "EU",
-              "value": "EU"
-            }
-          ],
-          "defaultOption": {
-            "name": "US",
-            "value": "US"
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "API Key",
+                    "configKey": "apiKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Api Key",
+                    "placeholder": "e.g: ABCDEFG",
+                    "note": "Enter your Customer.io API Key"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Site ID",
+                    "configKey": "siteID",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Site ID",
+                    "placeholder": "e.g: ABCDEFG",
+                    "note": "Enter your Customer.io Site ID"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Data Center",
+                    "configKey": "datacenter",
+                    "note": "Select your Customer.io Data Center",
+                    "options": [
+                      {
+                        "label": "US",
+                        "value": "US"
+                      },
+                      {
+                        "label": "EU",
+                        "value": "EU"
+                      }
+                    ],
+                    "default": "US"
+                  }
+                ]
+              }
+            ]
           },
-          "footerNote": "Select your Customer.io Data Center"
-        },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Destiantion Specific Setting",
+                "note": "Configure a few Customerio settings here",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Event Sent After Setting Device Token",
+                    "configKey": "deviceTokenEventName",
+                    "note": [
+                      "This event should be fired just after setting device token to enable sending device tokens to Customer.io immediately."
+                    ],
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Event Name",
+                    "placeholder": "e.g: device_token_registered"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Client-side event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.webDevice",
+                      "value": true
+                    },
+                    {
+                      "configKey": "connectionModes.mobileDevice",
+                      "value": true
+                    }
+                  ],
+                  "condition": "or"
+                },
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on events filtering:",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
+                      {
+                        "label": "Disabled",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack’s OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "Ketch consent settings",
+                "note": "Enter your Ketch Consent Purposes if you have them configured.",
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Ketch consent purpose",
+                    "note": "Input your Ketch consent purpose by pressing ‘Enter’ after each entry",
+                    "configKey": "ketchConsentPurposes",
+                    "tagKey": "purpose",
+                    "placeholder": "e.g: Marketing",
+                    "default": [
+                      {
+                        "purpose": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": [
         {
           "type": "checkbox",
           "label": "Send Page Name in SDK mode",
-          "value": "sendPageNameInSDK",
-          "default": true,
-          "footerNote": "Turn it OFF if you don't want to send the page name when connected in device mode. If OFF page name will automatically be captured by Customer.io."
-        }
-      ]
-    },
-    {
-      "title": "2. Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": false
+          "note": "Turn it OFF if you don't want to send the page name when connected in device mode. If OFF page name will automatically be captured by Customer.io.",
+          "configKey": "sendPageNameInSDK",
+          "default": true
         },
         {
           "type": "checkbox",
           "label": "Enable in-app message support",
-          "value": "dataUseInApp",
-          "default": false,
-          "footerNote": "Turn it ON if you want to send in-app messages to your website."
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "ketchConsentPurposes",
-          "label": "Ketch Consent Purposes",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "purpose",
-              "label": "Purpose ID",
-              "regex": "^(.{0,100})$",
-              "required": false
-            }
-          ]
+          "note": "Turn it ON if you want to send in-app messages to your website.",
+          "configKey": "dataUseInApp",
+          "default": false
         }
       ]
     }
-  ]
+  }
 }

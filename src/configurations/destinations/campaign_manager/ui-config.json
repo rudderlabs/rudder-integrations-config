@@ -11,7 +11,7 @@
           "regexErrorMessage": "Length of Profile ID must be below 50 characters.",
           "required": true,
           "secret": false,
-          "placeholder": "e.g: 641234",
+          "placeholder": "e.g: 64XX34",
           "footerNote": "User profile ID associated with request."
         },
         {
@@ -54,13 +54,15 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
           ]
