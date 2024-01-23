@@ -1,244 +1,343 @@
 {
-  "uiConfig": [
-    {
-      "title": "1. Connection Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Site ID",
-          "value": "siteID",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid Site ID",
-          "required": true,
-          "placeholder": "e.g: ABCDEFG"
-        },
-        {
-          "type": "textInput",
-          "label": "API Key",
-          "value": "apiKey",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid API Key",
-          "required": true,
-          "placeholder": "e.g: ABCDEFG"
-        },
-        {
-          "type": "textInput",
-          "label": "Event Sent After Setting Device Token",
-          "value": "deviceTokenEventName",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Event Name",
-          "placeholder": "e.g: device_token_registered",
-          "footerNote": "This event should be fired just after setting device token to enable sending device tokens to Customer.io immediately."
-        },
-        {
-          "type": "singleSelect",
-          "label": "Data Center",
-          "value": "datacenter",
-          "mode": "single",
-          "options": [
-            {
-              "name": "US",
-              "value": "US"
-            },
-            {
-              "name": "EU",
-              "value": "EU"
-            }
-          ],
-          "defaultOption": {
-            "name": "US",
-            "value": "US"
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "API Key",
+                    "configKey": "apiKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Api Key",
+                    "placeholder": "e.g: ABCDEFG",
+                    "note": "Enter your Customer.io API Key"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Site ID",
+                    "configKey": "siteID",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Site ID",
+                    "placeholder": "e.g: ABCDEFG",
+                    "note": "Enter your Customer.io Site ID"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Data Center",
+                    "configKey": "datacenter",
+                    "note": "Select your Customer.io Data Center",
+                    "options": [
+                      {
+                        "label": "US",
+                        "value": "US"
+                      },
+                      {
+                        "label": "EU",
+                        "value": "EU"
+                      }
+                    ],
+                    "default": "US"
+                  }
+                ]
+              }
+            ]
           },
-          "footerNote": "Select your Customer.io Data Center"
-        },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Destination Specific Setting",
+                "note": "Configure a few Customerio settings here",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Event Sent After Setting Device Token",
+                    "configKey": "deviceTokenEventName",
+                    "note": [
+                      "This event should be fired just after setting device token to enable sending device tokens to Customer.io immediately."
+                    ],
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Event Name",
+                    "placeholder": "e.g: device_token_registered"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "OneTrust consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
+                  },
+                  "about RudderStack's OneTrust Consent Management feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Consent categories",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: C0001",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
+              },
+              {
+                "title": "Ketch consent purpose settings",
+                "note": [
+                  "Enter your Ketch purpose Id if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/ketch/"
+                  },
+                  "about RudderStack and Ketch Consent Manager integration."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Purpose ID",
+                    "note": "Input your Ketch purpose Id by pressing 'Enter' after each entry",
+                    "configKey": "ketchConsentPurposes",
+                    "tagKey": "purpose",
+                    "placeholder": "e.g: Marketing",
+                    "default": [
+                      {
+                        "purpose": ""
+                      }
+                    ]
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Client-side event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.webDevice",
+                      "value": true
+                    },
+                    {
+                      "configKey": "connectionModes.mobileDevice",
+                      "value": true
+                    }
+                  ],
+                  "condition": "or"
+                },
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on events filtering:",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
+                      {
+                        "label": "Disabled",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": [
         {
           "type": "checkbox",
           "label": "Send Page Name in SDK mode",
-          "value": "sendPageNameInSDK",
-          "default": true,
-          "footerNote": "Turn it OFF if you don't want to send the page name when connected in device mode. If OFF page name will automatically be captured by Customer.io."
-        }
-      ]
-    },
-    {
-      "title": "2. Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": false
+          "note": "Turn it OFF if you don't want to send the page name when connected in device mode. If OFF page name will automatically be captured by Customer.io.",
+          "configKey": "sendPageNameInSDK",
+          "default": true
         },
         {
           "type": "checkbox",
           "label": "Enable in-app message support",
-          "value": "dataUseInApp",
-          "default": false,
-          "footerNote": "Turn it ON if you want to send in-app messages to your website."
+          "note": "Turn it ON if you want to send in-app messages to your website.",
+          "configKey": "dataUseInApp",
+          "default": false
         }
       ]
     },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
       "fields": [
         {
           "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Consent Categories",
-          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "C0001",
-              "value": "oneTrustCookieCategory",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category ID",
-              "required": false
-            }
-          ],
-          "preRequisites": {
-            "featureFlags": [
-              {
-                "configKey": "AMP_enable-gcm",
-                "value": false
-              },
-              {
-                "configKey": "AMP_enable-gcm"
-              }
-            ],
-            "featureFlagsCondition": "or"
-          }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "ketchConsentPurposes",
-          "label": "Ketch Consent Purposes",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "purpose",
-              "label": "Purpose ID",
-              "regex": "^(.{0,100})$",
-              "required": false
-            }
-          ],
-          "preRequisites": {
-            "featureFlags": [
-              {
-                "configKey": "AMP_enable-gcm",
-                "value": false
-              },
-              {
-                "configKey": "AMP_enable-gcm"
-              }
-            ],
-            "featureFlagsCondition": "or"
-          }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "consentManagement",
-          "label": "Consent management settings",
-          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
             {
               "type": "singleSelect",
               "label": "Consent management provider",
-              "value": "provider",
+              "configKey": "provider",
               "options": [
                 {
-                  "name": "Custom",
+                  "label": "Custom",
                   "value": "custom"
                 },
                 {
-                  "name": "Ketch",
+                  "label": "Ketch",
                   "value": "ketch"
                 },
                 {
-                  "name": "OneTrust",
+                  "label": "OneTrust",
                   "value": "oneTrust"
                 }
               ],
-              "defaultOption": {
-                "name": "Custom",
-                "value": "custom"
-              },
+              "default": "custom",
               "required": true
             },
             {
               "type": "singleSelect",
               "label": "the required consent logic",
-              "value": "resolutionStrategy",
+              "configKey": "resolutionStrategy",
               "options": [
                 {
-                  "name": "AND",
+                  "label": "AND",
                   "value": "and"
                 },
                 {
-                  "name": "OR",
+                  "label": "OR",
                   "value": "or"
                 }
               ],
-              "defaultOption": {
-                "name": "AND",
-                "value": "and"
-              },
+              "default": "and",
               "required": true,
               "variant": "badge",
               "preRequisites": {
@@ -251,16 +350,15 @@
               }
             },
             {
-              "type": "dynamicCustomForm",
-              "value": "consents",
+              "type": "tagInput",
               "label": "Enter consent category ID’s",
-              "customFields": [
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
                 {
-                  "type": "textInput",
-                  "placeholder": "Marketing",
-                  "value": "consent",
-                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "required": false
+                  "consent": ""
                 }
               ]
             }
@@ -276,5 +374,5 @@
         }
       ]
     }
-  ]
+  }
 }
