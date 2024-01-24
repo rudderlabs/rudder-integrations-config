@@ -30,6 +30,31 @@
                   },
                   {
                     "type": "singleSelect",
+                    "label": "Intercom REST API Version",
+                    "configKey": "apiVersion",
+                    "options": [
+                      {
+                        "label": "1.4",
+                        "value": "1.4"
+                      },
+                      {
+                        "label": "latest",
+                        "value": "latest"
+                      }
+                    ],
+                    "default": "1.4",
+                    "note": "Select your Intercom REST API Version to send data to intercom. Rudderstack supports both versions for backward compatibity",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "singleSelect",
                     "label": "API Server",
                     "configKey": "apiServer",
                     "options": [
@@ -53,8 +78,13 @@
                         {
                           "configKey": "connectionModes.cloud",
                           "value": true
+                        },
+                        {
+                          "configKey": "apiVersion",
+                          "value": "latest"
                         }
-                      ]
+                      ],
+                      "condition": "and"
                     }
                   },
                   {
@@ -125,6 +155,32 @@
                           "value": true
                         }
                       ]
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Enable this to update the last seen to the current time",
+                    "configKey": "updateLastRequestAt",
+                    "default": true,
+                    "note": [
+                      "For more details refer update_last_request_at in this ",
+                      {
+                        "text": "link",
+                        "link": "https://developers.intercom.com/intercom-api-reference/v1.2/reference/updating-the-last-seen-time"
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        },
+                        {
+                          "configKey": "apiVersion",
+                          "value": "1.4"
+                        }
+                      ],
+                      "condition": "and"
                     }
                   }
                 ]
