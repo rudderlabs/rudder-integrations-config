@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.63.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.62.1...v1.63.0) (2024-01-22)
+
+
+### Features
+
+* adding proxy server url in amplitude device mode ([#1163](https://github.com/rudderlabs/rudder-config-schema/issues/1163)) ([38d47b5](https://github.com/rudderlabs/rudder-config-schema/commit/38d47b57f9da248adcb0594387f7f1eefb841d3c))
+* onboard customerio to new UI ([#1118](https://github.com/rudderlabs/rudder-config-schema/issues/1118)) ([914bde6](https://github.com/rudderlabs/rudder-config-schema/commit/914bde6b62067ba1097c7734fb212963f7d4aaf6))
+* onboard new destination spotify pixel ([#1139](https://github.com/rudderlabs/rudder-config-schema/issues/1139)) ([d338d02](https://github.com/rudderlabs/rudder-config-schema/commit/d338d02f220395737352faa45473fced803512a8))
+* tiktok_ads: support new event version 2.0 ([7bd2848](https://github.com/rudderlabs/rudder-config-schema/commit/7bd2848349092f89f0f5d149cc3051c3347cbb19))
+
+
+### Bug Fixes
+
+* update stripe image to fix subscription sync [ETL-239] ([#1151](https://github.com/rudderlabs/rudder-config-schema/issues/1151)) ([6bb6e29](https://github.com/rudderlabs/rudder-config-schema/commit/6bb6e29318b6c526987dd2488d28a477fab205e8))
+
 ### [1.62.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.62.0...v1.62.1) (2024-01-16)
 
 
