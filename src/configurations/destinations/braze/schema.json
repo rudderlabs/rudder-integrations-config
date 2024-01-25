@@ -132,6 +132,22 @@
           "flutter": {
             "type": "string",
             "enum": ["cloud", "device"]
+          },
+          "unity": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "amp": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cordova": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "shopify": {
+            "type": "string",
+            "enum": ["cloud"]
           }
         }
       },
@@ -152,78 +168,87 @@
         }
       }
     },
+    "additonalProperties": false,
     "allOf": [
       {
         "if": {
           "properties": {
             "connectionMode": {
               "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "web": {
-                  "const": "device"
+              "anyOf": [
+                {
+                  "required": ["web"],
+                  "properties": {
+                    "web": {
+                      "const": "cloud"
+                    }
+                  }
                 },
-                "ios": {
-                  "const": "device"
+                {
+                  "required": ["ios"],
+                  "properties": {
+                    "ios": {
+                      "const": "cloud"
+                    }
+                  }
                 },
-                "android": {
-                  "const": "device"
+                {
+                  "required": ["android"],
+                  "properties": {
+                    "android": {
+                      "const": "cloud"
+                    }
+                  }
                 },
-                "flutter": {
-                  "const": "device"
+                {
+                  "required": ["unity"],
+                  "properties": {
+                    "unity": {
+                      "const": "cloud"
+                    }
+                  }
                 },
-                "reactnative": {
-                  "const": "device"
+                {
+                  "required": ["amp"],
+                  "properties": {
+                    "amp": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["reactnative"],
+                  "properties": {
+                    "reactnative": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["flutter"],
+                  "properties": {
+                    "flutter": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["cordova"],
+                  "properties": {
+                    "cordova": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["shopify"],
+                  "properties": {
+                    "shopify": {
+                      "const": "cloud"
+                    }
+                  }
                 }
-              }
-            }
-          },
-          "required": ["connectionMode"]
-        },
-        "then": {
-          "properties": {
-            "appKey": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            }
-          }
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "connectionMode": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "web": {
-                  "const": "cloud"
-                },
-                "ios": {
-                  "const": "cloud"
-                },
-                "android": {
-                  "const": "cloud"
-                },
-                "unity": {
-                  "const": "cloud"
-                },
-                "amp": {
-                  "const": "cloud"
-                },
-                "reactnative": {
-                  "const": "cloud"
-                },
-                "flutter": {
-                  "const": "cloud"
-                },
-                "cordova": {
-                  "const": "cloud"
-                },
-                "shopify": {
-                  "const": "cloud"
-                }
-              }
+              ]
             }
           },
           "required": ["connectionMode"]
@@ -234,7 +259,8 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
             }
-          }
+          },
+          "required": ["restApiKey"]
         }
       },
       {
@@ -242,18 +268,93 @@
           "properties": {
             "connectionMode": {
               "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "web": {
-                  "const": "hybrid"
+              "anyOf": [
+                {
+                  "required": ["web"],
+                  "properties": {
+                    "web": {
+                      "const": "device"
+                    }
+                  }
                 },
-                "ios": {
-                  "const": "hybrid"
+                {
+                  "required": ["ios"],
+                  "properties": {
+                    "ios": {
+                      "const": "device"
+                    }
+                  }
                 },
-                "android": {
-                  "const": "hybrid"
+                {
+                  "required": ["android"],
+                  "properties": {
+                    "android": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["flutter"],
+                  "properties": {
+                    "flutter": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["reactnative"],
+                  "properties": {
+                    "reactnative": {
+                      "const": "device"
+                    }
+                  }
                 }
-              }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "appKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["appKey"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["web"],
+                  "properties": {
+                    "web": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["ios"],
+                  "properties": {
+                    "ios": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["android"],
+                  "properties": {
+                    "android": {
+                      "const": "hybrid"
+                    }
+                  }
+                }
+              ]
             }
           },
           "required": ["connectionMode"]
@@ -267,6 +368,469 @@
             "appKey": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["restApiKey", "appKey"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["ios"],
+                  "properties": {
+                    "ios": {
+                      "const": "device"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "useNativeSDK": {
+              "type": "object",
+              "properties": {
+                "ios": {
+                  "type": "boolean",
+                  "const": true
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["web"],
+                  "properties": {
+                    "web": {
+                      "const": "device"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "useNativeSDK": {
+              "type": "object",
+              "properties": {
+                "web": {
+                  "type": "boolean",
+                  "const": true
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["android"],
+                  "properties": {
+                    "android": {
+                      "const": "device"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "useNativeSDK": {
+              "type": "object",
+              "properties": {
+                "android": {
+                  "type": "boolean",
+                  "const": true
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["flutter"],
+                  "properties": {
+                    "flutter": {
+                      "const": "device"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "useNativeSDK": {
+              "type": "object",
+              "properties": {
+                "flutter": {
+                  "type": "boolean",
+                  "const": true
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["reactnative"],
+                  "properties": {
+                    "reactnative": {
+                      "const": "device"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "useNativeSDK": {
+              "type": "object",
+              "properties": {
+                "reactnative": {
+                  "type": "boolean",
+                  "const": true
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["ios"],
+                  "properties": {
+                    "ios": {
+                      "const": "cloud"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "useNativeSDK": {
+              "type": "object",
+              "properties": {
+                "ios": {
+                  "type": "boolean",
+                  "const": false
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["android"],
+                  "properties": {
+                    "android": {
+                      "const": "cloud"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "useNativeSDK": {
+              "type": "object",
+              "properties": {
+                "android": {
+                  "type": "boolean",
+                  "const": false
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["unity"],
+                  "properties": {
+                    "unity": {
+                      "const": "cloud"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "useNativeSDK": {
+              "type": "object",
+              "properties": {
+                "unity": {
+                  "type": "boolean",
+                  "const": false
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["amp"],
+                  "properties": {
+                    "amp": {
+                      "const": "cloud"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "useNativeSDK": {
+              "type": "object",
+              "properties": {
+                "amp": {
+                  "type": "boolean",
+                  "const": false
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["reactnative"],
+                  "properties": {
+                    "reactnative": {
+                      "const": "cloud"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "useNativeSDK": {
+              "type": "object",
+              "properties": {
+                "reactnative": {
+                  "type": "boolean",
+                  "const": false
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["flutter"],
+                  "properties": {
+                    "flutter": {
+                      "const": "cloud"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "useNativeSDK": {
+              "type": "object",
+              "properties": {
+                "flutter": {
+                  "type": "boolean",
+                  "const": false
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["cordova"],
+                  "properties": {
+                    "cordova": {
+                      "const": "cloud"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "useNativeSDK": {
+              "type": "object",
+              "properties": {
+                "cordova": {
+                  "type": "boolean",
+                  "const": false
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["shopify"],
+                  "properties": {
+                    "shopify": {
+                      "const": "cloud"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "useNativeSDK": {
+              "type": "object",
+              "properties": {
+                "shopify": {
+                  "type": "boolean",
+                  "const": false
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["web"],
+                  "properties": {
+                    "web": {
+                      "const": "cloud"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "useNativeSDK": {
+              "type": "object",
+              "properties": {
+                "web": {
+                  "type": "boolean",
+                  "const": false
+                }
+              }
             }
           }
         }
