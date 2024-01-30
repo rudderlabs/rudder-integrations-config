@@ -18,9 +18,45 @@
                     "configKey": "appKey",
                     "regex": "^(.{1,100})$",
                     "regexErrorMessage": "Invalid App Key",
-                    "required": true,
                     "placeholder": "e.g: f2c7c97a-XXXX-XXXX-XXXX-faffc22c7c7f",
-                    "secret": true
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.android",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.ios",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.flutter",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.reactnative",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.android",
+                          "value": "hybrid"
+                        },
+                        {
+                          "configKey": "connectionMode.ios",
+                          "value": "hybrid"
+                        },
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "hybrid"
+                        }
+                      ],
+                      "condition": "or"
+                    }
                   },
                   {
                     "type": "textInput",
@@ -28,9 +64,16 @@
                     "configKey": "restApiKey",
                     "regex": "^(.{1,100})$",
                     "regexErrorMessage": "Invalid Rest Api Key",
-                    "required": true,
                     "placeholder": "e.g: 06c19c59-XXXX-XXXX-XXXX-faffc22c7c7f",
-                    "secret": true
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "singleSelect",

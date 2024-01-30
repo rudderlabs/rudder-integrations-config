@@ -1,17 +1,9 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["appKey", "restApiKey", "dataCenter"],
+    "required": ["dataCenter"],
     "type": "object",
     "properties": {
-      "appKey": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-      },
-      "restApiKey": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-      },
       "dataCenter": {
         "type": "string",
         "enum": [
@@ -277,6 +269,22 @@
           "flutter": {
             "type": "string",
             "enum": ["cloud", "device"]
+          },
+          "unity": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "amp": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cordova": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "shopify": {
+            "type": "string",
+            "enum": ["cloud"]
           }
         }
       },
@@ -445,6 +453,212 @@
         },
         "additionalProperties": false
       }
-    }
+    },
+    "additonalProperties": false,
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["web"],
+                  "properties": {
+                    "web": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["ios"],
+                  "properties": {
+                    "ios": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["android"],
+                  "properties": {
+                    "android": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["unity"],
+                  "properties": {
+                    "unity": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["amp"],
+                  "properties": {
+                    "amp": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["reactnative"],
+                  "properties": {
+                    "reactnative": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["flutter"],
+                  "properties": {
+                    "flutter": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["cordova"],
+                  "properties": {
+                    "cordova": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["shopify"],
+                  "properties": {
+                    "shopify": {
+                      "const": "cloud"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "restApiKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["restApiKey"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["web"],
+                  "properties": {
+                    "web": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["ios"],
+                  "properties": {
+                    "ios": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["android"],
+                  "properties": {
+                    "android": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["flutter"],
+                  "properties": {
+                    "flutter": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["reactnative"],
+                  "properties": {
+                    "reactnative": {
+                      "const": "device"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "appKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["appKey"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["web"],
+                  "properties": {
+                    "web": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["ios"],
+                  "properties": {
+                    "ios": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["android"],
+                  "properties": {
+                    "android": {
+                      "const": "hybrid"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "restApiKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            },
+            "appKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["restApiKey", "appKey"]
+        }
+      }
+    ]
   }
 }
