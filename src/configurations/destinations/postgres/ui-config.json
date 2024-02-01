@@ -2,15 +2,17 @@
   "uiConfig": {
     "baseTemplate": [
       {
-        "title": "Warehouse Setup",
+        "title": "Initial Setup",
         "note": "Review how this destination is set up",
         "sections": [
           {
+            "title": "Connection settings",
+            "note": "Configure connection settings here",
+            "icon": "otherSettings",
             "groups": [
               {
                 "title": "Connection Credentials",
                 "note": "Update your connection credentials here",
-                "icon": "settings",
                 "fields": [
                   {
                     "type": "textInput",
@@ -59,9 +61,80 @@
                 ]
               },
               {
+                "title": "Security Settings",
+                "note": "Security requirements for your warehouse",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "SSL Mode",
+                    "configKey": "sslMode",
+                    "note": "Select the SSL Mode required",
+                    "options": [
+                      {
+                        "name": "disable",
+                        "value": "disable"
+                      },
+                      {
+                        "name": "require",
+                        "value": "require"
+                      },
+                      {
+                        "name": "verify ca",
+                        "value": "verify-ca"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Client Key Pem File",
+                    "configKey": "clientKey",
+                    "regex": "-----BEGIN RSA PRIVATE KEY-----.*-----END RSA PRIVATE KEY-----",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "sslMode",
+                          "value": "verify-ca"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Client Cert Pem File",
+                    "configKey": "clientCert",
+                    "regex": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "sslMode",
+                          "value": "verify-ca"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Server CA Pem File",
+                    "configKey": "serverCA",
+                    "regex": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "sslMode",
+                          "value": "verify-ca"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
                 "title": "Object Storage Configuration",
                 "note": "Update where do you want the data staged to be stored",
-                "icon": "settings",
                 "fields": [
                   {
                     "type": "checkbox",
@@ -456,79 +529,6 @@
                     }
                   }
                 ]
-              },
-              {
-                "title": "Security Settings",
-                "note": "Security requirements for your warehouse",
-                "icon": "settings",
-                "fields": [
-                  {
-                    "type": "singleSelect",
-                    "label": "SSL Mode",
-                    "configKey": "sslMode",
-                    "note": "Select the SSL Mode required",
-                    "options": [
-                      {
-                        "name": "disable",
-                        "value": "disable"
-                      },
-                      {
-                        "name": "require",
-                        "value": "require"
-                      },
-                      {
-                        "name": "verify ca",
-                        "value": "verify-ca"
-                      }
-                    ],
-                    "default": "disable"
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "Client Key Pem File",
-                    "configKey": "clientKey",
-                    "regex": "-----BEGIN RSA PRIVATE KEY-----.*-----END RSA PRIVATE KEY-----",
-                    "secret": false,
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "sslMode",
-                          "value": "verify-ca"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "Client Cert Pem File",
-                    "configKey": "clientCert",
-                    "regex": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
-                    "secret": false,
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "sslMode",
-                          "value": "verify-ca"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "Server CA Pem File",
-                    "configKey": "serverCA",
-                    "regex": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----",
-                    "secret": false,
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "sslMode",
-                          "value": "verify-ca"
-                        }
-                      ]
-                    }
-                  }
-                ]
               }
             ]
           },
@@ -594,27 +594,27 @@
                     "placeholder": "e.g: Credit card visit",
                     "options": [
                       {
-                        "name": "Every 30 minutes",
+                        "label": "Every 30 minutes",
                         "value": "30"
                       },
                       {
-                        "name": "Every 1 hour",
+                        "label": "Every 1 hour",
                         "value": "60"
                       },
                       {
-                        "name": "Every 3 hours",
+                        "label": "Every 3 hours",
                         "value": "180"
                       },
                       {
-                        "name": "Every 6 hours",
+                        "label": "Every 6 hours",
                         "value": "360"
                       },
                       {
-                        "name": "Every 12 hours",
+                        "label": "Every 12 hours",
                         "value": "720"
                       },
                       {
-                        "name": "Every 24 hours",
+                        "label": "Every 24 hours",
                         "value": "1440"
                       }
                     ],
@@ -631,23 +631,22 @@
                     "secret": false
                   },
                   {
+                    "type": "timePicker",
+                    "label": "Sync Starting At (Optional)",
+                    "configKey": "syncStartAt",
+                    "options": {
+                      "omitSeconds": true,
+                      "minuteStep": 15
+                    }
+                  },
+                  {
                     "type": "textInput",
                     "label": "Exclude window (Optional)",
                     "note": "Specify required JSON properties in dot notation separated by commas",
                     "configKey": "excludeWindow",
                     "regex": "^(.*)$",
                     "regexErrorMessage": "Invalid Columns",
-                    "placeholder": "TODO",
-                    "secret": false
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "Sync Starting At (Optional)",
-                    "note": "Specify required JSON properties in dot notation separated by commas",
-                    "configKey": "syncStartAt",
-                    "regex": "^(.*)$",
-                    "regexErrorMessage": "Invalid Columns",
-                    "placeholder": "TODO",
+                    "placeholder": "Select time",
                     "secret": false
                   }
                 ]
