@@ -1,0 +1,40 @@
+{
+  "uiConfig": [
+    {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Bluecore namespace",
+          "value": "bluecoreNamespace",
+          "regex": ".*",
+          "required": true,
+          "placeholder": "e.g. b4a29abXXXXc8a18acd920ec1e2e",
+          "secret": true,
+          "footerNote": "Get it from the url https://app.bluecore.com/admin/dashboard/<namespace>"
+        }
+      ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "oneTrustCookieCategories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "C0001",
+              "value": "oneTrustCookieCategory",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
+              "required": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
