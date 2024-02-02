@@ -19,12 +19,12 @@ command
 
 const cmdOpts = command.opts();
 
-function getIntegrationNames(type) {
+function getIntegrationNames(type: string) {
   const dirPath = path.resolve(`src/configurations/${type}`);
   return fs.readdirSync(dirPath).filter((file) => fs.statSync(`${dirPath}/${file}`).isDirectory());
 }
 
-function getIntegrationData(name, type): Record<string, unknown>[] {
+function getIntegrationData(name: string, type: string): Record<string, unknown>[] {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let intgData: any;
   try {
@@ -120,7 +120,7 @@ describe('Validation Tests', () => {
   Object.keys(destTcData).forEach((dest: string, destIdx: number) => {
     describe(`${destIdx + 1}. Destination - ${dest}`, () => {
       destTcData[dest].forEach((td: Record<string, unknown>, tcIdx: number) => {
-        it(`TC ${tcIdx + 1}`, () => {
+        it(`TC ${tcIdx + 1}${td.testTitle ? ` - ${td.testTitle}` : ''}`, async () => {
           if (td.result === true) {
             expect(
               validateConfig(dest, td.config as Record<string, unknown>, 'destinations', true),
@@ -139,7 +139,7 @@ describe('Validation Tests', () => {
   Object.keys(srcTcData).forEach((src: string, srcIdx: number) => {
     describe(`${srcIdx + 1}. Source - ${src}`, () => {
       srcTcData[src].forEach((td: Record<string, unknown>, tcIdx: number) => {
-        it(`TC ${tcIdx + 1}`, () => {
+        it(`TC ${tcIdx + 1}${td.testTitle ? ` - ${td.testTitle}` : ''}`, async () => {
           if (td.result === true) {
             expect(
               validateConfig(src, td.config as Record<string, unknown>, 'sources', true),
