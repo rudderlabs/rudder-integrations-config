@@ -67,9 +67,10 @@
         "note": "Manage the settings for your destination",
         "sections": [
           {
-            "title": "Other settings",
-            "note": "Configure advanced RudderStack features here",
-            "icon": "otherSettings",
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
             "groups": [
               {
                 "title": "OneTrust consent settings",
@@ -95,12 +96,24 @@
                       }
                     ]
                   }
-                ]
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
               },
               {
                 "title": "Ketch consent settings",
                 "note": [
-                  "Enter your Ketch consent purpose IDs if you have them configured. ",
+                  "Enter your Ketch consent purpose IDs if you have them configured.",
                   {
                     "text": "Learn more ",
                     "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/ketch/"
@@ -121,7 +134,19 @@
                       }
                     ]
                   }
-                ]
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
               }
             ]
           }

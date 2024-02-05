@@ -67,7 +67,7 @@
         "note": "Manage the settings for your destination",
         "sections": [
           {
-            "title": "Other settings",
+            "title": "Destination settings",
             "note": "Configure advanced RudderStack features here",
             "icon": "otherSettings",
             "groups": [
@@ -104,18 +104,64 @@
                 "fields": [
                   {
                     "type": "tagInput",
-                    "label": "Consent category IDs",
+                    "label": "Cookie category ID",
                     "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
                     "configKey": "oneTrustCookieCategories",
                     "tagKey": "oneTrustCookieCategory",
                     "placeholder": "e.g: Credit card visit"
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "OneTrust consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
+                  },
+                  "about RudderStack's OneTrust Consent Management feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Consent category IDs",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: C0001",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
               },
               {
                 "title": "Ketch consent settings",
                 "note": [
-                  "Enter your Ketch consent purpose IDs if you have them configured. ",
+                  "Enter your Ketch consent purpose IDs if you have them configured.",
                   {
                     "text": "Learn more ",
                     "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/ketch/"
@@ -136,7 +182,19 @@
                       }
                     ]
                   }
-                ]
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
               }
             ]
           }
