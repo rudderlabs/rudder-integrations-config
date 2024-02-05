@@ -1,9 +1,10 @@
 [
   {
     "config": {
-      "apiKey": "cdsfvgertefdvcdfgrtfvdgrfvd",
-      "useNativeSDK": {
-        "web": false
+      "appId": "",
+      "apiVersion": "v2",
+      "connectionMode": {
+        "ios": "cloud"
       },
       "blacklistedEvents": [
         {
@@ -21,38 +22,35 @@
       "eventFilteringOption": "blacklistedEvents"
     },
     "result": false,
-    "err": [" must have required property 'appId'"]
+    "err": [" must have required property 'apiKey'", " must match \"then\" schema"]
   },
   {
     "config": {
-      "appId": "bhjjknlmnbhjnklm",
-      "useNativeSDK": {
-        "web": false
-      },
-      "blacklistedEvents": [
+      "apiKey": "",
+      "apiVersion": "v2",
+      "connectionMode": { "web": "cloud" },
+      "blacklistedEvents": [{ "eventName": "Pin Generated" }, { "eventName": "Pin Expired" }],
+      "whitelistedEvents": [{ "eventName": "" }],
+      "eventFilteringOption": "blacklistedEvents",
+      "oneTrustCookieCategories": [
         {
-          "eventName": "Pin Generated"
-        },
-        {
-          "eventName": "Pin Expired"
+          "oneTrustCookieCategory": ""
         }
-      ],
-      "whitelistedEvents": [
-        {
-          "eventName": ""
-        }
-      ],
-      "eventFilteringOption": "blacklistedEvents"
+      ]
     },
     "result": false,
-    "error": [" must have required property 'apiKey'"]
+    "err": [
+      "apiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
+      " must match \"then\" schema"
+    ]
   },
   {
     "config": {
-      "apiKey": "dfvgtbheygrefdbfgtyhrgfghtgrfdv",
-      "appId": "bhjjknlmnbhjnklm",
       "useNativeSDK": {
-        "web": false
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
       },
       "blacklistedEvents": [
         {
@@ -256,14 +254,16 @@
       ]
     },
     "result": false,
-    "err": ["oneTrustCookieCategories must be object", "ketchConsentPurposes must be object"]
+    "err": [" must have required property 'appId'", " must match \"then\" schema"]
   },
   {
     "config": {
-      "apiKey": "dfvgtbheygrefdbfgtyhrgfghtgrfdv",
-      "appId": "bhjjknlmnbhjnklm",
+      "appId": "",
       "useNativeSDK": {
-        "web": false
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
       },
       "blacklistedEvents": [
         {
@@ -279,101 +279,34 @@
         }
       ],
       "eventFilteringOption": "blacklistedEvents",
-      "oneTrustCookieCategories": {
-        "someunsupportedsourcetype": [
-          {
-            "oneTrustCookieCategory": "C0001"
-          },
-          {
-            "oneTrustCookieCategory": "C0002"
-          }
-        ],
-        "android": [
-          {
-            "someunsupportedkey": "C0001"
-          },
-          {
-            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-          },
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ],
-        "ios": [
-          {
-            "oneTrustCookieCategory": {
-              "not": "a string"
-            }
-          },
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ],
-        "web": {
-          "not": "an array"
-        },
-        "unity": [
-          "not an object",
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ]
-      },
-      "ketchConsentPurposes": {
-        "someunsupportedsourcetype": [
-          {
-            "purpose": "P1"
-          },
-          {
-            "purpose": "P2"
-          }
-        ],
-        "android": [
-          {
-            "someunsupportedkey": "P1"
-          },
-          {
-            "purpose": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-          },
-          {
-            "purpose": "P4"
-          }
-        ],
-        "ios": [
-          {
-            "purpose": {
-              "not": "a string"
-            }
-          },
-          {
-            "purpose": "P4"
-          }
-        ],
-        "web": {
-          "not": "an array"
-        },
-        "unity": [
-          "not an object",
-          {
-            "purpose": "P4"
-          }
-        ]
-      }
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": ""
+        }
+      ]
     },
     "result": false,
     "err": [
-      "oneTrustCookieCategories must NOT have additional properties",
-      "oneTrustCookieCategories.android.0 must NOT have additional properties",
-      "oneTrustCookieCategories.android.1.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
-      "oneTrustCookieCategories.ios.0.oneTrustCookieCategory must be string",
-      "oneTrustCookieCategories.web must be array",
-      "oneTrustCookieCategories.unity.0 must be object",
-      "ketchConsentPurposes must NOT have additional properties",
-      "ketchConsentPurposes.android.0 must NOT have additional properties",
-      "ketchConsentPurposes.android.1.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
-      "ketchConsentPurposes.ios.0.purpose must be string",
-      "ketchConsentPurposes.web must be array",
-      "ketchConsentPurposes.unity.0 must be object"
+      "appId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
+      " must match \"then\" schema"
     ]
+  },
+  {
+    "config": {
+      "apiKey": "dfvgtbheygrefdbfgtyhrgfghtgrfdv",
+      "appId": "bhjjknlmnbhjnklm",
+      "apiServer": "standard",
+      "apiVersion": "v2",
+      "useNativeSDK": { "web": false },
+      "blacklistedEvents": [{ "eventName": "Pin Generated" }, { "eventName": "Pin Expired" }],
+      "whitelistedEvents": [{ "eventName": "" }],
+      "eventFilteringOption": "blacklistedEvents",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": ""
+        }
+      ]
+    },
+    "result": true
   }
 ]

@@ -1,171 +1,347 @@
 {
-  "uiConfig": [
-    {
-      "title": "1. Connection Settings",
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection Settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Access Token",
+                    "configKey": "apiKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Access Token",
+                    "placeholder": "e.g: FGHrOjU4ZDc0MjEyXzhjYmNfNDZmYl85ODUxX2RjZDk0Mzk1M2VlMDoxOjA=",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Intercom REST API Version",
+                    "configKey": "apiVersion",
+                    "options": [
+                      {
+                        "label": "1.4",
+                        "value": "v1"
+                      },
+                      {
+                        "label": "latest",
+                        "value": "v2"
+                      }
+                    ],
+                    "default": "v2",
+                    "note": "Select your Intercom REST API Version to send data to intercom. Rudderstack supports both versions for backward compatibity",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "API Server",
+                    "configKey": "apiServer",
+                    "options": [
+                      {
+                        "label": "Standard",
+                        "value": "standard"
+                      },
+                      {
+                        "label": "EU",
+                        "value": "eu"
+                      },
+                      {
+                        "label": "AU",
+                        "value": "au"
+                      }
+                    ],
+                    "default": "standard",
+                    "note": "Select your Intercom API Server",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        },
+                        {
+                          "configKey": "apiVersion",
+                          "value": "v2"
+                        }
+                      ],
+                      "condition": "and"
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "App Id",
+                    "configKey": "appId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid App Id",
+                    "note": "Intercom appId. Applicable to device mode only",
+                    "placeholder": "e.g: fll5vd90",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.webDevice",
+                          "value": true
+                        },
+                        {
+                          "configKey": "connectionModes.mobileDevice",
+                          "value": true
+                        }
+                      ],
+                      "condition": "or"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Intercom IT",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Send AnonymousId as Secondary UserId",
+                    "configKey": "sendAnonymousId",
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Enable this to update the last seen to the current time",
+                    "configKey": "updateLastRequestAt",
+                    "default": true,
+                    "note": [
+                      "For more details refer update_last_request_at in this ",
+                      {
+                        "text": "link",
+                        "link": "https://developers.intercom.com/intercom-api-reference/v1.2/reference/updating-the-last-seen-time"
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        },
+                        {
+                          "configKey": "apiVersion",
+                          "value": "v1"
+                        }
+                      ],
+                      "condition": "and"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Client-side event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.webDevice",
+                      "value": true
+                    },
+                    {
+                      "configKey": "connectionModes.mobileDevice",
+                      "value": true
+                    }
+                  ],
+                  "condition": "or"
+                },
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on events filtering:",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
+                      {
+                        "label": "No events filtering",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack’s OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
       "fields": [
         {
           "type": "textInput",
-          "label": "Access Token",
-          "value": "apiKey",
+          "label": "iOS API Key",
+          "configKey": "mobileApiKeyIOS",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-          "regexErrorMessage": "Invalid Access Token",
-          "required": true,
-          "placeholder": "e.g: FGHrOjU4ZDc0MjEyXzhjYmXXXXX85ODUxX2RjZXX0Mzk1M2VlMDoxOjA="
-        },
-        {
-          "type": "textInput",
-          "label": "App Id",
-          "value": "appId",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-          "regexErrorMessage": "Invalid App Id",
-          "required": true,
-          "placeholder": "e.g: fll5Xd90"
+          "regexErrorMessage": "Invalid iOS API Key",
+          "placeholder": "e.g: ios_sdk-5fe73e0bb7fcae17a1a75fdbad227191a69f6c00",
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "connectionMode.ios",
+                "value": "device"
+              }
+            ]
+          }
         },
         {
           "type": "textInput",
           "label": "Android API Key",
-          "value": "mobileApiKeyAndroid",
+          "configKey": "mobileApiKeyAndroid",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
           "regexErrorMessage": "Invalid Android API Key",
-          "required": false,
-          "placeholder": "e.g: android_sdk-67f114561f2267e2XXX6e6687bc7a9ba455cf90"
-        },
-        {
-          "type": "textInput",
-          "label": "iOS API Key",
-          "value": "mobileApiKeyIOS",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-          "regexErrorMessage": "Invalid iOS API Key",
-          "required": false,
-          "placeholder": "e.g: ios_sdk-5fe73e0bb7fcaeXXXXa75fdbad227191a69f6c00"
-        }
-      ]
-    },
-    {
-      "title": "2. Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": false
-        }
-      ]
-    },
-    {
-      "title": "3. Other Setttings",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Include Context with Identify Calls",
-          "value": "collectContext",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Send AnonymousId as Secondary UserId",
-          "value": "sendAnonymousId",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Enable this to update the last seen to the current time",
-          "value": "updateLastRequestAt",
-          "footerNote": "For more details refer update_last_request_at in this link https://developers.intercom.com/intercom-api-reference/v1.2/reference/updating-the-last-seen-time",
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
+          "placeholder": "e.g: android_sdk-67f114561f2267e242466e6687bc7a9ba455cf90",
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "connectionMode.android",
+                "value": "device"
+              }
+            ]
           }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Consent Category IDs",
-          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "C0001",
-              "value": "oneTrustCookieCategory",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category ID",
-              "required": false
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "ketchConsentPurposes",
-          "label": "Ketch Consent Purpose IDs",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "marketing",
-              "value": "purpose",
-              "label": "Purpose ID",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "required": false
-            }
-          ]
         }
       ]
     }
-  ]
+  }
 }
