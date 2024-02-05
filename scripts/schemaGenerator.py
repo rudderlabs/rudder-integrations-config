@@ -337,6 +337,7 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
 
     dynamicCustomFormObj["items"] = dynamicCustomFormItemObj
     isSourceDependent = is_dest_field_dependent_on_source(field, dbConfig, schema_field_name)
+
     # If the field is source dependent, new schema object is created by setting the fields inside the source.
     if isSourceDependent:
         newDynamicCustomFormObj = {"type": FieldTypeEnum.OBJECT.value}
@@ -345,6 +346,7 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
             if sourceType in dbConfig["destConfig"] and field[schema_field_name] in dbConfig["destConfig"][sourceType]:
                 newDynamicCustomFormObj["properties"][sourceType] = dynamicCustomFormObj
         dynamicCustomFormObj = newDynamicCustomFormObj
+
     return dynamicCustomFormObj
 
 
@@ -920,6 +922,7 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, sel
         if selector == 'destination':
             baseTemplate = uiConfig.get('baseTemplate', [])
             sdkTemplate = uiConfig.get('sdkTemplate', {})
+            consentSettingsTemplate = uiConfig.get('consentSettingsTemplate', {})
             for template in baseTemplate:
                 for section in template.get('sections', []):
                     for group in section.get('groups', []):
@@ -949,6 +952,14 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, sel
                     else:
                         warnings.warn(f'The field {field["configKey"]} is defined in ui-config.json but not in db-config.json\n', UserWarning)
 
+                if field.get('required', False) == True and is_field_present_in_default_config(field, dbConfig, "configKey"):
+                    schemaObject['required'].append(field['configKey'])
+
+            for field in consentSettingsTemplate.get('fields', []):
+                generateFunction = uiTypetoSchemaFn.get(field['type'], None)
+                if generateFunction:
+                    properties[field['configKey']] = generateFunction(
+                        field, dbConfig, 'configKey')
                 if field.get('required', False) == True and is_field_present_in_default_config(field, dbConfig, "configKey"):
                     schemaObject['required'].append(field['configKey'])
 
@@ -1046,6 +1057,7 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
     else:
         baseTemplate = uiConfig.get('baseTemplate', [])
         sdkTemplate = uiConfig.get('sdkTemplate', {})
+        consentSettingsTemplate = uiConfig.get('consentSettingsTemplate', {})
         for template in baseTemplate:
             for section in template.get('sections', []):
                 for group in section.get('groups', []):
@@ -1086,6 +1098,24 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                         if schemaDiff:
                             warnings.warn("For type:{} field:{} Difference is : \n\n {} \n".format(
                                 curUiType, field["configKey"], get_formatted_json(schemaDiff)), UserWarning)
+
+        for field in consentSettingsTemplate.get('fields', []):
+            if "preRequisites" in field:
+                continue
+            generateFunction = uiTypetoSchemaFn.get(field['type'], None)
+            if generateFunction:
+                if generateFunction and field["type"] == curUiType:
+                    if field["configKey"] not in schema["properties"]:
+                        warnings.warn(
+                            f'{field["configKey"]} field is not in schema \n',  UserWarning)
+                    else:
+                        curSchemaField = schema["properties"][field["configKey"]]
+                        newSchemaField = uiTypetoSchemaFn.get(
+                            curUiType)(field, dbConfig, "configKey")
+                        schemaDiff = diff(newSchemaField, curSchemaField)
+                        if schemaDiff:
+                            warnings.warn("For type:{} field:{} Difference is : \n\n {} \n".format(
+                                curUiType, field["configKey"], schemaDiff), UserWarning)
 
 
 uiTypetoSchemaFn = {
