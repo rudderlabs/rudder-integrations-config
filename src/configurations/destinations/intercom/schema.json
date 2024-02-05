@@ -1,16 +1,18 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["apiKey", "appId"],
+    "required": [],
     "type": "object",
     "properties": {
-      "apiKey": {
+      "apiServer": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "enum": ["standard", "eu", "au"],
+        "default": "standard"
       },
-      "appId": {
+      "apiVersion": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "enum": ["v1", "v2"],
+        "default": "v2"
       },
       "mobileApiKeyAndroid": {
         "type": "object",
@@ -29,24 +31,6 @@
             "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
           }
         }
-      },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "boolean"
-          },
-          "ios": {
-            "type": "boolean"
-          },
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "collectContext": {
-        "type": "boolean",
-        "default": false
       },
       "sendAnonymousId": {
         "type": "boolean",
@@ -96,7 +80,120 @@
             }
           }
         }
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "boolean"
+          },
+          "ios": {
+            "type": "boolean"
+          },
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "string",
+            "enum": ["cloud", "device"]
+          },
+          "ios": {
+            "type": "string",
+            "enum": ["cloud", "device"]
+          },
+          "web": {
+            "type": "string",
+            "enum": ["cloud", "device"]
+          }
+        }
       }
-    }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "web": {
+                  "const": "device"
+                },
+                "ios": {
+                  "const": "device"
+                },
+                "android": {
+                  "const": "device"
+                }
+              }
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "appId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["appId"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "web": {
+                  "const": "cloud"
+                },
+                "ios": {
+                  "const": "cloud"
+                },
+                "android": {
+                  "const": "cloud"
+                },
+                "unity": {
+                  "const": "cloud"
+                },
+                "amp": {
+                  "const": "cloud"
+                },
+                "reactnative": {
+                  "const": "cloud"
+                },
+                "flutter": {
+                  "const": "cloud"
+                },
+                "cordova": {
+                  "const": "cloud"
+                },
+                "shopify": {
+                  "const": "cloud"
+                }
+              }
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["apiKey"]
+        }
+      }
+    ]
   }
 }
