@@ -19,6 +19,10 @@ CONFIG_DIR = 'src/configurations'
 
 EXCLUDED_DEST = ['postgres', 'bq', 'azure_synapse', 'clickhouse', 'deltalake', 'kafka']
 
+TEST_INTEGRATION_NAME_PREFIX = 'test_'
+
+TEST_INTEGRATION_NAME_SUFFIX = '_ignore'
+
 class FieldTypeEnum(Enum):
     STRING = "string"
     OBJECT = "object"
@@ -1170,14 +1174,20 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shou
         print(get_formatted_json(generatedSchema))
         print('-'*50)
 
-def get_schema_diff(name, selector, shouldUpdateSchema=False):
+def get_schema_diff(name, selector, shouldUpdateSchema=False, isTestMode=False):
     """ Validates the schema for the given name and selector.
 
     Args:
         name (string): name of the source or destination.
         selector (string): either 'source' or 'destination'.
         shouldUpdateSchema (boolean): if it should update the existing schema with generated one
+        isTestMode (boolean): if running in test mode
     """    
+
+    if not isTestMode and is_test_destination(name):
+        print(f'Skipping {name} as it is a test integration')
+        return
+
     file_selectors = ['db-config.json', 'ui-config.json', 'schema.json']
     directory = f'./{CONFIG_DIR}/{selector}s/{name}'
     if not os.path.isdir(directory):
@@ -1196,18 +1206,22 @@ def get_schema_diff(name, selector, shouldUpdateSchema=False):
 
         validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shouldUpdateSchema)
 
+def is_test_destination(name):
+    return name.startswith(TEST_INTEGRATION_NAME_PREFIX) and name.endswith(TEST_INTEGRATION_NAME_SUFFIX)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generates schema.json from ui-config.json and db-config.json and validates against actual scheme.json')
     group = parser.add_mutually_exclusive_group()
     parser.add_argument('selector', metavar='selector', type=str, help='Enter whether -name is a source or destination')
     parser.add_argument('-update', action='store_true', help='Will update existing schema with any changes')
+    parser.add_argument('-test', action='store_true', help='Will help run component tests')
     group.add_argument('-name', metavar='name', type=str, help='Enter the folder name under selector')
     group.add_argument('-all', action='store_true', help='Will run validation for all entities under selector')
     
     args = parser.parse_args()
     selector = args.selector
     shouldUpdateSchema = args.update
+    isTestMode = args.test
 
     if args.all:
         CONFIG_DIR = 'src/configurations'
@@ -1218,8 +1232,8 @@ if __name__ == '__main__':
         
         current_items = os.listdir(dir_path)
         for name in current_items:
-            get_schema_diff(name, selector, shouldUpdateSchema)
+            get_schema_diff(name, selector, shouldUpdateSchema, isTestMode)
         
     else:
         name = args.name 
-        get_schema_diff(name, selector, shouldUpdateSchema)
+        get_schema_diff(name, selector, shouldUpdateSchema, isTestMode)
