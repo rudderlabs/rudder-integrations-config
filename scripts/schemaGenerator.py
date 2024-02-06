@@ -10,18 +10,12 @@
 '''
 import os
 import warnings
-import json
-from jsondiff import JsonDiffer
 from enum import Enum
 import argparse
-
-CONFIG_DIR = 'src/configurations'
+from utils import get_json_from_file, get_json_diff, apply_json_diff, get_formatted_json, is_test_integration
+from constants import CONFIG_DIR
 
 EXCLUDED_DEST = ['postgres', 'bq', 'azure_synapse', 'clickhouse', 'deltalake', 'kafka']
-
-TEST_INTEGRATION_NAME_PREFIX = 'test_'
-
-TEST_INTEGRATION_NAME_SUFFIX = '_ignore'
 
 class FieldTypeEnum(Enum):
     STRING = "string"
@@ -1053,43 +1047,6 @@ uiTypetoSchemaFn = {
     'timePicker': generate_schema_for_time_picker
 }
 
-def get_json_diff(oldJson, newJson):
-    """Returns the difference between two JSONs.
-
-    Args:
-        oldJson (object): old json.
-        newJson (object): new json.
-
-    Returns:
-        object: difference between oldJson and newJson.
-    """    
-    differ = JsonDiffer(marshal=True)
-    return differ.diff(oldJson, newJson)
-
-def apply_json_diff(oldJson, diff):
-    """Applies the difference on oldJson and returns the newJson.
-
-    Args:
-        oldJson (object): old json.
-        diff (object): difference between oldJson and newJson.
-
-    Returns:
-        object: new json.
-    """    
-    differ = JsonDiffer(marshal=True)
-    return differ.patch(oldJson, diff)
-
-def get_formatted_json(jsonObj):
-    """Formats the json object.
-
-    Args:
-        jsonObj (object): json object.
-
-    Returns:
-        string: formatted json.
-    """    
-    return json.dumps(jsonObj, indent=2, ensure_ascii=False)
-
 def save_schema_to_file(selector, name, schema):
     # Get the parent directory (one level up)
     script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -1184,7 +1141,7 @@ def get_schema_diff(name, selector, shouldUpdateSchema=False, isTestMode=False):
         isTestMode (boolean): if running in test mode
     """    
 
-    if not isTestMode and is_test_destination(name):
+    if not isTestMode and is_test_integration(name):
         print(f'Skipping {name} as it is a test integration')
         return
 
@@ -1199,16 +1156,12 @@ def get_schema_diff(name, selector, shouldUpdateSchema=False, isTestMode=False):
         file_content = {}
         for file_selector in file_selectors:
             if file_selector in available_files:
-                with open (f'{directory}/{file_selector}', 'r') as f:
-                    file_content.update(json.loads(f.read().encode('utf-8', 'ignore')))
+                file_content.update(get_json_from_file(f'{directory}/{file_selector}'))
         uiConfig = file_content.get("uiConfig")
         schema = file_content.get("configSchema")
         dbConfig = file_content.get("config")
 
         validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shouldUpdateSchema)
-
-def is_test_destination(name):
-    return name.startswith(TEST_INTEGRATION_NAME_PREFIX) and name.endswith(TEST_INTEGRATION_NAME_SUFFIX)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generates schema.json from ui-config.json and db-config.json and validates against actual scheme.json')
@@ -1225,7 +1178,6 @@ if __name__ == '__main__':
     isTestMode = args.test
 
     if args.all:
-        CONFIG_DIR = 'src/configurations'
         dir_path = f'./{CONFIG_DIR}/{selector}s'
         if not os.path.isdir(dir_path):
             print(f'No {selector}s folder found')

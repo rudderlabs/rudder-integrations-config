@@ -1,0 +1,5 @@
+CONFIG_DIR = 'src/configurations'
+
+TEST_INTEGRATION_NAME_PREFIX = 'test_'
+
+TEST_INTEGRATION_NAME_SUFFIX = '_ignore'

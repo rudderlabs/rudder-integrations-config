@@ -4,6 +4,8 @@ import json
 import os
 import sys
 import jsondiff
+from constants import CONFIG_DIR
+from utils import is_test_integration
 
 #########################
 # ENV VARIABLES FOT TESTING
@@ -27,7 +29,6 @@ PASSWORD=os.environ['API_PASSWORD'] #sys.argv[3]
 # CONSTANTS
 HEADER = {"Content-Type": "application/json"}
 AUTH = (USERNAME, PASSWORD)
-CONFIG_DIR = 'src/configurations'
 #########################
 
 
@@ -105,6 +106,10 @@ def update_diff_db(selector):
         # check if item is a directory
         if not os.path.isdir(f'./{CONFIG_DIR}/{selector}s/{item}'):
             continue
+
+        if is_test_integration(item):
+            print(f'Skipping {item} as it is a test integration')
+            return
         
         updated_data = get_file_content(item, selector)
         persisted_data = get_config_definition(CONTROL_PLANE_URL, selector, updated_data["name"])
