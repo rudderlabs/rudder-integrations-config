@@ -1086,6 +1086,21 @@ def get_formatted_json(jsonObj):
     """    
     return json.dumps(jsonObj, indent=2, ensure_ascii=False)
 
+def save_schema_to_file(selector, name, schema):
+    # Get the parent directory (one level up)
+    script_directory = os.path.dirname(os.path.abspath(__file__))
+    directory = os.path.dirname(script_directory)
+
+    # Define the relative path
+    relative_path = f'src/configurations/{selector}s/{name}/schema.json'
+    file_path = os.path.join(directory, relative_path)
+    finalSchema = {}
+    finalSchema["configSchema"] = schema
+
+    # Write the new content
+    with open(file_path, 'w') as file:
+        file.write(get_formatted_json(finalSchema))
+
 def validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shouldUpdateSchema):
     """Generates a schema and compares it with an existing one. 
     If schemaDiff is present, it calls for individual warnings by iterating over each ui-type.
@@ -1110,17 +1125,7 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shou
     if schema:
         schemaDiff = get_json_diff(schema, generatedSchema["configSchema"])
         if shouldUpdateSchema:
-            # Get the parent directory (one level up)
-            script_directory = os.path.dirname(os.path.abspath(__file__))
-            directory = os.path.dirname(script_directory)
-            # Define the relative path
-            relative_path = f'src/configurations/{selector}s/{name}/schema.json'
-            file_path = os.path.join(directory, relative_path)
-            finalSchema = {}
-            finalSchema["configSchema"] = apply_json_diff(schema, schemaDiff)
-            # Write the new content
-            with open(file_path, 'w') as file:
-                file.write(get_formatted_json(finalSchema))
+            save_schema_to_file(selector, name, apply_json_diff(schema, schemaDiff))
 
         if schemaDiff:
             print('-'*50)
@@ -1158,8 +1163,10 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shou
                     warnings.warn("For anyOf field Difference is :  \n\n {} \n".format(get_formatted_json(anyOfSchemaDiff)), UserWarning)
             print('-'*50)
     else:
+        save_schema_to_file(selector, name, generatedSchema)
+
         print('-'*50)
-        print(f'Generated Schema for {name} in {selector}s')
+        print(f'Generated schema for {name} in {selector}s')
         print(get_formatted_json(generatedSchema))
         print('-'*50)
 
