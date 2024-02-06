@@ -1094,12 +1094,10 @@ def save_schema_to_file(selector, name, schema):
     # Define the relative path
     relative_path = f'src/configurations/{selector}s/{name}/schema.json'
     file_path = os.path.join(directory, relative_path)
-    finalSchema = {}
-    finalSchema["configSchema"] = schema
 
     # Write the new content
     with open(file_path, 'w') as file:
-        file.write(get_formatted_json(finalSchema))
+        file.write(get_formatted_json(schema))
 
 def validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shouldUpdateSchema):
     """Generates a schema and compares it with an existing one. 
@@ -1125,7 +1123,9 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shou
     if schema:
         schemaDiff = get_json_diff(schema, generatedSchema["configSchema"])
         if shouldUpdateSchema:
-            save_schema_to_file(selector, name, apply_json_diff(schema, schemaDiff))
+            finalSchema = {}
+            finalSchema["configSchema"] = apply_json_diff(schema, schemaDiff)
+            save_schema_to_file(selector, name, finalSchema)
 
         if schemaDiff:
             print('-'*50)
