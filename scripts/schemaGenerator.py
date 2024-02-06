@@ -1191,6 +1191,7 @@ def get_schema_diff(name, selector, shouldUpdateSchema=False, isTestMode=False):
     file_selectors = ['db-config.json', 'ui-config.json', 'schema.json']
     directory = f'./{CONFIG_DIR}/{selector}s/{name}'
     if not os.path.isdir(directory):
+        print(f'No {selector}s directory found for {name}')
         return
 
     if name not in EXCLUDED_DEST:
