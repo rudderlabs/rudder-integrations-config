@@ -32,6 +32,15 @@
                     "secret": true
                   },
                   {
+                    "type": "textInput",
+                    "label": "Tracking Tag ID",
+                    "note": "Tracking tag ID from advertiser preferences page in the TTD platform UI. If you can't find your tracking tag ID, contact your Technical Account Manager.",
+                    "configKey": "trackerId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Tracking Tag ID",
+                    "placeholder": "e.g: hcXXXke"
+                  },
+                  {
                     "type": "singleSelect",
                     "label": "Data Server",
                     "configKey": "dataServer",
@@ -147,12 +156,157 @@
             ]
           }
         ]
+      },
+      {
+        "title": "Event mapping",
+        "note": "Map RudderStack to Trade Desk events",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "RudderStack to Trade Desk event mappings",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "eventAndPropertiesMapping",
+                    "label": "Event and property mappings",
+                    "note": "Map RudderStack events/properties to Trade Desk events/properties"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     ],
     "sdkTemplate": {
       "title": "SDK settings",
       "note": "not visible in the ui",
       "fields": []
+    },
+    "redirectGroups": {
+      "eventAndPropertiesMapping": {
+        "tabs": [
+          {
+            "name": "Event",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map your RudderStack Events to Trade Desk Events",
+                "note": "Enter the input event name which you want to map with a Trade Desk Event Name",
+                "configKey": "eventsMapping",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "RudderStack Event",
+                    "placeholder": "e.g: Product Searched"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "key": "to",
+                    "label": "Trade Desk Event",
+                    "options": [
+                      {
+                        "name": "searchitem",
+                        "value": "searchitem"
+                      },
+                      {
+                        "name": "searchcategory",
+                        "value": "searchcategory"
+                      },
+                      {
+                        "name": "login",
+                        "value": "login"
+                      },
+                      {
+                        "name": "messagebusiness",
+                        "value": "messagebusiness"
+                      },
+                      {
+                        "name": "direction",
+                        "value": "direction"
+                      },
+                      {
+                        "name": "sitevisit",
+                        "value": "sitevisit"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Custom properties",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map custom properties",
+                "configKey": "customProperties",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "rudderProperty",
+                    "label": "RudderStack property path",
+                    "placeholder": "e.g properties.key1"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "key": "tradeDeskProperty",
+                    "label": "Trade Desk custom property",
+                    "options": [
+                      {
+                        "label": "td1",
+                        "value": "td1"
+                      },
+                      {
+                        "label": "td2",
+                        "value": "td2"
+                      },
+                      {
+                        "label": "td3",
+                        "value": "td3"
+                      },
+                      {
+                        "label": "td4",
+                        "value": "td4"
+                      },
+                      {
+                        "label": "td5",
+                        "value": "td5"
+                      },
+                      {
+                        "label": "td6",
+                        "value": "td6"
+                      },
+                      {
+                        "label": "td7",
+                        "value": "td7"
+                      },
+                      {
+                        "label": "td8",
+                        "value": "td8"
+                      },
+                      {
+                        "label": "td9",
+                        "value": "td9"
+                      },
+                      {
+                        "label": "td10",
+                        "value": "td10"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     }
   }
 }
