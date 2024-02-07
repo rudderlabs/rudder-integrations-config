@@ -1,8 +1,6 @@
 from jsondiff import JsonDiffer
 import json
 
-from constants import TEST_INTEGRATION_NAME_PREFIX, TEST_INTEGRATION_NAME_SUFFIX
-
 def get_json_diff(oldJson, newJson):
     """Returns the difference between two JSONs.
 
@@ -51,6 +49,3 @@ def get_json_from_file(filePath):
     """    
     with open(filePath, 'r') as file:
         return json.loads(file.read().encode('utf-8', 'ignore'))
-    
-def is_test_integration(name):
-    return name.startswith(TEST_INTEGRATION_NAME_PREFIX) and name.endswith(TEST_INTEGRATION_NAME_SUFFIX)

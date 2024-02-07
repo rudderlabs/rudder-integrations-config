@@ -12,7 +12,7 @@ import os
 import warnings
 from enum import Enum
 import argparse
-from utils import get_json_from_file, get_json_diff, apply_json_diff, get_formatted_json, is_test_integration
+from utils import get_json_from_file, get_json_diff, apply_json_diff, get_formatted_json
 from constants import CONFIG_DIR
 
 EXCLUDED_DEST = ['postgres', 'bq', 'azure_synapse', 'clickhouse', 'deltalake', 'kafka']
@@ -1053,7 +1053,7 @@ def save_schema_to_file(selector, name, schema):
     directory = os.path.dirname(script_directory)
 
     # Define the relative path
-    relative_path = f'src/configurations/{selector}s/{name}/schema.json'
+    relative_path = f'{CONFIG_DIR}/{selector}s/{name}/schema.json'
     file_path = os.path.join(directory, relative_path)
 
     # Write the new content
@@ -1124,26 +1124,22 @@ def validate_config_consistency(name, selector, uiConfig, dbConfig, schema, shou
                     warnings.warn("For anyOf field Difference is :  \n\n {} \n".format(get_formatted_json(anyOfSchemaDiff)), UserWarning)
             print('-'*50)
     else:
-        save_schema_to_file(selector, name, generatedSchema)
+        if shouldUpdateSchema:
+            save_schema_to_file(selector, name, generatedSchema)
 
         print('-'*50)
         print(f'Generated schema for {name} in {selector}s')
         print(get_formatted_json(generatedSchema))
         print('-'*50)
 
-def get_schema_diff(name, selector, shouldUpdateSchema=False, isTestMode=False):
+def get_schema_diff(name, selector, shouldUpdateSchema=False):
     """ Validates the schema for the given name and selector.
 
     Args:
         name (string): name of the source or destination.
         selector (string): either 'source' or 'destination'.
         shouldUpdateSchema (boolean): if it should update the existing schema with generated one
-        isTestMode (boolean): if running in test mode
     """    
-
-    if not isTestMode and is_test_integration(name):
-        print(f'Skipping {name} as it is a test integration')
-        return
 
     file_selectors = ['db-config.json', 'ui-config.json', 'schema.json']
     directory = f'./{CONFIG_DIR}/{selector}s/{name}'
@@ -1168,14 +1164,12 @@ if __name__ == '__main__':
     group = parser.add_mutually_exclusive_group()
     parser.add_argument('selector', metavar='selector', type=str, help='Enter whether -name is a source or destination')
     parser.add_argument('-update', action='store_true', help='Will update existing schema with any changes')
-    parser.add_argument('-test', action='store_true', help='Will help run component tests')
     group.add_argument('-name', metavar='name', type=str, help='Enter the folder name under selector')
     group.add_argument('-all', action='store_true', help='Will run validation for all entities under selector')
     
     args = parser.parse_args()
     selector = args.selector
     shouldUpdateSchema = args.update
-    isTestMode = args.test
 
     if args.all:
         dir_path = f'./{CONFIG_DIR}/{selector}s'
@@ -1185,8 +1179,8 @@ if __name__ == '__main__':
         
         current_items = os.listdir(dir_path)
         for name in current_items:
-            get_schema_diff(name, selector, shouldUpdateSchema, isTestMode)
+            get_schema_diff(name, selector, shouldUpdateSchema)
         
     else:
-        name = args.name 
-        get_schema_diff(name, selector, shouldUpdateSchema, isTestMode)
+        name = args.name
+        get_schema_diff(name, selector, shouldUpdateSchema)

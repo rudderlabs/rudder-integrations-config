@@ -18,17 +18,19 @@ function readSchemaFile(filePath): string | undefined {
 }
 
 describe('Schema Generator', () => {
-  const createNewDestSchema = readSchemaFile(
-    path.resolve(__dirname, './data/createNewDestSchema.json'),
-  );
+  const configDir = 'test/component_tests/configurations';
 
   it('should generate and save schema for the specified destination', () => {
-    const destName = 'test_create_dest_ignore';
-    const cmd = `npm run update:schema:destination "${destName}" -- -test`;
+    const newSchemaData = readSchemaFile(
+      path.resolve(__dirname, './data/createNewSchemaDest.json'),
+    );
+
+    const destName = 'create_new_schema_dest';
+    const cmd = `CONFIG_DIR=${configDir} npm run update:schema:destination "${destName}"`;
 
     execSync(cmd);
 
-    const schemaFilePath = path.resolve(`src/configurations/destinations/${destName}/schema.json`);
+    const schemaFilePath = path.resolve(`${configDir}/destinations/${destName}/schema.json`);
 
     const schema = readSchemaFile(schemaFilePath);
     if (schema) {
@@ -36,6 +38,6 @@ describe('Schema Generator', () => {
       fs.unlinkSync(schemaFilePath);
     }
 
-    expect(schema).toEqual(createNewDestSchema);
+    expect(schema).toEqual(newSchemaData);
   });
 });
