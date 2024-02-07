@@ -131,15 +131,21 @@ def generate_schema_for_default_checkbox(field, dbConfig, schema_field_name):
     Returns:
         object
     """    
-    defaultCheckboxObj = {
-        "type": FieldTypeEnum.OBJECT.value,
-        "properties": {
-            "web": {
-                "type": FieldTypeEnum.BOOLEAN.value
-            }
-        }
-    }
-    return defaultCheckboxObj
+    isSourceDependent = is_dest_field_dependent_on_source(field, dbConfig, schema_field_name)
+    defaultCheckboxSchemaObj = {}
+    if isSourceDependent:
+        defaultCheckboxSchemaObj["type"] = FieldTypeEnum.OBJECT.value
+        defaultCheckboxSchemaObj["properties"] = {}
+        # iterates over supported sources and sets the field for that source if field is present inside that source
+        for sourceType in dbConfig["supportedSourceTypes"]:
+            if sourceType in dbConfig["destConfig"] and field[schema_field_name] in dbConfig["destConfig"][sourceType]:
+                defaultCheckboxSchemaObj["properties"][sourceType] = {
+                    "type": FieldTypeEnum.BOOLEAN.value}
+    else:
+        defaultCheckboxSchemaObj["type"] = FieldTypeEnum.BOOLEAN.value
+        if "default" in field:
+            defaultCheckboxSchemaObj["default"] = field["default"]
+    return defaultCheckboxSchemaObj
 
 
 def generate_schema_for_checkbox(field, dbConfig, schema_field_name):
