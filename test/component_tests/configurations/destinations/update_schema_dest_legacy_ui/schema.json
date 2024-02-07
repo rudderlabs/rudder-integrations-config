@@ -1,0 +1,106 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["secretTextInputField"],
+    "type": "object",
+    "properties": {
+      "secretTextInputField": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "webSourceField": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          }
+        }
+      },
+      "androidSourceField": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "string"
+          }
+        }
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "textareaInputField": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
+      },
+      "singleSelectField": {
+        "type": "string",
+        "enum": ["valOne", "valTwo"],
+        "default": "valTwo"
+      },
+      "dynamicCustomFormField": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "formField": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "dynamicFormField": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "left": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "right": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "dynamicSelectFormField": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "left": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "right": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "timeRangePickerField": {
+        "type": "object",
+        "properties": {
+          "startTime": {
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string"
+          }
+        },
+        "required": ["startTime", "endTime"]
+      },
+      "timePickerField": {
+        "type": "string"
+      }
+    }
+  }
+}
