@@ -110,7 +110,7 @@ describe('Schema Generator', () => {
 
       const schema = readSchemaFile(schemaFilePath);
       // Restore schema file
-      if (schema) {
+      if (curSchema) {
         writeSchemaFile(schemaFilePath, curSchema);
       }
 
