@@ -1234,7 +1234,7 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                         newSchemaField = uiTypetoSchemaFn.get(curUiType)(
                             field, dbConfig, "configKey"
                         )
-                        schemaDiff = diff(newSchemaField, curSchemaField)
+                        schemaDiff = get_json_diff(newSchemaField, curSchemaField)
                         if schemaDiff:
                             warnings.warn(
                                 "For type:{} field:{} Difference is : \n\n {} \n".format(
@@ -1259,7 +1259,7 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                         newSchemaField = uiTypetoSchemaFn.get(curUiType)(
                             field, dbConfig, "configKey"
                         )
-                        schemaDiff = diff(newSchemaField, curSchemaField)
+                        schemaDiff = get_json_diff(newSchemaField, curSchemaField)
                         if schemaDiff:
                             warnings.warn(
                                 "For type:{} field:{} Difference is : \n\n {} \n".format(
