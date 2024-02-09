@@ -4,6 +4,7 @@ import json
 import os
 import sys
 import jsondiff
+from constants import CONFIG_DIR
 
 #########################
 # ENV VARIABLES FOT TESTING
@@ -27,7 +28,6 @@ PASSWORD = os.environ["API_PASSWORD"]  # sys.argv[3]
 # CONSTANTS
 HEADER = {"Content-Type": "application/json"}
 AUTH = (USERNAME, PASSWORD)
-CONFIG_DIR = "src/configurations"
 #########################
 
 

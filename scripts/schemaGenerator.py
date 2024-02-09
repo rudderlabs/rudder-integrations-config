@@ -10,14 +10,11 @@
 """
 
 import os
-import sys
 import warnings
-import json
-from jsondiff import diff
 from enum import Enum
 import argparse
-
-CONFIG_DIR = "src/configurations"
+from utils import get_json_from_file, get_json_diff, apply_json_diff, get_formatted_json
+from constants import CONFIG_DIR
 
 EXCLUDED_DEST = ["postgres", "bq", "azure_synapse", "clickhouse", "deltalake", "kafka"]
 
@@ -164,11 +161,27 @@ def generate_schema_for_default_checkbox(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    defaultCheckboxObj = {
-        "type": FieldTypeEnum.OBJECT.value,
-        "properties": {"web": {"type": FieldTypeEnum.BOOLEAN.value}},
-    }
-    return defaultCheckboxObj
+    isSourceDependent = is_dest_field_dependent_on_source(
+        field, dbConfig, schema_field_name
+    )
+    defaultCheckboxSchemaObj = {}
+    if isSourceDependent:
+        defaultCheckboxSchemaObj["type"] = FieldTypeEnum.OBJECT.value
+        defaultCheckboxSchemaObj["properties"] = {}
+        # iterates over supported sources and sets the field for that source if field is present inside that source
+        for sourceType in dbConfig["supportedSourceTypes"]:
+            if (
+                sourceType in dbConfig["destConfig"]
+                and field[schema_field_name] in dbConfig["destConfig"][sourceType]
+            ):
+                defaultCheckboxSchemaObj["properties"][sourceType] = {
+                    "type": FieldTypeEnum.BOOLEAN.value
+                }
+    else:
+        defaultCheckboxSchemaObj["type"] = FieldTypeEnum.BOOLEAN.value
+        if "default" in field:
+            defaultCheckboxSchemaObj["default"] = field["default"]
+    return defaultCheckboxSchemaObj
 
 
 def generate_schema_for_checkbox(field, dbConfig, schema_field_name):
@@ -1067,7 +1080,7 @@ def generate_schema_properties(
             generate_config_props(config)
 
 
-def generate_schema(uiConfig, dbConfig, name, selector, shouldUpdateSchema):
+def generate_schema(uiConfig, dbConfig, name, selector):
     """Returns the schema generated from given uiConfig and dbConfig.
 
     Args:
@@ -1075,7 +1088,6 @@ def generate_schema(uiConfig, dbConfig, name, selector, shouldUpdateSchema):
         dbConfig (object): Configurations of db-config.json.
         name (string): name of the source or destination.
         selector (string): either 'source' or 'destination'
-        shouldUpdateSchema (boolean): if it should update the existing schema with generated one
 
     Returns:
         object: schema
@@ -1102,18 +1114,6 @@ def generate_schema(uiConfig, dbConfig, name, selector, shouldUpdateSchema):
         uiConfig, dbConfig, schemaObject, schemaObject["properties"], name, selector
     )
     newSchema["configSchema"] = schemaObject
-
-    if shouldUpdateSchema:
-        # Get the parent directory (one level up)
-        script_directory = os.path.dirname(os.path.abspath(__file__))
-        directory = os.path.dirname(script_directory)
-        # Define the relative path
-        relative_path = f"src/configurations/{selector}s/{name.lower()}/schema.json"
-        file_path = os.path.join(directory, relative_path)
-        new_content = json.dumps(newSchema)
-        # Write the new content
-        with open(file_path, "w") as file:
-            file.write(new_content)
 
     return newSchema
 
@@ -1142,11 +1142,13 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                         newSchemaField = uiTypetoSchemaFn.get(curUiType)(
                             field, dbConfig, "value"
                         )
-                        schemaDiff = diff(newSchemaField, curSchemaField)
+                        schemaDiff = get_json_diff(curSchemaField, newSchemaField)
                         if schemaDiff:
                             warnings.warn(
                                 "For type:{} field:{} Difference is : \n\n {} \n".format(
-                                    curUiType, field["value"], schemaDiff
+                                    curUiType,
+                                    field["value"],
+                                    get_formatted_json(schemaDiff),
                                 ),
                                 UserWarning,
                             )
@@ -1176,14 +1178,45 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                                 newSchemaField = uiTypetoSchemaFn.get(curUiType)(
                                     field, dbConfig, "configKey"
                                 )
-                                schemaDiff = diff(newSchemaField, curSchemaField)
+                                schemaDiff = get_json_diff(
+                                    curSchemaField, newSchemaField
+                                )
                                 if schemaDiff:
                                     warnings.warn(
                                         "For type:{} field:{} Difference is : \n\n {} \n".format(
-                                            curUiType, field["configKey"], schemaDiff
+                                            curUiType,
+                                            field["configKey"],
+                                            get_formatted_json(schemaDiff),
                                         ),
                                         UserWarning,
                                     )
+
+        for field in sdkTemplate.get("fields", []):
+            if "preRequisites" in field:
+                continue
+            generateFunction = uiTypetoSchemaFn.get(field["type"], None)
+            if generateFunction:
+                if generateFunction and field["type"] == curUiType:
+                    if field["configKey"] not in schema["properties"]:
+                        warnings.warn(
+                            f'{field["configKey"]} field is not in schema \n',
+                            UserWarning,
+                        )
+                    else:
+                        curSchemaField = schema["properties"][field["configKey"]]
+                        newSchemaField = uiTypetoSchemaFn.get(curUiType)(
+                            field, dbConfig, "configKey"
+                        )
+                        schemaDiff = get_json_diff(curSchemaField, newSchemaField)
+                        if schemaDiff:
+                            warnings.warn(
+                                "For type:{} field:{} Difference is : \n\n {} \n".format(
+                                    curUiType,
+                                    field["configKey"],
+                                    get_formatted_json(schemaDiff),
+                                ),
+                                UserWarning,
+                            )
 
         for field in sdkTemplate.get("fields", []):
             if "preRequisites" in field:
@@ -1252,6 +1285,20 @@ uiTypetoSchemaFn = {
 }
 
 
+def save_schema_to_file(selector, name, schema):
+    # Get the parent directory (one level up)
+    script_directory = os.path.dirname(os.path.abspath(__file__))
+    directory = os.path.dirname(script_directory)
+
+    # Define the relative path
+    relative_path = f"{CONFIG_DIR}/{selector}s/{name}/schema.json"
+    file_path = os.path.join(directory, relative_path)
+
+    # Write the new content
+    with open(file_path, "w") as file:
+        file.write(get_formatted_json(schema))
+
+
 def validate_config_consistency(
     name, selector, uiConfig, dbConfig, schema, shouldUpdateSchema
 ):
@@ -1273,11 +1320,15 @@ def validate_config_consistency(
         warnings.warn(f"Ui-Config is null for {name} in {selector} \n", UserWarning)
         print("-" * 50)
         return
-    generatedSchema = generate_schema(
-        uiConfig, dbConfig, name, selector, shouldUpdateSchema
-    )
+    generatedSchema = generate_schema(uiConfig, dbConfig, name, selector)
+
     if schema:
-        schemaDiff = diff(schema, generatedSchema["configSchema"])
+        schemaDiff = get_json_diff(schema, generatedSchema["configSchema"])
+        if shouldUpdateSchema:
+            finalSchema = {}
+            finalSchema["configSchema"] = apply_json_diff(schema, schemaDiff)
+            save_schema_to_file(selector, name, finalSchema)
+
         if schemaDiff:
             print("-" * 50)
             print(f"Schema diff for {name} in {selector}s")
@@ -1295,11 +1346,11 @@ def validate_config_consistency(
             else:
                 curRequiredField = schema["required"]
                 newRequiredField = generatedSchema["configSchema"]["required"]
-                requiredFieldDiff = diff(curRequiredField, newRequiredField)
+                requiredFieldDiff = get_json_diff(curRequiredField, newRequiredField)
                 if requiredFieldDiff:
                     warnings.warn(
                         "For required field Difference is :  \n\n {} \n".format(
-                            requiredFieldDiff
+                            get_formatted_json(requiredFieldDiff)
                         ),
                         UserWarning,
                     )
@@ -1308,11 +1359,11 @@ def validate_config_consistency(
                 if "allOf" in schema:
                     curAllOfSchema = schema["allOf"]
                 newAllOfSchema = generatedSchema["configSchema"]["allOf"]
-                allOfSchemaDiff = diff(newAllOfSchema, curAllOfSchema)
+                allOfSchemaDiff = get_json_diff(curAllOfSchema, newAllOfSchema)
                 if allOfSchemaDiff:
                     warnings.warn(
                         "For allOf field Difference is :  \n\n {} \n".format(
-                            allOfSchemaDiff
+                            get_formatted_json(allOfSchemaDiff)
                         ),
                         UserWarning,
                     )
@@ -1321,19 +1372,22 @@ def validate_config_consistency(
                 if "anyOf" in schema:
                     curAnyOfSchema = schema["anyOf"]
                 newAnyOfSchema = generatedSchema["configSchema"]["anyOf"]
-                anyOfSchemaDiff = diff(newAnyOfSchema, curAnyOfSchema)
+                anyOfSchemaDiff = get_json_diff(curAnyOfSchema, newAnyOfSchema)
                 if anyOfSchemaDiff:
                     warnings.warn(
                         "For anyOf field Difference is :  \n\n {} \n".format(
-                            anyOfSchemaDiff
+                            get_formatted_json(anyOfSchemaDiff)
                         ),
                         UserWarning,
                     )
             print("-" * 50)
     else:
+        if shouldUpdateSchema:
+            save_schema_to_file(selector, name, generatedSchema)
+
         print("-" * 50)
-        print(f"Generated Schema for {name} in {selector}s")
-        print(json.dumps(generatedSchema, indent=2))
+        print(f"Generated schema for {name} in {selector}s")
+        print(get_formatted_json(generatedSchema))
         print("-" * 50)
 
 
@@ -1345,18 +1399,23 @@ def get_schema_diff(name, selector, shouldUpdateSchema=False):
         selector (string): either 'source' or 'destination'.
         shouldUpdateSchema (boolean): if it should update the existing schema with generated one
     """
+
     file_selectors = ["db-config.json", "ui-config.json", "schema.json"]
     directory = f"./{CONFIG_DIR}/{selector}s/{name}"
-    available_files = os.listdir(directory)
-    file_content = {}
-    for file_selector in file_selectors:
-        if file_selector in available_files:
-            with open(f"{directory}/{file_selector}", "r") as f:
-                file_content.update(json.loads(f.read()))
-    uiConfig = file_content.get("uiConfig")
-    schema = file_content.get("configSchema")
-    dbConfig = file_content.get("config")
+    if not os.path.isdir(directory):
+        print(f"No {selector}s directory found for {name}")
+        return
+
     if name not in EXCLUDED_DEST:
+        available_files = os.listdir(directory)
+        file_content = {}
+        for file_selector in file_selectors:
+            if file_selector in available_files:
+                file_content.update(get_json_from_file(f"{directory}/{file_selector}"))
+        uiConfig = file_content.get("uiConfig")
+        schema = file_content.get("configSchema")
+        dbConfig = file_content.get("config")
+
         validate_config_consistency(
             name, selector, uiConfig, dbConfig, schema, shouldUpdateSchema
         )
@@ -1392,10 +1451,14 @@ if __name__ == "__main__":
     shouldUpdateSchema = args.update
 
     if args.all:
-        CONFIG_DIR = "src/configurations"
-        current_items = os.listdir(f"./{CONFIG_DIR}/{selector}s")
+        dir_path = f"./{CONFIG_DIR}/{selector}s"
+        if not os.path.isdir(dir_path):
+            print(f"No {selector}s folder found")
+            exit(1)
+
+        current_items = os.listdir(dir_path)
         for name in current_items:
-            get_schema_diff(name, selector)
+            get_schema_diff(name, selector, shouldUpdateSchema)
 
     else:
         name = args.name
