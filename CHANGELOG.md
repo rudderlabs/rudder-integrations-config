@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.64.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.63.2...v1.64.0) (2024-02-05)
+
+
+### Features
+
+* add generic consent management fields in initially onboarded destinations config ([#1058](https://github.com/rudderlabs/rudder-config-schema/issues/1058)) ([6f80bc9](https://github.com/rudderlabs/rudder-config-schema/commit/6f80bc95a28886fc69d4b9036c227494225dff3a))
+* add trino doc links ([#1181](https://github.com/rudderlabs/rudder-config-schema/issues/1181)) ([ebb47d9](https://github.com/rudderlabs/rudder-config-schema/commit/ebb47d90393df2680663bd93cc4b06e123ebc095))
+* **INT-177:** move intercom to new ui ([#1065](https://github.com/rudderlabs/rudder-config-schema/issues/1065)) ([ae97579](https://github.com/rudderlabs/rudder-config-schema/commit/ae9757999030e2d1fbba990969a4e1bcf608ffb2))
+* onboard new destination ([#1171](https://github.com/rudderlabs/rudder-config-schema/issues/1171)) ([bd4001e](https://github.com/rudderlabs/rudder-config-schema/commit/bd4001e1ef153866bc17ec77fab5b71040cd9f75))
+* trade desk real time conversions ([#1155](https://github.com/rudderlabs/rudder-config-schema/issues/1155)) ([2bfdb1d](https://github.com/rudderlabs/rudder-config-schema/commit/2bfdb1d3650a0d931996d48b5b4f4e689ccd5224))
+
+
+### Bug Fixes
+
+* **braze:** add filtering of appKey and restApiKey ([#1138](https://github.com/rudderlabs/rudder-config-schema/issues/1138)) ([fcc0bc4](https://github.com/rudderlabs/rudder-config-schema/commit/fcc0bc421f741ffebe94c26d86d9382a98e8b489))
+* supported message type for mobile integrations ([#1169](https://github.com/rudderlabs/rudder-config-schema/issues/1169)) ([89b2ad8](https://github.com/rudderlabs/rudder-config-schema/commit/89b2ad81e451b3aa89fc03b3d1dfc0db9124a839))
+
+### [1.63.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.63.1...v1.63.2) (2024-02-05)
+
 ### [1.63.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.63.0...v1.63.1) (2024-01-29)
 
 ## [1.63.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.62.1...v1.63.0) (2024-01-22)
