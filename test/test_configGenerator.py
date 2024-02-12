@@ -10,20 +10,22 @@ sys.path.insert(0, parent_dir)
 
 from scripts.configGenerator import generateConfigs
 
-with open('test/configData/inputData.json', 'r') as file:
+with open("test/configData/inputData.json", "r") as file:
     input_data = json.load(file)
 
-with open('test/configData/db-config.json', 'r') as file:
+with open("test/configData/db-config.json", "r") as file:
     db_config = json.load(file)
-with open('test/configData/ui-config.json', 'r') as file:
+with open("test/configData/ui-config.json", "r") as file:
     ui_config = json.load(file)
+
 
 class TestConfigGenerator(unittest.TestCase):
 
     def test_config_generator(self):
         result = generateConfigs(input_data)
-        self.assertEqual(result['db_config'], json.dumps(db_config)) 
-        self.assertEqual(result['ui_config'], json.dumps(ui_config))
+        self.assertEqual(result["db_config"], json.dumps(db_config))
+        self.assertEqual(result["ui_config"], json.dumps(ui_config))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()
