@@ -1,43 +1,40 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["advertiserId", "advertiserSecretKey", "trackerId", "dataServer"],
+    "required": ["secretTextInputField"],
     "type": "object",
     "properties": {
-      "audienceId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,256})$"
-      },
-      "advertiserId": {
+      "secretTextInputField": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "advertiserSecretKey": {
+      "singleSelectField": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "enum": ["valOne", "valTwo"],
+        "default": "valTwo"
       },
-      "ttlInDays": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]|[1-9][0-9]|1[0-7][0-9]|180)$"
+      "webSourceField": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
+          }
+        }
       },
-      "trackerId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      "androidSourceField": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "string"
+          }
+        }
       },
-      "dataServer": {
-        "type": "string",
-        "enum": ["apac", "tokyo", "usEastCoast", "usWestCoast", "ukEu", "china"],
-        "default": "usEastCoast"
-      },
-      "oneTrustCookieCategories": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "oneTrustCookieCategory": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "boolean"
           }
         }
       },
@@ -46,7 +43,7 @@
         "properties": {
           "android": {
             "type": "string",
-            "enum": ["cloud"]
+            "enum": ["cloud", "device"]
           },
           "ios": {
             "type": "string",
@@ -54,7 +51,7 @@
           },
           "web": {
             "type": "string",
-            "enum": ["cloud"]
+            "enum": ["cloud", "device"]
           },
           "unity": {
             "type": "string",
