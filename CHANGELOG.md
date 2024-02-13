@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.64.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.64.0...v1.64.1) (2024-02-13)
+
+
+### Bug Fixes
+
+* made hidden flase for trino source ([#1208](https://github.com/rudderlabs/rudder-config-schema/issues/1208)) ([977516e](https://github.com/rudderlabs/rudder-config-schema/commit/977516e568284b88da8b06201b736c98f345777b))
+
 ## [1.64.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.63.2...v1.64.0) (2024-02-05)
 
 
