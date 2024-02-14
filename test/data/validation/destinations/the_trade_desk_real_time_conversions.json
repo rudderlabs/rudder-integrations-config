@@ -1,0 +1,70 @@
+[
+  {
+    "config": {
+      "advertiserId": "test-advertiserId",
+      "trackerId": "test-trackerId",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
+      ],
+      "eventsMapping": [
+        {
+          "from": "Product Added",
+          "to": "addToCart"
+        }
+      ],
+      "customProperties": [
+        {
+          "rudderProperty": "properties.key1",
+          "tradeDeskProperty": "td1"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "advertiserId": "",
+      "trackerId": "test-trackerId",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "advertiserId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
+    ]
+  },
+  {
+    "config": {
+      "advertiserId": "test-advertiserId",
+      "trackerId": "",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "trackerId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
+    ]
+  },
+  {
+    "config": {
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      " must have required property 'advertiserId'",
+      " must have required property 'trackerId'"
+    ]
+  }
+]
