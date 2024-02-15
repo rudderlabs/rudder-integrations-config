@@ -14,13 +14,13 @@
                 "fields": [
                   {
                     "type": "textInput",
-                    "label": "Pixel ID",
-                    "note": "Spotify Pixel dashboard > Manage > Your Pixels",
-                    "configKey": "pixelId",
+                    "label": "Organization id",
+                    "note": "CommandBar App dashboard > Account (Lower left Corner) > Org ID",
+                    "configKey": "orgId",
                     "regex": "^(.{1,100})$",
                     "secret": true,
-                    "regexErrorMessage": "Invalid Pixel ID",
-                    "placeholder": "e.g. dzq1p89h2bnpXXXX9x65hyx2hf5q1k3v"
+                    "regexErrorMessage": "Invalid Organization ID",
+                    "placeholder": "e.g. 2***e*2*"
                   }
                 ]
               }
@@ -55,19 +55,7 @@
             "title": "Destination settings",
             "note": "Configure advanced destination-specific settings here",
             "icon": "settings",
-            "groups": [
-              {
-                "title": "Spotify Pixel Alias Event Setting",
-                "fields": [
-                  {
-                    "type": "checkbox",
-                    "label": "Enhance attribution with externalIDs for conversion matching",
-                    "configKey": "enableAliasCall",
-                    "default": false
-                  }
-                ]
-              }
-            ]
+            "groups": []
           },
           {
             "title": "Other settings",
@@ -80,12 +68,8 @@
                 "preRequisites": {
                   "fields": [
                     {
-                      "configKey": "connectionModes.webDevice",
-                      "value": true
-                    },
-                    {
-                      "configKey": "connectionModes.mobileDevice",
-                      "value": true
+                      "configKey": "connectionMode.web",
+                      "value": "device"
                     }
                   ],
                   "condition": "or"
@@ -185,76 +169,8 @@
             ]
           }
         ]
-      },
-      {
-        "title": "Mappings",
-        "hideEditIcon": true,
-        "sections": [
-          {
-            "groups": [
-              {
-                "title": "Rudderstack to Spotify Pixel Event Mappings",
-                "fields": [
-                  {
-                    "type": "redirect",
-                    "redirectGroupKey": "spotifyPixelEventMapping",
-                    "label": "Event and property mappings"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
       }
     ],
-    "redirectGroups": {
-      "spotifyPixelEventMapping": {
-        "fields": [
-          {
-            "type": "mapping",
-            "label": "Mapping to trigger the Rudderstack events with standard Spotify Pixel events",
-            "configKey": "eventsToSpotifyPixelEvents",
-            "default": [],
-            "columns": [
-              {
-                "type": "textInput",
-                "key": "from",
-                "label": "Event Name",
-                "placeholder": "e.g: Order Completed"
-              },
-              {
-                "type": "singleSelect",
-                "key": "to",
-                "label": "Spotify Pixel Standard Event",
-                "placeholder": "e.g: Checkout",
-                "options": [
-                  {
-                    "name": "Lead",
-                    "value": "lead"
-                  },
-                  {
-                    "name": "Product",
-                    "value": "product"
-                  },
-                  {
-                    "name": "Add to Cart",
-                    "value": "addtocart"
-                  },
-                  {
-                    "name": "Check out",
-                    "value": "checkout"
-                  },
-                  {
-                    "name": "Purchase",
-                    "value": "purchase"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    },
     "sdkTemplate": {
       "title": "Web SDK settings",
       "note": "not visible in the ui",
