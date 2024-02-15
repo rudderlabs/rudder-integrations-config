@@ -580,6 +580,78 @@
         "note": "Manage the settings for your destination",
         "sections": [
           {
+            "groups": [
+              {
+                "title": "SSH Configuration",
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "WAREHOUSE_SSH_TUNNELLING",
+                      "value": true
+                    }
+                  ]
+                },
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "SSH Connection",
+                    "configKey": "useSSH",
+                    "note": "Establish SSH tunnel connection",
+                    "default": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "SSH Host",
+                    "configKey": "sshHost",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid SSH Host",
+                    "placeholder": "e.g: www.abc.com",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useSSH",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "SSH Port",
+                    "configKey": "sshPort",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid SSH Port",
+                    "placeholder": "e.g: 22",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useSSH",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "SSH User",
+                    "configKey": "sshUser",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid SSH User",
+                    "placeholder": "e.g: user1",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useSSH",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "title": "Other settings",
             "note": "Configure advanced RudderStack features here",
             "icon": "otherSettings",
