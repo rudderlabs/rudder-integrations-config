@@ -1,37 +1,12 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["publisherId"],
+    "required": ["orgId"],
     "type": "object",
     "properties": {
-      "publisherId": {
+      "orgId": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "appName": {
-        "type": "string"
-      },
-      "foregroundOnly": {
-        "type": "boolean",
-        "default": true
-      },
-      "foregroundAndBackground": {
-        "type": "boolean",
-        "default": false
-      },
-      "autoUpdateInterval": {
-        "type": "string"
-      },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "boolean"
-          },
-          "ios": {
-            "type": "boolean"
-          }
-        }
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
       "eventFilteringOption": {
         "type": "string",
@@ -62,6 +37,14 @@
           }
         }
       },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -71,6 +54,15 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
+          }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "enum": ["device"]
           }
         }
       }
