@@ -1,46 +1,47 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["apiKey", "domain"],
+    "required": ["orgId"],
     "type": "object",
     "properties": {
-      "apiKey": {
+      "orgId": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "domain": {
+      "eventFilteringOption": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
       },
-      "rudderEventsToFreshsalesEvents": {
+      "whitelistedEvents": {
         "type": "array",
         "items": {
           "type": "object",
           "properties": {
-            "from": {
+            "eventName": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "to": {
-              "type": "string",
-              "enum": ["sales_activity", "lifecycle_stage", ""]
             }
           }
         }
       },
-      "customPropertyMapping": {
+      "blacklistedEvents": {
         "type": "array",
         "items": {
           "type": "object",
           "properties": {
-            "from": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "to": {
+            "eventName": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
+          }
+        }
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
           }
         }
       },
@@ -53,6 +54,15 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
+          }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "enum": ["device"]
           }
         }
       }
