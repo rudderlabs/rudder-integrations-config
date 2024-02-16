@@ -1,37 +1,12 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["publisherId"],
+    "required": ["orgId"],
     "type": "object",
     "properties": {
-      "publisherId": {
+      "orgId": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "appName": {
-        "type": "string"
-      },
-      "foregroundOnly": {
-        "type": "boolean",
-        "default": true
-      },
-      "foregroundAndBackground": {
-        "type": "boolean",
-        "default": false
-      },
-      "autoUpdateInterval": {
-        "type": "string"
-      },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "boolean"
-          },
-          "ios": {
-            "type": "boolean"
-          }
-        }
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
       "eventFilteringOption": {
         "type": "string",
@@ -62,23 +37,18 @@
           }
         }
       },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
       "oneTrustCookieCategories": {
         "type": "object",
         "properties": {
-          "android": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              },
-              "additionalProperties": false
-            }
-          },
-          "ios": {
+          "web": {
             "type": "array",
             "items": {
               "type": "object",
@@ -94,23 +64,19 @@
         },
         "additionalProperties": false
       },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "enum": ["device"]
+          }
+        }
+      },
       "ketchConsentPurposes": {
         "type": "object",
         "properties": {
-          "android": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              },
-              "additionalProperties": false
-            }
-          },
-          "ios": {
+          "web": {
             "type": "array",
             "items": {
               "type": "object",
