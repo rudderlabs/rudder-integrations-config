@@ -8,13 +8,22 @@ from constants import CONFIG_DIR
 
 #########################
 # ENV VARIABLES FOT TESTING
-CONTROL_PLANE_URL="https://api.dev.rudderlabs.com"
-print(CONTROL_PLANE_URL)
-USERNAME="rudder_admin"
-print(USERNAME)
-PASSWORD="EP3^#fP8Yt&z"
-print(PASSWORD)
+# CONTROL_PLANE_URL="https://api.rudderstack.com"
+# print(CONTROL_PLANE_URL)
+# USERNAME="cbadmin"
+# print(USERNAME)
+# PASSWORD="testpassword"
+# print(PASSWORD)
 #########################
+
+#########################
+# ENV VARIABLES
+CONTROL_PLANE_URL = sys.argv[1]
+print(CONTROL_PLANE_URL)
+USERNAME = os.environ["API_USER"]  # sys.argv[2]
+print(USERNAME)
+PASSWORD = os.environ["API_PASSWORD"]  # sys.argv[3]
+# print(PASSWORD)
 #########################
 # CONSTANTS
 HEADER = {"Content-Type": "application/json"}
@@ -161,17 +170,16 @@ if __name__ == "__main__":
     print("Destination Stale Config Report")
     print(get_stale_data("destination", dest_final_report))
 
-    # print("Running Source Definitions Updates")
-    # src_final_report = update_diff_db('source')
-    # print("Source Definition Update Report")
-    # print(src_final_report)
-    # print("Source Stale Config Report")
-    # print(get_stale_data('source', src_final_report))
+    print("Running Source Definitions Updates")
+    src_final_report = update_diff_db("source")
+    print("Source Definition Update Report")
+    print(src_final_report)
+    print("Source Stale Config Report")
+    print(get_stale_data("source", src_final_report))
 
-    # print("Running Wht Lib Projects Definitions Updates")
-    # wht_final_report = update_diff_db('wht-lib-project')
-    # print("Wht lib project Definition Update Report")
-    # print(wht_final_report)
-    # print("Wht lib project Stale Config Report")
-    # print(get_stale_data('wht-lib-project', wht_final_report))
-    
+    print("Running Wht Lib Projects Definitions Updates")
+    wht_final_report = update_diff_db("wht-lib-project")
+    print("Wht lib project Definition Update Report")
+    print(wht_final_report)
+    print("Wht lib project Stale Config Report")
+    print(get_stale_data("wht-lib-project", wht_final_report))
