@@ -9,7 +9,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 * add connectionMode for all sourceTypes in dest def for selected destinations ([#1197](https://github.com/rudderlabs/rudder-config-schema/issues/1197)) ([dde686c](https://github.com/rudderlabs/rudder-config-schema/commit/dde686cc72e0ac7423487d566e8f9715cc43d24f))
 * add GCM to FB Pixel, GA, GMT, HobSpot, Redis, S3, Slack, VWO ([#1190](https://github.com/rudderlabs/rudder-config-schema/issues/1190)) ([f40d5cd](https://github.com/rudderlabs/rudder-config-schema/commit/f40d5cda403e39e149f132dc1ffc2d1efa50a186))
-* adding custom field support for freshsales ([#1195](https://github.com/rudderlabs/rudder-config-schema/issues/1195)) ([9124fb4](https://github.com/rudderlabs/rudder-config-schema/commit/9124fb44fd18d903bbf37f7cef3eaf7aeccf92e4))
 * enabled sql model support for mysql ([#1222](https://github.com/rudderlabs/rudder-config-schema/issues/1222)) ([09bbe2a](https://github.com/rudderlabs/rudder-config-schema/commit/09bbe2a5d1f81c26dec71582fbb7069550e7c7af))
 * improve schema generator output ([#1191](https://github.com/rudderlabs/rudder-config-schema/issues/1191)) ([04e05b8](https://github.com/rudderlabs/rudder-config-schema/commit/04e05b89a7333291792fbb6e111388b5ff8b985f))
 * onboard new destination commandbar ([#1196](https://github.com/rudderlabs/rudder-config-schema/issues/1196)) ([daf9fa8](https://github.com/rudderlabs/rudder-config-schema/commit/daf9fa8256eed280bad04c0c109de3787e6262e0))
@@ -21,9 +20,7 @@ All notable changes to this project will be documented in this file. See [standa
 ### Bug Fixes
 
 * add support of placing properties at root in af ([#1203](https://github.com/rudderlabs/rudder-config-schema/issues/1203)) ([1859354](https://github.com/rudderlabs/rudder-config-schema/commit/185935467899222b8766c63c63b934d70410cc9a))
-* bluecore review comments addressed ([#1225](https://github.com/rudderlabs/rudder-config-schema/issues/1225)) ([5e533ba](https://github.com/rudderlabs/rudder-config-schema/commit/5e533ba8c4d1aa99f6b601a9aa8d3ecf44e533fc))
 * comscore schema ([#1217](https://github.com/rudderlabs/rudder-config-schema/issues/1217)) ([7faa64a](https://github.com/rudderlabs/rudder-config-schema/commit/7faa64acfe2fca20b75789f31b541dd33e7fde8c))
-* reverting unhide of salesforce oauth ([#1220](https://github.com/rudderlabs/rudder-config-schema/issues/1220)) ([e73981f](https://github.com/rudderlabs/rudder-config-schema/commit/e73981f54b757aa60181942a19e7db97aac40658))
 
 ### [1.64.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.64.1...v1.64.2) (2024-02-14)
 
