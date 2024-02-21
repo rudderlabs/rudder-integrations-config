@@ -23,46 +23,12 @@
                   },
                   {
                     "type": "textInput",
-                    "label": "Advertiser Secret Key",
-                    "note": "Enter your advertiser secret key from the Advertiser Preferences page in The Trade Desk platform UI. If you can't find your secret key, please contact your Technical Account Manager.",
-                    "configKey": "advertiserSecretKey",
+                    "label": "Tracking Tag ID",
+                    "note": "Enter the tracking tag ID. Contact your The Trade Desk representative to obtain it.",
+                    "configKey": "trackerId",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-                    "regexErrorMessage": "Invalid Advertiser Secret Key",
-                    "placeholder": "e.g: u8a7f3k9p2nXXXXX4q5r2m8d7z1o9",
-                    "secret": true
-                  },
-                  {
-                    "type": "singleSelect",
-                    "label": "Data Server",
-                    "configKey": "dataServer",
-                    "note": "For reduce latency, select the data server closes to the location of the users targeted by your campaign.",
-                    "options": [
-                      {
-                        "label": "APAC",
-                        "value": "apac"
-                      },
-                      {
-                        "label": "Tokyo",
-                        "value": "tokyo"
-                      },
-                      {
-                        "label": "US East Coast",
-                        "value": "usEastCoast"
-                      },
-                      {
-                        "label": "US West Coast",
-                        "value": "usWestCoast"
-                      },
-                      {
-                        "label": "UK/EU",
-                        "value": "ukEu"
-                      },
-                      {
-                        "label": "China",
-                        "value": "china"
-                      }
-                    ],
-                    "default": "usEastCoast"
+                    "regexErrorMessage": "Invalid Tracking Tag ID",
+                    "placeholder": "e.g: hcXXXke"
                   }
                 ]
               }
@@ -90,29 +56,6 @@
         "title": "Configuration settings",
         "note": "Manage the settings for your destination",
         "sections": [
-          {
-            "title": "Destination settings",
-            "note": "Configure destination-specific settings here",
-            "icon": "settings",
-            "groups": [
-              {
-                "title": "Trade Desk IT",
-                "note": "Configure a few advanced Trade Desk settings here",
-                "fields": [
-                  {
-                    "type": "textInput",
-                    "label": "TTL (in days)",
-                    "note": "Enter the Time-to-Live (TTL) for the user data in segment, indicating the duration a user remains active in the segment. The default TTL is set to 30 days(most commonly used). The maximum allowable TTL is 180 days.",
-                    "configKey": "ttlInDays",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]|[1-9][0-9]|1[0-7][0-9]|180)$",
-                    "regexErrorMessage": "Invalid TTL",
-                    "placeholder": "e.g: 30",
-                    "default": "30"
-                  }
-                ]
-              }
-            ]
-          },
           {
             "id": "consentSettings",
             "title": "Consent settings",
@@ -231,12 +174,157 @@
             ]
           }
         ]
+      },
+      {
+        "title": "Event mapping",
+        "note": "Map RudderStack to Trade Desk events",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "RudderStack to Trade Desk event mappings",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "eventAndPropertiesMapping",
+                    "label": "Event and property mappings",
+                    "note": "Map RudderStack events/properties to Trade Desk events/properties"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     ],
     "sdkTemplate": {
       "title": "SDK settings",
       "note": "not visible in the ui",
       "fields": []
+    },
+    "redirectGroups": {
+      "eventAndPropertiesMapping": {
+        "tabs": [
+          {
+            "name": "Event",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map your RudderStack Events to Trade Desk Events",
+                "note": "Enter the input event name which you want to map with a Trade Desk Event Name",
+                "configKey": "eventsMapping",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "RudderStack Event",
+                    "placeholder": "e.g: Product Searched"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "key": "to",
+                    "label": "Trade Desk Event",
+                    "options": [
+                      {
+                        "name": "searchitem",
+                        "value": "searchitem"
+                      },
+                      {
+                        "name": "searchcategory",
+                        "value": "searchcategory"
+                      },
+                      {
+                        "name": "login",
+                        "value": "login"
+                      },
+                      {
+                        "name": "messagebusiness",
+                        "value": "messagebusiness"
+                      },
+                      {
+                        "name": "direction",
+                        "value": "direction"
+                      },
+                      {
+                        "name": "sitevisit",
+                        "value": "sitevisit"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Custom properties",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map custom properties",
+                "configKey": "customProperties",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "rudderProperty",
+                    "label": "RudderStack property path",
+                    "placeholder": "e.g properties.key1"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "key": "tradeDeskProperty",
+                    "label": "Trade Desk custom property",
+                    "options": [
+                      {
+                        "label": "td1",
+                        "value": "td1"
+                      },
+                      {
+                        "label": "td2",
+                        "value": "td2"
+                      },
+                      {
+                        "label": "td3",
+                        "value": "td3"
+                      },
+                      {
+                        "label": "td4",
+                        "value": "td4"
+                      },
+                      {
+                        "label": "td5",
+                        "value": "td5"
+                      },
+                      {
+                        "label": "td6",
+                        "value": "td6"
+                      },
+                      {
+                        "label": "td7",
+                        "value": "td7"
+                      },
+                      {
+                        "label": "td8",
+                        "value": "td8"
+                      },
+                      {
+                        "label": "td9",
+                        "value": "td9"
+                      },
+                      {
+                        "label": "td10",
+                        "value": "td10"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     }
   }
 }

@@ -8,61 +8,19 @@
           {
             "groups": [
               {
-                "title": "Connection settings",
+                "title": "Connection Settings",
                 "note": "Update your connection settings here",
                 "icon": "settings",
                 "fields": [
                   {
                     "type": "textInput",
-                    "label": "Advertiser ID",
-                    "note": "Enter your Advertiser Id from advertiser preferences page in The Trade Desk platform UI.",
-                    "configKey": "advertiserId",
+                    "label": "Bluecore namespace",
+                    "note": "Get it from the url https://app.bluecore.com/admin/dashboard/<namespace>",
+                    "configKey": "bluecoreNamespace",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-                    "regexErrorMessage": "Invalid Advertiser ID",
-                    "placeholder": "e.g: jxXXXph"
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "Advertiser Secret Key",
-                    "note": "Enter your advertiser secret key from the Advertiser Preferences page in The Trade Desk platform UI. If you can't find your secret key, please contact your Technical Account Manager.",
-                    "configKey": "advertiserSecretKey",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-                    "regexErrorMessage": "Invalid Advertiser Secret Key",
-                    "placeholder": "e.g: u8a7f3k9p2nXXXXX4q5r2m8d7z1o9",
-                    "secret": true
-                  },
-                  {
-                    "type": "singleSelect",
-                    "label": "Data Server",
-                    "configKey": "dataServer",
-                    "note": "For reduce latency, select the data server closes to the location of the users targeted by your campaign.",
-                    "options": [
-                      {
-                        "label": "APAC",
-                        "value": "apac"
-                      },
-                      {
-                        "label": "Tokyo",
-                        "value": "tokyo"
-                      },
-                      {
-                        "label": "US East Coast",
-                        "value": "usEastCoast"
-                      },
-                      {
-                        "label": "US West Coast",
-                        "value": "usWestCoast"
-                      },
-                      {
-                        "label": "UK/EU",
-                        "value": "ukEu"
-                      },
-                      {
-                        "label": "China",
-                        "value": "china"
-                      }
-                    ],
-                    "default": "usEastCoast"
+                    "secret": true,
+                    "regexErrorMessage": "Invalid Namespace",
+                    "placeholder": "e.g. dummy_namespace"
                   }
                 ]
               }
@@ -90,29 +48,6 @@
         "title": "Configuration settings",
         "note": "Manage the settings for your destination",
         "sections": [
-          {
-            "title": "Destination settings",
-            "note": "Configure destination-specific settings here",
-            "icon": "settings",
-            "groups": [
-              {
-                "title": "Trade Desk IT",
-                "note": "Configure a few advanced Trade Desk settings here",
-                "fields": [
-                  {
-                    "type": "textInput",
-                    "label": "TTL (in days)",
-                    "note": "Enter the Time-to-Live (TTL) for the user data in segment, indicating the duration a user remains active in the segment. The default TTL is set to 30 days(most commonly used). The maximum allowable TTL is 180 days.",
-                    "configKey": "ttlInDays",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]|[1-9][0-9]|1[0-7][0-9]|180)$",
-                    "regexErrorMessage": "Invalid TTL",
-                    "placeholder": "e.g: 30",
-                    "default": "30"
-                  }
-                ]
-              }
-            ]
-          },
           {
             "id": "consentSettings",
             "title": "Consent settings",
@@ -210,13 +145,13 @@
                     "text": "Learn more ",
                     "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
                   },
-                  "about RudderStack's OneTrust Consent Manager feature."
+                  "about RudderStack’s OneTrust Consent Manager feature."
                 ],
                 "fields": [
                   {
                     "type": "tagInput",
                     "label": "Cookie category name",
-                    "note": "Input your OneTrust category names by pressing 'Enter' after each entry",
+                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
                     "configKey": "oneTrustCookieCategories",
                     "tagKey": "oneTrustCookieCategory",
                     "placeholder": "e.g: Credit card visit",
@@ -231,10 +166,82 @@
             ]
           }
         ]
+      },
+      {
+        "title": "Mappings",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Rudderstack to Bluecore Event Mappings",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "bluecoreEventMapping",
+                    "label": "Event mappings"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     ],
+    "redirectGroups": {
+      "bluecoreEventMapping": {
+        "fields": [
+          {
+            "type": "mapping",
+            "label": "Mapping to trigger the Rudderstack events with standard Bluecore events",
+            "configKey": "eventsMapping",
+            "default": [],
+            "columns": [
+              {
+                "type": "textInput",
+                "key": "from",
+                "label": "Event Name",
+                "placeholder": "e.g: Custom Purchase Event"
+              },
+              {
+                "type": "singleSelect",
+                "key": "to",
+                "label": "Bluecore Standard Ecommerce Event",
+                "placeholder": "e.g: purchase",
+                "options": [
+                  {
+                    "name": "Viewed Product",
+                    "value": "viewed_product"
+                  },
+                  {
+                    "name": "Search",
+                    "value": "search"
+                  },
+                  {
+                    "name": "Add to Cart",
+                    "value": "add_to_cart"
+                  },
+                  {
+                    "name": "Remove From Cart",
+                    "value": "remove_from_cart"
+                  },
+                  {
+                    "name": "Wishlist",
+                    "value": "wishlist"
+                  },
+                  {
+                    "name": "Purchase",
+                    "value": "purchase"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "sdkTemplate": {
-      "title": "SDK settings",
+      "title": "Web SDK settings",
       "note": "not visible in the ui",
       "fields": []
     }

@@ -1,16 +1,16 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["apiKey"],
+    "required": ["advertiserId", "trackerId"],
     "type": "object",
     "properties": {
-      "apiKey": {
+      "advertiserId": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,61})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "sendAnonymousId": {
-        "type": "boolean",
-        "default": false
+      "trackerId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
       "oneTrustCookieCategories": {
         "type": "object",
@@ -161,6 +161,45 @@
         },
         "additionalProperties": false
       },
+      "eventsMapping": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "to": {
+              "type": "string",
+              "enum": [
+                "searchitem",
+                "searchcategory",
+                "login",
+                "messagebusiness",
+                "direction",
+                "sitevisit"
+              ]
+            }
+          }
+        }
+      },
+      "customProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "rudderProperty": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "tradeDeskProperty": {
+              "type": "string",
+              "enum": ["td1", "td2", "td3", "td4", "td5", "td6", "td7", "td8", "td9", "td10"]
+            }
+          }
+        }
+      },
       "connectionMode": {
         "type": "object",
         "properties": {
@@ -184,6 +223,14 @@
             "type": "string",
             "enum": ["cloud"]
           },
+          "cloud": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "warehouse": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
           "reactnative": {
             "type": "string",
             "enum": ["cloud"]
@@ -197,14 +244,6 @@
             "enum": ["cloud"]
           },
           "shopify": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "cloud": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "warehouse": {
             "type": "string",
             "enum": ["cloud"]
           }
