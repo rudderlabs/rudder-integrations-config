@@ -15,7 +15,9 @@
     "url": "https://github.com/rudderlabs/rudder-config-schema.git"
   },
   "scripts": {
-    "setup": "npm ci && pip3 install -r ./scripts/requirements.txt",
+    "setup:python": "pip3 install -r ./scripts/requirements.txt",
+    "setup:npm": "npm ci",
+    "setup": "npm run setup:npm && npm run setup:python",
     "test": "jest --detectOpenHandles --coverage --notify --watchAll=false",
     "test:ci": "npm run test -- --silent --expand --maxWorkers=2",
     "test:silent": "npm run test -- --silent",

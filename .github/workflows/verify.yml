@@ -11,12 +11,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4.1.1
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Setting up Python
-        run: ./scripts/setup-python.sh
+      - name: Install Dependencies
+        run: npm run setup:python
 
       # Reference: https://black.readthedocs.io/en/stable/integrations/github_actions.html
       - name: Check formatting for Python files
@@ -39,7 +35,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm run setup:npm
 
       - name: Run Lint Checks
         run: |
