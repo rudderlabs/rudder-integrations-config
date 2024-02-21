@@ -280,6 +280,28 @@
                   },
                   {
                     "type": "textInput",
+                    "label": "S3 Bucket to store data before loading into Postgres",
+                    "note": "Please make sure the bucket exists in your S3",
+                    "configKey": "bucketName",
+                    "regex": "^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
+                    "regexErrorMessage": "Invalid Staging S3 Storage Bucket Name",
+                    "placeholder": "e.g: s3-event-logs",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "S3"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
                     "label": "Staging Azure Blob Storage Container Name",
                     "note": "Container to store data before loading into Postgres",
                     "configKey": "containerName",
@@ -698,7 +720,7 @@
                         "value": "1440"
                       }
                     ],
-                    "default": "30"
+                    "default": "180"
                   },
                   {
                     "type": "textInput",
