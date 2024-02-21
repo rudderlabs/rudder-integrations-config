@@ -62,5 +62,104 @@
     },
     "result": false,
     "err": [" must have required property 'address'"]
+  },
+
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "address": "test-elastic-cache.012ut9.ng.0001.use1.cache.amazonaws.com:6379",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "address": "test-elastic-cache.012ut9.ng.0001.use1.cache.amazonaws.com:6379",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "address": "test-elastic-cache.012ut9.ng.0001.use1.cache.amazonaws.com:6379",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "address": "test-elastic-cache.012ut9.ng.0001.use1.cache.amazonaws.com:6379",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "address": "test-elastic-cache.012ut9.ng.0001.use1.cache.amazonaws.com:6379",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]

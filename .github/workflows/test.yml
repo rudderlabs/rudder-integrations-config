@@ -18,23 +18,20 @@ jobs:
           fetch-depth: 1
 
       - name: Setup Node
-        uses: actions/setup-node@v4.0.1
+        uses: actions/setup-node@v4.0.2
         with:
           node-version-file: '.nvmrc'
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm ci
-
-      - name: Set up Python
-        run: scripts/setup-python.sh
+        run: npm run setup
 
       - name: Run Tests
         run: npm run test:ci
 
       - name: Get changed files
         id: changed_files
-        uses: tj-actions/changed-files@v41
+        uses: tj-actions/changed-files@v42
         with:
           sha: ${{ github.event.pull_request.head.sha }}
 
