@@ -44,6 +44,14 @@
         "type": "boolean",
         "default": false
       },
+      "useUserDefinedPageEventName": {
+        "type": "boolean",
+        "default": false
+      },
+      "useUserDefinedScreenEventName": {
+        "type": "boolean",
+        "default": false
+      },
       "people": {
         "type": "boolean",
         "default": false
@@ -642,7 +650,7 @@
         }
       }
     },
-    "anyOf": [
+    "allOf": [
       {
         "if": {
           "properties": {
@@ -660,6 +668,44 @@
             }
           },
           "required": ["gdprApiToken"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "useUserDefinedPageEventName": {
+              "const": true
+            }
+          },
+          "required": ["useUserDefinedPageEventName"]
+        },
+        "then": {
+          "properties": {
+            "userDefinedPageEventTemplate": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$"
+            }
+          },
+          "required": ["userDefinedPageEventTemplate"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "useUserDefinedScreenEventName": {
+              "const": true
+            }
+          },
+          "required": ["useUserDefinedScreenEventName"]
+        },
+        "then": {
+          "properties": {
+            "userDefinedScreenEventTemplate": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$"
+            }
+          },
+          "required": ["userDefinedScreenEventTemplate"]
         }
       }
     ]
