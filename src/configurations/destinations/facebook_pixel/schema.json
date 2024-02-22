@@ -8,10 +8,6 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "accessToken": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,300})$"
-      },
       "categoryToContent": {
         "type": "array",
         "items": {
@@ -726,6 +722,35 @@
           }
         }
       }
-    }
+    },
+    "allOf": [
+      {
+        "if": {
+          "not": {
+            "properties": {
+              "connectionMode": {
+                "type": "object",
+                "properties": {
+                  "web": {
+                    "type": "string",
+                    "enum": ["device"]
+                  }
+                }
+              }
+            },
+            "required": ["connectionMode"]
+          }
+        },
+        "then": {
+          "properties": {
+            "accessToken": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,300})$"
+            }
+          },
+          "required": ["accessToken"]
+        }
+      }
+    ]
   }
 }
