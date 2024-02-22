@@ -11,16 +11,25 @@
                 "title": "Connection Settings",
                 "note": "Update your connection settings here",
                 "icon": "settings",
+
                 "fields": [
                   {
                     "type": "textInput",
                     "label": "Organization Id (API Key)",
-                    "note": "Ninetaile dashboard > Left Side Panel > API Key",
+                    "note": "Ninetailed dashboard > Left Side Panel > API Key",
                     "configKey": "organisationId",
                     "regex": "^(.{1,100})$",
                     "secret": true,
                     "regexErrorMessage": "Invalid Organization ID",
-                    "placeholder": "e.g. 52****-*4*4-4**9-***8-5****f*9****"
+                    "placeholder": "e.g. 52****-*4*4-4**9-***8-5****f*9****",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
                   }
                 ]
               }
@@ -94,8 +103,7 @@
                       "configKey": "connectionMode.web",
                       "value": "device"
                     }
-                  ],
-                  "condition": "or"
+                  ]
                 },
                 "fields": [
                   {

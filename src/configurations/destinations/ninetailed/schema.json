@@ -1,17 +1,13 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["organisationId"],
+    "required": [],
     "type": "object",
     "properties": {
       "environment": {
         "type": "string",
         "enum": ["main", "dev"],
         "default": "main"
-      },
-      "organisationId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
       "eventFilteringOption": {
         "type": "string",
@@ -71,6 +67,118 @@
           }
         }
       }
-    }
+    },
+    "additonalProperties": false,
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["web"],
+                  "properties": {
+                    "web": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["ios"],
+                  "properties": {
+                    "ios": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["android"],
+                  "properties": {
+                    "android": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["unity"],
+                  "properties": {
+                    "unity": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["amp"],
+                  "properties": {
+                    "amp": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["reactnative"],
+                  "properties": {
+                    "reactnative": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["flutter"],
+                  "properties": {
+                    "flutter": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["cordova"],
+                  "properties": {
+                    "cordova": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["shopify"],
+                  "properties": {
+                    "shopify": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["cloud"],
+                  "properties": {
+                    "shopify": {
+                      "const": "cloud"
+                    }
+                  }
+                },
+                {
+                  "required": ["warehouse"],
+                  "properties": {
+                    "shopify": {
+                      "const": "cloud"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "organisationId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["organisationId"]
+        }
+      }
+    ]
   }
 }
