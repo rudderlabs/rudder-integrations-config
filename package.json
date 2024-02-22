@@ -1,6 +1,6 @@
 {
   "name": "rudder-config-schema",
-  "version": "1.64.2",
+  "version": "1.65.0",
   "description": "",
   "main": "src/index.ts",
   "private": true,
@@ -21,8 +21,10 @@
     "test:silent": "npm run test -- --silent",
     "release": "npx standard-version",
     "check:lint": "eslint \"src/**/*.*\" -f json -o reports/eslint.json || exit 0",
+    "format:py": "python3 -m black .",
     "format": "prettier . --write",
     "lint:fix": "eslint \"src/**/*.*\" --fix",
+    "lint": "npm run format && npm run lint:fix",
     "prepare": "husky install",
     "pre-commit": "npm run test && npx lint-staged",
     "commit-msg": "commitlint --edit",
@@ -79,7 +81,8 @@
     "glob": "^9.3.2"
   },
   "lint-staged": {
-    "*.{json,js,ts,md}": "prettier --write"
+    "*.{json,js,ts,md}": "prettier --write",
+    "*.{py}": "python3 -m black"
   },
   "config": {
     "commitizen": {
