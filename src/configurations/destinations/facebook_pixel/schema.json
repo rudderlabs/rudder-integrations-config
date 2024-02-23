@@ -1,16 +1,12 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["pixelId", "accessToken"],
+    "required": ["pixelId"],
     "type": "object",
     "properties": {
       "pixelId": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-      },
-      "accessToken": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,300})$"
       },
       "categoryToContent": {
         "type": "array",
@@ -1000,6 +996,35 @@
           }
         }
       }
-    }
+    },
+    "allOf": [
+      {
+        "if": {
+          "not": {
+            "properties": {
+              "connectionMode": {
+                "type": "object",
+                "properties": {
+                  "web": {
+                    "type": "string",
+                    "enum": ["device"]
+                  }
+                }
+              }
+            },
+            "required": ["connectionMode"]
+          }
+        },
+        "then": {
+          "properties": {
+            "accessToken": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,300})$"
+            }
+          },
+          "required": ["accessToken"]
+        }
+      }
+    ]
   }
 }
