@@ -11,24 +11,23 @@ const getJSONDataFromFile = (filePath: string) => {
     return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
   } catch (e) {
     console.error(e);
-    console.error(`Unable to load test data for: "${filePath}"`);
+    console.error(`Unable to load file: "${filePath}"`);
     return null;
   }
 };
 
-const deepSearch = (obj: any, value: string) => {
+const deepSearch = (obj: any, value: string, count = 0) => {
   // eslint-disable-next-line no-restricted-syntax, guard-for-in
   for (const k in obj) {
     if (typeof obj[k] === 'object') {
-      const result = deepSearch(obj[k], value);
-      if (result) {
-        return result;
-      }
+      // eslint-disable-next-line no-param-reassign
+      count = deepSearch(obj[k], value, count);
     } else if (obj[k] === value) {
-      return obj;
+      // eslint-disable-next-line no-param-reassign
+      count += 1;
     }
   }
-  return null;
+  return count;
 };
 
 describe('Consent Management Fields Integrity tests', () => {
@@ -67,6 +66,11 @@ describe('Consent Management Fields Integrity tests', () => {
       });
 
       expect(fail).toBe(false);
+
+      // Remove defaultConfig from the list of source types
+      const destConfigSrcTypes = Object.keys(destConfig);
+      destConfigSrcTypes.splice(destConfigSrcTypes.indexOf('defaultConfig'), 1);
+      expect(destConfigSrcTypes.sort()).toEqual(supportedSourceTypes.sort());
     });
 
     // Validate schema.json
@@ -84,11 +88,11 @@ describe('Consent Management Fields Integrity tests', () => {
       expect(schema.configSchema.properties.ketchConsentPurposes.properties).toBeDefined();
 
       expect(
-        Object.keys(schema.configSchema.properties.oneTrustCookieCategories.properties),
-      ).toEqual(supportedSourceTypes);
-      expect(Object.keys(schema.configSchema.properties.ketchConsentPurposes.properties)).toEqual(
-        supportedSourceTypes,
-      );
+        Object.keys(schema.configSchema.properties.oneTrustCookieCategories.properties).sort(),
+      ).toEqual(supportedSourceTypes.sort());
+      expect(
+        Object.keys(schema.configSchema.properties.ketchConsentPurposes.properties).sort(),
+      ).toEqual(supportedSourceTypes.sort());
     });
 
     // Validate ui-config.json
@@ -96,11 +100,11 @@ describe('Consent Management Fields Integrity tests', () => {
     const uiConfig = getJSONDataFromFile(uiConfigFilePath);
 
     it(`should have oneTrustCookieCategories and ketchConsentPurposes properly defined in ui-config.json in ${destName}`, () => {
-      const oneTrustUIElement = deepSearch(uiConfig, 'oneTrustCookieCategories');
-      expect(oneTrustUIElement).toBeDefined();
+      const oneTrustUIElementCount = deepSearch(uiConfig, 'oneTrustCookieCategories');
+      expect(oneTrustUIElementCount).toEqual(1);
 
-      const ketchUIElement = deepSearch(uiConfig, 'ketchConsentPurposes');
-      expect(ketchUIElement).toBeDefined();
+      const ketchUIElementCount = deepSearch(uiConfig, 'ketchConsentPurposes');
+      expect(ketchUIElementCount).toEqual(1);
     });
   });
 });
