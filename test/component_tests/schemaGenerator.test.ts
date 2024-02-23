@@ -2,6 +2,21 @@ import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 
+function readFile(filePath): string | undefined {
+  let file;
+  if (!fs.existsSync(filePath)) {
+    return file;
+  }
+
+  try {
+    file = fs.readFileSync(filePath, 'utf8');
+  } catch (e) {
+    /* empty */
+  }
+
+  return file;
+}
+
 function readSchemaFile(filePath): string | undefined {
   let schema;
   if (!fs.existsSync(filePath)) {
@@ -17,8 +32,8 @@ function readSchemaFile(filePath): string | undefined {
   return schema;
 }
 
-function writeSchemaFile(filePath, schema) {
-  fs.writeFileSync(filePath, JSON.stringify(schema, null, 2));
+function writeFile(filePath, data) {
+  fs.writeFileSync(filePath, data);
 }
 
 describe('Schema Generator', () => {
@@ -102,7 +117,7 @@ describe('Schema Generator', () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     it.each(testData)('$description', ({ description, destName, expectedSchemaFile }) => {
       const schemaFilePath = path.resolve(`${configDir}/destinations/${destName}/schema.json`);
-      const curSchema = readSchemaFile(schemaFilePath);
+      const curSchema = readFile(schemaFilePath);
 
       const cmd = `CONFIG_DIR=${configDir} npm run update:schema:destination "${destName}"`;
 
@@ -111,7 +126,7 @@ describe('Schema Generator', () => {
       const schema = readSchemaFile(schemaFilePath);
       // Restore schema file
       if (curSchema) {
-        writeSchemaFile(schemaFilePath, curSchema);
+        writeFile(schemaFilePath, curSchema);
       }
 
       const expectedSchemaData = readSchemaFile(
