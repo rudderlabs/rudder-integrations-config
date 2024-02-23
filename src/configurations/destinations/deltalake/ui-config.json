@@ -1,543 +1,780 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Credentials",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Host",
-          "value": "host",
-          "regex": "(?!.*\\.ngrok\\.io)^(.{1,100})$",
-          "regexErrorMessage": "Invalid Host",
-          "placeholder": "xxx.cloud.databricks.com",
-          "required": true
-        },
-        {
-          "type": "textInput",
-          "label": "Port",
-          "value": "port",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid Port",
-          "placeholder": "443",
-          "required": true
-        },
-        {
-          "type": "textInput",
-          "label": "HTTP Path",
-          "value": "path",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid HTTP Path",
-          "placeholder": "sql/protocolv1/o/<ordId>/<clusterId> or /sql/1.0/endpoints/<endpointId>",
-          "required": true
-        },
-        {
-          "type": "textInput",
-          "label": "Personal Access Token",
-          "value": "token",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid Access Token",
-          "placeholder": "e.g: <personal-access-token>",
-          "required": true,
-          "secret": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Enable delta tables creation in an external location",
-          "value": "enableExternalLocation",
-          "default": false
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "enableExternalLocation",
-              "selectedValue": true
-            }
-          ],
-          "label": "External delta table location",
-          "value": "externalLocation",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid External Delta Table Location",
-          "placeholder": "/path/to/delta/table",
-          "required": true,
-          "footerNote": "This can only be applied to the new delta tables created by RudderStack. For already existing tables, RudderStack do not recreate the tables again.",
-          "footerURL": {
-            "link": "https://www.rudderstack.com/docs/data-warehouse-integrations/delta-lake/#faqs",
-            "text": "Please refer to the FAQs section, before you wanted to make any changes around managed and unmanaged tables provided by the Databricks."
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial Setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "title": "Connection settings",
+            "note": "Configure connection settings here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Connection Credentials",
+                "note": "Update your connection credentials here",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Host",
+                    "configKey": "host",
+                    "regex": "(?!.*\\.ngrok\\.io)^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Host",
+                    "placeholder": "xxx.cloud.databricks.com",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Port",
+                    "configKey": "port",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Port",
+                    "placeholder": "443",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "HTTP Path",
+                    "configKey": "path",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid HTTP Path",
+                    "placeholder": "sql/protocolv1/o/<ordId>/<clusterId> or /sql/1.0/endpoints/<endpointId>",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Personal Access Token",
+                    "configKey": "token",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Access Token",
+                    "placeholder": "e.g: <personal-access-token>",
+                    "secret": true
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Enable delta tables creation in an external location",
+                    "configKey": "enableExternalLocation",
+                    "default": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "External delta table location",
+                    "configKey": "externalLocation",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid External Delta Table Location",
+                    "placeholder": "/path/to/delta/table",
+                    "secret": false,
+                    "note": [
+                      "This can only be applied to the new delta tables created by RudderStack. For already existing tables, RudderStack do not recreate the tables again.",
+                      {
+                        "text": "Please refer to the FAQs section, before you wanted to make any changes around managed and unmanaged tables provided by the Databricks.",
+                        "link": "https://www.rudderstack.com/docs/data-warehouse-integrations/delta-lake/#faqs"
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "enableExternalLocation",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Catalog",
+                    "configKey": "catalog",
+                    "regex": "^(.*)$",
+                    "regexErrorMessage": "Invalid Catalog",
+                    "placeholder": "e.g: iosCatalog",
+                    "secret": false,
+                    "note": ["Catalog name where you organize your data assets"]
+                  }
+                ]
+              },
+              {
+                "title": "Object Storage Configuration",
+                "note": "Update where do you want the data staged to be stored",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Toggle on to use RudderStack manage storage object for staging data",
+                    "configKey": "useRudderStorage",
+                    "note": "All the Data is Staged in Rudderstack Managed Object Storage",
+                    "default": false
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose your Storage Provider",
+                    "configKey": "bucketProvider",
+                    "options": [
+                      {
+                        "label": "S3",
+                        "value": "S3"
+                      },
+                      {
+                        "label": "GCS",
+                        "value": "GCS"
+                      },
+                      {
+                        "label": "AZURE_BLOB",
+                        "value": "AZURE_BLOB"
+                      }
+                    ],
+                    "default": "S3",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Use STS Tokens to copy staging files",
+                    "configKey": "useSTSTokens",
+                    "default": false,
+                    "note": ["Note: This feature is only supported with databricks S3A client."],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "S3"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Prefix",
+                    "configKey": "prefix",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Prefix",
+                    "placeholder": "e.g: rudder",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Staging GCS Object Storage Bucket Name",
+                    "note": "GCS Bucket to store data before loading into Deltalake",
+                    "configKey": "bucketName",
+                    "regex": "^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$",
+                    "regexErrorMessage": "Invalid Staging GCS Object Storage Bucket Name",
+                    "placeholder": "e.g: gcs-event-logs",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "GCS"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "S3 Bucket to store data before loading into Deltalake",
+                    "note": "Please make sure the bucket exists in your S3",
+                    "configKey": "bucketName",
+                    "regex": "^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
+                    "regexErrorMessage": "Invalid Staging S3 Storage Bucket Name",
+                    "placeholder": "e.g: s3-event-logs",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "S3"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Staging Azure Blob Storage Container Name",
+                    "note": "Container to store data before loading into Deltalake",
+                    "configKey": "containerName",
+                    "regex": "^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$",
+                    "regexErrorMessage": "Invalid Staging Azure Blob Object Storage Bucket Name",
+                    "placeholder": "e.g: azure-blob-event-logs",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "AZURE_BLOB"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Role Based Authentication",
+                    "configKey": "roleBasedAuth",
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "S3"
+                        },
+                        {
+                          "configKey": "useSTSTokens",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "IAM Role ARN",
+                    "configKey": "iamRoleARN",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Role ARN",
+                    "placeholder": "e.g: arn:aws:iam::123456789012:role/S3Access",
+                    "secret": false,
+                    "note": [
+                      {
+                        "text": "Instructions for creating IAM Role",
+                        "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/"
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "S3"
+                        },
+                        {
+                          "configKey": "roleBasedAuth",
+                          "value": true
+                        },
+                        {
+                          "configKey": "useSTSTokens",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "AWS Access Key ID",
+                    "configKey": "accessKeyID",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid AWS Access Key ID",
+                    "placeholder": "e.g: access-key-id",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "S3"
+                        },
+                        {
+                          "configKey": "roleBasedAuth",
+                          "value": false
+                        },
+                        {
+                          "configKey": "useSTSTokens",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "AWS Secret Access Key",
+                    "configKey": "accessKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid AWS Secret Access Key",
+                    "placeholder": "e.g: access-secret-key-id",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "S3"
+                        },
+                        {
+                          "configKey": "roleBasedAuth",
+                          "value": false
+                        },
+                        {
+                          "configKey": "useSTSTokens",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Enable Server Side Encryption For S3",
+                    "configKey": "enableSSE",
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "S3"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Use shared access signature (SAS) Tokens",
+                    "note": "Use this to Grant limited access to Azure Storage resources using shared access signatures (SAS)",
+                    "configKey": "useSASTokens",
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "AZURE_BLOB"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Azure Blob Storage Account Name",
+                    "configKey": "accountName",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Azure Blob Storage Account Name",
+                    "placeholder": "e.g: account-name",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "AZURE_BLOB"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Azure Blob Storage Account Key",
+                    "configKey": "accountKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Azure Blob Storage Account Key",
+                    "placeholder": "e.g: account-key",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "AZURE_BLOB"
+                        },
+                        {
+                          "configKey": "useSASTokens",
+                          "value": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Azure Blob Storage SAS Token",
+                    "configKey": "sasToken",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.+)$",
+                    "regexErrorMessage": "Invalid Azure Blob Storage SAS Token",
+                    "placeholder": "e.g: sas-token",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "AZURE_BLOB"
+                        },
+                        {
+                          "configKey": "useSASTokens",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "GCP Service Account credentials JSON",
+                    "configKey": "credentials",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
+                    "note": [
+                      "Create a service account in your GCP Project for RudderStack with roles of 'storage.objectCreator'"
+                    ],
+                    "regexErrorMessage": "Invalid Credentials",
+                    "placeholder": "",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "bucketProvider",
+                          "value": "GCS"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "icon": "settings",
+                "note": "",
+                "title": "Namespace settings",
+                "callout": {
+                  "message": "Schema name for the warehouse where the tables are created",
+                  "type": "info"
+                },
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Namespace",
+                    "note": "Schema name for the warehouse where the tables are created,Default will be the source name",
+                    "configKey": "namespace",
+                    "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+                    "regexErrorMessage": "Invalid Namespace",
+                    "placeholder": "e.g: rudder-schema",
+                    "secret": false
+                  }
+                ]
+              }
+            ]
           }
-        },
-        {
-          "type": "textInput",
-          "label": "Catalog",
-          "labelNote": "Catalog name where you organize your data assets",
-          "value": "catalog",
-          "regex": "^(.*)$",
-          "regexErrorMessage": "Invalid Catalog",
-          "required": false,
-          "placeholder": "e.g: iosCatalog"
-        },
-        {
-          "type": "textInput",
-          "label": "Namespace",
-          "labelNote": "Schema name for the warehouse where the tables are created",
-          "value": "namespace",
-          "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
-          "regexErrorMessage": "Invalid Namespace",
-          "required": false,
-          "placeholder": "e.g: iosSource",
-          "footerNote": "Default will be the source name"
-        },
-        {
-          "type": "singleSelect",
-          "label": "Sync Frequency",
-          "value": "syncFrequency",
-          "options": [
-            {
-              "name": "Every 30 minutes",
-              "value": "30"
-            },
-            {
-              "name": "Every 1 hour",
-              "value": "60"
-            },
-            {
-              "name": "Every 3 hours",
-              "value": "180"
-            },
-            {
-              "name": "Every 6 hours",
-              "value": "360"
-            },
-            {
-              "name": "Every 12 hours",
-              "value": "720"
-            },
-            {
-              "name": "Every 24 hours",
-              "value": "1440"
-            }
-          ],
-          "defaultOption": {
-            "name": "Every 30 minutes",
-            "value": "30"
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Advanced Settings",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Sync Frequency",
+                    "configKey": "syncFrequency",
+                    "placeholder": "e.g: Credit card visit",
+                    "options": [
+                      {
+                        "label": "Every 30 minutes",
+                        "value": "30"
+                      },
+                      {
+                        "label": "Every 1 hour",
+                        "value": "60"
+                      },
+                      {
+                        "label": "Every 3 hours",
+                        "value": "180"
+                      },
+                      {
+                        "label": "Every 6 hours",
+                        "value": "360"
+                      },
+                      {
+                        "label": "Every 12 hours",
+                        "value": "720"
+                      },
+                      {
+                        "label": "Every 24 hours",
+                        "value": "1440"
+                      }
+                    ],
+                    "default": "180"
+                  },
+                  {
+                    "type": "timePicker",
+                    "label": "Sync Starting At (Optional)",
+                    "note": "Please specify time in UTC",
+                    "configKey": "syncStartAt",
+                    "options": {
+                      "omitSeconds": true,
+                      "minuteStep": 15
+                    }
+                  },
+                  {
+                    "type": "timeRangePicker",
+                    "label": "Exclude window (Optional)",
+                    "note": "Please specify time in UTC",
+                    "configKey": "excludeWindow",
+                    "startTimeLabel": "Start time",
+                    "startTimeKey": "excludeWindowStartTime",
+                    "endTimeLabel": "End time",
+                    "endTimeKey": "excludeWindowEndTime",
+                    "default": {
+                      "excludeWindowStartTime": "",
+                      "excludeWindowEndTime": ""
+                    },
+                    "options": {
+                      "omitSeconds": true,
+                      "minuteStep": 1
+                    }
+                  }
+                ]
+              }
+            ]
           },
-          "required": false
-        },
-        {
-          "type": "timePicker",
-          "label": "Sync Starting At (Optional)",
-          "value": "syncStartAt",
-          "options": {
-            "omitSeconds": true,
-            "minuteStep": 15
-          },
-          "required": false,
-          "footerNote": "Note: Please specify time in UTC"
-        },
-        {
-          "type": "timeRangePicker",
-          "label": "Exclude window (Optional)",
-          "value": "excludeWindow",
-          "startTime": {
-            "label": "start time",
-            "value": "excludeWindowStartTime"
-          },
-          "endTime": {
-            "label": "end time",
-            "value": "excludeWindowEndTime"
-          },
-          "options": {
-            "omitSeconds": true,
-            "minuteStep": 1
-          },
-          "required": false,
-          "footerNote": "Note: Please specify time in UTC"
-        }
-      ]
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "OneTrust consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
+                  },
+                  "about RudderStack's OneTrust Consent Management feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Consent categories",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: C0001",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
+              },
+              {
+                "title": "Ketch consent purpose settings",
+                "note": [
+                  "Enter your Ketch purpose Id if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/ketch/"
+                  },
+                  "about RudderStack and Ketch Consent Manager integration."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Purpose ID",
+                    "note": "Input your Ketch purpose Id by pressing 'Enter' after each entry",
+                    "configKey": "ketchConsentPurposes",
+                    "tagKey": "purpose",
+                    "placeholder": "e.g: Marketing",
+                    "default": [
+                      {
+                        "purpose": ""
+                      }
+                    ]
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     },
-    {
-      "title": "Object Storage Configuration",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use RudderStack managed object storage",
-          "value": "useRudderStorage",
-          "default": false,
-          "footerNote": "Note: Only available for RudderStack managed data planes"
-        },
-        {
-          "type": "singleSelect",
-          "label": "Choose your Storage Provider",
-          "value": "bucketProvider",
-          "options": [
-            {
-              "name": "S3",
-              "value": "S3"
-            },
-            {
-              "name": "GCS",
-              "value": "GCS"
-            },
-            {
-              "name": "AZURE_BLOB",
-              "value": "AZURE_BLOB"
-            }
-          ],
-          "defaultOption": {
-            "name": "S3",
-            "value": "S3"
-          },
-          "required": true,
-          "preRequisiteField": {
-            "name": "useRudderStorage",
-            "selectedValue": false
-          }
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "bucketProvider",
-              "selectedValue": "S3"
-            },
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            }
-          ],
-          "label": "Staging S3 Storage Bucket Name",
-          "labelNote": "S3 Bucket to store data before loading into DeltaLake",
-          "value": "bucketName",
-          "regex": "^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
-          "regexErrorMessage": "Invalid Staging S3 Storage Bucket Name",
-          "required": true,
-          "placeholder": "e.g: s3-event-logs",
-          "footerNote": "Please make sure the bucket exists in your S3"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "bucketProvider",
-              "selectedValue": "GCS"
-            },
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            }
-          ],
-          "label": "Staging GCS Object Storage Bucket Name",
-          "labelNote": "GCS Bucket to store data before loading into DeltaLake",
-          "value": "bucketName",
-          "regex": "^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$",
-          "regexErrorMessage": "Invalid Staging GCS Object Storage Bucket Name",
-          "required": true,
-          "placeholder": "e.g: gcs-event-logs",
-          "footerNote": "Please make sure the bucket exists in your GCS"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "bucketProvider",
-              "selectedValue": "AZURE_BLOB"
-            },
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            }
-          ],
-          "label": "Staging Azure Blob Storage Container Name",
-          "labelNote": "Container to store data before loading into DeltaLake",
-          "value": "containerName",
-          "regex": "^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$",
-          "regexErrorMessage": "Invalid Staging Azure Blob Storage Container Name",
-          "required": true,
-          "placeholder": "e.g: azure-event-logs",
-          "footerNote": "Please make sure the container exists in your Azure Blob Storage"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            }
-          ],
-          "label": "Prefix",
-          "value": "prefix",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Prefix",
-          "required": false,
-          "placeholder": "e.g: rudder"
-        },
-        {
-          "type": "checkbox",
-          "label": "Use STS Tokens to copy staging files",
-          "value": "useSTSTokens",
-          "default": false,
-          "footerNote": "Note: This feature is only supported with databricks S3A client.",
-          "preRequisiteField": [
-            {
-              "name": "bucketProvider",
-              "selectedValue": "S3"
-            },
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            }
-          ]
-        },
-        {
-          "type": "checkbox",
-          "preRequisiteField": [
-            {
-              "name": "bucketProvider",
-              "selectedValue": "S3"
-            },
-            {
-              "name": "useSTSTokens",
-              "selectedValue": true
-            },
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            }
-          ],
-          "label": "Role Based Authentication",
-          "value": "roleBasedAuth",
-          "default": true
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "bucketProvider",
-              "selectedValue": "S3"
-            },
-            {
-              "name": "useSTSTokens",
-              "selectedValue": true
-            },
-            {
-              "name": "roleBasedAuth",
-              "selectedValue": true
-            },
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            }
-          ],
-          "label": "IAM Role ARN",
-          "value": "iamRoleARN",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Role ARN",
-          "required": true,
-          "placeholder": "e.g: arn:aws:iam::1234XXX89012:role/S3Access",
-          "footerURL": {
-            "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/",
-            "text": "Instructions for creating IAM Role"
-          }
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "bucketProvider",
-              "selectedValue": "S3"
-            },
-            {
-              "name": "useSTSTokens",
-              "selectedValue": true
-            },
-            {
-              "name": "roleBasedAuth",
-              "selectedValue": false
-            },
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            }
-          ],
-          "label": "AWS Access Key ID",
-          "value": "accessKeyID",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid AWS Access Key ID",
-          "required": true,
-          "placeholder": "e.g: access-key-id",
-          "secret": true
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "bucketProvider",
-              "selectedValue": "S3"
-            },
-            {
-              "name": "useSTSTokens",
-              "selectedValue": true
-            },
-            {
-              "name": "roleBasedAuth",
-              "selectedValue": false
-            },
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            }
-          ],
-          "label": "AWS Secret Access Key",
-          "value": "accessKey",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid AWS Secret Access Key",
-          "required": true,
-          "placeholder": "e.g: secret-access-key",
-          "secret": true
-        },
-        {
-          "type": "checkbox",
-          "preRequisiteField": [
-            {
-              "name": "bucketProvider",
-              "selectedValue": "S3"
-            },
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            }
-          ],
-          "label": "Enable Server Side Encryption For S3?",
-          "value": "enableSSE",
-          "default": false
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "bucketProvider",
-              "selectedValue": "AZURE_BLOB"
-            },
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            }
-          ],
-          "label": "Azure Blob Storage Account Name",
-          "value": "accountName",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid Azure Blob Storage Account Name",
-          "required": true,
-          "secret": true,
-          "placeholder": "e.g: account-name"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "bucketProvider",
-              "selectedValue": "AZURE_BLOB"
-            },
-            {
-              "name": "useSASTokens",
-              "selectedValue": false
-            },
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            }
-          ],
-          "label": "Azure Blob Storage Account Key",
-          "value": "accountKey",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid Azure Blob Storage Account Key",
-          "required": true,
-          "secret": true,
-          "placeholder": "e.g: account-key"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "bucketProvider",
-              "selectedValue": "AZURE_BLOB"
-            },
-            {
-              "name": "useSASTokens",
-              "selectedValue": true
-            },
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            }
-          ],
-          "label": "Azure Blob Storage SAS Token",
-          "value": "sasToken",
-          "regex": "^(.+)$",
-          "regexErrorMessage": "Invalid Azure Blob Storage SAS Token",
-          "required": true,
-          "placeholder": "e.g: sas-token",
-          "secret": true
-        },
-        {
-          "type": "checkbox",
-          "preRequisiteField": [
-            {
-              "name": "bucketProvider",
-              "selectedValue": "AZURE_BLOB"
-            },
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            }
-          ],
-          "label": "Use shared access signature (SAS) Tokens",
-          "value": "useSASTokens",
-          "default": false,
-          "footerNote": "Use this to Grant limited access to Azure Storage resources using shared access signatures (SAS)"
-        },
-        {
-          "type": "textareaInput",
-          "preRequisiteField": [
-            {
-              "name": "bucketProvider",
-              "selectedValue": "GCS"
-            },
-            {
-              "name": "useRudderStorage",
-              "selectedValue": false
-            }
-          ],
-          "label": "Credentials",
-          "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your Google Cloud Storage",
-          "value": "credentials",
-          "regex": ".*",
-          "required": true,
-          "secret": true,
-          "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'storage.objectCreator'"
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
       "fields": [
         {
           "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Consent Categories",
-          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
             {
-              "type": "textInput",
-              "placeholder": "C0001",
-              "value": "oneTrustCookieCategory",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category ID",
-              "required": false
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "default": "oneTrust",
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category ID’s",
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }
-  ]
+  }
 }

@@ -1,164 +1,235 @@
 {
-  "uiConfig": [
-    {
-      "title": "1. Connection Credentials",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "GCS Storage Bucket Name",
-          "labelNote": "GCS Bucket to store your event data",
-          "value": "bucketName",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$",
-          "regexErrorMessage": "Invalid Staging GCS Object Storage Bucket Name",
-          "required": true,
-          "placeholder": "e.g: gcs-event-logs",
-          "footerNote": "Please make sure the bucket exists in your GCS"
-        },
-        {
-          "type": "textInput",
-          "label": "Prefix",
-          "value": "prefix",
-          "labelNote": "If configured, all data pushed by rudderstack will be at https://storage.googleapis.com/<bucketName>/<prefix>/",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-          "regexErrorMessage": "Invalid Prefix",
-          "required": false,
-          "placeholder": "e.g: rudder"
-        },
-        {
-          "type": "textInput",
-          "label": "Namespace",
-          "labelNote": "Schema name for the warehouse where the tables are created",
-          "value": "namespace",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
-          "regexErrorMessage": "Invalid Namespace",
-          "required": false,
-          "placeholder": "e.g: RUDDER_NAMESPACE",
-          "footerNote": "All data for the destination would be pushed to https://storage.googleapis.com/<bucketName>/<prefix>/rudder-datalake/<namespace>."
-        },
-        {
-          "type": "textInput",
-          "label": "Table suffix (optional)",
-          "labelNote": "If configured, table data would be pushed to <table-name>/<table-suffix>",
-          "value": "tableSuffix",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
-          "regexErrorMessage": "Invalid Table suffix path",
-          "required": false,
-          "placeholder": "e.g: TABLE_SUFFIX_PATH"
-        },
-        {
-          "type": "singleSelect",
-          "label": "Choose time window layout",
-          "value": "timeWindowLayout",
-          "options": [
-            {
-              "name": "Default (YYYY/MM/DD/HH)",
-              "value": "2006/01/02/15"
-            },
-            {
-              "name": "Upto Date (dt=YYYY-MM-DD)",
-              "value": "dt=2006-01-02"
-            },
-            {
-              "name": "Upto Year (year=YYYY)",
-              "value": "year=2006"
-            },
-            {
-              "name": "Upto Month (year=YYYY/month=MM)",
-              "value": "year=2006/month=01"
-            },
-            {
-              "name": "Upto Day (year=YYYY/month=MM/day=DD)",
-              "value": "year=2006/month=01/day=02"
-            },
-            {
-              "name": "Upto Hour (year=YYYY/month=MM/day=DD/hour=HH)",
-              "value": "year=2006/month=01/day=02/hour=15"
-            }
-          ],
-          "defaultOption": {
-            "name": "Default (YYYY/MM/DD/HH)",
-            "value": "2006/01/02/15"
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial Setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "title": "Bucket Settings",
+            "note": "Update your bucket settings here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Bucket Settings",
+                "note": "Update your bucket settings here",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "GCS Storage Bucket Name",
+                    "note": [
+                      "GCS Bucket to store your event data, Please make sure the bucket exists in your GCS"
+                    ],
+                    "configKey": "bucketName",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$",
+                    "regexErrorMessage": "Invalid Bucket Name",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "GCS Prefix",
+                    "note": [
+                      "If configured, all data pushed by rudderstack will be at https://storage.googleapis.com/<bucketName>/<prefix>/"
+                    ],
+                    "configKey": "prefix",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Prefix",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Table suffix (optional)",
+                    "note": [
+                      "If configured, table data would be pushed to <table-name>/<table-suffix>/"
+                    ],
+                    "configKey": "tableSuffix",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
+                    "regexErrorMessage": "Invalid Table suffix path",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "GCP Service Account credentials JSON",
+                    "configKey": "credentials",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
+                    "note": [
+                      "Create a service account in your GCP Project for RudderStack with roles of 'storage.objectCreator'"
+                    ],
+                    "regexErrorMessage": "Invalid Credentials",
+                    "placeholder": "",
+                    "secret": true
+                  }
+                ]
+              }
+            ]
           },
-          "required": false
-        },
-        {
-          "type": "textareaInput",
-          "label": "Credentials",
-          "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your Google Cloud Storage",
-          "value": "credentials",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
-          "required": true,
-          "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'storage.objectCreator'"
-        },
-        {
-          "type": "singleSelect",
-          "label": "Sync Frequency",
-          "value": "syncFrequency",
-          "options": [
-            {
-              "name": "Every 30 minutes",
-              "value": "30"
-            },
-            {
-              "name": "Every 1 hour",
-              "value": "60"
-            },
-            {
-              "name": "Every 3 hours",
-              "value": "180"
-            },
-            {
-              "name": "Every 6 hours",
-              "value": "360"
-            },
-            {
-              "name": "Every 12 hours",
-              "value": "720"
-            },
-            {
-              "name": "Every 24 hours",
-              "value": "1440"
-            }
-          ],
-          "defaultOption": {
-            "name": "Every 30 minutes",
-            "value": "30"
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
           },
-          "required": false
-        },
-        {
-          "type": "timePicker",
-          "label": "Sync Starting At (Optional)",
-          "value": "syncStartAt",
-          "options": {
-            "omitSeconds": true,
-            "minuteStep": 15
-          },
-          "required": false,
-          "footerNote": "Note: Please specify time in UTC"
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Consent Categories",
-          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "C0001",
-              "value": "oneTrustCookieCategory",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category ID",
-              "required": false
-            }
-          ]
-        }
-      ]
+          {
+            "groups": [
+              {
+                "icon": "settings",
+                "note": "",
+                "title": "Namespace settings",
+                "callout": {
+                  "message": "Schema name for the warehouse where the tables are created",
+                  "type": "info"
+                },
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Namespace",
+                    "note": "Schema name for the warehouse where the tables are created,All data for the destination would be pushed to https://storage.googleapis.com/<bucketName>/<prefix>/rudder-datalake/<namespace>.",
+                    "configKey": "namespace",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+                    "regexErrorMessage": "Invalid Namespace",
+                    "placeholder": "e.g: RUDDER_NAMESPACE",
+                    "secret": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Advanced Settings",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Sync Frequency",
+                    "configKey": "syncFrequency",
+                    "placeholder": "e.g: Credit card visit",
+                    "options": [
+                      {
+                        "label": "Every 30 minutes",
+                        "value": "30"
+                      },
+                      {
+                        "label": "Every 1 hour",
+                        "value": "60"
+                      },
+                      {
+                        "label": "Every 3 hours",
+                        "value": "180"
+                      },
+                      {
+                        "label": "Every 6 hours",
+                        "value": "360"
+                      },
+                      {
+                        "label": "Every 12 hours",
+                        "value": "720"
+                      },
+                      {
+                        "label": "Every 24 hours",
+                        "value": "1440"
+                      }
+                    ],
+                    "default": "180"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose time window layout",
+                    "configKey": "timeWindowLayout",
+                    "options": [
+                      {
+                        "label": "Default (YYYY/MM/DD/HH)",
+                        "value": "2006/01/02/15"
+                      },
+                      {
+                        "label": "Upto Date (dt=YYYY-MM-DD)",
+                        "value": "dt=2006-01-02"
+                      },
+                      {
+                        "label": "Upto Year (year=YYYY)",
+                        "value": "year=2006"
+                      },
+                      {
+                        "label": "Upto Month (year=YYYY/month=MM)",
+                        "value": "year=2006/month=01"
+                      },
+                      {
+                        "label": "Upto Day (year=YYYY/month=MM/day=DD)",
+                        "value": "year=2006/month=01/day=02"
+                      },
+                      {
+                        "label": "Upto Hour (year=YYYY/month=MM/day=DD/hour=HH)",
+                        "value": "year=2006/month=01/day=02/hour=15"
+                      }
+                    ],
+                    "default": "2006/01/02/15"
+                  },
+                  {
+                    "type": "timePicker",
+                    "label": "Sync Starting At (Optional)",
+                    "note": "Please specify time in UTC",
+                    "configKey": "syncStartAt",
+                    "options": {
+                      "omitSeconds": true,
+                      "minuteStep": 15
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack’s OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     }
-  ]
+  }
 }

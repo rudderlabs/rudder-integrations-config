@@ -1,157 +1,233 @@
 {
-  "uiConfig": [
-    {
-      "title": "1. Connection Credentials",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Azure Blob Storage Container Name",
-          "labelNote": "Container to store your event data",
-          "value": "containerName",
-          "regex": "^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$",
-          "regexErrorMessage": "Invalid Staging Azure Blob Storage Container Name",
-          "required": true,
-          "placeholder": "e.g: azure-event-logs",
-          "footerNote": "Please make sure the container exists in your Azure Blob Storage"
-        },
-        {
-          "type": "textInput",
-          "label": "Prefix",
-          "value": "prefix",
-          "labelNote": "If configured, all data pushed by rudderstack will be at https://<account_name>.blob.core.windows.net/<container_name>/<prefix>/",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Prefix",
-          "required": false,
-          "placeholder": "e.g: rudder"
-        },
-        {
-          "type": "textInput",
-          "label": "Namespace",
-          "labelNote": "Schema name for the warehouse where the tables are created",
-          "value": "namespace",
-          "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
-          "regexErrorMessage": "Invalid Namespace",
-          "required": false,
-          "placeholder": "e.g: RUDDER_NAMESPACE",
-          "footerNote": "All data for the destination would be pushed to https://<account_name>.blob.core.windows.net/<container_name>/<prefix>/rudder-datalake/<namespace>."
-        },
-        {
-          "type": "textInput",
-          "label": "Azure Blob Storage Account Name",
-          "value": "accountName",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid Azure Blob Storage Account Name",
-          "required": true,
-          "placeholder": "e.g: account-name"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "useSASTokens",
-              "selectedValue": false
-            }
-          ],
-          "label": "Azure Blob Storage Account Key",
-          "value": "accountKey",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid Azure Blob Storage Account Key",
-          "required": true,
-          "secret": true,
-          "placeholder": "e.g: account-key"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "useSASTokens",
-              "selectedValue": true
-            }
-          ],
-          "label": "Azure Blob Storage SAS Token",
-          "value": "sasToken",
-          "regex": "^(.+)$",
-          "regexErrorMessage": "Invalid Azure Blob Storage SAS Token",
-          "required": true,
-          "placeholder": "e.g: sas-token",
-          "secret": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Use shared access signature (SAS) Tokens",
-          "value": "useSASTokens",
-          "default": false,
-          "footerNote": "Use this to Grant limited access to Azure Storage resources using shared access signatures (SAS)"
-        },
-        {
-          "type": "singleSelect",
-          "label": "Sync Frequency",
-          "value": "syncFrequency",
-          "options": [
-            {
-              "name": "Every 30 minutes",
-              "value": "30"
-            },
-            {
-              "name": "Every 1 hour",
-              "value": "60"
-            },
-            {
-              "name": "Every 3 hours",
-              "value": "180"
-            },
-            {
-              "name": "Every 6 hours",
-              "value": "360"
-            },
-            {
-              "name": "Every 12 hours",
-              "value": "720"
-            },
-            {
-              "name": "Every 24 hours",
-              "value": "1440"
-            }
-          ],
-          "defaultOption": {
-            "name": "Every 30 minutes",
-            "value": "30"
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial Setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "title": "Bucket Settings",
+            "note": "Update your bucket settings here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Bucket Settings",
+                "note": "Update your bucket settings here",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Azure Blob Storage Container Name",
+                    "note": [
+                      "Container to store your event data, Please make sure the container exists in your Azure Blob Storag"
+                    ],
+                    "configKey": "containerName",
+                    "regex": "^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$",
+                    "regexErrorMessage": "Invalid Container Name",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Prefix",
+                    "note": [
+                      "If configured, all data pushed by rudderstack will be at https://<account_name>.blob.core.windows.net/<container_name>/<prefix>/"
+                    ],
+                    "configKey": "prefix",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Prefix",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Azure Blob Storage Account Name",
+                    "note": [
+                      "If configured, all data pushed by rudderstack will be at https://<account_name>.blob.core.windows.net/<container_name>/<prefix>/"
+                    ],
+                    "configKey": "accountName",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Azure Blob Storage Account Name",
+                    "placeholder": "e.g: account-name",
+                    "secret": false
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Use shared access signature (SAS) Tokens",
+                    "note": "Use this to Grant limited access to Azure Storage resources using shared access signatures (SAS)",
+                    "configKey": "useSASTokens",
+                    "default": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Azure Blob Storage SAS Token",
+                    "configKey": "sasToken",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.+)$",
+                    "regexErrorMessage": "Invalid Azure Blob Storage SAS Token",
+                    "placeholder": "e.g: sas-token",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useSASTokens",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Azure Blob Storage Account Key",
+                    "configKey": "accountKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Azure Blob Storage Account Key",
+                    "placeholder": "e.g: account-key",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useSASTokens",
+                          "value": false
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
           },
-          "required": false
-        },
-        {
-          "type": "timePicker",
-          "label": "Sync Starting At (Optional)",
-          "value": "syncStartAt",
-          "options": {
-            "omitSeconds": true,
-            "minuteStep": 15
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
           },
-          "required": false,
-          "footerNote": "Note: Please specify time in UTC"
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Consent Categories",
-          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "C0001",
-              "value": "oneTrustCookieCategory",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category ID",
-              "required": false
-            }
-          ]
-        }
-      ]
+          {
+            "groups": [
+              {
+                "icon": "settings",
+                "note": "",
+                "title": "Namespace settings",
+                "callout": {
+                  "message": "Schema name for the warehouse where the tables are created",
+                  "type": "info"
+                },
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Namespace",
+                    "note": "Schema name for the warehouse where the tables are created,Default will be the source name",
+                    "configKey": "namespace",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+                    "regexErrorMessage": "Invalid Namespace",
+                    "placeholder": "e.g: iosSource",
+                    "secret": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Advanced Settings",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Sync Frequency",
+                    "configKey": "syncFrequency",
+                    "placeholder": "e.g: Credit card visit",
+                    "options": [
+                      {
+                        "label": "Every 30 minutes",
+                        "value": "30"
+                      },
+                      {
+                        "label": "Every 1 hour",
+                        "value": "60"
+                      },
+                      {
+                        "label": "Every 3 hours",
+                        "value": "180"
+                      },
+                      {
+                        "label": "Every 6 hours",
+                        "value": "360"
+                      },
+                      {
+                        "label": "Every 12 hours",
+                        "value": "720"
+                      },
+                      {
+                        "label": "Every 24 hours",
+                        "value": "1440"
+                      }
+                    ],
+                    "default": "180"
+                  },
+                  {
+                    "type": "timePicker",
+                    "label": "Sync Starting At (Optional)",
+                    "note": "Please specify time in UTC",
+                    "configKey": "syncStartAt",
+                    "options": {
+                      "omitSeconds": true,
+                      "minuteStep": 15
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack’s OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     }
-  ]
+  }
 }

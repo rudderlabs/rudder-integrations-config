@@ -1,172 +1,238 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Credentials",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Project",
-          "labelNote": "GCP Project ID where your BigQuery database is located",
-          "value": "project",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Project",
-          "placeholder": "my-sample-project-19XX23",
-          "required": true
-        },
-        {
-          "type": "textInput",
-          "label": "Location",
-          "labelNote": "GCP region for your BigQuery datasets",
-          "value": "location",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Location",
-          "placeholder": "US, EU, asia-southeast1",
-          "required": false,
-          "footerNote": "Examples: US, EU, asia-south1"
-        },
-        {
-          "type": "textInput",
-          "label": "Staging GCS Storage Bucket Name",
-          "labelNote": "GCS Bucket to store data before loading into BigQuery",
-          "value": "bucketName",
-          "regex": "^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$",
-          "regexErrorMessage": "Invalid Staging GCS Storage Bucket Name",
-          "placeholder": "e.g: gcs-event-logs",
-          "required": true,
-          "footerNote": "Please make sure the bucket exists in your GCP Project in the same region as bigquery dataset"
-        },
-        {
-          "type": "textInput",
-          "label": "Prefix",
-          "value": "prefix",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Prefix",
-          "required": false,
-          "placeholder": "e.g: ruddder"
-        },
-        {
-          "type": "textInput",
-          "label": "Namespace",
-          "labelNote": "Schema name for the warehouse where the tables are created",
-          "value": "namespace",
-          "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
-          "regexErrorMessage": "Invalid Namespace",
-          "required": false,
-          "placeholder": "eg: dataset name",
-          "footerNote": "Default will be the source name"
-        },
-        {
-          "type": "textareaInput",
-          "subType": "JSON",
-          "label": "Credentials",
-          "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your BigQuery database",
-          "value": "credentials",
-          "regex": ".*",
-          "required": true,
-          "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'BigQuery User'",
-          "secret": true
-        },
-        {
-          "type": "singleSelect",
-          "label": "Sync Frequency",
-          "value": "syncFrequency",
-          "options": [
-            {
-              "name": "Every 30 minutes",
-              "value": "30"
-            },
-            {
-              "name": "Every 1 hour",
-              "value": "60"
-            },
-            {
-              "name": "Every 3 hours",
-              "value": "180"
-            },
-            {
-              "name": "Every 6 hours",
-              "value": "360"
-            },
-            {
-              "name": "Every 12 hours",
-              "value": "720"
-            },
-            {
-              "name": "Every 24 hours",
-              "value": "1440"
-            }
-          ],
-          "defaultOption": {
-            "name": "Every 30 minutes",
-            "value": "30"
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial Setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "title": "Connection settings",
+            "note": "Configure connection settings here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Connection Credentials",
+                "note": "Update your connection credentials here",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Project",
+                    "configKey": "project",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Project",
+                    "placeholder": "my-sample-project-19XX23",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Location",
+                    "configKey": "location",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Location",
+                    "placeholder": "US, EU, asia-southeast1",
+                    "secret": false
+                  }
+                ]
+              },
+              {
+                "title": "Object Storage Configuration",
+                "note": "Update where do you want the data staged to be stored",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Staging GCS Storage Bucket Name",
+                    "note": "Please make sure the bucket exists in your GCP Project in the same region as bigquery dataset",
+                    "configKey": "bucketName",
+                    "regex": "^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$",
+                    "regexErrorMessage": "Invalid Staging GCS Storage Bucket Name",
+                    "placeholder": "e.g: gcs-event-logs",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Prefix",
+                    "configKey": "prefix",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Prefix",
+                    "placeholder": "e.g: rudder",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "GCP Service Account credentials JSON",
+                    "configKey": "credentials",
+                    "regex": ".*",
+                    "note": [
+                      "Create a service account in your GCP Project for RudderStack with roles of 'BigQuery User'"
+                    ],
+                    "regexErrorMessage": "Invalid Credentials",
+                    "placeholder": "",
+                    "secret": true
+                  }
+                ]
+              }
+            ]
           },
-          "required": false
-        },
-        {
-          "type": "timePicker",
-          "label": "Sync Starting At (Optional)",
-          "value": "syncStartAt",
-          "options": {
-            "omitSeconds": true,
-            "minuteStep": 15
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
           },
-          "required": false,
-          "footerNote": "Note: Please specify time in UTC"
-        },
-        {
-          "type": "timeRangePicker",
-          "label": "Exclude window (Optional)",
-          "value": "excludeWindow",
-          "startTime": {
-            "label": "start time",
-            "value": "excludeWindowStartTime"
-          },
-          "endTime": {
-            "label": "end time",
-            "value": "excludeWindowEndTime"
-          },
-          "options": {
-            "omitSeconds": true,
-            "minuteStep": 1
-          },
-          "required": false,
-          "footerNote": "Note: Please specify time in UTC"
-        },
-        {
-          "type": "textInput",
-          "label": "JSON columns (Optional)",
-          "labelNote": "Specify required JSON properties in dot notation separated by commas",
-          "value": "jsonPaths",
-          "regex": "^(.*)$",
-          "placeholder": "e.g: testMap.nestedMap, testArray",
-          "required": false,
-          "footerURL": {
-            "link": "https://www.rudderstack.com/docs/destinations/warehouse-destinations/bigquery/#configuring-google-bigquery-destination-in-rudderstack",
-            "text": "Instructions for setting up the JSON columns"
+          {
+            "groups": [
+              {
+                "icon": "settings",
+                "note": "",
+                "title": "Namespace settings",
+                "callout": {
+                  "message": "Schema name for the warehouse where the tables are created",
+                  "type": "info"
+                },
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Namespace",
+                    "note": "Schema name for the warehouse where the tables are created,Default will be the source name",
+                    "configKey": "namespace",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+                    "regexErrorMessage": "Invalid Namespace",
+                    "placeholder": "e.g: iosSource",
+                    "secret": false
+                  }
+                ]
+              }
+            ]
           }
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Consent Categories",
-          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "C0001",
-              "value": "oneTrustCookieCategory",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category ID",
-              "required": false
-            }
-          ]
-        }
-      ]
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Advanced Settings",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Sync Frequency",
+                    "configKey": "syncFrequency",
+                    "placeholder": "e.g: Credit card visit",
+                    "options": [
+                      {
+                        "label": "Every 30 minutes",
+                        "value": "30"
+                      },
+                      {
+                        "label": "Every 1 hour",
+                        "value": "60"
+                      },
+                      {
+                        "label": "Every 3 hours",
+                        "value": "180"
+                      },
+                      {
+                        "label": "Every 6 hours",
+                        "value": "360"
+                      },
+                      {
+                        "label": "Every 12 hours",
+                        "value": "720"
+                      },
+                      {
+                        "label": "Every 24 hours",
+                        "value": "1440"
+                      }
+                    ],
+                    "default": "180"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "JSON columns (Optional)",
+                    "note": "Specify required JSON properties in dot notation separated by commas",
+                    "configKey": "jsonPaths",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.*)$",
+                    "regexErrorMessage": "Invalid Columns",
+                    "placeholder": "e.g: testMap.nestedMap, testArray",
+                    "secret": false
+                  },
+                  {
+                    "type": "timePicker",
+                    "label": "Sync Starting At (Optional)",
+                    "note": "Please specify time in UTC",
+                    "configKey": "syncStartAt",
+                    "options": {
+                      "omitSeconds": true,
+                      "minuteStep": 15
+                    }
+                  },
+                  {
+                    "type": "timeRangePicker",
+                    "label": "Exclude window (Optional)",
+                    "note": "Please specify time in UTC",
+                    "configKey": "excludeWindow",
+                    "startTimeLabel": "Start time",
+                    "startTimeKey": "excludeWindowStartTime",
+                    "endTimeLabel": "End time",
+                    "endTimeKey": "excludeWindowEndTime",
+                    "default": { "excludeWindowStartTime": "", "excludeWindowEndTime": "" },
+                    "options": {
+                      "omitSeconds": true,
+                      "minuteStep": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack’s OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     }
-  ]
+  }
 }

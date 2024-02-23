@@ -1,183 +1,287 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Credentials",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "S3 Storage Bucket Name",
-          "labelNote": "S3 Bucket to store your event data",
-          "value": "bucketName",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
-          "required": true,
-          "footerNote": "Please make sure the bucket exists in your S3"
-        },
-        {
-          "type": "checkbox",
-          "label": "Register schema on AWS Glue",
-          "value": "useGlue",
-          "default": false,
-          "footerNote": "We register the schema on AWS Glue's Data Catalog if this option is enabled"
-        },
-        {
-          "type": "textInput",
-          "label": "AWS Glue Region",
-          "labelNote": "Your AWS Glue region.Ex-For N.Virginia, this field's value would be 'us-east-1'",
-          "value": "region",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
-          "required": true,
-          "preRequisiteField": {
-            "name": "useGlue",
-            "selectedValue": true
-          }
-        },
-        {
-          "type": "textInput",
-          "label": "S3 Prefix",
-          "labelNote": "If configured, all data pushed by rudderstack will be at s3://<bucketName>/<prefix>/",
-          "value": "prefix",
-          "regex": ".*",
-          "required": false,
-          "placeholder": ""
-        },
-        {
-          "type": "textInput",
-          "label": "Namespace",
-          "value": "namespace",
-          "labelNote": "Defaults to source name.",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
-          "required": false,
-          "footerNote": "All data for the destination would be pushed to s3://<bucketName>/<prefix>/rudder-datalake/<namespace>.If glue is enabled, all table definitions are created in a database with name set to namespace."
-        },
-        {
-          "type": "checkbox",
-          "label": "Role Based Authentication",
-          "value": "roleBasedAuth",
-          "default": true
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "roleBasedAuth",
-              "selectedValue": true
-            }
-          ],
-          "label": "IAM Role ARN",
-          "value": "iamRoleARN",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "regexErrorMessage": "Invalid Role ARN",
-          "required": true,
-          "placeholder": "e.g: arn:aws:iam::12345X789012:role/S3Access",
-          "footerURL": {
-            "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/",
-            "text": "Instructions for creating IAM Role"
-          }
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "roleBasedAuth",
-              "selectedValue": false
-            }
-          ],
-          "label": "AWS Access Key ID",
-          "value": "accessKeyID",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
-          "required": false,
-          "placeholder": "e.g: access-key-id",
-          "secret": true
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "roleBasedAuth",
-              "selectedValue": false
-            }
-          ],
-          "label": "AWS Secret Access Key",
-          "value": "accessKey",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
-          "required": false,
-          "placeholder": "e.g: secret-access-key",
-          "secret": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Enable Server Side Encryption For S3?",
-          "value": "enableSSE",
-          "default": false
-        },
-        {
-          "type": "singleSelect",
-          "label": "Sync Frequency",
-          "value": "syncFrequency",
-          "options": [
-            {
-              "name": "Every 30 minutes",
-              "value": "30"
-            },
-            {
-              "name": "Every 1 hour",
-              "value": "60"
-            },
-            {
-              "name": "Every 3 hours",
-              "value": "180"
-            },
-            {
-              "name": "Every 6 hours",
-              "value": "360"
-            },
-            {
-              "name": "Every 12 hours",
-              "value": "720"
-            },
-            {
-              "name": "Every 24 hours",
-              "value": "1440"
-            }
-          ],
-          "defaultOption": {
-            "name": "Every 30 minutes",
-            "value": "30"
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial Setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "title": "Bucket Settings",
+            "note": "Update your bucket settings here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Bucket Settings",
+                "note": "Update your bucket settings here",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "S3 Storage Bucket Name",
+                    "note": [
+                      "S3 Bucket to store your event data, Please make sure the bucket exists in your S3"
+                    ],
+                    "configKey": "bucketName",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$",
+                    "regexErrorMessage": "Invalid Bucket Name",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "S3 Prefix",
+                    "note": [
+                      "If configured, all data pushed by rudderstack will be at s3://<bucketName>/<prefix>/"
+                    ],
+                    "configKey": "prefix",
+                    "regex": ".*",
+                    "regexErrorMessage": "Invalid Prefix",
+                    "secret": false
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Role Based Authentication",
+                    "configKey": "roleBasedAuth",
+                    "default": true
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "IAM Role ARN",
+                    "configKey": "iamRoleARN",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Role ARN",
+                    "placeholder": "e.g: arn:aws:iam::123456789012:role/S3Access",
+                    "secret": false,
+                    "note": [
+                      {
+                        "text": "Instructions for creating IAM Role",
+                        "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/"
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "roleBasedAuth",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "AWS Access Key ID",
+                    "configKey": "accessKeyID",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid AWS Access Key ID",
+                    "placeholder": "e.g: access-key-id",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "roleBasedAuth",
+                          "value": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "AWS Secret Access Key",
+                    "configKey": "accessKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid AWS Secret Access Key",
+                    "placeholder": "e.g: access-secret-key-id",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "roleBasedAuth",
+                          "value": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Enable Server Side Encryption For S3",
+                    "configKey": "enableSSE",
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "roleBasedAuth",
+                          "value": false
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "Glue Configuration",
+                "note": "Update where do you want the data staged to be stored",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Register schema on AWS Glue",
+                    "configKey": "useGlue",
+                    "note": "We register the schema on AWS Glue's Data Catalog if this option is enabled",
+                    "default": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "AWS Glue Region",
+                    "note": "Your AWS Glue region.Ex-For N.Virginia, this field's value would be 'us-east-1'",
+                    "configKey": "region",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
+                    "regexErrorMessage": "Invalid Region",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useGlue",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
           },
-          "required": false
-        },
-        {
-          "type": "timePicker",
-          "label": "Sync Starting At (Optional)",
-          "value": "syncStartAt",
-          "options": {
-            "omitSeconds": true
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
           },
-          "required": false,
-          "footerNote": "Note: Please specify time in UTC"
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Consent Categories",
-          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "C0001",
-              "value": "oneTrustCookieCategory",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category ID",
-              "required": false
-            }
-          ]
-        }
-      ]
+          {
+            "groups": [
+              {
+                "icon": "settings",
+                "note": "",
+                "title": "Namespace settings",
+                "callout": {
+                  "message": "Schema name for the warehouse where the tables are created",
+                  "type": "info"
+                },
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Namespace",
+                    "note": "Schema name for the warehouse where the tables are created,Default will be the source name",
+                    "configKey": "namespace",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+                    "regexErrorMessage": "Invalid Namespace",
+                    "placeholder": "e.g: iosSource",
+                    "secret": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Advanced Settings",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Sync Frequency",
+                    "configKey": "syncFrequency",
+                    "placeholder": "e.g: Credit card visit",
+                    "options": [
+                      {
+                        "label": "Every 30 minutes",
+                        "value": "30"
+                      },
+                      {
+                        "label": "Every 1 hour",
+                        "value": "60"
+                      },
+                      {
+                        "label": "Every 3 hours",
+                        "value": "180"
+                      },
+                      {
+                        "label": "Every 6 hours",
+                        "value": "360"
+                      },
+                      {
+                        "label": "Every 12 hours",
+                        "value": "720"
+                      },
+                      {
+                        "label": "Every 24 hours",
+                        "value": "1440"
+                      }
+                    ],
+                    "default": "180"
+                  },
+                  {
+                    "type": "timePicker",
+                    "label": "Sync Starting At (Optional)",
+                    "note": "Please specify time in UTC",
+                    "configKey": "syncStartAt",
+                    "options": {
+                      "omitSeconds": true,
+                      "minuteStep": 15
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack’s OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     }
-  ]
+  }
 }
