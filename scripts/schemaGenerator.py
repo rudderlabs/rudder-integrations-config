@@ -1837,51 +1837,81 @@ def update_ui_config_file(name, dir_path):
         ketch_consent_settings = False
         other_settings = None
         consent_settings = None
+        consent_settings_template = None
         base_template = ui_config["uiConfig"]["baseTemplate"]
 
-        # Search for existing consent settings sections
-        for template_entry in base_template:
-            if (
-                "title" in template_entry
-                and template_entry["title"] == "Configuration settings"
-            ):
-                configuration_settings = template_entry
-                for section in template_entry["sections"]:
+        for key in ui_config["uiConfig"]:
+            if key == "baseTemplate":
+                for template_entry in base_template:
+                    # Search for existing consent settings sections
                     if (
-                        not other_settings
-                        and "title" in section
-                        and section["title"] == "Other settings"
+                        "title" in template_entry
+                        and template_entry["title"] == "Configuration settings"
                     ):
-                        other_settings = section
-                        for group in section["groups"]:
+                        configuration_settings = template_entry
+                        for section in template_entry["sections"]:
                             if (
-                                "title" in group
-                                and group["title"] == "OneTrust consent settings"
+                                not other_settings
+                                and "title" in section
+                                and section["title"] == "Other settings"
                             ):
-                                one_trust_consent_settings_found = True
-                                one_trust_consent_settings = group
-                            elif (
-                                "title" in group
-                                and group["title"] == "Ketch consent settings"
-                            ):
-                                ketch_consent_settings_found = True
-                                ketch_consent_settings = group
+                                other_settings = section
+                                for group in section["groups"]:
+                                    if (
+                                        "title" in group
+                                        and group["title"]
+                                        == "OneTrust consent settings"
+                                    ):
+                                        one_trust_consent_settings_found = True
+                                        one_trust_consent_settings = group
+                                    elif (
+                                        "title" in group
+                                        and group["title"] == "Ketch consent settings"
+                                    ):
+                                        ketch_consent_settings_found = True
+                                        ketch_consent_settings = group
 
+                            if (
+                                not consent_settings
+                                and "title" in section
+                                and section["title"] == "Consent settings"
+                            ):
+                                consent_settings = section
+
+                        # Remove the existing consent settings sections
+                        if (
+                            one_trust_consent_settings_found
+                            and one_trust_consent_settings
+                        ):
+                            other_settings["groups"].remove(one_trust_consent_settings)
+
+                        # Remove the existing consent settings sections
+                        if ketch_consent_settings_found and ketch_consent_settings:
+                            other_settings["groups"].remove(ketch_consent_settings)
+            elif not consent_settings_template and key == "consentSettingsTemplate":
+                consent_settings_template = ui_config["uiConfig"][key]
+
+                for field in consent_settings_template["fields"]:
                     if (
-                        not consent_settings
-                        and "title" in section
-                        and section["title"] == "Consent settings"
+                        "label" in field
+                        and field["label"] == "OneTrust consent category IDs"
                     ):
-                        consent_settings = section
-                break
+                        one_trust_consent_settings = field
+                        one_trust_consent_settings_found = True
+                    elif (
+                        "label" in field
+                        and field["label"] == "Ketch consent purpose IDs"
+                    ):
+                        ketch_consent_settings = field
+                        ketch_consent_settings_found = True
 
-        # Remove the existing consent settings sections
-        if one_trust_consent_settings_found:
-            other_settings["groups"].remove(one_trust_consent_settings)
-
-        # Remove the existing consent settings sections
-        if ketch_consent_settings_found:
-            other_settings["groups"].remove(ketch_consent_settings)
+                # delete onetrust and ketch consent settings from the template
+                if one_trust_consent_settings_found and one_trust_consent_settings:
+                    consent_settings_template["fields"].remove(
+                        one_trust_consent_settings
+                    )
+                if ketch_consent_settings_found and ketch_consent_settings:
+                    consent_settings_template["fields"].remove(ketch_consent_settings)
 
         # Standard consent settings section with legacy fields
         new_consent_settings_section = {
@@ -1889,66 +1919,7 @@ def update_ui_config_file(name, dir_path):
             "title": "Consent settings",
             "note": "Configure consent settings for each provider here",
             "icon": "settings",
-            "groups": [
-                {
-                    "title": "OneTrust consent settings",
-                    "note": [
-                        "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-                        {
-                            "text": "Learn more ",
-                            "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/",
-                        },
-                        "about RudderStack's OneTrust Consent Management feature.",
-                    ],
-                    "fields": [
-                        {
-                            "type": "tagInput",
-                            "label": "Consent category IDs",
-                            "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
-                            "configKey": "oneTrustCookieCategories",
-                            "tagKey": "oneTrustCookieCategory",
-                            "placeholder": "e.g: C0001",
-                            "default": [{"oneTrustCookieCategory": ""}],
-                        }
-                    ],
-                    "preRequisites": {
-                        "featureFlags": [
-                            {"configKey": "AMP_enable-gcm", "value": False},
-                            {"configKey": "AMP_enable-gcm"},
-                        ],
-                        "featureFlagsCondition": "or",
-                    },
-                },
-                {
-                    "title": "Ketch consent settings",
-                    "note": [
-                        "Enter your Ketch consent purpose IDs if you have them configured.",
-                        {
-                            "text": "Learn more ",
-                            "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/ketch/",
-                        },
-                        "about RudderStack's Ketch Consent Management feature.",
-                    ],
-                    "fields": [
-                        {
-                            "type": "tagInput",
-                            "label": "Consent purpose IDs",
-                            "note": "Input your Ketch consent purpose IDs by pressing 'Enter' after each entry.",
-                            "configKey": "ketchConsentPurposes",
-                            "tagKey": "purpose",
-                            "placeholder": "e.g: marketing",
-                            "default": [{"purpose": ""}],
-                        }
-                    ],
-                    "preRequisites": {
-                        "featureFlags": [
-                            {"configKey": "AMP_enable-gcm", "value": False},
-                            {"configKey": "AMP_enable-gcm"},
-                        ],
-                        "featureFlagsCondition": "or",
-                    },
-                },
-            ],
+            "groups": [],
         }
 
         if not configuration_settings:
@@ -1976,6 +1947,53 @@ def update_ui_config_file(name, dir_path):
                     configuration_settings["sections"].remove(other_settings)
             else:
                 configuration_settings["sections"].append(new_consent_settings_section)
+
+        legacy_fields = [
+            {
+                "type": "tagInput",
+                "label": "OneTrust consent category IDs",
+                "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                "configKey": "oneTrustCookieCategories",
+                "tagKey": "oneTrustCookieCategory",
+                "placeholder": "e.g: C0001",
+                "default": [{"oneTrustCookieCategory": ""}],
+                "preRequisites": {
+                    "featureFlags": [
+                        {"configKey": "AMP_enable-gcm", "value": False},
+                        {"configKey": "AMP_enable-gcm"},
+                    ],
+                    "featureFlagsCondition": "or",
+                },
+            },
+            {
+                "type": "tagInput",
+                "label": "Ketch consent purpose IDs",
+                "note": "Input your Ketch consent purpose IDs by pressing 'Enter' after each entry.",
+                "configKey": "ketchConsentPurposes",
+                "tagKey": "purpose",
+                "placeholder": "e.g: marketing",
+                "default": [{"purpose": ""}],
+                "preRequisites": {
+                    "featureFlags": [
+                        {"configKey": "AMP_enable-gcm", "value": False},
+                        {"configKey": "AMP_enable-gcm"},
+                    ],
+                    "featureFlagsCondition": "or",
+                },
+            },
+        ]
+
+        if not consent_settings_template:
+            consent_settings_template = {
+                "title": "Consent settings",
+                "note": "not visible in the ui",
+                "fields": legacy_fields,
+            }
+            ui_config["uiConfig"]["consentSettingsTemplate"] = consent_settings_template
+        else:
+            legacy_fields.reverse()
+            for field in legacy_fields:
+                consent_settings_template["fields"].insert(0, field)
 
     with open(ui_config_file, "w") as f:
         f.write(get_formatted_json(ui_config))
