@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.66.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.65.0...v1.66.0) (2024-02-27)
+
+
+### Features
+
+* add event mapping support for branch destination ([#1238](https://github.com/rudderlabs/rudder-config-schema/issues/1238)) ([61e24c7](https://github.com/rudderlabs/rudder-config-schema/commit/61e24c78ff36b678f5fb1610e776885aebb39dbb))
+* added device mode support for flutter source for kochava destination ([bd8315a](https://github.com/rudderlabs/rudder-config-schema/commit/bd8315a0aa90d508fdc19cff0686b46a7b074222))
+
 ## [1.65.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.64.2...v1.65.0) (2024-02-20)
 
 
