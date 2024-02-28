@@ -222,5 +222,108 @@
     },
     "result": false,
     "err": ["eventFilteringOption must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "datasetId": "471828257250906",
+      "accessToken": "EABAKGVmm4FjBAKAHtWZB4er7fVTjFdJD33daH3ZB340qWk7Nv9MwZCOE0f27EKZA1LQxkQD8hQy1ZBb3SkIgeLcqZAbVtVXbpumoOtpqkP9fRqM0bZCeozeWkH3Y4TZCUpUeUsgKwGDqZB9QrrZCGwRcF9YZAvPDjZAT0YJjWNWQCKhnMQ2OEnrjtJmJgsWDicELxEAZD",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "datasetId": "471828257250906",
+      "accessToken": "EABAKGVmm4FjBAKAHtWZB4er7fVTjFdJD33daH3ZB340qWk7Nv9MwZCOE0f27EKZA1LQxkQD8hQy1ZBb3SkIgeLcqZAbVtVXbpumoOtpqkP9fRqM0bZCeozeWkH3Y4TZCUpUeUsgKwGDqZB9QrrZCGwRcF9YZAvPDjZAT0YJjWNWQCKhnMQ2OEnrjtJmJgsWDicELxEAZD",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "datasetId": "471828257250906",
+      "accessToken": "EABAKGVmm4FjBAKAHtWZB4er7fVTjFdJD33daH3ZB340qWk7Nv9MwZCOE0f27EKZA1LQxkQD8hQy1ZBb3SkIgeLcqZAbVtVXbpumoOtpqkP9fRqM0bZCeozeWkH3Y4TZCUpUeUsgKwGDqZB9QrrZCGwRcF9YZAvPDjZAT0YJjWNWQCKhnMQ2OEnrjtJmJgsWDicELxEAZD",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "datasetId": "471828257250906",
+      "accessToken": "EABAKGVmm4FjBAKAHtWZB4er7fVTjFdJD33daH3ZB340qWk7Nv9MwZCOE0f27EKZA1LQxkQD8hQy1ZBb3SkIgeLcqZAbVtVXbpumoOtpqkP9fRqM0bZCeozeWkH3Y4TZCUpUeUsgKwGDqZB9QrrZCGwRcF9YZAvPDjZAT0YJjWNWQCKhnMQ2OEnrjtJmJgsWDicELxEAZD",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "datasetId": "471828257250906",
+      "accessToken": "EABAKGVmm4FjBAKAHtWZB4er7fVTjFdJD33daH3ZB340qWk7Nv9MwZCOE0f27EKZA1LQxkQD8hQy1ZBb3SkIgeLcqZAbVtVXbpumoOtpqkP9fRqM0bZCeozeWkH3Y4TZCUpUeUsgKwGDqZB9QrrZCGwRcF9YZAvPDjZAT0YJjWNWQCKhnMQ2OEnrjtJmJgsWDicELxEAZD",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]
