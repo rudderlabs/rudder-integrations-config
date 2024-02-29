@@ -1,11 +1,12 @@
 {
-  "name": "BRANCH",
-  "displayName": "Branch Metrics",
+  "name": "NINETAILED",
+  "displayName": "Ninetailed",
   "config": {
-    "transformAtV1": "processor",
+    "cdkV2Enabled": true,
+    "transformAtV1": "router",
     "saveDestinationResponse": true,
     "includeKeys": [
-      "branchKey",
+      "environment",
       "blacklistedEvents",
       "whitelistedEvents",
       "eventFilteringOption",
@@ -13,9 +14,9 @@
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
-      "android",
-      "ios",
       "web",
+      "ios",
+      "android",
       "unity",
       "amp",
       "cloud",
@@ -26,35 +27,38 @@
       "shopify"
     ],
     "supportedMessageTypes": {
-      "cloud": ["identify", "track"],
+      "cloud": ["identify", "track", "page"],
       "device": {
-        "android": ["identify", "track"],
-        "ios": ["identify", "track"]
+        "web": ["identify", "track", "page"]
       }
     },
     "supportedConnectionModes": {
-      "android": ["cloud", "device"],
-      "ios": ["cloud", "device"],
-      "web": ["cloud"],
+      "web": ["cloud", "device"],
+      "android": ["cloud"],
+      "ios": ["cloud"],
       "unity": ["cloud"],
       "amp": ["cloud"],
       "reactnative": ["cloud"],
       "flutter": ["cloud"],
       "cordova": ["cloud"],
-      "shopify": ["cloud"]
+      "shopify": ["cloud"],
+      "warehouse": ["cloud"],
+      "cloud": ["cloud"]
     },
     "destConfig": {
       "defaultConfig": [
-        "branchKey",
-        "eventsMapping",
+        "environment",
+        "organisationId",
         "blacklistedEvents",
         "whitelistedEvents",
         "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
-      "android": ["useNativeSDK"],
-      "ios": ["useNativeSDK"]
+      "web": ["useNativeSDK", "connectionMode"]
     },
-    "secretKeys": []
+    "secretKeys": ["organisationId"]
+  },
+  "options": {
+    "isBeta": true
   }
 }
