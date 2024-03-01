@@ -130,6 +130,56 @@
           "value": "ignoreDnt",
           "default": false,
           "footerNote": "If enabled, Mixpanel will ignore \"Do Not Track\" setting of browser"
+        },
+        {
+          "type": "checkbox",
+          "label": "Use Custom Page Event Name",
+          "value": "useUserDefinedPageEventName",
+          "default": false,
+          "footerNote": "Send custom event name in page call"
+        },
+        {
+          "type": "textInput",
+          "label": "Page Event Name Template",
+          "value": "userDefinedPageEventTemplate",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$",
+          "regexErrorMessage": "Invalid Page Event Name",
+          "required": true,
+          "default": "Viewed {{ category }} {{ name }} page",
+          "footerNote": "Assign a event name for your page calls. Text {{ }} will be replaced with event payload value",
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "useUserDefinedPageEventName",
+                "value": true
+              }
+            ]
+          }
+        },
+        {
+          "type": "checkbox",
+          "label": "Use Custom Screen Event Name",
+          "value": "useUserDefinedScreenEventName",
+          "default": false,
+          "footerNote": "Send custom event name in screen call"
+        },
+        {
+          "type": "textInput",
+          "label": "Screen Event Name Template",
+          "value": "userDefinedScreenEventTemplate",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$",
+          "regexErrorMessage": "Invalid Screen Event Name",
+          "required": true,
+          "default": "Viewed {{ category }} {{ name }} screen",
+          "footerNote": "Assign a event name for your screen calls. Text {{ }} will be replaced with event payload value",
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "useUserDefinedScreenEventName",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     },
