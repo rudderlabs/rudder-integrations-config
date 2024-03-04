@@ -81,6 +81,12 @@
                     }
                   },
                   {
+                    "type": "checkbox",
+                    "label": "Use location for Databricks",
+                    "configKey": "useCatalog",
+                    "default": false
+                  },
+                  {
                     "type": "textInput",
                     "label": "Catalog",
                     "configKey": "catalog",
@@ -88,7 +94,15 @@
                     "regexErrorMessage": "Invalid Catalog",
                     "placeholder": "e.g: iosCatalog",
                     "secret": false,
-                    "note": ["Catalog name where you organize your data assets"]
+                    "note": ["Catalog name where you organize your data assets"],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useCatalog",
+                          "value": true
+                        }
+                      ]
+                    }
                   }
                 ]
               },
@@ -237,7 +251,7 @@
                     "type": "checkbox",
                     "label": "Role Based Authentication",
                     "configKey": "roleBasedAuth",
-                    "default": false,
+                    "default": true,
                     "preRequisites": {
                       "fields": [
                         {

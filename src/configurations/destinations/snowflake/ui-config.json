@@ -51,13 +51,27 @@
                     "secret": false
                   },
                   {
+                    "type": "checkbox",
+                    "label": "Use Role for Snowflake",
+                    "configKey": "useRole",
+                    "default": false
+                  },
+                  {
                     "type": "textInput",
                     "label": "Role",
                     "configKey": "role",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
                     "regexErrorMessage": "Invalid Role",
                     "placeholder": "e.g: RUDDER_ROLE",
-                    "secret": false
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRole",
+                          "value": true
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "textInput",
@@ -195,7 +209,7 @@
                     "type": "checkbox",
                     "label": "Role Based Authentication",
                     "configKey": "roleBasedAuth",
-                    "default": false,
+                    "default": true,
                     "preRequisites": {
                       "fields": [
                         {
@@ -208,6 +222,12 @@
                         }
                       ]
                     }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Use Storage Integration for AWS",
+                    "configKey": "useStorageIntegration",
+                    "default": false
                   },
                   {
                     "type": "textInput",
@@ -232,6 +252,10 @@
                         {
                           "configKey": "cloudProvider",
                           "value": "AWS"
+                        },
+                        {
+                          "configKey": "useStorageIntegration",
+                          "value": true
                         }
                       ]
                     }

@@ -24,13 +24,27 @@
                     "secret": false
                   },
                   {
+                    "type": "checkbox",
+                    "label": "Use Location for BigQuery",
+                    "configKey": "useLocation",
+                    "default": false
+                  },
+                  {
                     "type": "textInput",
                     "label": "Location",
                     "configKey": "location",
                     "regex": "^(.{0,100})$",
                     "regexErrorMessage": "Invalid Location",
                     "placeholder": "US, EU, asia-southeast1",
-                    "secret": false
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useLocation",
+                          "value": true
+                        }
+                      ]
+                    }
                   }
                 ]
               },

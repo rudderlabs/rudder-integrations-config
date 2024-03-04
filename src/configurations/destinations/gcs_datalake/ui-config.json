@@ -37,6 +37,12 @@
                     "secret": false
                   },
                   {
+                    "type": "checkbox",
+                    "label": "Use Table Suffix for GCS Datalake",
+                    "configKey": "useTableSuffix",
+                    "default": false
+                  },
+                  {
                     "type": "textInput",
                     "label": "Table suffix (optional)",
                     "note": [
@@ -45,7 +51,15 @@
                     "configKey": "tableSuffix",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
                     "regexErrorMessage": "Invalid Table suffix path",
-                    "secret": false
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useTableSuffix",
+                          "value": true
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "textInput",
