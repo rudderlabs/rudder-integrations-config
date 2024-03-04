@@ -63,13 +63,27 @@
                     "secret": false
                   },
                   {
+                    "type": "checkbox",
+                    "label": "Use Prefix for BigQuery",
+                    "configKey": "usePrefix",
+                    "default": false
+                  },
+                  {
                     "type": "textInput",
                     "label": "Prefix",
                     "configKey": "prefix",
                     "regex": "^(.{0,100})$",
                     "regexErrorMessage": "Invalid Prefix",
                     "placeholder": "e.g: rudder",
-                    "secret": false
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "usePrefix",
+                          "value": true
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "textInput",

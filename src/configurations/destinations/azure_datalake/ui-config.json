@@ -26,6 +26,12 @@
                     "secret": false
                   },
                   {
+                    "type": "checkbox",
+                    "label": "Use Prefix for Azure Datalake",
+                    "configKey": "usePrefix",
+                    "default": false
+                  },
+                  {
                     "type": "textInput",
                     "label": "Prefix",
                     "note": [
@@ -34,7 +40,15 @@
                     "configKey": "prefix",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
                     "regexErrorMessage": "Invalid Prefix",
-                    "secret": false
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "usePrefix",
+                          "value": true
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "textInput",

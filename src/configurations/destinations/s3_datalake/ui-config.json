@@ -26,6 +26,12 @@
                     "secret": false
                   },
                   {
+                    "type": "checkbox",
+                    "label": "Use Prefix for S3 Datalake",
+                    "configKey": "usePrefix",
+                    "default": false
+                  },
+                  {
                     "type": "textInput",
                     "label": "S3 Prefix",
                     "note": [
@@ -34,7 +40,15 @@
                     "configKey": "prefix",
                     "regex": ".*",
                     "regexErrorMessage": "Invalid Prefix",
-                    "secret": false
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "usePrefix",
+                          "value": true
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "checkbox",
