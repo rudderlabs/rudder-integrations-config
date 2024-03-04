@@ -82,7 +82,7 @@
                   },
                   {
                     "type": "checkbox",
-                    "label": "Use location for Databricks",
+                    "label": "Use catalog for Databricks",
                     "configKey": "useCatalog",
                     "default": false
                   },
@@ -90,7 +90,7 @@
                     "type": "textInput",
                     "label": "Catalog",
                     "configKey": "catalog",
-                    "regex": "^(.*)$",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid Catalog",
                     "placeholder": "e.g: iosCatalog",
                     "secret": false,
@@ -168,13 +168,21 @@
                     "type": "checkbox",
                     "label": "Use Prefix for Deltalake",
                     "configKey": "usePrefix",
-                    "default": false
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "textInput",
                     "label": "Prefix",
                     "configKey": "prefix",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid Prefix",
                     "placeholder": "e.g: rudder",
                     "secret": false,
@@ -416,7 +424,7 @@
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid Azure Blob Storage Account Name",
                     "placeholder": "e.g: account-name",
-                    "secret": false,
+                    "secret": true,
                     "preRequisites": {
                       "fields": [
                         {

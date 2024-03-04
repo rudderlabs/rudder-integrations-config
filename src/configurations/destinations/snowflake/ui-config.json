@@ -60,7 +60,7 @@
                     "type": "textInput",
                     "label": "Role",
                     "configKey": "role",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid Role",
                     "placeholder": "e.g: RUDDER_ROLE",
                     "secret": false,
@@ -124,15 +124,23 @@
                   },
                   {
                     "type": "checkbox",
-                    "label": "Use Prefix for RedShift",
+                    "label": "Use Prefix for Snowflake",
                     "configKey": "usePrefix",
-                    "default": false
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "textInput",
                     "label": "Prefix",
                     "configKey": "prefix",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid Prefix",
                     "placeholder": "e.g: rudder",
                     "secret": false,
@@ -237,13 +245,25 @@
                     "type": "checkbox",
                     "label": "Use Storage Integration for AWS",
                     "configKey": "useStorageIntegration",
-                    "default": false
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useRudderStorage",
+                          "value": false
+                        },
+                        {
+                          "configKey": "cloudProvider",
+                          "value": "AWS"
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "textInput",
                     "label": "Storage Integration",
                     "configKey": "storageIntegration",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid Storage Integration",
                     "placeholder": "e.g: aws_int",
                     "note": [
@@ -274,7 +294,7 @@
                     "type": "textInput",
                     "label": "Storage Integration",
                     "configKey": "storageIntegration",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid Storage Integration",
                     "placeholder": "e.g: gcs_int",
                     "note": [
@@ -301,7 +321,7 @@
                     "type": "textInput",
                     "label": "Storage Integration",
                     "configKey": "storageIntegration",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid Storage Integration",
                     "note": [
                       {
