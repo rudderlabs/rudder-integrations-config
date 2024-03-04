@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.66.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.66.0...v1.66.1) (2024-03-04)
+
+
+### Bug Fixes
+
+* amplitude fix for user operations ([#1249](https://github.com/rudderlabs/rudder-config-schema/issues/1249)) ([1581331](https://github.com/rudderlabs/rudder-config-schema/commit/1581331260b80fb93abf539b769ffdebe3312c84))
+
 ## [1.66.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.65.0...v1.66.0) (2024-02-27)
 
 
