@@ -36,9 +36,9 @@
 
 You need to install Python3.
 
-And then, install Python dependencies:
+And then, setup the project dependencies by running below command:
 
-`pip3 install -r ./scripts/requirements.txt`
+`npm run setup`
 
 Run below command to deploy integrations definitions config to database:
 
