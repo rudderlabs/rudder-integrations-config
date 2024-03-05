@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.67.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.66.1...v1.67.0) (2024-03-04)
+
+
+### Features
+
+* add mapping for event-event definition key in sfmc ([#1227](https://github.com/rudderlabs/rudder-config-schema/issues/1227)) ([635f5cc](https://github.com/rudderlabs/rudder-config-schema/commit/635f5cc7ff14528306b7f28de0e1555a6301bb33))
+* add support of custom page/screen event name in mixpanel ([#1228](https://github.com/rudderlabs/rudder-config-schema/issues/1228)) ([0db6823](https://github.com/rudderlabs/rudder-config-schema/commit/0db6823ce429900e22b310945c088d6a165feea5))
+* add v2 toggle for google ads for ecom spec support ([#1204](https://github.com/rudderlabs/rudder-config-schema/issues/1204)) ([af30138](https://github.com/rudderlabs/rudder-config-schema/commit/af30138e626664eb2899c0e2a050674220f3e608))
+* deprecate cdkV1 destination and onboard to cdkV2 ([#1244](https://github.com/rudderlabs/rudder-config-schema/issues/1244)) ([ef6bebf](https://github.com/rudderlabs/rudder-config-schema/commit/ef6bebf3511c0aef39fdbe0b5660a61d984b3cf2))
+* garl consent mode ([#1246](https://github.com/rudderlabs/rudder-config-schema/issues/1246)) ([7da2f81](https://github.com/rudderlabs/rudder-config-schema/commit/7da2f81c6d75a25e1ed9e51f72d3cc3429ec4384))
+* onboard new destination ninetailed ([#1211](https://github.com/rudderlabs/rudder-config-schema/issues/1211)) ([ef2045f](https://github.com/rudderlabs/rudder-config-schema/commit/ef2045fca0150640c39683cfe248205d422fe7cb))
+* remove categoryToContent mapping field for fb_pixel and fb_conversions ([#1248](https://github.com/rudderlabs/rudder-config-schema/issues/1248)) ([1cd665c](https://github.com/rudderlabs/rudder-config-schema/commit/1cd665cdae3a8bd7f292cdc18a824a1856c0f089))
+
+
+### Bug Fixes
+
+* gcm config for missed source types ([#1245](https://github.com/rudderlabs/rudder-config-schema/issues/1245)) ([1812a8c](https://github.com/rudderlabs/rudder-config-schema/commit/1812a8c7dae3b77290bba4c7af178bfa4fe9e2ed))
+* make accessToken required only for cloud mode ([#1233](https://github.com/rudderlabs/rudder-config-schema/issues/1233)) ([32e1d10](https://github.com/rudderlabs/rudder-config-schema/commit/32e1d10d059b9409f31c3d6c209a3c944b512465))
+
 ### [1.66.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.66.0...v1.66.1) (2024-03-04)
 
 
