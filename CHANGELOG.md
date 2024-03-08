@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.67.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.67.0...v1.67.1) (2024-03-08)
+
+
+### Bug Fixes
+
+* move assosiation to required field hs for retl connection ([#1262](https://github.com/rudderlabs/rudder-config-schema/issues/1262)) ([050a04a](https://github.com/rudderlabs/rudder-config-schema/commit/050a04acafe5b586cd2e58acca656a2359fd730d))
+
 ## [1.67.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.66.1...v1.67.0) (2024-03-04)
 
 
