@@ -1,332 +1,584 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Ecommerce event spec support for track events",
-          "value": "v2",
-          "default": true,
-          "footerURL": {
-            "link": "https://www.rudderstack.com/docs/event-spec/ecommerce-events-spec",
-            "text": "If enabled, track events follow the RudderStack ecommerce spec"
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "One click checkout",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Conversion ID",
+                    "configKey": "conversionID",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^AW-(.{0,100})$",
+                    "regexErrorMessage": "Invalid Conversion ID",
+                    "placeholder": "e.g: AW-412940"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": [],
+                "defaultConnectionModes": {
+                  "web": "device"
+                }
+              }
+            ]
           }
-        },
-        {
-          "type": "textInput",
-          "label": "Conversion ID",
-          "value": "conversionID",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^AW-(.{0,100})$",
-          "regexErrorMessage": "Invalid Conversion ID",
-          "required": true,
-          "placeholder": "e.g: AW-41X940"
-        },
-        {
-          "type": "dynamicSelectForm",
-          "label": "Mapping to trigger the Google Ads events for the respective events set here.",
-          "labelLeft": "Event Name",
-          "labelRight": "Google Ads Event",
-          "value": "eventMappingFromConfig",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "required": false,
-          "placeholderLeft": "e.g: Order Completed",
-          "placeholderRight": "e.g: Checkout",
-          "options": [
-            {
-              "name": "Lead",
-              "value": "Lead"
-            },
-            {
-              "name": "PageVisit",
-              "value": "PageVisit"
-            },
-            {
-              "name": "ViewCategory",
-              "value": "ViewCategory"
-            },
-            {
-              "name": "SignUp",
-              "value": "Signup"
-            },
-            {
-              "name": "WatchVideo",
-              "value": "WatchVideo"
-            },
-            {
-              "name": "Checkout",
-              "value": "Checkout"
-            },
-            {
-              "name": "Search",
-              "value": "Search"
-            },
-            {
-              "name": "AddToCart",
-              "value": "AddToCart"
-            },
-            {
-              "name": "Purchase",
-              "value": "purchase"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Track Events",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Track Conversions",
-          "value": "trackConversions",
-          "default": true
-        },
-        {
-          "preRequisiteField": [
-            {
-              "name": "trackConversions",
-              "selectedValue": true
-            }
-          ],
-          "type": "checkbox",
-          "label": "Enable Conversion Events Filtering",
-          "value": "enableConversionEventsFiltering",
-          "footerNote": "If enabled, specified list of events is considered as conversion events else all events is considered as conversion events",
-          "default": false
-        },
-        {
-          "preRequisiteField": [
-            {
-              "name": "trackConversions",
-              "selectedValue": true
-            },
-            {
-              "name": "enableConversionEventsFiltering",
-              "selectedValue": true
-            }
-          ],
-          "type": "dynamicCustomForm",
-          "label": "Events to Track Conversions",
-          "value": "eventsToTrackConversions",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Product Added"
-            }
-          ]
-        },
-        {
-          "type": "checkbox",
-          "label": "Track Dynamic Remarketing",
-          "value": "trackDynamicRemarketing",
-          "default": false
-        },
-        {
-          "preRequisiteField": [
-            {
-              "name": "trackDynamicRemarketing",
-              "selectedValue": true
-            }
-          ],
-          "type": "checkbox",
-          "label": "Enable Dynamic Remarketing Events Filtering",
-          "value": "enableDynamicRemarketingEventsFiltering",
-          "footerNote": "If enabled, specified list of events is considered as dynamic remarketing events else all the events is considered as dynamic remarketing events",
-          "default": false
-        },
-        {
-          "preRequisiteField": [
-            {
-              "name": "trackDynamicRemarketing",
-              "selectedValue": true
-            },
-            {
-              "name": "enableDynamicRemarketingEventsFiltering",
-              "selectedValue": true
-            }
-          ],
-          "type": "dynamicCustomForm",
-          "label": "Events to Track Dynamic Remarketing",
-          "value": "eventsToTrackDynamicRemarketing",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "required": false,
-              "placeholder": "e.g: Product Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
-        {
-          "type": "defaultCheckbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Goggle Ads Common Settings",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Ecommerce event spec support for track events",
+                    "configKey": "v2",
+                    "default": true,
+                    "note": [
+                      "If enabled, track events follow the RudderStack ecommerce spec. ",
+                      {
+                        "text": "Learn more",
+                        "link": "https://www.rudderstack.com/docs/event-spec/ecommerce-events-spec"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "DoubleClick Floodlight Advertiser ID",
+                    "note": [
+                      "Configure your DoubleClick Floodlight Advertiser ID to pass it to Gtag's config parameter to ensure tags are loaded by first-party cookies.",
+                      {
+                        "text": "Learn more",
+                        "link": "https://support.google.com/campaignmanager/answer/7554821?hl=en"
+                      }
+                    ],
+                    "configKey": "dcfaId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^DC-(.{0,100})$",
+                    "regexErrorMessage": "Invalid DoubleClick Floodlight Advertiser ID",
+                    "placeholder": "e.g: DC-12345"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Send Page View",
+                    "configKey": "sendPageView",
+                    "note": "To stop the global site tag from sending an automatic remarketing hit to your Google Ads accounts upon page view, you have the option to disable this feature.",
+                    "default": true
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Conversion Linker",
+                    "configKey": "conversionLinker",
+                    "note": "If you wish to prevent the global site tag from establishing first-party cookies on your site's domain, you should deactivate this setting.(Not recommended by Google)",
+                    "default": true
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Disable Ad Personalization",
+                    "configKey": "disableAdPersonalization",
+                    "note": [
+                      "Enable this setting to to disable the collection of remarketing data for users who do not wish to view personalized ads",
+                      {
+                        "text": "Learn more.",
+                        "link": "https://support.google.com/google-ads/answer/9606827?hl=en"
+                      }
+                    ],
+                    "default": false
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Allow Enhanced Conversions",
+                    "configKey": "allowEnhancedConversions",
+                    "note": [
+                      "Enable this setting to allow enhanced conversions.",
+                      {
+                        "text": "Learn the requirements to setup enhanced conversions beforehand.",
+                        "link": "https://support.google.com/google-ads/answer/13258081?hl=en-GB&visit_id=638454338885467899-1095037605&rd=1#Config&zippy=%2Cconfigure-your-conversion-page-google-tag"
+                      }
+                    ],
+                    "default": false
+                  }
+                ]
+              },
+              {
+                "title": "Conversion Events Setting",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Track Conversions",
+                    "configKey": "trackConversions",
+                    "default": true
+                  },
+                  {
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "trackConversions",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "type": "checkbox",
+                    "label": "Enable Conversion Events Filtering",
+                    "configKey": "enableConversionEventsFiltering",
+                    "note": "When enabled, only the specified list of events is considered as conversion events. Otherwise, all events will be considered as conversion events",
+                    "default": false
+                  },
+                  {
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "trackConversions",
+                          "value": true
+                        },
+                        {
+                          "configKey": "enableConversionEventsFiltering",
+                          "value": true
+                        }
+                      ],
+                      "condition": "and"
+                    },
+                    "type": "tagInput",
+                    "label": "Events to Track Conversions",
+                    "configKey": "eventsToTrackConversions",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Product Added"
+                  }
+                ]
+              },
+              {
+                "title": "Dynamic Remarketing Events Setting",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Track Dynamic Remarketing",
+                    "configKey": "trackDynamicRemarketing",
+                    "default": false
+                  },
+                  {
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "trackDynamicRemarketing",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "type": "checkbox",
+                    "label": "Enable Dynamic Remarketing Events Filtering",
+                    "configKey": "enableDynamicRemarketingEventsFiltering",
+                    "note": "When enabled, only the specified list of events is considered as dynamic remarketing events. Otherwise, all events will be considered as dynamic remarketing events",
+                    "default": false
+                  },
+                  {
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "trackDynamicRemarketing",
+                          "value": true
+                        },
+                        {
+                          "configKey": "enableDynamicRemarketingEventsFiltering",
+                          "value": true
+                        }
+                      ],
+                      "condition": "and"
+                    },
+                    "type": "tagInput",
+                    "label": "Events to Track Dynamic Remarketing",
+                    "configKey": "eventsToTrackDynamicRemarketing",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Product Added"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Client-side event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.webDevice",
+                      "value": true
+                    },
+                    {
+                      "configKey": "connectionModes.mobileDevice",
+                      "value": true
+                    }
+                  ],
+                  "condition": "or"
+                },
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on events filtering:",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
+                      {
+                        "label": "No events filtering",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack’s OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Marketing",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
           }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
+        ]
+      },
+      {
+        "title": "Event mapping",
+        "note": "RudderStack to Google Ads mappings",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Google Ads Conversion Events mapping",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "trackConversions",
+                      "value": true
+                    }
+                  ]
+                },
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "conversionEventMapping",
+                    "label": "Map Google Ads conversion label with Rudderstack event",
+                    "note": "Mapping applies exclusively to conversion events",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "trackConversions",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "Google Ads Dynamic Remarketing Events mapping",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "trackDynamicRemarketing",
+                      "value": true
+                    }
+                  ]
+                },
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "dynamicRemarketingEventMapping",
+                    "label": "Mapping to trigger the Rudderstack events with standard Google Ads events",
+                    "note": "Mapping applies exclusively to dynamic remarketing events. If no mapping is provided, RudderStack will directly send the event name to Google Ads.",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "trackDynamicRemarketing",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+
+              {
+                "title": "Google Ads Page Events mapping",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.webDevice",
+                      "value": true
+                    }
+                  ]
+                },
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "pageLoadConversionMapping",
+                    "label": "Mapping to trigger the page load conversion events",
+                    "note": "Mapping is related to page load conversion events",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.webDevice",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     },
-    {
-      "title": "Configure Page Load Conversion",
-      "fields": [
-        {
-          "type": "dynamicForm",
-          "labelLeft": "Conversion Label",
-          "labelRight": "Name",
-          "keyLeft": "conversionLabel",
-          "keyRight": "name",
-          "placeholderLeft": "bpg3CMiIjXXXELXBp8wC",
-          "placeholderRight": "name",
-          "value": "pageLoadConversions"
-        },
-        {
-          "type": "textInput",
-          "label": "Default Conversion Label",
-          "value": "defaultPageConversion",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-          "regexErrorMessage": "Invalid Default Conversion Label",
-          "required": false,
-          "placeholder": "e.g: bpg3CMiIjXXXELXBp8wC"
-        }
-      ]
-    },
-    {
-      "title": "Click Event Conversion",
-      "fields": [
-        {
-          "type": "dynamicForm",
-          "labelLeft": "Conversion Label",
-          "labelRight": "Name",
-          "keyLeft": "conversionLabel",
-          "keyRight": "name",
-          "placeholderLeft": "bpg3CMiIjXXXELXBp8wC",
-          "placeholderRight": "name",
-          "value": "clickEventConversions"
-        }
-      ]
-    },
-    {
-      "title": "Additional Settings",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Send Page View",
-          "value": "sendPageView",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Conversion Linker",
-          "value": "conversionLinker",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Disable Ad Personalization",
-          "value": "disableAdPersonalization",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Send Event Label As conversion for Conversion Events",
-          "value": "enableConversionLabel",
-          "footerNote": "If enabled, all the conversion events label will be kept as conversion else it will be respective event name",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Allow Enhanced Conversions",
-          "value": "allowEnhancedConversions",
-          "default": false
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Consent Categories",
-          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "C0001",
-              "value": "oneTrustCookieCategory",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category ID",
-              "required": false
-            }
-          ]
-        }
-      ]
+    "redirectGroups": {
+      "conversionEventMapping": {
+        "tabs": [
+          {
+            "name": "Conversion events mapping",
+            "fields": [
+              {
+                "type": "checkbox",
+                "label": "Send all conversion events name as conversion",
+                "configKey": "enableConversionLabel",
+                "note": "When enabled, all conversion events will be labeled as 'conversion'; otherwise, they will retain their respective event names",
+                "default": false
+              },
+              {
+                "type": "textInput",
+                "label": "Default Conversion Label",
+                "configKey": "defaultPageConversion",
+                "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                "regexErrorMessage": "Invalid Default Conversion Label",
+                "placeholder": "e.g: bpg3CMiIjLMBELXBp8wC",
+                "note": "If no mapping is specified for 'Map Google Ads conversion label with RudderStack event', RudderStack will default to using this field for the conversion label value, while setting the event name as 'Viewed a Page'"
+              },
+              {
+                "type": "mapping",
+                "label": "Map Google Ads conversion label with Rudderstack event",
+                "configKey": "clickEventConversions",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "Conversion Label",
+                    "placeholder": "e.g: bpg3CMiIjLMBELXBp8wC"
+                  },
+                  {
+                    "type": "textInput",
+                    "key": "to",
+                    "label": "Rudderstack Track Event Name",
+                    "placeholder": "e.g: Order Completed"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "dynamicRemarketingEventMapping": {
+        "tabs": [
+          {
+            "name": "Dynamic remarketing event mapping",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Mapping to trigger the Rudderstack events with standard Google Ads events",
+                "configKey": "eventMappingFromConfig",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "Event Name",
+                    "placeholder": "e.g: Order Completed"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "key": "to",
+                    "label": "Google Ads Standard Event",
+                    "placeholder": "e.g: Checkout",
+                    "options": [
+                      {
+                        "label": "Lead",
+                        "value": "Lead"
+                      },
+                      {
+                        "label": "PageVisit",
+                        "value": "PageVisit"
+                      },
+                      {
+                        "label": "ViewCategory",
+                        "value": "ViewCategory"
+                      },
+                      {
+                        "label": "SignUp",
+                        "value": "Signup"
+                      },
+                      {
+                        "label": "WatchVideo",
+                        "value": "WatchVideo"
+                      },
+                      {
+                        "label": "Checkout",
+                        "value": "Checkout"
+                      },
+                      {
+                        "label": "Search",
+                        "value": "Search"
+                      },
+                      {
+                        "label": "AddToCart",
+                        "value": "AddToCart"
+                      },
+                      {
+                        "label": "Purchase",
+                        "value": "Purchase"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "pageLoadConversionMapping": {
+        "tabs": [
+          {
+            "name": "Page Load Conversion mapping",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Mapping to trigger the page load conversion events",
+                "configKey": "pageLoadConversions",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "conversionLabel",
+                    "label": "Conversion Label",
+                    "placeholder": "bpg3CMiIjXXXELXBp8wC"
+                  },
+                  {
+                    "type": "textInput",
+                    "key": "name",
+                    "label": "Name",
+                    "placeholder": "placeholderRight"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     }
-  ]
+  }
 }
