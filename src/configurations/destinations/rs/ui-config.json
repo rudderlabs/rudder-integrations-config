@@ -90,8 +90,8 @@
             }
           ],
           "defaultOption": {
-            "name": "Every 30 minutes",
-            "value": "30"
+            "name": "Every 3 hours",
+            "value": "180"
           },
           "required": true
         },
@@ -124,19 +124,6 @@
           },
           "required": false,
           "footerNote": "Note: Please specify time in UTC"
-        },
-        {
-          "type": "textInput",
-          "label": "JSON columns (Optional)",
-          "labelNote": "Specify required JSON properties in dot notation separated by commas",
-          "value": "jsonPaths",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.*)$",
-          "placeholder": "e.g: testMap.nestedMap, testArray",
-          "required": false,
-          "footerURL": {
-            "link": "https://www.rudderstack.com/docs/destinations/warehouse-destinations/redshift/#configuring-redshift-destination-in-rudderstack",
-            "text": "Instructions for setting up the JSON columns"
-          }
         }
       ]
     },
@@ -262,6 +249,31 @@
           "preRequisiteField": {
             "name": "useRudderStorage",
             "selectedValue": false
+          }
+        }
+      ]
+    },
+    {
+      "title": "Advanced Settings",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Warehouse De-dupe",
+          "value": "preferAppend",
+          "footerNote": "Disable this toggle to move from Append to Merge operation. Switching from Append to Merge ensures 100% non-duplicate data, but would increase warehouse operations time significantly",
+          "default": true
+        },
+        {
+          "type": "textInput",
+          "label": "JSON columns (Optional)",
+          "labelNote": "Specify required JSON properties in dot notation separated by commas",
+          "value": "jsonPaths",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.*)$",
+          "placeholder": "e.g: testMap.nestedMap, testArray",
+          "required": false,
+          "footerURL": {
+            "link": "https://www.rudderstack.com/docs/destinations/warehouse-destinations/redshift/#configuring-redshift-destination-in-rudderstack",
+            "text": "Instructions for setting up the JSON columns"
           }
         }
       ]
