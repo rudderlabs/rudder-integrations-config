@@ -8,19 +8,18 @@
           {
             "groups": [
               {
-                "title": "Connection Settings",
+                "title": "Connection settings",
                 "note": "Update your connection settings here",
                 "icon": "settings",
                 "fields": [
                   {
                     "type": "textInput",
-                    "label": "API Key",
-                    "note": "Enter the API Key from your dynamic yield account. Get this in Settings -> API Keys",
-                    "configKey": "apiKey",
+                    "label": "Public Key",
+                    "note": "Public key from koala's workspace",
+                    "configKey": "publicKey",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-                    "regexErrorMessage": "Invalid API Key",
-                    "placeholder": "e.g: QuIUHRjXXXG2L7eZDZiPQU",
-                    "secret": true
+                    "regexErrorMessage": "Invalid Public Key",
+                    "placeholder": "e.g. pk_xxxxxx"
                   }
                 ]
               }
@@ -49,47 +48,28 @@
         "note": "Manage the settings for your destination",
         "sections": [
           {
-            "title": "Event level settings",
-            "note": "Configure your event level settings",
-            "groups": [
-              {
-                "title": "Identify settings",
-                "note": "Set how you are sending email",
-                "fields": [
-                  {
-                    "type": "checkbox",
-                    "label": "Hash Email",
-                    "note": "Enable this toggle to hash email, keep it disabled if you are sending hashed email",
-                    "configKey": "hashEmail",
-                    "default": false
-                  }
-                ]
-              }
-            ]
-          },
-          {
             "title": "Other settings",
             "note": "Configure advanced RudderStack features here",
             "icon": "otherSettings",
             "groups": [
               {
-                "title": "OneTrust consent settings",
+                "title": "OneTrust cookie consent settings",
                 "note": [
-                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  "Enter your OneTrust category names if you have them configured. ",
                   {
                     "text": "Learn more ",
-                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
                   },
-                  "about RudderStack's OneTrust Consent Management feature."
+                  "about RudderStack's OneTrust Consent Manager feature."
                 ],
                 "fields": [
                   {
                     "type": "tagInput",
-                    "label": "Consent categories",
-                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing 'Enter' after each entry",
                     "configKey": "oneTrustCookieCategories",
                     "tagKey": "oneTrustCookieCategory",
-                    "placeholder": "e.g: C0001",
+                    "placeholder": "e.g: Credit card visit",
                     "default": [
                       {
                         "oneTrustCookieCategory": ""
@@ -104,7 +84,7 @@
       }
     ],
     "sdkTemplate": {
-      "title": "Web SDK settings",
+      "title": "SDK settings",
       "note": "not visible in the ui",
       "fields": []
     }

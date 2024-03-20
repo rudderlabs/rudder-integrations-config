@@ -1,12 +1,10 @@
 {
-  "name": "GCS_DATALAKE",
-  "displayName": "Google Cloud Storage Datalake",
-  "category": "warehouse",
+  "name": "MOVABLE_INK",
+  "displayName": "Movable Ink",
   "config": {
-    "transformAtV1": "processor",
+    "cdkV2Enabled": true,
+    "transformAtV1": "router",
     "saveDestinationResponse": true,
-    "includeKeys": ["oneTrustCookieCategories"],
-    "excludeKeys": [],
     "supportedSourceTypes": [
       "android",
       "ios",
@@ -14,36 +12,34 @@
       "unity",
       "amp",
       "cloud",
+      "warehouse",
       "reactnative",
-      "cloudSource",
       "flutter",
       "cordova",
       "shopify"
     ],
+    "supportedMessageTypes": {
+      "cloud": ["identify", "track"]
+    },
     "supportedConnectionModes": {
       "android": ["cloud"],
       "ios": ["cloud"],
       "web": ["cloud"],
       "unity": ["cloud"],
       "amp": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"],
       "reactnative": ["cloud"],
       "flutter": ["cloud"],
       "cordova": ["cloud"],
       "shopify": ["cloud"]
     },
     "destConfig": {
-      "defaultConfig": [
-        "bucketName",
-        "prefix",
-        "namespace",
-        "tableSuffix",
-        "timeWindowLayout",
-        "credentials",
-        "syncFrequency",
-        "syncStartAt",
-        "oneTrustCookieCategories"
-      ]
+      "defaultConfig": ["endpoint", "accessKey", "accessSecret", "oneTrustCookieCategories"]
     },
-    "secretKeys": ["credentials"]
+    "secretKeys": ["accessKey", "accessSecret"]
+  },
+  "options": {
+    "isBeta": true
   }
 }
