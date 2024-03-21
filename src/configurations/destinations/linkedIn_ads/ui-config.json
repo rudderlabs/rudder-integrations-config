@@ -14,10 +14,19 @@
                 "fields": [
                   {
                     "type": "checkbox",
-                    "label": "Hash Data",
+                    "label": "Hash and Encode Data",
                     "configKey": "hashData",
                     "default": true,
-                    "note": "Disable it if you are sending hashed user email"
+                    "note": "Disable it if you are sending hashed and encoded user email"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Deduplication Key",
+                    "value": "deduplicationKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "required": false,
+                    "placeholder": "e.g: messageId",
+                    "footerNote": "By default, RudderStack will send messageId as the event_id field. You can utilize this input, to specify another field value sent via payload, to be used instead"
                   }
                 ]
               }
