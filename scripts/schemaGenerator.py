@@ -995,10 +995,10 @@ def generate_schema_properties(
                     properties[field["value"]] = generateFunction(
                         field, dbConfig, "value"
                     )
-                if field.get(
-                    "required", False
-                ) == True and is_field_present_in_default_config(
-                    field, dbConfig, "value"
+                if (
+                    field.get("required", False) == True
+                    and is_field_present_in_default_config(field, dbConfig, "value")
+                    and "preRequisiteField" not in field
                 ):
                     schemaObject["required"].append(field["value"])
     else:
