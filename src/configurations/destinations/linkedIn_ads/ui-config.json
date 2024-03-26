@@ -18,15 +18,6 @@
                     "configKey": "hashData",
                     "default": true,
                     "note": "Disable it if you are sending hashed and encoded user email"
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "Deduplication Key",
-                    "configKey": "deduplicationKey",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                    "required": false,
-                    "placeholder": "e.g: messageId",
-                    "footerNote": "By default, RudderStack will send messageId as the event_id field. You can utilize this input, to specify another field value sent via payload, to be used instead. For example if properties.eventId is mentioned, Rudderstack will map from message.properties.eventId"
                   }
                 ]
               }
@@ -54,6 +45,27 @@
         "title": "Configuration settings",
         "note": "Manage the settings for your destination",
         "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Optional configuration settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Deduplication Key",
+                    "configKey": "deduplicationKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "required": false,
+                    "placeholder": "e.g: messageId",
+                    "footerNote": "By default, RudderStack will send messageId as the event_id field. You can utilize this input, to specify another field value sent via payload, to be used instead. For example if properties.eventId is mentioned, Rudderstack will map from message.properties.eventId"
+                  }
+                ]
+              }
+            ]
+          },
           {
             "title": "Other settings",
             "note": "Configure advanced RudderStack features here",
