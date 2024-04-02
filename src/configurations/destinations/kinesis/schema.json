@@ -12,14 +12,8 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "roleBasedAuth": {
-        "type": "boolean",
-        "default": true
-      },
-      "useMessageId": {
-        "type": "boolean",
-        "default": false
-      },
+      "roleBasedAuth": { "type": "boolean", "default": true },
+      "useMessageId": { "type": "boolean", "default": false },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -31,16 +25,28 @@
             }
           }
         }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "android": { "type": "string", "enum": ["cloud"] },
+          "ios": { "type": "string", "enum": ["cloud"] },
+          "web": { "type": "string", "enum": ["cloud"] },
+          "unity": { "type": "string", "enum": ["cloud"] },
+          "amp": { "type": "string", "enum": ["cloud"] },
+          "reactnative": { "type": "string", "enum": ["cloud"] },
+          "flutter": { "type": "string", "enum": ["cloud"] },
+          "cordova": { "type": "string", "enum": ["cloud"] },
+          "shopify": { "type": "string", "enum": ["cloud"] },
+          "cloud": { "type": "string", "enum": ["cloud"] },
+          "warehouse": { "type": "string", "enum": ["cloud"] }
+        }
       }
     },
     "allOf": [
       {
         "if": {
-          "properties": {
-            "roleBasedAuth": {
-              "const": true
-            }
-          },
+          "properties": { "roleBasedAuth": { "const": true } },
           "required": ["roleBasedAuth"]
         },
         "then": {
@@ -49,20 +55,14 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "roleBasedAuth": {
-              "const": true
-            }
+            "roleBasedAuth": { "const": true }
           },
           "required": ["iamRoleARN", "roleBasedAuth"]
         }
       },
       {
         "if": {
-          "properties": {
-            "roleBasedAuth": {
-              "const": false
-            }
-          },
+          "properties": { "roleBasedAuth": { "const": false } },
           "required": ["roleBasedAuth"]
         },
         "then": {
@@ -75,9 +75,7 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "roleBasedAuth": {
-              "const": false
-            }
+            "roleBasedAuth": { "const": false }
           },
           "required": ["accessKeyID", "accessKey"]
         }

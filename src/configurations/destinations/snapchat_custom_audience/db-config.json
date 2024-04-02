@@ -3,21 +3,17 @@
   "displayName": "Snapchat Custom Audience",
   "config": {
     "supportsVisualMapper": true,
-    "auth": {
-      "type": "OAuth",
-      "role": "snapchat_custom_audience",
-      "rudderScopes": ["delivery"]
-    },
+    "auth": { "type": "OAuth", "role": "snapchat_custom_audience", "rudderScopes": ["delivery"] },
     "transformAtV1": "router",
     "saveDestinationResponse": true,
     "includeKeys": ["segmentId", "schema", "disableHashing", "oneTrustCookieCategories"],
     "excludeKeys": [],
     "supportedSourceTypes": ["cloud", "warehouse", "shopify"],
-    "supportedMessageTypes": {
-      "cloud": ["audiencelist"]
-    },
+    "supportedMessageTypes": { "cloud": ["audiencelist"] },
     "supportedConnectionModes": {
-      "shopify": ["cloud"]
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
     },
     "syncBehaviours": ["mirror"],
     "disableJsonMapper": true,
@@ -28,7 +24,10 @@
         "schema",
         "disableHashing",
         "oneTrustCookieCategories"
-      ]
+      ],
+      "cloud": ["connectionMode"],
+      "warehouse": ["connectionMode"],
+      "shopify": ["connectionMode"]
     },
     "secretKeys": ["segmentId"]
   }
