@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.69.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.68.1...v1.69.0) (2024-04-02)
+
+
+### Features
+
+* onboard new destination bloomreach ([#1273](https://github.com/rudderlabs/rudder-config-schema/issues/1273)) ([09e8e8f](https://github.com/rudderlabs/rudder-config-schema/commit/09e8e8f55ccf6d17ad6e929a82caaaa9677f4f7f))
+* onboarding linkedin conversion api ([#1274](https://github.com/rudderlabs/rudder-config-schema/issues/1274)) ([0fc0081](https://github.com/rudderlabs/rudder-config-schema/commit/0fc0081f512b2aece54ab4fbba82328f89911625))
+
+
+### Bug Fixes
+
+* ninetailed: modify page support ([#1293](https://github.com/rudderlabs/rudder-config-schema/issues/1293)) ([f0b1ca2](https://github.com/rudderlabs/rudder-config-schema/commit/f0b1ca256cfd7a28455ae88680b38147d1837c2f))
+* snap pixel: typo ([#1295](https://github.com/rudderlabs/rudder-config-schema/issues/1295)) ([c391320](https://github.com/rudderlabs/rudder-config-schema/commit/c391320a903b96ad793cb2ea248fd0d64128aa54))
+* snapchat conversion: add event level_complete ([#1299](https://github.com/rudderlabs/rudder-config-schema/issues/1299)) ([e82967f](https://github.com/rudderlabs/rudder-config-schema/commit/e82967f16967c441fb177ee35644f3af7eac6557))
+* support mapping for all standard events for snappixel ([#1290](https://github.com/rudderlabs/rudder-config-schema/issues/1290)) ([03516eb](https://github.com/rudderlabs/rudder-config-schema/commit/03516eb762e0ca5fe345d01cdfe45bca1161b8d0))
+
 ### [1.68.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.68.0...v1.68.1) (2024-03-21)
 
 ## [1.68.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.67.1...v1.68.0) (2024-03-18)
