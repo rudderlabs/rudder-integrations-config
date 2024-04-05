@@ -1,6 +1,6 @@
 {
   "name": "rudder-config-schema",
-  "version": "1.64.0",
+  "version": "1.68.1",
   "description": "",
   "main": "src/index.ts",
   "private": true,
@@ -15,7 +15,9 @@
     "url": "https://github.com/rudderlabs/rudder-config-schema.git"
   },
   "scripts": {
-    "setup": "npm ci",
+    "setup:python": "pip3 install -r ./scripts/requirements.txt",
+    "setup:npm": "npm ci",
+    "setup": "npm run setup:npm && npm run setup:python",
     "test": "jest --detectOpenHandles --coverage --notify --watchAll=false",
     "test:ci": "npm run test -- --silent --expand --maxWorkers=2",
     "test:silent": "npm run test -- --silent",
@@ -82,7 +84,7 @@
   },
   "lint-staged": {
     "*.{json,js,ts,md}": "prettier --write",
-    "*.{py}": "python3 -m black"
+    "*.py": "python3 -m black"
   },
   "config": {
     "commitizen": {

@@ -234,7 +234,7 @@
         "cdkEnabled": {
           "type": "boolean",
           "title": "CDK V1 Enabled",
-          "description": "Whether to use CDK V2 implementation for destination transformation.",
+          "description": "Whether to use CDK V1 implementation for destination transformation.",
           "default": false
         },
         "destConfig": {
@@ -281,6 +281,16 @@
           "title": "Secret Keys",
           "description": "The keys that are to be treated as secrets in the destination configuration.",
           "$comment": "In the UI, these fields will be masked and only allowed to be edited (not viewed) on the destination configuration page. Moreover, the values for these fields are stored in a separate database.",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "immutableKeys": {
+          "type": "array",
+          "title": "Immutable Keys",
+          "description": "The keys that are to be treated as Immutable in the destination configuration.",
+          "$comment": "In the UI, these fields can only be set in the creation flow and cannot be edited again.",
           "items": {
             "type": "string"
           },

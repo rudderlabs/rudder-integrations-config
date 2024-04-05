@@ -2,6 +2,94 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.68.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.68.0...v1.68.1) (2024-03-21)
+
+## [1.68.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.67.1...v1.68.0) (2024-03-18)
+
+
+### Features
+
+* custom environment slug ([#1275](https://github.com/rudderlabs/rudder-config-schema/issues/1275)) ([a856eef](https://github.com/rudderlabs/rudder-config-schema/commit/a856eef62d79dbf61fad3b9d84eb31d33f62b5ea))
+* onboard destination movable ink ([#1252](https://github.com/rudderlabs/rudder-config-schema/issues/1252)) ([c4bdb5e](https://github.com/rudderlabs/rudder-config-schema/commit/c4bdb5ee623765c7c18802628366ff02f2196782))
+* onboard new destination koala ([#1258](https://github.com/rudderlabs/rudder-config-schema/issues/1258)) ([37b7150](https://github.com/rudderlabs/rudder-config-schema/commit/37b7150736fe803b3c837f01a57a80ad53cbfede))
+* reviewed destinations for secret keys and updated configs accordingly ([#1268](https://github.com/rudderlabs/rudder-config-schema/issues/1268)) ([7289e5c](https://github.com/rudderlabs/rudder-config-schema/commit/7289e5c07e849f40ecc0700db733b48c9afc9364))
+
+
+### Bug Fixes
+
+* secret keys for destinations ([#1224](https://github.com/rudderlabs/rudder-config-schema/issues/1224)) ([6d1be08](https://github.com/rudderlabs/rudder-config-schema/commit/6d1be08238de2fa00e16d4bf4717ebd611e12341))
+* slack notifications ([#1260](https://github.com/rudderlabs/rudder-config-schema/issues/1260)) ([9800571](https://github.com/rudderlabs/rudder-config-schema/commit/9800571dcd81eab128dc7a3345a6dcb6645ed079))
+
+### [1.67.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.67.0...v1.67.1) (2024-03-08)
+
+
+### Bug Fixes
+
+* move assosiation to required field hs for retl connection ([#1262](https://github.com/rudderlabs/rudder-config-schema/issues/1262)) ([050a04a](https://github.com/rudderlabs/rudder-config-schema/commit/050a04acafe5b586cd2e58acca656a2359fd730d))
+
+## [1.67.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.66.1...v1.67.0) (2024-03-04)
+
+
+### Features
+
+* add mapping for event-event definition key in sfmc ([#1227](https://github.com/rudderlabs/rudder-config-schema/issues/1227)) ([635f5cc](https://github.com/rudderlabs/rudder-config-schema/commit/635f5cc7ff14528306b7f28de0e1555a6301bb33))
+* add support of custom page/screen event name in mixpanel ([#1228](https://github.com/rudderlabs/rudder-config-schema/issues/1228)) ([0db6823](https://github.com/rudderlabs/rudder-config-schema/commit/0db6823ce429900e22b310945c088d6a165feea5))
+* add v2 toggle for google ads for ecom spec support ([#1204](https://github.com/rudderlabs/rudder-config-schema/issues/1204)) ([af30138](https://github.com/rudderlabs/rudder-config-schema/commit/af30138e626664eb2899c0e2a050674220f3e608))
+* deprecate cdkV1 destination and onboard to cdkV2 ([#1244](https://github.com/rudderlabs/rudder-config-schema/issues/1244)) ([ef6bebf](https://github.com/rudderlabs/rudder-config-schema/commit/ef6bebf3511c0aef39fdbe0b5660a61d984b3cf2))
+* garl consent mode ([#1246](https://github.com/rudderlabs/rudder-config-schema/issues/1246)) ([7da2f81](https://github.com/rudderlabs/rudder-config-schema/commit/7da2f81c6d75a25e1ed9e51f72d3cc3429ec4384))
+* onboard new destination ninetailed ([#1211](https://github.com/rudderlabs/rudder-config-schema/issues/1211)) ([ef2045f](https://github.com/rudderlabs/rudder-config-schema/commit/ef2045fca0150640c39683cfe248205d422fe7cb))
+* remove categoryToContent mapping field for fb_pixel and fb_conversions ([#1248](https://github.com/rudderlabs/rudder-config-schema/issues/1248)) ([1cd665c](https://github.com/rudderlabs/rudder-config-schema/commit/1cd665cdae3a8bd7f292cdc18a824a1856c0f089))
+
+
+### Bug Fixes
+
+* gcm config for missed source types ([#1245](https://github.com/rudderlabs/rudder-config-schema/issues/1245)) ([1812a8c](https://github.com/rudderlabs/rudder-config-schema/commit/1812a8c7dae3b77290bba4c7af178bfa4fe9e2ed))
+* make accessToken required only for cloud mode ([#1233](https://github.com/rudderlabs/rudder-config-schema/issues/1233)) ([32e1d10](https://github.com/rudderlabs/rudder-config-schema/commit/32e1d10d059b9409f31c3d6c209a3c944b512465))
+
+### [1.66.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.66.0...v1.66.1) (2024-03-04)
+
+
+### Bug Fixes
+
+* amplitude fix for user operations ([#1249](https://github.com/rudderlabs/rudder-config-schema/issues/1249)) ([1581331](https://github.com/rudderlabs/rudder-config-schema/commit/1581331260b80fb93abf539b769ffdebe3312c84))
+
+## [1.66.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.65.0...v1.66.0) (2024-02-27)
+
+
+### Features
+
+* add event mapping support for branch destination ([#1238](https://github.com/rudderlabs/rudder-config-schema/issues/1238)) ([61e24c7](https://github.com/rudderlabs/rudder-config-schema/commit/61e24c78ff36b678f5fb1610e776885aebb39dbb))
+* added device mode support for flutter source for kochava destination ([bd8315a](https://github.com/rudderlabs/rudder-config-schema/commit/bd8315a0aa90d508fdc19cff0686b46a7b074222))
+
+## [1.65.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.64.2...v1.65.0) (2024-02-20)
+
+
+### Features
+
+* add connectionMode for all sourceTypes in dest def for selected destinations ([#1197](https://github.com/rudderlabs/rudder-config-schema/issues/1197)) ([dde686c](https://github.com/rudderlabs/rudder-config-schema/commit/dde686cc72e0ac7423487d566e8f9715cc43d24f))
+* add GCM to FB Pixel, GA, GMT, HobSpot, Redis, S3, Slack, VWO ([#1190](https://github.com/rudderlabs/rudder-config-schema/issues/1190)) ([f40d5cd](https://github.com/rudderlabs/rudder-config-schema/commit/f40d5cda403e39e149f132dc1ffc2d1efa50a186))
+* enabled sql model support for mysql ([#1222](https://github.com/rudderlabs/rudder-config-schema/issues/1222)) ([09bbe2a](https://github.com/rudderlabs/rudder-config-schema/commit/09bbe2a5d1f81c26dec71582fbb7069550e7c7af))
+* improve schema generator output ([#1191](https://github.com/rudderlabs/rudder-config-schema/issues/1191)) ([04e05b8](https://github.com/rudderlabs/rudder-config-schema/commit/04e05b89a7333291792fbb6e111388b5ff8b985f))
+* onboard new destination commandbar ([#1196](https://github.com/rudderlabs/rudder-config-schema/issues/1196)) ([daf9fa8](https://github.com/rudderlabs/rudder-config-schema/commit/daf9fa8256eed280bad04c0c109de3787e6262e0))
+* onboard trade desk real time conversions ([#1213](https://github.com/rudderlabs/rudder-config-schema/issues/1213)) ([0d9b8d7](https://github.com/rudderlabs/rudder-config-schema/commit/0d9b8d7ee45b6ba5c914aaca6c2c11474a7575e9))
+* onboarding bluecore integration ([#1182](https://github.com/rudderlabs/rudder-config-schema/issues/1182)) ([6d5e40f](https://github.com/rudderlabs/rudder-config-schema/commit/6d5e40fdb812aa4c46ea13cbae5f7eb696d0cc0c))
+* tiktok_offline_events added support for  all Standard  events ([#1216](https://github.com/rudderlabs/rudder-config-schema/issues/1216)) ([61d36fa](https://github.com/rudderlabs/rudder-config-schema/commit/61d36fa5db882f00d97dd9dc88b2f26a7d49a87a))
+
+
+### Bug Fixes
+
+* add support of placing properties at root in af ([#1203](https://github.com/rudderlabs/rudder-config-schema/issues/1203)) ([1859354](https://github.com/rudderlabs/rudder-config-schema/commit/185935467899222b8766c63c63b934d70410cc9a))
+* comscore schema ([#1217](https://github.com/rudderlabs/rudder-config-schema/issues/1217)) ([7faa64a](https://github.com/rudderlabs/rudder-config-schema/commit/7faa64acfe2fca20b75789f31b541dd33e7fde8c))
+
+### [1.64.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.64.1...v1.64.2) (2024-02-14)
+
+### [1.64.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.64.0...v1.64.1) (2024-02-13)
+
+
+### Bug Fixes
+
+* made hidden flase for trino source ([#1208](https://github.com/rudderlabs/rudder-config-schema/issues/1208)) ([977516e](https://github.com/rudderlabs/rudder-config-schema/commit/977516e568284b88da8b06201b736c98f345777b))
+
 ## [1.64.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.63.2...v1.64.0) (2024-02-05)
 
 
