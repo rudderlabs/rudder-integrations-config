@@ -1271,6 +1271,18 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                                 ),
                                 UserWarning,
                             )
+                    if (
+                        curUiType == "textInput"
+                        and field["value"] in schema["required"]
+                        and "regex" not in field
+                    ):
+                        warnings.warn(
+                            "For type:{} field:{} regex in ui-config and pattern in schema are mandatory for a required textInput \n".format(
+                                curUiType,
+                                field["value"],
+                            ),
+                            UserWarning,
+                        )
     else:
         baseTemplate = uiConfig.get("baseTemplate", [])
         sdkTemplate = uiConfig.get("sdkTemplate", {})
@@ -1309,6 +1321,18 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                                         ),
                                         UserWarning,
                                     )
+                            if (
+                                curUiType == "textInput"
+                                and field["configKey"] in schema["required"]
+                                and "regex" not in field
+                            ):
+                                warnings.warn(
+                                    "For type:{} field:{} regex in ui-config and pattern in schema are mandatory for a required textInput \n".format(
+                                        curUiType,
+                                        field["configKey"],
+                                    ),
+                                    UserWarning,
+                                )
 
         for field in sdkTemplate.get("fields", []):
             if "preRequisites" in field:
