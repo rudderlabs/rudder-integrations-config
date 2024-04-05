@@ -1,0 +1,175 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": [
+                  "Update your connection settings here.",
+                  {
+                    "text": "Follow this guide for detailed instructions on retrieving the required settings from Bloomreach.",
+                    "link": "https://documentation.bloomreach.com/engagement/reference/authentication"
+                  }
+                ],
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "API Base URL",
+                    "note": "URL of the Bloomreach instance",
+                    "configKey": "apiBaseUrl",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$|^$",
+                    "regexErrorMessage": "Invalid API Base URl",
+                    "placeholder": "e.g. https://demoapp-api.bloomreach.com"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "API Key",
+                    "note": "API Key from Project settings > Access management > API",
+                    "configKey": "apiKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid API Key",
+                    "placeholder": "e.g. eb3hb4***123",
+                    "secret": true
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "API Secret",
+                    "note": "API Secret from Project settings > Access management> API",
+                    "configKey": "apiSecret",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid API Secret",
+                    "placeholder": "e.g. 9p7v71***123",
+                    "secret": true
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Project Token",
+                    "note": "Project Token from Project settings > Access management> API",
+                    "configKey": "projectToken",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Project Token",
+                    "placeholder": "e.g. geu9qu-***-x0i983-***"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Hard ID",
+                    "note": "Enter the hard Id that will be used in Bloomreach to identify a customer. Most common one is `registered`. Make sure this id exist in your project",
+                    "configKey": "hardID",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Hard ID",
+                    "placeholder": "e.g. registered"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Soft ID",
+                    "note": "Enter the soft Id that will be used in Bloomreach to identify a customer. Most common one is `cookie`. Make sure this id exist in your project",
+                    "configKey": "softID",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Soft ID",
+                    "placeholder": "e.g. cookie"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "tagInput",
+          "label": "OneTrust consent category IDs",
+          "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+          "configKey": "oneTrustCookieCategories",
+          "tagKey": "oneTrustCookieCategory",
+          "placeholder": "e.g: C0001",
+          "default": [
+            {
+              "oneTrustCookieCategory": ""
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "tagInput",
+          "label": "Ketch consent purpose IDs",
+          "note": "Input your Ketch consent purpose IDs by pressing 'Enter' after each entry.",
+          "configKey": "ketchConsentPurposes",
+          "tagKey": "purpose",
+          "placeholder": "e.g: marketing",
+          "default": [
+            {
+              "purpose": ""
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        }
+      ]
+    }
+  }
+}

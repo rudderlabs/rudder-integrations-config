@@ -1,0 +1,211 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection Settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Hash and Encode Data",
+                    "configKey": "hashData",
+                    "default": true,
+                    "note": "Disable it if you are sending hashed and encoded user email"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding.",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Ad Account Settings",
+                "fields": [
+                  {
+                    "type": "dynamicDataSelect",
+                    "configKey": "adAccountId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Ad account Id is required",
+                    "label": "LinkedIn Ad Account Id",
+                    "placeholder": "e.g 1234567",
+                    "apiName": "adAccounts"
+                  }
+                ]
+              },
+              {
+                "title": "Optional configuration settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Deduplication Key",
+                    "configKey": "deduplicationKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "placeholder": "e.g: messageId",
+                    "note": "By default, RudderStack will send messageId as the event_id field. You can utilize this input, to specify another field value sent via payload, to be used instead. For example if properties.eventId is mentioned, Rudderstack will map from message.properties.eventId"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          }
+        ]
+      },
+      {
+        "title": "Event mapping",
+        "note": "Map RudderStack Events to Linkedin Ads Conversion",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "RudderStack Event name to Linkedin Ads Conversion Rule Id mappings",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "conversionMapping",
+                    "label": "Events mapping",
+                    "note": "Map RudderStack events to Linkedin Ads Conversion Rule Id"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "redirectGroups": {
+      "conversionMapping": {
+        "fields": [
+          {
+            "type": "dynamicCustomForm",
+            "label": "Map Rudderstack Events to Linkedin Advertising account conversion rules",
+            "configKey": "conversionMapping",
+            "rowFields": [
+              {
+                "type": "mappingRow",
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "configKey": "from",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Event name is required",
+                    "label": "RudderStack Event Name",
+                    "placeholder": "e.g Products Searched"
+                  },
+                  {
+                    "type": "dynamicDataSelect",
+                    "configKey": "to",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Conversion Rule is required",
+                    "label": "Linkedin Advertising Account Conversion Rule",
+                    "placeholder": "e.g Search",
+                    "apiName": "conversionRules"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "tagInput",
+          "label": "OneTrust consent category IDs",
+          "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+          "configKey": "oneTrustCookieCategories",
+          "tagKey": "oneTrustCookieCategory",
+          "placeholder": "e.g: C0001",
+          "default": [
+            {
+              "oneTrustCookieCategory": ""
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "tagInput",
+          "label": "Ketch consent purpose IDs",
+          "note": "Input your Ketch consent purpose IDs by pressing 'Enter' after each entry.",
+          "configKey": "ketchConsentPurposes",
+          "tagKey": "purpose",
+          "placeholder": "e.g: marketing",
+          "default": [
+            {
+              "purpose": ""
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        }
+      ]
+    }
+  }
+}

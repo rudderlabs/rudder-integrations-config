@@ -1153,6 +1153,18 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                                 ),
                                 UserWarning,
                             )
+                    if (
+                        curUiType == "textInput"
+                        and field["value"] in schema["required"]
+                        and "regex" not in field
+                    ):
+                        warnings.warn(
+                            "For type:{} field:{} regex in ui-config and pattern in schema are mandatory for a required textInput \n".format(
+                                curUiType,
+                                field["value"],
+                            ),
+                            UserWarning,
+                        )
     else:
         baseTemplate = uiConfig.get("baseTemplate", [])
         sdkTemplate = uiConfig.get("sdkTemplate", {})
@@ -1191,6 +1203,18 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                                         ),
                                         UserWarning,
                                     )
+                            if (
+                                curUiType == "textInput"
+                                and field["configKey"] in schema["required"]
+                                and "regex" not in field
+                            ):
+                                warnings.warn(
+                                    "For type:{} field:{} regex in ui-config and pattern in schema are mandatory for a required textInput \n".format(
+                                        curUiType,
+                                        field["configKey"],
+                                    ),
+                                    UserWarning,
+                                )
 
         for field in sdkTemplate.get("fields", []):
             if "preRequisites" in field:
@@ -1857,10 +1881,10 @@ def update_ui_config_file(name, dir_path):
                             ):
                                 other_settings = section
                                 for group in section["groups"]:
-                                    if (
-                                        "title" in group
-                                        and group["title"]
-                                        == "OneTrust consent settings"
+                                    if "title" in group and (
+                                        group["title"] == "OneTrust consent settings"
+                                        or group["title"]
+                                        == "OneTrust cookie consent settings"
                                     ):
                                         one_trust_consent_settings_found = True
                                         one_trust_consent_settings = group
