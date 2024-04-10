@@ -58,6 +58,16 @@
                   },
                   {
                     "type": "textInput",
+                    "label": "Property Id",
+                    "configKey": "propertyId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$|^$",
+                    "regexErrorMessage": "Invalid Measurement Id",
+                    "note": "Property is a numeric Google Analytics GA4 Property identifier. It is a unique identifier for a GA4 property. You can find this in the GA4 UI under Admin > Property > Property Details > Property ID",
+                    "placeholder": "e.g: 341372335",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
                     "preRequisites": {
                       "fields": [
                         {
@@ -320,6 +330,26 @@
             ]
           }
         ]
+      },
+      {
+        "title": "Advanced Mapping",
+        "note": "Map your source events to destination events and properties",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Custom Mapping",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "advancedMapping"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     ],
     "sdkTemplate": {
@@ -473,6 +503,90 @@
           }
         }
       ]
+    },
+    "redirectGroups": {
+      "advancedMapping": {
+        "tabs": [
+          {
+            "name": "Dimension and Metrics Mappings",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map RudderStack properties to GA4 dimenstions and metrics (Note: These can be overriden per event level mapping)",
+                "configKey": "commonMapping",
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "RudderStack Property",
+                    "placeholder": "properties.price"
+                  },
+                  {
+                    "type": "dynamicDataSelect",
+                    "label": "GA4 parameter",
+                    "key": "to",
+                    "placeholder": "value",
+                    "apiName": "getGA4DimensionsAndMetrics"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Event Level Mappings",
+            "fields": [
+              {
+                "type": "dynamicCustomForm",
+                "label": "Map RudderStack event name to GA4 events",
+                "configKey": "eventsMapping",
+                "default": [],
+                "rowFields": [
+                  {
+                    "type": "mappingRow",
+                    "columns": [
+                      {
+                        "type": "textInput",
+                        "label": "RudderStack Event Name",
+                        "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                        "configKey": "rsEventName",
+                        "placeholder": "e.g Products Searched",
+                        "regexErrorMessage": "Event name is required"
+                      },
+                      {
+                        "type": "textInput",
+                        "label": "Ga4 Event Name",
+                        "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                        "configKey": "ga4EventName",
+                        "placeholder": "e.g Search",
+                        "regexErrorMessage": "Event name is required"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "mapping",
+                    "label": "Map your Event Property",
+                    "columns": [
+                      {
+                        "key": "from",
+                        "type": "textInput",
+                        "label": "RudderStack Property Name",
+                        "placeholder": "e.g properties.revenue"
+                      },
+                      {
+                        "key": "to",
+                        "type": "textInput",
+                        "label": "GA4 parameter",
+                        "placeholder": "e.g value"
+                      }
+                    ],
+                    "configKey": "eventProperties"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     }
   }
 }
