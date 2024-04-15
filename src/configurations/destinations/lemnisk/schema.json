@@ -4,14 +4,7 @@
     "required": ["cloudMode"],
     "type": "object",
     "properties": {
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "sdkWriteKey": {
         "type": "object",
         "properties": {
@@ -30,11 +23,7 @@
           }
         }
       },
-      "cloudMode": {
-        "type": "string",
-        "enum": ["web", "server", "device"],
-        "default": "web"
-      },
+      "cloudMode": { "type": "string", "enum": ["web", "server", "device"], "default": "web" },
       "eventFilteringOption": {
         "type": "string",
         "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
@@ -75,18 +64,27 @@
             }
           }
         }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "web": { "type": "string", "enum": ["cloud", "device"] },
+          "android": { "type": "string", "enum": ["cloud"] },
+          "ios": { "type": "string", "enum": ["cloud"] },
+          "unity": { "type": "string", "enum": ["cloud"] },
+          "amp": { "type": "string", "enum": ["cloud"] },
+          "reactnative": { "type": "string", "enum": ["cloud"] },
+          "flutter": { "type": "string", "enum": ["cloud"] },
+          "cordova": { "type": "string", "enum": ["cloud"] },
+          "shopify": { "type": "string", "enum": ["cloud"] },
+          "cloud": { "type": "string", "enum": ["cloud"] },
+          "warehouse": { "type": "string", "enum": ["cloud"] }
+        }
       }
     },
     "allOf": [
       {
-        "if": {
-          "properties": {
-            "cloudMode": {
-              "const": "web"
-            }
-          },
-          "required": ["cloudMode"]
-        },
+        "if": { "properties": { "cloudMode": { "const": "web" } }, "required": ["cloudMode"] },
         "then": {
           "properties": {
             "plWriteKey": {
@@ -102,14 +100,7 @@
         }
       },
       {
-        "if": {
-          "properties": {
-            "cloudMode": {
-              "const": "server"
-            }
-          },
-          "required": ["cloudMode"]
-        },
+        "if": { "properties": { "cloudMode": { "const": "server" } }, "required": ["cloudMode"] },
         "then": {
           "properties": {
             "passKey": {
@@ -120,12 +111,8 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
             },
-            "diapiWriteKey": {
-              "type": "string"
-            },
-            "srcId": {
-              "type": "string"
-            },
+            "diapiWriteKey": { "type": "string" },
+            "srcId": { "type": "string" },
             "diapi": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(https?|ftp)://[^\\s/$.?#].[^\\s]*$"

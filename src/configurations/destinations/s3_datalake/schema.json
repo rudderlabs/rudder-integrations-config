@@ -8,42 +8,22 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
       },
-      "useGlue": {
-        "type": "boolean",
-        "default": false
-      },
-      "prefix": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
-      },
+      "useGlue": { "type": "boolean", "default": false },
+      "prefix": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*" },
       "namespace": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
       },
-      "roleBasedAuth": {
-        "type": "boolean",
-        "default": true
-      },
-      "skipTracksTable": {
-        "type": "boolean",
-        "default": false
-      },
-      "skipUsersTable": {
-        "type": "boolean",
-        "default": false
-      },
-      "enableSSE": {
-        "type": "boolean",
-        "default": false
-      },
+      "roleBasedAuth": { "type": "boolean", "default": true },
+      "skipTracksTable": { "type": "boolean", "default": false },
+      "skipUsersTable": { "type": "boolean", "default": false },
+      "enableSSE": { "type": "boolean", "default": false },
       "syncFrequency": {
         "type": "string",
         "enum": ["30", "60", "180", "360", "720", "1440"],
         "default": "180"
       },
-      "syncStartAt": {
-        "type": "string"
-      },
+      "syncStartAt": { "type": "string" },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -55,35 +35,37 @@
             }
           }
         }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "android": { "type": "string", "enum": ["cloud"] },
+          "ios": { "type": "string", "enum": ["cloud"] },
+          "web": { "type": "string", "enum": ["cloud"] },
+          "unity": { "type": "string", "enum": ["cloud"] },
+          "amp": { "type": "string", "enum": ["cloud"] },
+          "reactnative": { "type": "string", "enum": ["cloud"] },
+          "flutter": { "type": "string", "enum": ["cloud"] },
+          "cordova": { "type": "string", "enum": ["cloud"] },
+          "shopify": { "type": "string", "enum": ["cloud"] },
+          "cloud": { "type": "string", "enum": ["cloud"] },
+          "cloudSource": { "type": "string", "enum": ["cloud"] }
+        }
       }
     },
     "allOf": [
       {
-        "if": {
-          "properties": {
-            "useGlue": {
-              "const": true
-            }
-          },
-          "required": ["useGlue"]
-        },
+        "if": { "properties": { "useGlue": { "const": true } }, "required": ["useGlue"] },
         "then": {
           "properties": {
-            "region": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
-            }
+            "region": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*" }
           },
           "required": ["region"]
         }
       },
       {
         "if": {
-          "properties": {
-            "roleBasedAuth": {
-              "const": true
-            }
-          },
+          "properties": { "roleBasedAuth": { "const": true } },
           "required": ["roleBasedAuth"]
         },
         "then": {
@@ -92,20 +74,14 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
             },
-            "roleBasedAuth": {
-              "const": true
-            }
+            "roleBasedAuth": { "const": true }
           },
           "required": ["iamRoleARN", "roleBasedAuth"]
         }
       },
       {
         "if": {
-          "properties": {
-            "roleBasedAuth": {
-              "const": false
-            }
-          },
+          "properties": { "roleBasedAuth": { "const": false } },
           "required": ["roleBasedAuth"]
         },
         "then": {
@@ -118,9 +94,7 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
             },
-            "roleBasedAuth": {
-              "const": false
-            }
+            "roleBasedAuth": { "const": false }
           },
           "required": []
         }

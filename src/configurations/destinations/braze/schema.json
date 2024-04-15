@@ -21,26 +21,11 @@
         ],
         "default": "US-01"
       },
-      "enableSubscriptionGroupInGroupCall": {
-        "type": "boolean",
-        "default": false
-      },
-      "enableNestedArrayOperations": {
-        "type": "boolean",
-        "default": false
-      },
-      "trackAnonymousUser": {
-        "type": "boolean",
-        "default": false
-      },
-      "sendPurchaseEventWithExtraProperties": {
-        "type": "boolean",
-        "default": false
-      },
-      "supportDedup": {
-        "type": "boolean",
-        "default": false
-      },
+      "enableSubscriptionGroupInGroupCall": { "type": "boolean", "default": false },
+      "enableNestedArrayOperations": { "type": "boolean", "default": false },
+      "trackAnonymousUser": { "type": "boolean", "default": false },
+      "sendPurchaseEventWithExtraProperties": { "type": "boolean", "default": false },
+      "supportDedup": { "type": "boolean", "default": false },
       "eventFilteringOption": {
         "type": "string",
         "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
@@ -82,90 +67,40 @@
           }
         }
       },
-      "enableBrazeLogging": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
+      "enableBrazeLogging": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "useNativeSDK": {
         "type": "object",
         "properties": {
-          "android": {
-            "type": "boolean"
-          },
-          "ios": {
-            "type": "boolean"
-          },
-          "web": {
-            "type": "boolean"
-          },
-          "reactnative": {
-            "type": "boolean"
-          },
-          "flutter": {
-            "type": "boolean"
-          }
+          "android": { "type": "boolean" },
+          "ios": { "type": "boolean" },
+          "web": { "type": "boolean" },
+          "reactnative": { "type": "boolean" },
+          "flutter": { "type": "boolean" }
         }
       },
       "connectionMode": {
         "type": "object",
         "properties": {
-          "android": {
-            "type": "string",
-            "enum": ["cloud", "device", "hybrid"]
-          },
-          "ios": {
-            "type": "string",
-            "enum": ["cloud", "device", "hybrid"]
-          },
-          "web": {
-            "type": "string",
-            "enum": ["cloud", "device", "hybrid"]
-          },
-          "reactnative": {
-            "type": "string",
-            "enum": ["cloud", "device"]
-          },
-          "flutter": {
-            "type": "string",
-            "enum": ["cloud", "device"]
-          },
-          "unity": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "amp": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "cordova": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "shopify": {
-            "type": "string",
-            "enum": ["cloud"]
-          }
+          "android": { "type": "string", "enum": ["cloud", "device", "hybrid"] },
+          "web": { "type": "string", "enum": ["cloud", "device", "hybrid"] },
+          "ios": { "type": "string", "enum": ["cloud", "device", "hybrid"] },
+          "flutter": { "type": "string", "enum": ["cloud", "device"] },
+          "reactnative": { "type": "string", "enum": ["cloud", "device"] },
+          "unity": { "type": "string", "enum": ["cloud"] },
+          "amp": { "type": "string", "enum": ["cloud"] },
+          "cordova": { "type": "string", "enum": ["cloud"] },
+          "shopify": { "type": "string", "enum": ["cloud"] },
+          "cloud": { "type": "string", "enum": ["cloud"] },
+          "warehouse": { "type": "string", "enum": ["cloud"] }
         }
       },
       "enablePushNotification": {
         "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
+        "properties": { "web": { "type": "boolean" } }
       },
       "allowUserSuppliedJavascript": {
         "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
+        "properties": { "web": { "type": "boolean" } }
       }
     },
     "additonalProperties": false,
@@ -176,78 +111,18 @@
             "connectionMode": {
               "type": "object",
               "anyOf": [
-                {
-                  "required": ["web"],
-                  "properties": {
-                    "web": {
-                      "const": "cloud"
-                    }
-                  }
-                },
-                {
-                  "required": ["ios"],
-                  "properties": {
-                    "ios": {
-                      "const": "cloud"
-                    }
-                  }
-                },
-                {
-                  "required": ["android"],
-                  "properties": {
-                    "android": {
-                      "const": "cloud"
-                    }
-                  }
-                },
-                {
-                  "required": ["unity"],
-                  "properties": {
-                    "unity": {
-                      "const": "cloud"
-                    }
-                  }
-                },
-                {
-                  "required": ["amp"],
-                  "properties": {
-                    "amp": {
-                      "const": "cloud"
-                    }
-                  }
-                },
+                { "required": ["web"], "properties": { "web": { "const": "cloud" } } },
+                { "required": ["ios"], "properties": { "ios": { "const": "cloud" } } },
+                { "required": ["android"], "properties": { "android": { "const": "cloud" } } },
+                { "required": ["unity"], "properties": { "unity": { "const": "cloud" } } },
+                { "required": ["amp"], "properties": { "amp": { "const": "cloud" } } },
                 {
                   "required": ["reactnative"],
-                  "properties": {
-                    "reactnative": {
-                      "const": "cloud"
-                    }
-                  }
+                  "properties": { "reactnative": { "const": "cloud" } }
                 },
-                {
-                  "required": ["flutter"],
-                  "properties": {
-                    "flutter": {
-                      "const": "cloud"
-                    }
-                  }
-                },
-                {
-                  "required": ["cordova"],
-                  "properties": {
-                    "cordova": {
-                      "const": "cloud"
-                    }
-                  }
-                },
-                {
-                  "required": ["shopify"],
-                  "properties": {
-                    "shopify": {
-                      "const": "cloud"
-                    }
-                  }
-                }
+                { "required": ["flutter"], "properties": { "flutter": { "const": "cloud" } } },
+                { "required": ["cordova"], "properties": { "cordova": { "const": "cloud" } } },
+                { "required": ["shopify"], "properties": { "shopify": { "const": "cloud" } } }
               ]
             }
           },
@@ -269,45 +144,13 @@
             "connectionMode": {
               "type": "object",
               "anyOf": [
-                {
-                  "required": ["web"],
-                  "properties": {
-                    "web": {
-                      "const": "device"
-                    }
-                  }
-                },
-                {
-                  "required": ["ios"],
-                  "properties": {
-                    "ios": {
-                      "const": "device"
-                    }
-                  }
-                },
-                {
-                  "required": ["android"],
-                  "properties": {
-                    "android": {
-                      "const": "device"
-                    }
-                  }
-                },
-                {
-                  "required": ["flutter"],
-                  "properties": {
-                    "flutter": {
-                      "const": "device"
-                    }
-                  }
-                },
+                { "required": ["web"], "properties": { "web": { "const": "device" } } },
+                { "required": ["ios"], "properties": { "ios": { "const": "device" } } },
+                { "required": ["android"], "properties": { "android": { "const": "device" } } },
+                { "required": ["flutter"], "properties": { "flutter": { "const": "device" } } },
                 {
                   "required": ["reactnative"],
-                  "properties": {
-                    "reactnative": {
-                      "const": "device"
-                    }
-                  }
+                  "properties": { "reactnative": { "const": "device" } }
                 }
               ]
             }
@@ -330,30 +173,9 @@
             "connectionMode": {
               "type": "object",
               "anyOf": [
-                {
-                  "required": ["web"],
-                  "properties": {
-                    "web": {
-                      "const": "hybrid"
-                    }
-                  }
-                },
-                {
-                  "required": ["ios"],
-                  "properties": {
-                    "ios": {
-                      "const": "hybrid"
-                    }
-                  }
-                },
-                {
-                  "required": ["android"],
-                  "properties": {
-                    "android": {
-                      "const": "hybrid"
-                    }
-                  }
-                }
+                { "required": ["web"], "properties": { "web": { "const": "hybrid" } } },
+                { "required": ["ios"], "properties": { "ios": { "const": "hybrid" } } },
+                { "required": ["android"], "properties": { "android": { "const": "hybrid" } } }
               ]
             }
           },
