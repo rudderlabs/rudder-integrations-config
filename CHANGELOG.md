@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.70.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.70.0...v1.70.1) (2024-04-08)
+
+
+### Bug Fixes
+
+* revert fb marketing connector ([242e7c1](https://github.com/rudderlabs/rudder-config-schema/commit/242e7c161904917d8685452ef72959b78ed37e4f))
+
+## [1.70.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.69.0...v1.70.0) (2024-04-05)
+
+
+### Features
+
+* extend gcm support for additional destinations ([#1307](https://github.com/rudderlabs/rudder-config-schema/issues/1307)) ([d819a43](https://github.com/rudderlabs/rudder-config-schema/commit/d819a43b2287c33cb30fd26a90da9abb2e6c5ac0))
+
 ## [1.69.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.68.1...v1.69.0) (2024-04-02)
 
 
