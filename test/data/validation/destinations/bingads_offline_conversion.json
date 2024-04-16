@@ -1,0 +1,57 @@
+[
+  {
+    "config": {
+      "customerAccountId": "434342324",
+      "customerId": "447477473",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "customerAccountId": "",
+      "customerId": "447477473",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "customerAccountId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$\""
+    ]
+  },
+  {
+    "config": {
+      "customerAccountId": "434342324",
+      "customerId": "",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["customerId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$\""]
+  },
+  {
+    "config": {
+      "customerAccountId": "434342324",
+      "customerId": "447477473",
+      "oneTrustCookieCategories": {
+        "web": [
+          {
+            "oneTrustCookieCategory": "Marketing"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["oneTrustCookieCategories must be array"]
+  }
+]
