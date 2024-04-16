@@ -16,10 +16,9 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
       },
-      "tableSuffix": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
-      },
+      "skipTracksTable": { "type": "boolean", "default": false },
+      "skipUsersTable": { "type": "boolean", "default": false },
+      "tableSuffix": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*" },
       "timeWindowLayout": {
         "type": "string",
         "enum": [
@@ -32,18 +31,13 @@
         ],
         "default": "2006/01/02/15"
       },
-      "credentials": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
-      },
+      "credentials": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*" },
       "syncFrequency": {
         "type": "string",
         "enum": ["30", "60", "180", "360", "720", "1440"],
-        "default": "30"
+        "default": "180"
       },
-      "syncStartAt": {
-        "type": "string"
-      },
+      "syncStartAt": { "type": "string" },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -54,6 +48,22 @@
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "android": { "type": "string", "enum": ["cloud"] },
+          "ios": { "type": "string", "enum": ["cloud"] },
+          "web": { "type": "string", "enum": ["cloud"] },
+          "unity": { "type": "string", "enum": ["cloud"] },
+          "amp": { "type": "string", "enum": ["cloud"] },
+          "reactnative": { "type": "string", "enum": ["cloud"] },
+          "flutter": { "type": "string", "enum": ["cloud"] },
+          "cordova": { "type": "string", "enum": ["cloud"] },
+          "shopify": { "type": "string", "enum": ["cloud"] },
+          "cloud": { "type": "string", "enum": ["cloud"] },
+          "cloudSource": { "type": "string", "enum": ["cloud"] }
         }
       }
     }

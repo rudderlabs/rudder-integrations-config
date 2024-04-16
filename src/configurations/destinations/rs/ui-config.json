@@ -257,6 +257,27 @@
       "title": "Advanced Settings",
       "fields": [
         {
+          "type": "checkbox",
+          "label": "Warehouse Append",
+          "value": "preferAppend",
+          "footerNote": "Disable to move from Append to Merge operation. Switching from Append to Merge ensures 100% non-duplicate data, but would increase warehouse operations time significantly",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "label": "Skip User Table",
+          "value": "skipUsersTable",
+          "footerNote": "Enable this feature to send event data exclusively to the Identify table, and skip user table. Eliminates the need for merge operation on the user table",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "Skip Tracks Table",
+          "value": "skipTracksTable",
+          "footerNote": "Enable this feature to skip sending the event data to the “tracks” table",
+          "default": false
+        },
+        {
           "type": "textInput",
           "label": "JSON columns (Optional)",
           "labelNote": "Specify required JSON properties in dot notation separated by commas",
@@ -288,7 +309,98 @@
               "label": "Category ID",
               "required": false
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "consentManagement",
+          "label": "Consent management settings",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "customFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "value": "provider",
+              "options": [
+                {
+                  "name": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "name": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "name": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "defaultOption": {
+                "name": "OneTrust",
+                "value": "oneTrust"
+              },
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "value": "resolutionStrategy",
+              "options": [
+                {
+                  "name": "AND",
+                  "value": "and"
+                },
+                {
+                  "name": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "dynamicCustomForm",
+              "value": "consents",
+              "label": "Enter consent category ID’s",
+              "customFields": [
+                {
+                  "type": "textInput",
+                  "placeholder": "Marketing",
+                  "value": "consent",
+                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "required": false
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }

@@ -2,6 +2,54 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.70.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.70.0...v1.70.1) (2024-04-08)
+
+
+### Bug Fixes
+
+* revert fb marketing connector ([242e7c1](https://github.com/rudderlabs/rudder-config-schema/commit/242e7c161904917d8685452ef72959b78ed37e4f))
+
+## [1.70.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.69.0...v1.70.0) (2024-04-05)
+
+
+### Features
+
+* extend gcm support for additional destinations ([#1307](https://github.com/rudderlabs/rudder-config-schema/issues/1307)) ([d819a43](https://github.com/rudderlabs/rudder-config-schema/commit/d819a43b2287c33cb30fd26a90da9abb2e6c5ac0))
+
+## [1.69.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.68.1...v1.69.0) (2024-04-02)
+
+
+### Features
+
+* onboard new destination bloomreach ([#1273](https://github.com/rudderlabs/rudder-config-schema/issues/1273)) ([09e8e8f](https://github.com/rudderlabs/rudder-config-schema/commit/09e8e8f55ccf6d17ad6e929a82caaaa9677f4f7f))
+* onboarding linkedin conversion api ([#1274](https://github.com/rudderlabs/rudder-config-schema/issues/1274)) ([0fc0081](https://github.com/rudderlabs/rudder-config-schema/commit/0fc0081f512b2aece54ab4fbba82328f89911625))
+
+
+### Bug Fixes
+
+* ninetailed: modify page support ([#1293](https://github.com/rudderlabs/rudder-config-schema/issues/1293)) ([f0b1ca2](https://github.com/rudderlabs/rudder-config-schema/commit/f0b1ca256cfd7a28455ae88680b38147d1837c2f))
+* snap pixel: typo ([#1295](https://github.com/rudderlabs/rudder-config-schema/issues/1295)) ([c391320](https://github.com/rudderlabs/rudder-config-schema/commit/c391320a903b96ad793cb2ea248fd0d64128aa54))
+* snapchat conversion: add event level_complete ([#1299](https://github.com/rudderlabs/rudder-config-schema/issues/1299)) ([e82967f](https://github.com/rudderlabs/rudder-config-schema/commit/e82967f16967c441fb177ee35644f3af7eac6557))
+* support mapping for all standard events for snappixel ([#1290](https://github.com/rudderlabs/rudder-config-schema/issues/1290)) ([03516eb](https://github.com/rudderlabs/rudder-config-schema/commit/03516eb762e0ca5fe345d01cdfe45bca1161b8d0))
+
+### [1.68.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.68.0...v1.68.1) (2024-03-21)
+
+## [1.68.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.67.1...v1.68.0) (2024-03-18)
+
+
+### Features
+
+* custom environment slug ([#1275](https://github.com/rudderlabs/rudder-config-schema/issues/1275)) ([a856eef](https://github.com/rudderlabs/rudder-config-schema/commit/a856eef62d79dbf61fad3b9d84eb31d33f62b5ea))
+* onboard destination movable ink ([#1252](https://github.com/rudderlabs/rudder-config-schema/issues/1252)) ([c4bdb5e](https://github.com/rudderlabs/rudder-config-schema/commit/c4bdb5ee623765c7c18802628366ff02f2196782))
+* onboard new destination koala ([#1258](https://github.com/rudderlabs/rudder-config-schema/issues/1258)) ([37b7150](https://github.com/rudderlabs/rudder-config-schema/commit/37b7150736fe803b3c837f01a57a80ad53cbfede))
+* reviewed destinations for secret keys and updated configs accordingly ([#1268](https://github.com/rudderlabs/rudder-config-schema/issues/1268)) ([7289e5c](https://github.com/rudderlabs/rudder-config-schema/commit/7289e5c07e849f40ecc0700db733b48c9afc9364))
+
+
+### Bug Fixes
+
+* secret keys for destinations ([#1224](https://github.com/rudderlabs/rudder-config-schema/issues/1224)) ([6d1be08](https://github.com/rudderlabs/rudder-config-schema/commit/6d1be08238de2fa00e16d4bf4717ebd611e12341))
+* slack notifications ([#1260](https://github.com/rudderlabs/rudder-config-schema/issues/1260)) ([9800571](https://github.com/rudderlabs/rudder-config-schema/commit/9800571dcd81eab128dc7a3345a6dcb6645ed079))
+
 ### [1.67.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.67.0...v1.67.1) (2024-03-08)
 
 

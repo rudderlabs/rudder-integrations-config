@@ -4,54 +4,32 @@
     "type": "object",
     "required": ["project", "bucketName", "credentials", "syncFrequency"],
     "properties": {
-      "project": {
-        "type": "string",
-        "pattern": "(^env[.].+)|^(.{1,100})$"
-      },
-      "location": {
-        "type": "string",
-        "pattern": "(^env[.].*)|^(.{0,100})$"
-      },
+      "project": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
+      "location": { "type": "string", "pattern": "(^env[.].*)|^(.{0,100})$" },
       "bucketName": {
         "type": "string",
         "pattern": "(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$"
       },
-      "prefix": {
-        "type": "string",
-        "pattern": "(^env[.].*)|^(.{0,100})$"
-      },
-      "namespace": {
-        "type": "string",
-        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
-      },
-      "credentials": {
-        "type": "string",
-        "pattern": "(^env[.].+)|.+"
-      },
+      "prefix": { "type": "string", "pattern": "(^env[.].*)|^(.{0,100})$" },
+      "namespace": { "type": "string", "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$" },
+      "credentials": { "type": "string", "pattern": "(^env[.].+)|.+" },
       "syncFrequency": {
         "type": "string",
         "pattern": "^(30|60|180|360|720|1440)$",
         "default": "180"
       },
-      "syncStartAt": {
-        "type": "string"
-      },
+      "syncStartAt": { "type": "string" },
+      "skipTracksTable": { "type": "boolean", "default": false },
+      "skipUsersTable": { "type": "boolean", "default": false },
       "excludeWindow": {
         "type": "object",
         "required": ["excludeWindowStartTime", "excludeWindowEndTime"],
         "properties": {
-          "excludeWindowStartTime": {
-            "type": "string"
-          },
-          "excludeWindowEndTime": {
-            "type": "string"
-          }
+          "excludeWindowStartTime": { "type": "string" },
+          "excludeWindowEndTime": { "type": "string" }
         }
       },
-      "jsonPaths": {
-        "type": "string",
-        "pattern": "(^env[.].*)|.*"
-      },
+      "jsonPaths": { "type": "string", "pattern": "(^env[.].*)|.*" },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -62,6 +40,22 @@
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "android": { "type": "string", "enum": ["cloud"] },
+          "ios": { "type": "string", "enum": ["cloud"] },
+          "web": { "type": "string", "enum": ["cloud"] },
+          "unity": { "type": "string", "enum": ["cloud"] },
+          "amp": { "type": "string", "enum": ["cloud"] },
+          "cloud": { "type": "string", "enum": ["cloud"] },
+          "reactnative": { "type": "string", "enum": ["cloud"] },
+          "cloudSource": { "type": "string", "enum": ["cloud"] },
+          "flutter": { "type": "string", "enum": ["cloud"] },
+          "cordova": { "type": "string", "enum": ["cloud"] },
+          "shopify": { "type": "string", "enum": ["cloud"] }
         }
       }
     },
