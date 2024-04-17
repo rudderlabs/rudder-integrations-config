@@ -8,7 +8,6 @@ All notable changes to this project will be documented in this file. See [standa
 ### Features
 
 * add connectionMode for all sourceTypes in dest def for all destinations ([#1271](https://github.com/rudderlabs/rudder-config-schema/issues/1271)) ([d2420e3](https://github.com/rudderlabs/rudder-config-schema/commit/d2420e354873fdce8476d7792e9c84c5a2c0934e))
-* deprecate mixpanel apiSecret ([#1304](https://github.com/rudderlabs/rudder-config-schema/issues/1304)) ([d02302c](https://github.com/rudderlabs/rudder-config-schema/commit/d02302cff5fab27c51904a399216b6ca58a886f5))
 * make regex mandatory for required textInputs ([#1289](https://github.com/rudderlabs/rudder-config-schema/issues/1289)) ([ce6eaa1](https://github.com/rudderlabs/rudder-config-schema/commit/ce6eaa182b34be31871aabd1f040d1318ec0b343))
 
 ### [1.70.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.70.0...v1.70.1) (2024-04-08)
