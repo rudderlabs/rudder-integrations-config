@@ -1,0 +1,96 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["host", "port", "username", "authMethod", "fileFormat", "filePath"],
+    "type": "object",
+    "properties": {
+      "host": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$"
+      },
+      "port": {
+        "type": "string",
+        "pattern": "^(?:[1-9][0-9]{0,4}|[1-5][0-9]{4}|6[0-5]{4}|6553[0-5])$"
+      },
+      "username": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "authMethod": {
+        "type": "string",
+        "enum": ["passwordAuth", "keyAuth"],
+        "default": "passwordAuth"
+      },
+      "fileFormat": {
+        "type": "string",
+        "enum": ["json", "csv"],
+        "default": "csv"
+      },
+      "filePath": {
+        "type": "string",
+        "pattern": ".*"
+      },
+      "oneTrustCookieCategories": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "oneTrustCookieCategory": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "warehouse": {
+            "type": "string",
+            "enum": ["cloud"]
+          }
+        }
+      }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "authMethod": {
+              "const": "passwordAuth"
+            }
+          },
+          "required": ["authMethod"]
+        },
+        "then": {
+          "properties": {
+            "password": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["password"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "authMethod": {
+              "const": "keyAuth"
+            }
+          },
+          "required": ["authMethod"]
+        },
+        "then": {
+          "properties": {
+            "privateKey": {
+              "type": "string",
+              "pattern": "^(.+)$"
+            }
+          },
+          "required": ["privateKey"]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Host",
+                    "note": "Enter the Hostname or IP Address of the server. Do not include the port number.",
+                    "configKey": "host",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Host"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Port",
+                    "note": "Enter the Port Number of the server.",
+                    "configKey": "port",
+                    "regex": "^(?:[1-9][0-9]{0,4}|[1-5][0-9]{4}|6[0-5]{4}|6553[0-5])$",
+                    "regexErrorMessage": "Invalid Port",
+                    "placeholder": "e.g. 22"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Username",
+                    "configKey": "username",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Username",
+                    "placeholder": "e.g. testUser"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Authentication",
+                    "note": "Select the Authentication method.",
+                    "configKey": "authMethod",
+                    "options": [
+                      {
+                        "label": "Username + Password",
+                        "value": "passwordAuth"
+                      },
+                      {
+                        "label": "Username + SSH Key",
+                        "value": "keyAuth"
+                      }
+                    ],
+                    "default": "passwordAuth"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Password",
+                    "configKey": "password",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Password",
+                    "placeholder": "e.g. passXXX123",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "authMethod",
+                          "value": "passwordAuth"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Private Key",
+                    "note": "Enter the full Private Key for the user including the header and footer.",
+                    "configKey": "privateKey",
+                    "regex": "^(.+)$",
+                    "regexErrorMessage": "Invalid Private Key",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "authMethod",
+                          "value": "keyAuth"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "File Format",
+                    "configKey": "fileFormat",
+                    "options": [
+                      {
+                        "label": "JSON",
+                        "value": "json"
+                      },
+                      {
+                        "label": "CSV",
+                        "value": "csv"
+                      }
+                    ],
+                    "default": "csv"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "File Path",
+                    "note": "Enter the file path where the data will be stored. The parent directory of the file should already exist. We support date and time variables within '{}', including {YYYY}, {MM}, {DD}, {hh}, {mm}, {ss}, {ms}, {timestampInSec}, and {timestampInMs}.",
+                    "configKey": "filePath",
+                    "regex": ".*",
+                    "regexErrorMessage": "Invalid File Path",
+                    "placeholder": "e.g: directory/file_{YYYY}_{MM}_{DD}_{mm}.csv"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack's OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing 'Enter' after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    }
+  }
+}
