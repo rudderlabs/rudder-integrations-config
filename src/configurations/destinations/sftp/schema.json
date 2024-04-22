@@ -1,7 +1,7 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["host", "port", "username", "authMethod", "fileFormat", "filePath"],
+    "required": ["host", "port", "username", "authMethod", "filePath"],
     "type": "object",
     "properties": {
       "host": {
@@ -21,14 +21,9 @@
         "enum": ["passwordAuth", "keyAuth"],
         "default": "passwordAuth"
       },
-      "fileFormat": {
-        "type": "string",
-        "enum": ["json", "csv"],
-        "default": "csv"
-      },
       "filePath": {
         "type": "string",
-        "pattern": ".*"
+        "pattern": "^.*\\.(json|csv)$"
       },
       "oneTrustCookieCategories": {
         "type": "array",
@@ -85,7 +80,7 @@
           "properties": {
             "privateKey": {
               "type": "string",
-              "pattern": "^(.+)$"
+              "pattern": "^[\\s\\S]+$"
             }
           },
           "required": ["privateKey"]

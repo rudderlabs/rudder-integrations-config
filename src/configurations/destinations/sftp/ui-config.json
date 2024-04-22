@@ -75,7 +75,7 @@
                     "label": "Private Key",
                     "note": "Enter the full Private Key for the user including the header and footer.",
                     "configKey": "privateKey",
-                    "regex": "^(.+)$",
+                    "regex": "^[\\s\\S]+$",
                     "regexErrorMessage": "Invalid Private Key",
                     "secret": true,
                     "preRequisites": {
@@ -85,30 +85,15 @@
                           "value": "keyAuth"
                         }
                       ]
-                    }
-                  },
-                  {
-                    "type": "singleSelect",
-                    "label": "File Format",
-                    "configKey": "fileFormat",
-                    "options": [
-                      {
-                        "label": "JSON",
-                        "value": "json"
-                      },
-                      {
-                        "label": "CSV",
-                        "value": "csv"
-                      }
-                    ],
-                    "default": "csv"
+                    },
+                    "isTextArea": true
                   },
                   {
                     "type": "textInput",
                     "label": "File Path",
-                    "note": "Enter the file path where the data will be stored. The parent directory of the file should already exist. We support date and time variables within '{}', including {YYYY}, {MM}, {DD}, {hh}, {mm}, {ss}, {ms}, {timestampInSec}, and {timestampInMs}.",
+                    "note": "Enter the file path where the data will be stored. The parent directory of the file should already exist. Supported file types are JSON and CSV. We support date and time variables within '{}', including {YYYY}, {MM}, {DD}, {hh}, {mm}, {ss}, {ms}, {timestampInSec}, and {timestampInMs}.",
                     "configKey": "filePath",
-                    "regex": ".*",
+                    "regex": "^.*\\.(json|csv)$",
                     "regexErrorMessage": "Invalid File Path",
                     "placeholder": "e.g: directory/file_{YYYY}_{MM}_{DD}_{mm}.csv"
                   }
