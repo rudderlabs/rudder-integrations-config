@@ -21,8 +21,24 @@ async function importJsonFromFile(file: string) {
   return JSON.parse(content);
 }
 
+const addCommonSchema = async () => {
+  const commonDestinationsSchema = await importJsonFromFile(
+    path.join(__dirname, '../configurations/destinations/commonSchema.json'),
+  );
+  const commonSourcesSchema = await importJsonFromFile(
+    path.join(__dirname, '../configurations/sources/commonSchema.json'),
+  );
+  if (!ajv.getSchema('commonDestinationsSchema.json')) {
+    ajv.addSchema(commonDestinationsSchema);
+  }
+  if (!ajv.getSchema('commonSourcesSchema.json')) {
+    ajv.addSchema(commonSourcesSchema);
+  }
+};
+
 async function initAjvValidators() {
-  const files = await glob(path.join(__dirname, '../configurations/**/schema.json'));
+  await addCommonSchema();
+  const files = await glob(path.join(__dirname, '../configurations/**/*schema.json'));
   const filePromises = files.map(importJsonFromFile);
   const contents = await Promise.all(filePromises);
 
