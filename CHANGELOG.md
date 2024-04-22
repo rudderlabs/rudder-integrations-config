@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.71.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.71.0...v1.71.1) (2024-04-22)
+
+
+### Bug Fixes
+
+* onboard yandex metrica offline events ([#1326](https://github.com/rudderlabs/rudder-config-schema/issues/1326)) ([090ea76](https://github.com/rudderlabs/rudder-config-schema/commit/090ea76402480f1df747d5696fe4277341f6dcd6))
+
 ## [1.71.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.70.1...v1.71.0) (2024-04-15)
 
 
