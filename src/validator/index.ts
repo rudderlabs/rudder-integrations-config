@@ -22,15 +22,14 @@ async function importJsonFromFile(file: string) {
 }
 
 const addCommonSchema = async () => {
-  if (!ajv.getSchema('commonSourcesSchema.json')) {
+  if (!ajv.getSchema('commonSourcesSchema')) {
     const commonSourcesSchema = await importJsonFromFile(
-     path.join(__dirname, '../configurations/sources/commonSchema.json'),
+      path.join(__dirname, '../configurations/sources/commonSchema.json'),
     );
     ajv.addSchema(commonSourcesSchema);
   }
-  
 
-  if (!ajv.getSchema('commonDestinationsSchema.json')) {
+  if (!ajv.getSchema('commonDestinationsSchema')) {
     const commonDestinationsSchema = await importJsonFromFile(
       path.join(__dirname, '../configurations/destinations/commonSchema.json'),
     );
