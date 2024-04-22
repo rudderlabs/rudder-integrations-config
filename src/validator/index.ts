@@ -40,7 +40,7 @@ const addCommonSchema = async () => {
 
 async function initAjvValidators() {
   await addCommonSchema();
-  const files = await glob(path.join(__dirname, '../configurations/**/*schema.json'));
+  const files = await glob(path.join(__dirname, '../configurations/**/schema.json'));
   const filePromises = files.map(importJsonFromFile);
   const contents = await Promise.all(filePromises);
 
