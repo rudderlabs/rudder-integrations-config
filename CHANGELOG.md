@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.71.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.71.1...v1.71.2) (2024-04-24)
+
+
+### Bug Fixes
+
+* iterable schema ([#1332](https://github.com/rudderlabs/rudder-config-schema/issues/1332)) ([73060ab](https://github.com/rudderlabs/rudder-config-schema/commit/73060ab151274fadd7701ccfd30f1af9d93cc5b3))
+
 ### [1.71.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.71.0...v1.71.1) (2024-04-22)
 
 
