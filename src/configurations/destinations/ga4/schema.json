@@ -922,13 +922,13 @@
             "type": "string",
             "enum": ["cloud", "device"]
           },
-          "ios": {
-            "type": "string",
-            "enum": ["cloud", "device"]
-          },
           "web": {
             "type": "string",
             "enum": ["cloud", "device", "hybrid"]
+          },
+          "ios": {
+            "type": "string",
+            "enum": ["cloud", "device"]
           },
           "unity": {
             "type": "string",
@@ -953,6 +953,14 @@
           "shopify": {
             "type": "string",
             "enum": ["cloud"]
+          },
+          "cloud": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "warehouse": {
+            "type": "string",
+            "enum": ["cloud"]
           }
         }
       }
@@ -974,7 +982,33 @@
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(G-.{1,100})$|^$"
             }
           },
-          "required": ["measurementId"]
+          "required": ["measurementId"],
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "connectionMode": {
+                    "type": "object",
+                    "properties": {
+                      "web": {
+                        "type": "string",
+                        "enum": ["device"]
+                      }
+                    }
+                  }
+                },
+                "required": ["connectionMode"]
+              },
+              "then": {
+                "properties": {
+                  "sdkBaseUrl": {
+                    "type": "string",
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]*|^$"
+                  }
+                }
+              }
+            }
+          ]
         }
       },
       {
