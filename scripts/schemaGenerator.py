@@ -772,7 +772,6 @@ def generate_schema_for_allOf(uiConfig, dbConfig, schema_field_name):
     """
     allOfItemList = []
     preRequisiteFieldsList = get_unique_pre_requisite_fields(uiConfig)
-    schema_field_name = "configKey"
     for preRequisiteField in preRequisiteFieldsList:
         ifObj = generate_if_object(preRequisiteField)
         thenObj = {"properties": {}, "required": []}
@@ -1202,7 +1201,10 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                             )
                     if (
                         curUiType == "textInput"
-                        and field["value"] in schema["required"]
+                        and (
+                            schema.get("required", False) == True
+                            and field["value"] in schema["required"]
+                        )
                         and "regex" not in field
                     ):
                         warnings.warn(
@@ -1252,7 +1254,10 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                                     )
                             if (
                                 curUiType == "textInput"
-                                and field["configKey"] in schema["required"]
+                                and (
+                                    schema.get("required", False) == True
+                                    and field["configKey"] in schema["required"]
+                                )
                                 and "regex" not in field
                             ):
                                 warnings.warn(
