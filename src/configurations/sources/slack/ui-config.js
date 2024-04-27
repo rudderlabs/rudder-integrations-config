@@ -1,1 +1,3 @@
-
+{
+  "uiConfig": null
+}
