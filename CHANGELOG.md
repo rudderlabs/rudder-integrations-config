@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.72.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.71.2...v1.72.0) (2024-04-29)
+
+
+### Features
+
+* add autoConfig support in FBPixel via toggle ([#1337](https://github.com/rudderlabs/rudder-config-schema/issues/1337)) ([8acbb91](https://github.com/rudderlabs/rudder-config-schema/commit/8acbb91df784cb6f81264b7fb86cf001533da474))
+* add gcm support for active campaign,adj,adobe,adroll,af ([#1314](https://github.com/rudderlabs/rudder-config-schema/issues/1314)) ([a529b03](https://github.com/rudderlabs/rudder-config-schema/commit/a529b03c759861c6dfd5010619828b08973cc7c6))
+* added custom domain input field during ga4 setup ([e4ec3b5](https://github.com/rudderlabs/rudder-config-schema/commit/e4ec3b5c98beb5b8b2f121565f401e8796b8df1f))
+* supporting add to cart for criteo ([#1324](https://github.com/rudderlabs/rudder-config-schema/issues/1324)) ([1c74915](https://github.com/rudderlabs/rudder-config-schema/commit/1c749153fc4105a1a0da0f17ff7d07e26678c3d6))
+
+
+### Bug Fixes
+
+* replace schema ref with actual schema ([#1336](https://github.com/rudderlabs/rudder-config-schema/issues/1336)) ([4059fd5](https://github.com/rudderlabs/rudder-config-schema/commit/4059fd5a7ee83c2e09ff63d5deaac4a057c1d9d7))
+* resolving comments ([2e1974b](https://github.com/rudderlabs/rudder-config-schema/commit/2e1974b360f98ca764692a9c7effa04fbbe69a3f))
+* resolving comments ([44cd910](https://github.com/rudderlabs/rudder-config-schema/commit/44cd9109f4e99672fac5cfe5481aa8b210b9919b))
+* some minor fix ([bc9be28](https://github.com/rudderlabs/rudder-config-schema/commit/bc9be2899443d60a0946dd1b47064d63afabf4cc))
+* some minor issues ([e32579f](https://github.com/rudderlabs/rudder-config-schema/commit/e32579f63e601a44a17ee15d32db4bed2c45b33e))
+
 ### [1.71.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.71.1...v1.71.2) (2024-04-24)
 
 
