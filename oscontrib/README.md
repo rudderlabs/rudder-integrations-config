@@ -8,7 +8,7 @@ To contribute a destination, you need to provide all the required data for all t
 
 ## How you can provide your destination connection setting details
 
-You can checkout the sample input file [**here**](https://github.com/rudderlabs/rudder-integrations-config/blob/config-generator-script/test/configData/inputData.json):
+You can checkout the sample input file [**here**](/test/configData/inputData.json):
 
 For the above input data, the UI will look like as shown below:
 
