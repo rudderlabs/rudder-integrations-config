@@ -126,6 +126,26 @@ def is_dest_field_dependent_on_source(field, dbConfig, schema_field_name):
     return False
 
 
+def is_key_present_in_dest_config(dbConfig, key):
+    """Checks if the given key is present in destConfig across all source types.
+
+    Args:
+        dbConfig (object): Destination configuration in db-config.json.
+        key (string): key to be searched in destConfig tree.
+
+    Returns:
+        boolean: True if the key is present in destConfig else, False.
+    """
+    if not dbConfig:
+        return False
+
+    if "destConfig" in dbConfig:
+        for configSection in dbConfig["destConfig"]:
+            if key in dbConfig["destConfig"][configSection]:
+                return True
+    return False
+
+
 def is_field_present_in_default_config(field, dbConfig, schema_field_name):
     """Checks if the given field is present in defaultConfig list present in dbConfig.
 
@@ -740,6 +760,7 @@ def generate_schema_for_allOf(uiConfig, dbConfig, schema_field_name):
     - For each unique preRequisiteField, the properties are found by matching the current preRequisiteField.
     - preRequisiteField becomes if block and corresponding properties become then block.
 
+
     Args:
         uiConfig (object): file content of ui-config.json.
         dbConfig (object): Configurations of db-config.json.
@@ -971,9 +992,7 @@ def generate_connection_mode(dbConfig):
     return connectionObj
 
 
-def generate_schema_properties(
-    uiConfig, dbConfig, schemaObject, properties, name, selector
-):
+def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, selector):
     """Generates corresponding schema properties by iterating over each of the ui-config fields.
 
     Args:
@@ -981,7 +1000,6 @@ def generate_schema_properties(
         dbConfig (object): Configurations of db-config.json.
         schemaObject (object): schema being generated
         properties (object): properties of schema
-        name (string): name of the source or destination.
         selector (string): either 'source' or 'destination'
     """
     if is_old_format(uiConfig):
@@ -992,9 +1010,16 @@ def generate_schema_properties(
                     continue
                 generateFunction = uiTypetoSchemaFn.get(field["type"], None)
                 if generateFunction:
-                    properties[field["value"]] = generateFunction(
-                        field, dbConfig, "value"
-                    )
+                    # Generate schema for the field if it is defined in the destination config
+                    if is_key_present_in_dest_config(dbConfig, field["value"]):
+                        properties[field["value"]] = generateFunction(
+                            field, dbConfig, "value"
+                        )
+                    else:
+                        warnings.warn(
+                            f'The field {field["value"]} is defined in ui-config.json but not in db-config.json\n',
+                            UserWarning,
+                        )
                 if field.get(
                     "required", False
                 ) == True and is_field_present_in_default_config(
@@ -1012,9 +1037,18 @@ def generate_schema_properties(
                         for field in group.get("fields", []):
                             generateFunction = uiTypetoSchemaFn.get(field["type"], None)
                             if generateFunction:
-                                properties[field["configKey"]] = generateFunction(
-                                    field, dbConfig, "configKey"
-                                )
+                                # Generate schema for the field if it is defined in the destination config
+                                if is_key_present_in_dest_config(
+                                    dbConfig, field["configKey"]
+                                ):
+                                    properties[field["configKey"]] = generateFunction(
+                                        field, dbConfig, "configKey"
+                                    )
+                                else:
+                                    warnings.warn(
+                                        f'The field {field["configKey"]} is defined in ui-config.json but not in db-config.json\n',
+                                        UserWarning,
+                                    )
                             if (
                                 template.get("title", "") == "Initial setup"
                                 and is_field_present_in_default_config(
@@ -1027,9 +1061,17 @@ def generate_schema_properties(
             for field in sdkTemplate.get("fields", []):
                 generateFunction = uiTypetoSchemaFn.get(field["type"], None)
                 if generateFunction:
-                    properties[field["configKey"]] = generateFunction(
-                        field, dbConfig, "configKey"
-                    )
+                    # Generate schema for the field if it is defined in the destination config
+                    if is_key_present_in_dest_config(dbConfig, field["configKey"]):
+                        properties[field["configKey"]] = generateFunction(
+                            field, dbConfig, "configKey"
+                        )
+                    else:
+                        warnings.warn(
+                            f'The field {field["configKey"]} is defined in ui-config.json but not in db-config.json\n',
+                            UserWarning,
+                        )
+
                 if field.get(
                     "required", False
                 ) == True and is_field_present_in_default_config(
@@ -1051,9 +1093,12 @@ def generate_schema_properties(
                     schemaObject["required"].append(field["configKey"])
 
             # default properties in new ui-config based schemas.
-            schemaObject["properties"]["useNativeSDK"] = generate_schema_for_checkbox(
-                {"type": "checkbox", "value": "useNativeSDK"}, dbConfig, "value"
-            )
+            if is_key_present_in_dest_config(dbConfig, "useNativeSDK"):
+                schemaObject["properties"]["useNativeSDK"] = (
+                    generate_schema_for_checkbox(
+                        {"type": "checkbox", "value": "useNativeSDK"}, dbConfig, "value"
+                    )
+                )
             schemaObject["properties"]["connectionMode"] = generate_connection_mode(
                 dbConfig
             )
@@ -1099,6 +1144,7 @@ def generate_schema(uiConfig, dbConfig, name, selector):
     schemaObject["type"] = "object"
     schemaObject["properties"] = {}
     allOfSchemaObj = {}
+    print(f"Generating schema for {name} {selector}")
     if is_old_format(uiConfig):
         allOfSchemaObj = generate_schema_for_allOf(uiConfig, dbConfig, "value")
     if allOfSchemaObj:
@@ -1110,8 +1156,9 @@ def generate_schema(uiConfig, dbConfig, name, selector):
                 schemaObject["anyOf"] = allOfSchemaObj
         else:
             schemaObject["allOf"] = allOfSchemaObj
+
     generate_schema_properties(
-        uiConfig, dbConfig, schemaObject, schemaObject["properties"], name, selector
+        uiConfig, dbConfig, schemaObject, schemaObject["properties"], selector
     )
     newSchema["configSchema"] = schemaObject
 
@@ -1154,7 +1201,10 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                             )
                     if (
                         curUiType == "textInput"
-                        and field["value"] in schema["required"]
+                        and (
+                            schema.get("required", False) == True
+                            and field["value"] in schema["required"]
+                        )
                         and "regex" not in field
                     ):
                         warnings.warn(
@@ -1204,7 +1254,10 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                                     )
                             if (
                                 curUiType == "textInput"
-                                and field["configKey"] in schema["required"]
+                                and (
+                                    schema.get("required", False) == True
+                                    and field["configKey"] in schema["required"]
+                                )
                                 and "regex" not in field
                             ):
                                 warnings.warn(
@@ -1423,11 +1476,9 @@ def get_schema_diff(name, selector, shouldUpdateSchema=False):
         selector (string): either 'source' or 'destination'.
         shouldUpdateSchema (boolean): if it should update the existing schema with generated one
     """
-
     file_selectors = ["db-config.json", "ui-config.json", "schema.json"]
     directory = f"./{CONFIG_DIR}/{selector}s/{name}"
     if not os.path.isdir(directory):
-        print(f"No {selector}s directory found for {name}")
         return
 
     if name not in EXCLUDED_DEST:
