@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. See [standa
 * add gcm support for active campaign,adj,adobe,adroll,af ([#1314](https://github.com/rudderlabs/rudder-config-schema/issues/1314)) ([a529b03](https://github.com/rudderlabs/rudder-config-schema/commit/a529b03c759861c6dfd5010619828b08973cc7c6))
 * added custom domain input field during ga4 setup ([e4ec3b5](https://github.com/rudderlabs/rudder-config-schema/commit/e4ec3b5c98beb5b8b2f121565f401e8796b8df1f))
 * supporting add to cart for criteo ([#1324](https://github.com/rudderlabs/rudder-config-schema/issues/1324)) ([1c74915](https://github.com/rudderlabs/rudder-config-schema/commit/1c749153fc4105a1a0da0f17ff7d07e26678c3d6))
+* transaction level custom property support AWIN ([#1342](https://github.com/rudderlabs/rudder-config-schema/issues/1342)) ([2ff1586](https://github.com/rudderlabs/rudder-config-schema/commit/2ff158638e7996983d1a72c85751e12f98322350))
 
 
 ### Bug Fixes
