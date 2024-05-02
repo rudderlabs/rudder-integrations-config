@@ -90,6 +90,44 @@
           },
           "required": ["privateKey"]
         }
+      },
+      {
+        "if": {
+          "properties": {
+            "fileFormat": {
+              "const": "csv"
+            }
+          },
+          "required": ["fileFormat"]
+        },
+        "then": {
+          "properties": {
+            "filePath": {
+              "type": "string",
+              "pattern": "\\.csv$"
+            }
+          },
+          "required": ["filePath"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "fileFormat": {
+              "const": "json"
+            }
+          },
+          "required": ["fileFormat"]
+        },
+        "then": {
+          "properties": {
+            "filePath": {
+              "type": "string",
+              "pattern": "\\.json$"
+            }
+          },
+          "required": ["filePath"]
+        }
       }
     ]
   }
