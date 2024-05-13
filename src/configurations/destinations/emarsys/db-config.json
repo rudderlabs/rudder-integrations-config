@@ -1,25 +1,24 @@
 {
-  "name": "AWIN",
-  "displayName": "Awin",
+  "name": "EMARSYS",
+  "displayName": "Emarsys",
   "config": {
-    "transformAtV1": "processor",
+    "cdkV2Enabled": true,
+    "transformAtV1": "router",
     "saveDestinationResponse": true,
-    "includeKeys": ["advertiserId", "eventsToTrack", "customFieldMap", "oneTrustCookieCategories"],
     "excludeKeys": [],
     "supportedSourceTypes": [
       "android",
       "ios",
-      "web",
       "unity",
       "amp",
-      "cloud",
       "reactnative",
       "flutter",
       "cordova",
-      "warehouse",
-      "shopify"
+      "web",
+      "cloud",
+      "shopify",
+      "warehouse"
     ],
-    "supportedMessageTypes": { "cloud": ["track"] },
     "supportedConnectionModes": {
       "android": ["cloud"],
       "ios": ["cloud"],
@@ -33,25 +32,35 @@
       "cloud": ["cloud"],
       "warehouse": ["cloud"]
     },
+    "supportedMessageTypes": {
+      "cloud": ["identify", "track", "group"]
+    },
     "destConfig": {
       "defaultConfig": [
-        "advertiserId",
-        "eventsToTrack",
-        "customFieldMap",
+        "emersysUsername",
+        "emersysUserSecret",
+        "eventsMapping",
+        "fieldMapping",
+        "emersysCustomIdentifier",
+        "defaultContactList",
+        "discardEmptyProperties",
         "oneTrustCookieCategories"
       ],
       "android": ["connectionMode"],
       "ios": ["connectionMode"],
-      "web": ["connectionMode"],
       "unity": ["connectionMode"],
       "amp": ["connectionMode"],
-      "cloud": ["connectionMode"],
       "reactnative": ["connectionMode"],
       "flutter": ["connectionMode"],
       "cordova": ["connectionMode"],
-      "warehouse": ["connectionMode"],
-      "shopify": ["connectionMode"]
+      "web": ["connectionMode"],
+      "cloud": ["connectionMode"],
+      "shopify": ["connectionMode"],
+      "warehouse": ["connectionMode"]
     },
-    "secretKeys": ["advertiserId"]
+    "secretKeys": ["emersysUsername", "emersysUserSecret"]
+  },
+  "options": {
+    "isBeta": true
   }
 }
