@@ -11,7 +11,6 @@ All notable changes to this project will be documented in this file. See [standa
 * improve schema generator ([#1207](https://github.com/rudderlabs/rudder-config-schema/issues/1207))
 * onboard emersys destination ([#1335](https://github.com/rudderlabs/rudder-config-schema/issues/1335)) 
 * onboard new destination sftp ([#1321](https://github.com/rudderlabs/rudder-integrations-config/pull/1321))
-* app secret support for facebook custom audience ([#1358](https://github.com/rudderlabs/rudder-integrations-config/pull/1358))
 
 ### Bug Fixes
 
