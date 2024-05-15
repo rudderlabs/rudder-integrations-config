@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.73.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.72.0...v1.73.0) (2024-05-08)
+
+
+### Features
+
+* add json module support in Redis ([#1353](https://github.com/rudderlabs/rudder-config-schema/issues/1353)) ([07ae1c4](https://github.com/rudderlabs/rudder-config-schema/commit/07ae1c48b7074d187b25a14c7863cdb5b4aa9922))
+
 ## [1.72.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.71.2...v1.72.0) (2024-04-29)
 
 
