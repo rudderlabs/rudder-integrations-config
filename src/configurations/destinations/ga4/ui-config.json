@@ -8,7 +8,7 @@
           {
             "groups": [
               {
-                "title": "One click checkout",
+                "title": "Connection settings",
                 "note": "Update your connection settings here",
                 "icon": "settings",
                 "fields": [
@@ -37,6 +37,29 @@
                       }
                     ],
                     "default": "gtag"
+                  },
+                  {
+                    "type": "textInput",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "typesOfClient",
+                          "value": "gtag"
+                        },
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "device"
+                        }
+                      ]
+                    },
+                    "label": "SDK Base URL",
+                    "configKey": "sdkBaseUrl",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]*|^$",
+                    "regexErrorMessage": "Please input a valid URL.",
+                    "note": "Enter your GA4 SDK base URL, https://{SDK Base URL}/gtag/js. By default, it is https://www.googletagmanager.com.",
+                    "placeholder": "e.g: https://www.example.com",
+                    "default": "https://www.googletagmanager.com",
+                    "secret": false
                   },
                   {
                     "type": "textInput",
