@@ -7,21 +7,17 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Features
 
-* add file format ([4d9bc7e](https://github.com/rudderlabs/rudder-config-schema/commit/4d9bc7e16980945aae6a9102789f77e87b07b88c))
-* **criteo:** add support of sha256 hashing method for email field ([#1301](https://github.com/rudderlabs/rudder-config-schema/issues/1301)) ([958e7d3](https://github.com/rudderlabs/rudder-config-schema/commit/958e7d3e95e9aceafbdafc44a7d0e7b65eeadc9a))
-* improve schema generator ([#1207](https://github.com/rudderlabs/rudder-config-schema/issues/1207)) ([55ad8d7](https://github.com/rudderlabs/rudder-config-schema/commit/55ad8d79e7ab2508feb8496e7f4d0674004e6611))
-* onboard emersys destination ([#1335](https://github.com/rudderlabs/rudder-config-schema/issues/1335)) ([4dea628](https://github.com/rudderlabs/rudder-config-schema/commit/4dea628413dcf3a420d4512e8004c8c458428e37))
-* onboard new destination sftp ([71a66a9](https://github.com/rudderlabs/rudder-config-schema/commit/71a66a9b53671fbac179296364013214aa975171))
-* update schema ([e4e70dd](https://github.com/rudderlabs/rudder-config-schema/commit/e4e70dd1b91f6d8802d4f563a3866e82896eb011))
-* update schema ([76721f0](https://github.com/rudderlabs/rudder-config-schema/commit/76721f0d4028c64b20d4ac2e1596283e9275a4b1))
-
+* **criteo:** add support of sha256 hashing method for email field ([#1301](https://github.com/rudderlabs/rudder-config-schema/issues/1301))
+* improve schema generator ([#1207](https://github.com/rudderlabs/rudder-config-schema/issues/1207))
+* onboard emersys destination ([#1335](https://github.com/rudderlabs/rudder-config-schema/issues/1335)) 
+* onboard new destination sftp ([#1321](https://github.com/rudderlabs/rudder-integrations-config/pull/1321))
 
 ### Bug Fixes
 
-* adding group call to emarsys ([#1349](https://github.com/rudderlabs/rudder-config-schema/issues/1349)) ([fa72fda](https://github.com/rudderlabs/rudder-config-schema/commit/fa72fda6083c047c345c8f809fe8e7926cb11934))
-* remove useNativeSdk from snowflake ([#1359](https://github.com/rudderlabs/rudder-config-schema/issues/1359)) ([05d14f0](https://github.com/rudderlabs/rudder-config-schema/commit/05d14f0b8a613520e1aba542a82c9aaf96ef0715))
-* schema ([f6cff9f](https://github.com/rudderlabs/rudder-config-schema/commit/f6cff9f4a82df23ec4bcb3228bd672aec0aee515))
+* adding group call to emarsys ([#1349](https://github.com/rudderlabs/rudder-config-schema/issues/1349))
+* remove useNativeSdk from snowflake ([#1359](https://github.com/rudderlabs/rudder-config-schema/issues/1359))
 * add unity and web as supported source type on singular ([#1370](https://github.com/rudderlabs/rudder-integrations-config/pull/1370))
+
 ## [1.73.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.72.0...v1.73.0) (2024-05-08)
 
 
