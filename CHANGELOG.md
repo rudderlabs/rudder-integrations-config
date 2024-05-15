@@ -15,7 +15,8 @@ All notable changes to this project will be documented in this file. See [standa
 ### Bug Fixes
 
 * adding group call to emarsys ([#1349](https://github.com/rudderlabs/rudder-config-schema/issues/1349))
-* remove useNativeSdk from snowflake ([#1359](https://github.com/rudderlabs/rudder-config-schema/issues/1359)) 
+* remove useNativeSdk from snowflake ([#1359](https://github.com/rudderlabs/rudder-config-schema/issues/1359))
+* add unity and web as supported source type on singular ([#1370](https://github.com/rudderlabs/rudder-integrations-config/pull/1370))
 
 ## [1.73.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.72.0...v1.73.0) (2024-05-08)
 
