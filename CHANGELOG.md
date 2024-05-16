@@ -2,6 +2,65 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.73.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.72.0...v1.73.0) (2024-05-08)
+
+
+### Features
+
+* add json module support in Redis ([#1353](https://github.com/rudderlabs/rudder-config-schema/issues/1353)) ([07ae1c4](https://github.com/rudderlabs/rudder-config-schema/commit/07ae1c48b7074d187b25a14c7863cdb5b4aa9922))
+
+## [1.72.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.71.2...v1.72.0) (2024-04-29)
+
+
+### Features
+
+* add autoConfig support in FBPixel via toggle ([#1337](https://github.com/rudderlabs/rudder-config-schema/issues/1337)) ([8acbb91](https://github.com/rudderlabs/rudder-config-schema/commit/8acbb91df784cb6f81264b7fb86cf001533da474))
+* add gcm support for active campaign,adj,adobe,adroll,af ([#1314](https://github.com/rudderlabs/rudder-config-schema/issues/1314)) ([a529b03](https://github.com/rudderlabs/rudder-config-schema/commit/a529b03c759861c6dfd5010619828b08973cc7c6))
+* added custom domain input field during ga4 setup ([e4ec3b5](https://github.com/rudderlabs/rudder-config-schema/commit/e4ec3b5c98beb5b8b2f121565f401e8796b8df1f))
+* supporting add to cart for criteo ([#1324](https://github.com/rudderlabs/rudder-config-schema/issues/1324)) ([1c74915](https://github.com/rudderlabs/rudder-config-schema/commit/1c749153fc4105a1a0da0f17ff7d07e26678c3d6))
+* transaction level custom property support AWIN ([#1342](https://github.com/rudderlabs/rudder-config-schema/issues/1342)) ([2ff1586](https://github.com/rudderlabs/rudder-config-schema/commit/2ff158638e7996983d1a72c85751e12f98322350))
+
+
+### Bug Fixes
+
+* replace schema ref with actual schema ([#1336](https://github.com/rudderlabs/rudder-config-schema/issues/1336)) ([4059fd5](https://github.com/rudderlabs/rudder-config-schema/commit/4059fd5a7ee83c2e09ff63d5deaac4a057c1d9d7))
+
+### [1.71.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.71.1...v1.71.2) (2024-04-24)
+
+
+### Bug Fixes
+
+* iterable schema ([#1332](https://github.com/rudderlabs/rudder-config-schema/issues/1332)) ([73060ab](https://github.com/rudderlabs/rudder-config-schema/commit/73060ab151274fadd7701ccfd30f1af9d93cc5b3))
+
+### [1.71.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.71.0...v1.71.1) (2024-04-22)
+
+
+### Bug Fixes
+
+* onboard yandex metrica offline events ([#1326](https://github.com/rudderlabs/rudder-config-schema/issues/1326)) ([090ea76](https://github.com/rudderlabs/rudder-config-schema/commit/090ea76402480f1df747d5696fe4277341f6dcd6))
+
+## [1.71.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.70.1...v1.71.0) (2024-04-15)
+
+
+### Features
+
+* add connectionMode for all sourceTypes in dest def for all destinations ([#1271](https://github.com/rudderlabs/rudder-config-schema/issues/1271)) ([d2420e3](https://github.com/rudderlabs/rudder-config-schema/commit/d2420e354873fdce8476d7792e9c84c5a2c0934e))
+* make regex mandatory for required textInputs ([#1289](https://github.com/rudderlabs/rudder-config-schema/issues/1289)) ([ce6eaa1](https://github.com/rudderlabs/rudder-config-schema/commit/ce6eaa182b34be31871aabd1f040d1318ec0b343))
+
+### [1.70.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.70.0...v1.70.1) (2024-04-08)
+
+
+### Bug Fixes
+
+* revert fb marketing connector ([242e7c1](https://github.com/rudderlabs/rudder-config-schema/commit/242e7c161904917d8685452ef72959b78ed37e4f))
+
+## [1.70.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.69.0...v1.70.0) (2024-04-05)
+
+
+### Features
+
+* extend gcm support for additional destinations ([#1307](https://github.com/rudderlabs/rudder-config-schema/issues/1307)) ([d819a43](https://github.com/rudderlabs/rudder-config-schema/commit/d819a43b2287c33cb30fd26a90da9abb2e6c5ac0))
+
 ## [1.69.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.68.1...v1.69.0) (2024-04-02)
 
 

@@ -1,9 +1,9 @@
 [
   {
     "config": {
-      "devKey": "aSL8jBa1DG9erAmMxRPiLM",
-      "androidAppId": "com.yara.fw.stage",
-      "appleAppId": "1202646468",
+      "devKey": "aSL8jBaXXXXerAmMxRPiLM",
+      "androidAppId": "com.test.xx.stage",
+      "appleAppId": "1202XX6468",
       "useRichEventName": true,
       "sharingFilter": "all",
       "eventFilteringOption": "whitelistedEvents",
@@ -25,7 +25,7 @@
       "useNativeSDK": {
         "android": true
       },
-      "androidAppId": "in.mintpro.debug",
+      "androidAppId": "in.test.debug",
       "useRichEventName": true,
       "sharingFilter": "all",
       "eventFilteringOption": "disable",
@@ -40,8 +40,8 @@
   },
   {
     "config": {
-      "devKey": "KPH1PgKOKNst12LgFnQ8EI",
-      "androidAppId": "com.mycom.android.parent.debug",
+      "devKey": "KPH1PgXXXXt12LgFnQ8EI",
+      "androidAppId": "com.test.android.debug",
       "appleAppId": "id1251122201",
       "useRichEventName": false,
       "sharingFilter": "all",
@@ -64,7 +64,7 @@
   },
   {
     "config": {
-      "devKey": "P4kRcaFz8d6WwjpoosM3M1",
+      "devKey": "KPH1PgXXXXt12LgFnQ8EI",
       "useNativeSDK": {
         "ios": true
       },
@@ -75,7 +75,7 @@
   },
   {
     "config": {
-      "devKey": "fSk3Lt3dVaWRTQ8H5m7BvI",
+      "devKey": "KPH1PgXXXXt12LgFnQ8EI",
       "useRichEventName": false,
       "sharingFilter": "all",
       "useNativeSDK": {
@@ -88,9 +88,9 @@
   },
   {
     "config": {
-      "devKey": "aSL8jBa1DG9erAmMxRPiLM",
-      "androidAppId": "com.yara.fw.stage",
-      "appleAppId": "1202646468",
+      "devKey": "aSL8jBaXXXXerAmMxRPiLM",
+      "androidAppId": "com.test.xx.stage",
+      "appleAppId": "1202XX6468",
       "useRichEventName": true,
       "sharingFilter": "qwssjfhncbhfjehduhendhhcidkfhhzvvxxpoiqwbfhfjjdskkdhviiwyrtehegdgyksjhjffmcnbcnvopoqweebdgggvcjkicjjcjcjnnzxxcxxxsdjjhjhjfhfgffhhhtjjjwwoo",
       "eventFilteringOption": "whitelistedEvents",
@@ -107,5 +107,103 @@
     "err": [
       "sharingFilter must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\""
     ]
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "devKey": "aSL8jBa1DG9erAmMxRPiLM",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "devKey": "aSL8jBa1DG9erAmMxRPiLM",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "devKey": "aSL8jBa1DG9erAmMxRPiLM",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "devKey": "aSL8jBa1DG9erAmMxRPiLM",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "devKey": "aSL8jBa1DG9erAmMxRPiLM",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]
