@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.74.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.73.0...v1.74.0) (2024-05-13)
+
+
+### Features
+
+* **criteo:** add support of sha256 hashing method for email field ([#1301](https://github.com/rudderlabs/rudder-config-schema/issues/1301))
+* improve schema generator ([#1207](https://github.com/rudderlabs/rudder-config-schema/issues/1207))
+* onboard emersys destination ([#1335](https://github.com/rudderlabs/rudder-config-schema/issues/1335)) 
+* onboard new destination sftp ([#1321](https://github.com/rudderlabs/rudder-integrations-config/pull/1321))
+
+### Bug Fixes
+
+* adding group call to emarsys ([#1349](https://github.com/rudderlabs/rudder-config-schema/issues/1349))
+* remove useNativeSdk from snowflake ([#1359](https://github.com/rudderlabs/rudder-config-schema/issues/1359))
+* add unity and web as supported source type on singular ([#1370](https://github.com/rudderlabs/rudder-integrations-config/pull/1370))
+
 ## [1.73.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.72.0...v1.73.0) (2024-05-08)
 
 
