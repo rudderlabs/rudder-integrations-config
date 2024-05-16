@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.74.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.73.0...v1.74.0) (2024-05-13)
+
+
+### Features
+
+* **criteo:** add support of sha256 hashing method for email field ([#1301](https://github.com/rudderlabs/rudder-config-schema/issues/1301))
+* improve schema generator ([#1207](https://github.com/rudderlabs/rudder-config-schema/issues/1207))
+* onboard emersys destination ([#1335](https://github.com/rudderlabs/rudder-config-schema/issues/1335)) 
+* onboard new destination sftp ([#1321](https://github.com/rudderlabs/rudder-integrations-config/pull/1321))
+
+### Bug Fixes
+
+* adding group call to emarsys ([#1349](https://github.com/rudderlabs/rudder-config-schema/issues/1349))
+* remove useNativeSdk from snowflake ([#1359](https://github.com/rudderlabs/rudder-config-schema/issues/1359))
+* add unity and web as supported source type on singular ([#1370](https://github.com/rudderlabs/rudder-integrations-config/pull/1370))
+
+## [1.73.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.72.0...v1.73.0) (2024-05-08)
+
+
+### Features
+
+* add json module support in Redis ([#1353](https://github.com/rudderlabs/rudder-config-schema/issues/1353)) ([07ae1c4](https://github.com/rudderlabs/rudder-config-schema/commit/07ae1c48b7074d187b25a14c7863cdb5b4aa9922))
+
+## [1.72.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.71.2...v1.72.0) (2024-04-29)
+
+
+### Features
+
+* add autoConfig support in FBPixel via toggle ([#1337](https://github.com/rudderlabs/rudder-config-schema/issues/1337)) ([8acbb91](https://github.com/rudderlabs/rudder-config-schema/commit/8acbb91df784cb6f81264b7fb86cf001533da474))
+* add gcm support for active campaign,adj,adobe,adroll,af ([#1314](https://github.com/rudderlabs/rudder-config-schema/issues/1314)) ([a529b03](https://github.com/rudderlabs/rudder-config-schema/commit/a529b03c759861c6dfd5010619828b08973cc7c6))
+* added custom domain input field during ga4 setup ([e4ec3b5](https://github.com/rudderlabs/rudder-config-schema/commit/e4ec3b5c98beb5b8b2f121565f401e8796b8df1f))
+* supporting add to cart for criteo ([#1324](https://github.com/rudderlabs/rudder-config-schema/issues/1324)) ([1c74915](https://github.com/rudderlabs/rudder-config-schema/commit/1c749153fc4105a1a0da0f17ff7d07e26678c3d6))
+* transaction level custom property support AWIN ([#1342](https://github.com/rudderlabs/rudder-config-schema/issues/1342)) ([2ff1586](https://github.com/rudderlabs/rudder-config-schema/commit/2ff158638e7996983d1a72c85751e12f98322350))
+
+
+### Bug Fixes
+
+* replace schema ref with actual schema ([#1336](https://github.com/rudderlabs/rudder-config-schema/issues/1336)) ([4059fd5](https://github.com/rudderlabs/rudder-config-schema/commit/4059fd5a7ee83c2e09ff63d5deaac4a057c1d9d7))
+
 ### [1.71.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.71.1...v1.71.2) (2024-04-24)
 
 
