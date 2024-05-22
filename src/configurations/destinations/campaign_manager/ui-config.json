@@ -7,7 +7,7 @@
           "type": "textInput",
           "label": "Profile ID",
           "value": "profileId",
-          "regex": "^(.{1,50})$",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,50})$",
           "regexErrorMessage": "Length of Profile ID must be below 50 characters.",
           "required": true,
           "secret": false,
@@ -45,6 +45,30 @@
           "required": false,
           "default": false,
           "footerNote": "Whether this particular request may come from a user under the age of 16 (may differ by country), under compliance with the European Union's General Data Protection Regulation (GDPR)."
+        },
+        {
+          "type": "checkbox",
+          "label": "Enhanced Conversions",
+          "value": "enhancedConversions",
+          "required": false,
+          "default": false,
+          "footerNote": "Enable this toggle to enhanced the conversions."
+        },
+        {
+          "type": "checkbox",
+          "label": "Hash user identifiers",
+          "value": "hashUserIdentifiers",
+          "required": false,
+          "default": false,
+          "footerNote": "RudderStack will hash your user identifiers by default. Switch this off if you are already sending hashed data.",
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "enhancedConversions",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     },
