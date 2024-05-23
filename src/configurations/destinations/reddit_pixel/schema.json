@@ -6,7 +6,7 @@
     "properties": {
       "advertiserId": {
         "type": "string",
-        "pattern": "^(.{0,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "eventMappingFromConfig": {
         "type": "array",
@@ -14,7 +14,8 @@
           "type": "object",
           "properties": {
             "from": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
             "to": {
               "type": "string",
@@ -25,7 +26,8 @@
                 "Lead",
                 "ViewContent",
                 "Search",
-                "SignUp"
+                "SignUp",
+                ""
               ]
             }
           }
@@ -43,13 +45,50 @@
           }
         }
       },
-      "useNativeSDK": { "type": "boolean" },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
       "connectionMode": {
         "type": "object",
         "properties": {
           "web": { "type": "string", "enum": ["web"] }
         }
+      },
+      "eventFilteringOption": {
+        "type": "string",
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
+      },
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
       }
-    }
+    },
+    "additionalProperties": false
   }
 }
