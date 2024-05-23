@@ -1,7 +1,7 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["accessToken", "audienceId", "maxUserCount"],
+    "required": ["accessToken", "maxUserCount"],
     "type": "object",
     "properties": {
       "accessToken": {
@@ -13,12 +13,22 @@
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$"
       },
       "adAccountId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "type": "object",
+        "properties": {
+          "warehouse": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          }
+        }
       },
       "audienceId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "type": "object",
+        "properties": {
+          "cloud": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          }
+        }
       },
       "maxUserCount": {
         "type": "string",
@@ -28,7 +38,23 @@
         "type": "array",
         "items": {
           "type": "string",
-          "enum": ["EMAIL", "PHONE", "GEN", "MADID","EXTERN_ID","DOBY", "DOBM", "DOBD","LN","FN", "FI","CT","ST","ZIP","COUNTRY"]
+          "enum": [
+            "EMAIL",
+            "PHONE",
+            "GEN",
+            "MADID",
+            "EXTERN_ID",
+            "DOBY",
+            "DOBM",
+            "DOBD",
+            "LN",
+            "FN",
+            "FI",
+            "CT",
+            "ST",
+            "ZIP",
+            "COUNTRY"
+          ]
         },
         "default": ["EMAIL"]
       },
@@ -46,8 +72,7 @@
           "COPY_PASTE",
           "CONTACT_IMPORTER",
           "HOUSEHOLD_AUDIENCE",
-          "NA",
-          ""
+          "NA"
         ],
         "default": "NA"
       },
@@ -59,8 +84,8 @@
           "HASHES",
           "USER_IDS",
           "HASHES_OR_USER_IDS",
-          "FB_EVENT_SIGNALS",
           "MOBILE_ADVERTISER_IDS",
+          "FB_EVENT_SIGNALS",
           "EXTERNAL_IDS",
           "MULTI_HASHES",
           "TOKENS",
@@ -104,12 +129,11 @@
           "COPY_PASTE_EMAIL_HASHES",
           "CONTACT_IMPORTER",
           "DATA_FILE",
-          "NA",
-          ""
+          "NA"
         ],
         "default": "NA"
       },
-  
+
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
