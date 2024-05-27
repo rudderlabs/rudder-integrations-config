@@ -1,46 +1,8 @@
 [
   {
-    "config": {
-      "apiKey": "",
-      "domain": "mytest-1234"
-    },
-    "result": false,
-    "err": ["apiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""]
-  },
-  {
-    "config": {
-      "apiKey": "adhs123-adhs123-adhs3",
-      "domain": "mytest-1234"
-    },
-    "result": true
-  },
-  {
-    "config": {
-      "apiKey": "adhs123-adhs123-adhs3"
-    },
-    "result": false,
-    "err": [" must have required property 'domain'"]
-  },
-  {
-    "config": {
-      "domain": "mytest-1234"
-    },
-    "result": false,
-    "err": [" must have required property 'apiKey'"]
-  },
-  {
-    "config": {
-      "apiKey": "adhs123-adhs123-adhs3",
-      "domain": ""
-    },
-    "result": false,
-    "err": ["domain must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""]
-  },
-  {
     "testTitle": "With valid multiple consent management providers config",
     "config": {
-      "apiKey": "adhs123-adhs123-adhs3",
-      "domain": "mytest-1234",
+      "advertiserId": "test-host",
       "consentManagement": {
         "web": [
           {
@@ -72,10 +34,9 @@
   {
     "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
     "config": {
-      "apiKey": "adhs123-adhs123-adhs3",
-      "domain": "mytest-1234",
+      "advertiserId": "test-host",
       "consentManagement": {
-        "android": [
+        "web": [
           {
             "provider": "custom",
             "resolutionStrategy": "nor"
@@ -85,17 +46,16 @@
     },
     "result": false,
     "err": [
-      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
-      "consentManagement.android.0 must match \"then\" schema"
+      "consentManagement.web.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.web.0 must match \"then\" schema"
     ]
   },
   {
     "testTitle": "With consent management custom provider config and no resolutionStrategy value",
     "config": {
-      "apiKey": "adhs123-adhs123-adhs3",
-      "domain": "mytest-1234",
+      "advertiserId": "test-host",
       "consentManagement": {
-        "android": [
+        "web": [
           {
             "provider": "custom"
           }
@@ -104,17 +64,16 @@
     },
     "result": false,
     "err": [
-      "consentManagement.android.0 must have required property 'resolutionStrategy'",
-      "consentManagement.android.0 must match \"then\" schema"
+      "consentManagement.web.0 must have required property 'resolutionStrategy'",
+      "consentManagement.web.0 must match \"then\" schema"
     ]
   },
   {
     "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
     "config": {
-      "apiKey": "adhs123-adhs123-adhs3",
-      "domain": "mytest-1234",
+      "advertiserId": "test-host",
       "consentManagement": {
-        "android": [
+        "web": [
           {
             "provider": "oneTrust"
           }
@@ -126,10 +85,9 @@
   {
     "testTitle": "With consent management custom provider config invalid provider value",
     "config": {
-      "apiKey": "adhs123-adhs123-adhs3",
-      "domain": "mytest-1234",
+      "advertiserId": "test-host",
       "consentManagement": {
-        "android": [
+        "web": [
           {
             "provider": "dummyProvider"
           }
@@ -137,6 +95,6 @@
       }
     },
     "result": false,
-    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
+    "err": ["consentManagement.web.0.provider must be equal to one of the allowed values"]
   }
 ]
