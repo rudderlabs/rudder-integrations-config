@@ -8,10 +8,13 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "standardPageCall": {
-        "type": "boolean",
-        "default": false
+      "autoConfig": {
+        "type": "object",
+        "properties": {
+          "web": { "type": "boolean" }
+        }
       },
+      "standardPageCall": { "type": "boolean", "default": false },
       "eventsToEvents": {
         "type": "array",
         "items": {
@@ -53,10 +56,7 @@
         "enum": ["properties.value", "properties.price"],
         "default": "properties.price"
       },
-      "advancedMapping": {
-        "type": "boolean",
-        "default": false
-      },
+      "advancedMapping": { "type": "boolean", "default": false },
       "blacklistPiiProperties": {
         "type": "array",
         "items": {
@@ -66,9 +66,7 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "blacklistPiiHash": {
-              "type": "boolean"
-            }
+            "blacklistPiiHash": { "type": "boolean" }
           }
         }
       },
@@ -105,43 +103,31 @@
           }
         }
       },
-      "limitedDataUSage": {
-        "type": "boolean",
-        "default": false
-      },
-      "testDestination": {
-        "type": "boolean",
-        "default": false
-      },
+      "limitedDataUSage": { "type": "boolean", "default": false },
+      "testDestination": { "type": "boolean", "default": false },
       "testEventCode": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "removeExternalId": {
-        "type": "boolean",
-        "default": false
-      },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
+      "removeExternalId": { "type": "boolean", "default": false },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "connectionMode": {
         "type": "object",
         "properties": {
-          "web": {
-            "type": "string",
-            "enum": ["cloud", "device"]
-          }
+          "web": { "type": "string", "enum": ["cloud", "device"] },
+          "android": { "type": "string", "enum": ["cloud"] },
+          "ios": { "type": "string", "enum": ["cloud"] },
+          "unity": { "type": "string", "enum": ["cloud"] },
+          "amp": { "type": "string", "enum": ["cloud"] },
+          "reactnative": { "type": "string", "enum": ["cloud"] },
+          "flutter": { "type": "string", "enum": ["cloud"] },
+          "cordova": { "type": "string", "enum": ["cloud"] },
+          "shopify": { "type": "string", "enum": ["cloud"] },
+          "cloud": { "type": "string", "enum": ["cloud"] },
+          "warehouse": { "type": "string", "enum": ["cloud"] }
         }
       },
-      "useUpdatedMapping": {
-        "type": "boolean",
-        "default": false
-      },
+      "useUpdatedMapping": { "type": "boolean", "default": false },
       "eventFilteringOption": {
         "type": "string",
         "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
@@ -224,19 +210,12 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
+                    "properties": { "provider": { "const": "custom" } },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
+                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -270,19 +249,12 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
+                    "properties": { "provider": { "const": "custom" } },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
+                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -316,19 +288,12 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
+                    "properties": { "provider": { "const": "custom" } },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
+                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -362,19 +327,12 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
+                    "properties": { "provider": { "const": "custom" } },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
+                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -408,19 +366,12 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
+                    "properties": { "provider": { "const": "custom" } },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
+                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -454,19 +405,12 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
+                    "properties": { "provider": { "const": "custom" } },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
+                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -500,19 +444,12 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
+                    "properties": { "provider": { "const": "custom" } },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
+                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -546,19 +483,12 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
+                    "properties": { "provider": { "const": "custom" } },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
+                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -592,19 +522,12 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
+                    "properties": { "provider": { "const": "custom" } },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
+                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -638,19 +561,12 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
+                    "properties": { "provider": { "const": "custom" } },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
+                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -684,19 +600,12 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
+                    "properties": { "provider": { "const": "custom" } },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
+                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -714,12 +623,7 @@
             "properties": {
               "connectionMode": {
                 "type": "object",
-                "properties": {
-                  "web": {
-                    "type": "string",
-                    "enum": ["device"]
-                  }
-                }
+                "properties": { "web": { "type": "string", "enum": ["device"] } }
               }
             },
             "required": ["connectionMode"]

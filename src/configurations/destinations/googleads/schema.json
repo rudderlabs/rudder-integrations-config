@@ -4,10 +4,8 @@
     "required": ["conversionID"],
     "type": "object",
     "properties": {
-      "v2": {
-        "type": "boolean",
-        "default": true
-      },
+      "v2": { "type": "boolean", "default": true },
+      "allowIdentify": { "type": "boolean", "default": false },
       "conversionID": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^AW-(.{0,100})$"
@@ -39,22 +37,9 @@
           }
         }
       },
-      "trackConversions": {
-        "type": "boolean",
-        "default": true
-      },
-      "trackDynamicRemarketing": {
-        "type": "boolean",
-        "default": false
-      },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
+      "trackConversions": { "type": "boolean", "default": true },
+      "trackDynamicRemarketing": { "type": "boolean", "default": false },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "eventFilteringOption": {
         "type": "string",
         "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
@@ -120,26 +105,11 @@
           }
         }
       },
-      "sendPageView": {
-        "type": "boolean",
-        "default": true
-      },
-      "conversionLinker": {
-        "type": "boolean",
-        "default": true
-      },
-      "disableAdPersonalization": {
-        "type": "boolean",
-        "default": false
-      },
-      "enableConversionLabel": {
-        "type": "boolean",
-        "default": false
-      },
-      "allowEnhancedConversions": {
-        "type": "boolean",
-        "default": false
-      },
+      "sendPageView": { "type": "boolean", "default": true },
+      "conversionLinker": { "type": "boolean", "default": true },
+      "disableAdPersonalization": { "type": "boolean", "default": false },
+      "enableConversionLabel": { "type": "boolean", "default": false },
+      "allowEnhancedConversions": { "type": "boolean", "default": false },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -151,24 +121,72 @@
             }
           }
         }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": { "web": { "type": "string", "enum": ["device"] } }
+      },
+      "consentManagement": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "ketch", "oneTrust"],
+                  "default": "oneTrust"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            }
+          }
+        }
       }
     },
     "allOf": [
       {
         "if": {
-          "properties": {
-            "trackConversions": {
-              "const": true
-            }
-          },
+          "properties": { "trackConversions": { "const": true } },
           "required": ["trackConversions"]
         },
         "then": {
           "properties": {
-            "enableConversionEventsFiltering": {
-              "type": "boolean",
-              "default": false
-            }
+            "enableConversionEventsFiltering": { "type": "boolean", "default": false }
           },
           "required": []
         }
@@ -176,12 +194,8 @@
       {
         "if": {
           "properties": {
-            "trackConversions": {
-              "const": true
-            },
-            "enableConversionEventsFiltering": {
-              "const": true
-            }
+            "trackConversions": { "const": true },
+            "enableConversionEventsFiltering": { "const": true }
           },
           "required": ["trackConversions", "enableConversionEventsFiltering"]
         },
@@ -205,19 +219,12 @@
       },
       {
         "if": {
-          "properties": {
-            "trackDynamicRemarketing": {
-              "const": true
-            }
-          },
+          "properties": { "trackDynamicRemarketing": { "const": true } },
           "required": ["trackDynamicRemarketing"]
         },
         "then": {
           "properties": {
-            "enableDynamicRemarketingEventsFiltering": {
-              "type": "boolean",
-              "default": false
-            }
+            "enableDynamicRemarketingEventsFiltering": { "type": "boolean", "default": false }
           },
           "required": []
         }
@@ -225,12 +232,8 @@
       {
         "if": {
           "properties": {
-            "trackDynamicRemarketing": {
-              "const": true
-            },
-            "enableDynamicRemarketingEventsFiltering": {
-              "const": true
-            }
+            "trackDynamicRemarketing": { "const": true },
+            "enableDynamicRemarketingEventsFiltering": { "const": true }
           },
           "required": ["trackDynamicRemarketing", "enableDynamicRemarketingEventsFiltering"]
         },

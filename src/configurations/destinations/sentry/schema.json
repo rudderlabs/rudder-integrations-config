@@ -5,7 +5,8 @@
     "type": "object",
     "properties": {
       "dsn": {
-        "type": "string"
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,300})$"
       },
       "environment": {
         "type": "string"
@@ -122,6 +123,10 @@
             }
           }
         }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": { "web": { "type": "string", "enum": ["device"] } }
       }
     },
     "additionalProperties": false

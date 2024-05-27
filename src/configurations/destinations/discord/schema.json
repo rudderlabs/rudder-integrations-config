@@ -12,10 +12,7 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,1000})$"
       },
-      "embedFlag": {
-        "type": "boolean",
-        "default": false
-      },
+      "embedFlag": { "type": "boolean", "default": false },
       "eventTemplateSettings": {
         "type": "array",
         "items": {
@@ -29,10 +26,7 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,1000})$"
             },
-            "eventRegex": {
-              "type": "boolean",
-              "default": false
-            }
+            "eventRegex": { "type": "boolean", "default": false }
           }
         }
       },
@@ -59,18 +53,27 @@
             }
           }
         }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "android": { "type": "string", "enum": ["cloud"] },
+          "ios": { "type": "string", "enum": ["cloud"] },
+          "web": { "type": "string", "enum": ["cloud"] },
+          "unity": { "type": "string", "enum": ["cloud"] },
+          "amp": { "type": "string", "enum": ["cloud"] },
+          "reactnative": { "type": "string", "enum": ["cloud"] },
+          "flutter": { "type": "string", "enum": ["cloud"] },
+          "cordova": { "type": "string", "enum": ["cloud"] },
+          "shopify": { "type": "string", "enum": ["cloud"] },
+          "cloud": { "type": "string", "enum": ["cloud"] },
+          "warehouse": { "type": "string", "enum": ["cloud"] }
+        }
       }
     },
     "anyOf": [
       {
-        "if": {
-          "properties": {
-            "embedFlag": {
-              "const": true
-            }
-          },
-          "required": ["embedFlag"]
-        },
+        "if": { "properties": { "embedFlag": { "const": true } }, "required": ["embedFlag"] },
         "then": {
           "properties": {
             "embedTitleTemplate": {

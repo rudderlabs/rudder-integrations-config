@@ -4,22 +4,20 @@
   "config": {
     "cdkV2Enabled": true,
     "supportsVisualMapper": true,
-    "auth": {
-      "type": "OAuth"
-    },
+    "auth": { "type": "OAuth" },
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": ["oneTrustCookieCategories"],
     "excludeKeys": [],
     "supportedSourceTypes": ["cloud", "warehouse", "shopify"],
-    "supportedMessageTypes": {
-      "cloud": ["audiencelist"]
-    },
+    "supportedMessageTypes": { "cloud": ["audiencelist"] },
     "syncBehaviours": ["mirror"],
     "disableJsonMapper": true,
     "isAudienceSupported": true,
     "supportedConnectionModes": {
-      "shopify": ["cloud"]
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
     },
     "destConfig": {
       "defaultConfig": [
@@ -29,10 +27,11 @@
         "audienceId",
         "hashEmail",
         "oneTrustCookieCategories"
-      ]
+      ],
+      "cloud": ["connectionMode"],
+      "warehouse": ["connectionMode"],
+      "shopify": ["connectionMode"]
     }
   },
-  "options": {
-    "isBeta": true
-  }
+  "options": { "isBeta": true }
 }

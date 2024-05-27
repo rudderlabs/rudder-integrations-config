@@ -14,7 +14,7 @@
       },
       "hashMethod": {
         "type": "string",
-        "enum": ["none", "md5"],
+        "enum": ["none", "md5", "sha256"],
         "default": "none"
       },
       "fieldMapping": {
@@ -33,14 +33,7 @@
           }
         }
       },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
+      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "eventFilteringOption": {
         "type": "string",
         "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
@@ -98,11 +91,16 @@
                 "cart viewed",
                 "order completed",
                 "product list viewed",
+                "product added",
                 ""
               ]
             }
           }
         }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": { "web": { "type": "string", "enum": ["device"] } }
       }
     }
   }
