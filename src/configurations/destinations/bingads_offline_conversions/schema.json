@@ -1,0 +1,37 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["customerAccountId", "customerId"],
+    "properties": {
+      "customerAccountId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+      },
+      "customerId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+      },
+      "oneTrustCookieCategories": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "oneTrustCookieCategory": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "shopify": { "type": "string", "enum": ["cloud"] },
+          "cloud": { "type": "string", "enum": ["cloud"] },
+          "warehouse": { "type": "string", "enum": ["cloud"] }
+        }
+      }
+    }
+  }
+}
