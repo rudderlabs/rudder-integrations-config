@@ -1,12 +1,20 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["authVersion"],
     "type": "object",
     "properties": {
       "authVersion": { "type": "string", "enum": ["v1", "v2"], "default": "v1" },
       "allOf": [
         {
-          "if": { "properties": { "authVersion": { "const": "v1" } }, "required": ["authVersion"] },
+          "if": {
+            "properties": {
+              "authVersion": {
+                "const": "v1"
+              }
+            },
+            "required": ["authVersion"]
+          },
           "then": {
             "properties": {
               "devKey": {
@@ -18,7 +26,14 @@
           }
         },
         {
-          "if": { "properties": { "authVersion": { "const": "v2" } }, "required": ["authVersion"] },
+          "if": {
+            "properties": {
+              "authVersion": {
+                "const": "v2"
+              }
+            },
+            "required": ["authVersion"]
+          },
           "then": {
             "properties": {
               "s2sKey": {
@@ -551,6 +566,7 @@
           "shopify": { "type": "string", "enum": ["cloud"] }
         }
       }
-    }
+    },
+    "additionalProperties": false
   }
 }
