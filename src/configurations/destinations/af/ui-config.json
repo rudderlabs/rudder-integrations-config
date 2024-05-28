@@ -4,11 +4,46 @@
       "title": "Connection Settings",
       "fields": [
         {
+          "type": "singleSelect",
+          "label": "Authorization Type",
+          "value": "authVersion",
+          "options": [
+            {
+              "name": "Authorization with dev key",
+              "value": "v1"
+            },
+            {
+              "name": "Authorization with server to server key",
+              "value": "v2"
+            }
+          ],
+          "defaultOption": {
+            "value": "v1"
+          }
+        },
+        {
           "type": "textInput",
+          "preRequisiteField": {
+            "name": "authorizationType",
+            "selectedValue": "v1"
+          },
           "label": "AppsFlyer Dev Key",
           "value": "devKey",
           "regex": "^(.{1,100})$",
           "regexErrorMessage": "Invalid AppsFlyer Dev Key",
+          "required": true,
+          "placeholder": "e.g: bSjsdXXXOo9sew21Shj"
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": {
+            "name": "authorizationType",
+            "selectedValue": "v2"
+          },
+          "label": "AppsFlyer server to server API key",
+          "value": "s2sKey",
+          "regex": "^(.{1,200})$",
+          "regexErrorMessage": "Invalid AppsFlyer s2s key",
           "required": true,
           "placeholder": "e.g: bSjsdXXXOo9sew21Shj"
         },
