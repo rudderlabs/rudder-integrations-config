@@ -86,6 +86,9 @@
         { "to": "Search", "from": "Search" },
         { "to": "SignUp", "from": "SignUp" }
       ],
+      "connectionMode": {
+        "web": "device"
+      },
       "whitelistedEvents": [],
       "blacklistedEvents": [],
       "oneTrustCookieCategories": []
@@ -104,6 +107,9 @@
             "resolutionStrategy": "nor"
           }
         ]
+      },
+      "connectionMode": {
+        "web": "device"
       }
     },
     "result": false,
@@ -158,5 +164,88 @@
     },
     "result": false,
     "err": ["consentManagement.web.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With invalid connectionMode",
+    "config": {
+      "eventFilteringOption": "disable",
+      "advertiserId": "01234567890123456789012345678901234567890123456789",
+      "eventMappingFromConfig": [
+        { "from": "Add to cart", "to": "AddToCart" },
+        { "to": "AddToWishlist", "from": "Add to Wishlist" },
+        { "to": "Purchase", "from": "Purchase" },
+        { "to": "Lead", "from": "Lead" },
+        { "to": "ViewContent", "from": "View" },
+        { "to": "Search", "from": "Search" },
+        { "to": "SignUp", "from": "SignUp" }
+      ],
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": [],
+      "connectionMode": {
+        "web": "device"
+      }
+    },
+    "result": true,
+    "err": ["eventMappingFromConfig.0.to must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "check with all possible event names",
+    "config": {
+      "advertiserId": "12345",
+      "eventFilteringOption": "disable",
+      "eventMappingFromConfig": [
+        {
+          "from": "123123",
+          "to": "AddToCart"
+        },
+        {
+          "to": "AddToWishlist",
+          "from": "1"
+        },
+        {
+          "to": "Purchase",
+          "from": "2"
+        },
+        {
+          "to": "Lead",
+          "from": "3"
+        },
+        {
+          "to": "ViewContent",
+          "from": "4"
+        },
+        {
+          "to": "Search",
+          "from": "5"
+        },
+        {
+          "to": "SignUp",
+          "from": "6"
+        },
+        {
+          "to": "AddToWishlist",
+          "from": "6"
+        }
+      ],
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust",
+            "resolutionStrategy": "",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
   }
 ]
