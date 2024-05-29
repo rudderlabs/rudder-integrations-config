@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 
 ### Features
-
+* onboard klaviyo bulk upload destination ([#1432](https://github.com/rudderlabs/rudder-config-schema/issues/1432)) ([d24bec3](https://github.com/rudderlabs/rudder-config-schema/commit/d24bec329776ca0e068f6a419a7d1db470421304))
 * added GCM support for Appcues destination ([#1376](https://github.com/rudderlabs/rudder-config-schema/issues/1376)) ([e017424](https://github.com/rudderlabs/rudder-config-schema/commit/e0174248d959977d477e408a953c996542efa7f4))
 * added GCM support for BigQuery Stream destination ([#1397](https://github.com/rudderlabs/rudder-config-schema/issues/1397)) ([37586af](https://github.com/rudderlabs/rudder-config-schema/commit/37586af077087f415e90d367e7b443a294c2dcdd))
 * added GCM support for BingAds destination ([#1393](https://github.com/rudderlabs/rudder-config-schema/issues/1393)) ([bf5f781](https://github.com/rudderlabs/rudder-config-schema/commit/bf5f781eb34195d47c41c703da0b371ac10fe173))
