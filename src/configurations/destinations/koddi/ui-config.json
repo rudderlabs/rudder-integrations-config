@@ -1,0 +1,95 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here.",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "API Base URL",
+                    "note": "Enter your API Base URL, e.g. https://{clientname}.koddi.io/event-collection/beacon",
+                    "configKey": "apiBaseUrl",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$",
+                    "regexErrorMessage": "Invalid API Base URl",
+                    "required": true,
+                    "placeholder": "e.g. https://clientname.koddi.io/event-collection/beacon"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Client Name",
+                    "configKey": "clientName",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,200})$",
+                    "regexErrorMessage": "Invalid Client Name",
+                    "required": true,
+                    "placeholder": "e.g. clientName"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Clicks Event Settings",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "testVersionOverride",
+                    "configKey": "testVersionOverride",
+                    "default": false,
+                    "note": "Enabling this allows you to add a testing parameter."
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "overrides",
+                    "configKey": "overrides",
+                    "default": false,
+                    "note": "Enabling this allows you to override the auction results."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    }
+  }
+}
