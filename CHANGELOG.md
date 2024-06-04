@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.75.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.75.0...v1.75.1) (2024-06-03)
+
+
+### Bug Fixes
+
+* emarsys track call event mapping fix ([#1440](https://github.com/rudderlabs/rudder-config-schema/issues/1440)) ([f579c1e](https://github.com/rudderlabs/rudder-config-schema/commit/f579c1e60ee24c060a38ef43934c0f116f63f10e))
+
 ## [1.75.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.74.0...v1.75.0) (2024-05-27)
 
 
