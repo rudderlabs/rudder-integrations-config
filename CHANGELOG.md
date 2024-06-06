@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.75.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.75.1...v1.75.2) (2024-06-06)
+
+
+### Bug Fixes
+
+* facebook custom audience schema issue ([#1447](https://github.com/rudderlabs/rudder-config-schema/issues/1447)) ([a16b9a9](https://github.com/rudderlabs/rudder-config-schema/commit/a16b9a9b8a646d619f4dd31b4b250da21f53daf1))
+
 ### [1.75.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.75.0...v1.75.1) (2024-06-03)
 
 
