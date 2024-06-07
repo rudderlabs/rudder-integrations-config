@@ -1,9 +1,14 @@
 {
-  "name": "GA4",
-  "displayName": "Google Analytics 4 (GA4)",
+  "name": "GA4_V2",
+  "displayName": "Google Analytics 4 (GA4) V2",
   "config": {
     "transformAtV1": "processor",
     "saveDestinationResponse": false,
+    "auth": {
+      "type": "OAuth",
+      "role": "google_analytics_4",
+      "rudderScopes": ["delivery"]
+    },
     "includeKeys": [
       "debugView",
       "measurementId",
@@ -59,10 +64,12 @@
     "hybridModeCloudEventsFilter": { "web": { "messageType": ["track", "group"] } },
     "destConfig": {
       "defaultConfig": [
+        "rudderAccountId",
         "apiSecret",
         "debugMode",
         "typesOfClient",
         "measurementId",
+        "propertyId",
         "firebaseAppId",
         "whitelistedEvents",
         "blacklistedEvents",
@@ -70,6 +77,7 @@
         "piiPropertiesToIgnore",
         "oneTrustCookieCategories",
         "ketchConsentPurposes",
+        "eventsMapping",
         "sdkBaseUrl"
       ],
       "web": [
@@ -96,6 +104,7 @@
     "secretKeys": ["apiSecret"]
   },
   "options": {
-    "isBeta": false
+    "isBeta": false,
+    "supportsCustomMappings": true
   }
 }
