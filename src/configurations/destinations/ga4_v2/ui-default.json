@@ -4,10 +4,10 @@
       "rsEventName": "Products Searched",
       "destEventName": "search",
       "eventProperties": [
-        { "to": "$.events[0].params.search_term", "from": "$.events[0].params.properties.query" },
+        { "from": "$.events[0].params.properties.query", "to": "$.events[0].params.search_term" },
         {
-          "from": "$.context.traits",
-          "to": "$.user_properties"
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value"
         }
       ]
     },
@@ -15,8 +15,8 @@
       "rsEventName": "Product List Viewed",
       "destEventName": "view_item_list",
       "eventProperties": [
-        { "to": "$.events[0].params.item_list_id", "from": "$.properties.list_id" },
-        { "to": "$.events[0].params.item_list_name", "from": "$.properties.category" },
+        { "from": "$.properties.list_id", "to": "$.events[0].params.item_list_id" },
+        { "from": "$.properties.category", "to": "$.events[0].params.item_list_name" },
         {
           "from": "$.properties.products[*].product_id",
           "to": "$.events[0].params.items[*].item_id"
@@ -82,8 +82,8 @@
           "to": "$.events[0].params.items[*].location_id"
         },
         {
-          "from": "$.context.traits",
-          "to": "$.user_properties"
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value"
         }
       ]
     },
@@ -91,11 +91,11 @@
       "rsEventName": "Product Clicked",
       "destEventName": "select_item",
       "eventProperties": [
-        { "to": "$.events[0].params.item_list_id", "from": "$.properties.list_id" },
-        { "to": "$.events[0].params.item_list_name", "from": "$.properties.category" },
+        { "from": "$.properties.list_id", "to": "$.events[0].params.item_list_id" },
+        { "from": "$.properties.category", "to": "$.events[0].params.item_list_name" },
         {
-          "from": "$.context.traits",
-          "to": "$.user_properties"
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value"
         }
       ]
     },
@@ -103,10 +103,10 @@
       "rsEventName": "Promotion Viewed",
       "destEventName": "view_promotion",
       "eventProperties": [
-        { "to": "$.events[0].params.creative_name", "from": "$.properties.creative_name" },
-        { "to": "$.events[0].params.creative_slot", "from": "$.properties.creative_slot" },
-        { "to": "$.events[0].params.promotion_name", "from": "$.properties.promotion_name" },
-        { "to": "$.events[0].params.promotion_id", "from": "$.properties.promotion_id" },
+        { "from": "$.properties.creative_name", "to": "$.events[0].params.creative_name" },
+        { "from": "$.properties.creative_slot", "to": "$.events[0].params.creative_slot" },
+        { "from": "$.properties.promotion_name", "to": "$.events[0].params.promotion_name" },
+        { "from": "$.properties.promotion_id", "to": "$.events[0].params.promotion_id" },
         {
           "from": "$.properties.products[*].product_id",
           "to": "$.events[0].params.items[*].item_id"
@@ -172,8 +172,8 @@
           "to": "$.events[0].params.items[*].location_id"
         },
         {
-          "from": "$.context.traits",
-          "to": "$.user_properties"
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value"
         }
       ]
     },
@@ -181,10 +181,10 @@
       "rsEventName": "Promotion Clicked",
       "destEventName": "select_promotion",
       "eventProperties": [
-        { "to": "$.events[0].params.creative_name", "from": "$.properties.creative_name" },
-        { "to": "$.events[0].params.creative_slot", "from": "$.properties.creative_slot" },
-        { "to": "$.events[0].params.promotion_name", "from": "$.properties.promotion_name" },
-        { "to": "$.events[0].params.promotion_id", "from": "$.properties.promotion_id" },
+        { "from": "$.properties.creative_name", "to": "$.events[0].params.creative_name" },
+        { "from": "$.properties.creative_slot", "to": "$.events[0].params.creative_slot" },
+        { "from": "$.properties.promotion_name", "to": "$.events[0].params.promotion_name" },
+        { "from": "$.properties.promotion_id", "to": "$.events[0].params.promotion_id" },
         {
           "from": "$.properties.products[*].product_id",
           "to": "$.events[0].params.items[*].item_id"
@@ -250,8 +250,8 @@
           "to": "$.events[0].params.items[*].location_id"
         },
         {
-          "from": "$.context.traits",
-          "to": "$.user_properties"
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value"
         }
       ]
     },
@@ -259,10 +259,10 @@
       "rsEventName": "Product Viewed",
       "destEventName": "view_item",
       "eventProperties": [
-        { "to": "$.events[0].params.currency", "from": "$.properties.currency" },
+        { "from": "$.properties.currency", "to": "$.events[0].params.currency" },
         {
-          "from": "$.context.traits",
-          "to": "$.user_properties"
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value"
         }
       ]
     },
@@ -270,11 +270,11 @@
       "rsEventName": "Product Added",
       "destEventName": "add_to_cart",
       "eventProperties": [
-        { "to": "$.events[0].params.currency", "from": "$.properties.currency" },
-        { "to": "$.events[0].params.value", "from": "$.properties.revenue" },
+        { "from": "$.properties.currency", "to": "$.events[0].params.currency" },
+        { "from": "$.properties.revenue", "to": "$.events[0].params.value" },
         {
-          "from": "$.context.traits",
-          "to": "$.user_properties"
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value"
         }
       ]
     },
@@ -282,10 +282,10 @@
       "rsEventName": "Product Removed",
       "destEventName": "remove_from_cart",
       "eventProperties": [
-        { "to": "$.events[0].params.value", "from": "$.properties.revenue" },
+        { "from": "$.properties.revenue", "to": "$.events[0].params.value" },
         {
-          "from": "$.context.traits",
-          "to": "$.user_properties"
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value"
         }
       ]
     },
@@ -293,8 +293,8 @@
       "rsEventName": "Cart Viewed",
       "destEventName": "view_cart",
       "eventProperties": [
-        { "to": "$.events[0].params.currency", "from": "$.properties.currency" },
-        { "to": "$.events[0].params.value", "from": "$.properties.revenue" },
+        { "from": "$.properties.currency", "to": "$.events[0].params.currency" },
+        { "from": "$.properties.revenue", "to": "$.events[0].params.value" },
         {
           "from": "$.properties.products[*].product_id",
           "to": "$.events[0].params.items[*].item_id"
@@ -360,8 +360,8 @@
           "to": "$.events[0].params.items[*].location_id"
         },
         {
-          "from": "$.context.traits",
-          "to": "$.user_properties"
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value"
         }
       ]
     },
@@ -369,10 +369,10 @@
       "rsEventName": "Product Added to Wishlist",
       "destEventName": "add_to_wishlist",
       "eventProperties": [
-        { "to": "$.events[0].params.currency", "from": "$.properties.currency" },
+        { "from": "$.properties.currency", "to": "$.events[0].params.currency" },
         {
-          "from": "$.context.traits",
-          "to": "$.user_properties"
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value"
         }
       ]
     },
@@ -380,9 +380,9 @@
       "rsEventName": "Checkout Started",
       "destEventName": "begin_checkout",
       "eventProperties": [
-        { "to": "$.events[0].params.currency", "from": "$.properties.currency" },
-        { "to": "$.events[0].params.coupon", "from": "$.properties.coupon" },
-        { "to": "$.events[0].params.value", "from": "$.properties.revenue" },
+        { "from": "$.properties.currency", "to": "$.events[0].params.currency" },
+        { "from": "$.properties.coupon", "to": "$.events[0].params.coupon" },
+        { "from": "$.properties.revenue", "to": "$.events[0].params.value" },
         {
           "from": "$.properties.products[*].product_id",
           "to": "$.events[0].params.items[*].item_id"
@@ -448,8 +448,8 @@
           "to": "$.events[0].params.items[*].location_id"
         },
         {
-          "from": "$.context.traits",
-          "to": "$.user_properties"
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value"
         }
       ]
     },
@@ -457,12 +457,12 @@
       "rsEventName": "Order Completed",
       "destEventName": "purchase",
       "eventProperties": [
-        { "to": "$.events[0].params.currency", "from": "$.properties.currency" },
-        { "to": "$.events[0].params.transaction_id", "from": "$.properties.transaction_id" },
-        { "to": "$.events[0].params.coupon", "from": "$.properties.coupon" },
-        { "to": "$.events[0].params.shipping", "from": "$.properties.shipping" },
-        { "to": "$.events[0].params.tax", "from": "$.properties.tax" },
-        { "to": "$.events[0].params.value", "from": "$.properties.revenue" },
+        { "from": "$.properties.currency", "to": "$.events[0].params.currency" },
+        { "from": "$.properties.transaction_id", "to": "$.events[0].params.transaction_id" },
+        { "from": "$.properties.coupon", "to": "$.events[0].params.coupon" },
+        { "from": "$.properties.shipping", "to": "$.events[0].params.shipping" },
+        { "from": "$.properties.tax", "to": "$.events[0].params.tax" },
+        { "from": "$.properties.revenue", "to": "$.events[0].params.value" },
         {
           "from": "$.properties.products[*].product_id",
           "to": "$.events[0].params.items[*].item_id"
@@ -528,8 +528,8 @@
           "to": "$.events[0].params.items[*].location_id"
         },
         {
-          "from": "$.context.traits",
-          "to": "$.user_properties"
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value"
         }
       ]
     },
@@ -537,12 +537,12 @@
       "rsEventName": "Order Refunded",
       "destEventName": "refund",
       "eventProperties": [
-        { "to": "$.events[0].params.currency", "from": "$.properties.currency" },
-        { "to": "$.events[0].params.transaction_id", "from": "$.properties.transaction_id" },
-        { "to": "$.events[0].params.coupon", "from": "$.properties.coupon" },
-        { "to": "$.events[0].params.shipping", "from": "$.properties.shipping" },
-        { "to": "$.events[0].params.tax", "from": "$.properties.tax" },
-        { "to": "$.events[0].params.value", "from": "$.properties.revenue" },
+        { "from": "$.properties.currency", "to": "$.events[0].params.currency" },
+        { "from": "$.properties.transaction_id", "to": "$.events[0].params.transaction_id" },
+        { "from": "$.properties.coupon", "to": "$.events[0].params.coupon" },
+        { "from": "$.properties.shipping", "to": "$.events[0].params.shipping" },
+        { "from": "$.properties.tax", "to": "$.events[0].params.tax" },
+        { "from": "$.properties.revenue", "to": "$.events[0].params.value" },
         {
           "from": "$.properties.products[*].product_id",
           "to": "$.events[0].params.items[*].item_id"
@@ -608,8 +608,8 @@
           "to": "$.events[0].params.items[*].location_id"
         },
         {
-          "from": "$.context.traits",
-          "to": "$.user_properties"
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value"
         }
       ]
     },
@@ -617,10 +617,10 @@
       "rsEventName": "Product Shared",
       "destEventName": "share",
       "eventProperties": [
-        { "to": "$.events[0].params.item_id", "from": "$.properties.product_id" },
+        { "from": "$.properties.product_id", "to": "$.events[0].params.item_id" },
         {
-          "from": "$.context.traits",
-          "to": "$.user_properties"
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value"
         }
       ]
     },
@@ -628,12 +628,12 @@
       "rsEventName": "Cart Shared",
       "destEventName": "share",
       "eventProperties": [
-        { "to": "$.events[0].params.method", "from": "$.properties.share_via" },
-        { "to": "$.events[0].params.content_type", "from": "$.properties.content_type" },
-        { "to": "$.events[0].params.item_id", "from": "$.properties.cart_id" },
+        { "from": "$.properties.share_via", "to": "$.events[0].params.method" },
+        { "from": "$.properties.content_type", "to": "$.events[0].params.content_type" },
+        { "from": "$.properties.cart_id", "to": "$.events[0].params.item_id" },
         {
-          "from": "$.context.traits",
-          "to": "$.user_properties"
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value"
         }
       ]
     },
@@ -641,10 +641,10 @@
       "rsEventName": "Payment Info Entered",
       "destEventName": "add_payment_info",
       "eventProperties": [
-        { "to": "$.events[0].params.currency", "from": "$.properties.currency" },
-        { "to": "$.events[0].params.coupon", "from": "$.properties.coupon" },
-        { "to": "$.events[0].params.payment_type", "from": "$.properties.payment_method" },
-        { "to": "$.events[0].params.value", "from": "$.properties.revenue" },
+        { "from": "$.properties.currency", "to": "$.events[0].params.currency" },
+        { "from": "$.properties.coupon", "to": "$.events[0].params.coupon" },
+        { "from": "$.properties.payment_method", "to": "$.events[0].params.payment_type" },
+        { "from": "$.properties.revenue", "to": "$.events[0].params.value" },
         {
           "from": "$.properties.products[*].product_id",
           "to": "$.events[0].params.items[*].item_id"
@@ -710,8 +710,8 @@
           "to": "$.events[0].params.items[*].location_id"
         },
         {
-          "from": "$.context.traits",
-          "to": "$.user_properties"
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value"
         }
       ]
     },
@@ -719,10 +719,10 @@
       "rsEventName": "Checkout Step Completed",
       "destEventName": "add_shipping_info",
       "eventProperties": [
-        { "to": "$.events[0].params.currency", "from": "$.properties.currency" },
-        { "to": "$.events[0].params.value", "from": "$.properties.revenue" },
-        { "to": "$.events[0].params.coupon", "from": "$.properties.coupon" },
-        { "to": "$.events[0].params.shipping_tier", "from": "$.properties.shipping_method" },
+        { "from": "$.properties.currency", "to": "$.events[0].params.currency" },
+        { "from": "$.properties.revenue", "to": "$.events[0].params.value" },
+        { "from": "$.properties.coupon", "to": "$.events[0].params.coupon" },
+        { "from": "$.properties.shipping_method", "to": "$.events[0].params.shipping_tier" },
         {
           "from": "$.properties.products[*].product_id",
           "to": "$.events[0].params.items[*].item_id"
@@ -788,8 +788,8 @@
           "to": "$.events[0].params.items[*].location_id"
         },
         {
-          "from": "$.context.traits",
-          "to": "$.user_properties"
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value"
         }
       ]
     }
