@@ -489,12 +489,37 @@
           "default": false
         },
         "hidden": {
-          "type": "boolean",
-          "title": "Hidden",
-          "description": "Whether the destination is hidden.",
-          "$comment": "This is used to hide the destination from the UI.",
-          "default": false
+          "anyOf": [
+            {
+              "type": "boolean",
+              "title": "Hidden",
+              "description": "Whether the destination is hidden.",
+              "$comment": "This is used to hide the destination from the UI.",
+              "default": false
+            },
+            {
+              "type": "object",
+              "title": "Hidden",
+              "description": "Whether the destination is hidden.",
+              "$comment": "This is used to hide the destination from the UI.",
+              "properties": {
+                "featureFlagName": {
+                  "type": "string",
+                  "title": "Feature Flag Name",
+                  "description": "The feature flag name to hide the destination.",
+                  "$comment": "This is used to hide the destination from the UI based on the feature flag."
+                },
+                "featureFlagValue": {
+                  "type": "boolean",
+                  "title": "Feature Flag Value",
+                  "description": "The feature flag value to hide the destination.",
+                  "$comment": "This is used to hide the destination from the UI based on the feature flag value."
+                }
+              }
+            }
+          ]
         },
+
         "deprecated": {
           "type": "boolean",
           "title": "Deprecated",
