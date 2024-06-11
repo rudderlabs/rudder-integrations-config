@@ -4,7 +4,11 @@
       "rsEventName": "Products Searched",
       "destEventName": "search",
       "eventProperties": [
-        { "from": "$.events[0].params.properties.query", "to": "$.events[0].params.search_term" },
+        {
+          "from": "$.events[0].params.properties.query",
+          "to": "$.events[0].params.search_term",
+          "required": true
+        },
         {
           "from": "$.context.traits.*",
           "to": "$.user_properties.*.value"
@@ -19,11 +23,13 @@
         { "from": "$.properties.category", "to": "$.events[0].params.item_list_name" },
         {
           "from": "$.properties.products[*].product_id",
-          "to": "$.events[0].params.items[*].item_id"
+          "to": "$.events[0].params.items[*].item_id",
+          "required": true
         },
         {
           "from": "$.properties.products[*].name",
-          "to": "$.events[0].params.items[*].item_name"
+          "to": "$.events[0].params.items[*].item_name",
+          "required": true
         },
         {
           "from": "$.properties.products[*].coupon",
@@ -94,6 +100,72 @@
         { "from": "$.properties.list_id", "to": "$.events[0].params.item_list_id" },
         { "from": "$.properties.category", "to": "$.events[0].params.item_list_name" },
         {
+          "from": "$.properties.products[*].product_id",
+          "to": "$.events[0].params.items[*].item_id",
+          "required": true
+        },
+        {
+          "from": "$.properties.products[*].name",
+          "to": "$.events[0].params.items[*].item_name",
+          "required": true
+        },
+        {
+          "from": "$.properties.products[*].coupon",
+          "to": "$.events[0].params.items[*].coupon"
+        },
+        {
+          "from": "$.properties.products[*].price",
+          "to": "$.events[0].params.items[*].price"
+        },
+        {
+          "from": "$.properties.products[*].position",
+          "to": "$.events[0].params.items[*].position"
+        },
+        {
+          "from": "$.properties.products[*].quantity",
+          "to": "$.events[0].params.items[*].quantity"
+        },
+        {
+          "from": "$.properties.products[*].affiliation",
+          "to": "$.events[0].params.items[*].affiliation"
+        },
+        {
+          "from": "$.properties.products[*].currency",
+          "to": "$.events[0].params.items[*].currency"
+        },
+        {
+          "from": "$.properties.products[*].discount",
+          "to": "$.events[0].params.items[*].discount"
+        },
+        {
+          "from": "$.properties.products[*].item_category2",
+          "to": "$.events[0].params.items[*].item_category2"
+        },
+        {
+          "from": "$.properties.products[*].item_category3",
+          "to": "$.events[0].params.items[*].item_category3"
+        },
+        {
+          "from": "$.properties.products[*].item_category4",
+          "to": "$.events[0].params.items[*].item_category4"
+        },
+        {
+          "from": "$.properties.products[*].item_category5",
+          "to": "$.events[0].params.items[*].item_category5"
+        },
+        {
+          "from": "$.properties.products[*].item_list_id",
+          "to": "$.events[0].params.items[*].item_list_id"
+        },
+        {
+          "from": "$.properties.products[*].item_list_name",
+          "to": "$.events[0].params.items[*].item_list_name"
+        },
+        {
+          "from": "$.properties.products[*].location_id",
+          "to": "$.events[0].params.items[*].location_id"
+        },
+        {
           "from": "$.context.traits.*",
           "to": "$.user_properties.*.value"
         }
@@ -109,11 +181,13 @@
         { "from": "$.properties.promotion_id", "to": "$.events[0].params.promotion_id" },
         {
           "from": "$.properties.products[*].product_id",
-          "to": "$.events[0].params.items[*].item_id"
+          "to": "$.events[0].params.items[*].item_id",
+          "required": true
         },
         {
           "from": "$.properties.products[*].name",
-          "to": "$.events[0].params.items[*].item_name"
+          "to": "$.events[0].params.items[*].item_name",
+          "required": true
         },
         {
           "from": "$.properties.products[*].coupon",
@@ -187,11 +261,13 @@
         { "from": "$.properties.promotion_id", "to": "$.events[0].params.promotion_id" },
         {
           "from": "$.properties.products[*].product_id",
-          "to": "$.events[0].params.items[*].item_id"
+          "to": "$.events[0].params.items[*].item_id",
+          "required": true
         },
         {
           "from": "$.properties.products[*].name",
-          "to": "$.events[0].params.items[*].item_name"
+          "to": "$.events[0].params.items[*].item_name",
+          "required": true
         },
         {
           "from": "$.properties.products[*].coupon",
@@ -259,7 +335,78 @@
       "rsEventName": "Product Viewed",
       "destEventName": "view_item",
       "eventProperties": [
-        { "from": "$.properties.currency", "to": "$.events[0].params.currency" },
+        { "from": "$.properties.currency", "to": "$.events[0].params.currency", "required": true },
+        {
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value",
+          "required": true
+        },
+        {
+          "from": "$.properties.products[*].product_id",
+          "to": "$.events[0].params.items[*].item_id",
+          "required": true
+        },
+        {
+          "from": "$.properties.products[*].name",
+          "to": "$.events[0].params.items[*].item_name",
+          "required": true
+        },
+        {
+          "from": "$.properties.products[*].coupon",
+          "to": "$.events[0].params.items[*].coupon"
+        },
+        {
+          "from": "$.properties.products[*].price",
+          "to": "$.events[0].params.items[*].price"
+        },
+        {
+          "from": "$.properties.products[*].position",
+          "to": "$.events[0].params.items[*].position"
+        },
+        {
+          "from": "$.properties.products[*].quantity",
+          "to": "$.events[0].params.items[*].quantity"
+        },
+        {
+          "from": "$.properties.products[*].affiliation",
+          "to": "$.events[0].params.items[*].affiliation"
+        },
+        {
+          "from": "$.properties.products[*].currency",
+          "to": "$.events[0].params.items[*].currency"
+        },
+        {
+          "from": "$.properties.products[*].discount",
+          "to": "$.events[0].params.items[*].discount"
+        },
+        {
+          "from": "$.properties.products[*].item_category2",
+          "to": "$.events[0].params.items[*].item_category2"
+        },
+        {
+          "from": "$.properties.products[*].item_category3",
+          "to": "$.events[0].params.items[*].item_category3"
+        },
+        {
+          "from": "$.properties.products[*].item_category4",
+          "to": "$.events[0].params.items[*].item_category4"
+        },
+        {
+          "from": "$.properties.products[*].item_category5",
+          "to": "$.events[0].params.items[*].item_category5"
+        },
+        {
+          "from": "$.properties.products[*].item_list_id",
+          "to": "$.events[0].params.items[*].item_list_id"
+        },
+        {
+          "from": "$.properties.products[*].item_list_name",
+          "to": "$.events[0].params.items[*].item_list_name"
+        },
+        {
+          "from": "$.properties.products[*].location_id",
+          "to": "$.events[0].params.items[*].location_id"
+        },
         {
           "from": "$.context.traits.*",
           "to": "$.user_properties.*.value"
@@ -270,8 +417,74 @@
       "rsEventName": "Product Added",
       "destEventName": "add_to_cart",
       "eventProperties": [
-        { "from": "$.properties.currency", "to": "$.events[0].params.currency" },
-        { "from": "$.properties.revenue", "to": "$.events[0].params.value" },
+        { "from": "$.properties.currency", "to": "$.events[0].params.currency", "required": true },
+        { "from": "$.properties.revenue", "to": "$.events[0].params.value", "required": true },
+        {
+          "from": "$.properties.products[*].product_id",
+          "to": "$.events[0].params.items[*].item_id",
+          "required": true
+        },
+        {
+          "from": "$.properties.products[*].name",
+          "to": "$.events[0].params.items[*].item_name",
+          "required": true
+        },
+        {
+          "from": "$.properties.products[*].coupon",
+          "to": "$.events[0].params.items[*].coupon"
+        },
+        {
+          "from": "$.properties.products[*].price",
+          "to": "$.events[0].params.items[*].price"
+        },
+        {
+          "from": "$.properties.products[*].position",
+          "to": "$.events[0].params.items[*].position"
+        },
+        {
+          "from": "$.properties.products[*].quantity",
+          "to": "$.events[0].params.items[*].quantity"
+        },
+        {
+          "from": "$.properties.products[*].affiliation",
+          "to": "$.events[0].params.items[*].affiliation"
+        },
+        {
+          "from": "$.properties.products[*].currency",
+          "to": "$.events[0].params.items[*].currency"
+        },
+        {
+          "from": "$.properties.products[*].discount",
+          "to": "$.events[0].params.items[*].discount"
+        },
+        {
+          "from": "$.properties.products[*].item_category2",
+          "to": "$.events[0].params.items[*].item_category2"
+        },
+        {
+          "from": "$.properties.products[*].item_category3",
+          "to": "$.events[0].params.items[*].item_category3"
+        },
+        {
+          "from": "$.properties.products[*].item_category4",
+          "to": "$.events[0].params.items[*].item_category4"
+        },
+        {
+          "from": "$.properties.products[*].item_category5",
+          "to": "$.events[0].params.items[*].item_category5"
+        },
+        {
+          "from": "$.properties.products[*].item_list_id",
+          "to": "$.events[0].params.items[*].item_list_id"
+        },
+        {
+          "from": "properties.products[*].item_list_name",
+          "to": "$.events[0].params.items[*].item_list_name"
+        },
+        {
+          "from": "$.properties.products[*].location_id",
+          "to": "$.events[0].params.items[*].location_id"
+        },
         {
           "from": "$.context.traits.*",
           "to": "$.user_properties.*.value"
@@ -282,7 +495,78 @@
       "rsEventName": "Product Removed",
       "destEventName": "remove_from_cart",
       "eventProperties": [
-        { "from": "$.properties.revenue", "to": "$.events[0].params.value" },
+        { "from": "$.properties.revenue", "to": "$.events[0].params.value", "required": true },
+        {
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value",
+          "required": true
+        },
+        {
+          "from": "$.properties.products[*].product_id",
+          "to": "$.events[0].params.items[*].item_id",
+          "required": true
+        },
+        {
+          "from": "$.properties.products[*].name",
+          "to": "$.events[0].params.items[*].item_name",
+          "required": true
+        },
+        {
+          "from": "$.properties.products[*].coupon",
+          "to": "$.events[0].params.items[*].coupon"
+        },
+        {
+          "from": "$.properties.products[*].price",
+          "to": "$.events[0].params.items[*].price"
+        },
+        {
+          "from": "$.properties.products[*].position",
+          "to": "$.events[0].params.items[*].position"
+        },
+        {
+          "from": "$.properties.products[*].quantity",
+          "to": "$.events[0].params.items[*].quantity"
+        },
+        {
+          "from": "$.properties.products[*].affiliation",
+          "to": "$.events[0].params.items[*].affiliation"
+        },
+        {
+          "from": "$.properties.products[*].currency",
+          "to": "$.events[0].params.items[*].currency"
+        },
+        {
+          "from": "$.properties.products[*].discount",
+          "to": "$.events[0].params.items[*].discount"
+        },
+        {
+          "from": "$.properties.products[*].item_category2",
+          "to": "$.events[0].params.items[*].item_category2"
+        },
+        {
+          "from": "$.properties.products[*].item_category3",
+          "to": "$.events[0].params.items[*].item_category3"
+        },
+        {
+          "from": "$.properties.products[*].item_category4",
+          "to": "$.events[0].params.items[*].item_category4"
+        },
+        {
+          "from": "$.properties.products[*].item_category5",
+          "to": "$.events[0].params.items[*].item_category5"
+        },
+        {
+          "from": "$.properties.products[*].item_list_id",
+          "to": "$.events[0].params.items[*].item_list_id"
+        },
+        {
+          "from": "properties.products[*].item_list_name",
+          "to": "$.events[0].params.items[*].item_list_name"
+        },
+        {
+          "from": "$.properties.products[*].location_id",
+          "to": "$.events[0].params.items[*].location_id"
+        },
         {
           "from": "$.context.traits.*",
           "to": "$.user_properties.*.value"
@@ -293,15 +577,17 @@
       "rsEventName": "Cart Viewed",
       "destEventName": "view_cart",
       "eventProperties": [
-        { "from": "$.properties.currency", "to": "$.events[0].params.currency" },
-        { "from": "$.properties.revenue", "to": "$.events[0].params.value" },
+        { "from": "$.properties.currency", "to": "$.events[0].params.currency", "required": true },
+        { "from": "$.properties.revenue", "to": "$.events[0].params.value", "required": true },
         {
           "from": "$.properties.products[*].product_id",
-          "to": "$.events[0].params.items[*].item_id"
+          "to": "$.events[0].params.items[*].item_id",
+          "required": true
         },
         {
           "from": "$.properties.products[*].name",
-          "to": "$.events[0].params.items[*].item_name"
+          "to": "$.events[0].params.items[*].item_name",
+          "required": true
         },
         {
           "from": "$.properties.products[*].coupon",
@@ -369,7 +655,78 @@
       "rsEventName": "Product Added to Wishlist",
       "destEventName": "add_to_wishlist",
       "eventProperties": [
-        { "from": "$.properties.currency", "to": "$.events[0].params.currency" },
+        { "from": "$.properties.currency", "to": "$.events[0].params.currency", "required": true },
+        {
+          "from": "$.context.traits.*",
+          "to": "$.user_properties.*.value",
+          "required": true
+        },
+        {
+          "from": "$.properties.products[*].product_id",
+          "to": "$.events[0].params.items[*].item_id",
+          "required": true
+        },
+        {
+          "from": "$.properties.products[*].name",
+          "to": "$.events[0].params.items[*].item_name",
+          "required": true
+        },
+        {
+          "from": "$.properties.products[*].coupon",
+          "to": "$.events[0].params.items[*].coupon"
+        },
+        {
+          "from": "$.properties.products[*].price",
+          "to": "$.events[0].params.items[*].price"
+        },
+        {
+          "from": "$.properties.products[*].position",
+          "to": "$.events[0].params.items[*].position"
+        },
+        {
+          "from": "$.properties.products[*].quantity",
+          "to": "$.events[0].params.items[*].quantity"
+        },
+        {
+          "from": "$.properties.products[*].affiliation",
+          "to": "$.events[0].params.items[*].affiliation"
+        },
+        {
+          "from": "$.properties.products[*].currency",
+          "to": "$.events[0].params.items[*].currency"
+        },
+        {
+          "from": "$.properties.products[*].discount",
+          "to": "$.events[0].params.items[*].discount"
+        },
+        {
+          "from": "$.properties.products[*].item_category2",
+          "to": "$.events[0].params.items[*].item_category2"
+        },
+        {
+          "from": "$.properties.products[*].item_category3",
+          "to": "$.events[0].params.items[*].item_category3"
+        },
+        {
+          "from": "$.properties.products[*].item_category4",
+          "to": "$.events[0].params.items[*].item_category4"
+        },
+        {
+          "from": "$.properties.products[*].item_category5",
+          "to": "$.events[0].params.items[*].item_category5"
+        },
+        {
+          "from": "$.properties.products[*].item_list_id",
+          "to": "$.events[0].params.items[*].item_list_id"
+        },
+        {
+          "from": "properties.products[*].item_list_name",
+          "to": "$.events[0].params.items[*].item_list_name"
+        },
+        {
+          "from": "$.properties.products[*].location_id",
+          "to": "$.events[0].params.items[*].location_id"
+        },
         {
           "from": "$.context.traits.*",
           "to": "$.user_properties.*.value"
@@ -380,16 +737,19 @@
       "rsEventName": "Checkout Started",
       "destEventName": "begin_checkout",
       "eventProperties": [
-        { "from": "$.properties.currency", "to": "$.events[0].params.currency" },
+        { "from": "$.properties.currency", "to": "$.events[0].params.currency", "required": true },
+        { "from": "$.properties.revenue", "to": "$.events[0].params.value", "required": true },
         { "from": "$.properties.coupon", "to": "$.events[0].params.coupon" },
-        { "from": "$.properties.revenue", "to": "$.events[0].params.value" },
+
         {
           "from": "$.properties.products[*].product_id",
-          "to": "$.events[0].params.items[*].item_id"
+          "to": "$.events[0].params.items[*].item_id",
+          "required": true
         },
         {
           "from": "$.properties.products[*].name",
-          "to": "$.events[0].params.items[*].item_name"
+          "to": "$.events[0].params.items[*].item_name",
+          "required": true
         },
         {
           "from": "$.properties.products[*].coupon",
@@ -457,19 +817,25 @@
       "rsEventName": "Order Completed",
       "destEventName": "purchase",
       "eventProperties": [
-        { "from": "$.properties.currency", "to": "$.events[0].params.currency" },
-        { "from": "$.properties.transaction_id", "to": "$.events[0].params.transaction_id" },
+        { "from": "$.properties.currency", "to": "$.events[0].params.currency", "required": true },
+        { "from": "$.properties.revenue", "to": "$.events[0].params.value", "required": true },
+        {
+          "from": "$.properties.transaction_id",
+          "to": "$.events[0].params.transaction_id",
+          "required": true
+        },
         { "from": "$.properties.coupon", "to": "$.events[0].params.coupon" },
         { "from": "$.properties.shipping", "to": "$.events[0].params.shipping" },
         { "from": "$.properties.tax", "to": "$.events[0].params.tax" },
-        { "from": "$.properties.revenue", "to": "$.events[0].params.value" },
         {
           "from": "$.properties.products[*].product_id",
-          "to": "$.events[0].params.items[*].item_id"
+          "to": "$.events[0].params.items[*].item_id",
+          "required": true
         },
         {
           "from": "$.properties.products[*].name",
-          "to": "$.events[0].params.items[*].item_name"
+          "to": "$.events[0].params.items[*].item_name",
+          "required": true
         },
         {
           "from": "$.properties.products[*].coupon",
@@ -537,19 +903,26 @@
       "rsEventName": "Order Refunded",
       "destEventName": "refund",
       "eventProperties": [
-        { "from": "$.properties.currency", "to": "$.events[0].params.currency" },
-        { "from": "$.properties.transaction_id", "to": "$.events[0].params.transaction_id" },
+        { "from": "$.properties.currency", "to": "$.events[0].params.currency", "required": true },
+        {
+          "from": "$.properties.transaction_id",
+          "to": "$.events[0].params.transaction_id",
+          "required": true
+        },
+        { "from": "$.properties.revenue", "to": "$.events[0].params.value", "required": true },
         { "from": "$.properties.coupon", "to": "$.events[0].params.coupon" },
         { "from": "$.properties.shipping", "to": "$.events[0].params.shipping" },
         { "from": "$.properties.tax", "to": "$.events[0].params.tax" },
-        { "from": "$.properties.revenue", "to": "$.events[0].params.value" },
+
         {
           "from": "$.properties.products[*].product_id",
-          "to": "$.events[0].params.items[*].item_id"
+          "to": "$.events[0].params.items[*].item_id",
+          "required": true
         },
         {
           "from": "$.properties.products[*].name",
-          "to": "$.events[0].params.items[*].item_name"
+          "to": "$.events[0].params.items[*].item_name",
+          "required": true
         },
         {
           "from": "$.properties.products[*].coupon",
@@ -618,6 +991,8 @@
       "destEventName": "share",
       "eventProperties": [
         { "from": "$.properties.product_id", "to": "$.events[0].params.item_id" },
+        { "from": "$.properties.share_via", "to": "$.events[0].params.method" },
+        { "from": "$.properties.content_type", "to": "$.events[0].params.content_type" },
         {
           "from": "$.context.traits.*",
           "to": "$.user_properties.*.value"
@@ -641,17 +1016,20 @@
       "rsEventName": "Payment Info Entered",
       "destEventName": "add_payment_info",
       "eventProperties": [
-        { "from": "$.properties.currency", "to": "$.events[0].params.currency" },
+        { "from": "$.properties.currency", "to": "$.events[0].params.currency", "required": true },
+        { "from": "$.properties.revenue", "to": "$.events[0].params.value", "required": true },
         { "from": "$.properties.coupon", "to": "$.events[0].params.coupon" },
         { "from": "$.properties.payment_method", "to": "$.events[0].params.payment_type" },
-        { "from": "$.properties.revenue", "to": "$.events[0].params.value" },
+
         {
           "from": "$.properties.products[*].product_id",
-          "to": "$.events[0].params.items[*].item_id"
+          "to": "$.events[0].params.items[*].item_id",
+          "required": true
         },
         {
           "from": "$.properties.products[*].name",
-          "to": "$.events[0].params.items[*].item_name"
+          "to": "$.events[0].params.items[*].item_name",
+          "required": true
         },
         {
           "from": "$.properties.products[*].coupon",
@@ -719,17 +1097,19 @@
       "rsEventName": "Checkout Step Completed",
       "destEventName": "add_shipping_info",
       "eventProperties": [
-        { "from": "$.properties.currency", "to": "$.events[0].params.currency" },
-        { "from": "$.properties.revenue", "to": "$.events[0].params.value" },
+        { "from": "$.properties.currency", "to": "$.events[0].params.currency", "required": true },
+        { "from": "$.properties.revenue", "to": "$.events[0].params.value", "required": true },
         { "from": "$.properties.coupon", "to": "$.events[0].params.coupon" },
         { "from": "$.properties.shipping_method", "to": "$.events[0].params.shipping_tier" },
         {
           "from": "$.properties.products[*].product_id",
-          "to": "$.events[0].params.items[*].item_id"
+          "to": "$.events[0].params.items[*].item_id",
+          "required": true
         },
         {
           "from": "$.properties.products[*].name",
-          "to": "$.events[0].params.items[*].item_name"
+          "to": "$.events[0].params.items[*].item_name",
+          "required": true
         },
         {
           "from": "$.properties.products[*].coupon",
