@@ -17,15 +17,52 @@
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "datacenter": { "type": "string", "enum": ["US", "EU"], "default": "US" },
-      "sendPageNameInSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "sendPageNameInSDK": {
+        "type": "object",
+        "properties": {
+          "web": { "type": "boolean" }
+        }
+      },
+      "backgroundQueueMinNumberOfTasks": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          }
+        }
+      },
+      "backgroundQueueSecondsDelay": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+          }
+        }
+      },
+      "autoTrackDeviceAttributes": {
+        "type": "object",
+        "properties": {
+          "android": { "type": "boolean" },
+          "ios": { "type": "boolean" }
+        }
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": { "type": "boolean" },
+          "android": { "type": "boolean" },
+          "ios": { "type": "boolean" }
+        }
+      },
       "dataUseInApp": { "type": "object", "properties": { "web": { "type": "boolean" } } },
       "connectionMode": {
         "type": "object",
         "properties": {
           "web": { "type": "string", "enum": ["cloud", "device"] },
-          "android": { "type": "string", "enum": ["cloud"] },
-          "ios": { "type": "string", "enum": ["cloud"] },
+          "android": { "type": "string", "enum": ["cloud", "device"] },
+          "ios": { "type": "string", "enum": ["cloud", "device"] },
           "unity": { "type": "string", "enum": ["cloud"] },
           "amp": { "type": "string", "enum": ["cloud"] },
           "cloud": { "type": "string", "enum": ["cloud"] },
@@ -523,6 +560,7 @@
           }
         }
       }
-    }
+    },
+    "additionalProperties": false
   }
 }
