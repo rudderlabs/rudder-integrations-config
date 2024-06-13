@@ -62,4 +62,4 @@ For any questions, concerns, or queries, you can start by asking a question in o
 <!----variables---->
 
 [issue]: https://github.com/rudderlabs/rudder-config-schema/issues/new
-[CLA]: https://rudderlabs.wufoo.com/forms/rudderlabs-contributor-license-agreement
+[CLA]: https://forms.gle/845JRGVZaC6kPZy68
