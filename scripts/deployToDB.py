@@ -4,27 +4,46 @@ import json
 import os
 import sys
 import jsondiff
+import argparse
 from constants import CONFIG_DIR
 
-#########################
-# ENV VARIABLES FOT TESTING
-# CONTROL_PLANE_URL="https://api.rudderstack.com"
-# print(CONTROL_PLANE_URL)
-# USERNAME="cbadmin"
-# print(USERNAME)
-# PASSWORD="testpassword"
-# print(PASSWORD)
-#########################
 
-#########################
-# ENV VARIABLES
-CONTROL_PLANE_URL = sys.argv[1]
-print(CONTROL_PLANE_URL)
-USERNAME = os.environ["API_USER"]  # sys.argv[2]
-print(USERNAME)
-PASSWORD = os.environ["API_PASSWORD"]  # sys.argv[3]
-# print(PASSWORD)
-#########################
+def get_command_line_arguments():
+    parser = argparse.ArgumentParser(description="Script to deploy config files to DB.")
+    parser.add_argument("control_plane_url", nargs="?", help="Control plane URL")
+    parser.add_argument("username", nargs="?", help="Control plane admin username")
+    parser.add_argument("password", nargs="?", help="Control plane admin password")
+
+    args = parser.parse_args()
+
+    control_plane_url = args.control_plane_url or os.getenv("CONTROL_PLANE_URL")
+    username = args.username or os.getenv("API_USER")
+    password = args.password or os.getenv("API_PASSWORD")
+
+    missing_args = []
+
+    if control_plane_url is None:
+        missing_args.append(
+            "1st positional argument or CONTROL_PLANE_URL environment variable"
+        )
+    if username is None:
+        missing_args.append("2nd positional argument or API_USER environment variable")
+    if password is None:
+        missing_args.append(
+            "3rd positional argument or API_PASSWORD environment variable"
+        )
+
+    if missing_args:
+        print("Error: Missing the following arguments or environment variables:")
+        for arg in missing_args:
+            print(arg)
+        sys.exit(1)
+
+    return control_plane_url, username, password
+
+
+CONTROL_PLANE_URL, USERNAME, PASSWORD = get_command_line_arguments()
+
 # CONSTANTS
 HEADER = {"Content-Type": "application/json"}
 AUTH = (USERNAME, PASSWORD)
