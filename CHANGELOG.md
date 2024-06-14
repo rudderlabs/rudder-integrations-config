@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.77.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.77.0...v1.77.1) (2024-06-14)
+
+
+### Bug Fixes
+
+* integration config for customerio ([#1469](https://github.com/rudderlabs/rudder-config-schema/issues/1469)) ([94463e7](https://github.com/rudderlabs/rudder-config-schema/commit/94463e7ffaf2c6233cba406c4987860bbd871ede))
+
 ## [1.77.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.76.0...v1.77.0) (2024-06-14)
 
 
