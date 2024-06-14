@@ -82,20 +82,7 @@ def get_file_content(name, selector):
     for file_selector in file_selectors:
         if file_selector in available_files:
             with open(f"{directory}/{file_selector}", "r") as f:
-
-                if file_selector == "ui-config.json" and (
-                    "ui-default.json" in available_files
-                ):
-                    ui_config = json.loads(f.read())
-                    ui_defaults = json.loads(
-                        open(f"{directory}/ui-default.json", "r").read()
-                    )
-                    for key in ui_defaults.keys():
-                        defaults = ui_defaults[key]
-                        update_defaults(ui_config, key, defaults)
-                    file_content.update(ui_config)
-                else:
-                    file_content.update(json.loads(f.read()))
+                file_content.update(json.loads(f.read()))
 
     return file_content
 
@@ -192,27 +179,6 @@ def get_stale_data(selector, report):
             stale_config_report.append({item})
 
     return stale_config_report
-
-
-def update_defaults(json_data, config_key_to_update, new_defaults):
-    # Helper function to recursively traverse the JSON object
-    def traverse(obj):
-        if isinstance(obj, dict):
-            for key, value in obj.items():
-                if key == "configKey" and value == config_key_to_update:
-                    # Found the object with the specified configKey
-                    obj["default"] = new_defaults
-                    return
-                else:
-                    traverse(value)
-        elif isinstance(obj, list):
-            for item in obj:
-                traverse(item)
-
-    try:
-        traverse(json_data)  # Start traversal from the root of the JSON object
-    except Exception as e:
-        print(f"Error while updating defaults for {config_key_to_update}: {e}")
 
 
 if __name__ == "__main__":
