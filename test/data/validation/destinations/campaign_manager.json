@@ -1,36 +1,112 @@
 [
   {
+    "testTitle": "With valid multiple consent management providers config",
     "config": {
-      "profileId": "test-profileId",
-      "limitAdTracking": true,
-      "treatmentForUnderage": true,
-      "childDirectedTreatment": true,
-      "nonPersonalizedAd": true,
+      "rudderAccountId": "test-host",
+      "profileId": "test-database",
+      "limitedAdTracking": "test-user",
       "enableEnhancedConversions": true,
       "isHashingRequired": true,
-      "oneTrustCookieCategories": [
-        {
-          "oneTrustCookieCategory": "Marketing"
-        }
-      ]
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
     },
     "result": true
   },
   {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
     "config": {
-      "limitAdTracking": true,
-      "treatmentForUnderage": true,
-      "childDirectedTreatment": true,
-      "nonPersonalizedAd": true,
-      "enableEnhancedConversions": false,
-      "isHashingRequired": false,
-      "oneTrustCookieCategories": [
-        {
-          "oneTrustCookieCategory": "Marketing"
-        }
-      ]
+      "rudderAccountId": "test-host",
+      "profileId": "test-database",
+      "limitedAdTracking": "test-user",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
     },
     "result": false,
-    "err": [" must have required property 'profileId'"]
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "rudderAccountId": "test-host",
+      "profileId": "test-database",
+      "limitedAdTracking": "test-user",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "rudderAccountId": "test-host",
+      "profileId": "test-database",
+      "limitedAdTracking": "test-user",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "rudderAccountId": "test-host",
+      "profileId": "test-database",
+      "limitedAdTracking": "test-user",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]

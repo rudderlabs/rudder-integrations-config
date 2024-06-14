@@ -1,5 +1,24 @@
 [
   {
+    "testTitle": "With valid config",
+    "config": {
+      "eventFilteringOption": "disable",
+      "advertiserId": "1234",
+      "eventMappingFromConfig": [
+        { "from": "Add to cart", "to": "AddToCart" },
+        { "to": "AddToWishlist", "from": "Add to Wishlist" },
+        { "to": "Purchase", "from": "Purchase" },
+        { "to": "Lead", "from": "Lead" },
+        { "to": "ViewContent", "from": "View" },
+        { "to": "Search", "from": "Search" }
+      ],
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": []
+    },
+    "result": true
+  },
+  {
     "testTitle": "With valid multiple consent management providers config",
     "config": {
       "advertiserId": "test-host",
@@ -32,6 +51,52 @@
     "result": true
   },
   {
+    "testTitle": "With invalid advertiserId",
+    "config": {
+      "eventFilteringOption": "disable",
+      "advertiserId": "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789",
+      "eventMappingFromConfig": [
+        { "from": "Add to cart", "to": "AddToCart" },
+        { "to": "AddToWishlist", "from": "Add to Wishlist" },
+        { "to": "Purchase", "from": "Purchase" },
+        { "to": "Lead", "from": "Lead" },
+        { "to": "ViewContent", "from": "View" },
+        { "to": "Search", "from": "Search" }
+      ],
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": []
+    },
+    "result": false,
+    "err": [
+      "advertiserId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\""
+    ]
+  },
+  {
+    "testTitle": "With invalid event name",
+    "config": {
+      "eventFilteringOption": "disable",
+      "advertiserId": "01234567890123456789012345678901234567890123456789",
+      "eventMappingFromConfig": [
+        { "from": "Add to cart", "to": "AddedToCart" },
+        { "to": "AddToWishlist", "from": "Add to Wishlist" },
+        { "to": "Purchase", "from": "Purchase" },
+        { "to": "Lead", "from": "Lead" },
+        { "to": "ViewContent", "from": "View" },
+        { "to": "Search", "from": "Search" },
+        { "to": "SignUp", "from": "SignUp" }
+      ],
+      "connectionMode": {
+        "web": "device"
+      },
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": []
+    },
+    "result": false,
+    "err": ["eventMappingFromConfig.0.to must be equal to one of the allowed values"]
+  },
+  {
     "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
     "config": {
       "advertiserId": "test-host",
@@ -42,6 +107,9 @@
             "resolutionStrategy": "nor"
           }
         ]
+      },
+      "connectionMode": {
+        "web": "device"
       }
     },
     "result": false,
@@ -96,5 +164,79 @@
     },
     "result": false,
     "err": ["consentManagement.web.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With invalid connectionMode",
+    "config": {
+      "eventFilteringOption": "disable",
+      "advertiserId": "01234567890123456789012345678901234567890123456789",
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": [],
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": ["connectionMode.web must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "check with all possible event names",
+    "config": {
+      "advertiserId": "12345",
+      "eventFilteringOption": "disable",
+      "eventMappingFromConfig": [
+        {
+          "from": "123123",
+          "to": "AddToCart"
+        },
+        {
+          "to": "AddToWishlist",
+          "from": "1"
+        },
+        {
+          "to": "Purchase",
+          "from": "2"
+        },
+        {
+          "to": "Lead",
+          "from": "3"
+        },
+        {
+          "to": "ViewContent",
+          "from": "4"
+        },
+        {
+          "to": "Search",
+          "from": "5"
+        },
+        {
+          "to": "SignUp",
+          "from": "6"
+        },
+        {
+          "to": "AddToWishlist",
+          "from": "6"
+        }
+      ],
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust",
+            "resolutionStrategy": "",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
   }
 ]
