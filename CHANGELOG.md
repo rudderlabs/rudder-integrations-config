@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.77.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.76.0...v1.77.0) (2024-06-14)
+
+
+### Features
+
+* added device-mode support for customer.io ([#1430](https://github.com/rudderlabs/rudder-config-schema/issues/1430)) ([1e7545a](https://github.com/rudderlabs/rudder-config-schema/commit/1e7545a86c85314997dda0c5852a0df08755a603))
+* added GCM support for Amplitude ([#1455](https://github.com/rudderlabs/rudder-config-schema/issues/1455)) ([8bd8915](https://github.com/rudderlabs/rudder-config-schema/commit/8bd891512d59151c3a10b45252cc6dc93a2bf0b7))
+
 ## [1.76.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.75.2...v1.76.0) (2024-06-10)
 
 
