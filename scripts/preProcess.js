@@ -1,17 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { JsonTemplateEngine } = require('@rudderstack/json-template-engine');
-const fs = require('fs');
+const fs = require('fs/promises');
 const path = require('path');
-const { promisify } = require('util');
-
-const readdir = promisify(fs.readdir);
-const readFile = promisify(fs.readFile);
-const writeFile = promisify(fs.writeFile);
 
 const srcPath = path.resolve(__dirname, '../src');
 
 async function getUiConfigTemplate(destinationName) {
-  const uiConfig = await readFile(
+  const uiConfig = await fs.readFile(
     `${srcPath}/configurations/destinations/${destinationName}/ui-config.jt`,
     'utf8',
   );
@@ -20,7 +15,7 @@ async function getUiConfigTemplate(destinationName) {
 
 async function getUiDefaultData(destinationName) {
   try {
-    const defaults = await readFile(
+    const defaults = await fs.readFile(
       `${srcPath}/configurations/destinations/${destinationName}/ui-default.json`,
       'utf8',
     );
@@ -33,7 +28,7 @@ async function getUiDefaultData(destinationName) {
 }
 
 async function getDestinationNames() {
-  const destinationFolders = await readdir(`${srcPath}/configurations/destinations`);
+  const destinationFolders = await fs.readdir(`${srcPath}/configurations/destinations`);
   return destinationFolders;
 }
 
@@ -41,6 +36,9 @@ async function main() {
   const destinationFolders = await getDestinationNames();
 
   destinationFolders.forEach(async (destinationName) => {
+    if (destinationName === 'ga4_v2') {
+      console.log('Skipping GA4_v2');
+    }
     const uiDefaults = await getUiDefaultData(destinationName);
     if (!uiDefaults) {
       return;
@@ -49,7 +47,7 @@ async function main() {
     const uiConfigTemplate = await getUiConfigTemplate(destinationName);
     const result = await JsonTemplateEngine.create(uiConfigTemplate).evaluate(uiDefaults);
 
-    await writeFile(
+    await fs.writeFile(
       `${srcPath}/configurations/destinations/${destinationName}/ui-config.json`,
       JSON.stringify(result, null, 2),
     );
