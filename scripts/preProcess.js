@@ -2,60 +2,60 @@
 const { JsonTemplateEngine } = require('@rudderstack/json-template-engine');
 const fs = require('fs');
 const path = require('path');
+const { promisify } = require('util');
+
+const readdir = promisify(fs.readdir);
+const readFile = promisify(fs.readFile);
+const writeFile = promisify(fs.writeFile);
 
 const srcPath = path.resolve(__dirname, '../src');
 
-function getUiConfigTemplate(destinationName) {
-  const uiConfig = fs.readFileSync(
+async function getUiConfigTemplate(destinationName) {
+  const uiConfig = await readFile(
     `${srcPath}/configurations/destinations/${destinationName}/ui-config.jt`,
     'utf8',
   );
   return uiConfig;
 }
 
-function getUiDefaultData(destinationName) {
+async function getUiDefaultData(destinationName) {
   try {
-    const defaults = fs.readFileSync(
+    const defaults = await readFile(
       `${srcPath}/configurations/destinations/${destinationName}/ui-default.json`,
       'utf8',
     );
     return JSON.parse(defaults);
   } catch (error) {
     // skip the destination if ui-default.json is not present
+    console.log(`ui-default.json not found for ${destinationName}`);
     return undefined;
   }
 }
 
-function getDestinationNames() {
-  // read all the ui-config files from src/destinations/{destinationName} folder
-
-  // resolve path to src from current directory
-
-  const destinationFolders = fs
-    .readdirSync(`${srcPath}/configurations/destinations`, { withFileTypes: true })
-    .filter((dirent) => dirent.isDirectory())
-    .map((dirent) => dirent.name);
-
+async function getDestinationNames() {
+  const destinationFolders = await readdir(`${srcPath}/configurations/destinations`);
   return destinationFolders;
 }
 
-function main() {
-  const destinationFolders = getDestinationNames();
+async function main() {
+  const destinationFolders = await getDestinationNames();
 
-  destinationFolders.forEach((destinationName) => {
-    const uiDefaults = getUiDefaultData(destinationName);
+  destinationFolders.forEach(async (destinationName) => {
+    const uiDefaults = await getUiDefaultData(destinationName);
     if (!uiDefaults) {
       return;
     }
 
-    const uiConfigTemplate = getUiConfigTemplate(destinationName);
-    const result = JsonTemplateEngine.createAsSync(uiConfigTemplate).evaluate(uiDefaults);
+    const uiConfigTemplate = await getUiConfigTemplate(destinationName);
+    const result = await JsonTemplateEngine.create(uiConfigTemplate).evaluate(uiDefaults);
 
-    fs.writeFileSync(
+    await writeFile(
       `${srcPath}/configurations/destinations/${destinationName}/ui-config.json`,
       JSON.stringify(result, null, 2),
     );
   });
 }
 
-main();
+main().catch((error) => {
+  console.error(error);
+});
