@@ -47,7 +47,75 @@
             }
           }
         }
+      },
+      "enableEnhancedConversions":  {
+        "type": "boolean",
+        "default": false
+      },
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "oneTrustCookieCategories": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "oneTrustCookieCategory": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "web": { "type": "string", "enum": ["device"] }
+        }
       }
-    }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": { 
+            "enableEnhancedConversions": { 
+              "const": true 
+            } 
+          },
+          "required": ["enableEnhancedConversions"]
+        },
+        "then": {
+          "properties": {
+            "isHashRequired": {
+              "type": "boolean",
+              "default": true
+            },
+            "enableEnhancedConversions": { "const": true }
+          },
+          "required": ["isHashRequired"]
+        }
+      }
+    ]
   }
 }
