@@ -2,7 +2,7 @@
   "uiConfig": [
     {
       "title": "Connection Credentials",
-      "secretFields": ["password"],
+      "secretFields": ["password", "privateKey", "privateKeyPassphrase"],
       "docLinks": {
         "grantPermissions": "https://docs.rudderstack.com/reverse-etl/snowflake/#granting-permissions",
         "verifyingCredentials": "https://docs.rudderstack.com/reverse-etl/snowflake/#what-do-the-three-validations-under-verifying-credentials-imply",
@@ -11,6 +11,24 @@
       },
       "nameField": "account",
       "fields": [
+        {
+          "type": "singleSelect",
+          "label": "Authentication Type",
+          "value": "authenticationType",
+          "options": [
+            {
+              "name": "Key Pair Authentication",
+              "value": "keyPair"
+            },
+            {
+              "name": "Username Password Authentication",
+              "value": "password"
+            }
+          ],
+          "defaultOption": {
+            "value": "password"
+          }
+        },
         {
           "type": "textInput",
           "label": "Account",
@@ -66,7 +84,37 @@
           "inputFieldType": "password",
           "regex": ".*",
           "required": true,
-          "secret": true
+          "secret": true,
+          "preRequisiteField": {
+            "name": "authenticationType",
+            "selectedValue": "password"
+          }
+        },
+        {
+          "type": "textInput",
+          "label": "Private Key",
+          "value": "privateKey",
+          "inputFieldType": "password",
+          "regex": ".*",
+          "required": true,
+          "secret": true,
+          "preRequisiteField": {
+            "name": "authenticationType",
+            "selectedValue": "keyPair"
+          }
+        },
+        {
+          "type": "textInput",
+          "label": "Private Key Passphrase",
+          "value": "privateKeyPassphrase",
+          "inputFieldType": "password",
+          "regex": ".*",
+          "required": false,
+          "secret": true,
+          "preRequisiteField": {
+            "name": "authenticationType",
+            "selectedValue": "keyPair"
+          }
         }
       ]
     }
