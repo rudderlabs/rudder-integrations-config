@@ -48,9 +48,14 @@
           }
         }
       },
-      "enableEnhancedConversions":  {
+      "enableEnhancedConversions": {
         "type": "boolean",
         "default": false
+      },
+      "eventFilteringOption": {
+        "type": "string",
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
       },
       "whitelistedEvents": {
         "type": "array",
@@ -98,10 +103,10 @@
     "allOf": [
       {
         "if": {
-          "properties": { 
-            "enableEnhancedConversions": { 
-              "const": true 
-            } 
+          "properties": {
+            "enableEnhancedConversions": {
+              "const": true
+            }
           },
           "required": ["enableEnhancedConversions"]
         },

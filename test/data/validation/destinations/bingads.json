@@ -98,111 +98,133 @@
     "err": ["consentManagement.web.0.provider must be equal to one of the allowed values"]
   },
   {
-    "tagID": "1",
-    "enableEnhancedConversions": true,
-    "eventFilteringOption": "disable",
-    "whitelistedEvents": [],
-    "blacklistedEvents": [],
-    "oneTrustCookieCategories": [],
-    "isHashRequired": true,
-    "useNativeSDK": {
+    "testTitle": "Basic test case including tagID, enableEnhancedConversions -> true",
+    "config": {
+      "tagID": "1",
+      "enableEnhancedConversions": true,
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": [],
+      "isHashRequired": true,
+      "useNativeSDK": {
         "web": true
-    },
-    "connectionMode": {
+      },
+      "connectionMode": {
         "web": "device"
+      },
+      "consentManagement": {}
     },
-    "consentManagement": {}
+    "result": true
   },
   {
-    "tagID": "2",
-    "enableEnhancedConversions": false,
-    "eventFilteringOption": "disable",
-    "isHashRequired": true,
-    "whitelistedEvents": [],
-    "blacklistedEvents": [],
-    "oneTrustCookieCategories": [],
-    "useNativeSDK": {
+    "testTitle": "Disabled EnhancedConversions",
+    "config": {
+      "tagID": "2",
+      "enableEnhancedConversions": false,
+      "eventFilteringOption": "disable",
+      "isHashRequired": true,
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": [],
+      "useNativeSDK": {
         "web": true
-    },
-    "connectionMode": {
+      },
+      "connectionMode": {
         "web": "device"
+      },
+      "consentManagement": {}
     },
-    "consentManagement": {}
-},
-{
-  "tagID": "3",
-  "enableEnhancedConversions": true,
-  "eventFilteringOption": "disable",
-  "whitelistedEvents": [],
-  "blacklistedEvents": [],
-  "oneTrustCookieCategories": [],
-  "isHashRequired": false,
-  "useNativeSDK": {
-      "web": true
+    "result": true
   },
-  "connectionMode": {
-      "web": "device"
-  },
-  "consentManagement": {}
-},
-{
-  "tagID": "4",
-  "enableEnhancedConversions": true,
-  "eventFilteringOption": "whitelistedEvents",
-  "isHashRequired": false,
-  "whitelistedEvents": [
-      {
+  {
+    "testTitle": "Enabled Enhanced Conversions, Event Filtering Option -> whitelisted Events, isHashRequired -> false",
+    "config": {
+      "tagID": "3",
+      "enableEnhancedConversions": true,
+      "eventFilteringOption": "whitelistedEvents",
+      "isHashRequired": false,
+      "whitelistedEvents": [
+        {
           "eventName": "Anonymous Page Visit"
-      }
-  ],
-  "blacklistedEvents": [],
-  "oneTrustCookieCategories": [],
-  "useNativeSDK": {
-      "web": true
+        }
+      ],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": [],
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {}
+    },
+    "result": true
   },
-  "connectionMode": {
-      "web": "device"
-  },
-  "consentManagement": {}
-},
-{
-  "tagID": "5",
-  "enableEnhancedConversions": true,
-  "eventFilteringOption": "blacklistedEvents",
-  "isHashRequired": true,
-  "whitelistedEvents": [
-      {
+  {
+    "testTitle": "Event Filtering Option -> blacklisted Events",
+    "config": {
+      "tagID": "4",
+      "enableEnhancedConversions": true,
+      "eventFilteringOption": "blacklistedEvents",
+      "isHashRequired": true,
+      "whitelistedEvents": [
+        {
           "eventName": "Anonymous Page Visit"
-      }
-  ],
-  "blacklistedEvents": [],
-  "oneTrustCookieCategories": [],
-  "useNativeSDK": {
-      "web": true
+        }
+      ],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": [],
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {}
+    },
+    "result": true
   },
-  "connectionMode": {
-      "web": "device"
+  {
+    "testTitle": "connection Mode -> cloud",
+    "config": {
+      "tagID": "5",
+      "enableEnhancedConversions": true,
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": [],
+      "isHashRequired": true,
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "consentManagement": {}
+    },
+    "result": false,
+    "err": ["Sending events via cloud mode is not supported for this destination"]
   },
-  "consentManagement": {}
-},
-{
-  "tagID": "6",
-  "enableEnhancedConversions": true,
-  "eventFilteringOption": "blacklistedEvents",
-  "isHashRequired": true,
-  "whitelistedEvents": [],
-  "blacklistedEvents": [
-      {
-          "eventName": "Credit Card Added"
-      }
-  ],
-  "oneTrustCookieCategories": [],
-  "useNativeSDK": {
-      "web": true
-  },
-  "connectionMode": {
-      "web": "device"
-  },
-  "consentManagement": {}
-}
+  {
+    "testTitle": "Without tagID",
+    "config": {
+      "tagID": "",
+      "enableEnhancedConversions": true,
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": [],
+      "isHashRequired": true,
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "consentManagement": {}
+    },
+    "result": false,
+    "err": ["tagID is not given"]
+  }
 ]
