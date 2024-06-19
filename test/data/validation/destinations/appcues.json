@@ -96,5 +96,131 @@
     },
     "result": false,
     "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "Basic test with only accountId",
+    "config": {
+      "accountId": "1234",
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": [],
+      "nativeSdkUrl": {
+        "web": ""
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {}
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With nativeSdkUrl and for Client-side Events Filtering allowlist events are picked, mode -> cloud",
+    "config": {
+      "accountId": "1235",
+      "eventFilteringOption": "whitelistedEvents",
+      "whitelistedEvents": [
+        {
+          "eventName": "Anonymous Page visit"
+        }
+      ],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": [],
+      "nativeSdkUrl": {
+        "web": "https://fast.appcues.com/1235.js"
+      },
+      "useNativeSDK": {
+        "web": false
+      },
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "consentManagement": {}
+    },
+    "result": true
+  },
+  {
+    "testTitle": "without accountId",
+    "config": {
+      "accountId": "",
+      "eventFilteringOption": "blacklistedEvents",
+      "whitelistedEvents": [],
+      "blacklistedEvents": [
+        {
+          "eventName": "Credit card added"
+        }
+      ],
+      "oneTrustCookieCategories": [],
+      "nativeSdkUrl": {
+        "web": "https://fast.appcues.com/1236.js"
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {}
+    },
+    "result": false,
+    "err": ["AccountId must be added as it's a mandatory field"]
+  },
+  {
+    "testTitle": "eventFilteringOption -> disable, as enabling device-mode integrations works only with either allowlisted or denylisted events",
+    "config": {
+      "accountId": "1237",
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [],
+      "blacklistedEvents": [
+        {
+          "eventName": "Credit card added"
+        }
+      ],
+      "oneTrustCookieCategories": [],
+      "nativeSdkUrl": {
+        "web": "https://fast.appcues.com/1237.js"
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {}
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Invalid accountId",
+    "config": {
+      "accountId": "1238nwbdwhdgweydgydgewydgwhjakjsksjshshhsuwyd7deuwejdhwjdsanxamsxbasxbahcgdshjcsmnfjjmnajshjhkanamcnsdbcjdsbcsmn",
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [
+        {
+          "eventName": "Anonymous Page visit"
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": "Credit card added"
+        }
+      ],
+      "nativeSdkUrl": {
+        "web": "htt://fast.appcues.com/1238.js"
+      },
+      "useNativeSDK": {
+        "web": false
+      },
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "consentManagement": {}
+    },
+    "result": false,
+    "err": ["AccountId must be according to the following pattern -> \"^(.{0,100})$\" "]
   }
 ]

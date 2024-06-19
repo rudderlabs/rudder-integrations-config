@@ -96,5 +96,72 @@
     },
     "result": false,
     "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "Basic test with correct webhookUrl and authHeader",
+    "config": {
+      "webhookUrl": "https://webhook.site/3b922986-eeb0-4671-9816-df753f2d2ecd",
+      "authHeader": "abc123",
+      "oneTrustCookieCategories": [],
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "consentManagement": {}
+    },
+    "result": true
+  },
+  {
+    "testTitle": "No value added in authHeader",
+    "config": {
+      "webhookUrl": "https://webhook.site/3b922986-eeb0-4671-9816-df753f2d2ecd",
+      "authHeader": "",
+      "oneTrustCookieCategories": [],
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "consentManagement": {}
+    },
+    "result": false,
+    "err": ["authHeader is a mandatory field and therefore it should be present"]
+  },
+  {
+    "testTitle": "Without webhookUrl",
+    "config": {
+      "webhookUrl": "",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        }
+      ],
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "consentManagement": {}
+    },
+    "result": false,
+    "err": ["webhookUrl is a mandatory field"]
+  },
+  {
+    "testTitle": "With consentManagement provider -> OneTrust, consent category ID -> Marketing",
+    "config": {
+      "webhookUrl": "https://webhook.site/3b922986-eeb0-4671-9816-df753f2d2ecd",
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust",
+            "resolutionStrategy": "",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": true
   }
 ]
