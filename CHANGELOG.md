@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.77.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.77.2...v1.77.3) (2024-06-19)
+
+
+### Bug Fixes
+
+* fix connectionMode preRequisite condition for braze ([754c649](https://github.com/rudderlabs/rudder-config-schema/commit/754c649bcc423c58ccef92245971d13f2ef37cfc))
+
+### [1.77.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.77.1...v1.77.2) (2024-06-19)
+
+
+### Bug Fixes
+
+* braze config wh source ([#1465](https://github.com/rudderlabs/rudder-config-schema/issues/1465)) ([fdb5125](https://github.com/rudderlabs/rudder-config-schema/commit/fdb5125c01c20f42cbb3111c7ebc58e2ede612f2))
+
+### [1.77.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.77.0...v1.77.1) (2024-06-14)
+
+
+### Bug Fixes
+
+* integration config for customerio ([#1469](https://github.com/rudderlabs/rudder-config-schema/issues/1469)) ([94463e7](https://github.com/rudderlabs/rudder-config-schema/commit/94463e7ffaf2c6233cba406c4987860bbd871ede))
+
 ## [1.77.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.76.0...v1.77.0) (2024-06-14)
 
 
