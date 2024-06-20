@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.77.4](https://github.com/rudderlabs/rudder-config-schema/compare/v1.77.3...v1.77.4) (2024-06-20)
+
+
+### Bug Fixes
+
+* snowflake key pair authentication for warehouse destination ([858a23b](https://github.com/rudderlabs/rudder-config-schema/commit/858a23b06cd48919a95f7c6ea8c71e92b4622fd4))
+
 ### [1.77.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.77.2...v1.77.3) (2024-06-19)
 
 
