@@ -1,15 +1,7 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": [
-      "account",
-      "database",
-      "warehouse",
-      "user",
-      "password",
-      "syncFrequency",
-      "useRudderStorage"
-    ],
+    "required": ["account", "database", "warehouse", "user", "syncFrequency", "useRudderStorage"],
     "type": "object",
     "properties": {
       "account": {
@@ -32,7 +24,6 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "password": { "type": "string", "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*" },
       "namespace": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
@@ -58,6 +49,7 @@
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.*)$"
       },
       "useRudderStorage": { "type": "boolean", "default": false },
+      "useKeyPairAuth": { "type": "boolean", "default": false },
       "preferAppend": { "type": "boolean", "default": true },
       "oneTrustCookieCategories": {
         "type": "array",
@@ -532,6 +524,46 @@
     "allOf": [
       {
         "if": {
+          "properties": { "useKeyPairAuth": { "const": false } },
+          "required": ["useKeyPairAuth"]
+        },
+        "then": {
+          "properties": {
+            "password": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
+            },
+            "useKeyPairAuth": {
+              "const": false
+            }
+          },
+          "required": ["password"]
+        }
+      },
+      {
+        "if": {
+          "properties": { "useKeyPairAuth": { "const": true } },
+          "required": ["useKeyPairAuth"]
+        },
+        "then": {
+          "properties": {
+            "privateKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|-----BEGIN (?:ENCRYPTED )?PRIVATE KEY-----[\\s\\S]+?-----END (?:ENCRYPTED )?PRIVATE KEY-----"
+            },
+            "privateKeyPassphrase": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "useKeyPairAuth": {
+              "const": true
+            }
+          },
+          "required": ["privateKey", "useKeyPairAuth"]
+        }
+      },
+      {
+        "if": {
           "properties": { "useRudderStorage": { "const": false } },
           "required": ["useRudderStorage"]
         },
@@ -675,6 +707,7 @@
           ]
         }
       }
-    ]
+    ],
+    "additionalProperties": true
   }
 }
