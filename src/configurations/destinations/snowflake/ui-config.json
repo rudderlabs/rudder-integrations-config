@@ -49,13 +49,39 @@
           "required": false
         },
         {
+          "type": "checkbox",
+          "label": "Use Key Pair Authentication",
+          "value": "useKeyPairAuth",
+          "default": false,
+          "required": false
+        },
+        {
           "type": "textInput",
           "label": "Password",
           "value": "password",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
           "placeholder": "e.g: RUDDER_PASSWORD",
           "required": true,
+          "secret": true,
+          "preRequisiteField": { "name": "useKeyPairAuth", "selectedValue": false }
+        },
+        {
+          "type": "textareaInput",
+          "required": true,
+          "regex": "-----BEGIN (?:ENCRYPTED )?PRIVATE KEY-----[\\s\\S]+?-----END (?:ENCRYPTED )?PRIVATE KEY-----",
+          "preRequisiteField": { "name": "useKeyPairAuth", "selectedValue": true },
+          "label": "Private Key",
+          "value": "privateKey",
           "secret": true
+        },
+        {
+          "type": "textInput",
+          "regex": "^(.{0,100})$",
+          "secret": true,
+          "preRequisiteField": { "name": "useKeyPairAuth", "selectedValue": true },
+          "label": "Private Key Passphrase",
+          "value": "privateKeyPassphrase",
+          "footerNote": "Use the password you set when encrypting the private key. Leave it blank if the private key is not encrypted."
         },
         {
           "type": "textInput",
