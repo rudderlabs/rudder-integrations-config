@@ -50,11 +50,19 @@
       },
       "tagID": {
         "type": "string",
-        "pattern": "^(.{0,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "enableEnhancedConversions": {
         "type": "boolean",
         "default": false
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
       },
       "eventFilteringOption": {
         "type": "string",
@@ -104,7 +112,7 @@
         }
       }
     },
-    "allOf": [
+    "anyOf": [
       {
         "if": {
           "properties": {
@@ -119,8 +127,7 @@
             "isHashRequired": {
               "type": "boolean",
               "default": true
-            },
-            "enableEnhancedConversions": { "const": true }
+            }
           },
           "required": ["isHashRequired"]
         }
