@@ -40,13 +40,43 @@ And then, setup the project dependencies by running below command:
 
 `npm run setup`
 
-Run below command to deploy integrations definitions config to database:
+The below command deploys integration definitions to the specified control-plane database:
 
 ```
-python3 ./scripts/deployToDB.py <config-be-url> <username> <password>
+python3 ./scripts/deployToDB.py --help
 
-Ex:
-python3 ./scripts/deployToDB.py http://localhost:5050 myusername mypassword
+usage: deployToDB.py [-h] [control_plane_url] [username] [password]
+
+Script to deploy config files to DB.
+
+positional arguments:
+  control_plane_url  Control plane URL
+  username           Control plane admin username
+  password           Control plane admin password
+
+options:
+  -h, --help         show this help message and exit
+```
+
+#### Positional argument environment variable fallback table
+
+| Positional Argument | Fallback Environment Variable | Description           |
+| ------------------- | ----------------------------- | --------------------- |
+| ARG1                | CONTROL_PLANE_URL             | The control plane URL |
+| ARG2                | API_USER                      | The cp admin          |
+| ARG3                | API_PASSWORD                  | The cp admin password |
+
+### Usage examples
+
+```
+# Just command line args
+python3 ./scripts/deployToDB.py http://localhost:5050 foo bar
+
+# Some command line some envs
+API_USER=foo API_PASSWORD=bar python3 ./scripts/deployToDB.py http://localhost:5050
+
+# Just envs
+CONTROL_PLANE_URL=http://foo.bar API_USER=foo API_PASSWORD=bar python3 ./scripts/deployToDB.py
 ```
 
 ## Contribute

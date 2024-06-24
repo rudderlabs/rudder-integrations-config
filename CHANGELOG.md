@@ -2,6 +2,57 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.77.4](https://github.com/rudderlabs/rudder-config-schema/compare/v1.77.3...v1.77.4) (2024-06-20)
+
+
+### Bug Fixes
+
+* snowflake key pair authentication for warehouse destination ([858a23b](https://github.com/rudderlabs/rudder-config-schema/commit/858a23b06cd48919a95f7c6ea8c71e92b4622fd4))
+
+### [1.77.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.77.2...v1.77.3) (2024-06-19)
+
+
+### Bug Fixes
+
+* fix connectionMode preRequisite condition for braze ([754c649](https://github.com/rudderlabs/rudder-config-schema/commit/754c649bcc423c58ccef92245971d13f2ef37cfc))
+
+### [1.77.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.77.1...v1.77.2) (2024-06-19)
+
+
+### Bug Fixes
+
+* braze config wh source ([#1465](https://github.com/rudderlabs/rudder-config-schema/issues/1465)) ([fdb5125](https://github.com/rudderlabs/rudder-config-schema/commit/fdb5125c01c20f42cbb3111c7ebc58e2ede612f2))
+
+### [1.77.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.77.0...v1.77.1) (2024-06-14)
+
+
+### Bug Fixes
+
+* integration config for customerio ([#1469](https://github.com/rudderlabs/rudder-config-schema/issues/1469)) ([94463e7](https://github.com/rudderlabs/rudder-config-schema/commit/94463e7ffaf2c6233cba406c4987860bbd871ede))
+
+## [1.77.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.76.0...v1.77.0) (2024-06-14)
+
+
+### Features
+
+* added device-mode support for customer.io ([#1430](https://github.com/rudderlabs/rudder-config-schema/issues/1430)) ([1e7545a](https://github.com/rudderlabs/rudder-config-schema/commit/1e7545a86c85314997dda0c5852a0df08755a603))
+* added GCM support for Amplitude ([#1455](https://github.com/rudderlabs/rudder-config-schema/issues/1455)) ([8bd8915](https://github.com/rudderlabs/rudder-config-schema/commit/8bd891512d59151c3a10b45252cc6dc93a2bf0b7))
+
+## [1.76.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.75.2...v1.76.0) (2024-06-10)
+
+
+### Features
+
+* added GCM support for 5 destinations - Batch 1 ([#1419](https://github.com/rudderlabs/rudder-config-schema/issues/1419)) ([146be7e](https://github.com/rudderlabs/rudder-config-schema/commit/146be7e7d183c1758706a7871d0a784da932b34c))
+* added GCM support for 5 destinations - Batch 2 ([#1420](https://github.com/rudderlabs/rudder-config-schema/issues/1420)) ([d726ac5](https://github.com/rudderlabs/rudder-config-schema/commit/d726ac50055e4e7f2a0b87d1cc90234ffc1abf9d))
+* added GCM support for 5 destinations - Batch 3 ([#1422](https://github.com/rudderlabs/rudder-config-schema/issues/1422)) ([ccd4393](https://github.com/rudderlabs/rudder-config-schema/commit/ccd43933f52bc25b9ba840ffc38a828309ff551a))
+* added GCM support for 5 destinations - Batch 4 ([#1425](https://github.com/rudderlabs/rudder-config-schema/issues/1425)) ([f647ced](https://github.com/rudderlabs/rudder-config-schema/commit/f647ced7d68b93189ae0a764ff678db8539bd090))
+* added GCM support for 5 destinations - Batch 5 ([#1426](https://github.com/rudderlabs/rudder-config-schema/issues/1426)) ([8f8bb25](https://github.com/rudderlabs/rudder-config-schema/commit/8f8bb25bf4d7b7fb6286bbb348366837c84a9b51))
+* added GCM support for 5 destinations - Batch 6 ([#1431](https://github.com/rudderlabs/rudder-config-schema/issues/1431)) ([7ed3664](https://github.com/rudderlabs/rudder-config-schema/commit/7ed3664d14bc9a3e9e6dcffbd8d13ea07823584a))
+* added GCM support for 5 destinations - Batch 7 ([#1433](https://github.com/rudderlabs/rudder-config-schema/issues/1433)) ([1d9136c](https://github.com/rudderlabs/rudder-config-schema/commit/1d9136c96375c34feda9860f4c4415d78093a31f))
+* adding s2s key for appsflyer ([#1427](https://github.com/rudderlabs/rudder-config-schema/issues/1427)) ([c386e28](https://github.com/rudderlabs/rudder-config-schema/commit/c386e287d88858340e33987c29a5973016d978e2))
+* new singer klaviyo source for the latest API ([#1437](https://github.com/rudderlabs/rudder-config-schema/issues/1437)) ([10c2230](https://github.com/rudderlabs/rudder-config-schema/commit/10c22309fdb72e3a4dde5e96410d7b74c899bd0f))
+
 ### [1.75.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.75.1...v1.75.2) (2024-06-06)
 
 
