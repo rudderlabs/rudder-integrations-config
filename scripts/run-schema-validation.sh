@@ -9,7 +9,7 @@ for file in $changed_files; do
     if [[ "$parent_directory" == "src/configurations/destinations" || "$parent_directory" == "src/configurations/sources" ]]; then
         name=$(echo "$file" | cut -d '/' -f 4)
         selector=$(echo "$parent_directory" | cut -d '/' -f 3)
-        selector=${selector::-1}
+        selector=$(echo "$selector" | sed 's/.$//')
         # Storing the last directory to ensure that validation runs only once, even if multiple configuration files are changed for a given source or destination.
         if [ "$last_directory" != "${directory}" ]; then
             output==$(python scripts/schemaGenerator.py -name="$name" $selector 2>&1)
