@@ -135,5 +135,133 @@
     },
     "result": false,
     "err": [" must NOT have additional properties", " must NOT have additional properties"]
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "dsn": "https://42152b1ac22XXX378fdXXXfbdb442798@o1142740.ingest.sentry.io/6201791",
+      "environment": "production",
+      "customVersionProperty": "window.kaholo.version",
+      "release": "window.kaholo.version",
+      "serverName": "server",
+      "logger": "sentry",
+      "debugMode": false,
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "dsn": "https://42152b1ac22XXX378fdXXXfbdb442798@o1142740.ingest.sentry.io/6201791",
+      "environment": "production",
+      "customVersionProperty": "window.kaholo.version",
+      "release": "window.kaholo.version",
+      "serverName": "server",
+      "logger": "sentry",
+      "debugMode": false,
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "dsn": "https://42152b1ac22XXX378fdXXXfbdb442798@o1142740.ingest.sentry.io/6201791",
+      "environment": "production",
+      "customVersionProperty": "window.kaholo.version",
+      "release": "window.kaholo.version",
+      "serverName": "server",
+      "logger": "sentry",
+      "debugMode": false,
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0 must have required property 'resolutionStrategy'",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "dsn": "https://42152b1ac22XXX378fdXXXfbdb442798@o1142740.ingest.sentry.io/6201791",
+      "environment": "production",
+      "customVersionProperty": "window.kaholo.version",
+      "release": "window.kaholo.version",
+      "serverName": "server",
+      "logger": "sentry",
+      "debugMode": false,
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "dsn": "https://42152b1ac22XXX378fdXXXfbdb442798@o1142740.ingest.sentry.io/6201791",
+      "environment": "production",
+      "customVersionProperty": "window.kaholo.version",
+      "release": "window.kaholo.version",
+      "serverName": "server",
+      "logger": "sentry",
+      "debugMode": false,
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.web.0.provider must be equal to one of the allowed values"]
   }
 ]
