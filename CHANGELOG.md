@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.77.5](https://github.com/rudderlabs/rudder-config-schema/compare/v1.77.4...v1.77.5) (2024-06-25)
+
+
+### Bug Fixes
+
+* enhancement: onboard user API for onesignal ([#1460](https://github.com/rudderlabs/rudder-config-schema/issues/1460)) ([b2c8e58](https://github.com/rudderlabs/rudder-config-schema/commit/b2c8e58eb7301778e7739388d4cb7bef1fbaa894))
+
 ### [1.77.4](https://github.com/rudderlabs/rudder-config-schema/compare/v1.77.3...v1.77.4) (2024-06-20)
 
 
