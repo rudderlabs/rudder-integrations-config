@@ -40,13 +40,6 @@ And then, setup the project dependencies by running below command:
 
 `npm run setup`
 
-### Generated UI Configs For Destinations Supporting Custom Mappings
-
-As there are significant default values for ui-config.json for destinations supporting custom mappings, we use templating mechanism to manage it. Make sure to run `npm run pre-process` to make sure you have the updated `generated ui-config.json` for such destinations the default values for these are maintained in `ui-default.json` under same dir.
-
-`ui-config.jt` is the template file used to produce the `ui-config.json` we use the [rudder-json-template-engine
-](https://github.com/rudderlabs/rudder-json-template-engine) for it.
-
 The below command deploys integration definitions to the specified control-plane database:
 
 ```
