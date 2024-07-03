@@ -2,6 +2,83 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.78.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.77.5...v1.78.0) (2024-07-01)
+
+
+### Features
+
+* added GCM support for 5 destinations - Batch 10 ([#1480](https://github.com/rudderlabs/rudder-config-schema/issues/1480)) ([4340084](https://github.com/rudderlabs/rudder-config-schema/commit/434008474677c0e7ea6335cf3fa00df2b550f1c3))
+* added GCM support for 5 destinations - Batch 11 ([#1483](https://github.com/rudderlabs/rudder-config-schema/issues/1483)) ([53fee90](https://github.com/rudderlabs/rudder-config-schema/commit/53fee906a954fb95851beb0d202c2a84d68e6a02))
+* added GCM support for 5 destinations - Batch 12 ([#1487](https://github.com/rudderlabs/rudder-config-schema/issues/1487)) ([55af8c7](https://github.com/rudderlabs/rudder-config-schema/commit/55af8c7f66fdfb26b3bc436d2122916ae42729dc))
+* added GCM support for 5 destinations - Batch 13 ([#1488](https://github.com/rudderlabs/rudder-config-schema/issues/1488)) ([af7909f](https://github.com/rudderlabs/rudder-config-schema/commit/af7909f7f7f5a40beaf04104d74eca930d143d42))
+* added GCM support for 5 destinations - Batch 14 ([#1489](https://github.com/rudderlabs/rudder-config-schema/issues/1489)) ([ae45d1b](https://github.com/rudderlabs/rudder-config-schema/commit/ae45d1b96414142aedbbd6044710b065f088a863))
+* added GCM support for 5 destinations - Batch 15 ([#1490](https://github.com/rudderlabs/rudder-config-schema/issues/1490)) ([5871961](https://github.com/rudderlabs/rudder-config-schema/commit/5871961add908033a53436459cb2f63e56bc1072))
+* added GCM support for 5 destinations - Batch 16 ([#1492](https://github.com/rudderlabs/rudder-config-schema/issues/1492)) ([a538556](https://github.com/rudderlabs/rudder-config-schema/commit/a538556b7ba6042eb979b1ddd6356c066732e1e5))
+* added GCM support for 5 destinations - Batch 17 ([#1494](https://github.com/rudderlabs/rudder-config-schema/issues/1494)) ([6f20dea](https://github.com/rudderlabs/rudder-config-schema/commit/6f20dea9cc4d2c7b70d728761c57ce44f449c79d))
+* added GCM support for 5 destinations - Batch 18 ([#1495](https://github.com/rudderlabs/rudder-config-schema/issues/1495)) ([2bd407f](https://github.com/rudderlabs/rudder-config-schema/commit/2bd407f2ec6f01b8c521b233a297b1047b46b035))
+* added GCM support for 5 destinations - Batch 19 ([#1496](https://github.com/rudderlabs/rudder-config-schema/issues/1496)) ([e6b6437](https://github.com/rudderlabs/rudder-config-schema/commit/e6b6437d4887be5d0b255afb4c0f1c7220540355))
+* added GCM support for 5 destinations - Batch 20 ([#1497](https://github.com/rudderlabs/rudder-config-schema/issues/1497)) ([db221d4](https://github.com/rudderlabs/rudder-config-schema/commit/db221d4124c464bba05b9dbb2d25a0b08492f252))
+* added GCM support for 5 destinations - Batch 21 ([#1498](https://github.com/rudderlabs/rudder-config-schema/issues/1498)) ([bedc97f](https://github.com/rudderlabs/rudder-config-schema/commit/bedc97f015cc485b2035c518a5f2e12194b0da51))
+* added GCM support for 5 destinations - Batch 22 ([#1501](https://github.com/rudderlabs/rudder-config-schema/issues/1501)) ([7360b6e](https://github.com/rudderlabs/rudder-config-schema/commit/7360b6e802d35dfd1d52b8ce3ba41ed15c9f268d))
+* added GCM support for 5 destinations - Batch 23 ([#1502](https://github.com/rudderlabs/rudder-config-schema/issues/1502)) ([fb53441](https://github.com/rudderlabs/rudder-config-schema/commit/fb53441eba682d78e531cc7b5e94f7e18352a14a))
+* added GCM support for 5 destinations - Batch 24 ([#1503](https://github.com/rudderlabs/rudder-config-schema/issues/1503)) ([390288d](https://github.com/rudderlabs/rudder-config-schema/commit/390288d6988bf6e1b019e04c4cecc1b3406d5728))
+* added GCM support for 5 destinations - Batch 25 ([#1504](https://github.com/rudderlabs/rudder-config-schema/issues/1504)) ([6cf3eec](https://github.com/rudderlabs/rudder-config-schema/commit/6cf3eecb84cddab37ab3a5572b3ed0416df1854a))
+* added GCM support for 5 destinations - Batch 26 ([#1506](https://github.com/rudderlabs/rudder-config-schema/issues/1506)) ([7069b4d](https://github.com/rudderlabs/rudder-config-schema/commit/7069b4d3005a1386a6e6bec67c611670b79a24b0))
+* added GCM support for 5 destinations - Batch 27 ([#1508](https://github.com/rudderlabs/rudder-config-schema/issues/1508)) ([b0542f3](https://github.com/rudderlabs/rudder-config-schema/commit/b0542f36753727327d7ae5cd06e17cf02e30105d))
+* added GCM support for 5 destinations - Batch 28 ([#1510](https://github.com/rudderlabs/rudder-config-schema/issues/1510)) ([5daa43c](https://github.com/rudderlabs/rudder-config-schema/commit/5daa43caa328344d3cac14604feac65c423356d2))
+* added GCM support for 5 destinations - Batch 29 ([#1511](https://github.com/rudderlabs/rudder-config-schema/issues/1511)) ([acf8eee](https://github.com/rudderlabs/rudder-config-schema/commit/acf8eeea902bc24649aa4448723d9cd8ddacf05f))
+* added GCM support for 5 destinations - Batch 8 ([#1434](https://github.com/rudderlabs/rudder-config-schema/issues/1434)) ([0200d89](https://github.com/rudderlabs/rudder-config-schema/commit/0200d89df2830e6bea8deabe7037101eb2918a6c))
+* added GCM support for 5 destinations - Batch 9 ([#1435](https://github.com/rudderlabs/rudder-config-schema/issues/1435)) ([e80d714](https://github.com/rudderlabs/rudder-config-schema/commit/e80d7148abf98034ebd51de5f5d2f5b03cfef36b))
+* added GCM support for Airship destination ([#1361](https://github.com/rudderlabs/rudder-config-schema/issues/1361)) ([41feb43](https://github.com/rudderlabs/rudder-config-schema/commit/41feb431702e2ae56ae017e878fedb9581039764))
+* added GCM support for Algolia Insights destination ([#1362](https://github.com/rudderlabs/rudder-config-schema/issues/1362)) ([16a70ed](https://github.com/rudderlabs/rudder-config-schema/commit/16a70eda8cc0cc73a38e0d8ede9d2a510f76049e))
+* added GCM support for Amazon Kinesis destination ([#1364](https://github.com/rudderlabs/rudder-config-schema/issues/1364)) ([cc08e84](https://github.com/rudderlabs/rudder-config-schema/commit/cc08e849d80b61ba0642311d501437e82d8accee))
+* added GCM support for Amazon Kinesis Firehose destination ([#1366](https://github.com/rudderlabs/rudder-config-schema/issues/1366)) ([aabaa44](https://github.com/rudderlabs/rudder-config-schema/commit/aabaa44575ac25a29afae131e0125b7808a3167a))
+* added GCM support for Apache Kafka destination ([#1367](https://github.com/rudderlabs/rudder-config-schema/issues/1367)) ([b85bb29](https://github.com/rudderlabs/rudder-config-schema/commit/b85bb29fefbb3e539b877336d558bf5c9701583f))
+* added GCM support for App Center destination ([#1375](https://github.com/rudderlabs/rudder-config-schema/issues/1375)) ([0a3ef1e](https://github.com/rudderlabs/rudder-config-schema/commit/0a3ef1e3d09032d99611a2a476d8acf1cc9d7925))
+* added GCM support for Attentive Tag destination ([#1377](https://github.com/rudderlabs/rudder-config-schema/issues/1377)) ([908382e](https://github.com/rudderlabs/rudder-config-schema/commit/908382e14cc5ed120b1fe9e1e094ed6ca5fe63a3))
+* added GCM support for Attribution destination ([#1381](https://github.com/rudderlabs/rudder-config-schema/issues/1381)) ([dbf1b31](https://github.com/rudderlabs/rudder-config-schema/commit/dbf1b311c7127a9f0250c2299ad26141c214a859))
+* added GCM support for Autopilot destination ([#1382](https://github.com/rudderlabs/rudder-config-schema/issues/1382)) ([3d2947b](https://github.com/rudderlabs/rudder-config-schema/commit/3d2947b275a628ba193881a77ffb8777b7e6b872))
+* added GCM support for Awin destination ([#1402](https://github.com/rudderlabs/rudder-config-schema/issues/1402)) ([4a3beab](https://github.com/rudderlabs/rudder-config-schema/commit/4a3beab87937c309b92fd5ae41d6f8f941faceb2))
+* added GCM support for AWS EventBridge destination ([#1403](https://github.com/rudderlabs/rudder-config-schema/issues/1403)) ([6a83035](https://github.com/rudderlabs/rudder-config-schema/commit/6a8303560ee5be1f322843f537a6d8099b25d249))
+* added GCM support for AWS Lambda destination ([#1404](https://github.com/rudderlabs/rudder-config-schema/issues/1404)) ([f8f7f84](https://github.com/rudderlabs/rudder-config-schema/commit/f8f7f846b0be1c73065798fa4c221a350ccfdf89))
+* added GCM support for AWS Personalize destination ([#1405](https://github.com/rudderlabs/rudder-config-schema/issues/1405)) ([37cfd43](https://github.com/rudderlabs/rudder-config-schema/commit/37cfd439684d362da27f999186c3db9b9ce43605))
+* added GCM support for Axeptio destination ([#1406](https://github.com/rudderlabs/rudder-config-schema/issues/1406)) ([fded3eb](https://github.com/rudderlabs/rudder-config-schema/commit/fded3eb29233000834d206b8f464881baa0bb576))
+* added GCM support for Azure Blob Storage destination ([#1408](https://github.com/rudderlabs/rudder-config-schema/issues/1408)) ([8913571](https://github.com/rudderlabs/rudder-config-schema/commit/8913571469a3aec134aabc3204f3310b6dcf8c05))
+* added GCM support for Azure Deltalake destination ([#1409](https://github.com/rudderlabs/rudder-config-schema/issues/1409)) ([3d6380e](https://github.com/rudderlabs/rudder-config-schema/commit/3d6380e4a7c3780b61acfe3705c7e3bfd9dbab4f))
+* added GCM support for Azure Event Hub destination ([#1410](https://github.com/rudderlabs/rudder-config-schema/issues/1410)) ([46ea8e1](https://github.com/rudderlabs/rudder-config-schema/commit/46ea8e1637952e27d3f8ab9b4ebf0ead17cd7773))
+* added GCM support for Azure Synapse destination ([#1411](https://github.com/rudderlabs/rudder-config-schema/issues/1411)) ([fcb0dfd](https://github.com/rudderlabs/rudder-config-schema/commit/fcb0dfd6a2b3c837b58c5251460742cba9f58b7e))
+* added GCM support for Bigquery destination ([#1412](https://github.com/rudderlabs/rudder-config-schema/issues/1412)) ([818b7db](https://github.com/rudderlabs/rudder-config-schema/commit/818b7db99fcd0053493354a03b9f711aa8e619df))
+* added GCM support for BingAds Audience destination ([#1413](https://github.com/rudderlabs/rudder-config-schema/issues/1413)) ([bc0e543](https://github.com/rudderlabs/rudder-config-schema/commit/bc0e54317c0743ae31639c9b6b6e6474cb0a6ac6))
+* added GCM support for bloomreach destination ([#1414](https://github.com/rudderlabs/rudder-config-schema/issues/1414)) ([605f312](https://github.com/rudderlabs/rudder-config-schema/commit/605f312962bcf044d3570e2ac9fad5abe0107691))
+* added GCM support for Bluecore destination ([#1415](https://github.com/rudderlabs/rudder-config-schema/issues/1415)) ([4373487](https://github.com/rudderlabs/rudder-config-schema/commit/43734876ad67c538b7a83654693ea2ce99320cbc))
+* added GCM support for Blueshift destination ([#1416](https://github.com/rudderlabs/rudder-config-schema/issues/1416)) ([b46838a](https://github.com/rudderlabs/rudder-config-schema/commit/b46838af31db012f1d7cac935e385dddcab7a425))
+* added GCM support for Branch Metrics destination ([#1417](https://github.com/rudderlabs/rudder-config-schema/issues/1417)) ([b28b0fe](https://github.com/rudderlabs/rudder-config-schema/commit/b28b0fece79bc6048391c4fce1a6415a3e066718))
+* added GCM support for Facebook App Events ([#1352](https://github.com/rudderlabs/rudder-config-schema/issues/1352)) ([92d2331](https://github.com/rudderlabs/rudder-config-schema/commit/92d2331de4d9df516c9091f64b872036537b3e53))
+* added GCM support for Indicative destination ([#1360](https://github.com/rudderlabs/rudder-config-schema/issues/1360)) ([08a8f5a](https://github.com/rudderlabs/rudder-config-schema/commit/08a8f5af1bb15ca7de1bcf6b22f021f96b70cdb6))
+* added GCM support for Iterable destination ([#1356](https://github.com/rudderlabs/rudder-config-schema/issues/1356)) ([a943ab0](https://github.com/rudderlabs/rudder-config-schema/commit/a943ab080713aadb6841a4209d6a9216413ffb2b))
+* added GCM support for MoEngage destination ([#1357](https://github.com/rudderlabs/rudder-config-schema/issues/1357)) ([c913fb6](https://github.com/rudderlabs/rudder-config-schema/commit/c913fb628f1f64f94977e0193b42ec8ad9ee52e1))
+* added support for key pair authentication option for snowflake source ([#1476](https://github.com/rudderlabs/rudder-config-schema/issues/1476)) ([2d0e97a](https://github.com/rudderlabs/rudder-config-schema/commit/2d0e97aed5eb63ae6859416823cc0708578ebdb5))
+* cm360 enhanced conversions ([#1407](https://github.com/rudderlabs/rudder-config-schema/issues/1407)) ([6b98436](https://github.com/rudderlabs/rudder-config-schema/commit/6b9843688faae40d96148e8fedf4abbd534b1a16))
+* counting method support for dcm floodlight ([#1424](https://github.com/rudderlabs/rudder-config-schema/issues/1424)) ([5697d35](https://github.com/rudderlabs/rudder-config-schema/commit/5697d35958da9755332b3061fd7f4ddeef7bc0b0))
+* make connection mode to auth type ([#1478](https://github.com/rudderlabs/rudder-config-schema/issues/1478)) ([cd115e4](https://github.com/rudderlabs/rudder-config-schema/commit/cd115e41640db4314703a568bf8e3ae2062b8da1))
+* onboard source closeCRM ([#1479](https://github.com/rudderlabs/rudder-config-schema/issues/1479)) ([05fdb01](https://github.com/rudderlabs/rudder-config-schema/commit/05fdb019575a0911c9da1bee203e2cc207d0f238))
+* onboarding clicksend ([#1464](https://github.com/rudderlabs/rudder-config-schema/issues/1464)) ([7043913](https://github.com/rudderlabs/rudder-config-schema/commit/70439133cf813cec51cf9377ecfd2f3607f96ef4))
+* updated bingAds schema and testCases ([#1472](https://github.com/rudderlabs/rudder-config-schema/issues/1472)) ([c2d2c19](https://github.com/rudderlabs/rudder-config-schema/commit/c2d2c1934c565ebe8af8b68d18f011b7df0e579c))
+* updated schema and testCases for 3 destinations ([#1482](https://github.com/rudderlabs/rudder-config-schema/issues/1482)) ([ddb344e](https://github.com/rudderlabs/rudder-config-schema/commit/ddb344e6983921aa739f01a217776828b2c8339d))
+
+
+### Bug Fixes
+
+* ga4 cm defaults ([#1513](https://github.com/rudderlabs/rudder-config-schema/issues/1513)) ([526dd7c](https://github.com/rudderlabs/rudder-config-schema/commit/526dd7c442248b3c774bab651a776eadb3963e3e))
+* update default for config ([#1505](https://github.com/rudderlabs/rudder-config-schema/issues/1505)) ([fbad3a0](https://github.com/rudderlabs/rudder-config-schema/commit/fbad3a0eb3f7019880b7ee874d7f89b9a7d39502))
+
+### [1.77.5](https://github.com/rudderlabs/rudder-config-schema/compare/v1.77.4...v1.77.5) (2024-06-25)
+
+
+### Bug Fixes
+
+* enhancement: onboard user API for onesignal ([#1460](https://github.com/rudderlabs/rudder-config-schema/issues/1460)) ([b2c8e58](https://github.com/rudderlabs/rudder-config-schema/commit/b2c8e58eb7301778e7739388d4cb7bef1fbaa894))
+
 ### [1.77.4](https://github.com/rudderlabs/rudder-config-schema/compare/v1.77.3...v1.77.4) (2024-06-20)
 
 
