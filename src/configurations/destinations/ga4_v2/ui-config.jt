@@ -6,22 +6,110 @@
         "title": "Initial setup",
         "note": "Review how this destination is set up",
         "sections": [
-          {   
+          {
             "groups": [
-                {
-                  "title": "Connection settings",
-                  "note": "Update your connection settings here",
-                  "icon": "settings",
-                  "fields" : [
-                    {
-                      "configKey": "random",
-                      "type": "text",
-                      "label": "RandomPlaceholder",
-                      "placeholder": "Random Placeholder",
-                      "default": "Random",
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "API Secret",
+                    "note": "Enter the API secret associated with your GA4 data stream.  Create this in your GA UI under Admin > Data Streams > choose your stream > Measurement Protocol API Secrets > Create",
+                    "configKey": "apiSecret",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid API Secret",
+                    "placeholder": "e.g: QuIUHRj7XXXXX7eZDZiPQU",
+                    "secret": true
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Client Type",
+                    "configKey": "typesOfClient",
+                    "options": [
+                      {
+                        "label": "gtag.js",
+                        "value": "gtag"
+                      },
+                      {
+                        "label": "Firebase",
+                        "value": "firebase"
+                      }
+                    ],
+                    "default": "gtag"
+                  },
+                  {
+                    "type": "textInput",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "typesOfClient",
+                          "value": "gtag"
+                        },
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "device"
+                        }
+                      ]
                     },
-                  ]
-                }
+                    "label": "SDK Base URL",
+                    "configKey": "sdkBaseUrl",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]*|^$",
+                    "regexErrorMessage": "Please input a valid URL.",
+                    "note": "Enter your GA4 SDK base URL, https://{SDK Base URL}/gtag/js. By default, it is https://www.googletagmanager.com.",
+                    "placeholder": "e.g: https://www.example.com",
+                    "default": "https://www.googletagmanager.com",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "typesOfClient",
+                          "value": "gtag"
+                        }
+                      ]
+                    },
+                    "label": "Measurement Id",
+                    "configKey": "measurementId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(G-.{1,100})$|^$",
+                    "regexErrorMessage": "Invalid Measurement Id",
+                    "note": "Enter the ID associated with your stream.  Find this under Admin > Data Streams > choose your stream > Measurement ID",
+                    "placeholder": "e.g: G-AB1CD2E34F",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Property Id",
+                    "configKey": "propertyId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$|^$",
+                    "regexErrorMessage": "Invalid Measurement Id",
+                    "note": "Property is a numeric Google Analytics GA4 Property identifier. It is a unique identifier for a GA4 property. You can find this in the GA4 UI under Admin > Property > Property Details > Property ID",
+                    "placeholder": "e.g: 341372335",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "typesOfClient",
+                          "value": "firebase"
+                        }
+                      ]
+                    },
+                    "label": "Firebase App Id",
+                    "configKey": "firebaseAppId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Firebase App Id",
+                    "note": "Enter the ID associated with your stream.  Find this under Admin > Data Streams > choose your stream > Firebase App ID",
+                    "placeholder": "e.g: 2:637XX8496727:web:a4284b4cXXe329d5",
+                    "secret": false
+                  }
+                ]
+              }
             ]
           },
           {
@@ -77,22 +165,6 @@
             "note": "Configure advanced destination-specific settings here",
             "icon": "settings",
             "groups": [
-              {
-                  "title": "Connection settings",
-                  "note": "Update your connection settings here",
-                  "icon": "settings",
-                  "fields" : [
-                    {
-                      "configKey": "configData",
-                      "type": "cascaDerSelect",
-                      "label": "Select Account -> Property -> DataStream -> Protocol Secrets",
-                      "apiName": "getGA4ConfigData",
-                      "placeholder": "Select config details",
-                      "default": "{\"account\": \"123\"}",
-                      "secret": true
-                    },
-                  ]
-              },
               {
                 "title": "GA4 IT",
                 "fields": [
@@ -535,7 +607,8 @@
                         "type": "dynamicDataSelect",
                         "label": "GA4 parameter",
                         "key": "to",
-                        "placeholder": "$.event[0].params.value"
+                        "placeholder": "$.event[0].params.value",
+                        "apiName": "getGA4DimensionsAndMetrics"
                       }
                     ],
                     "configKey": "eventProperties"
