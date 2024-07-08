@@ -96,5 +96,134 @@
     },
     "result": false,
     "err": ["consentManagement.web.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "Basic test case including tagID, enableEnhancedConversions -> true",
+    "config": {
+      "tagID": "1",
+      "enableEnhancedConversions": true,
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": [],
+      "isHashRequired": true,
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {}
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Disabled EnhancedConversions",
+    "config": {
+      "tagID": "2",
+      "enableEnhancedConversions": false,
+      "eventFilteringOption": "disable",
+      "isHashRequired": true,
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": [],
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {}
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Enabled Enhanced Conversions, Event Filtering Option -> whitelisted Events, isHashRequired -> false",
+    "config": {
+      "tagID": "3",
+      "enableEnhancedConversions": true,
+      "eventFilteringOption": "whitelistedEvents",
+      "isHashRequired": false,
+      "whitelistedEvents": [
+        {
+          "eventName": "Anonymous Page Visit"
+        }
+      ],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": [],
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {}
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Event Filtering Option -> blacklisted Events",
+    "config": {
+      "tagID": "4",
+      "enableEnhancedConversions": true,
+      "eventFilteringOption": "blacklistedEvents",
+      "isHashRequired": true,
+      "whitelistedEvents": [
+        {
+          "eventName": "Anonymous Page Visit"
+        }
+      ],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": [],
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {}
+    },
+    "result": true
+  },
+  {
+    "testTitle": "connection Mode -> cloud",
+    "config": {
+      "tagID": "5",
+      "enableEnhancedConversions": true,
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": [],
+      "isHashRequired": true,
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "consentManagement": {}
+    },
+    "result": false,
+    "err": ["connectionMode.web must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "Without tagID",
+    "config": {
+      "enableEnhancedConversions": true,
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": [],
+      "isHashRequired": true,
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {}
+    },
+    "result": false,
+    "err": [" must have required property 'tagID'"]
   }
 ]
