@@ -40,9 +40,9 @@ N/A
 
 - [ ] Are sensitive fields marked as secret in definition config?
 
-- [ ] Is the PR limited to 10 file changes?
+- [ ] My test cases and placeholders use only masked/sample values for sensitive fields
 
-- [ ] Is the PR limited to one linear task?
+- [ ] Is the PR limited to 10 file changes & one task?
 
 ### Reviewer checklist
 
