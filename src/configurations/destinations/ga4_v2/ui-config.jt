@@ -14,11 +14,20 @@
                   "icon": "settings",
                   "fields" : [
                     {
-                      "configKey": "random",
-                      "type": "text",
-                      "label": "RandomPlaceholder",
-                      "placeholder": "Random Placeholder",
-                      "default": "Random",
+                      "configKey": "configData",
+                      "type": "nestedSelect",
+                      "label": "Select Account -> Property -> DataStream -> Protocol Secrets",
+                      "apiName": "getGA4ConfigData",
+                      "apiDependencies": ["rudderAccountId"],
+                      "placeholder": "Select config details",
+                      "preRequisites": {
+                                            "fields": [
+                                                {
+                                                    "configKey": "rudderAccountId",
+                                                    "exists": true
+                                                }
+                                            ]
+                                        }
                     },
                   ]
                 }
@@ -77,22 +86,6 @@
             "note": "Configure advanced destination-specific settings here",
             "icon": "settings",
             "groups": [
-              {
-                  "title": "Connection settings",
-                  "note": "Update your connection settings here",
-                  "icon": "settings",
-                  "fields" : [
-                    {
-                      "configKey": "configData",
-                      "type": "cascaDerSelect",
-                      "label": "Select Account -> Property -> DataStream -> Protocol Secrets",
-                      "apiName": "getGA4ConfigData",
-                      "placeholder": "Select config details",
-                      "default": "{\"account\": \"123\"}",
-                      "secret": true
-                    },
-                  ]
-              },
               {
                 "title": "GA4 IT",
                 "fields": [
@@ -466,11 +459,11 @@
       "advancedMapping": {
         "tabs": [
           {
-            "name": "Dimension and Metrics Mappings",
+            "name": "Global Mappings",
             "fields": [
               {
                 "type": "mapping",
-                "label": "Map RudderStack properties to GA4 dimenstions and metrics (Note: These can be overriden per event level mapping)",
+                "label": "Map RudderStack properties to GA4 dimensions and metrics (Note: These can be overriden per event level mapping)",
                 "configKey": "commonMapping",
                 "hideViewModeControl": true,
                 "columns": [
@@ -496,7 +489,7 @@
             "fields": [
               {
                 "type": "dynamicCustomForm",
-                "label": "Map RudderStack event name to GA4 events",
+                "label": "Map RudderStack events to GA4 events",
                 "configKey": "eventsMapping",
                 "default": ^.eventsMapping,
                 "rowFields": [

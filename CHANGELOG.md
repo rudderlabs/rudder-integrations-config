@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.80.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.79.0...v1.80.0) (2024-07-10)
+
+
+### Features
+
+* moved nestedSelect component into initial setup in GA4_V2 ([#1527](https://github.com/rudderlabs/rudder-config-schema/issues/1527)) ([5c355d4](https://github.com/rudderlabs/rudder-config-schema/commit/5c355d460dd3e14436d238837f0deecacc79f375))
+
 ## [1.79.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.78.0...v1.79.0) (2024-07-08)
 
 
