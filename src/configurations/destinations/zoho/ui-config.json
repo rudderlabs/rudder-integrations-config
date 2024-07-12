@@ -1,0 +1,259 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection Settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "title": "Region Settings",
+                    "fields": [
+                      {
+                        "type": "singleSelect",
+                        "label": "Data Center Region",
+                        "value": "region",
+                        "options": [
+                          {
+                            "name": "US",
+                            "value": "US"
+                          },
+                          {
+                            "name": "AU",
+                            "value": "AU"
+                          },
+                          {
+                            "name": "EU",
+                            "value": "EU"
+                          },
+                          {
+                            "name": "CA",
+                            "value": "CA"
+                          },
+                          {
+                            "name": "IN",
+                            "value": "IN"
+                          },
+                          {
+                            "name": "CN",
+                            "value": "CN"
+                          },
+                          {
+                            "name": "JP",
+                            "value": "JP"
+                          }
+                        ],
+                        "defaultOption": {
+                          "name": "US",
+                          "value": "US"
+                        },
+                        "required": true
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding.",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Module Settings",
+                "fields": [
+                  {
+                    "type": "dynamicDataSelect",
+                    "configKey": "module",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Module",
+                    "label": "Zoho Module",
+                    "placeholder": "e.g 1234567",
+                    "apiName": "getModules"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "OneTrust consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
+                  },
+                  "about RudderStack's OneTrust Consent Management feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Consent categories",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: C0001",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Field Level Specification",
+        "note": "Choose module specific Multi Select Picklist Field Actions",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Choose True if you want to always append values in multiselect fields or false if you want to entirely overrite the field values",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "multiSelectFieldLevelDecision",
+                    "label": "Module Specific Multi Select Pick List Field Action Mapping",
+                    "note": "Map Zoho Multi Select Pick List Field Action To Append or Replace"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Trigger Level Specification",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "RudderStack Event name to Linkedin Ads Conversion Rule Id mappings",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Data Center Region",
+                    "value": "trigger",
+                    "options": [
+                      {
+                        "name": "Workflow",
+                        "value": "workflow"
+                      },
+                      {
+                        "name": "Approval",
+                        "value": "approval"
+                      },
+                      {
+                        "name": "Blueprint",
+                        "value": "blueprint"
+                      },
+                      {
+                        "name": "None",
+                        "value": "None"
+                      }
+                    ],
+                    "defaultOption": {
+                      "name": "None",
+                      "value": "None"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "redirectGroups": {
+      "multiSelectFieldLevelDecision": {
+        "fields": [
+          {
+            "type": "dynamicCustomForm",
+            "label": "Choose module specific Multi Select Picklist Field Actions",
+            "configKey": "multiSelectFieldLevelDecision",
+            "rowFields": [
+              {
+                "type": "mappingRow",
+                "columns": [
+                  {
+                    "type": "dynamicDataSelect",
+                    "configKey": "from",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid multi select field",
+                    "label": "Zoho Multi Select Picklist Type Fields",
+                    "placeholder": "e.g Search",
+                    "apiName": "getFields"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Data Center Region",
+                    "value": "to",
+                    "options": [
+                      {
+                        "name": "Append",
+                        "value": "true"
+                      },
+                      {
+                        "name": "Replace",
+                        "value": "false"
+                      }
+                    ],
+                    "defaultOption": {
+                      "name": "Append",
+                      "value": "true"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
