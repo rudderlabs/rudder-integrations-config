@@ -1,3 +1,61 @@
 {
-  "configSchema": null
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": [],
+    "type": "object",
+    "properties": {},
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "const": "accessKey"
+            }
+          },
+          "required": [
+            "connectionMode"
+          ]
+        },
+        "then": {
+          "properties": {
+            "accessKeyID": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "accessKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          },
+          "required": [
+            "accessKeyID",
+            "accessKey"
+          ]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "const": "crossAccountRole"
+            }
+          },
+          "required": [
+            "connectionMode"
+          ]
+        },
+        "then": {
+          "properties": {
+            "roleARN": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          },
+          "required": [
+            "roleARN"
+          ]
+        }
+      }
+    ]
+  }
 }
