@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.81.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.80.0...v1.81.0) (2024-07-17)
+
+
+### Features
+
+* introduce klaviyo v2 dropdown option ([#1546](https://github.com/rudderlabs/rudder-config-schema/issues/1546)) ([d4792c2](https://github.com/rudderlabs/rudder-config-schema/commit/d4792c2338db52d52d2cd7e240e3c323e9bffd17))
+
 ## [1.80.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.79.0...v1.80.0) (2024-07-10)
 
 
