@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.82.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.81.0...v1.82.0) (2024-07-18)
+
+
+### Features
+
+* enable router for fb_custom_audience ([#1554](https://github.com/rudderlabs/rudder-config-schema/issues/1554)) ([40afb26](https://github.com/rudderlabs/rudder-config-schema/commit/40afb26fe3242689f0511491e091eacb285fa475))
+
 ## [1.81.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.80.0...v1.81.0) (2024-07-17)
 
 
