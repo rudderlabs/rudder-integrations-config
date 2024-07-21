@@ -13,49 +13,40 @@
                 "icon": "settings",
                 "fields": [
                   {
-                    "title": "Region Settings",
-                    "fields": [
+                    "type": "singleSelect",
+                    "label": "Data Center Region",
+                    "configKey": "region",
+                    "options": [
                       {
-                        "type": "singleSelect",
-                        "label": "Data Center Region",
-                        "value": "region",
-                        "options": [
-                          {
-                            "name": "US",
-                            "value": "US"
-                          },
-                          {
-                            "name": "AU",
-                            "value": "AU"
-                          },
-                          {
-                            "name": "EU",
-                            "value": "EU"
-                          },
-                          {
-                            "name": "CA",
-                            "value": "CA"
-                          },
-                          {
-                            "name": "IN",
-                            "value": "IN"
-                          },
-                          {
-                            "name": "CN",
-                            "value": "CN"
-                          },
-                          {
-                            "name": "JP",
-                            "value": "JP"
-                          }
-                        ],
-                        "defaultOption": {
-                          "name": "US",
-                          "value": "US"
-                        },
-                        "required": true
+                        "name": "US",
+                        "value": "US"
+                      },
+                      {
+                        "name": "AU",
+                        "value": "AU"
+                      },
+                      {
+                        "name": "EU",
+                        "value": "EU"
+                      },
+                      {
+                        "name": "CA",
+                        "value": "CA"
+                      },
+                      {
+                        "name": "IN",
+                        "value": "IN"
+                      },
+                      {
+                        "name": "CN",
+                        "value": "CN"
+                      },
+                      {
+                        "name": "JP",
+                        "value": "JP"
                       }
-                    ]
+                    ],
+                    "default": "US"
                   }
                 ]
               }
@@ -80,7 +71,7 @@
         ]
       },
       {
-        "title": "Destination Configuration settings",
+        "title": "Configuration settings",
         "note": "Manage the settings for your destination",
         "sections": [
           {
@@ -111,6 +102,40 @@
                     "configKey": "addDefaultDuplicateCheck",
                     "default": true,
                     "note": "Rudderstack will use the identifier field as primary duplicate check field as primary."
+                  }
+                ]
+              },
+              {
+                "title": "Zoho Trigger Option",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Trigger Action",
+                    "configKey": "trigger",
+                    "note": "Select 'None' if you do not want to trigger anything, and 'default' if any trigger(s) is already configured in Zoho",
+                    "options": [
+                      {
+                        "name": "Workflow",
+                        "value": "workflow"
+                      },
+                      {
+                        "name": "Approval",
+                        "value": "approval"
+                      },
+                      {
+                        "name": "Blueprint",
+                        "value": "blueprint"
+                      },
+                      {
+                        "name": "Default",
+                        "value": "Default"
+                      },
+                      {
+                        "name": "None",
+                        "value": "None"
+                      }
+                    ],
+                    "default": "None"
                   }
                 ]
               }
@@ -172,48 +197,6 @@
             ]
           }
         ]
-      },
-      {
-        "title": "Trigger Level Specification",
-        "hideEditIcon": true,
-        "sections": [
-          {
-            "groups": [
-              {
-                "title": "RudderStack Event name to Linkedin Ads Conversion Rule Id mappings",
-                "fields": [
-                  {
-                    "type": "singleSelect",
-                    "label": "Data Center Region",
-                    "value": "trigger",
-                    "options": [
-                      {
-                        "name": "Workflow",
-                        "value": "workflow"
-                      },
-                      {
-                        "name": "Approval",
-                        "value": "approval"
-                      },
-                      {
-                        "name": "Blueprint",
-                        "value": "blueprint"
-                      },
-                      {
-                        "name": "None",
-                        "value": "None"
-                      }
-                    ],
-                    "defaultOption": {
-                      "name": "None",
-                      "value": "None"
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        ]
       }
     ],
     "sdkTemplate": {
@@ -226,7 +209,7 @@
         "fields": [
           {
             "type": "dynamicCustomForm",
-            "label": "Choose module specific Multi Select Picklist Field Actions",
+            "label": "Choose Module specific Multi Select Picklist Field Actions",
             "configKey": "multiSelectFieldLevelDecision",
             "rowFields": [
               {
