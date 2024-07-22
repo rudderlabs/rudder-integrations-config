@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.82.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.82.0...v1.82.1) (2024-07-22)
+
+
+### Bug Fixes
+
+* add support for shopify source for braze purchase config ([586648d](https://github.com/rudderlabs/rudder-config-schema/commit/586648d1a1331328d925e018c1d2d5e484abfa45))
+* make clientId override default false for old ga4 and non existant for new ga4 ([fdd1794](https://github.com/rudderlabs/rudder-config-schema/commit/fdd17945723488e09e1193d6ad8adf06a2a66b6f))
+
 ## [1.82.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.81.0...v1.82.0) (2024-07-18)
 
 
