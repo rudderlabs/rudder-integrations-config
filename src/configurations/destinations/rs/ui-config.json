@@ -5,6 +5,12 @@
       "fields": [
         {
           "type": "textInput",
+          "preRequisiteField": [
+            {
+              "name": "useIAMForAuth",
+              "selectedValue": false
+            }
+          ],
           "label": "Host",
           "value": "host",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,255})$",
@@ -14,6 +20,12 @@
         },
         {
           "type": "textInput",
+          "preRequisiteField": [
+            {
+              "name": "useIAMForAuth",
+              "selectedValue": false
+            }
+          ],
           "label": "Port",
           "value": "port",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
@@ -40,13 +52,71 @@
           "required": true
         },
         {
+          "type": "checkbox",
+          "label": "Use IAM for Authentication",
+          "value": "useIAMForAuth",
+          "required": false,
+          "default": false
+        },
+        {
           "type": "textInput",
+          "preRequisiteField": [
+            {
+              "name": "useIAMForAuth",
+              "selectedValue": false
+            }
+          ],
           "label": "Password",
           "value": "password",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
           "placeholder": "e.g: warehousepassword",
           "required": true,
           "secret": true
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": [
+            {
+              "name": "useIAMForAuth",
+              "selectedValue": true
+            }
+          ],
+          "label": "IAM Role ARN For Authentication",
+          "value": "iamRoleARNForAuth",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+          "regexErrorMessage": "Invalid Role ARN",
+          "required": true,
+          "placeholder": "e.g: arn:aws:iam::12345X789012:role/RedshiftAccess"
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": [
+            {
+              "name": "useIAMForAuth",
+              "selectedValue": true
+            }
+          ],
+          "label": "Cluster Id",
+          "value": "clusterId",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,255})$",
+          "regexErrorMessage": "Invalid ClusterID",
+          "placeholder": "Cluster Identifier",
+          "required": true
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": [
+            {
+              "name": "useIAMForAuth",
+              "selectedValue": true
+            }
+          ],
+          "label": "Cluster region",
+          "value": "clusterRegion",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,255})$",
+          "regexErrorMessage": "Invalid Cluster region",
+          "placeholder": "Cluster Identifier",
+          "required": true
         },
         {
           "type": "textInput",
