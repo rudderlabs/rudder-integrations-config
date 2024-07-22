@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.82.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.82.0...v1.82.1) (2024-07-22)
+
+
+### Bug Fixes
+
+* add support for shopify source for braze purchase config ([586648d](https://github.com/rudderlabs/rudder-config-schema/commit/586648d1a1331328d925e018c1d2d5e484abfa45))
+* make clientId override default false for old ga4 and non existant for new ga4 ([fdd1794](https://github.com/rudderlabs/rudder-config-schema/commit/fdd17945723488e09e1193d6ad8adf06a2a66b6f))
+
+## [1.82.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.81.0...v1.82.0) (2024-07-18)
+
+
+### Features
+
+* enable router for fb_custom_audience ([#1554](https://github.com/rudderlabs/rudder-config-schema/issues/1554)) ([40afb26](https://github.com/rudderlabs/rudder-config-schema/commit/40afb26fe3242689f0511491e091eacb285fa475))
+
+## [1.81.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.80.0...v1.81.0) (2024-07-17)
+
+
+### Features
+
+* introduce klaviyo v2 dropdown option ([#1546](https://github.com/rudderlabs/rudder-config-schema/issues/1546)) ([d4792c2](https://github.com/rudderlabs/rudder-config-schema/commit/d4792c2338db52d52d2cd7e240e3c323e9bffd17))
+
+## [1.80.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.79.0...v1.80.0) (2024-07-10)
+
+
+### Features
+
+* moved nestedSelect component into initial setup in GA4_V2 ([#1527](https://github.com/rudderlabs/rudder-config-schema/issues/1527)) ([5c355d4](https://github.com/rudderlabs/rudder-config-schema/commit/5c355d460dd3e14436d238837f0deecacc79f375))
+
+## [1.79.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.78.0...v1.79.0) (2024-07-08)
+
+
+### Features
+
+* onboard new custom destination: wunderkind ([#1457](https://github.com/rudderlabs/rudder-config-schema/issues/1457)) ([b992a4e](https://github.com/rudderlabs/rudder-config-schema/commit/b992a4e456effc6b3f112d5b284fa4c9abe59404))
+* use klaviyo image v8.3.0 etl-310 ([#1521](https://github.com/rudderlabs/rudder-config-schema/issues/1521)) ([0c2e249](https://github.com/rudderlabs/rudder-config-schema/commit/0c2e249431cd9ac1ed4843590d7a1d52837fa45c))
+
+
+### Bug Fixes
+
+* update zendesk support streams ([#1520](https://github.com/rudderlabs/rudder-config-schema/issues/1520)) ([80b8e4b](https://github.com/rudderlabs/rudder-config-schema/commit/80b8e4b08392288ad1d6731401f2a16b53dfce4d))
+
 ## [1.78.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.77.5...v1.78.0) (2024-07-01)
 
 
