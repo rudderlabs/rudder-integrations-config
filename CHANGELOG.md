@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.83.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.82.1...v1.83.0) (2024-07-22)
+
+
+### Features
+
+* added syncFilesReport in options for s3 source ([#1550](https://github.com/rudderlabs/rudder-config-schema/issues/1550)) ([ed432b0](https://github.com/rudderlabs/rudder-config-schema/commit/ed432b0c2d86098d441783c7ecfa3e935e5ba165))
+* braze source event mapping ([#1560](https://github.com/rudderlabs/rudder-config-schema/issues/1560)) ([339a898](https://github.com/rudderlabs/rudder-config-schema/commit/339a8986fe0ddcb079a14e89424a13f4bc87747e))
+* onboard cordial destination ([#1558](https://github.com/rudderlabs/rudder-config-schema/issues/1558)) ([e9f2b33](https://github.com/rudderlabs/rudder-config-schema/commit/e9f2b33dc79e575413ae1b55cf096b9db580d59c))
+* onboard zoho ([#1528](https://github.com/rudderlabs/rudder-config-schema/issues/1528)) ([e9ea507](https://github.com/rudderlabs/rudder-config-schema/commit/e9ea507e80ef778d5592409c8aeea6d57365ee29))
+* onboarded XPixel Integration ([#1545](https://github.com/rudderlabs/rudder-config-schema/issues/1545)) ([a2f297c](https://github.com/rudderlabs/rudder-config-schema/commit/a2f297c0562f1daa38a1d022354b2c8d7244a36d))
+* use autoComplete in ga4v2 ([#1557](https://github.com/rudderlabs/rudder-config-schema/issues/1557)) ([0e1320d](https://github.com/rudderlabs/rudder-config-schema/commit/0e1320d17592738a44b7f755f845c40181a2d758))
+
+
+### Bug Fixes
+
+* typo for rudder ([#1551](https://github.com/rudderlabs/rudder-config-schema/issues/1551)) ([4b6e5e7](https://github.com/rudderlabs/rudder-config-schema/commit/4b6e5e74568876dde0a918cd2811ef3e95daa3b1))
+
 ### [1.82.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.82.0...v1.82.1) (2024-07-22)
 
 
