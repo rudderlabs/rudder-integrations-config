@@ -14,11 +14,20 @@
                 "icon": "settings",
                 "fields": [
                   {
-                    "configKey": "random",
-                    "type": "text",
-                    "label": "RandomPlaceholder",
-                    "placeholder": "Random Placeholder",
-                    "default": "Random"
+                    "configKey": "configData",
+                    "type": "nestedSelect",
+                    "label": "Select Account -> Property -> DataStream -> Protocol Secrets",
+                    "apiName": "getGA4ConfigData",
+                    "apiDependencies": ["rudderAccountId"],
+                    "placeholder": "Select config details",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "rudderAccountId",
+                          "exists": true
+                        }
+                      ]
+                    }
                   }
                 ]
               }
@@ -77,22 +86,6 @@
             "note": "Configure advanced destination-specific settings here",
             "icon": "settings",
             "groups": [
-              {
-                "title": "Connection settings",
-                "note": "Update your connection settings here",
-                "icon": "settings",
-                "fields": [
-                  {
-                    "configKey": "configData",
-                    "type": "cascaDerSelect",
-                    "label": "Select Account -> Property -> DataStream -> Protocol Secrets",
-                    "apiName": "getGA4ConfigData",
-                    "placeholder": "Select config details",
-                    "default": "{\"account\": \"123\"}",
-                    "secret": true
-                  }
-                ]
-              },
               {
                 "title": "GA4 IT",
                 "fields": [
@@ -358,27 +351,6 @@
           "configKey": "extendPageViewParams",
           "note": "Enabling this extends the set of properties automatically collected to include 'URL' and 'search'.  Note that GA4 has a limit on the number of unique properties per event name",
           "default": false
-        },
-        {
-          "preRequisites": {
-            "fields": [
-              {
-                "configKey": "connectionMode.web",
-                "value": "hybrid"
-              }
-            ]
-          },
-          "type": "checkbox",
-          "label": "Override gtag client ID & session ID",
-          "configKey": "overrideClientAndSessionId",
-          "note": [
-            "Override the gtag clientID & sessionID with RudderStack's to ensure attribution is properly unified across page and track events. We recommend turning on the override function. Otherwise, instrument your RudderStack SDK based on instructions ",
-            {
-              "text": "here",
-              "link": "https://www.rudderstack.com/docs/destinations/streaming-destinations/google-analytics-4/setting-up-google-analytics-4-in-rudderstack/#hybrid-mode"
-            }
-          ],
-          "default": true
         }
       ]
     },
@@ -466,11 +438,11 @@
       "advancedMapping": {
         "tabs": [
           {
-            "name": "Dimension and Metrics Mappings",
+            "name": "Global Mappings",
             "fields": [
               {
                 "type": "mapping",
-                "label": "Map RudderStack properties to GA4 dimenstions and metrics (Note: These can be overriden per event level mapping)",
+                "label": "Map RudderStack properties to GA4 dimensions and metrics (Note: These can be overriden per event level mapping)",
                 "configKey": "commonMapping",
                 "hideViewModeControl": true,
                 "columns": [
@@ -481,7 +453,7 @@
                     "placeholder": "properties.price"
                   },
                   {
-                    "type": "dynamicDataSelect",
+                    "type": "autoComplete",
                     "label": "GA4 parameter",
                     "key": "to",
                     "placeholder": "value"
@@ -496,7 +468,7 @@
             "fields": [
               {
                 "type": "dynamicCustomForm",
-                "label": "Map RudderStack event name to GA4 events",
+                "label": "Map RudderStack events to GA4 events",
                 "configKey": "eventsMapping",
                 "default": [
                   {
@@ -527,6 +499,10 @@
                         "to": "$.events[0].params.item_list_name"
                       },
                       {
+                        "from": "1",
+                        "to": "$.events[0].params.engagement_time_msec"
+                      },
+                      {
                         "from": "$.properties.products[*].product_id",
                         "to": "$.events[0].params.items[*].item_id",
                         "required": true
@@ -546,7 +522,7 @@
                       },
                       {
                         "from": "$.properties.products[*].position",
-                        "to": "$.events[0].params.items[*].position"
+                        "to": "$.events[0].params.items[*].index"
                       },
                       {
                         "from": "$.properties.products[*].quantity",
@@ -627,6 +603,10 @@
                         "to": "$.events[0].params.item_list_name"
                       },
                       {
+                        "from": "1",
+                        "to": "$.events[0].params.engagement_time_msec"
+                      },
+                      {
                         "from": "$.properties.product_id",
                         "to": "$.events[0].params.items[*].item_id",
                         "required": true
@@ -646,7 +626,7 @@
                       },
                       {
                         "from": "$.properties.position",
-                        "to": "$.events[0].params.items[*].position"
+                        "to": "$.events[0].params.items[*].index"
                       },
                       {
                         "from": "$.properties.quantity",
@@ -735,6 +715,10 @@
                         "to": "$.events[0].params.promotion_id"
                       },
                       {
+                        "from": "1",
+                        "to": "$.events[0].params.engagement_time_msec"
+                      },
+                      {
                         "from": "$.properties.products[*].product_id",
                         "to": "$.events[0].params.items[*].item_id",
                         "required": true
@@ -754,7 +738,7 @@
                       },
                       {
                         "from": "$.properties.products[*].position",
-                        "to": "$.events[0].params.items[*].position"
+                        "to": "$.events[0].params.items[*].index"
                       },
                       {
                         "from": "$.properties.products[*].quantity",
@@ -843,6 +827,10 @@
                         "to": "$.events[0].params.promotion_id"
                       },
                       {
+                        "from": "1",
+                        "to": "$.events[0].params.engagement_time_msec"
+                      },
+                      {
                         "from": "$.properties.products[*].product_id",
                         "to": "$.events[0].params.items[*].item_id",
                         "required": true
@@ -862,7 +850,7 @@
                       },
                       {
                         "from": "$.properties.products[*].position",
-                        "to": "$.events[0].params.items[*].position"
+                        "to": "$.events[0].params.items[*].index"
                       },
                       {
                         "from": "$.properties.products[*].quantity",
@@ -945,6 +933,10 @@
                         "required": true
                       },
                       {
+                        "from": "1",
+                        "to": "$.events[0].params.engagement_time_msec"
+                      },
+                      {
                         "from": "$.properties.product_id",
                         "to": "$.events[0].params.items[*].item_id",
                         "required": true
@@ -964,7 +956,7 @@
                       },
                       {
                         "from": "$.properties.position",
-                        "to": "$.events[0].params.items[*].position"
+                        "to": "$.events[0].params.items[*].index"
                       },
                       {
                         "from": "$.properties.quantity",
@@ -1047,6 +1039,10 @@
                         "required": true
                       },
                       {
+                        "from": "1",
+                        "to": "$.events[0].params.engagement_time_msec"
+                      },
+                      {
                         "from": "$.properties.product_id",
                         "to": "$.events[0].params.items[*].item_id",
                         "required": true
@@ -1066,7 +1062,7 @@
                       },
                       {
                         "from": "$.properties.position",
-                        "to": "$.events[0].params.items[*].position"
+                        "to": "$.events[0].params.items[*].index"
                       },
                       {
                         "from": "$.properties.quantity",
@@ -1149,6 +1145,10 @@
                         "required": true
                       },
                       {
+                        "from": "1",
+                        "to": "$.events[0].params.engagement_time_msec"
+                      },
+                      {
                         "from": "$.properties.product_id",
                         "to": "$.events[0].params.items[*].item_id",
                         "required": true
@@ -1168,7 +1168,7 @@
                       },
                       {
                         "from": "$.properties.position",
-                        "to": "$.events[0].params.items[*].position"
+                        "to": "$.events[0].params.items[*].index"
                       },
                       {
                         "from": "$.properties.quantity",
@@ -1251,6 +1251,10 @@
                         "required": true
                       },
                       {
+                        "from": "1",
+                        "to": "$.events[0].params.engagement_time_msec"
+                      },
+                      {
                         "from": "$.properties.products[*].product_id",
                         "to": "$.events[0].params.items[*].item_id",
                         "required": true
@@ -1270,7 +1274,7 @@
                       },
                       {
                         "from": "$.properties.products[*].position",
-                        "to": "$.events[0].params.items[*].position"
+                        "to": "$.events[0].params.items[*].index"
                       },
                       {
                         "from": "$.properties.products[*].quantity",
@@ -1353,6 +1357,10 @@
                         "required": true
                       },
                       {
+                        "from": "1",
+                        "to": "$.events[0].params.engagement_time_msec"
+                      },
+                      {
                         "from": "$.properties.product_id",
                         "to": "$.events[0].params.items[*].item_id",
                         "required": true
@@ -1372,7 +1380,7 @@
                       },
                       {
                         "from": "$.properties.position",
-                        "to": "$.events[0].params.items[*].position"
+                        "to": "$.events[0].params.items[*].index"
                       },
                       {
                         "from": "$.properties.quantity",
@@ -1459,6 +1467,10 @@
                         "to": "$.events[0].params.coupon"
                       },
                       {
+                        "from": "1",
+                        "to": "$.events[0].params.engagement_time_msec"
+                      },
+                      {
                         "from": "$.properties.products[*].product_id",
                         "to": "$.events[0].params.items[*].item_id",
                         "required": true
@@ -1478,7 +1490,7 @@
                       },
                       {
                         "from": "$.properties.products[*].position",
-                        "to": "$.events[0].params.items[*].position"
+                        "to": "$.events[0].params.items[*].index"
                       },
                       {
                         "from": "$.properties.products[*].quantity",
@@ -1578,6 +1590,10 @@
                         "to": "$.events[0].params.tax"
                       },
                       {
+                        "from": "1",
+                        "to": "$.events[0].params.engagement_time_msec"
+                      },
+                      {
                         "from": "$.properties.products[*].product_id",
                         "to": "$.events[0].params.items[*].item_id",
                         "required": true
@@ -1597,7 +1613,7 @@
                       },
                       {
                         "from": "$.properties.products[*].position",
-                        "to": "$.events[0].params.items[*].position"
+                        "to": "$.events[0].params.items[*].index"
                       },
                       {
                         "from": "$.properties.products[*].quantity",
@@ -1697,6 +1713,10 @@
                         "to": "$.events[0].params.tax"
                       },
                       {
+                        "from": "1",
+                        "to": "$.events[0].params.engagement_time_msec"
+                      },
+                      {
                         "from": "$.properties.products[*].product_id",
                         "to": "$.events[0].params.items[*].item_id",
                         "required": true
@@ -1716,7 +1736,7 @@
                       },
                       {
                         "from": "$.properties.products[*].position",
-                        "to": "$.events[0].params.items[*].position"
+                        "to": "$.events[0].params.items[*].index"
                       },
                       {
                         "from": "$.properties.products[*].quantity",
@@ -1801,6 +1821,10 @@
                         "to": "$.events[0].params.content_type"
                       },
                       {
+                        "from": "1",
+                        "to": "$.events[0].params.engagement_time_msec"
+                      },
+                      {
                         "from": "$.context.traits.*",
                         "to": "$.user_properties.*.value"
                       }
@@ -1821,6 +1845,10 @@
                       {
                         "from": "$.properties.cart_id",
                         "to": "$.events[0].params.item_id"
+                      },
+                      {
+                        "from": "1",
+                        "to": "$.events[0].params.engagement_time_msec"
                       },
                       {
                         "from": "$.context.traits.*",
@@ -1851,6 +1879,10 @@
                         "to": "$.events[0].params.payment_type"
                       },
                       {
+                        "from": "1",
+                        "to": "$.events[0].params.engagement_time_msec"
+                      },
+                      {
                         "from": "$.properties.products[*].product_id",
                         "to": "$.events[0].params.items[*].item_id",
                         "required": true
@@ -1870,7 +1902,7 @@
                       },
                       {
                         "from": "$.properties.products[*].position",
-                        "to": "$.events[0].params.items[*].position"
+                        "to": "$.events[0].params.items[*].index"
                       },
                       {
                         "from": "$.properties.products[*].quantity",
@@ -1961,6 +1993,10 @@
                         "to": "$.events[0].params.shipping_tier"
                       },
                       {
+                        "from": "1",
+                        "to": "$.events[0].params.engagement_time_msec"
+                      },
+                      {
                         "from": "$.properties.products[*].product_id",
                         "to": "$.events[0].params.items[*].item_id",
                         "required": true
@@ -1980,7 +2016,7 @@
                       },
                       {
                         "from": "$.properties.products[*].position",
-                        "to": "$.events[0].params.items[*].position"
+                        "to": "$.events[0].params.items[*].index"
                       },
                       {
                         "from": "$.properties.products[*].quantity",
@@ -2082,7 +2118,7 @@
                         "placeholder": "e.g $.properties.revenue"
                       },
                       {
-                        "type": "dynamicDataSelect",
+                        "type": "autoComplete",
                         "label": "GA4 parameter",
                         "key": "to",
                         "placeholder": "$.event[0].params.value"
