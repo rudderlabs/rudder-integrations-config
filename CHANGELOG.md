@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.83.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.83.0...v1.83.1) (2024-07-25)
+
+
+### Features
+
+* feat: cordial source ([#1575](https://github.com/rudderlabs/rudder-integrations-config/pull/1575)) ([83e3313](https://github.com/rudderlabs/rudder-integrations-config/commit/83e331334859bbfc2b9d0e6f2deb2c36e29fc2cf))
+
 ## [1.83.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.82.1...v1.83.0) (2024-07-22)
 
 
