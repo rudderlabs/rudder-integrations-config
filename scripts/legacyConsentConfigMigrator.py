@@ -127,15 +127,13 @@ def update_test_file(supported_source_types, name):
     one_trust_failure_scenarios = [
         {
             "input": [
-                {"someunsupportedkey": "C0001"},
                 {
                     "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                 },
                 {"oneTrustCookieCategory": "C0004"},
             ],
             "error": [
-                "oneTrustCookieCategories.ASDF.0 must NOT have additional properties",
-                'oneTrustCookieCategories.ASDF.1.oneTrustCookieCategory must match pattern "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"',
+                'oneTrustCookieCategories.ASDF.0.oneTrustCookieCategory must match pattern "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"',
             ],
         },
         {
@@ -160,15 +158,13 @@ def update_test_file(supported_source_types, name):
     ketch_failure_scenarios = [
         {
             "input": [
-                {"someunsupportedkey": "P1"},
                 {
                     "purpose": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                 },
                 {"purpose": "P4"},
             ],
             "error": [
-                "ketchConsentPurposes.ASDF.0 must NOT have additional properties",
-                'ketchConsentPurposes.ASDF.1.purpose must match pattern "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"',
+                'ketchConsentPurposes.ASDF.0.purpose must match pattern "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"',
             ],
         },
         {
@@ -186,7 +182,6 @@ def update_test_file(supported_source_types, name):
     ]
 
     s_idx = 0
-    is_first = True
     failure_tcs = []
     while s_idx < len(one_trust_failure_scenarios):
         failure_test_clone = json.loads(json.dumps(success_test))
@@ -194,17 +189,6 @@ def update_test_file(supported_source_types, name):
 
         failure_test_clone["err"] = []
         failure_test_clone["config"]["oneTrustCookieCategories"] = {}
-        if is_first:
-            failure_test_clone["config"]["oneTrustCookieCategories"][
-                "someunsupportedsourcetype"
-            ] = [
-                {"oneTrustCookieCategory": "C0001"},
-                {"oneTrustCookieCategory": "C0002"},
-            ]
-            failure_test_clone["err"].append(
-                "oneTrustCookieCategories must NOT have additional properties"
-            )
-            is_first = False
 
         for source_type in supported_source_types:
             if s_idx >= len(one_trust_failure_scenarios):
@@ -224,21 +208,12 @@ def update_test_file(supported_source_types, name):
         failure_test_clone["result"] = False
 
     s_idx = 0
-    is_first = True
     tc_idx = 0
     while s_idx < len(ketch_failure_scenarios):
         failure_test_clone = failure_tcs[tc_idx]
         tc_idx += 1
 
         failure_test_clone["config"]["ketchConsentPurposes"] = {}
-        if is_first:
-            failure_test_clone["config"]["ketchConsentPurposes"][
-                "someunsupportedsourcetype"
-            ] = [{"purpose": "P1"}, {"purpose": "P2"}]
-            failure_test_clone["err"].append(
-                "ketchConsentPurposes must NOT have additional properties"
-            )
-            is_first = False
 
         for source_type in supported_source_types:
             if s_idx >= len(ketch_failure_scenarios):
@@ -296,10 +271,8 @@ def update_schema_file(supported_source_types, name, dir_path):
                         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
                     }
                 },
-                "additionalProperties": False,
             },
         }
-    one_trust_cookie_categories_schema["additionalProperties"] = False
     config_schema["properties"][
         "oneTrustCookieCategories"
     ] = one_trust_cookie_categories_schema
@@ -318,10 +291,8 @@ def update_schema_file(supported_source_types, name, dir_path):
                         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
                     }
                 },
-                "additionalProperties": False,
             },
         }
-    ketch_consent_schema["additionalProperties"] = False
     config_schema["properties"]["ketchConsentPurposes"] = ketch_consent_schema
 
     schema["configSchema"] = config_schema
