@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.83.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.83.1...v1.83.3) (2024-07-31)
+
+
+### Bug Fixes
+
+* update sdk base url for ga4 hybrid mode ([#1588](https://github.com/rudderlabs/rudder-config-schema/issues/1588)) ([bccadc9](https://github.com/rudderlabs/rudder-config-schema/commit/bccadc9a3b631d45dcfc1ca49fd32b3d230d7f9c))
+
 ### [1.83.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.83.1...v1.83.2) (2024-07-30)
 
 ### [1.83.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.83.0...v1.83.1) (2024-07-25)
