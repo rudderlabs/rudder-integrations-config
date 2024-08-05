@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file. See [standa
 * criteo add support for multiple hash methods ([#1587](https://github.com/rudderlabs/rudder-config-schema/issues/1587)) ([b4eab9a](https://github.com/rudderlabs/rudder-config-schema/commit/b4eab9aac8191f9ba575b544ed17b8faeb48a891))
 * enable salesforce v2 ([#1601](https://github.com/rudderlabs/rudder-config-schema/issues/1601)) ([efc5b80](https://github.com/rudderlabs/rudder-config-schema/commit/efc5b8006594705d2eb3bb3fe48fa4d32cd16ca6))
 * onboard cordial source ([#1570](https://github.com/rudderlabs/rudder-config-schema/issues/1570)) ([fbaf1f6](https://github.com/rudderlabs/rudder-config-schema/commit/fbaf1f6da7de5978843b9d431a72df5f1f22b091))
+* add unity source support in Singular, add match_id config ([#1602](https://github.com/rudderlabs/rudder-config-schema/issues/1602)) ([c9626b3](https://github.com/rudderlabs/rudder-config-schema/commit/c9626b38ca414ff770f05bd23f96261a70c10028))
 
 
 ### Bug Fixes
