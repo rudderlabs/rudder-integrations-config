@@ -4,6 +4,13 @@
       "title": "Connection Credentials",
       "fields": [
         {
+          "type": "checkbox",
+          "label": "Use IAM for Authentication",
+          "value": "useIAMForAuth",
+          "required": false,
+          "default": false
+        },
+        {
           "type": "textInput",
           "preRequisiteField": [
             {
@@ -35,6 +42,36 @@
         },
         {
           "type": "textInput",
+          "preRequisiteField": [
+            {
+              "name": "useIAMForAuth",
+              "selectedValue": true
+            }
+          ],
+          "label": "Cluster Id",
+          "value": "clusterId",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,255})$",
+          "regexErrorMessage": "Invalid ClusterID",
+          "placeholder": "Cluster Identifier",
+          "required": true
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": [
+            {
+              "name": "useIAMForAuth",
+              "selectedValue": true
+            }
+          ],
+          "label": "Cluster region",
+          "value": "clusterRegion",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,255})$",
+          "regexErrorMessage": "Invalid Cluster region",
+          "placeholder": "Cluster Identifier",
+          "required": true
+        },
+        {
+          "type": "textInput",
           "label": "Database",
           "value": "database",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
@@ -50,13 +87,6 @@
           "regexErrorMessage": "Invalid User",
           "placeholder": "e.g: warehouseuser",
           "required": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Use IAM for Authentication",
-          "value": "useIAMForAuth",
-          "required": false,
-          "default": false
         },
         {
           "type": "textInput",
@@ -87,36 +117,6 @@
           "regexErrorMessage": "Invalid Role ARN",
           "required": true,
           "placeholder": "e.g: arn:aws:iam::12345X789012:role/RedshiftAccess"
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "useIAMForAuth",
-              "selectedValue": true
-            }
-          ],
-          "label": "Cluster Id",
-          "value": "clusterId",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,255})$",
-          "regexErrorMessage": "Invalid ClusterID",
-          "placeholder": "Cluster Identifier",
-          "required": true
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "useIAMForAuth",
-              "selectedValue": true
-            }
-          ],
-          "label": "Cluster region",
-          "value": "clusterRegion",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,255})$",
-          "regexErrorMessage": "Invalid Cluster region",
-          "placeholder": "Cluster Identifier",
-          "required": true
         },
         {
           "type": "textInput",
