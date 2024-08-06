@@ -45,29 +45,6 @@
                         {
                           "configKey": "typesOfClient",
                           "value": "gtag"
-                        },
-                        {
-                          "configKey": "connectionMode.web",
-                          "value": "device"
-                        }
-                      ]
-                    },
-                    "label": "SDK Base URL",
-                    "configKey": "sdkBaseUrl",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]*|^$",
-                    "regexErrorMessage": "Please input a valid URL.",
-                    "note": "Enter your GA4 SDK base URL, https://{SDK Base URL}/gtag/js. By default, it is https://www.googletagmanager.com.",
-                    "placeholder": "e.g: https://www.example.com",
-                    "default": "https://www.googletagmanager.com",
-                    "secret": false
-                  },
-                  {
-                    "type": "textInput",
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "typesOfClient",
-                          "value": "gtag"
                         }
                       ]
                     },
@@ -129,8 +106,55 @@
             "icon": "settings",
             "groups": [
               {
-                "title": "GA4 IT",
+                "title": "GA4 Additional Settings",
                 "fields": [
+                  {
+                    "type": "textInput",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "hybrid"
+                        }
+                      ],
+                      "condition": "or"
+                    },
+                    "label": "SDK Base URL",
+                    "configKey": "sdkBaseUrl",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]*|^$",
+                    "regexErrorMessage": "Please input a valid URL.",
+                    "note": "Enter your GA4 SDK base URL, https://{SDK Base URL}/gtag/js. By default, it is https://www.googletagmanager.com.",
+                    "placeholder": "e.g: https://www.example.com",
+                    "default": "https://www.googletagmanager.com",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "hybrid"
+                        }
+                      ],
+                      "condition": "or"
+                    },
+                    "label": "Server Side Container URL",
+                    "configKey": "serverContainerUrl",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]*|^$",
+                    "regexErrorMessage": "Please input a valid URL.",
+                    "note": "Enter your GA4 Server Side Container URL",
+                    "placeholder": "e.g: https://analytics.example.com",
+                    "secret": false
+                  },
                   {
                     "type": "checkbox",
                     "label": "Debug via Validation Server",
