@@ -1,186 +1,265 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Client Id",
-          "value": "clientId",
-          "required": true,
-          "placeholder": "e.g. ow08170123XXXlovt1z0j8hm",
-          "secret": true
-        },
-        {
-          "type": "textInput",
-          "label": "Client Secret",
-          "value": "clientSecret",
-          "required": true,
-          "placeholder": "e.g. Sm7Yoqpx1XXX1234Juvl61Ag",
-          "secret": true
-        },
-        {
-          "type": "textInput",
-          "label": "Subdomain",
-          "value": "subDomain",
-          "required": true,
-          "placeholder": "e.g. mcxt4zx4641XXX1jd9rp300hdc8y",
-          "secret": true
-        }
-      ]
-    },
-    {
-      "title": "Identify Call Settings",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Do Not Create or Update Contacts",
-          "value": "createOrUpdateContacts",
-          "default": false,
-          "footerNote": "To disable creating or updating contacts during an identify call, set this option to true."
-        },
-        {
-          "type": "textInput",
-          "label": "Identify Data External Key",
-          "value": "externalKey",
-          "required": false,
-          "placeholder": "e.g. mcxt4zx4641XXX1jd9rp300hdc8y",
-          "footerNote": "Use this setting if you would like Rudder identify events to create or update Data Extensions in SFMC. The External Key of the Salesforce Marketing Cloud Data Extension to which you'd like to send Identify data. You can find this in the SFMC interface by navigating to Data & Analytics > Contact Builder > Data Extensions; the extension's name will appear in the External Key column."
-        }
-      ]
-    },
-    {
-      "title": "Track Call Settings",
-      "fields": [
-        {
-          "type": "dynamicForm",
-          "label": "Map events to external key",
-          "labelLeft": "Event Name",
-          "labelRight": "External Key",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g: Product Clicked",
-          "placeholderRight": "eg: 69364906-XXXX-XXXX-XXXX-7D9CD87F16EC",
-          "value": "eventToExternalKey"
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Map events to primary key",
-          "labelLeft": "Event Name",
-          "labelRight": "Primary Key",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g: Product Clicked",
-          "placeholderRight": "eg: Contact Key",
-          "value": "eventToPrimaryKey",
-          "footerNote": "The target Data Extension's Primary Key. If a value is not provided, defaults to Contact Key. You can add multiple primary keys by separating them with commas. The primary key names should be same as that you have set in SFMC data extensions."
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Map events to event definition key",
-          "labelLeft": "Event Name",
-          "labelRight": "Event Definition Key",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g: Product Clicked",
-          "placeholderRight": "eg: AcmeBank-AccountAccessed",
-          "value": "eventToDefinitionMapping",
-          "footerNote": "Map your event names to the respective event definition keys."
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "eventToUUID",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "event",
-              "label": "Event Name",
-              "placeholder": "e.g. Product Added",
-              "required": false
-            },
-            {
-              "type": "checkbox",
-              "value": "uuid",
-              "label": "UUID",
-              "required": false,
-              "footerNote": "If this is checked then we will generate a UUID and pass it through to SMC as the value for Primary Key for this event called 'Uuid'. This will override the above Primary Key field."
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Consent Categories",
-          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "C0001",
-              "value": "oneTrustCookieCategory",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category ID",
-              "required": false
-            }
-          ],
-          "preRequisites": {
-            "featureFlags": [
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
               {
-                "configKey": "AMP_enable-gcm",
-                "value": false
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Client Id",
+                    "configKey": "clientId",
+                    "placeholder": "e.g. ow08170123XXXlovt1z0j8hm",
+                    "secret": true
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Client Secret",
+                    "configKey": "clientSecret",
+                    "placeholder": "e.g. Sm7Yoqpx1XXX1234Juvl61Ag",
+                    "secret": true
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Subdomain",
+                    "configKey": "subDomain",
+                    "placeholder": "e.g. mcxt4zx4641XXX1jd9rp300hdc8y",
+                    "secret": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Identify Call Settings",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Do Not Create or Update Contacts",
+                    "configKey": "createOrUpdateContacts",
+                    "default": false,
+                    "note": "To disable creating or updating contacts during an identify call, set this option to true."
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Identify Data External Key",
+                    "configKey": "externalKey",
+                    "placeholder": "e.g. mcxt4zx4641XXX1jd9rp300hdc8y",
+                    "note": "Use this setting if you would like Rudder identify events to create or update Data Extensions in SFMC. The External Key of the Salesforce Marketing Cloud Data Extension to which you'd like to send Identify data. You can find this in the SFMC interface by navigating to Data & Analytics > Contact Builder > Data Extensions; the extension's name will appear in the External Key column."
+                  },
+                  {
+                    "type": "dynamicDataSelect",
+                    "configKey": "accounts",
+                    "label": "Business Unit(optional)",
+                    "placeholder": "e.g 1234567",
+                    "apiName": "getAccounts"
+                  },
+                  {
+                    "type": "dynamicDataSelect",
+                    "configKey": "dataFolders",
+                    "label": "Data Folder(optional)",
+                    "placeholder": "e.g 1234567",
+                    "apiName": "getFolders"
+                  },
+                  {
+                    "type": "dynamicDataSelect",
+                    "configKey": "dataExtensions",
+                    "label": "Data Extensions",
+                    "placeholder": "e.g 1234567",
+                    "apiName": "getDataExtensions"
+                  }
+                ]
               },
               {
-                "configKey": "AMP_enable-gcm"
+                "title": "Track Call Settings",
+                "fields": [
+                  {
+                    "type": "dynamicForm",
+                    "label": "Map events to external key",
+                    "labelLeft": "Event Name",
+                    "labelRight": "External Key",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g: Product Clicked",
+                    "placeholderRight": "eg: 69364906-XXXX-XXXX-XXXX-7D9CD87F16EC",
+                    "value": "eventToExternalKey"
+                  },
+                  {
+                    "type": "dynamicForm",
+                    "label": "Map events to primary key",
+                    "labelLeft": "Event Name",
+                    "labelRight": "Primary Key",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g: Product Clicked",
+                    "placeholderRight": "eg: Contact Key",
+                    "value": "eventToPrimaryKey",
+                    "footerNote": "The target Data Extension's Primary Key. If a value is not provided, defaults to Contact Key. You can add multiple primary keys by separating them with commas. The primary key names should be same as that you have set in SFMC data extensions."
+                  },
+                  {
+                    "type": "dynamicForm",
+                    "label": "Map events to event definition key",
+                    "labelLeft": "Event Name",
+                    "labelRight": "Event Definition Key",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g: Product Clicked",
+                    "placeholderRight": "eg: AcmeBank-AccountAccessed",
+                    "value": "eventToDefinitionMapping",
+                    "footerNote": "Map your event names to the respective event definition keys."
+                  },
+                  {
+                    "type": "dynamicCustomForm",
+                    "value": "eventToUUID",
+                    "customFields": [
+                      {
+                        "type": "textInput",
+                        "value": "event",
+                        "label": "Event Name",
+                        "placeholder": "e.g. Product Added",
+                        "required": false
+                      },
+                      {
+                        "type": "checkbox",
+                        "value": "uuid",
+                        "label": "UUID",
+                        "required": false,
+                        "footerNote": "If this is checked then we will generate a UUID and pass it through to SMC as the value for Primary Key for this event called 'Uuid'. This will override the above Primary Key field."
+                      }
+                    ]
+                  }
+                ]
               }
-            ],
-            "featureFlagsCondition": "or"
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "OneTrust consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
+                  },
+                  "about RudderStack's OneTrust Consent Management feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Consent categories",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: C0001",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-gcm",
+                          "value": false
+                        },
+                        {
+                          "configKey": "AMP_enable-gcm"
+                        }
+                      ],
+                      "featureFlagsCondition": "or"
+                    }
+                  }
+                ]
+              }
+            ]
           }
-        },
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
         {
           "type": "dynamicCustomForm",
-          "value": "consentManagement",
-          "label": "Consent management settings",
-          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
             {
               "type": "singleSelect",
               "label": "Consent management provider",
-              "value": "provider",
+              "configKey": "provider",
               "options": [
                 {
-                  "name": "Custom",
+                  "label": "Custom",
                   "value": "custom"
                 },
                 {
-                  "name": "Ketch",
+                  "label": "Ketch",
                   "value": "ketch"
                 },
                 {
-                  "name": "OneTrust",
+                  "label": "OneTrust",
                   "value": "oneTrust"
                 }
               ],
-              "defaultOption": {
-                "name": "OneTrust",
-                "value": "oneTrust"
-              },
+              "default": "oneTrust",
               "required": true
             },
             {
               "type": "singleSelect",
               "label": "the required consent logic",
-              "value": "resolutionStrategy",
+              "configKey": "resolutionStrategy",
               "options": [
                 {
-                  "name": "AND",
+                  "label": "AND",
                   "value": "and"
                 },
                 {
-                  "name": "OR",
+                  "label": "OR",
                   "value": "or"
                 }
               ],
@@ -196,16 +275,15 @@
               }
             },
             {
-              "type": "dynamicCustomForm",
-              "value": "consents",
+              "type": "tagInput",
               "label": "Enter consent category ID’s",
-              "customFields": [
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
                 {
-                  "type": "textInput",
-                  "placeholder": "Marketing",
-                  "value": "consent",
-                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "required": false
+                  "consent": ""
                 }
               ]
             }
@@ -221,5 +299,5 @@
         }
       ]
     }
-  ]
+  }
 }
