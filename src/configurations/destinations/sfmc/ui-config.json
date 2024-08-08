@@ -103,69 +103,10 @@
                     "apiName": "getDataExtensions"
                   }
                 ]
-              },
-              {
-                "title": "Track Call Settings",
-                "fields": [
-                  {
-                    "type": "dynamicForm",
-                    "label": "Map events to external key",
-                    "labelLeft": "Event Name",
-                    "labelRight": "External Key",
-                    "keyLeft": "from",
-                    "keyRight": "to",
-                    "placeholderLeft": "e.g: Product Clicked",
-                    "placeholderRight": "eg: 69364906-XXXX-XXXX-XXXX-7D9CD87F16EC",
-                    "value": "eventToExternalKey"
-                  },
-                  {
-                    "type": "dynamicForm",
-                    "label": "Map events to primary key",
-                    "labelLeft": "Event Name",
-                    "labelRight": "Primary Key",
-                    "keyLeft": "from",
-                    "keyRight": "to",
-                    "placeholderLeft": "e.g: Product Clicked",
-                    "placeholderRight": "eg: Contact Key",
-                    "value": "eventToPrimaryKey",
-                    "footerNote": "The target Data Extension's Primary Key. If a value is not provided, defaults to Contact Key. You can add multiple primary keys by separating them with commas. The primary key names should be same as that you have set in SFMC data extensions."
-                  },
-                  {
-                    "type": "dynamicForm",
-                    "label": "Map events to event definition key",
-                    "labelLeft": "Event Name",
-                    "labelRight": "Event Definition Key",
-                    "keyLeft": "from",
-                    "keyRight": "to",
-                    "placeholderLeft": "e.g: Product Clicked",
-                    "placeholderRight": "eg: AcmeBank-AccountAccessed",
-                    "value": "eventToDefinitionMapping",
-                    "footerNote": "Map your event names to the respective event definition keys."
-                  },
-                  {
-                    "type": "dynamicCustomForm",
-                    "value": "eventToUUID",
-                    "customFields": [
-                      {
-                        "type": "textInput",
-                        "value": "event",
-                        "label": "Event Name",
-                        "placeholder": "e.g. Product Added",
-                        "required": false
-                      },
-                      {
-                        "type": "checkbox",
-                        "value": "uuid",
-                        "label": "UUID",
-                        "required": false,
-                        "footerNote": "If this is checked then we will generate a UUID and pass it through to SMC as the value for Primary Key for this event called 'Uuid'. This will override the above Primary Key field."
-                      }
-                    ]
-                  }
-                ]
               }
             ]
           },
+
           {
             "title": "Other settings",
             "note": "Configure advanced RudderStack features here",
@@ -206,6 +147,45 @@
                       ],
                       "featureFlagsCondition": "or"
                     }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Track Call Settings",
+        "note": "You can add different mapping for different events here",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Event Mappings",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "eventsToExternalKey",
+                    "label": "Map events to external key"
+                  },
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "eventToPrimaryKey",
+                    "label": "Map events to primary key",
+                    "note": "The target Data Extension's Primary Key. If a value is not provided, defaults to Contact Key. You can add multiple primary keys by separating them with commas. The primary key names should be same as that you have set in SFMC data extensions."
+                  },
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "eventToDefinitionMapping",
+                    "label": "Map events to event definition key",
+                    "note": "Map your event names to the respective event definition keys."
+                  },
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "eventToUUID",
+                    "label": "Map events to UUID",
+                    "note": "RudderStack lets you set an automatically-generated UUID as the primary key value for a track event. To do so, enter the event in the Event Name field under Track Call Settings and enable the UUID setting."
                   }
                 ]
               }
@@ -298,6 +278,108 @@
           }
         }
       ]
+    },
+    "redirectGroups": {
+      "eventsToExternalKey": {
+        "fields": [
+          {
+            "type": "mapping",
+            "label": "Map events to external key",
+            "configKey": "eventToExternalKey",
+            "default": [],
+            "columns": [
+              {
+                "type": "textInput",
+                "key": "from",
+                "label": "Event Name",
+                "placeholder": "e.g: Product Clicked"
+              },
+              {
+                "type": "textInput",
+                "key": "to",
+                "label": "External Key",
+                "placeholder": "eg: 69364906-XXXX-XXXX-XXXX-7D9CD87F16EC"
+              }
+            ]
+          }
+        ]
+      },
+      "eventToPrimaryKey": {
+        "fields": [
+          {
+            "type": "mapping",
+            "label": "",
+            "configKey": "eventToPrimaryKey",
+            "default": [],
+            "columns": [
+              {
+                "type": "textInput",
+                "key": "from",
+                "label": "Event Name",
+                "placeholder": "e.g: Product Clicked"
+              },
+              {
+                "type": "textInput",
+                "key": "to",
+                "label": "Primary Key",
+                "placeholder": "eg: Contact Key"
+              }
+            ]
+          }
+        ]
+      },
+      "eventToDefinitionMapping": {
+        "fields": [
+          {
+            "type": "mapping",
+            "label": "Map your RudderStack events to Adobe custom events",
+            "configKey": "eventToDefinitionMapping",
+            "default": [],
+            "columns": [
+              {
+                "type": "textInput",
+                "key": "from",
+                "label": "Event Name",
+                "placeholder": "e.g: Product Clicked"
+              },
+              {
+                "type": "textInput",
+                "key": "to",
+                "label": "Event Definition Key",
+                "placeholder": "eg: AcmeBank-AccountAccessed"
+              }
+            ]
+          }
+        ]
+      },
+      "eventToUUID": {
+        "fields": [
+          {
+            "type": "dynamicCustomForm",
+            "configKey": "eventToUUID",
+            "label": "Map events to UUID",
+            "rowFields": [
+              {
+                "type": "mappingRow",
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "configKey": "event",
+                    "label": "Event Name",
+                    "placeholder": "e.g. Product Added"
+                  },
+                  {
+                    "type": "checkbox",
+                    "configKey": "uuid",
+                    "label": "UUID",
+                    "default": true
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     }
   }
 }
