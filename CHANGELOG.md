@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.86.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.85.0...v1.86.0) (2024-08-09)
+
+
+### Features
+
+* dont run validations on sources ([#1585](https://github.com/rudderlabs/rudder-config-schema/issues/1585)) ([e02a585](https://github.com/rudderlabs/rudder-config-schema/commit/e02a585b4d6bd2ff763f369ffd15d149399f6860))
+
+
+### Bug Fixes
+
+* update test.yml ([#1612](https://github.com/rudderlabs/rudder-config-schema/issues/1612)) ([2ec8bda](https://github.com/rudderlabs/rudder-config-schema/commit/2ec8bdaf55086614ac9455508c6f64def0ec4447))
+
 ## [1.85.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.84.0...v1.85.0) (2024-08-05)
 
 
