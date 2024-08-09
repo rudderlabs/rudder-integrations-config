@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.86.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.85.0...v1.86.0) (2024-08-09)
+
+
+### Features
+
+* dont run validations on sources ([#1585](https://github.com/rudderlabs/rudder-config-schema/issues/1585)) ([e02a585](https://github.com/rudderlabs/rudder-config-schema/commit/e02a585b4d6bd2ff763f369ffd15d149399f6860))
+
+
+### Bug Fixes
+
+* update test.yml ([#1612](https://github.com/rudderlabs/rudder-config-schema/issues/1612)) ([2ec8bda](https://github.com/rudderlabs/rudder-config-schema/commit/2ec8bdaf55086614ac9455508c6f64def0ec4447))
+
+## [1.85.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.84.0...v1.85.0) (2024-08-05)
+
+
+### Features
+
+* criteo add support for multiple hash methods ([#1587](https://github.com/rudderlabs/rudder-config-schema/issues/1587)) ([b4eab9a](https://github.com/rudderlabs/rudder-config-schema/commit/b4eab9aac8191f9ba575b544ed17b8faeb48a891))
+* enable salesforce v2 ([#1601](https://github.com/rudderlabs/rudder-config-schema/issues/1601)) ([efc5b80](https://github.com/rudderlabs/rudder-config-schema/commit/efc5b8006594705d2eb3bb3fe48fa4d32cd16ca6))
+* onboard cordial source ([#1570](https://github.com/rudderlabs/rudder-config-schema/issues/1570)) ([fbaf1f6](https://github.com/rudderlabs/rudder-config-schema/commit/fbaf1f6da7de5978843b9d431a72df5f1f22b091))
+* add unity source support in Singular, add match_id config ([#1602](https://github.com/rudderlabs/rudder-config-schema/issues/1602)) ([c9626b3](https://github.com/rudderlabs/rudder-config-schema/commit/c9626b38ca414ff770f05bd23f96261a70c10028))
+
+
+### Bug Fixes
+
+* ga4 ui label ([#1599](https://github.com/rudderlabs/rudder-config-schema/issues/1599)) ([a958af3](https://github.com/rudderlabs/rudder-config-schema/commit/a958af3b5fb12d817232836762dc7ca9042ca31c))
+* updated default auth type for snowflake source ([#1586](https://github.com/rudderlabs/rudder-config-schema/issues/1586)) ([fc0f303](https://github.com/rudderlabs/rudder-config-schema/commit/fc0f3033067d9e1cce3f18e102c17c7dd4e436fb))
+
 ## [1.84.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.83.3...v1.84.0) (2024-08-01)
 
 
