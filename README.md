@@ -89,7 +89,3 @@ CONTROL_PLANE_URL=http://foo.bar API_USER=foo API_PASSWORD=bar python3 ./scripts
 ## Contribute
 
 We would love to see you contribute to RudderStack. Get more information on how to contribute [**here**](CONTRIBUTING.md).
-
-## License
-
-The RudderStack \*\*software name\*\* is released under the [**MIT License**](https://opensource.org/licenses/MIT).
