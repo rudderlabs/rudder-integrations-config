@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.86.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.86.0...v1.86.1) (2024-08-14)
+
+
+### Bug Fixes
+
+* facebook-singer-version-update ([c2e85d4](https://github.com/rudderlabs/rudder-config-schema/commit/c2e85d46eae5ca42ccb1d5c72d53e0091a8fc761))
+
 ## [1.86.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.85.0...v1.86.0) (2024-08-09)
 
 
