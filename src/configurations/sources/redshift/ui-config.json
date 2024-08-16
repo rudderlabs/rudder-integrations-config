@@ -50,10 +50,55 @@
           "trim": true
         },
         {
+          "type": "singleSelect",
+          "label": "Authentication Type",
+          "value": "authenticationType",
+          "options": [
+            {
+              "name": "IAM",
+              "value": "iam"
+            },
+            {
+              "name": "Username Password Authentication",
+              "value": "password"
+            }
+          ],
+          "defaultOption": {
+            "value": "iam"
+          }
+        },
+        {
+          "type": "textInput",
+          "required": true,
+          "preRequisiteField": { "name": "authenticationType", "selectedValue": "iam" },
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+          "label": "IAM Role ARN",
+          "placeholder": "E.g: arn:aws:iam::123456789012:role/MyRedshiftRole",
+          "value": "roleARN"
+        },
+        {
+          "type": "textInput",
+          "label": "Cluster Identifier",
+          "value": "clusterIdentifier",
+          "required": true,
+          "placeholder": "e.g: warehouse-cluster",
+          "preRequisiteField": { "name": "authenticationType", "selectedValue": "iam" }
+        },
+        {
+          "type": "textInput",
+          "label": "Cluster Region",
+          "value": "region",
+          "required": true,
+          "placeholder": "e.g: us-east-1",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+          "preRequisiteField": { "name": "authenticationType", "selectedValue": "iam" }
+        },
+        {
           "type": "textInput",
           "label": "Password",
           "value": "password",
           "inputFieldType": "password",
+          "preRequisiteField": { "name": "authenticationType", "selectedValue": "password" },
           "regex": ".*",
           "required": true,
           "secret": true
