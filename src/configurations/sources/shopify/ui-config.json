@@ -4,10 +4,35 @@
       "title": "Connection Settings",
       "fields": [
         {
+          "type": "singleSelect",
+          "label": "Version of app",
+          "value": "version",
+          "options": [
+            {
+              "name": "Client side tracking with the Rudderstack tracker script (Legacy).",
+              "value": "v1"
+            },
+            {
+              "name": "Client side tracking with the Rudderstack web pixel (Recommended).",
+              "value": "v2"
+            }
+          ],
+          "defaultOption": {
+            "name": "tracker",
+            "value": "v1"
+          },
+          "footerNote": "Select the version of the app you want to use. ",
+          "required": true
+        },
+        {
           "type": "checkbox",
           "label": "Disable client side identifier",
           "value": "disableClientSideIdentifier",
           "default": false,
+          "preRequisiteField": {
+            "name": "version",
+            "selectedValue": "v1"
+          },
           "footerNote": "Disables client side identifier in shopify tracker"
         }
       ]
