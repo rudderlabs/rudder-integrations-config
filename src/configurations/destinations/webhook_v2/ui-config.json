@@ -229,7 +229,15 @@
                     "type": "checkbox",
                     "label": "Enable Batching",
                     "configKey": "isBatchingEnabled",
-                    "default": false
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "format",
+                          "value": "json"
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "textInput",
@@ -243,8 +251,13 @@
                         {
                           "configKey": "isBatchingEnabled",
                           "value": true
+                        },
+                        {
+                          "configKey": "format",
+                          "value": "json"
                         }
-                      ]
+                      ],
+                      "condition": "and"
                     }
                   }
                 ]
