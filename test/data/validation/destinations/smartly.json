@@ -1,0 +1,87 @@
+[
+  {
+    "config": {
+      "apiToken": "testAuthToken",
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "apiToken": "testAuthToken",
+      "eventFilteringOption": "whitelistedEvents",
+      "whitelistedEvents": [
+        {
+          "eventName": "testevent"
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "connectionMode": {
+        "web": "device"
+      }
+    },
+    "result": false,
+    "err": ["connectionMode.web must be equal to one of the allowed values"]
+  },
+  {
+    "config": {
+      "apiToken": "testAuthToken",
+      "eventFilteringOption": "enable",
+      "whitelistedEvents": [
+        {
+          "eventName": "testevent"
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": ["eventFilteringOption must be equal to one of the allowed values"]
+  },
+  {
+    "config": {
+      "eventFilteringOption": "whitelistedEvents",
+      "whitelistedEvents": [
+        {
+          "eventName": "testevent"
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "useNativeSDK": {
+        "web": false
+      },
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'apiToken'"]
+  }
+]
