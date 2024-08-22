@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.87.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.86.1...v1.87.0) (2024-08-20)
+
+
+### Features
+
+* enable vdm for sfmc ([efc4ad2](https://github.com/rudderlabs/rudder-config-schema/commit/efc4ad2901e6d2b443c6279f21c3e4e31fd755fd))
+* iam support for redshift source ([#1613](https://github.com/rudderlabs/rudder-config-schema/issues/1613)) ([31c97ec](https://github.com/rudderlabs/rudder-config-schema/commit/31c97ec001fc8f4b45f006075aea5f285b2bb419))
+* iam support for redshift source ([#1619](https://github.com/rudderlabs/rudder-config-schema/issues/1619)) ([c5195cb](https://github.com/rudderlabs/rudder-config-schema/commit/c5195cb8b7ca695aa8918679bf5ba588f739a87b))
+
 ### [1.86.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.86.0...v1.86.1) (2024-08-14)
 
 
