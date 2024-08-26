@@ -1,20 +1,26 @@
 {
-  "name": "SFMC",
-  "displayName": "Salesforce Marketing Cloud",
+  "name": "SMARTLY",
+  "displayName": "Smartly",
   "config": {
-    "supportsVisualMapper": true,
-    "syncBehaviours": ["upsert"],
+    "cdkV2Enabled": true,
     "transformAtV1": "router",
     "saveDestinationResponse": true,
-    "throttlingCost": { "eventType": { "identify": 1, "track": 1 } },
-    "includeKeys": ["oneTrustCookieCategories", "consentManagement"],
+    "includeKeys": [
+      "apiToken",
+      "eventsMapping",
+      "blacklistedEvents",
+      "whitelistedEvents",
+      "eventFilteringOption",
+      "oneTrustCookieCategories",
+      "consentManagement"
+    ],
     "excludeKeys": [],
     "supportedSourceTypes": [
       "android",
       "ios",
-      "web",
       "unity",
       "amp",
+      "web",
       "cloud",
       "warehouse",
       "reactnative",
@@ -22,7 +28,7 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": { "cloud": ["identify", "track"] },
+    "supportedMessageTypes": { "cloud": ["track"] },
     "supportedConnectionModes": {
       "android": ["cloud"],
       "ios": ["cloud"],
@@ -38,15 +44,11 @@
     },
     "destConfig": {
       "defaultConfig": [
-        "clientId",
-        "clientSecret",
-        "subDomain",
-        "createOrUpdateContacts",
-        "externalKey",
-        "eventToExternalKey",
-        "eventToPrimaryKey",
-        "eventToUUID",
-        "eventToDefinitionMapping",
+        "apiToken",
+        "eventsMapping",
+        "blacklistedEvents",
+        "whitelistedEvents",
+        "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
       "android": ["connectionMode", "consentManagement"],
@@ -61,6 +63,7 @@
       "cordova": ["connectionMode", "consentManagement"],
       "shopify": ["connectionMode", "consentManagement"]
     },
-    "secretKeys": ["clientId", "clientSecret", "subDomain"]
-  }
+    "secretKeys": ["apiToken"]
+  },
+  "options": { "isBeta": true }
 }

@@ -40,8 +40,8 @@ jobs:
         run: |
           CHANGED_FILES="${{ steps.changed_files.outputs.all_changed_files }}"
           FILES_TO_VALIDATE=$(echo "$CHANGED_FILES" | tr ' ' '\n' | grep -v "src/configurations/sources" || true)
+          FILES_TO_VALIDATE=$(echo "$FILES_TO_VALIDATE" | tr '\n' ' ')
           echo "files_to_validate=$FILES_TO_VALIDATE" >> $GITHUB_ENV
-
       - name: Output Filtered files (remove later after sanity)
         run: echo $files_to_validate
 
