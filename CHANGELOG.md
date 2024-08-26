@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.87.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.87.0...v1.87.1) (2024-08-26)
+
+
+### Bug Fixes
+
+* snapchat custom audience support ([#1631](https://github.com/rudderlabs/rudder-config-schema/issues/1631)) ([fd6b978](https://github.com/rudderlabs/rudder-config-schema/commit/fd6b97870643b44b70feebb17d5fe83ad60959ea))
+
 ## [1.87.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.86.1...v1.87.0) (2024-08-20)
 
 
