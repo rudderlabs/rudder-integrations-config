@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.87.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.87.1...v1.87.2) (2024-08-26)
+
+
+### Bug Fixes
+
+* remove wrong conf from snapchat conversion and add for custom aud ([c5b1097](https://github.com/rudderlabs/rudder-config-schema/commit/c5b1097832efb29e0c4ff1b21fe73f3505b9a128))
+
 ### [1.87.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.87.0...v1.87.1) (2024-08-26)
 
 
