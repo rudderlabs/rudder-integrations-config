@@ -1,44 +1,58 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["database", "user", "syncFrequency", "useRudderStorage"],
+    "required": ["apiToken"],
     "type": "object",
     "properties": {
-      "database": {
+      "apiToken": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
       },
-      "user": {
+      "eventsMapping": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            },
+            "to": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          }
+        }
+      },
+      "eventFilteringOption": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
       },
-      "namespace": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
       },
-      "skipTracksTable": { "type": "boolean", "default": false },
-      "skipUsersTable": { "type": "boolean", "default": false },
-      "syncFrequency": {
-        "type": "string",
-        "enum": ["30", "60", "180", "360", "720", "1440"],
-        "default": "180"
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
       },
-      "syncStartAt": { "type": "string" },
-      "excludeWindow": {
-        "type": "object",
-        "properties": {
-          "excludeWindowStartTime": { "type": "string" },
-          "excludeWindowEndTime": { "type": "string" }
-        },
-        "required": ["excludeWindowStartTime", "excludeWindowEndTime"]
-      },
-      "jsonPaths": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.*)$"
-      },
-      "useRudderStorage": { "type": "boolean", "default": false },
-      "useIAMForAuth": { "type": "boolean", "default": false },
-      "preferAppend": { "type": "boolean", "default": true },
       "oneTrustCookieCategories": {
         "type": "array",
         "items": {
@@ -100,7 +114,7 @@
               ]
             }
           },
-          "cloudSource": {
+          "warehouse": {
             "type": "array",
             "items": {
               "type": "object",
@@ -565,137 +579,52 @@
       "connectionMode": {
         "type": "object",
         "properties": {
-          "android": { "type": "string", "enum": ["cloud"] },
-          "ios": { "type": "string", "enum": ["cloud"] },
-          "web": { "type": "string", "enum": ["cloud"] },
-          "unity": { "type": "string", "enum": ["cloud"] },
-          "amp": { "type": "string", "enum": ["cloud"] },
-          "reactnative": { "type": "string", "enum": ["cloud"] },
-          "flutter": { "type": "string", "enum": ["cloud"] },
-          "cordova": { "type": "string", "enum": ["cloud"] },
-          "shopify": { "type": "string", "enum": ["cloud"] },
-          "cloud": { "type": "string", "enum": ["cloud"] },
-          "cloudSource": { "type": "string", "enum": ["cloud"] }
+          "android": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "ios": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "web": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "unity": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "amp": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "reactnative": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "flutter": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cordova": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "shopify": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cloud": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "warehouse": {
+            "type": "string",
+            "enum": ["cloud"]
+          }
         }
       }
-    },
-    "allOf": [
-      {
-        "if": {
-          "properties": {
-            "useIAMForAuth": {
-              "const": false
-            }
-          },
-          "required": ["useIAMForAuth"]
-        },
-        "then": {
-          "properties": {
-            "host": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,255})$"
-            },
-            "port": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            },
-            "password": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
-            },
-            "useIAMForAuth": {
-              "const": false
-            }
-          },
-          "required": ["host", "port", "password"]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "useIAMForAuth": {
-              "const": true
-            }
-          },
-          "required": ["useIAMForAuth"]
-        },
-        "then": {
-          "properties": {
-            "iamRoleARNForAuth": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "clusterId": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,255})$"
-            },
-            "clusterRegion": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,255})$"
-            },
-            "useIAMForAuth": {
-              "const": true
-            }
-          },
-          "required": ["clusterId", "clusterRegion", "iamRoleARNForAuth", "useIAMForAuth"]
-        }
-      },
-      {
-        "if": {
-          "properties": { "useRudderStorage": { "const": false } },
-          "required": ["useRudderStorage"]
-        },
-        "then": {
-          "properties": {
-            "bucketName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$|(^\\{\\{.+\\}\\}$)"
-            },
-            "prefix": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([^\\s]{0,100})$"
-            },
-            "enableSSE": { "type": "boolean", "default": false }
-          },
-          "required": ["bucketName"],
-          "anyOf": [
-            {
-              "properties": {
-                "accessKeyID": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                },
-                "accessKey": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                },
-                "roleBasedAuth": { "const": false }
-              },
-              "required": []
-            },
-            {
-              "properties": {
-                "iamRoleARN": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                },
-                "roleBasedAuth": { "const": true }
-              },
-              "required": ["iamRoleARN", "roleBasedAuth"]
-            }
-          ]
-        }
-      },
-      {
-        "if": {
-          "properties": { "useRudderStorage": { "const": false } },
-          "required": ["useRudderStorage"]
-        },
-        "then": {
-          "properties": { "roleBasedAuth": { "type": "boolean", "default": true } },
-          "required": []
-        }
-      }
-    ]
+    }
   }
 }
