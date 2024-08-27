@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.88.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.87.2...v1.88.0) (2024-08-27)
+
+
+### Features
+
+* add audience support for sfmc destination ([#1639](https://github.com/rudderlabs/rudder-config-schema/issues/1639)) ([2c2ad3b](https://github.com/rudderlabs/rudder-config-schema/commit/2c2ad3b0cfa3ab8efa2b3a5311cbd7452c02ae15))
+
 ### [1.87.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.87.1...v1.87.2) (2024-08-26)
 
 
