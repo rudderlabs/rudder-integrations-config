@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.89.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.88.0...v1.89.0) (2024-08-27)
+
+
+### Features
+
+* make legacy consent management fields source type specific ([#1642](https://github.com/rudderlabs/rudder-config-schema/issues/1642)) ([e429505](https://github.com/rudderlabs/rudder-config-schema/commit/e429505e92f2e3da65a4bd52fc1ffd2abdb17875))
+
+
+### Bug Fixes
+
+* stale config report format ([cbb1f29](https://github.com/rudderlabs/rudder-config-schema/commit/cbb1f2912628d00afb52d776441ebe6f444e81a9))
+
 ## [1.88.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.87.2...v1.88.0) (2024-08-27)
 
 
