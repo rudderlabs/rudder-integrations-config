@@ -47,6 +47,7 @@ CONTROL_PLANE_URL, USERNAME, PASSWORD = get_command_line_arguments()
 # CONSTANTS
 HEADER = {"Content-Type": "application/json"}
 AUTH = (USERNAME, PASSWORD)
+REQUEST_TIMEOUT = 10  # seconds
 #########################
 
 
@@ -61,13 +62,13 @@ def parse_response(resp):
 
 def get_persisted_store(base_url, selector):
     request_url = f"{base_url}/{selector}-definitions"
-    response = requests.get(request_url)
+    response = requests.get(request_url, timeout=REQUEST_TIMEOUT)
     return json.loads(response.text)
 
 
 def get_config_definition(base_url, selector, name):
     request_url = f"{base_url}/{selector}-definitions/{name}"
-    response = requests.get(request_url)
+    response = requests.get(request_url, timeout=REQUEST_TIMEOUT)
     return response
 
 
@@ -89,13 +90,25 @@ def get_file_content(name, selector):
 
 def update_config_definition(selector, name, fileData):
     url = f"{CONTROL_PLANE_URL}/{selector}-definitions/{name}"
-    resp = requests.post(url=url, headers=HEADER, data=json.dumps(fileData), auth=AUTH)
+    resp = requests.post(
+        url=url,
+        headers=HEADER,
+        data=json.dumps(fileData),
+        auth=AUTH,
+        timeout=REQUEST_TIMEOUT,
+    )
     return parse_response(resp)
 
 
 def create_config_definition(selector, fileData):
     url = f"{CONTROL_PLANE_URL}/{selector}-definitions/"
-    resp = requests.post(url=url, headers=HEADER, data=json.dumps(fileData), auth=AUTH)
+    resp = requests.post(
+        url=url,
+        headers=HEADER,
+        data=json.dumps(fileData),
+        auth=AUTH,
+        timeout=REQUEST_TIMEOUT,
+    )
     return parse_response(resp)
 
 
@@ -112,7 +125,11 @@ def update_config(data_diff, selector):
             url = f"{CONTROL_PLANE_URL}/{selector}-definitions/{nameInConfig}"
 
         resp = requests.post(
-            url=url, headers=HEADER, data=json.dumps(fileData), auth=AUTH
+            url=url,
+            headers=HEADER,
+            data=json.dumps(fileData),
+            auth=AUTH,
+            timeout=REQUEST_TIMEOUT,
         )
         status, response = parse_response(resp)
         diff["update"] = {"status": status, "response": response}
@@ -156,7 +173,7 @@ def update_diff_db(selector):
                 )
             else:
                 final_report.append(
-                    {"name": updated_data["name"], "action": "na", "status": ""}
+                    {"name": updated_data["name"], "action": "N/A", "status": ""}
                 )
 
         else:
@@ -166,6 +183,10 @@ def update_diff_db(selector):
             )
 
     return final_report
+
+
+def get_formatted_json(data):
+    return json.dumps(data, indent=2)
 
 
 def get_stale_data(selector, report):
@@ -182,23 +203,47 @@ def get_stale_data(selector, report):
 
 
 if __name__ == "__main__":
+    print("\n")
+    print("#" * 50)
     print("Running Destination Definitions Updates")
     dest_final_report = update_diff_db("destination")
-    print("Destination Definition Update Report")
-    print(dest_final_report)
-    print("Destination Stale Config Report")
-    print(get_stale_data("destination", dest_final_report))
 
+    print("\n")
+    print("#" * 50)
+    print("Destination Definition Update Report")
+    print(get_formatted_json(dest_final_report))
+
+    print("\n")
+    print("#" * 50)
+    print("Stale Destinations Report")
+    print(get_formatted_json(get_stale_data("destination", dest_final_report)))
+
+    print("\n")
+    print("#" * 50)
     print("Running Source Definitions Updates")
     src_final_report = update_diff_db("source")
-    print("Source Definition Update Report")
-    print(src_final_report)
-    print("Source Stale Config Report")
-    print(get_stale_data("source", src_final_report))
 
-    print("Running Wht Lib Projects Definitions Updates")
+    print("\n")
+    print("#" * 50)
+    print("Source Definition Update Report")
+    print(get_formatted_json(src_final_report))
+
+    print("\n")
+    print("#" * 50)
+    print("Stale Sources Report")
+    print(get_formatted_json(get_stale_data("source", src_final_report)))
+
+    print("\n")
+    print("#" * 50)
+    print("Running Wht Lib Project Definitions Updates")
     wht_final_report = update_diff_db("wht-lib-project")
-    print("Wht lib project Definition Update Report")
-    print(wht_final_report)
-    print("Wht lib project Stale Config Report")
-    print(get_stale_data("wht-lib-project", wht_final_report))
+
+    print("\n")
+    print("#" * 50)
+    print("Wht Lib Project Definition Update Report")
+    print(get_formatted_json(wht_final_report))
+
+    print("\n")
+    print("#" * 50)
+    print("Stale Wht Lib Projects Report")
+    print(get_formatted_json(get_stale_data("wht-lib-project", wht_final_report)))
