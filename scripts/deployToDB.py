@@ -197,7 +197,7 @@ def get_stale_data(selector, report):
 
     for item in persisted_items:
         if item not in file_items:
-            stale_config_report.append({item})
+            stale_config_report.append(item)
 
     return stale_config_report
 
