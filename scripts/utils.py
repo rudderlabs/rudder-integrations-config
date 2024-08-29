@@ -53,3 +53,9 @@ def get_json_from_file(filePath):
     """
     with open(filePath, "r") as file:
         return json.loads(file.read().encode("utf-8", "ignore"))
+
+
+def is_old_format(uiConfig):
+    if isinstance(uiConfig, dict):
+        return False
+    return True

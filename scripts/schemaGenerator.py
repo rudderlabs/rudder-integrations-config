@@ -13,7 +13,14 @@ import os
 import warnings
 from enum import Enum
 import argparse
-from utils import get_json_from_file, get_json_diff, apply_json_diff, get_formatted_json
+from legacyConsentConfigMigrator import restructure_legacy_consent_fields
+from utils import (
+    get_json_from_file,
+    get_json_diff,
+    apply_json_diff,
+    get_formatted_json,
+    is_old_format,
+)
 from constants import CONFIG_DIR
 
 EXCLUDED_DEST = ["postgres", "bq", "azure_synapse", "clickhouse", "deltalake", "kafka"]
@@ -24,12 +31,6 @@ class FieldTypeEnum(Enum):
     OBJECT = "object"
     BOOLEAN = "boolean"
     ARRAY = "array"
-
-
-def is_old_format(uiConfig):
-    if isinstance(uiConfig, dict):
-        return False
-    return True
 
 
 def get_options_list_for_enum(field):
@@ -1512,6 +1513,7 @@ if __name__ == "__main__":
         action="store_true",
         help="Will update existing schema with any changes",
     )
+    parser.add_argument("-restructureLegacyConsentFields", action="store_true")
     group.add_argument(
         "-name", metavar="name", type=str, help="Enter the folder name under selector"
     )
@@ -1525,16 +1527,27 @@ if __name__ == "__main__":
     selector = args.selector
     shouldUpdateSchema = args.update
 
+    # THIS IS A TEMPORARY OPTION TO RESTRUCTURE LEGACY CONSENT FIELDS
+    # THIS WILL BE REMOVED ONCE ALL THE DESTINATIONS ARE UPDATED
+    restructureLegacyConsentFields = args.restructureLegacyConsentFields
+
+    dir_path = f"./{CONFIG_DIR}/{selector}s"
     if args.all:
-        dir_path = f"./{CONFIG_DIR}/{selector}s"
         if not os.path.isdir(dir_path):
             print(f"No {selector}s folder found")
             exit(1)
 
-        current_items = os.listdir(dir_path)
-        for name in current_items:
-            get_schema_diff(name, selector, shouldUpdateSchema)
-
+        if restructureLegacyConsentFields:
+            restructure_legacy_consent_fields(os.listdir(dir_path), dir_path)
+        else:
+            current_items = os.listdir(dir_path)
+            for name in current_items:
+                get_schema_diff(name, selector, shouldUpdateSchema)
     else:
         name = args.name
-        get_schema_diff(name, selector, shouldUpdateSchema)
+        if restructureLegacyConsentFields:
+            restructure_legacy_consent_fields(
+                [dest_name.strip() for dest_name in name.split(",")], dir_path
+            )
+        else:
+            get_schema_diff(name, selector, shouldUpdateSchema)
