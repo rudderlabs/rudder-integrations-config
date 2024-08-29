@@ -1,0 +1,572 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Webhook URL",
+                    "configKey": "webhookUrl",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$|^$",
+                    "regexErrorMessage": "Invalid Webhook URL",
+                    "placeholder": "e.g. http://www.abcd.com"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Authentication",
+                    "configKey": "auth",
+                    "options": [
+                      {
+                        "label": "No Auth",
+                        "value": "noAuth"
+                      },
+                      {
+                        "label": "Basic Auth",
+                        "value": "basicAuth"
+                      },
+                      {
+                        "label": "Bearer Token",
+                        "value": "bearerTokenAuth"
+                      },
+                      {
+                        "label": "API Key",
+                        "value": "apiKeyAuth"
+                      }
+                    ],
+                    "default": "noAuth"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Username",
+                    "configKey": "username",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Username",
+                    "placeholder": "e.g. test username",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "auth",
+                          "value": "basicAuth"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Password",
+                    "configKey": "password",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Password",
+                    "placeholder": "e.g. test password",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "auth",
+                          "value": "basicAuth"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Token",
+                    "configKey": "bearerToken",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,255})$",
+                    "regexErrorMessage": "Invalid Token",
+                    "placeholder": "e.g. test token",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "auth",
+                          "value": "bearerTokenAuth"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Key",
+                    "configKey": "apiKeyName",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Key Name",
+                    "default": "x-api-key",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "auth",
+                          "value": "apiKeyAuth"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Value",
+                    "configKey": "apiKeyValue",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Value",
+                    "placeholder": "e.g. test value",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "auth",
+                          "value": "apiKeyAuth"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Method",
+                    "configKey": "method",
+                    "options": [
+                      {
+                        "label": "POST",
+                        "value": "POST"
+                      },
+                      {
+                        "label": "PUT",
+                        "value": "PUT"
+                      },
+                      {
+                        "label": "PATCH",
+                        "value": "PATCH"
+                      },
+                      {
+                        "label": "GET",
+                        "value": "GET"
+                      },
+                      {
+                        "label": "DELETE",
+                        "value": "DELETE"
+                      }
+                    ],
+                    "default": "POST"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Body Format",
+                    "configKey": "format",
+                    "options": [
+                      {
+                        "label": "JSON",
+                        "value": "JSON"
+                      },
+                      {
+                        "label": "XML",
+                        "value": "XML"
+                      }
+                    ],
+                    "default": "JSON"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Event Configuration",
+        "note": "Configure event mapping, query parameters, and headers.",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "icon": "rightToLine",
+                "title": "Event Configuration",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "advancedMapping"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Webhook Configuration Settings",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Enable Batching",
+                    "configKey": "isBatchingEnabled",
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "format",
+                          "value": "JSON"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Maximum Batch Size",
+                    "configKey": "maxBatchSize",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([1-9][0-9]{0,1}|100)$",
+                    "regexErrorMessage": "Invalid Batch Size",
+                    "placeholder": "e.g. 10",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "isBatchingEnabled",
+                          "value": true
+                        },
+                        {
+                          "configKey": "format",
+                          "value": "JSON"
+                        }
+                      ],
+                      "condition": "and"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Client-side event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.webDevice",
+                      "value": true
+                    },
+                    {
+                      "configKey": "connectionModes.mobileDevice",
+                      "value": true
+                    }
+                  ],
+                  "condition": "or"
+                },
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on event filtering: ",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
+                      {
+                        "label": "Disabled",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input the events you want to allowlist.\nInput separate events by pressing 'Enter'.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input the events you want to denylist.\nInput separate events by pressing 'Enter'.",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "OneTrust consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  {
+                    "text": "Learn more",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
+                  },
+                  " about RudderStack's OneTrust Consent Management feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Consent categories",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: C0001",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "default": "oneTrust",
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category ID’s",
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "redirectGroups": {
+      "advancedMapping": {
+        "tabs": [
+          {
+            "name": "Property Mappings",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map your RudderStack properties to Webhook properties",
+                "configKey": "propertiesMapping",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "RudderStack",
+                    "placeholder": "e.g: $.properties.key1"
+                  },
+                  {
+                    "type": "textInput",
+                    "key": "to",
+                    "label": "Webhook",
+                    "placeholder": "e.g: $.events.key2"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Query Parameters",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map your query parameters",
+                "configKey": "queryParams",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "to",
+                    "label": "Key",
+                    "placeholder": "e.g: key"
+                  },
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "Value",
+                    "placeholder": "e.g: value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Headers",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map your headers",
+                "configKey": "headers",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "to",
+                    "label": "Key",
+                    "placeholder": "e.g. content-type"
+                  },
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "Value",
+                    "placeholder": "e.g. application/json"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
