@@ -1,0 +1,203 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Lytics Account Id",
+                    "configKey": "lyticsAccountId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$",
+                    "regexErrorMessage": "Invalid Lytics Account Id",
+                    "placeholder": "e.g. 5XX4",
+                    "secret": true,
+                    "footerNote": "Your Lytics Account Id (account identifier)"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Lytics API Key",
+                    "configKey": "lyticsApiKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid API Key",
+                    "placeholder": "e.g. 343XXX598",
+                    "secret": true,
+                    "footerNote": "Your Customer Id"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Lytics Stream Settings",
+                "fields": [
+                  {
+                    "type": "autoComplete",
+                    "label": "Choose your account Specific Stream Name",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Stream Name",
+                    "configKey": "lyticsStreamName",
+                    "apiName": "getStreams"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "OneTrust consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
+                  },
+                  "about RudderStack's OneTrust Consent Management feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Consent categories",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: C0001",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Stream Wise Property Mapping",
+        "note": "Map RudderStack Event Properties to Lytics Stream-based Properties. This mapping will referenced from message.properties",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "RudderStack Event Properties to Lytics Stream-based Properties Mapping",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "streamTraitsMapping",
+                    "label": "Stream-based Property Mapping",
+                    "note": "Map RudderStack events properties to the above chosen Lytics Stream Properties"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Timestamp Property Mapping",
+        "note": "Declare the property to be considered as Timestamp in Lytics",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Choose Already Existing Stream-based Properties or Add your own Property name",
+                "fields": [
+                  {
+                    "type": "autoComplete",
+                    "label": "Choose the field that can be used as timestamp",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Property Name",
+                    "configKey": "timestampField",
+                    "apiName": "customProperty"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "redirectGroups": {
+      "streamTraitsMapping": {
+        "fields": [
+          {
+            "type": "dynamicCustomForm",
+            "label": "Map Rudderstack event properties to Lytics stream-based properties. This is a 1:1 mapping.",
+            "configKey": "streamTraitsMapping",
+            "rowFields": [
+              {
+                "type": "mappingRow",
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "configKey": "rudderProperty",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Event Property",
+                    "label": "RudderStack Event Property",
+                    "placeholder": "e.g city"
+                  },
+                  {
+                    "type": "autoComplete",
+                    "configKey": "lyticsProperty",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Custom Property",
+                    "label": "Lytics property name",
+                    "placeholder": "e.g companyCity",
+                    "apiName": "customProperty"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
