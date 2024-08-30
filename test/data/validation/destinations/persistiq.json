@@ -1,6 +1,136 @@
 [
   {
     "config": {
+      "apiKey": "893yXXXf823yf0",
+      "persistIqAttributesMapping": [
+        {
+          "from": "useroccupation",
+          "to": "occupation1"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "apiKey": "",
+      "persistIqAttributesMapping": [
+        {
+          "from": "useroccupation",
+          "to": "occupation"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["apiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""]
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "apiKey": "893yXXXf823yf0",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "apiKey": "893yXXXf823yf0",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "apiKey": "893yXXXf823yf0",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "apiKey": "893yXXXf823yf0",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "apiKey": "893yXXXf823yf0",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "config": {
+      "apiKey": "893yXXXf823yf0",
+      "persistIqAttributesMapping": [
+        {
+          "from": "useroccupation",
+          "to": "occupation1"
+        }
+      ],
       "oneTrustCookieCategories": {
         "web": [
           {
@@ -128,6 +258,13 @@
   },
   {
     "config": {
+      "apiKey": "893yXXXf823yf0",
+      "persistIqAttributesMapping": [
+        {
+          "from": "useroccupation",
+          "to": "occupation1"
+        }
+      ],
       "oneTrustCookieCategories": [
         {
           "oneTrustCookieCategory": "C0001"
@@ -150,6 +287,13 @@
   },
   {
     "config": {
+      "apiKey": "893yXXXf823yf0",
+      "persistIqAttributesMapping": [
+        {
+          "from": "useroccupation",
+          "to": "occupation1"
+        }
+      ],
       "oneTrustCookieCategories": {
         "web": [
           {
@@ -209,6 +353,7 @@
         ]
       }
     },
+    "result": false,
     "err": [
       "oneTrustCookieCategories.web.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
       "oneTrustCookieCategories.cloud.0.oneTrustCookieCategory must be string",
@@ -218,7 +363,6 @@
       "ketchConsentPurposes.cloud.0.purpose must be string",
       "ketchConsentPurposes.android must be array",
       "ketchConsentPurposes.ios.0 must be object"
-    ],
-    "result": false
+    ]
   }
 ]
