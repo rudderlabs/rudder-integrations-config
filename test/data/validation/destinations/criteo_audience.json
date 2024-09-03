@@ -7,16 +7,21 @@
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
-      }
+      },
+      "gumCallerId": "532XX445"
     },
     "result": true
   },
   {
     "config": {
+      "audienceId": {
+        "cloud": "000000"
+      },
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
-      }
+      },
+      "gumCallerId": "532XX445"
     },
     "result": true
   },
@@ -28,7 +33,8 @@
       "audienceType": "email",
       "adAccountId": {
         "warehouse": ""
-      }
+      },
+      "gumCallerId": "532XX445"
     },
     "result": false,
     "err": [
@@ -37,6 +43,9 @@
   },
   {
     "config": {
+      "adAccountId": {
+        "warehouse": "0000000"
+      },
       "audienceId": "000000",
       "audienceType": "gum",
       "gumCallerId": ""
@@ -54,6 +63,9 @@
         "cloud": "000000"
       },
       "audienceType": "gum",
+      "adAccountId": {
+        "warehouse": "0000000"
+      },
       "gumCallerId": "00000"
     },
     "result": true
@@ -68,6 +80,7 @@
       "adAccountId": {
         "warehouse": "0000000"
       },
+      "gumCallerId": "00000",
       "consentManagement": {
         "web": [
           {
@@ -106,6 +119,7 @@
       "adAccountId": {
         "warehouse": "0000000"
       },
+      "gumCallerId": "00000",
       "consentManagement": {
         "shopify": [
           {
@@ -131,6 +145,7 @@
       "adAccountId": {
         "warehouse": "0000000"
       },
+      "gumCallerId": "00000",
       "consentManagement": {
         "shopify": [
           {
@@ -155,6 +170,7 @@
       "adAccountId": {
         "warehouse": "0000000"
       },
+      "gumCallerId": "00000",
       "consentManagement": {
         "shopify": [
           {
@@ -175,6 +191,7 @@
       "adAccountId": {
         "warehouse": "0000000"
       },
+      "gumCallerId": "00000",
       "consentManagement": {
         "shopify": [
           {
@@ -185,5 +202,43 @@
     },
     "result": false,
     "err": ["consentManagement.shopify.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "Without audienceId",
+    "config": {
+      "audienceType": "email",
+      "adAccountId": {
+        "warehouse": "0000000"
+      },
+      "gumCallerId": "532XX445"
+    },
+    "result": false,
+    "err": [" must have required property 'audienceId'"]
+  },
+  {
+    "testTitle": "Without adAccountId",
+    "config": {
+      "audienceId": {
+        "cloud": "000000"
+      },
+      "audienceType": "email",
+      "gumCallerId": "532XX445"
+    },
+    "result": false,
+    "err": [" must have required property 'adAccountId'"]
+  },
+  {
+    "testTitle": "Without gumCallerId",
+    "config": {
+      "audienceId": {
+        "cloud": "000000"
+      },
+      "audienceType": "email",
+      "adAccountId": {
+        "warehouse": "0000000"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'gumCallerId'"]
   }
 ]

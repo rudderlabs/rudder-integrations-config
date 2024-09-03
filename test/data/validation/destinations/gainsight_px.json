@@ -3,6 +3,7 @@
     "testTitle": "With valid multiple consent management providers config",
     "config": {
       "apiKey": "test-host",
+      "productTagKey": "AP-XXXXXX-1",
       "consentManagement": {
         "web": [
           {
@@ -35,6 +36,7 @@
     "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
     "config": {
       "apiKey": "test-host",
+      "productTagKey": "AP-XXXXXX-1",
       "consentManagement": {
         "android": [
           {
@@ -54,6 +56,7 @@
     "testTitle": "With consent management custom provider config and no resolutionStrategy value",
     "config": {
       "apiKey": "test-host",
+      "productTagKey": "AP-XXXXXX-1",
       "consentManagement": {
         "android": [
           {
@@ -72,6 +75,7 @@
     "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
     "config": {
       "apiKey": "test-host",
+      "productTagKey": "AP-XXXXXX-1",
       "consentManagement": {
         "android": [
           {
@@ -86,6 +90,7 @@
     "testTitle": "With consent management custom provider config invalid provider value",
     "config": {
       "apiKey": "test-host",
+      "productTagKey": "AP-XXXXXX-1",
       "consentManagement": {
         "android": [
           {
@@ -96,5 +101,52 @@
     },
     "result": false,
     "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "Without apiKey",
+    "config": {
+      "productTagKey": "AP-XXXXXX-1",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        }
+      ],
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'apiKey'"]
+  },
+  {
+    "testTitle": "Without productTagKey",
+    "config": {
+      "apiKey": "test-host",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        }
+      ],
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'productTagKey'"]
+  },
+  {
+    "testTitle": "Without apiKey and productTagKey",
+    "config": {
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        }
+      ],
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'apiKey'", " must have required property 'productTagKey'"]
   }
 ]

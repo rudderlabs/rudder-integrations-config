@@ -2,7 +2,7 @@
   {
     "testTitle": "With valid multiple consent management providers config",
     "config": {
-      "accountid": "test-host",
+      "accountId": "test-host",
       "accounttoken": "test-database",
       "passcode": "test-user",
       "region": "test-password",
@@ -37,7 +37,7 @@
   {
     "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
     "config": {
-      "accountid": "test-host",
+      "accountId": "test-host",
       "accounttoken": "test-database",
       "passcode": "test-user",
       "region": "test-password",
@@ -59,7 +59,7 @@
   {
     "testTitle": "With consent management custom provider config and no resolutionStrategy value",
     "config": {
-      "accountid": "test-host",
+      "accountId": "test-host",
       "accounttoken": "test-database",
       "passcode": "test-user",
       "region": "test-password",
@@ -80,7 +80,7 @@
   {
     "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
     "config": {
-      "accountid": "test-host",
+      "accountId": "test-host",
       "accounttoken": "test-database",
       "passcode": "test-user",
       "region": "test-password",
@@ -97,7 +97,7 @@
   {
     "testTitle": "With consent management custom provider config invalid provider value",
     "config": {
-      "accountid": "test-host",
+      "accountId": "test-host",
       "accounttoken": "test-database",
       "passcode": "test-user",
       "region": "test-password",
@@ -111,5 +111,52 @@
     },
     "result": false,
     "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "Without accountId",
+    "config": {
+      "passcode": "test-user",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        }
+      ],
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'accountId'"]
+  },
+  {
+    "testTitle": "Without passcode",
+    "config": {
+      "accountId": "test-host",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        }
+      ],
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'passcode'"]
+  },
+  {
+    "testTitle": "Without accountId and passcode",
+    "config": {
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        }
+      ],
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'accountId'", " must have required property 'passcode'"]
   }
 ]

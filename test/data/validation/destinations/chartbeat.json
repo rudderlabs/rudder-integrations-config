@@ -3,6 +3,7 @@
     "testTitle": "With valid multiple consent management providers config",
     "config": {
       "domain": "test-host",
+      "uid": "ABCDEFG",
       "consentManagement": {
         "web": [
           {
@@ -35,6 +36,7 @@
     "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
     "config": {
       "domain": "test-host",
+      "uid": "ABCDEFG",
       "consentManagement": {
         "web": [
           {
@@ -54,6 +56,7 @@
     "testTitle": "With consent management custom provider config and no resolutionStrategy value",
     "config": {
       "domain": "test-host",
+      "uid": "ABCDEFG",
       "consentManagement": {
         "web": [
           {
@@ -72,6 +75,7 @@
     "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
     "config": {
       "domain": "test-host",
+      "uid": "ABCDEFG",
       "consentManagement": {
         "web": [
           {
@@ -86,6 +90,7 @@
     "testTitle": "With consent management custom provider config invalid provider value",
     "config": {
       "domain": "test-host",
+      "uid": "ABCDEFG",
       "consentManagement": {
         "web": [
           {
@@ -96,5 +101,52 @@
     },
     "result": false,
     "err": ["consentManagement.web.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "Without domain",
+    "config": {
+      "uid": "ABCDEFG",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        }
+      ],
+      "connectionMode": {
+        "web": "device"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'domain'"]
+  },
+  {
+    "testTitle": "Without uid",
+    "config": {
+      "domain": "test-host",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        }
+      ],
+      "connectionMode": {
+        "web": "device"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'uid'"]
+  },
+  {
+    "testTitle": "Without domain and uid",
+    "config": {
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        }
+      ],
+      "connectionMode": {
+        "web": "device"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'domain'", " must have required property 'uid'"]
   }
 ]
