@@ -2,6 +2,145 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.89.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.88.0...v1.89.0) (2024-08-27)
+
+
+### Features
+
+* make legacy consent management fields source type specific ([#1642](https://github.com/rudderlabs/rudder-config-schema/issues/1642)) ([e429505](https://github.com/rudderlabs/rudder-config-schema/commit/e429505e92f2e3da65a4bd52fc1ffd2abdb17875))
+
+
+### Bug Fixes
+
+* stale config report format ([cbb1f29](https://github.com/rudderlabs/rudder-config-schema/commit/cbb1f2912628d00afb52d776441ebe6f444e81a9))
+
+## [1.88.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.87.2...v1.88.0) (2024-08-27)
+
+
+### Features
+
+* add audience support for sfmc destination ([#1639](https://github.com/rudderlabs/rudder-config-schema/issues/1639)) ([2c2ad3b](https://github.com/rudderlabs/rudder-config-schema/commit/2c2ad3b0cfa3ab8efa2b3a5311cbd7452c02ae15))
+
+### [1.87.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.87.1...v1.87.2) (2024-08-26)
+
+
+### Bug Fixes
+
+* remove wrong conf from snapchat conversion and add for custom aud ([c5b1097](https://github.com/rudderlabs/rudder-config-schema/commit/c5b1097832efb29e0c4ff1b21fe73f3505b9a128))
+
+### [1.87.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.87.0...v1.87.1) (2024-08-26)
+
+
+### Bug Fixes
+
+* snapchat custom audience support ([#1631](https://github.com/rudderlabs/rudder-config-schema/issues/1631)) ([fd6b978](https://github.com/rudderlabs/rudder-config-schema/commit/fd6b97870643b44b70feebb17d5fe83ad60959ea))
+
+## [1.87.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.86.1...v1.87.0) (2024-08-20)
+
+
+### Features
+
+* enable vdm for sfmc ([efc4ad2](https://github.com/rudderlabs/rudder-config-schema/commit/efc4ad2901e6d2b443c6279f21c3e4e31fd755fd))
+* iam support for redshift source ([#1613](https://github.com/rudderlabs/rudder-config-schema/issues/1613)) ([31c97ec](https://github.com/rudderlabs/rudder-config-schema/commit/31c97ec001fc8f4b45f006075aea5f285b2bb419))
+* iam support for redshift source ([#1619](https://github.com/rudderlabs/rudder-config-schema/issues/1619)) ([c5195cb](https://github.com/rudderlabs/rudder-config-schema/commit/c5195cb8b7ca695aa8918679bf5ba588f739a87b))
+
+### [1.86.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.86.0...v1.86.1) (2024-08-14)
+
+
+### Bug Fixes
+
+* facebook-singer-version-update ([c2e85d4](https://github.com/rudderlabs/rudder-config-schema/commit/c2e85d46eae5ca42ccb1d5c72d53e0091a8fc761))
+
+## [1.86.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.85.0...v1.86.0) (2024-08-09)
+
+
+### Features
+
+* dont run validations on sources ([#1585](https://github.com/rudderlabs/rudder-config-schema/issues/1585)) ([e02a585](https://github.com/rudderlabs/rudder-config-schema/commit/e02a585b4d6bd2ff763f369ffd15d149399f6860))
+
+
+### Bug Fixes
+
+* update test.yml ([#1612](https://github.com/rudderlabs/rudder-config-schema/issues/1612)) ([2ec8bda](https://github.com/rudderlabs/rudder-config-schema/commit/2ec8bdaf55086614ac9455508c6f64def0ec4447))
+
+## [1.85.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.84.0...v1.85.0) (2024-08-05)
+
+
+### Features
+
+* criteo add support for multiple hash methods ([#1587](https://github.com/rudderlabs/rudder-config-schema/issues/1587)) ([b4eab9a](https://github.com/rudderlabs/rudder-config-schema/commit/b4eab9aac8191f9ba575b544ed17b8faeb48a891))
+* enable salesforce v2 ([#1601](https://github.com/rudderlabs/rudder-config-schema/issues/1601)) ([efc5b80](https://github.com/rudderlabs/rudder-config-schema/commit/efc5b8006594705d2eb3bb3fe48fa4d32cd16ca6))
+* onboard cordial source ([#1570](https://github.com/rudderlabs/rudder-config-schema/issues/1570)) ([fbaf1f6](https://github.com/rudderlabs/rudder-config-schema/commit/fbaf1f6da7de5978843b9d431a72df5f1f22b091))
+* add unity source support in Singular, add match_id config ([#1602](https://github.com/rudderlabs/rudder-config-schema/issues/1602)) ([c9626b3](https://github.com/rudderlabs/rudder-config-schema/commit/c9626b38ca414ff770f05bd23f96261a70c10028))
+
+
+### Bug Fixes
+
+* ga4 ui label ([#1599](https://github.com/rudderlabs/rudder-config-schema/issues/1599)) ([a958af3](https://github.com/rudderlabs/rudder-config-schema/commit/a958af3b5fb12d817232836762dc7ca9042ca31c))
+* updated default auth type for snowflake source ([#1586](https://github.com/rudderlabs/rudder-config-schema/issues/1586)) ([fc0f303](https://github.com/rudderlabs/rudder-config-schema/commit/fc0f3033067d9e1cce3f18e102c17c7dd4e436fb))
+
+## [1.84.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.83.3...v1.84.0) (2024-08-01)
+
+
+### Features
+
+* ga4 updates ([#1596](https://github.com/rudderlabs/rudder-config-schema/issues/1596)) ([ac28792](https://github.com/rudderlabs/rudder-config-schema/commit/ac287923b00e4f96bd21d306dd89ddd5c74e7ba3))
+
+### [1.83.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.83.1...v1.83.3) (2024-07-31)
+
+
+### Bug Fixes
+
+* update sdk base url for ga4 hybrid mode ([#1588](https://github.com/rudderlabs/rudder-config-schema/issues/1588)) ([bccadc9](https://github.com/rudderlabs/rudder-config-schema/commit/bccadc9a3b631d45dcfc1ca49fd32b3d230d7f9c))
+
+### [1.83.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.83.1...v1.83.2) (2024-07-30)
+
+### [1.83.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.83.0...v1.83.1) (2024-07-25)
+
+
+### Features
+
+* feat: cordial source ([#1575](https://github.com/rudderlabs/rudder-integrations-config/pull/1575)) ([83e3313](https://github.com/rudderlabs/rudder-integrations-config/commit/83e331334859bbfc2b9d0e6f2deb2c36e29fc2cf))
+
+## [1.83.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.82.1...v1.83.0) (2024-07-22)
+
+
+### Features
+
+* added syncFilesReport in options for s3 source ([#1550](https://github.com/rudderlabs/rudder-config-schema/issues/1550)) ([ed432b0](https://github.com/rudderlabs/rudder-config-schema/commit/ed432b0c2d86098d441783c7ecfa3e935e5ba165))
+* braze source event mapping ([#1560](https://github.com/rudderlabs/rudder-config-schema/issues/1560)) ([339a898](https://github.com/rudderlabs/rudder-config-schema/commit/339a8986fe0ddcb079a14e89424a13f4bc87747e))
+* onboard cordial destination ([#1558](https://github.com/rudderlabs/rudder-config-schema/issues/1558)) ([e9f2b33](https://github.com/rudderlabs/rudder-config-schema/commit/e9f2b33dc79e575413ae1b55cf096b9db580d59c))
+* onboard zoho ([#1528](https://github.com/rudderlabs/rudder-config-schema/issues/1528)) ([e9ea507](https://github.com/rudderlabs/rudder-config-schema/commit/e9ea507e80ef778d5592409c8aeea6d57365ee29))
+* onboarded XPixel Integration ([#1545](https://github.com/rudderlabs/rudder-config-schema/issues/1545)) ([a2f297c](https://github.com/rudderlabs/rudder-config-schema/commit/a2f297c0562f1daa38a1d022354b2c8d7244a36d))
+* use autoComplete in ga4v2 ([#1557](https://github.com/rudderlabs/rudder-config-schema/issues/1557)) ([0e1320d](https://github.com/rudderlabs/rudder-config-schema/commit/0e1320d17592738a44b7f755f845c40181a2d758))
+
+
+### Bug Fixes
+
+* typo for rudder ([#1551](https://github.com/rudderlabs/rudder-config-schema/issues/1551)) ([4b6e5e7](https://github.com/rudderlabs/rudder-config-schema/commit/4b6e5e74568876dde0a918cd2811ef3e95daa3b1))
+
+### [1.82.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.82.0...v1.82.1) (2024-07-22)
+
+
+### Bug Fixes
+
+* add support for shopify source for braze purchase config ([586648d](https://github.com/rudderlabs/rudder-config-schema/commit/586648d1a1331328d925e018c1d2d5e484abfa45))
+* make clientId override default false for old ga4 and non existant for new ga4 ([fdd1794](https://github.com/rudderlabs/rudder-config-schema/commit/fdd17945723488e09e1193d6ad8adf06a2a66b6f))
+
+## [1.82.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.81.0...v1.82.0) (2024-07-18)
+
+
+### Features
+
+* enable router for fb_custom_audience ([#1554](https://github.com/rudderlabs/rudder-config-schema/issues/1554)) ([40afb26](https://github.com/rudderlabs/rudder-config-schema/commit/40afb26fe3242689f0511491e091eacb285fa475))
+
+## [1.81.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.80.0...v1.81.0) (2024-07-17)
+
+
+### Features
+
+* introduce klaviyo v2 dropdown option ([#1546](https://github.com/rudderlabs/rudder-config-schema/issues/1546)) ([d4792c2](https://github.com/rudderlabs/rudder-config-schema/commit/d4792c2338db52d52d2cd7e240e3c323e9bffd17))
+
 ## [1.80.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.79.0...v1.80.0) (2024-07-10)
 
 

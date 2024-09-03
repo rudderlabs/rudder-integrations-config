@@ -12,7 +12,14 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]*|^$"
       },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
       "eventFilteringOption": {
         "type": "string",
         "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
@@ -43,22 +50,37 @@
         }
       },
       "oneTrustCookieCategories": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "oneTrustCookieCategory": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
             }
           }
         }
       },
       "ketchConsentPurposes": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": { "purpose": { "type": "string", "pattern": "^(.{0,100})$" } }
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
         }
       },
       "consentManagement": {
@@ -90,12 +112,19 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": { "provider": { "const": "custom" } },
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -107,7 +136,12 @@
       },
       "connectionMode": {
         "type": "object",
-        "properties": { "web": { "type": "string", "enum": ["device"] } }
+        "properties": {
+          "web": {
+            "type": "string",
+            "enum": ["device"]
+          }
+        }
       }
     }
   }

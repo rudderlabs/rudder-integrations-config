@@ -103,10 +103,51 @@
                     "preRequisites": {
                       "fields": [
                         {
-                          "configKey": "connectionModes.cloud",
-                          "value": true
+                          "configKey": "connectionMode.cloud",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.shopify",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.android",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.unity",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.ios",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.amp",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.flutter",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.reactnative",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.warehouse",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.cordova",
+                          "value": "cloud"
                         }
-                      ]
+                      ],
+                      "condition": "or"
                     },
                     "configKey": "debugMode",
                     "default": false
@@ -122,6 +163,78 @@
                         "piiProperty": ""
                       }
                     ]
+                  }
+                ]
+              },
+              {
+                "title": "Hybrid mode settings",
+                "note": "Configure additional settings for hybrid mode here",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionMode.web",
+                      "value": "hybrid"
+                    }
+                  ]
+                },
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose how to capture pageviews",
+                    "configKey": "capturePageView",
+                    "note": [
+                      "Choose whether you want to send page view events through the RudderStack JS SDK, or through automatic collection on each page load using GA4 Enhanced Measurement (gtag).",
+                      {
+                        "text": "Learn more here ",
+                        "link": "https://developers.google.com/analytics/devguides/collection/ga4/views?client_type=gtag"
+                      },
+                      "about how GA4 measures pages and screens"
+                    ],
+                    "options": [
+                      {
+                        "label": "RudderStack JS SDK",
+                        "value": "rs"
+                      },
+                      {
+                        "label": "gtag Automated Capture",
+                        "value": "gtag"
+                      }
+                    ],
+                    "default": "rs"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Debug via DebugView",
+                    "configKey": "debugView",
+                    "default": false,
+                    "note": [
+                      "Enabling this allows you to monitor your device mode events in ",
+                      {
+                        "text": "DebugView.",
+                        "link": "https://support.google.com/analytics/answer/7201382"
+                      },
+                      "For hybrid mode, these would be only your page calls"
+                    ]
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Include URL and Search as Page View properties",
+                    "configKey": "extendPageViewParams",
+                    "note": "Enabling this extends the set of properties automatically collected to include 'URL' and 'search'.  Note that GA4 has a limit on the number of unique properties per event name",
+                    "default": false
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Override gtag client ID & session ID",
+                    "configKey": "overrideClientAndSessionId",
+                    "note": [
+                      "Override the gtag clientID & sessionID with RudderStack's to ensure attribution is properly unified across page and track events. We recommend turning on the override function. Otherwise, instrument your RudderStack SDK based on instructions ",
+                      {
+                        "text": "here",
+                        "link": "https://www.rudderstack.com/docs/destinations/streaming-destinations/google-analytics-4/setting-up-google-analytics-4-in-rudderstack/#hybrid-mode"
+                      }
+                    ],
+                    "default": false
                   }
                 ]
               }
@@ -306,74 +419,7 @@
     "sdkTemplate": {
       "title": "Web SDK settings",
       "note": "not visible in the ui",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "label": "Choose how to capture pageviews",
-          "configKey": "capturePageView",
-          "note": [
-            "Choose whether you want to send page view events through the RudderStack JS SDK, or through automatic collection on each page load using GA4 Enhanced Measurement (gtag).",
-            {
-              "text": "Learn more here ",
-              "link": "https://developers.google.com/analytics/devguides/collection/ga4/views?client_type=gtag"
-            },
-            "about how GA4 measures pages and screens"
-          ],
-          "options": [
-            {
-              "label": "RudderStack JS SDK",
-              "value": "rs"
-            },
-            {
-              "label": "gtag Automated Capture",
-              "value": "gtag"
-            }
-          ],
-          "default": "rs"
-        },
-        {
-          "type": "checkbox",
-          "label": "Debug via DebugView",
-          "configKey": "debugView",
-          "default": true,
-          "note": [
-            "Enabling this allows you to monitor your device mode events in ",
-            {
-              "text": "DebugView.",
-              "link": "https://support.google.com/analytics/answer/7201382"
-            },
-            "For hybrid mode, these would be only your page calls"
-          ]
-        },
-        {
-          "type": "checkbox",
-          "label": "Include URL and Search as Page View properties",
-          "configKey": "extendPageViewParams",
-          "note": "Enabling this extends the set of properties automatically collected to include 'URL' and 'search'.  Note that GA4 has a limit on the number of unique properties per event name",
-          "default": false
-        },
-        {
-          "preRequisites": {
-            "fields": [
-              {
-                "configKey": "connectionMode.web",
-                "value": "hybrid"
-              }
-            ]
-          },
-          "type": "checkbox",
-          "label": "Override gtag client ID & session ID",
-          "configKey": "overrideClientAndSessionId",
-          "note": [
-            "Override the gtag clientID & sessionID with RudderStack's to ensure attribution is properly unified across page and track events. We recommend turning on the override function. Otherwise, instrument your RudderStack SDK based on instructions ",
-            {
-              "text": "here",
-              "link": "https://www.rudderstack.com/docs/destinations/streaming-destinations/google-analytics-4/setting-up-google-analytics-4-in-rudderstack/#hybrid-mode"
-            }
-          ],
-          "default": true
-        }
-      ]
+      "fields": []
     },
     "consentSettingsTemplate": {
       "title": "Consent settings",
@@ -474,7 +520,7 @@
                     "placeholder": "properties.price"
                   },
                   {
-                    "type": "dynamicDataSelect",
+                    "type": "autoComplete",
                     "label": "GA4 parameter",
                     "key": "to",
                     "placeholder": "value"
@@ -2139,7 +2185,7 @@
                         "placeholder": "e.g $.properties.revenue"
                       },
                       {
-                        "type": "dynamicDataSelect",
+                        "type": "autoComplete",
                         "label": "GA4 parameter",
                         "key": "to",
                         "placeholder": "$.event[0].params.value"
