@@ -4,6 +4,74 @@
     "required": ["accountId", "passcode"],
     "type": "object",
     "properties": {
+      "accountId": {
+        "type": "string",
+        "pattern": ".*"
+      },
+      "passcode": {
+        "type": "string",
+        "pattern": ".*"
+      },
+      "accountToken": {
+        "type": "string",
+        "pattern": ".*"
+      },
+      "trackAnonymous": { "type": "boolean", "default": false },
+      "enableObjectIdMapping": { "type": "boolean", "default": false },
+      "region": {
+        "type": "string",
+        "enum": ["none", "in1", "sg1", "us1", "sk1", "aps3", "mec1"],
+        "default": "none"
+      },
+      "eventFilteringOption": {
+        "type": "string",
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
+      },
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "oneTrustCookieCategories": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "oneTrustCookieCategory": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
       "consentManagement": {
         "type": "object",
         "properties": {

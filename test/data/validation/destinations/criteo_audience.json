@@ -1,40 +1,34 @@
 [
   {
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "123",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
       },
-      "gumCallerId": "532XX445"
+      "gumCallerId": "532445"
     },
     "result": true
   },
   {
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "1234",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
       },
-      "gumCallerId": "532XX445"
+      "gumCallerId": "5445"
     },
     "result": true
   },
   {
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "123",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": ""
       },
-      "gumCallerId": "532XX445"
+      "gumCallerId": "53445"
     },
     "result": false,
     "err": [
@@ -54,14 +48,13 @@
     "err": [
       "gumCallerId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$\"",
       " must match \"then\" schema",
-      " must match a schema in anyOf"
+      " must match a schema in anyOf",
+      "gumCallerId must match pattern \"^[0-9]+$\""
     ]
   },
   {
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "123",
       "audienceType": "gum",
       "adAccountId": {
         "warehouse": "0000000"
@@ -73,9 +66,7 @@
   {
     "testTitle": "With valid multiple consent management providers config",
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "123",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
@@ -112,9 +103,7 @@
   {
     "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "123",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
@@ -138,9 +127,7 @@
   {
     "testTitle": "With consent management custom provider config and no resolutionStrategy value",
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "123",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
@@ -163,9 +150,7 @@
   {
     "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "123",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
@@ -184,9 +169,7 @@
   {
     "testTitle": "With consent management custom provider config invalid provider value",
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "123",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
@@ -210,7 +193,7 @@
       "adAccountId": {
         "warehouse": "0000000"
       },
-      "gumCallerId": "532XX445"
+      "gumCallerId": "53445"
     },
     "result": false,
     "err": [" must have required property 'audienceId'"]
@@ -218,11 +201,9 @@
   {
     "testTitle": "Without adAccountId",
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "123",
       "audienceType": "email",
-      "gumCallerId": "532XX445"
+      "gumCallerId": "532445"
     },
     "result": false,
     "err": [" must have required property 'adAccountId'"]
@@ -230,9 +211,7 @@
   {
     "testTitle": "Without gumCallerId",
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "123",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
@@ -240,5 +219,20 @@
     },
     "result": false,
     "err": [" must have required property 'gumCallerId'"]
+  },
+  {
+    "testTitle": "Invalid audienceId",
+    "config": {
+      "audienceId": {
+        "cloud": "000000"
+      },
+      "gumCallerId": "53445",
+      "audienceType": "email",
+      "adAccountId": {
+        "warehouse": "0000000"
+      }
+    },
+    "result": false,
+    "err": ["audienceId must be string"]
   }
 ]

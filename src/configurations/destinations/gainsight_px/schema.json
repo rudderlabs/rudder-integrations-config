@@ -4,6 +4,26 @@
     "required": ["apiKey", "productTagKey"],
     "type": "object",
     "properties": {
+      "apiKey": {
+        "type": "string",
+        "pattern": ".*"
+      },
+      "productTagKey": {
+        "type": "string",
+        "pattern": "^(.{0,100})$"
+      },
+      "oneTrustCookieCategories": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "oneTrustCookieCategory": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
       "consentManagement": {
         "type": "object",
         "properties": {
