@@ -35,17 +35,6 @@
   },
   {
     "config": {
-      "account": "test-account",
-      "user": "test-user",
-      "role": "test-role",
-      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
-      "privateKeyPassphrase": "test-passphrase",
-      "database": "test-database"
-    },
-    "result": true
-  },
-  {
-    "config": {
       "account": "",
       "user": "test-user",
       "role": "test-role",
@@ -145,6 +134,33 @@
     },
     "result": false,
     "err": [" must have required property 'database'"]
+  },
+  {
+    "config": {
+      "account": "test-account",
+      "user": "test-user",
+      "role": "test-role",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "database": "test-database",
+      "namespace": ""
+    },
+    "result": false,
+    "err": [
+      "namespace must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{1,64})$\""
+    ]
+  },
+  {
+    "config": {
+      "account": "test-account",
+      "user": "test-user",
+      "role": "test-role",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "database": "test-database"
+    },
+    "result": false,
+    "err": [" must have required property 'namespace'"]
   },
   {
     "testTitle": "With valid multiple consent management providers config",
