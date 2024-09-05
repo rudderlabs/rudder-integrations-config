@@ -1,0 +1,277 @@
+[
+  {
+    "config": {
+      "account": "test-account",
+      "user": "test-user",
+      "role": "test-role",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "database": "test-database",
+      "namespace": "test-namespace"
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "account": "test-account",
+      "user": "test-user",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "database": "test-database",
+      "namespace": "test-namespace"
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "account": "test-account",
+      "user": "test-user",
+      "role": "test-role",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "database": "test-database",
+      "namespace": "test-namespace"
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "account": "test-account",
+      "user": "test-user",
+      "role": "test-role",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "database": "test-database"
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "account": "",
+      "user": "test-user",
+      "role": "test-role",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "database": "test-database",
+      "namespace": "test-namespace"
+    },
+    "result": false,
+    "err": ["account must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""]
+  },
+  {
+    "config": {
+      "user": "test-user",
+      "role": "test-role",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "database": "test-database",
+      "namespace": "test-namespace"
+    },
+    "result": false,
+    "err": [" must have required property 'account'"]
+  },
+  {
+    "config": {
+      "account": "test-account",
+      "user": "",
+      "role": "test-role",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "database": "test-database",
+      "namespace": "test-namespace"
+    },
+    "result": false,
+    "err": ["user must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""]
+  },
+  {
+    "config": {
+      "account": "test-account",
+      "role": "test-role",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "database": "test-database",
+      "namespace": "test-namespace"
+    },
+    "result": false,
+    "err": [" must have required property 'user'"]
+  },
+  {
+    "config": {
+      "account": "test-account",
+      "user": "test-user",
+      "role": "test-role",
+      "privateKey": "",
+      "privateKeyPassphrase": "test-passphrase",
+      "database": "test-database",
+      "namespace": "test-namespace"
+    },
+    "result": false,
+    "err": [
+      "privateKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|-----BEGIN (?:ENCRYPTED )?PRIVATE KEY-----[\\s\\S]+?-----END (?:ENCRYPTED )?PRIVATE KEY-----\""
+    ]
+  },
+  {
+    "config": {
+      "account": "test-account",
+      "user": "test-user",
+      "role": "test-role",
+      "privateKeyPassphrase": "test-passphrase",
+      "database": "test-database",
+      "namespace": "test-namespace"
+    },
+    "result": false,
+    "err": [" must have required property 'privateKey'"]
+  },
+  {
+    "config": {
+      "account": "test-account",
+      "user": "test-user",
+      "role": "test-role",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "database": "",
+      "namespace": "test-namespace"
+    },
+    "result": false,
+    "err": ["database must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""]
+  },
+  {
+    "config": {
+      "account": "test-account",
+      "user": "test-user",
+      "role": "test-role",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "namespace": "test-namespace"
+    },
+    "result": false,
+    "err": [" must have required property 'database'"]
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "account": "test-account",
+      "user": "test-user",
+      "role": "test-role",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "database": "test-database",
+      "namespace": "test-namespace",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "account": "test-account",
+      "user": "test-user",
+      "role": "test-role",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "database": "test-database",
+      "namespace": "test-namespace",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "account": "test-account",
+      "user": "test-user",
+      "role": "test-role",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "database": "test-database",
+      "namespace": "test-namespace",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "account": "test-account",
+      "user": "test-user",
+      "role": "test-role",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "database": "test-database",
+      "namespace": "test-namespace",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "account": "test-account",
+      "user": "test-user",
+      "role": "test-role",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "database": "test-database",
+      "namespace": "test-namespace",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
+  }
+]
