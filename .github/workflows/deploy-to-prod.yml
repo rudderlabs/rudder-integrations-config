@@ -27,8 +27,9 @@ jobs:
       version: ${{ steps.extract_version.outputs.version }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.5.0
+        uses: actions/checkout@v4.1.1
         with:
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 1
 
       - name: Extract Package Version
@@ -39,7 +40,7 @@ jobs:
           echo "version=$version" >> $GITHUB_OUTPUT
 
   deploy:
-    needs: [ extract-version ]
+    needs: [extract-version]
     name: Deployment To Production DB
     # Only merged pull requests from release candidate branches and external workflow calls must trigger
     if: (((startsWith(github.event.pull_request.head.ref, 'release/') || startsWith(github.event.pull_request.head.ref, 'hotfix-release/')) && github.event.pull_request.merged == true) || github.event_name == 'workflow_call')
@@ -51,5 +52,5 @@ jobs:
     secrets:
       API_USERNAME: ${{ secrets.PROD_USERNAME }}
       API_PASSWORD: ${{ secrets.PROD_PASSWORD }}
-      SLACK_BOT_TOKEN: $$ {{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       SLACK_RELEASE_CHANNEL_ID: ${{ secrets.SLACK_RELEASE_CHANNEL_ID }}

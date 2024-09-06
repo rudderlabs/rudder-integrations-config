@@ -2,7 +2,6 @@
   "name": "PROFITWELL",
   "displayName": "ProfitWell",
   "config": {
-    "transformAt": "router",
     "transformAtV1": "router",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -11,7 +10,8 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "oneTrustCookieCategories",
-      "eventFilteringOption"
+      "eventFilteringOption",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
@@ -27,7 +27,20 @@
       "warehouse",
       "shopify"
     ],
-    "supportedMessageTypes": ["identify"],
+    "supportedMessageTypes": { "cloud": ["identify"], "device": { "web": ["identify"] } },
+    "supportedConnectionModes": {
+      "web": ["cloud", "device"],
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "privateApiKey",
@@ -36,7 +49,17 @@
         "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
-      "web": ["useNativeSDK", "publicApiKey", "siteType"]
+      "web": ["useNativeSDK", "publicApiKey", "siteType", "connectionMode", "consentManagement"],
+      "android": ["connectionMode", "consentManagement"],
+      "ios": ["connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "reactnative": ["connectionMode", "consentManagement"],
+      "flutter": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     },
     "secretKeys": ["privateApiKey", "publicApiKey"]
   }

@@ -2,7 +2,6 @@
   "name": "LOTAME",
   "displayName": "Lotame",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -14,10 +13,15 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "oneTrustCookieCategories",
-      "eventFilteringOption"
+      "eventFilteringOption",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": ["web", "amp"],
+    "supportedConnectionModes": { "web": ["cloud", "device"], "amp": ["cloud", "device"] },
+    "supportedMessageTypes": {
+      "device": { "web": ["identify", "page"], "amp": ["identify", "page"] }
+    },
     "destConfig": {
       "defaultConfig": [
         "bcpUrlSettingsPixel",
@@ -30,8 +34,8 @@
         "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
-      "web": ["useNativeSDK"],
-      "amp": ["useNativeSDK"]
+      "web": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "amp": ["useNativeSDK", "connectionMode", "consentManagement"]
     },
     "secretKeys": []
   }

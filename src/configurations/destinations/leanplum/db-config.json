@@ -2,7 +2,6 @@
   "name": "LEANPLUM",
   "displayName": "Leanplum",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -14,7 +13,8 @@
       "whitelistedEvents",
       "eventFilteringOption",
       "oneTrustCookieCategories",
-      "connectionMode"
+      "connectionMode",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
@@ -33,9 +33,35 @@
     "supportedConnectionModes": {
       "android": ["cloud", "device", "hybrid"],
       "ios": ["cloud", "device", "hybrid"],
-      "flutter": ["cloud", "device", "hybrid"]
+      "flutter": ["cloud", "device", "hybrid"],
+      "web": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
     },
-    "supportedMessageTypes": ["identify", "page", "screen", "track"],
+    "hybridModeCloudEventsFilter": {
+      "android": {
+        "messageType": ["identify", "page", "screen", "track", "group"]
+      },
+      "ios": {
+        "messageType": ["identify", "page", "screen", "track", "group"]
+      },
+      "flutter": {
+        "messageType": ["identify", "page", "screen", "track", "group"]
+      }
+    },
+    "supportedMessageTypes": {
+      "cloud": ["identify", "page", "screen", "track"],
+      "device": {
+        "android": ["identify", "track", "screen"],
+        "ios": ["identify", "track", "screen"],
+        "flutter": ["identify", "track", "screen"]
+      }
+    },
     "destConfig": {
       "defaultConfig": [
         "applicationId",
@@ -46,9 +72,17 @@
         "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
-      "android": ["useNativeSDK", "useNativeSDKToSend", "connectionMode"],
-      "ios": ["useNativeSDK", "useNativeSDKToSend", "connectionMode"],
-      "flutter": ["useNativeSDK", "useNativeSDKToSend", "connectionMode"]
+      "android": ["useNativeSDK", "useNativeSDKToSend", "connectionMode", "consentManagement"],
+      "ios": ["useNativeSDK", "useNativeSDKToSend", "connectionMode", "consentManagement"],
+      "flutter": ["useNativeSDK", "useNativeSDKToSend", "connectionMode", "consentManagement"],
+      "web": ["connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "reactnative": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"]
     },
     "secretKeys": ["clientKey"]
   }

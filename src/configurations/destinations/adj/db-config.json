@@ -2,7 +2,6 @@
   "name": "ADJ",
   "displayName": "Adjust",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -12,7 +11,8 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "eventFilteringOption",
-      "oneTrustCookieCategories"
+      "oneTrustCookieCategories",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
@@ -26,9 +26,26 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": [
-      "track"
-    ],
+    "supportedMessageTypes": {
+      "cloud": ["track"],
+      "device": {
+        "android": ["identify", "track"],
+        "ios": ["identify", "track"],
+        "flutter": ["identify", "track"],
+        "unity": ["identify", "track"]
+      }
+    },
+    "supportedConnectionModes": {
+      "android": ["cloud", "device"],
+      "ios": ["cloud", "device"],
+      "flutter": ["cloud", "device"],
+      "unity": ["cloud", "device"],
+      "reactnative": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "appToken",
@@ -41,19 +58,16 @@
         "partnerParamsKeys",
         "oneTrustCookieCategories"
       ],
-      "android": [
-        "useNativeSDK"
-      ],
-      "ios": [
-        "useNativeSDK"
-      ],
-      "flutter": [
-        "useNativeSDK"
-      ],
-      "unity": [
-        "useNativeSDK"
-      ]
+      "android": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "ios": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "flutter": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "unity": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "reactnative": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     },
-    "secretKeys": []
+    "secretKeys": ["appToken"]
   }
 }

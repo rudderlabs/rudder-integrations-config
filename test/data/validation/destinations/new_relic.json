@@ -2,7 +2,7 @@
   {
     "config": {
       "accountId": "123456789",
-      "insertKey": "95bd1331112976i0ff9b",
+      "insertKey": "95bd133XXXX976i0ff9b",
       "dataCenter": "us",
       "customEventType": "",
       "sendDeviceContext": false,
@@ -13,7 +13,7 @@
   {
     "config": {
       "accountId": "",
-      "insertKey": "95bd1331112976i0ff9b",
+      "insertKey": "95bd133XXXX976i0ff9b",
       "dataCenter": "us",
       "customEventType": "",
       "sendDeviceContext": false,
@@ -26,7 +26,7 @@
   },
   {
     "config": {
-      "accountId": "45678909876789",
+      "accountId": "45678XXX876789",
       "insertKey": "",
       "dataCenter": "us",
       "customEventType": "",
@@ -41,7 +41,7 @@
   {
     "config": {
       "accountId": "123456789",
-      "insertKey": "95bd1331112976i0ff9b",
+      "insertKey": "95bd133XXXX976i0ff9b",
       "dataCenter": "eu",
       "customEventType": "",
       "sendDeviceContext": false,
@@ -52,7 +52,7 @@
   {
     "config": {
       "accountId": "123456789",
-      "insertKey": "95bd1331112976i0ff9b",
+      "insertKey": "95bd133XXXX976i0ff9b",
       "dataCenter": "us",
       "customEventType": "",
       "sendDeviceContext": true,
@@ -63,12 +63,135 @@
   {
     "config": {
       "accountId": "123456789",
-      "insertKey": "95bd1331112976i0ff9b",
+      "insertKey": "95bd133XXXX976i0ff9b",
       "dataCenter": "eu",
       "customEventType": "",
       "sendDeviceContext": false,
       "sendUserIdanonymousId": true
     },
     "result": true
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "accountId": "123456789",
+      "insertKey": "95bd133XXXX976i0ff9b",
+      "dataCenter": "us",
+      "customEventType": "",
+      "sendDeviceContext": false,
+      "sendUserIdanonymousId": false,
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "accountId": "123456789",
+      "insertKey": "95bd133XXXX976i0ff9b",
+      "dataCenter": "us",
+      "customEventType": "",
+      "sendDeviceContext": false,
+      "sendUserIdanonymousId": false,
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "accountId": "123456789",
+      "insertKey": "95bd133XXXX976i0ff9b",
+      "dataCenter": "us",
+      "customEventType": "",
+      "sendDeviceContext": false,
+      "sendUserIdanonymousId": false,
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "accountId": "123456789",
+      "insertKey": "95bd133XXXX976i0ff9b",
+      "dataCenter": "us",
+      "customEventType": "",
+      "sendDeviceContext": false,
+      "sendUserIdanonymousId": false,
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "accountId": "123456789",
+      "insertKey": "95bd133XXXX976i0ff9b",
+      "dataCenter": "us",
+      "customEventType": "",
+      "sendDeviceContext": false,
+      "sendUserIdanonymousId": false,
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]

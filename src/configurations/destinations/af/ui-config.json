@@ -4,13 +4,49 @@
       "title": "Connection Settings",
       "fields": [
         {
+          "type": "singleSelect",
+          "label": "Authorization Type",
+          "value": "authVersion",
+          "options": [
+            {
+              "name": "Authorization with dev key",
+              "value": "v1"
+            },
+            {
+              "name": "Authorization with server to server key",
+              "value": "v2"
+            }
+          ],
+          "defaultOption": {
+            "value": "v1"
+          },
+          "required": true
+        },
+        {
           "type": "textInput",
+          "preRequisiteField": {
+            "name": "authVersion",
+            "selectedValue": "v1"
+          },
           "label": "AppsFlyer Dev Key",
           "value": "devKey",
           "regex": "^(.{1,100})$",
           "regexErrorMessage": "Invalid AppsFlyer Dev Key",
           "required": true,
-          "placeholder": "e.g: bSjsdGYsOo9sjw23Shj"
+          "placeholder": "e.g: bSjsdXXXOo9sew21Shj"
+        },
+        {
+          "type": "textInput",
+          "preRequisiteField": {
+            "name": "authVersion",
+            "selectedValue": "v2"
+          },
+          "label": "AppsFlyer server to server API key",
+          "value": "s2sKey",
+          "regex": "^(.{1,200})$",
+          "regexErrorMessage": "Invalid AppsFlyer s2s key",
+          "required": true,
+          "placeholder": "e.g: bSjsdXXXOo9sew21Shj"
         },
         {
           "type": "textInput",
@@ -19,7 +55,7 @@
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Android App ID",
           "required": false,
-          "placeholder": "com.mypackage.example",
+          "placeholder": "e.g: com.mypackage.example",
           "footerNote": "Field is required if os.name is set to android"
         },
         {
@@ -29,7 +65,7 @@
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Apple App ID",
           "required": false,
-          "placeholder": "123456789",
+          "placeholder": "e.g: 123456789",
           "footerNote": "Field is required if os.name is set to any of the Apple OS names (ios, ipados, watchos, tvos etc.)"
         },
         {
@@ -38,6 +74,28 @@
           "value": "useRichEventName",
           "footerNote": "To include screen/page name in Screen/Page event names (ex: Viewed Contacts Page)",
           "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "Add properties at root in eventValue",
+          "value": "addPropertiesAtRoot",
+          "footerNote": "To send the custom properties to the root of eventValue.",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "Add af_currency to root of eventValue",
+          "value": "afCurrencyAtRoot",
+          "footerNote": "af_currency is added at the root of eventValue, outside properties object.",
+          "default": false,
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_appsflyer_add_prop_to_root",
+                "value": true
+              }
+            ]
+          }
         },
         {
           "type": "textInput",
@@ -126,14 +184,14 @@
           "label": "Status Callback Urls",
           "value": "statusCallbackUrls",
           "regex": "^(?!.*\\.ngrok\\.io).*$",
-          "placeholder": "https://examplecontroller.com/opengdpr_callbacks",
+          "placeholder": "e.g: https://examplecontroller.com/opengdpr_callbacks",
           "footerNote": "Endpoint for status callbacks to be sent with the deletion request status changes. If you want to provide more than one callbacks, provide them as comma separated strings."
         },
         {
           "type": "textInput",
           "label": "API Token",
           "value": "apiToken",
-          "placeholder": "c81aaf36-8323-4bb6-b5a8-asdfasdfas4f3c",
+          "placeholder": "e.g: c81aaf36-XXXX-4bb6-XXXX-asdfasdfas4f3c",
           "secret": true,
           "footerNote": "Provide your V2.0 API Token."
         }
@@ -145,16 +203,109 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "consentManagement",
+          "label": "Consent management settings",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "customFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "value": "provider",
+              "options": [
+                {
+                  "name": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "name": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "name": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "defaultOption": {
+                "name": "OneTrust",
+                "value": "oneTrust"
+              },
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "value": "resolutionStrategy",
+              "options": [
+                {
+                  "name": "AND",
+                  "value": "and"
+                },
+                {
+                  "name": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "dynamicCustomForm",
+              "value": "consents",
+              "label": "Enter consent category ID’s",
+              "customFields": [
+                {
+                  "type": "textInput",
+                  "placeholder": "Marketing",
+                  "value": "consent",
+                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "required": false
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }

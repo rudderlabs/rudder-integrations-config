@@ -2,7 +2,6 @@
   "name": "MOENGAGE",
   "displayName": "MoEngage",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -12,7 +11,8 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "oneTrustCookieCategories",
-      "eventFilteringOption"
+      "eventFilteringOption",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
@@ -28,7 +28,28 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": ["identify", "track", "alias"],
+    "supportedMessageTypes": {
+      "cloud": ["identify", "track", "alias"],
+      "device": {
+        "web": ["identify", "track"],
+        "android": ["identify", "track", "alias"],
+        "ios": ["identify", "track", "alias"],
+        "reactnative": ["identify", "track", "alias"]
+      }
+    },
+    "supportedConnectionModes": {
+      "web": ["cloud", "device"],
+      "android": ["cloud", "device"],
+      "ios": ["cloud", "device"],
+      "reactnative": ["cloud", "device"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "apiId",
@@ -39,10 +60,17 @@
         "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
-      "web": ["useNativeSDK", "debug"],
-      "android": ["useNativeSDK"],
-      "ios": ["useNativeSDK"],
-      "reactnative": ["useNativeSDK"]
+      "web": ["useNativeSDK", "debug", "connectionMode", "consentManagement"],
+      "android": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "ios": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "reactnative": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "flutter": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     },
     "secretKeys": ["apiKey"]
   }

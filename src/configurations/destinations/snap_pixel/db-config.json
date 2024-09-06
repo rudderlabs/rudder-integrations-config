@@ -2,7 +2,6 @@
   "name": "SNAP_PIXEL",
   "displayName": "Snap Pixel",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -15,10 +14,13 @@
       "eventFilteringOption",
       "deduplicationKey",
       "enableDeduplication",
-      "ketchConsentPurposes"
+      "ketchConsentPurposes",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": ["web"],
+    "supportedConnectionModes": { "web": ["device"] },
+    "supportedMessageTypes": { "device": { "web": ["identify", "track", "page"] } },
     "destConfig": {
       "defaultConfig": [
         "pixelId",
@@ -32,7 +34,7 @@
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
-      "web": ["useNativeSDK"]
+      "web": ["useNativeSDK", "connectionMode", "consentManagement"]
     },
     "secretKeys": ["pixelId"]
   }

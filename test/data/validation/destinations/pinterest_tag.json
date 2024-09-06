@@ -2,11 +2,10 @@
   {
     "config": {
       "tagId": "123456789",
-      "advertiserId": "429047995",
-      "appId": "429047995",
+      "advertiserId": "429000995",
+      "appId": "429000995",
       "enhancedMatch": true,
       "sendingUnHashedData": true,
-      "enableDeduplication": true,
       "deduplicationKey": "messageId",
       "sendExternalId": true,
       "sendAsCustomEvent": true,
@@ -30,10 +29,9 @@
   {
     "config": {
       "tagId": "123456789abc",
-      "advertiserId": "429047995",
-      "appId": "429047995",
+      "advertiserId": "429000995",
+      "appId": "429000995",
       "sendingUnHashedData": false,
-      "enableDeduplication": true,
       "deduplicationKey": "messageId",
       "enhancedMatch": true,
       "customProperties": [
@@ -58,11 +56,10 @@
     "config": {
       "tagId": "123456789",
       "apiVersion": "legacyApi",
-      "advertiserId": "429047995abc",
-      "appId": "429047995",
+      "advertiserId": "429000995abc",
+      "appId": "429000995",
       "sendingUnHashedData": false,
       "enhancedMatch": true,
-      "enableDeduplication": false,
       "customProperties": [
         {
           "properties": "presentclass"
@@ -87,10 +84,9 @@
   {
     "config": {
       "tagId": "123456789",
-      "advertiserId": "429047995",
-      "appId": "429047995abc",
+      "advertiserId": "429000995",
+      "appId": "429000995abc",
       "sendingUnHashedData": true,
-      "enableDeduplication": false,
       "enhancedMatch": false,
       "customProperties": [
         {
@@ -113,10 +109,9 @@
   {
     "config": {
       "tagId": "123456789",
-      "advertiserId": "429047995",
-      "appId": "429047995",
+      "advertiserId": "429000995",
+      "appId": "429000995",
       "sendingUnHashedData": true,
-      "enableDeduplication": true,
       "deduplicationKey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "enhancedMatch": false,
       "customProperties": [
@@ -136,21 +131,19 @@
     },
     "result": false,
     "err": [
-      "deduplicationKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
-      " must match \"then\" schema"
+      "deduplicationKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\""
     ]
   },
   {
     "config": {
       "tagId": "123456789",
-      "advertiserId": "429047995",
-      "appId": "429047995",
+      "advertiserId": "429000995",
+      "appId": "429000995",
       "apiVersion": "newApi",
       "adAccountId": "abc",
       "conversionToken": "conversionToken123",
       "enhancedMatch": true,
       "sendingUnHashedData": true,
-      "enableDeduplication": true,
       "deduplicationKey": "messageId",
       "customProperties": [
         {
@@ -176,14 +169,13 @@
   {
     "config": {
       "tagId": "123456789",
-      "advertiserId": "429047995",
-      "appId": "429047995",
+      "advertiserId": "429000995",
+      "appId": "429000995",
       "apiVersion": "newApi",
       "adAccountId": "12345",
       "conversionToken": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "enhancedMatch": true,
       "sendingUnHashedData": true,
-      "enableDeduplication": true,
       "deduplicationKey": "messageId",
       "customProperties": [
         {
@@ -205,5 +197,138 @@
       "conversionToken must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,101})$\"",
       " must match \"then\" schema"
     ]
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "tagId": "123456789",
+      "advertiserId": "429000995",
+      "appId": "429000995",
+      "enhancedMatch": true,
+      "sendingUnHashedData": true,
+      "deduplicationKey": "messageId",
+      "sendExternalId": true,
+      "sendAsCustomEvent": true,
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "tagId": "123456789",
+      "advertiserId": "429000995",
+      "appId": "429000995",
+      "enhancedMatch": true,
+      "sendingUnHashedData": true,
+      "deduplicationKey": "messageId",
+      "sendExternalId": true,
+      "sendAsCustomEvent": true,
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "tagId": "123456789",
+      "advertiserId": "429000995",
+      "appId": "429000995",
+      "enhancedMatch": true,
+      "sendingUnHashedData": true,
+      "deduplicationKey": "messageId",
+      "sendExternalId": true,
+      "sendAsCustomEvent": true,
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "tagId": "123456789",
+      "advertiserId": "429000995",
+      "appId": "429000995",
+      "enhancedMatch": true,
+      "sendingUnHashedData": true,
+      "deduplicationKey": "messageId",
+      "sendExternalId": true,
+      "sendAsCustomEvent": true,
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "tagId": "123456789",
+      "advertiserId": "429000995",
+      "appId": "429000995",
+      "enhancedMatch": true,
+      "sendingUnHashedData": true,
+      "deduplicationKey": "messageId",
+      "sendExternalId": true,
+      "sendAsCustomEvent": true,
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]

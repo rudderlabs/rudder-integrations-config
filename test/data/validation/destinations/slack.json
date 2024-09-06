@@ -30,7 +30,7 @@
   {
     "config": {
       "identifyTemplate": "",
-      "webhookUrl": "https://hooks.slack.com/services/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",
+      "webhookUrl": "https://hooks.slack.com/services/XXXXX/XXXXX/4cg8sTTqSOrX5vXYwuTsEHPc",
       "eventChannelSettings": [
         {
           "eventName": "XYZ",
@@ -69,7 +69,7 @@
   {
     "config": {
       "identifyTemplate": "",
-      "webhookUrl": "https://hooks.slack.com/services/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",
+      "webhookUrl": "https://hooks.slack.com/services/XXXX/XXXX/4cg8sTTqSOrX5vXYwuTsEHPc",
       "eventChannelSettings": [
         {
           "eventName": "XYZ",
@@ -96,5 +96,103 @@
       "eventTemplateSettings.0.eventName must be string",
       "eventTemplateSettings.0.eventRegex must be boolean"
     ]
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "webhookUrl": "https://hooks.slack.com/services/XXXX/XXXX/4cg8sTTqSOrX5vXYwuTsEHPc",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "webhookUrl": "https://hooks.slack.com/services/XXXX/XXXX/4cg8sTTqSOrX5vXYwuTsEHPc",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "webhookUrl": "https://hooks.slack.com/services/XXXX/XXXX/4cg8sTTqSOrX5vXYwuTsEHPc",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "webhookUrl": "https://hooks.slack.com/services/XXXX/XXXX/4cg8sTTqSOrX5vXYwuTsEHPc",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "webhookUrl": "https://hooks.slack.com/services/XXXX/XXXX/4cg8sTTqSOrX5vXYwuTsEHPc",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]

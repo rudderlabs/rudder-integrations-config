@@ -7,10 +7,17 @@
       "eventFilteringOption": "disable",
       "whitelistedEvents": [],
       "blacklistedEvents": [],
-      "useNativeSDK": { "android": false, "ios": false },
+      "useNativeSDK": {
+        "android": false,
+        "ios": false
+      },
       "oneTrustCookieCategories": [
-        { "oneTrustCookieCategory": "m1a" },
-        { "oneTrustCookieCategory": "m1i" }
+        {
+          "oneTrustCookieCategory": "m1a"
+        },
+        {
+          "oneTrustCookieCategory": "m1i"
+        }
       ]
     },
     "result": false,
@@ -25,12 +32,117 @@
       "eventFilteringOption": "disable",
       "whitelistedEvents": [],
       "blacklistedEvents": [],
-      "useNativeSDK": { "android": false, "ios": false },
+      "useNativeSDK": {
+        "android": false,
+        "ios": false
+      },
       "oneTrustCookieCategories": [
-        { "oneTrustCookieCategory": "m1a" },
-        { "oneTrustCookieCategory": "m1i" }
+        {
+          "oneTrustCookieCategory": "m1a"
+        },
+        {
+          "oneTrustCookieCategory": "m1i"
+        }
       ]
     },
     "result": true
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "appID": "appid101",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "appID": "appid101",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "appID": "appid101",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "appID": "appid101",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "appID": "appid101",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]

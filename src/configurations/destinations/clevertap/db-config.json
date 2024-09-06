@@ -2,7 +2,6 @@
   "name": "CLEVERTAP",
   "displayName": "CleverTap",
   "config": {
-    "transformAt": "router",
     "transformAtV1": "router",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -13,7 +12,8 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "oneTrustCookieCategories",
-      "eventFilteringOption"
+      "eventFilteringOption",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
@@ -29,7 +29,28 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": ["identify", "page", "screen", "track", "alias"],
+    "supportedMessageTypes": {
+      "cloud": ["identify", "page", "screen", "track", "alias"],
+      "device": {
+        "web": ["identify", "track", "page"],
+        "android": ["identify", "track", "screen"],
+        "ios": ["identify", "track", "screen"],
+        "reactnative": ["identify", "track", "screen"]
+      }
+    },
+    "supportedConnectionModes": {
+      "android": ["cloud", "device"],
+      "web": ["cloud", "device"],
+      "ios": ["cloud", "device"],
+      "reactnative": ["cloud", "device"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "accountId",
@@ -43,11 +64,18 @@
         "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
-      "web": ["useNativeSDK"],
-      "android": ["useNativeSDK"],
-      "ios": ["useNativeSDK"],
-      "reactnative": ["useNativeSDK"]
+      "web": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "android": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "ios": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "reactnative": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "flutter": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     },
-    "secretKeys": ["passcode"]
+    "secretKeys": ["passcode", "accountToken"]
   }
 }

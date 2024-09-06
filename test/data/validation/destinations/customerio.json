@@ -1,10 +1,13 @@
 [
   {
     "config": {
-      "siteID": "95bd1331112976i0ff9b",
-      "apiKey": "95bd1331112976i0ff9b",
+      "siteID": "95bd13XXXX29XXi0ff9b",
+      "apiKey": "95bd13XXXX29XXi0ff9b",
       "deviceTokenEventName": "device_token_registered",
       "datacenter": "US",
+      "connectionMode": {
+        "web": "cloud"
+      },
       "eventFilteringOption": "disable",
       "whitelistedEvents": [
         {
@@ -32,9 +35,12 @@
   },
   {
     "config": {
-      "apiKey": "95bd1331112976i0ff9b",
+      "apiKey": "95bd13XXXX29XXi0ff9b",
       "deviceTokenEventName": "device_token_registered",
       "datacenter": "US",
+      "connectionMode": {
+        "web": "cloud"
+      },
       "eventFilteringOption": "whitelistedEvents",
       "whitelistedEvents": [
         {
@@ -63,10 +69,13 @@
   },
   {
     "config": {
-      "siteID": "95bd1331112976i0ff9b",
-      "apiKey": "95bd1330072974f0ff9b",
+      "siteID": "95bd13XXXX29XXi0ff9b",
+      "apiKey": "95bd13XXXX29XXi0ff9b",
       "deviceTokenEventName": "device_location_registered",
       "datacenter": "EU",
+      "connectionMode": {
+        "web": "cloud"
+      },
       "whitelistedEvents": [
         {
           "eventName": "practice"
@@ -98,6 +107,9 @@
       "deviceTokenEventName": "device_id_removed",
       "datacenter": "US",
       "eventFilteringOption": "disable",
+      "connectionMode": {
+        "web": "cloud"
+      },
       "whitelistedEvents": [
         {
           "eventName": ["e1", "v1"]
@@ -125,13 +137,16 @@
   },
   {
     "config": {
-      "siteID": "95bd1331112976i0ff9b",
-      "apiKey": "95bd1331112976i0ff9b",
+      "siteID": "95bd13XXXX29XXi0ff9b",
+      "apiKey": "95bd13XXXX29XXi0ff9b",
       "deviceTokenEventName": "device_token_registered",
       "datacenter": "EU",
       "eventFilteringOption": "disable",
       "useNativeSDK": {
         "web": false
+      },
+      "connectionMode": {
+        "web": "cloud"
       },
       "sendPageNameInSDK": {
         "web": false
@@ -146,8 +161,8 @@
   },
   {
     "config": {
-      "siteID": "95bd1331112976i0ff9b",
-      "apiKey": "95bd1331112976i0ff9b",
+      "siteID": "95bd13XXXX29XXi0ff9b",
+      "apiKey": "95bd13XXXX29XXi0ff9b",
       "deviceTokenEventName": "qwsafpmznjhbfjhchdgeiuudhwgvdfkzxuiookaghhrytedhgfgjslalapooiqnbvemixuhevvsjklodjdokhuijghqwnvzxccdwsalkijediwhfwibkjnkji",
       "datacenter": "EU",
       "eventFilteringOption": "disable",
@@ -156,6 +171,9 @@
       },
       "sendPageNameInSDK": {
         "web": false
+      },
+      "connectionMode": {
+        "web": "cloud"
       },
       "oneTrustCookieCategories": [
         {
@@ -167,5 +185,108 @@
     "err": [
       "deviceTokenEventName must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\""
     ]
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "siteID": "95bd13XXXX29XXi0ff9b",
+      "apiKey": "95bd13XXXX29XXi0ff9b",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "siteID": "95bd13XXXX29XXi0ff9b",
+      "apiKey": "95bd13XXXX29XXi0ff9b",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "siteID": "95bd13XXXX29XXi0ff9b",
+      "apiKey": "95bd13XXXX29XXi0ff9b",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "siteID": "95bd13XXXX29XXi0ff9b",
+      "apiKey": "95bd13XXXX29XXi0ff9b",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "siteID": "95bd13XXXX29XXi0ff9b",
+      "apiKey": "95bd13XXXX29XXi0ff9b",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]

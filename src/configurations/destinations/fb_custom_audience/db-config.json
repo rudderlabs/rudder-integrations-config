@@ -2,21 +2,29 @@
   "name": "FB_CUSTOM_AUDIENCE",
   "displayName": "Facebook Custom Audience",
   "config": {
+    "features": ["vdm-next"],
     "supportsBlankAudienceCreation": true,
     "disableJsonMapper": true,
     "supportsVisualMapper": true,
     "syncBehaviours": ["mirror"],
-    "transformAt": "processor",
-    "transformAtV1": "processor",
+    "transformAtV1": "router",
     "saveDestinationResponse": true,
-    "includeKeys": ["oneTrustCookieCategories"],
+    "includeKeys": ["oneTrustCookieCategories", "consentManagement"],
     "excludeKeys": [],
     "supportedSourceTypes": ["cloud", "warehouse", "shopify"],
-    "supportedMessageTypes": ["audiencelist"],
+    "supportedMessageTypes": {
+      "cloud": ["audiencelist", "record"]
+    },
     "isAudienceSupported": true,
+    "supportedConnectionModes": {
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "accessToken",
+        "appSecret",
         "maxUserCount",
         "userSchema",
         "isHashRequired",
@@ -26,22 +34,37 @@
         "subType",
         "oneTrustCookieCategories"
       ],
-      "cloud": ["audienceId"],
-      "warehouse": ["adAccountId"]
+      "cloud": ["audienceId", "connectionMode", "consentManagement"],
+      "warehouse": ["adAccountId", "connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     },
-    "secretKeys": ["accessToken"]
+    "secretKeys": ["accessToken", "appSecret"]
   },
   "responseRules": {
     "responseType": "JSON",
     "rules": {
       "abortable": [
-        { "errors.0.code": 200 },
-        { "errors.0.code": 100 },
-        { "errors.0.code": 2650 },
-        { "errors.0.code": 368 },
-        { "errors.0.code": 105 },
-        { "errors.0.code": 294 },
-        { "errors.0.code": 190 }
+        {
+          "errors.0.code": 200
+        },
+        {
+          "errors.0.code": 100
+        },
+        {
+          "errors.0.code": 2650
+        },
+        {
+          "errors.0.code": 368
+        },
+        {
+          "errors.0.code": 105
+        },
+        {
+          "errors.0.code": 294
+        },
+        {
+          "errors.0.code": 190
+        }
       ]
     }
   }

@@ -1,0 +1,202 @@
+[
+  {
+    "config": {
+      "audienceId": "test-segment",
+      "advertiserId": "test-advertiserId",
+      "advertiserSecretKey": "test-advertiserSecretKey",
+      "segmentName": "test-segment",
+      "dataServer": "usEastCoast",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "audienceId": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz",
+      "advertiserId": "test-advertiserId",
+      "advertiserSecretKey": "test-advertiserSecretKey",
+      "segmentName": "test-segment",
+      "dataServer": "usEastCoast",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "audienceId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,256})$\""
+    ]
+  },
+  {
+    "config": {
+      "audienceId": "test-segment",
+      "advertiserId": "",
+      "advertiserSecretKey": "test-advertiserSecretKey",
+      "segmentName": "test-segment",
+      "dataServer": "usEastCoast",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "advertiserId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
+    ]
+  },
+  {
+    "config": {
+      "audienceId": "test-segment",
+      "advertiserId": "test-advertiserId",
+      "advertiserSecretKey": "test-advertiserSecretKey",
+      "segmentName": "test-segment",
+      "dataServer": "test-server",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["dataServer must be equal to one of the allowed values"]
+  },
+  {
+    "config": {
+      "audienceId": "test-segment",
+      "advertiserId": "test-advertiserId",
+      "segmentName": "test-segment",
+      "dataServer": "usEastCoast",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
+      ]
+    },
+    "result": false,
+    "err": [" must have required property 'advertiserSecretKey'"]
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "audienceId": "test-segment",
+      "advertiserId": "test-advertiserId",
+      "advertiserSecretKey": "test-advertiserSecretKey",
+      "segmentName": "test-segment",
+      "dataServer": "usEastCoast",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "audienceId": "test-segment",
+      "advertiserId": "test-advertiserId",
+      "advertiserSecretKey": "test-advertiserSecretKey",
+      "segmentName": "test-segment",
+      "dataServer": "usEastCoast",
+      "consentManagement": {
+        "warehouse": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.warehouse.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.warehouse.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "audienceId": "test-segment",
+      "advertiserId": "test-advertiserId",
+      "advertiserSecretKey": "test-advertiserSecretKey",
+      "segmentName": "test-segment",
+      "dataServer": "usEastCoast",
+      "consentManagement": {
+        "warehouse": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.warehouse.0 must have required property 'resolutionStrategy'",
+      "consentManagement.warehouse.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "audienceId": "test-segment",
+      "advertiserId": "test-advertiserId",
+      "advertiserSecretKey": "test-advertiserSecretKey",
+      "segmentName": "test-segment",
+      "dataServer": "usEastCoast",
+      "consentManagement": {
+        "warehouse": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "audienceId": "test-segment",
+      "advertiserId": "test-advertiserId",
+      "advertiserSecretKey": "test-advertiserSecretKey",
+      "segmentName": "test-segment",
+      "dataServer": "usEastCoast",
+      "consentManagement": {
+        "warehouse": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.warehouse.0.provider must be equal to one of the allowed values"]
+  }
+]

@@ -2,7 +2,6 @@
   "name": "FB",
   "displayName": "Facebook App Events",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -13,7 +12,8 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "eventFilteringOption",
-      "oneTrustCookieCategories"
+      "oneTrustCookieCategories",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
@@ -28,7 +28,26 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": ["page", "screen", "track"],
+    "supportedMessageTypes": {
+      "cloud": ["page", "screen", "track"],
+      "device": {
+        "android": ["identify", "screen", "track"],
+        "ios": ["identify", "screen", "track"]
+      }
+    },
+    "supportedConnectionModes": {
+      "android": ["cloud", "device"],
+      "ios": ["cloud", "device"],
+      "web": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "appID",
@@ -40,8 +59,16 @@
         "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
-      "android": ["useNativeSDK"],
-      "ios": ["useNativeSDK"]
+      "android": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "ios": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "reactnative": ["connectionMode", "consentManagement"],
+      "flutter": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     },
     "secretKeys": []
   }

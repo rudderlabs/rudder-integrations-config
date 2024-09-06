@@ -2,15 +2,18 @@
   "name": "PAGERDUTY",
   "displayName": "PagerDuty",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
-    "includeKeys": ["routingKey", "dedupKeyFieldIdentifier", "oneTrustCookieCategories"],
+    "includeKeys": [
+      "routingKey",
+      "dedupKeyFieldIdentifier",
+      "oneTrustCookieCategories",
+      "consentManagement"
+    ],
     "excludeKeys": [],
     "supportedSourceTypes": [
       "web",
       "cloud",
-      "mobile",
       "android",
       "ios",
       "unity",
@@ -21,9 +24,33 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": ["track"],
+    "supportedMessageTypes": { "cloud": ["track"] },
+    "supportedConnectionModes": {
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "web": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "destConfig": {
-      "defaultConfig": ["routingKey", "dedupKeyFieldIdentifier", "oneTrustCookieCategories"]
+      "defaultConfig": ["routingKey", "dedupKeyFieldIdentifier", "oneTrustCookieCategories"],
+      "web": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "android": ["connectionMode", "consentManagement"],
+      "ios": ["connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "reactnative": ["connectionMode", "consentManagement"],
+      "flutter": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     },
     "secretKeys": ["routingKey"]
   }

@@ -2,21 +2,21 @@
   {
     "config": {
       "heartBeatFrequencyInMs": "11234",
-      "shynetServiceUrl": "https://localhost:5555/ingress/5b3470a9-be69-4298-9ec1-3fe3f483738c/script.js"
+      "shynetServiceUrl": "https://localhost:5555/ingress/5b3470a9-XXXX-4298-9ec1-3fe3f483738c/script.js"
     },
     "result": true
   },
   {
     "config": {
       "heartBeatFrequencyInMs": "",
-      "shynetServiceUrl": "http://localhost:5555/ingress/5b3470a9-be69-4298-9ec1-3fe3f483738c/script.js"
+      "shynetServiceUrl": "http://localhost:5555/ingress/5b3470a9-XXXX-4298-9ec1-3fe3f483738c/script.js"
     },
     "result": true
   },
   {
     "config": {
       "heartBeatFrequencyInMs": "5000000000000000000000000000000000000",
-      "shynetServiceUrl": "https://wwww.mysite.com/ingress/5b3470a9-be69-4298-9ec1-354354354wefdv/script.js"
+      "shynetServiceUrl": "https://wwww.mysite.com/ingress/5b3470a9-XXXX-4298-9ec1-354354354wefdv/script.js"
     },
     "result": false,
     "err": [
@@ -31,5 +31,108 @@
     "err": [
       "shynetServiceUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,300})$\""
     ]
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "heartBeatFrequencyInMs": "11234",
+      "shynetServiceUrl": "https://localhost:5555/ingress/5b3470a9-XXXX-4298-9ec1-3fe3f483738c/script.js",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "heartBeatFrequencyInMs": "11234",
+      "shynetServiceUrl": "https://localhost:5555/ingress/5b3470a9-XXXX-4298-9ec1-3fe3f483738c/script.js",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "heartBeatFrequencyInMs": "11234",
+      "shynetServiceUrl": "https://localhost:5555/ingress/5b3470a9-XXXX-4298-9ec1-3fe3f483738c/script.js",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "heartBeatFrequencyInMs": "11234",
+      "shynetServiceUrl": "https://localhost:5555/ingress/5b3470a9-XXXX-4298-9ec1-3fe3f483738c/script.js",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "heartBeatFrequencyInMs": "11234",
+      "shynetServiceUrl": "https://localhost:5555/ingress/5b3470a9-XXXX-4298-9ec1-3fe3f483738c/script.js",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]

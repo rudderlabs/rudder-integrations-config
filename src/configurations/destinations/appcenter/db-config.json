@@ -2,7 +2,6 @@
   "name": "APPCENTER",
   "displayName": "App Center",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -12,11 +11,32 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "eventFilteringOption",
-      "oneTrustCookieCategories"
+      "oneTrustCookieCategories",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": ["android", "ios", "reactnative", "cordova", "flutter"],
-    "supportedMessageTypes": ["track"],
+    "supportedMessageTypes": {
+      "cloud": ["track"],
+      "device": {
+        "cordova": ["track", "screen"],
+        "android": ["track", "screen"],
+        "ios": ["track", "screen"],
+        "reactnative": ["track", "screen"],
+        "flutter": ["track", "screen"]
+      }
+    },
+    "supportedConnectionModes": {
+      "cordova": ["cloud", "device"],
+      "android": ["cloud", "device"],
+      "ios": ["cloud", "device"],
+      "flutter": ["cloud", "device"],
+      "reactnative": ["cloud", "device"],
+      "web": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "shopify": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "appSecret",
@@ -27,11 +47,11 @@
         "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
-      "android": ["useNativeSDK"],
-      "ios": ["useNativeSDK"],
-      "reactnative": ["useNativeSDK"],
-      "flutter": ["useNativeSDK"],
-      "cordova": ["useNativeSDK"]
+      "android": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "ios": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "reactnative": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "flutter": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "cordova": ["useNativeSDK", "connectionMode", "consentManagement"]
     },
     "secretKeys": ["appSecret"]
   }

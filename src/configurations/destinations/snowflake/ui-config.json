@@ -9,7 +9,7 @@
           "value": "account",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
           "regexErrorMessage": "Invalid Account",
-          "placeholder": "e.g: qya54180.us-east-1",
+          "placeholder": "e.g: qya5X180.us-east-1",
           "required": true
         },
         {
@@ -49,13 +49,39 @@
           "required": false
         },
         {
+          "type": "checkbox",
+          "label": "Use Key Pair Authentication",
+          "value": "useKeyPairAuth",
+          "default": false,
+          "required": false
+        },
+        {
           "type": "textInput",
           "label": "Password",
           "value": "password",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
           "placeholder": "e.g: RUDDER_PASSWORD",
           "required": true,
+          "secret": true,
+          "preRequisiteField": { "name": "useKeyPairAuth", "selectedValue": false }
+        },
+        {
+          "type": "textareaInput",
+          "required": true,
+          "regex": "-----BEGIN (?:ENCRYPTED )?PRIVATE KEY-----[\\s\\S]+?-----END (?:ENCRYPTED )?PRIVATE KEY-----",
+          "preRequisiteField": { "name": "useKeyPairAuth", "selectedValue": true },
+          "label": "Private Key",
+          "value": "privateKey",
           "secret": true
+        },
+        {
+          "type": "textInput",
+          "regex": "^(.{0,100})$",
+          "secret": true,
+          "preRequisiteField": { "name": "useKeyPairAuth", "selectedValue": true },
+          "label": "Private Key Passphrase",
+          "value": "privateKeyPassphrase",
+          "footerNote": "Use the password you set when encrypting the private key. Leave it blank if the private key is not encrypted."
         },
         {
           "type": "textInput",
@@ -66,7 +92,8 @@
           "regexErrorMessage": "Invalid Namespace",
           "required": false,
           "placeholder": "e.g: RUDDER_NAMESPACE",
-          "footerNote": "Default will be the source name"
+          "footerNote": "Default will be the source name",
+          "immutable": true
         },
         {
           "type": "singleSelect",
@@ -99,8 +126,8 @@
             }
           ],
           "defaultOption": {
-            "name": "Every 30 minutes",
-            "value": "30"
+            "name": "Every 3 hours",
+            "value": "180"
           },
           "required": true
         },
@@ -133,19 +160,6 @@
           },
           "required": false,
           "footerNote": "Note: Please specify time in UTC"
-        },
-        {
-          "type": "textInput",
-          "label": "JSON columns (Optional)",
-          "labelNote": "Specify required JSON properties in dot notation separated by commas",
-          "value": "jsonPaths",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.*)$",
-          "placeholder": "e.g: testMap.nestedMap, testArray",
-          "required": false,
-          "footerURL": {
-            "link": "https://www.rudderstack.com/docs/data-warehouse-integrations/snowflake/#configuring-snowflake-destination-in-rudderstack",
-            "text": "Instructions for setting up the JSON columns"
-          }
         }
       ]
     },
@@ -369,7 +383,7 @@
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
           "regexErrorMessage": "Invalid Role ARN",
           "required": true,
-          "placeholder": "e.g: arn:aws:iam::123456789012:role/S3Access",
+          "placeholder": "e.g: arn:aws:iam::12345X789012:role/S3Access",
           "footerURL": {
             "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/",
             "text": "Instructions for creating IAM Role"
@@ -545,22 +559,180 @@
       ]
     },
     {
+      "title": "Advanced Settings",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Warehouse Append",
+          "value": "preferAppend",
+          "footerNote": "Disable to move from Append to Merge operation. Switching from Append to Merge ensures 100% non-duplicate data, but would increase warehouse operations time significantly",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "label": "Skip User Table",
+          "value": "skipUsersTable",
+          "footerNote": "Enable this feature to send event data exclusively to the Identify table, and skip user table. Eliminates the need for merge operation on the user table",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "Skip Tracks Table",
+          "value": "skipTracksTable",
+          "footerNote": "Enable this feature to skip sending the event data to the “tracks” table",
+          "default": false
+        },
+        {
+          "type": "textInput",
+          "label": "JSON columns (Optional)",
+          "labelNote": "Specify required JSON properties in dot notation separated by commas",
+          "value": "jsonPaths",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.*)$",
+          "placeholder": "e.g: testMap.nestedMap, testArray",
+          "required": false,
+          "footerURL": {
+            "link": "https://www.rudderstack.com/docs/destinations/warehouse-destinations/snowflake/#configuring-snowflake-destination-in-rudderstack",
+            "text": "Instructions for setting up the JSON columns"
+          }
+        }
+      ]
+    },
+    {
       "title": "Consent Settings",
       "fields": [
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "C0001",
+              "value": "oneTrustCookieCategory",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
+              "required": false
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "ketchConsentPurposes",
+          "label": "Ketch Consent Purposes",
           "customFields": [
             {
               "type": "textInput",
               "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category Name/ID",
+              "value": "purpose",
+              "label": "Purpose ID",
+              "regex": "^(.{0,100})$",
               "required": false
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "consentManagement",
+          "label": "Consent management settings",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "customFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "value": "provider",
+              "options": [
+                {
+                  "name": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "name": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "name": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "defaultOption": {
+                "name": "OneTrust",
+                "value": "oneTrust"
+              },
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "value": "resolutionStrategy",
+              "options": [
+                {
+                  "name": "AND",
+                  "value": "and"
+                },
+                {
+                  "name": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "dynamicCustomForm",
+              "value": "consents",
+              "label": "Enter consent category ID’s",
+              "customFields": [
+                {
+                  "type": "textInput",
+                  "placeholder": "Marketing",
+                  "value": "consent",
+                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "required": false
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }

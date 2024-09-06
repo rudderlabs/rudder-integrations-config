@@ -28,7 +28,7 @@
                     "configKey": "apiKey",
                     "regex": ".*",
                     "required": true,
-                    "placeholder": "e.g. c59e3838caa934b535c1fd342dfds23452dfcccf95c16787304e7a0c0e8051b326451bb2",
+                    "placeholder": "e.g. c5Xe3398cla9fXXXXf95094eXa0c1e8b32X451bbpm8j2",
                     "secret": true,
                     "footerNote": "Your API Access Key"
                   }
@@ -74,7 +74,7 @@
                     "regex": "^(.{0,100})$",
                     "regexErrorMessage": "Invalid Event Key",
                     "required": false,
-                    "placeholder": "e.g. c2a856fddc721350dec4fbbc2e5c43a7ddfaaa03",
+                    "placeholder": "e.g. c1a85Xfddc121350XXX4fvbc2e5c83a7dXfaha01",
                     "secret": true,
                     "note": "Your Event Key"
                   },
@@ -85,7 +85,7 @@
                     "regex": "^(.{0,100})$",
                     "regexErrorMessage": "Invalid ActID",
                     "required": false,
-                    "placeholder": "e.g. 276450567",
+                    "placeholder": "e.g. 2764X0567",
                     "secret": true,
                     "note": "Your ActId"
                   }
@@ -94,35 +94,48 @@
             ]
           },
           {
-            "title": "Other settings",
-            "note": "Configure advanced RudderStack features here",
-            "icon": "otherSettings",
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
             "groups": [
               {
-                "title": "OneTrust cookie consent settings",
+                "title": "OneTrust consent settings",
                 "note": [
-                  "Enter your OneTrust category names if you have them configured. ",
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
                   {
                     "text": "Learn more ",
-                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
                   },
-                  "about RudderStack’s OneTrust Consent Manager feature."
+                  "about RudderStack's OneTrust Consent Management feature."
                 ],
                 "fields": [
                   {
                     "type": "tagInput",
-                    "label": "Cookie category name",
-                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                    "label": "Consent categories",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
                     "configKey": "oneTrustCookieCategories",
                     "tagKey": "oneTrustCookieCategory",
-                    "placeholder": "e.g: Credit card visit",
+                    "placeholder": "e.g: C0001",
                     "default": [
                       {
                         "oneTrustCookieCategory": ""
                       }
                     ]
                   }
-                ]
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
               }
             ]
           }
@@ -132,9 +145,87 @@
     "sdkTemplate": {
       "title": "SDK settings",
       "note": "not visible in the ui",
+      "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
       "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "default": "oneTrust",
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category ID’s",
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
+        }
       ]
     }
   }
 }
-

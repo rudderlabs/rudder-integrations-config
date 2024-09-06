@@ -1,0 +1,260 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection Settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Emarsys Username",
+                    "configKey": "emersysUsername",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "secret": true,
+                    "regexErrorMessage": "Invalid Username",
+                    "placeholder": "e.g. dummy_username"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Emarsys User Secret",
+                    "configKey": "emersysUserSecret",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "secret": true,
+                    "regexErrorMessage": "Invalid User Secret",
+                    "placeholder": "e.g. dummy_userSecret"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding.",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Custom Identifier Field Settings",
+                "fields": [
+                  {
+                    "type": "dynamicDataSelect",
+                    "configKey": "emersysCustomIdentifier",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Custom Identifier",
+                    "label": "Choose Custom Identifier From Your Emarsys Properties List. If not chosen by you Rudderstack will consider 'email' as a custom identifier",
+                    "placeholder": "e.g 1234567",
+                    "apiName": "customIdentifier"
+                  }
+                ]
+              },
+              {
+                "title": "Default Contact List Field Settings",
+                "fields": [
+                  {
+                    "type": "dynamicDataSelect",
+                    "configKey": "defaultContactList",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Contact List",
+                    "label": "Choose Default Contact List From Emarsys Account.",
+                    "placeholder": "e.g 1234567",
+                    "apiName": "contactList"
+                  }
+                ]
+              },
+              {
+                "title": "Optional configuration settings",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Discard empty contact properties",
+                    "configKey": "discardEmptyProperties",
+                    "default": true,
+                    "note": "Disable it if you are not sending null or empty values for contact properties"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "OneTrust consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
+                  },
+                  "about RudderStack's OneTrust Consent Management feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Consent categories",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: C0001",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Contact Property mapping",
+        "note": "Map RudderStack Event Traits to Emarsys Contact Properties. This mapping will referenced from message.traits or message.context.traits while making identify and group calls",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "RudderStack Event Traits to Emarsys Contact Properties Mapping",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "fieldMapping",
+                    "label": "Custom Property Mapping",
+                    "note": "Map RudderStack events properties to Emarsys custom fields"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Event mapping",
+        "note": "Map RudderStack Events to Emarsys External Events",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "RudderStack Event name to Emarsys External Event Name Mapping",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "eventsMapping",
+                    "label": "External Event Mapping",
+                    "note": "Map RudderStack events to Emarsys external events"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "redirectGroups": {
+      "fieldMapping": {
+        "fields": [
+          {
+            "type": "dynamicCustomForm",
+            "label": "Map Rudderstack event traits to Emarsys contact properties. This is a 1:1 mapping.",
+            "configKey": "fieldMapping",
+            "rowFields": [
+              {
+                "type": "mappingRow",
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "configKey": "rudderProperty",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Event Property",
+                    "label": "RudderStack Event Property",
+                    "placeholder": "e.g city"
+                  },
+                  {
+                    "type": "dynamicDataSelect",
+                    "configKey": "emersysProperty",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Custom Property",
+                    "label": "Emarsys custom property name",
+                    "placeholder": "e.g companyCity",
+                    "apiName": "customProperty"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "eventsMapping": {
+        "fields": [
+          {
+            "type": "dynamicCustomForm",
+            "label": "Map Rudderstack Events to Emarsys external events. This is a 1:1 mapping.",
+            "configKey": "eventsMapping",
+            "rowFields": [
+              {
+                "type": "mappingRow",
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "configKey": "from",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Event Name",
+                    "label": "RudderStack Event Name",
+                    "placeholder": "e.g product added"
+                  },
+                  {
+                    "type": "dynamicDataSelect",
+                    "configKey": "to",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid external event",
+                    "label": "Emarsys external event name",
+                    "placeholder": "e.g addToCart",
+                    "apiName": "externalEvent"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

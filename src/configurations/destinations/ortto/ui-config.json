@@ -1,0 +1,439 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Private Api Key",
+                    "note": "Your Private API Key.",
+                    "configKey": "privateApiKey",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,300})$",
+                    "regexErrorMessage": "Invalid Api Key",
+                    "placeholder": "e.g: PRV-dummy--dsfsdfsdfsd72fsXUQ6hxfybiDAwg",
+                    "secret": true
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Instance Region",
+                    "note": "Select your instance region",
+                    "configKey": "instanceRegion",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid instance region",
+                    "options": [
+                      {
+                        "label": "Australia",
+                        "value": "au"
+                      },
+                      {
+                        "label": "Europe",
+                        "value": "eu"
+                      },
+                      {
+                        "label": "Other",
+                        "value": "other"
+                      }
+                    ],
+                    "default": "other"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "OneTrust consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
+                  },
+                  "about RudderStack's OneTrust Consent Management feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Consent categories",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: C0001",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Event and property mapping",
+        "note": "Map RudderStack to Ortto events/properties",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "RudderStack to Ortto event/property mappings",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "eventAndPropertyMapping",
+                    "label": "Event and property mappings",
+                    "note": "Map RudderStack events/properties to Ortto custom events/properties"
+                  },
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "traitsMapping",
+                    "label": "Custom user traits mappings",
+                    "note": "Map RudderStack traits to your Ortto Person attributes"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "default": "oneTrust",
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category ID’s",
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "redirectGroups": {
+      "eventAndPropertyMapping": {
+        "fields": [
+          {
+            "type": "dynamicCustomForm",
+            "label": "Map RudderStack event name to Ortto Custom event name",
+            "configKey": "orttoEventsMapping",
+            "rowFields": [
+              {
+                "type": "mappingRow",
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "configKey": "rsEventName",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Event name is required",
+                    "label": "RudderStack Event Name",
+                    "placeholder": "e.g Products Searched"
+                  },
+                  {
+                    "type": "textInput",
+                    "configKey": "orttoEventName",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Event name is required",
+                    "label": "Ortto Event Name",
+                    "placeholder": "e.g Search"
+                  }
+                ]
+              },
+              {
+                "type": "mapping",
+                "label": "Map your Event Property",
+                "configKey": "eventProperties",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "rudderProperty",
+                    "label": "RudderStack Property Name",
+                    "placeholder": "e.g firstName"
+                  },
+                  {
+                    "type": "textInput",
+                    "key": "orttoProperty",
+                    "label": "Ortto Property Name",
+                    "placeholder": "e.g first_name"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "key": "type",
+                    "label": "Ortto Property type",
+                    "options": [
+                      {
+                        "label": "Email",
+                        "value": "email"
+                      },
+                      {
+                        "label": "Text",
+                        "value": "text"
+                      },
+                      {
+                        "label": "Long Text",
+                        "value": "longText"
+                      },
+                      {
+                        "label": "Number",
+                        "value": "number"
+                      },
+                      {
+                        "label": "Decimal Number",
+                        "value": "decimalNumber"
+                      },
+                      {
+                        "label": "Curreny",
+                        "value": "currency"
+                      },
+                      {
+                        "label": "Date",
+                        "value": "date"
+                      },
+                      {
+                        "label": "Time and date",
+                        "value": "timeAndDate"
+                      },
+                      {
+                        "label": "Boolean",
+                        "value": "boolean"
+                      },
+                      {
+                        "label": "Phone Number",
+                        "value": "phone"
+                      },
+                      {
+                        "label": "Single Select",
+                        "value": "singleSelect"
+                      },
+                      {
+                        "label": "Multi Select",
+                        "value": "multiSelect"
+                      },
+                      {
+                        "label": "Link",
+                        "value": "link"
+                      },
+                      {
+                        "label": "Object",
+                        "value": "object"
+                      }
+                    ],
+                    "default": "text"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "traitsMapping": {
+        "fields": [
+          {
+            "type": "mapping",
+            "label": "Map your Event Property",
+            "configKey": "orttoPersonAttributes",
+            "default": [],
+            "columns": [
+              {
+                "type": "textInput",
+                "key": "rudderTraits",
+                "label": "RudderStack traits Name",
+                "placeholder": "e.g firstName"
+              },
+              {
+                "type": "textInput",
+                "key": "orttoAttribute",
+                "label": "Ortto attribute Name",
+                "placeholder": "e.g first_name"
+              },
+              {
+                "type": "singleSelect",
+                "key": "type",
+                "label": "Ortto attribute type",
+                "options": [
+                  {
+                    "label": "Text",
+                    "value": "text"
+                  },
+                  {
+                    "label": "Long Text",
+                    "value": "longText"
+                  },
+                  {
+                    "label": "Number",
+                    "value": "number"
+                  },
+                  {
+                    "label": "Decimal Number",
+                    "value": "decimalNumber"
+                  },
+                  {
+                    "label": "Curreny",
+                    "value": "currency"
+                  },
+                  {
+                    "label": "Date",
+                    "value": "date"
+                  },
+                  {
+                    "label": "Time and date",
+                    "value": "timeAndDate"
+                  },
+                  {
+                    "label": "Boolean",
+                    "value": "boolean"
+                  },
+                  {
+                    "label": "Phone Number",
+                    "value": "phone"
+                  },
+                  {
+                    "label": "Single Select",
+                    "value": "str"
+                  },
+                  {
+                    "label": "Multi Select",
+                    "value": "multiSelect"
+                  },
+                  {
+                    "label": "Link",
+                    "value": "link"
+                  },
+                  {
+                    "label": "Object",
+                    "value": "object"
+                  }
+                ],
+                "default": "text"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

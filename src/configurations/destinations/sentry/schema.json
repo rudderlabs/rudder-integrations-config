@@ -4,12 +4,25 @@
     "required": ["dsn"],
     "type": "object",
     "properties": {
-      "dsn": { "type": "string" },
-      "environment": { "type": "string" },
-      "customVersionProperty": { "type": "string" },
-      "release": { "type": "string" },
-      "serverName": { "type": "string" },
-      "logger": { "type": "string" },
+      "dsn": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,300})$"
+      },
+      "environment": {
+        "type": "string"
+      },
+      "customVersionProperty": {
+        "type": "string"
+      },
+      "release": {
+        "type": "string"
+      },
+      "serverName": {
+        "type": "string"
+      },
+      "logger": {
+        "type": "string"
+      },
       "ignoreErrors": {
         "type": "array",
         "items": {
@@ -58,8 +71,18 @@
           }
         }
       },
-      "debugMode": { "type": "boolean", "default": false },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "debugMode": {
+        "type": "boolean",
+        "default": false
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
       "eventFilteringOption": {
         "type": "string",
         "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
@@ -100,6 +123,61 @@
             }
           }
         }
+      },
+      "consentManagement": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "ketch", "oneTrust"],
+                  "default": "oneTrust"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": { "web": { "type": "string", "enum": ["device"] } }
       }
     },
     "additionalProperties": false

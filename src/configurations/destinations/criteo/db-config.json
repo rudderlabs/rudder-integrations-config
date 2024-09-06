@@ -2,7 +2,6 @@
   "name": "CRITEO",
   "displayName": "Criteo",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -14,10 +13,13 @@
       "whitelistedEvents",
       "oneTrustCookieCategories",
       "eventFilteringOption",
-      "eventsToStandard"
+      "eventsToStandard",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": ["web"],
+    "supportedConnectionModes": { "web": ["device"] },
+    "supportedMessageTypes": { "device": { "web": ["track", "page"] } },
     "destConfig": {
       "defaultConfig": [
         "accountId",
@@ -30,7 +32,7 @@
         "eventsToStandard",
         "oneTrustCookieCategories"
       ],
-      "web": ["useNativeSDK"]
+      "web": ["useNativeSDK", "connectionMode", "consentManagement"]
     },
     "secretKeys": ["accountId"]
   }

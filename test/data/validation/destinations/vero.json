@@ -1,17 +1,38 @@
 [
   {
     "config": {
-      "authToken": "MOx2ZmMwLNE2A2IdNKL0N2VhN2I3ZGY1MTVmMzA1ODk0YmIkNDZhNTojMTk3YTBlMTg1YmU1NWM0MDA2ZDVmZjY0ZGFiOTVkNDMyYTcwOWFk",
-      "apiKey": { "web": "755fc11162r14c41ar7e7df232f305984bb021a1" },
-      "useNativeSDK": { "web": false },
-      "blacklistedEvents": {
-        "web": [{ "eventName": "Pin Generated" }, { "eventName": "Pin Expired" }]
+      "authToken": "MOx2ZmMwLNE2A2IdNKL0N2VhN2I3ZGY1MTVmMzA1ODk0YmIkNDZhNTXXXXk3YTBlMTg1YmU1NWM0MDA2ZDVmZjY0ZGFiOTVkNDMyYTcwOWFk",
+      "apiKey": {
+        "web": "755fc11162r14c4XXXX7df232f305984bb021a1"
       },
-      "whitelistedEvents": { "web": [{ "eventName": "" }] },
+      "useNativeSDK": {
+        "web": false
+      },
+      "blacklistedEvents": {
+        "web": [
+          {
+            "eventName": "Pin Generated"
+          },
+          {
+            "eventName": "Pin Expired"
+          }
+        ]
+      },
+      "whitelistedEvents": {
+        "web": [
+          {
+            "eventName": ""
+          }
+        ]
+      },
       "eventFilteringOption": "blacklistedEvents",
       "oneTrustCookieCategories": [
-        { "oneTrustCookieCategory": "Sales" },
-        { "oneTrustCookieCategory": "Marketing" }
+        {
+          "oneTrustCookieCategory": "Sales"
+        },
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
       ]
     },
     "result": false,
@@ -21,24 +42,152 @@
     "config": {
       "authToken": "wbiwefbwiefbfkbfwekj",
       "eventFilteringOption": "disable",
-      "whitelistedEvents": [{ "eventName": "" }],
-      "blacklistedEvents": [{ "eventName": "" }],
-      "apiKey": { "web": "bkajbdskasbdkbadasdsa" },
-      "useNativeSDK": { "web": false },
-      "oneTrustCookieCategories": [{ "oneTrustCookieCategory": "" }]
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "apiKey": {
+        "web": "bkajbdskasbdkbadasdsa"
+      },
+      "useNativeSDK": {
+        "web": false
+      },
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": ""
+        }
+      ]
     },
     "result": true
   },
   {
     "config": {
       "eventFilteringOption": "disable",
-      "whitelistedEvents": [{ "eventName": "" }],
-      "blacklistedEvents": [{ "eventName": "" }],
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
       "apiKey": "djykdftkuf",
-      "useNativeSDK": { "web": false },
-      "oneTrustCookieCategories": [{ "oneTrustCookieCategory": "" }]
+      "useNativeSDK": {
+        "web": false
+      },
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": ""
+        }
+      ]
     },
     "result": false,
     "err": ["apiKey must be object"]
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "authToken": "wbiwefbwiefbfkbfwekj",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "authToken": "wbiwefbwiefbfkbfwekj",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "authToken": "wbiwefbwiefbfkbfwekj",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "authToken": "wbiwefbwiefbfkbfwekj",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "authToken": "wbiwefbwiefbfkbfwekj",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]

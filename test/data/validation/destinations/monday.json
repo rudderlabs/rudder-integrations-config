@@ -2,7 +2,7 @@
   {
     "config": {
       "apiToken": "",
-      "boardId": "483949233",
+      "boardId": "483XXX233",
       "groupTitle": "",
       "columnToPropertyMapping": [
         {
@@ -10,14 +10,18 @@
           "to": "status"
         }
       ],
-      "whitelistedEvents": [{ "eventName": "" }]
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ]
     },
     "result": false,
     "err": ["apiToken must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,300})$\""]
   },
   {
     "config": {
-      "apiToken": "eywwakzdjiksjhriherniSFsjhnskdojsSDFhsdns.sSRSSREWdnfnsjshfjsjskshfiskskdS__Fskilhih",
+      "apiToken": "eywwakzdjiksjhrihXXXSFsjhnskdojsXXXXXns.sSRSSREWdnfnsjshfjXXXXhfiskskdS__Fskilhih",
       "boardId": "",
       "groupTitle": "",
       "columnToPropertyMapping": [
@@ -26,15 +30,19 @@
           "to": "status"
         }
       ],
-      "whitelistedEvents": [{ "eventName": "Product added to cart" }]
+      "whitelistedEvents": [
+        {
+          "eventName": "Product added to cart"
+        }
+      ]
     },
     "result": false,
     "err": ["boardId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""]
   },
   {
     "config": {
-      "apiToken": "eywwakzdjiksjhriherniSFsjhnskdojsSDFhsdns.sSRSSREWdnfnsjshfjsjskshfiskskdS__Fskilhih",
-      "boardId": "323826323",
+      "apiToken": "eywwakzdjiksjhrihXXXSFsjhnskdojsXXXXXns.sSRSSREWdnfnsjshfjXXXXhfiskskdS__Fskilhih",
+      "boardId": "32XXX6323",
       "groupTitle": false,
       "columnToPropertyMapping": [
         {
@@ -43,8 +51,12 @@
         }
       ],
       "whitelistedEvents": [
-        { "eventName": "Product purchased" },
-        { "eventName": "Product added to cart" }
+        {
+          "eventName": "Product purchased"
+        },
+        {
+          "eventName": "Product added to cart"
+        }
       ]
     },
     "result": false,
@@ -52,8 +64,8 @@
   },
   {
     "config": {
-      "apiToken": "eywwakzdjiksjhriherniSFsjhnskdojsSDFhsdns.sSRSSREWdnfnsjshfjsjskshfiskskdS__Fskilhih",
-      "boardId": "323826323",
+      "apiToken": "eywwakzdjiksjhrihXXXSFsjhnskdojsXXXXXns.sSRSSREWdnfnsjshfjXXXXhfiskskdS__Fskilhih",
+      "boardId": "32XXX6323",
       "groupTitle": "Active deals",
       "columnToPropertyMapping": [
         {
@@ -62,10 +74,122 @@
         }
       ],
       "whitelistedEvents": [
-        { "eventName": "Product purchased" },
-        { "eventName": "Product added to cart" }
+        {
+          "eventName": "Product purchased"
+        },
+        {
+          "eventName": "Product added to cart"
+        }
       ]
     },
     "result": true
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "apiToken": "eywwakzdjiksjhrihXXXSFsjhnskdojsXXXXXns.sSRSSREWdnfnsjshfjXXXXhfiskskdS__Fskilhih",
+      "boardId": "32XXX6323",
+      "groupTitle": "Active deals",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "apiToken": "eywwakzdjiksjhrihXXXSFsjhnskdojsXXXXXns.sSRSSREWdnfnsjshfjXXXXhfiskskdS__Fskilhih",
+      "boardId": "32XXX6323",
+      "groupTitle": "Active deals",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "apiToken": "eywwakzdjiksjhrihXXXSFsjhnskdojsXXXXXns.sSRSSREWdnfnsjshfjXXXXhfiskskdS__Fskilhih",
+      "boardId": "32XXX6323",
+      "groupTitle": "Active deals",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "apiToken": "eywwakzdjiksjhrihXXXSFsjhnskdojsXXXXXns.sSRSSREWdnfnsjshfjXXXXhfiskskdS__Fskilhih",
+      "boardId": "32XXX6323",
+      "groupTitle": "Active deals",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "apiToken": "eywwakzdjiksjhrihXXXSFsjhnskdojsXXXXXns.sSRSSREWdnfnsjshfjXXXXhfiskskdS__Fskilhih",
+      "boardId": "32XXX6323",
+      "groupTitle": "Active deals",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]

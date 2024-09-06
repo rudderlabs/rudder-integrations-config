@@ -2,10 +2,9 @@
   "name": "ONE_SIGNAL",
   "displayName": "OneSignal",
   "config": {
-    "transformAt": "processor",
-    "transformAtV1": "processor",
+    "transformAtV1": "router",
     "saveDestinationResponse": true,
-    "includeKeys": ["oneTrustCookieCategories"],
+    "includeKeys": ["oneTrustCookieCategories", "consentManagement"],
     "excludeKeys": [],
     "supportedSourceTypes": [
       "android",
@@ -20,17 +19,44 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": ["identify", "track", "group"],
+    "supportedMessageTypes": {
+      "cloud": ["identify", "track", "group"]
+    },
+    "supportedConnectionModes": {
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "web": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "appId",
+        "version",
         "emailDeviceType",
         "smsDeviceType",
         "eventAsTags",
         "allowedProperties",
         "oneTrustCookieCategories"
-      ]
+      ],
+      "android": ["connectionMode", "consentManagement"],
+      "ios": ["connectionMode", "consentManagement"],
+      "web": ["connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "reactnative": ["connectionMode", "consentManagement"],
+      "flutter": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"]
     },
-    "secretKeys": []
+    "secretKeys": ["appId"]
   }
 }

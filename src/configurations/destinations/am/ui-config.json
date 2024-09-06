@@ -25,7 +25,7 @@
                     "configKey": "apiKey",
                     "regex": "^(.{1,100})$",
                     "regexErrorMessage": "Invalid Api Key",
-                    "placeholder": "e.g: bSjsdGYsOo9sjw23Shj",
+                    "placeholder": "e.g: bAjsdGXXXXo9sjw23Slj",
                     "secret": true
                   },
                   {
@@ -86,17 +86,29 @@
                     "type": "checkbox",
                     "label": "Track all Pages to Amplitude",
                     "configKey": "trackAllPages",
-                    "note": "Send all pageview events to Amplitude with either “Loaded a page” or “Viewed a screen” event names",
+                    "note": "Send all pageview events to Amplitude with either \"Loaded a page\" or \"Viewed a screen\" event names",
                     "default": false,
                     "preRequisites": {
                       "fields": [
                         {
-                          "configKey": "connectionModes.mobileDevice",
-                          "value": true
+                          "configKey": "connectionMode.android",
+                          "value": "device"
                         },
                         {
-                          "configKey": "connectionModes.webDevice",
-                          "value": true
+                          "configKey": "connectionMode.ios",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.flutter",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.reactnative",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "device"
                         }
                       ],
                       "condition": "or"
@@ -106,17 +118,29 @@
                     "type": "checkbox",
                     "label": "Track Categorized Pages to Amplitude",
                     "configKey": "trackCategorizedPages",
-                    "note": "Any page call with a category will be sent to Amplitude as either a “Loaded {Category} Page” or “Viewed {Category} Screen” event",
+                    "note": "Any page call with a category will be sent to Amplitude as either a \"Loaded {Category} Page\" or \"Viewed {Category} Screen\" event",
                     "default": true,
                     "preRequisites": {
                       "fields": [
                         {
-                          "configKey": "connectionModes.mobileDevice",
-                          "value": true
+                          "configKey": "connectionMode.android",
+                          "value": "device"
                         },
                         {
-                          "configKey": "connectionModes.webDevice",
-                          "value": true
+                          "configKey": "connectionMode.ios",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.flutter",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.reactnative",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "device"
                         }
                       ],
                       "condition": "or"
@@ -126,17 +150,29 @@
                     "type": "checkbox",
                     "label": "Track Named Pages to Amplitude",
                     "configKey": "trackNamedPages",
-                    "note": "Any page call with a name will be sent to Amplitude as either a “Loaded {Name} Page” or “Viewed {Name} Screen” event",
+                    "note": "Any page call with a name will be sent to Amplitude as either a \"Loaded {Name} Page\" or \"Viewed {Name} Screen\" event",
                     "default": true,
                     "preRequisites": {
                       "fields": [
                         {
-                          "configKey": "connectionModes.mobileDevice",
-                          "value": true
+                          "configKey": "connectionMode.android",
+                          "value": "device"
                         },
                         {
-                          "configKey": "connectionModes.webDevice",
-                          "value": true
+                          "configKey": "connectionMode.ios",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.flutter",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.reactnative",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "device"
                         }
                       ],
                       "condition": "or"
@@ -145,7 +181,7 @@
                   {
                     "type": "checkbox",
                     "label": "Use Custom Page Event Name",
-                    "note": "Send start and end session events",
+                    "note": "Send custom event name in page call",
                     "configKey": "useUserDefinedPageEventName",
                     "default": false,
                     "preRequisites": {
@@ -176,6 +212,46 @@
                     }
                   }
                 ]
+              },
+              {
+                "title": "Screen settings",
+                "note": "Set how you want to send your screen calls to Amplitude",
+                "icon": "file",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Use Custom Screen Event Name",
+                    "note": "Send custom event name in screen call",
+                    "configKey": "useUserDefinedScreenEventName",
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Screen Event Name Format",
+                    "note": "Assign a event name for your screen calls. Text {{ }} will be replaced with event payload value",
+                    "configKey": "userProvidedScreenEventString",
+                    "regex": "^(.{0,200})$",
+                    "regexErrorMessage": "Invalid Screen Event Name",
+                    "placeholder": "e.g: Viewed a {{ name }}",
+                    "secret": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "useUserDefinedScreenEventName",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -200,7 +276,7 @@
                   {
                     "type": "textInput",
                     "label": "Group value trait",
-                    "note": "Specify the group value (group_value) for your group calls to Amplitude. For example, if you set group_type: “industry”, group_value might be “retail”",
+                    "note": "Specify the group value (group_value) for your group calls to Amplitude. For example, if you set group_type: \"industry\", group_value might be \"retail\"",
                     "configKey": "groupValueTrait",
                     "placeholder": "e.g: company_name",
                     "regex": "^(.{0,100})$",
@@ -215,7 +291,7 @@
                   {
                     "type": "tagInput",
                     "label": "Traits to increment",
-                    "note": "Input separate traits by pressing ‘Enter’ after each trait. Set the traits to increment on an identify call. These traits will then be incremented by the numerical value associated with the trait in your identify call.",
+                    "note": "Input separate traits by pressing 'Enter' after each trait. Set the traits to increment on an identify call. These traits will then be incremented by the numerical value associated with the trait in your identify call.",
                     "configKey": "traitsToIncrement",
                     "tagKey": "traits",
                     "placeholder": "e.g: Revenue",
@@ -228,7 +304,7 @@
                   {
                     "type": "tagInput",
                     "label": "Traits to set once",
-                    "note": "Input separate traits by pressing ‘Enter’ after each trait. Specify the traits that should be set once. This prevents overriding the property value.",
+                    "note": "Input separate traits by pressing 'Enter' after each trait. Specify the traits that should be set once. This prevents overriding the property value.",
                     "configKey": "traitsToSetOnce",
                     "tagKey": "traits",
                     "placeholder": "e.g: lastName",
@@ -241,7 +317,7 @@
                   {
                     "type": "tagInput",
                     "label": "Traits to append",
-                    "note": "Input separate traits by pressing ‘Enter’ after each trait. Append a value or multiple values to a user property array",
+                    "note": "Input separate traits by pressing 'Enter' after each trait. Append a value or multiple values to a user property array",
                     "configKey": "traitsToAppend",
                     "tagKey": "traits",
                     "placeholder": "e.g: createdAt",
@@ -257,8 +333,20 @@
                           "value": true
                         },
                         {
-                          "configKey": "connectionModes.mobileDevice",
-                          "value": true
+                          "configKey": "connectionMode.android",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.ios",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.flutter",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.reactnative",
+                          "value": "device"
                         }
                       ],
                       "condition": "or"
@@ -267,7 +355,7 @@
                   {
                     "type": "tagInput",
                     "label": "Traits to prepend",
-                    "note": "Input separate traits by pressing ‘Enter’ after each trait. Prepend a value or multiple values to a user property array",
+                    "note": "Input separate traits by pressing 'Enter' after each trait. Prepend a value or multiple values to a user property array",
                     "configKey": "traitsToPrepend",
                     "tagKey": "traits",
                     "placeholder": "e.g: createdAt",
@@ -283,11 +371,44 @@
                           "value": true
                         },
                         {
-                          "configKey": "connectionModes.mobileDevice",
-                          "value": true
+                          "configKey": "connectionMode.android",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.ios",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.flutter",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.reactnative",
+                          "value": "device"
                         }
                       ],
                       "condition": "or"
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Enbale Support for enhanced user operations",
+                    "configKey": "enableEnhancedUserOperations",
+                    "note": "Enable support for enhanced user operations like set, setOnce, unset, increment, append, prepend, and remove for user traits in all flows",
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ],
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_amplitude-enable-enhanced-user-operations",
+                          "value": true
+                        }
+                      ]
                     }
                   }
                 ]
@@ -316,13 +437,13 @@
                     ],
                     "regex": "^(.{0,100})$",
                     "regexErrorMessage": "Invalid Api Key",
-                    "placeholder": "e.g: bSjsdGYsOo9sjw23Shj",
+                    "placeholder": "e.g: bSjsdXXXX9sjw23Ahj",
                     "secret": true
                   },
                   {
                     "type": "textInput",
                     "label": "Version Name",
-                    "note": "Assign a version name for your page, and we’ll send it to Amplitude for more detailed events",
+                    "note": "Assign a version name for your page, and we'll send it to Amplitude for more detailed events",
                     "configKey": "versionName",
                     "regex": "^(.{0,100})$",
                     "regexErrorMessage": "Invalid Version Name",
@@ -331,8 +452,8 @@
                     "preRequisites": {
                       "fields": [
                         {
-                          "configKey": "connectionModes.webDevice",
-                          "value": true
+                          "configKey": "connectionMode.web",
+                          "value": "device"
                         }
                       ]
                     }
@@ -346,8 +467,20 @@
                     "preRequisites": {
                       "fields": [
                         {
-                          "configKey": "connectionModes.mobileDevice",
-                          "value": true
+                          "configKey": "connectionMode.android",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.ios",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.flutter",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.reactnative",
+                          "value": "device"
                         }
                       ]
                     }
@@ -356,7 +489,7 @@
               },
               {
                 "title": "eCommerce settings",
-                "note": "Define how you want your ‘Order Completed’ events to be passed to Amplitude",
+                "note": "Define how you want your 'Order Completed' events to be passed to Amplitude",
                 "fields": [
                   {
                     "type": "checkbox",
@@ -377,6 +510,13 @@
             ]
           },
           {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          },
+          {
             "title": "Other settings",
             "note": "Configure advanced RudderStack features here",
             "icon": "otherSettings",
@@ -387,12 +527,24 @@
                 "preRequisites": {
                   "fields": [
                     {
-                      "configKey": "connectionModes.webDevice",
-                      "value": true
+                      "configKey": "connectionMode.web",
+                      "value": "device"
                     },
                     {
-                      "configKey": "connectionModes.mobileDevice",
-                      "value": true
+                      "configKey": "connectionMode.android",
+                      "value": "device"
+                    },
+                    {
+                      "configKey": "connectionMode.ios",
+                      "value": "device"
+                    },
+                    {
+                      "configKey": "connectionMode.flutter",
+                      "value": "device"
+                    },
+                    {
+                      "configKey": "connectionMode.reactnative",
+                      "value": "device"
                     }
                   ],
                   "condition": "or"
@@ -422,7 +574,7 @@
                   {
                     "type": "tagInput",
                     "label": "Allowlisted events",
-                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
+                    "note": "Input separate events by pressing 'Enter'.\nInput the events you want to allowlist.",
                     "configKey": "whitelistedEvents",
                     "tagKey": "eventName",
                     "placeholder": "e.g: Anonymous page visit",
@@ -443,7 +595,7 @@
                   {
                     "type": "tagInput",
                     "label": "Denylisted events",
-                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
+                    "note": "Input separate events by pressing 'Enter'.\nInput the events you want to denylist. ",
                     "configKey": "blacklistedEvents",
                     "tagKey": "eventName",
                     "placeholder": "e.g: Anonymous page visit",
@@ -462,32 +614,6 @@
                     }
                   }
                 ]
-              },
-              {
-                "title": "OneTrust cookie consent settings",
-                "note": [
-                  "Enter your OneTrust category names if you have them configured. ",
-                  {
-                    "text": "Learn more ",
-                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
-                  },
-                  "about RudderStack’s OneTrust Consent Manager feature."
-                ],
-                "fields": [
-                  {
-                    "type": "tagInput",
-                    "label": "Cookie category name",
-                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
-                    "configKey": "oneTrustCookieCategories",
-                    "tagKey": "oneTrustCookieCategory",
-                    "placeholder": "e.g: Credit card visit",
-                    "default": [
-                      {
-                        "oneTrustCookieCategory": ""
-                      }
-                    ]
-                  }
-                ]
               }
             ]
           }
@@ -498,6 +624,15 @@
       "title": "SDK settings",
       "note": "not visible in the ui",
       "fields": [
+        {
+          "type": "textInput",
+          "label": "Proxy server url",
+          "note": "Send data to Amplitude by using a domain proxy to relay requests. Presently supported for web device mode only",
+          "configKey": "proxyServerUrl",
+          "regex": "^(?!http://)(?:(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(?!.*\\.ngrok\\.io).*)$",
+          "regexErrorMessage": "Invalid Proxy Server URL",
+          "placeholder": "e.g: https://proxyserver.url.com"
+        },
         {
           "type": "checkbox",
           "label": "Enable location listening",
@@ -530,7 +665,7 @@
           "type": "checkbox",
           "label": "Replace Device ID with Anonymous ID",
           "note": [
-            "Use anonymous ID instead of device ID. The anonymous ID can be generated by RudderStack’s SDK. Or, you can set it yourselves using the ",
+            "Use anonymous ID instead of device ID. The anonymous ID can be generated by RudderStack's SDK. Or, you can set it yourselves using the ",
             {
               "text": "setAnonymousID() method.",
               "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/supported-api/#overriding-anonymous-id"
@@ -549,7 +684,7 @@
         {
           "type": "checkbox",
           "label": "Save Referrer, URL Params, GCLID only once per session",
-          "note": "Track GCLID, referrer, and UTM parameters only once per session, ignoring any new values which may enter a user’s session",
+          "note": "Track GCLID, referrer, and UTM parameters only once per session, ignoring any new values which may enter a user's session",
           "configKey": "trackNewCampaigns",
           "default": true
         },
@@ -572,6 +707,136 @@
           "regexErrorMessage": "Invalid Value",
           "default": "30",
           "placeholder": "e.g: 30"
+        }
+      ]
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "tagInput",
+          "label": "OneTrust consent category IDs",
+          "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "configKey": "oneTrustCookieCategories",
+          "tagKey": "oneTrustCookieCategory",
+          "placeholder": "e.g: C0001",
+          "default": [
+            {
+              "oneTrustCookieCategory": ""
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "tagInput",
+          "label": "Ketch consent purpose IDs",
+          "note": "Input your Ketch consent purpose IDs by pressing 'Enter' after each entry.",
+          "configKey": "ketchConsentPurposes",
+          "tagKey": "purpose",
+          "placeholder": "e.g: marketing",
+          "default": [
+            {
+              "purpose": ""
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "default": "oneTrust",
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category ID’s",
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }

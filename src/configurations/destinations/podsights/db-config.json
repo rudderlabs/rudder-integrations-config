@@ -2,7 +2,6 @@
   "name": "PODSIGHTS",
   "displayName": "Podsights",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -12,11 +11,13 @@
       "whitelistedEvents",
       "oneTrustCookieCategories",
       "eventFilteringOption",
-      "enableAliasCall"
+      "enableAliasCall",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": ["web"],
-    "supportedMessageTypes": ["track", "page"],
+    "supportedMessageTypes": { "device": { "web": ["track", "page"] } },
+    "supportedConnectionModes": { "web": ["device"] },
     "destConfig": {
       "defaultConfig": [
         "pixelId",
@@ -27,7 +28,7 @@
         "enableAliasCall",
         "oneTrustCookieCategories"
       ],
-      "web": ["useNativeSDK"]
+      "web": ["useNativeSDK", "connectionMode", "consentManagement"]
     },
     "secretKeys": ["pixelId"]
   }

@@ -2,7 +2,6 @@
   "name": "JUNE",
   "displayName": "JUNE",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -10,7 +9,8 @@
       "whitelistedEvents",
       "blacklistedEvents",
       "eventFilteringOption",
-      "oneTrustCookieCategories"
+      "oneTrustCookieCategories",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
@@ -26,7 +26,23 @@
       "warehouse",
       "shopify"
     ],
-    "supportedMessageTypes": ["page", "identify", "track", "group"],
+    "supportedMessageTypes": {
+      "cloud": ["page", "identify", "track", "group"],
+      "device": { "web": ["identify", "track", "page", "group"] }
+    },
+    "supportedConnectionModes": {
+      "web": ["cloud", "device"],
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "apiKey",
@@ -35,7 +51,17 @@
         "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
-      "web": ["useNativeSDK"]
+      "web": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "android": ["connectionMode", "consentManagement"],
+      "ios": ["connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "reactnative": ["connectionMode", "consentManagement"],
+      "flutter": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     },
     "secretKeys": ["apiKey"]
   }

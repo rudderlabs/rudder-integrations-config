@@ -1,7 +1,7 @@
 [
   {
     "config": {
-      "apiToken": "pk_880343042_1W64ZBPLP71H5YAYAUEJHSRL",
+      "apiToken": "pk_88XXXX042_1W64ZBPLP71H5YAYAUEJHSRL",
       "listId": "175496000",
       "keyToCustomFieldName": [
         {
@@ -9,13 +9,17 @@
           "to": "industry"
         }
       ],
-      "whitelistedEvents": [{ "eventName": "" }]
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ]
     },
     "result": true
   },
   {
     "config": {
-      "apiToken": "pk_880343042_1W64ZBPLP71H5YAYAUEJHSRL",
+      "apiToken": "pk_88XXXX042_1W64ZBPLP71H5YAYAUEJHSRL",
       "listId": "175496000",
       "keyToCustomFieldName": [
         {
@@ -35,7 +39,14 @@
           "to": "paymentStatus"
         }
       ],
-      "whitelistedEvents": [{ "eventName": "" }, { "eventName": "Product Viewed" }]
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        },
+        {
+          "eventName": "Product Viewed"
+        }
+      ]
     },
     "result": true
   },
@@ -94,5 +105,108 @@
     },
     "result": false,
     "err": [" must have required property 'listId'"]
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "apiToken": "pk_88XXXX042_1W64ZBPLP71H5YAYAUEJHSRL",
+      "listId": "175496000",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "apiToken": "pk_88XXXX042_1W64ZBPLP71H5YAYAUEJHSRL",
+      "listId": "175496000",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "apiToken": "pk_88XXXX042_1W64ZBPLP71H5YAYAUEJHSRL",
+      "listId": "175496000",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "apiToken": "pk_88XXXX042_1W64ZBPLP71H5YAYAUEJHSRL",
+      "listId": "175496000",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "apiToken": "pk_88XXXX042_1W64ZBPLP71H5YAYAUEJHSRL",
+      "listId": "175496000",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]

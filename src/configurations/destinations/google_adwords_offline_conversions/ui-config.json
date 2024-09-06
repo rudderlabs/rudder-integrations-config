@@ -10,7 +10,7 @@
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
           "regexErrorMessage": "Invalid Customer Id",
           "required": true,
-          "placeholder": "e.g: 6293429833"
+          "placeholder": "e.g: 6293X29833"
         },
         {
           "type": "checkbox",
@@ -22,7 +22,12 @@
         {
           "type": "textInput",
           "label": "Login Customer ID",
-          "preRequisiteField": [{ "name": "subAccount", "selectedValue": true }],
+          "preRequisiteField": [
+            {
+              "name": "subAccount",
+              "selectedValue": true
+            }
+          ],
           "value": "loginCustomerId",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
           "required": true,
@@ -70,6 +75,72 @@
           "value": "eventsToConversionsNamesMapping"
         },
         {
+          "type": "singleSelect",
+          "label": "Specify the consent for uploaded users for using their data in Google Advertising Purpose",
+          "footerNote": "For store sales this is the only way to provide consent for using the data for Google Advertising. ref: https://developers.google.com/google-ads/api/rest/reference/rest/v16/Consent",
+          "value": "userDataConsent",
+          "options": [
+            {
+              "name": "Unspecified",
+              "value": "UNSPECIFIED"
+            },
+            {
+              "name": "Unknown",
+              "value": "UNKNOWN"
+            },
+            {
+              "name": "Granted",
+              "value": "GRANTED"
+            },
+            {
+              "name": "Denied",
+              "value": "DENIED"
+            }
+          ],
+          "default": "UNSPECIFIED",
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_gaoc_enable_consent_mode",
+                "value": true
+              }
+            ]
+          }
+        },
+        {
+          "type": "singleSelect",
+          "label": "Specify the consent for uploaded users for using their data regarding Ads Personalization",
+          "footerNote": "For store sales this is the only way to provide consent for using the data for Google Ads Personalization. Ref: https://developers.google.com/google-ads/api/rest/reference/rest/v16/Consent",
+          "value": "personalizationConsent",
+          "options": [
+            {
+              "name": "Unspecified",
+              "value": "UNSPECIFIED"
+            },
+            {
+              "name": "Unknown",
+              "value": "UNKNOWN"
+            },
+            {
+              "name": "Granted",
+              "value": "GRANTED"
+            },
+            {
+              "name": "Denied",
+              "value": "DENIED"
+            }
+          ],
+          "default": "UNSPECIFIED",
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_gaoc_enable_consent_mode",
+                "value": true
+              }
+            ]
+          }
+        },
+        {
           "type": "dynamicForm",
           "label": "Map your variable names to custom Google Ads variables.",
           "labelLeft": "custom variable names",
@@ -87,13 +158,31 @@
           "required": false,
           "footerNote": "Source of the user identifier",
           "options": [
-            { "name": "None", "value": "none" },
-            { "name": "UNSPECIFIED", "value": "UNSPECIFIED" },
-            { "name": "UNKNOWN", "value": "UNKNOWN" },
-            { "name": "FIRST_PARTY", "value": "FIRST_PARTY" },
-            { "name": "THIRD_PARTY", "value": "THIRD_PARTY" }
+            {
+              "name": "None",
+              "value": "none"
+            },
+            {
+              "name": "UNSPECIFIED",
+              "value": "UNSPECIFIED"
+            },
+            {
+              "name": "UNKNOWN",
+              "value": "UNKNOWN"
+            },
+            {
+              "name": "FIRST_PARTY",
+              "value": "FIRST_PARTY"
+            },
+            {
+              "name": "THIRD_PARTY",
+              "value": "THIRD_PARTY"
+            }
           ],
-          "defaultOption": { "name": "None", "value": "none" }
+          "defaultOption": {
+            "name": "None",
+            "value": "none"
+          }
         },
         {
           "type": "singleSelect",
@@ -102,13 +191,31 @@
           "required": false,
           "footerNote": "The environment this conversion was recorded on. e.g. App or Web.",
           "options": [
-            { "name": "None", "value": "none" },
-            { "name": "UNSPECIFIED", "value": "UNSPECIFIED" },
-            { "name": "UNKNOWN", "value": "UNKNOWN" },
-            { "name": "APP", "value": "APP" },
-            { "name": "WEB", "value": "WEB" }
+            {
+              "name": "None",
+              "value": "none"
+            },
+            {
+              "name": "UNSPECIFIED",
+              "value": "UNSPECIFIED"
+            },
+            {
+              "name": "UNKNOWN",
+              "value": "UNKNOWN"
+            },
+            {
+              "name": "APP",
+              "value": "APP"
+            },
+            {
+              "name": "WEB",
+              "value": "WEB"
+            }
           ],
-          "defaultOption": { "name": "None", "value": "none" }
+          "defaultOption": {
+            "name": "None",
+            "value": "none"
+          }
         },
         {
           "type": "singleSelect",
@@ -124,7 +231,10 @@
               "value": "phone"
             }
           ],
-          "defaultOption": { "name": "Email", "value": "email" }
+          "defaultOption": {
+            "name": "Email",
+            "value": "email"
+          }
         },
         {
           "type": "checkbox",
@@ -148,17 +258,109 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
               "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category Name/ID",
+              "label": "Category ID",
               "required": false
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "consentManagement",
+          "label": "Consent management settings",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "customFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "value": "provider",
+              "options": [
+                {
+                  "name": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "name": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "name": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "defaultOption": {
+                "name": "OneTrust",
+                "value": "oneTrust"
+              },
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "value": "resolutionStrategy",
+              "options": [
+                {
+                  "name": "AND",
+                  "value": "and"
+                },
+                {
+                  "name": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "dynamicCustomForm",
+              "value": "consents",
+              "label": "Enter consent category ID’s",
+              "customFields": [
+                {
+                  "type": "textInput",
+                  "placeholder": "Marketing",
+                  "value": "consent",
+                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "required": false
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }

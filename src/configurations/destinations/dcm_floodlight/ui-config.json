@@ -9,7 +9,7 @@
           "value": "advertiserId",
           "regex": "^([0-9]{0,100})$",
           "required": true,
-          "placeholder": "e.g. 22114552",
+          "placeholder": "e.g. 22XXX552",
           "secret": true,
           "footerNote": "Enter your Floodlight advertiser ID by going to the Campaigns or Activities tab in your dashboard."
         },
@@ -32,6 +32,16 @@
           "placeholder": "e.g. conv01",
           "secret": false,
           "footerNote": "Use this setting to define the same parameter value across all the conversion events. Alternatively, you can define this value for each conversion event in the Floodlight Group Tag field below."
+        },
+        {
+          "type": "textInput",
+          "label": "Counting Method",
+          "value": "countingMethod",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+          "required": false,
+          "placeholder": "e.g. standard",
+          "secret": false,
+          "footerNote": "Use this setting to define the same parameter value across all the conversion events. Alternatively, you can define this value for each conversion event in the Floodlight Counting Method field below."
         },
         {
           "type": "dynamicCustomForm",
@@ -61,6 +71,14 @@
               "required": false,
               "placeholder": "e.g: conv01",
               "footerNote": "This should be the (type) of your tag string. If left blank, RudderStack will pick the value defined in the Group Tag field above."
+            },
+            {
+              "type": "textInput",
+              "label": "Floodlight Counting Method",
+              "value": "floodlightCountingMethod",
+              "required": false,
+              "placeholder": "e.g: standard",
+              "footerNote": "Enter the counting method for this conversion event, RudderStack will use this as a fallback value if 'properties.countingMethod' is empty"
             },
             {
               "type": "checkbox",
@@ -203,16 +221,109 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "consentManagement",
+          "label": "Consent management settings",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "customFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "value": "provider",
+              "options": [
+                {
+                  "name": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "name": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "name": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "defaultOption": {
+                "name": "OneTrust",
+                "value": "oneTrust"
+              },
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "value": "resolutionStrategy",
+              "options": [
+                {
+                  "name": "AND",
+                  "value": "and"
+                },
+                {
+                  "name": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "dynamicCustomForm",
+              "value": "consents",
+              "label": "Enter consent category ID’s",
+              "customFields": [
+                {
+                  "type": "textInput",
+                  "placeholder": "Marketing",
+                  "value": "consent",
+                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "required": false
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }

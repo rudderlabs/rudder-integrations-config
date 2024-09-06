@@ -1,0 +1,232 @@
+[
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "accountId": "11",
+      "apiKey": "QyWIGHjXXXX2L4ePAPiXCA",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "accountId": "12",
+      "apiKey": "QyWIGHjXXXX2L4ePAPiXCA",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "accountId": "13",
+      "apiKey": "QyWIGHjXXXX2L4ePAPiXCA",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "accountId": "14",
+      "apiKey": "QyWIGHjXXXX2L4ePAPiXCA",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "accountId": "15",
+      "apiKey": "QyWIGHjXXXX2L4ePAPiXCA",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "Basic test with only accountId",
+    "config": {
+      "accountId": "1234",
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": [],
+      "nativeSdkUrl": {
+        "web": ""
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {}
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With nativeSdkUrl and for Client-side Events Filtering allowlist events are picked, mode -> cloud",
+    "config": {
+      "accountId": "1235",
+      "eventFilteringOption": "whitelistedEvents",
+      "whitelistedEvents": [
+        {
+          "eventName": "Anonymous Page visit"
+        }
+      ],
+      "blacklistedEvents": [],
+      "oneTrustCookieCategories": [],
+      "nativeSdkUrl": {
+        "web": "https://fast.appcues.com/1235.js"
+      },
+      "useNativeSDK": {
+        "web": false
+      },
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "consentManagement": {}
+    },
+    "result": true
+  },
+  {
+    "testTitle": "without accountId",
+    "config": {
+      "eventFilteringOption": "blacklistedEvents",
+      "whitelistedEvents": [],
+      "blacklistedEvents": [
+        {
+          "eventName": "Credit card added"
+        }
+      ],
+      "oneTrustCookieCategories": [],
+      "nativeSdkUrl": {
+        "web": "https://fast.appcues.com/1236.js"
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {}
+    },
+    "result": false,
+    "err": [" must have required property 'accountId'"]
+  },
+  {
+    "testTitle": "eventFilteringOption -> disable, as enabling device-mode integrations works only with either allowlisted or denylisted events",
+    "config": {
+      "accountId": "1237",
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [],
+      "blacklistedEvents": [
+        {
+          "eventName": "Credit card added"
+        }
+      ],
+      "oneTrustCookieCategories": [],
+      "nativeSdkUrl": {
+        "web": "https://fast.appcues.com/1237.js"
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {}
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Invalid accountId",
+    "config": {
+      "accountId": "1238nwbdwhdgweydgydgewydgwhjakjsksjshshhsuwyd7deuwejdhwjdsanxamsxbasxbahcgdshjcsmnfjjmnajshjhkanamcnsdbcjdsbcsmn",
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [
+        {
+          "eventName": "Anonymous Page visit"
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": "Credit card added"
+        }
+      ],
+      "nativeSdkUrl": {
+        "web": "htt://fast.appcues.com/1238.js"
+      },
+      "useNativeSDK": {
+        "web": false
+      },
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "consentManagement": {}
+    },
+    "result": false,
+    "err": [
+      "accountId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\""
+    ]
+  }
+]

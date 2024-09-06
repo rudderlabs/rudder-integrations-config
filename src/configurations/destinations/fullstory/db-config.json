@@ -3,7 +3,6 @@
   "displayName": "Fullstory",
   "config": {
     "cdkV2Enabled": true,
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -13,10 +12,10 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "oneTrustCookieCategories",
-      "eventFilteringOption"
+      "eventFilteringOption",
+      "consentManagement"
     ],
     "excludeKeys": [],
-    "supportedMessageTypes": ["track", "identify", "page", "screen"],
     "supportedSourceTypes": [
       "web",
       "android",
@@ -33,7 +32,23 @@
     "supportedConnectionModes": {
       "android": ["cloud", "device"],
       "ios": ["cloud", "device"],
-      "web": ["cloud", "device"]
+      "web": ["cloud", "device"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
+    "supportedMessageTypes": {
+      "cloud": ["track", "identify"],
+      "device": {
+        "web": ["identify", "track", "page"],
+        "android": ["identify", "track", "screen"],
+        "ios": ["identify", "track", "screen"]
+      }
     },
     "destConfig": {
       "defaultConfig": [
@@ -44,9 +59,17 @@
         "oneTrustCookieCategories",
         "eventFilteringOption"
       ],
-      "web": ["useNativeSDK", "connectionMode", "fs_debug_mode", "fs_host"],
-      "android": ["useNativeSDK", "connectionMode"],
-      "ios": ["useNativeSDK", "connectionMode"]
+      "web": ["useNativeSDK", "connectionMode", "fs_debug_mode", "fs_host", "consentManagement"],
+      "android": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "ios": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "reactnative": ["connectionMode", "consentManagement"],
+      "flutter": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     },
     "secretKeys": ["apiKey"]
   },

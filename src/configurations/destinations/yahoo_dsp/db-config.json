@@ -2,14 +2,18 @@
   "name": "YAHOO_DSP",
   "displayName": "Yahoo DSP",
   "config": {
-    "transformAt": "router",
     "transformAtV1": "router",
     "saveDestinationResponse": true,
-    "includeKeys": ["oneTrustCookieCategories"],
+    "includeKeys": ["oneTrustCookieCategories", "consentManagement"],
     "excludeKeys": [],
     "supportedSourceTypes": ["cloud", "warehouse", "shopify"],
     "syncBehaviours": [],
-    "supportedMessageTypes": ["audiencelist"],
+    "supportedMessageTypes": { "cloud": ["audiencelist"] },
+    "supportedConnectionModes": {
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "clientId",
@@ -20,7 +24,10 @@
         "hashRequired",
         "seedListType",
         "oneTrustCookieCategories"
-      ]
+      ],
+      "cloud": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     },
     "secretKeys": ["clientId", "clientSecret"]
   }

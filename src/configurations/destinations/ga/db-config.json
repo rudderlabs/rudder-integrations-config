@@ -10,7 +10,6 @@
     },
     "supportsVisualMapper": true,
     "isAudienceSupported": false,
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": false,
     "includeKeys": [
@@ -39,8 +38,9 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "oneTrustCookieCategories",
-      "eventFilteringOption",
-      "ketchConsentPurposes"
+      "ketchConsentPurposes",
+      "consentManagement",
+      "eventFilteringOption"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
@@ -56,7 +56,23 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": ["identify", "page", "screen", "track"],
+    "supportedMessageTypes": {
+      "cloud": ["identify", "page", "screen", "track"],
+      "device": { "web": ["track", "page"] }
+    },
+    "supportedConnectionModes": {
+      "web": ["cloud", "device"],
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "trackingID",
@@ -94,9 +110,25 @@
         "domain",
         "optimize",
         "useGoogleAmpClientId",
-        "namedTracker"
-      ]
+        "namedTracker",
+        "consentManagement",
+        "connectionMode"
+      ],
+      "android": ["consentManagement", "connectionMode"],
+      "ios": ["consentManagement", "connectionMode"],
+      "unity": ["consentManagement", "connectionMode"],
+      "amp": ["consentManagement", "connectionMode"],
+      "cloud": ["consentManagement", "connectionMode"],
+      "warehouse": ["consentManagement", "connectionMode"],
+      "reactnative": ["consentManagement", "connectionMode"],
+      "flutter": ["consentManagement", "connectionMode"],
+      "cordova": ["consentManagement", "connectionMode"],
+      "shopify": ["consentManagement", "connectionMode"]
     },
     "secretKeys": []
+  },
+  "options": {
+    "deprecated": true,
+    "deprecationLabel": "Google sunsetted Google Analytics (UA). Please set up Google Analytics 4 instead"
   }
 }

@@ -56,18 +56,31 @@
           "regexErrorMessage": "Invalid Namespace",
           "required": false,
           "placeholder": "e.g: rudder-schema",
-          "footerNote": "Default will be the source name"
+          "footerNote": "Default will be the source name",
+          "immutable": true
         },
         {
           "type": "singleSelect",
           "label": "SSL Mode",
           "value": "sslMode",
           "options": [
-            { "name": "disable", "value": "disable" },
-            { "name": "true", "value": "true" },
-            { "name": "false", "value": "false" }
+            {
+              "name": "disable",
+              "value": "disable"
+            },
+            {
+              "name": "true",
+              "value": "true"
+            },
+            {
+              "name": "false",
+              "value": "false"
+            }
           ],
-          "defaultOption": { "name": "disable", "value": "disable" },
+          "defaultOption": {
+            "name": "disable",
+            "value": "disable"
+          },
           "required": true
         },
         {
@@ -75,21 +88,45 @@
           "label": "Sync Frequency",
           "value": "syncFrequency",
           "options": [
-            { "name": "Every 30 minutes", "value": "30" },
-            { "name": "Every 1 hour", "value": "60" },
-            { "name": "Every 3 hours", "value": "180" },
-            { "name": "Every 6 hours", "value": "360" },
-            { "name": "Every 12 hours", "value": "720" },
-            { "name": "Every 24 hours", "value": "1440" }
+            {
+              "name": "Every 30 minutes",
+              "value": "30"
+            },
+            {
+              "name": "Every 1 hour",
+              "value": "60"
+            },
+            {
+              "name": "Every 3 hours",
+              "value": "180"
+            },
+            {
+              "name": "Every 6 hours",
+              "value": "360"
+            },
+            {
+              "name": "Every 12 hours",
+              "value": "720"
+            },
+            {
+              "name": "Every 24 hours",
+              "value": "1440"
+            }
           ],
-          "defaultOption": { "name": "Every 30 minutes", "value": "30" },
+          "defaultOption": {
+            "name": "Every 3 hours",
+            "value": "180"
+          },
           "required": false
         },
         {
           "type": "timePicker",
           "label": "Sync Starting At (Optional)",
           "value": "syncStartAt",
-          "options": { "omitSeconds": true, "minuteStep": 15 },
+          "options": {
+            "omitSeconds": true,
+            "minuteStep": 15
+          },
           "required": false,
           "footerNote": "Note: Please specify time in UTC"
         },
@@ -97,9 +134,18 @@
           "type": "timeRangePicker",
           "label": "Exclude window (Optional)",
           "value": "excludeWindow",
-          "startTime": { "label": "start time", "value": "excludeWindowStartTime" },
-          "endTime": { "label": "end time", "value": "excludeWindowEndTime" },
-          "options": { "omitSeconds": true, "minuteStep": 1 },
+          "startTime": {
+            "label": "start time",
+            "value": "excludeWindowStartTime"
+          },
+          "endTime": {
+            "label": "end time",
+            "value": "excludeWindowEndTime"
+          },
+          "options": {
+            "omitSeconds": true,
+            "minuteStep": 1
+          },
           "required": false,
           "footerNote": "Note: Please specify time in UTC"
         }
@@ -120,20 +166,44 @@
           "label": "Choose your Storage Provider",
           "value": "bucketProvider",
           "options": [
-            { "name": "S3", "value": "S3" },
-            { "name": "GCS", "value": "GCS" },
-            { "name": "AZURE_BLOB", "value": "AZURE_BLOB" },
-            { "name": "MINIO", "value": "MINIO" }
+            {
+              "name": "S3",
+              "value": "S3"
+            },
+            {
+              "name": "GCS",
+              "value": "GCS"
+            },
+            {
+              "name": "AZURE_BLOB",
+              "value": "AZURE_BLOB"
+            },
+            {
+              "name": "MINIO",
+              "value": "MINIO"
+            }
           ],
-          "defaultOption": { "name": "MINIO", "value": "MINIO" },
+          "defaultOption": {
+            "name": "MINIO",
+            "value": "MINIO"
+          },
           "required": true,
-          "preRequisiteField": { "name": "useRudderStorage", "selectedValue": false }
+          "preRequisiteField": {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
         },
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "S3" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "S3"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "Staging S3 Storage Bucket Name",
           "labelNote": "S3 Bucket to store data before loading into AzureSynapse",
@@ -147,8 +217,14 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "GCS" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "GCS"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "Staging GCS Object Storage Bucket Name",
           "labelNote": "GCS Bucket to store data before loading into AzureSynapse",
@@ -162,8 +238,14 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "AZURE_BLOB" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "AZURE_BLOB"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "Staging Azure Blob Storage Container Name",
           "labelNote": "Container to store data before loading into AzureSynapse",
@@ -177,8 +259,14 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "MINIO" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "MINIO"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "Staging MINIO Storage Bucket Name",
           "labelNote": "MINIO Bucket to store data before loading into AzureSynapse",
@@ -192,8 +280,14 @@
         {
           "type": "checkbox",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "S3" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "S3"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "Role Based Authentication",
           "value": "roleBasedAuth",
@@ -202,16 +296,25 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "S3" },
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "roleBasedAuth", "selectedValue": true }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "S3"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            },
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": true
+            }
           ],
           "label": "IAM Role ARN",
           "value": "iamRoleARN",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Role ARN",
           "required": true,
-          "placeholder": "e.g: arn:aws:iam::123456789012:role/S3Access",
+          "placeholder": "e.g: arn:aws:iam::123XXX89012:role/S3Access",
           "footerURL": {
             "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/",
             "text": "Instructions for creating IAM Role"
@@ -220,9 +323,18 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "S3" },
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "roleBasedAuth", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "S3"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            },
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": false
+            }
           ],
           "label": "AWS Access Key ID",
           "value": "accessKeyID",
@@ -234,9 +346,18 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "S3" },
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "roleBasedAuth", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "S3"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            },
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": false
+            }
           ],
           "label": "AWS Secret Access Key",
           "value": "accessKey",
@@ -248,8 +369,14 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "AZURE_BLOB" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "AZURE_BLOB"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "Azure Blob Storage Account Name",
           "value": "accountName",
@@ -261,9 +388,18 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "AZURE_BLOB" },
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "useSASTokens", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "AZURE_BLOB"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            },
+            {
+              "name": "useSASTokens",
+              "selectedValue": false
+            }
           ],
           "label": "Azure Blob Storage Account Key",
           "value": "accountKey",
@@ -276,9 +412,18 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "AZURE_BLOB" },
-            { "name": "useRudderStorage", "selectedValue": false },
-            { "name": "useSASTokens", "selectedValue": true }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "AZURE_BLOB"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            },
+            {
+              "name": "useSASTokens",
+              "selectedValue": true
+            }
           ],
           "label": "Azure Blob Storage SAS Token",
           "value": "sasToken",
@@ -291,8 +436,14 @@
         {
           "type": "checkbox",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "AZURE_BLOB" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "AZURE_BLOB"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "Use shared access signature (SAS) Tokens",
           "value": "useSASTokens",
@@ -302,8 +453,14 @@
         {
           "type": "textareaInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "GCS" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "GCS"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "Credentials",
           "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your Google Cloud Storage",
@@ -315,8 +472,14 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "MINIO" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "MINIO"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "MinIO Endpoint",
           "value": "endPoint",
@@ -328,8 +491,14 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "MINIO" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "MINIO"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "MINIO Access Key ID",
           "value": "accessKeyID",
@@ -341,8 +510,14 @@
         {
           "type": "textInput",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "MINIO" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "MINIO"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "MINIO Secret Access Key",
           "value": "secretAccessKey",
@@ -354,12 +529,44 @@
         {
           "type": "checkbox",
           "preRequisiteField": [
-            { "name": "bucketProvider", "selectedValue": "MINIO" },
-            { "name": "useRudderStorage", "selectedValue": false }
+            {
+              "name": "bucketProvider",
+              "selectedValue": "MINIO"
+            },
+            {
+              "name": "useRudderStorage",
+              "selectedValue": false
+            }
           ],
           "label": "Use SSL for connection",
           "value": "useSSL",
           "default": true
+        }
+      ]
+    },
+    {
+      "title": "Advanced Settings",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Warehouse Append",
+          "value": "preferAppend",
+          "footerNote": "Disable to move from Append to Merge operation. Switching from Append to Merge ensures 100% non-duplicate data, but would increase warehouse operations time significantly",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "label": "Skip User Table",
+          "value": "skipUsersTable",
+          "footerNote": "Enable this feature to send event data exclusively to the Identify table, and skip user table. Eliminates the need for merge operation on the user table",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "Skip Tracks Table",
+          "value": "skipTracksTable",
+          "footerNote": "Enable this feature to skip sending the event data to the “tracks” table",
+          "default": false
         }
       ]
     },
@@ -369,16 +576,109 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "consentManagement",
+          "label": "Consent management settings",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "customFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "value": "provider",
+              "options": [
+                {
+                  "name": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "name": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "name": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "defaultOption": {
+                "name": "OneTrust",
+                "value": "oneTrust"
+              },
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "value": "resolutionStrategy",
+              "options": [
+                {
+                  "name": "AND",
+                  "value": "and"
+                },
+                {
+                  "name": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "dynamicCustomForm",
+              "value": "consents",
+              "label": "Enter consent category ID’s",
+              "customFields": [
+                {
+                  "type": "textInput",
+                  "placeholder": "Marketing",
+                  "value": "consent",
+                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "required": false
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }

@@ -2,7 +2,6 @@
   "name": "BUGSNAG",
   "displayName": "Bugsnag",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -11,10 +10,23 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "oneTrustCookieCategories",
-      "eventFilteringOption"
+      "eventFilteringOption",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": ["android", "ios", "web"],
+    "supportedMessageTypes": {
+      "device": {
+        "web": ["identify"],
+        "android": ["identify", "track", "screen"],
+        "ios": ["identify", "track", "screen"]
+      }
+    },
+    "supportedConnectionModes": {
+      "android": ["cloud", "device"],
+      "web": ["cloud", "device"],
+      "ios": ["cloud", "device"]
+    },
     "destConfig": {
       "defaultConfig": [
         "apiKey",
@@ -23,9 +35,9 @@
         "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
-      "android": ["useNativeSDK"],
-      "ios": ["useNativeSDK"],
-      "web": ["useNativeSDK", "releaseStage"]
+      "android": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "ios": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "web": ["useNativeSDK", "releaseStage", "connectionMode", "consentManagement"]
     },
     "secretKeys": ["apiKey"]
   }

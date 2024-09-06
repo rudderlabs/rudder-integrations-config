@@ -1,8 +1,8 @@
 [
   {
     "config": {
-      "apiKey": "d2bnp1ubi9x6zq1p89h5hyx2hf5q1k3v",
-      "webClientApiKey": "d2bnp1ubi9x6zq1p845487293848yx2hf5q1k3v",
+      "apiKey": "d2bnp1XXXXx6zq1p89h5hyx2hf5q1k3v",
+      "webClientApiKey": "d2bnp1XXXXx6zq1p89h5hyx2hf5q1k3v",
       "eventFilteringOption": "disable",
       "whitelistedEvents": [
         {
@@ -19,7 +19,7 @@
   },
   {
     "config": {
-      "webClientApiKey": "d2bnp1ubi9x6zq1p845487293848yx2hf5q1k3v",
+      "webClientApiKey": "d2bnp1XXXXx6zq1p89h5hyx2hf5q1k3v",
       "eventFilteringOption": "disable",
       "whitelistedEvents": [
         {
@@ -38,7 +38,7 @@
   {
     "config": {
       "apiKey": "",
-      "webClientApiKey": "d2bnp1ubi9x6zq1p845487293848yx2hf5q1k3v",
+      "webClientApiKey": "d2bnp1XXXXx6zq1p89h5hyx2hf5q1k3v",
       "eventFilteringOption": "disable",
       "whitelistedEvents": [
         {
@@ -56,7 +56,7 @@
   },
   {
     "config": {
-      "apiKey": "d2bnp1ubi9x6zq1p89h5hyx2hf5q1k3v",
+      "apiKey": "d2bnp1XXXXx6zq1p89h5hyx2hf5q1k3v",
       "webClientApiKey": "",
       "eventFilteringOption": "disable",
       "whitelistedEvents": [
@@ -77,7 +77,7 @@
   },
   {
     "config": {
-      "apiKey": "d2bnp1ubi9x6zq1p89h5hyx2hf5q1k3v",
+      "apiKey": "d2bnp1XXXXx6zq1p89h5hyx2hf5q1k3v",
       "eventFilteringOption": "disable",
       "whitelistedEvents": [
         {
@@ -92,5 +92,113 @@
     },
     "result": false,
     "err": [" must have required property 'webClientApiKey'"]
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "apiKey": "d2bnp1XXXXx6zq1p89h5hyx2hf5q1k3v",
+      "webClientApiKey": "d2bnp1XXXXx6zq1p89h5hyx2hf5q1k3v",
+      "eventFilteringOption": "disable",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "apiKey": "d2bnp1XXXXx6zq1p89h5hyx2hf5q1k3v",
+      "webClientApiKey": "d2bnp1XXXXx6zq1p89h5hyx2hf5q1k3v",
+      "eventFilteringOption": "disable",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "apiKey": "d2bnp1XXXXx6zq1p89h5hyx2hf5q1k3v",
+      "webClientApiKey": "d2bnp1XXXXx6zq1p89h5hyx2hf5q1k3v",
+      "eventFilteringOption": "disable",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "apiKey": "d2bnp1XXXXx6zq1p89h5hyx2hf5q1k3v",
+      "webClientApiKey": "d2bnp1XXXXx6zq1p89h5hyx2hf5q1k3v",
+      "eventFilteringOption": "disable",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "apiKey": "d2bnp1XXXXx6zq1p89h5hyx2hf5q1k3v",
+      "webClientApiKey": "d2bnp1XXXXx6zq1p89h5hyx2hf5q1k3v",
+      "eventFilteringOption": "disable",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]

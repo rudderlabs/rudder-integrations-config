@@ -4,13 +4,33 @@
       "title": "Connection Settings",
       "fields": [
         {
+          "type": "checkbox",
+          "label": "Ecommerce event spec support for track events",
+          "value": "v2",
+          "default": true,
+          "footerURL": {
+            "link": "https://www.rudderstack.com/docs/event-spec/ecommerce-events-spec",
+            "text": "If enabled, track events follow the RudderStack ecommerce spec"
+          }
+        },
+        {
+          "type": "checkbox",
+          "label": "Allow identify calls for the Google Ads destination",
+          "value": "allowIdentify",
+          "default": false,
+          "footerURL": {
+            "link": "https://support.google.com/google-ads/answer/13258081#zippy=%2Cconfigure-your-conversion-page-google-tag",
+            "text": "If enabled, identify calls can be used to define your enhanced conversion fields"
+          }
+        },
+        {
           "type": "textInput",
           "label": "Conversion ID",
           "value": "conversionID",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^AW-(.{0,100})$",
           "regexErrorMessage": "Invalid Conversion ID",
           "required": true,
-          "placeholder": "e.g: AW-412940"
+          "placeholder": "e.g: AW-41X940"
         },
         {
           "type": "dynamicSelectForm",
@@ -231,7 +251,7 @@
           "labelRight": "Name",
           "keyLeft": "conversionLabel",
           "keyRight": "name",
-          "placeholderLeft": "bpg3CMiIjLMBELXBp8wC",
+          "placeholderLeft": "bpg3CMiIjXXXELXBp8wC",
           "placeholderRight": "name",
           "value": "pageLoadConversions"
         },
@@ -242,7 +262,7 @@
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
           "regexErrorMessage": "Invalid Default Conversion Label",
           "required": false,
-          "placeholder": "e.g: bpg3CMiIjLMBELXBp8wC"
+          "placeholder": "e.g: bpg3CMiIjXXXELXBp8wC"
         }
       ]
     },
@@ -255,7 +275,7 @@
           "labelRight": "Name",
           "keyLeft": "conversionLabel",
           "keyRight": "name",
-          "placeholderLeft": "bpg3CMiIjLMBELXBp8wC",
+          "placeholderLeft": "bpg3CMiIjXXXELXBp8wC",
           "placeholderRight": "name",
           "value": "clickEventConversions"
         }
@@ -303,17 +323,109 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
               "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category Name/ID",
+              "label": "Category ID",
               "required": false
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "consentManagement",
+          "label": "Consent management settings",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "customFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "value": "provider",
+              "options": [
+                {
+                  "name": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "name": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "name": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "defaultOption": {
+                "name": "OneTrust",
+                "value": "oneTrust"
+              },
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "value": "resolutionStrategy",
+              "options": [
+                {
+                  "name": "AND",
+                  "value": "and"
+                },
+                {
+                  "name": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "dynamicCustomForm",
+              "value": "consents",
+              "label": "Enter consent category ID’s",
+              "customFields": [
+                {
+                  "type": "textInput",
+                  "placeholder": "Marketing",
+                  "value": "consent",
+                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "required": false
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }

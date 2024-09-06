@@ -2,10 +2,9 @@
   "name": "ATTRIBUTION",
   "displayName": "Attribution",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": false,
-    "includeKeys": ["oneTrustCookieCategories"],
+    "includeKeys": ["oneTrustCookieCategories", "consentManagement"],
     "excludeKeys": [],
     "supportedSourceTypes": [
       "android",
@@ -20,8 +19,34 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": ["alias", "group", "identify", "page", "screen", "track"],
-    "destConfig": { "defaultConfig": ["writeKey", "oneTrustCookieCategories"], "web": [] },
+    "supportedMessageTypes": { "cloud": ["alias", "group", "identify", "page", "screen", "track"] },
+    "supportedConnectionModes": {
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "web": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
+    "destConfig": {
+      "defaultConfig": ["writeKey", "oneTrustCookieCategories"],
+      "android": ["connectionMode", "consentManagement"],
+      "ios": ["connectionMode", "consentManagement"],
+      "web": ["connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "reactnative": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "flutter": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
+    },
     "secretKeys": ["writeKey"]
   }
 }

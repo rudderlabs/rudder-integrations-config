@@ -2,7 +2,6 @@
   "name": "PENDO",
   "displayName": "Pendo",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -10,10 +9,13 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "oneTrustCookieCategories",
-      "eventFilteringOption"
+      "eventFilteringOption",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": ["web"],
+    "supportedConnectionModes": { "web": ["device"] },
+    "supportedMessageTypes": { "device": { "web": ["identify", "track", "group"] } },
     "destConfig": {
       "defaultConfig": [
         "apiKey",
@@ -22,8 +24,8 @@
         "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
-      "web": ["useNativeSDK"]
+      "web": ["useNativeSDK", "connectionMode", "consentManagement"]
     },
-    "secretKeys": []
+    "secretKeys": ["apiKey"]
   }
 }

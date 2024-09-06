@@ -2,7 +2,6 @@
   "name": "YANDEX_METRICA",
   "displayName": "Yandex.Metrica",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -17,11 +16,13 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "oneTrustCookieCategories",
-      "eventFilteringOption"
+      "eventFilteringOption",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": ["web"],
-    "supportedMessageTypes": ["identify", "track", "page"],
+    "supportedMessageTypes": { "device": { "web": ["identify", "track", "page"] } },
+    "supportedConnectionModes": { "web": ["device"] },
     "destConfig": {
       "defaultConfig": [
         "tagId",
@@ -37,7 +38,7 @@
         "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
-      "web": ["useNativeSDK"]
+      "web": ["useNativeSDK", "connectionMode", "consentManagement"]
     },
     "secretKeys": ["tagId"]
   }

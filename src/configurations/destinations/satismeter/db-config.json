@@ -2,7 +2,6 @@
   "name": "SATISMETER",
   "displayName": "SatisMeter",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -15,11 +14,19 @@
       "eventFilteringOption",
       "whitelistedEvents",
       "blacklistedEvents",
-      "oneTrustCookieCategories"
+      "oneTrustCookieCategories",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": ["web"],
-    "supportedMessageTypes": ["identify", "track"],
+    "supportedMessageTypes": {
+      "device": {
+        "web": ["identify", "track"]
+      }
+    },
+    "supportedConnectionModes": {
+      "web": ["device"]
+    },
     "destConfig": {
       "defaultConfig": [
         "writeKey",
@@ -33,7 +40,7 @@
         "blacklistedEvents",
         "oneTrustCookieCategories"
       ],
-      "web": ["useNativeSDK"]
+      "web": ["useNativeSDK", "connectionMode", "consentManagement"]
     },
     "secretKeys": ["writeKey"]
   }

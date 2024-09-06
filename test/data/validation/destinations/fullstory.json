@@ -39,30 +39,203 @@
   },
   {
     "config": {
-      "blacklistedEvents": [{ "eventName": "" }],
-      "whitelistedEvents": [{ "eventName": "" }],
-      "oneTrustCookieCategories": [{ "oneTrustCookieCategory": "" }],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": ""
+        }
+      ],
       "eventFilteringOption": "disable",
-      "useNativeSDK": { "web": true },
-      "connectionMode": { "web": "device" },
-      "fs_debug_mode": { "web": false },
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "fs_debug_mode": {
+        "web": false
+      },
       "fs_org": "dummyorg2",
-      "fs_host": { "web": "dummyhost.com" }
+      "fs_host": {
+        "web": "dummyhost.com"
+      }
     },
     "result": true
   },
   {
     "config": {
-      "blacklistedEvents": [{ "eventName": "" }],
-      "whitelistedEvents": [{ "eventName": "" }],
-      "oneTrustCookieCategories": [{ "oneTrustCookieCategory": "" }],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": ""
+        }
+      ],
       "eventFilteringOption": "disable",
-      "useNativeSDK": { "web": true },
-      "connectionMode": { "web": "device" },
-      "fs_debug_mode": { "web": true },
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "fs_debug_mode": {
+        "web": true
+      },
       "fs_org": "dummyorg",
-      "fs_host": { "web": "" }
+      "fs_host": {
+        "web": ""
+      }
     },
     "result": true
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "fs_debug_mode": {
+        "web": true
+      },
+      "fs_org": "dummyorg",
+      "fs_host": {
+        "web": "dummyhost.com"
+      },
+      "apiKey": "na1.dummy",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "fs_debug_mode": {
+        "web": true
+      },
+      "fs_org": "dummyorg",
+      "fs_host": {
+        "web": "dummyhost.com"
+      },
+      "apiKey": "na1.dummy",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "fs_debug_mode": {
+        "web": true
+      },
+      "fs_org": "dummyorg",
+      "fs_host": {
+        "web": "dummyhost.com"
+      },
+      "apiKey": "na1.dummy",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "fs_debug_mode": {
+        "web": true
+      },
+      "fs_org": "dummyorg",
+      "fs_host": {
+        "web": "dummyhost.com"
+      },
+      "apiKey": "na1.dummy",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "fs_debug_mode": {
+        "web": true
+      },
+      "fs_org": "dummyorg",
+      "fs_host": {
+        "web": "dummyhost.com"
+      },
+      "apiKey": "na1.dummy",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]

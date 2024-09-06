@@ -2,7 +2,6 @@
   "name": "WOOPRA",
   "displayName": "WOOPRA",
   "config": {
-    "transformAt": "router",
     "transformAtV1": "router",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -20,7 +19,8 @@
       "whitelistedEvents",
       "blacklistedEvents",
       "eventFilteringOption",
-      "oneTrustCookieCategories"
+      "oneTrustCookieCategories",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
@@ -36,7 +36,23 @@
       "warehouse",
       "shopify"
     ],
-    "supportedMessageTypes": ["identify", "track", "page"],
+    "supportedMessageTypes": {
+      "cloud": ["identify", "track", "page"],
+      "device": { "web": ["identify", "track", "page"] }
+    },
+    "supportedConnectionModes": {
+      "web": ["cloud", "device"],
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "cloud": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "warehouse": ["cloud"],
+      "shopify": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "projectName",
@@ -55,7 +71,17 @@
         "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
-      "web": ["useNativeSDK"]
+      "web": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "android": ["connectionMode", "consentManagement"],
+      "ios": ["connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "reactnative": ["connectionMode", "consentManagement"],
+      "flutter": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     }
   }
 }

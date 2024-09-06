@@ -2,12 +2,11 @@
   "name": "BQSTREAM",
   "displayName": "BigQuery Stream",
   "config": {
-    "transformAt": "router",
     "transformAtV1": "router",
     "saveDestinationResponse": true,
-    "includeKeys": ["oneTrustCookieCategories"],
+    "includeKeys": ["oneTrustCookieCategories", "consentManagement"],
     "excludeKeys": [],
-    "supportedMessageTypes": ["track"],
+    "supportedMessageTypes": { "cloud": ["track"] },
     "supportedSourceTypes": [
       "android",
       "ios",
@@ -21,6 +20,19 @@
       "warehouse",
       "shopify"
     ],
+    "supportedConnectionModes": {
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "web": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "datasetId",
@@ -29,7 +41,18 @@
         "credentials",
         "insertId",
         "oneTrustCookieCategories"
-      ]
+      ],
+      "android": ["connectionMode", "consentManagement"],
+      "ios": ["connectionMode", "consentManagement"],
+      "web": ["connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "reactnative": ["connectionMode", "consentManagement"],
+      "flutter": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     },
     "secretKeys": ["credentials"]
   }

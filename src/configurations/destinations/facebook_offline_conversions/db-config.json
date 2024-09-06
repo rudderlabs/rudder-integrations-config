@@ -2,7 +2,6 @@
   "name": "FACEBOOK_OFFLINE_CONVERSIONS",
   "displayName": "Facebook Offline Conversions",
   "config": {
-    "transformAt": "router",
     "transformAtV1": "router",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -11,7 +10,8 @@
       "eventsToStandard",
       "categoryToContent",
       "valueFieldIdentifier",
-      "oneTrustCookieCategories"
+      "oneTrustCookieCategories",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
@@ -27,7 +27,20 @@
       "warehouse",
       "shopify"
     ],
-    "supportedMessageTypes": ["track"],
+    "supportedMessageTypes": { "cloud": ["track"] },
+    "supportedConnectionModes": {
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "web": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "accessToken",
@@ -38,8 +51,23 @@
         "categoryToContent",
         "valueFieldIdentifier",
         "oneTrustCookieCategories"
-      ]
+      ],
+      "android": ["connectionMode", "consentManagement"],
+      "ios": ["connectionMode", "consentManagement"],
+      "web": ["connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "reactnative": ["connectionMode", "consentManagement"],
+      "flutter": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     },
     "secretKeys": ["accessToken"]
+  },
+  "options": {
+    "deprecated": true,
+    "deprecationLabel": "Facebook Offline Conversions is deprecated. Please use Facebook Conversions destination instead."
   }
 }

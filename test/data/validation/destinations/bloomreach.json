@@ -1,0 +1,156 @@
+[
+  {
+    "config": {
+      "apiBaseUrl": "https://api.test.com/",
+      "apiKey": "test-apiKey",
+      "apiSecret": "test-apiSecret",
+      "projectToken": "test-projectToken",
+      "hardID": "registered",
+      "softID": "cookie",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "apiKey": "test-apiKey",
+      "apiSecret": "test-apiSecret",
+      "projectToken": "test-projectToken",
+      "softID": "cookie",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "Marketing"
+        }
+      ]
+    },
+    "result": false,
+    "err": [" must have required property 'apiBaseUrl'", " must have required property 'hardID'"]
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "apiBaseUrl": "https://api.test.com/",
+      "apiKey": "test-apiKey",
+      "apiSecret": "test-apiSecret",
+      "projectToken": "test-projectToken",
+      "hardID": "registered",
+      "softID": "cookie",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "apiBaseUrl": "https://api.test.com/",
+      "apiKey": "test-apiKey",
+      "apiSecret": "test-apiSecret",
+      "projectToken": "test-projectToken",
+      "hardID": "registered",
+      "softID": "cookie",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "apiBaseUrl": "https://api.test.com/",
+      "apiKey": "test-apiKey",
+      "apiSecret": "test-apiSecret",
+      "projectToken": "test-projectToken",
+      "hardID": "registered",
+      "softID": "cookie",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "apiBaseUrl": "https://api.test.com/",
+      "apiKey": "test-apiKey",
+      "apiSecret": "test-apiSecret",
+      "projectToken": "test-projectToken",
+      "hardID": "registered",
+      "softID": "cookie",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "apiBaseUrl": "https://api.test.com/",
+      "apiKey": "test-apiKey",
+      "apiSecret": "test-apiSecret",
+      "projectToken": "test-projectToken",
+      "hardID": "registered",
+      "softID": "cookie",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
+  }
+]

@@ -4,17 +4,85 @@
       "accountId": "12",
       "homePageUrl": "https://www.google.com",
       "hashMethod": "md5",
-      "fieldMapping": [{ "from": "signup", "to": "billing" }],
-      "whitelistedEvents": [{ "eventName": "login" }],
-      "blacklistedEvents": [{ "eventName": "ad_disabled" }],
+      "fieldMapping": [
+        {
+          "from": "signup",
+          "to": "billing"
+        }
+      ],
+      "whitelistedEvents": [
+        {
+          "eventName": "login"
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": "ad_disabled"
+        }
+      ],
       "eventFilteringOption": "whitelistedEvents",
-      "oneTrustCookieCategories": [{ "oneTrustCookieCategory": "product" }],
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "product"
+        }
+      ],
       "eventsToStandard": [
-        { "from": "add to cart", "to": "product viewed" },
-        { "from": "cart checkout", "to": "cart viewed" }
+        {
+          "from": "add to cart",
+          "to": "product viewed"
+        },
+        {
+          "from": "cart checkout",
+          "to": "cart viewed"
+        }
       ]
     },
-    "useNativeSDK": { "web": false },
+    "useNativeSDK": {
+      "web": false
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "accountId": "12",
+      "homePageUrl": "https://www.google.com",
+      "hashMethod": "both",
+      "fieldMapping": [
+        {
+          "from": "signup",
+          "to": "billing"
+        }
+      ],
+      "whitelistedEvents": [
+        {
+          "eventName": "login"
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": "ad_disabled"
+        }
+      ],
+      "eventFilteringOption": "whitelistedEvents",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "product"
+        }
+      ],
+      "eventsToStandard": [
+        {
+          "from": "add to cart",
+          "to": "product viewed"
+        },
+        {
+          "from": "cart checkout",
+          "to": "cart viewed"
+        }
+      ]
+    },
+    "useNativeSDK": {
+      "web": false
+    },
     "result": true
   },
   {
@@ -22,33 +90,177 @@
       "accountId": "",
       "homePageUrl": "https://www.facebook.com",
       "hashMethod": "md5",
-      "fieldMapping": [{ "from": "signup", "to": "billing" }],
-      "whitelistedEvents": [{ "eventName": "login" }],
-      "blacklistedEvents": [{ "eventName": "ad_disabled" }],
+      "fieldMapping": [
+        {
+          "from": "signup",
+          "to": "billing"
+        }
+      ],
+      "whitelistedEvents": [
+        {
+          "eventName": "login"
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": "ad_disabled"
+        }
+      ],
       "eventFilteringOption": "whitelistedEvents",
-      "oneTrustCookieCategories": [{ "oneTrustCookieCategory": "product" }],
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "product"
+        }
+      ],
       "eventsToStandard": [
-        { "from": "add to cart", "to": "product viewed" },
-        { "from": "cart checkout", "to": "cart viewed" }
+        {
+          "from": "add to cart",
+          "to": "product viewed"
+        },
+        {
+          "from": "cart checkout",
+          "to": "cart viewed"
+        }
       ]
     },
-    "useNativeSDK": { "web": false },
+    "useNativeSDK": {
+      "web": false
+    },
     "result": false,
     "err": ["accountId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$\""]
   },
   {
     "config": {
       "accountId": "15",
-      "fieldMapping": [{ "from": "login", "to": "logout" }],
-      "whitelistedEvents": [{ "eventName": "product added" }],
-      "blacklistedEvents": [{ "eventName": "ad_disabled" }],
+      "fieldMapping": [
+        {
+          "from": "login",
+          "to": "logout"
+        }
+      ],
+      "whitelistedEvents": [
+        {
+          "eventName": "product added"
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": "ad_disabled"
+        }
+      ],
       "eventFilteringOption": "whitelistedEvents",
       "eventsToStandard": [
-        { "from": "add to cart", "to": "product viewed" },
-        { "from": "cart checkout", "to": "cart viewed" }
+        {
+          "from": "add to cart",
+          "to": "product viewed"
+        },
+        {
+          "from": "cart checkout",
+          "to": "cart viewed"
+        }
       ]
     },
-    "useNativeSDK": { "web": false },
+    "useNativeSDK": {
+      "web": false
+    },
     "result": true
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "accountId": "12",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "accountId": "12",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "accountId": "12",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0 must have required property 'resolutionStrategy'",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "accountId": "12",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "accountId": "12",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.web.0.provider must be equal to one of the allowed values"]
   }
 ]

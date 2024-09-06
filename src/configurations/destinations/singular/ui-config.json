@@ -10,7 +10,7 @@
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[a-zA-Z0-9_]*$",
           "regexErrorMessage": "Invalid API Key",
           "required": true,
-          "placeholder": "e.g: abcd_456e5678",
+          "placeholder": "e.g: abcd_45Xe5678",
           "secret": true
         },
         {
@@ -20,7 +20,7 @@
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[a-zA-Z0-9]*$",
           "regexErrorMessage": "Invalid Secret Key",
           "required": false,
-          "placeholder": "e.g: r344c6e48c0r87y6iio567b67ad61324",
+          "placeholder": "e.g: r344c6e48c0rXXX6iio567b67ad61324",
           "secret": true
         },
         {
@@ -37,6 +37,34 @@
               "placeholder": "e.g: Session Event Name"
             }
           ]
+        },
+        {
+          "type": "singleSelect",
+          "label": "Match ID mapping",
+          "value": "match_id",
+          "required": false,
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-singular-matchid",
+                "value": true
+              }
+            ]
+          },
+          "options": [
+            {
+              "name": "Map match ID to context.device.advertisingId",
+              "value": "advertisingId"
+            },
+            {
+              "name": "Map match ID to properties.match_id",
+              "value": "hash"
+            }
+          ],
+          "defaultOption": {
+            "name": "Map match ID to context.device.advertisingId",
+            "value": "advertisingId"
+          }
         }
       ]
     },
@@ -114,17 +142,109 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
               "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category Name/ID",
+              "label": "Category ID",
               "required": false
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "consentManagement",
+          "label": "Consent management settings",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "customFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "value": "provider",
+              "options": [
+                {
+                  "name": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "name": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "name": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "defaultOption": {
+                "name": "OneTrust",
+                "value": "oneTrust"
+              },
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "value": "resolutionStrategy",
+              "options": [
+                {
+                  "name": "AND",
+                  "value": "and"
+                },
+                {
+                  "name": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "dynamicCustomForm",
+              "value": "consents",
+              "label": "Enter consent category ID’s",
+              "customFields": [
+                {
+                  "type": "textInput",
+                  "placeholder": "Marketing",
+                  "value": "consent",
+                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "required": false
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }

@@ -1,0 +1,170 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection Settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Pixel Id",
+                    "note": "Enter the Pixel ID of your Reddit Ads account associated with the conversion events",
+                    "configKey": "accountId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Pixel Id",
+                    "placeholder": "e.g: a2_dfsdfsXXXne",
+                    "secret": false
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Hash Data",
+                    "configKey": "hashData",
+                    "default": true,
+                    "note": "Disable it if you are sending hashed data for fields (email, userId, ip, advertiserId)"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding.",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "OneTrust consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
+                  },
+                  "about RudderStack's OneTrust Consent Management feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Consent categories",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: C0001",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Event mapping",
+        "note": "Map RudderStack to Reddit events",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "RudderStack to Reddit event mappings",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "customEventMapping",
+                    "label": "Events mapping",
+                    "note": "Map RudderStack events to Reddit events"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "redirectGroups": {
+      "customEventMapping": {
+        "fields": [
+          {
+            "type": "mapping",
+            "label": "Map your RudderStack Events to Reddit Events",
+            "note": "Enter the input event name which you want to map with a Reddit Event Name",
+            "configKey": "eventsMapping",
+            "default": [],
+            "columns": [
+              {
+                "type": "textInput",
+                "key": "from",
+                "label": "RudderStack Event",
+                "placeholder": "e.g: Product Viewed"
+              },
+              {
+                "type": "singleSelect",
+                "key": "to",
+                "label": "Reddit Event",
+                "options": [
+                  {
+                    "name": "ViewContent",
+                    "value": "ViewContent"
+                  },
+                  {
+                    "name": "Search",
+                    "value": "Search"
+                  },
+                  {
+                    "name": "AddToCart",
+                    "value": "AddToCart"
+                  },
+                  {
+                    "name": "AddToWishlist",
+                    "value": "AddToWishlist"
+                  },
+                  {
+                    "name": "Purchase",
+                    "value": "Purchase"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

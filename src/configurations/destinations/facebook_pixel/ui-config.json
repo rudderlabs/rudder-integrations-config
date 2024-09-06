@@ -1,355 +1,665 @@
 {
-  "uiConfig": [
-    {
-      "title": "1. Connection Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Pixel ID",
-          "value": "pixelId",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "regexErrorMessage": "Invalid Pixel ID",
-          "required": true,
-          "placeholder": "e.g: 1234567898765",
-          "footerNote": "Your Pixel ID, from the snippet created on the Facebook Pixel creation page."
-        },
-        {
-          "type": "textInput",
-          "label": "Business Access Token",
-          "value": "accessToken",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,208})$",
-          "regexErrorMessage": "Invalid Business Access Token",
-          "required": false,
-          "secret": true,
-          "placeholder": "e.g: EAALPFdyOVl4BAKEXmVR...",
-          "footerNote": "Your Business Access token from your Business Account. Required for cloud-mode."
-        }
-      ]
-    },
-    {
-      "title": "2. Event Settings",
-      "fields": [
-        {
-          "type": "dynamicForm",
-          "label": "Map Categories to Facebook Content Types",
-          "required": false,
-          "placeholderLeft": "e.g. Product Searched",
-          "placeholderRight": "Product",
-          "labelLeft": "category",
-          "labelRight": "Facebook content type",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "value": "categoryToContent"
-        },
-        {
-          "type": "checkbox",
-          "label": "Enable Standard Event (PageView) for all Page and Screen Calls",
-          "value": "standardPageCall",
-          "default": false
-        },
-        {
-          "type": "dynamicSelectForm",
-          "label": "Map your events with Facebook Standard Events",
-          "labelLeft": "Event Name",
-          "labelRight": "Standard Event Name",
-          "value": "eventsToEvents",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "required": false,
-          "placeholderLeft": "e.g. Product Searched",
-          "options": [
-            {
-              "name": "ViewContent",
-              "value": "ViewContent"
-            },
-            {
-              "name": "Search",
-              "value": "Search"
-            },
-            {
-              "name": "AddToCart",
-              "value": "AddToCart"
-            },
-            {
-              "name": "AddToWishlist",
-              "value": "AddToWishlist"
-            },
-            {
-              "name": "InitiateCheckout",
-              "value": "InitiateCheckout"
-            },
-            {
-              "name": "AddPaymentInfo",
-              "value": "AddPaymentInfo"
-            },
-            {
-              "name": "Purchase",
-              "value": "Purchase"
-            },
-            {
-              "name": "PageView",
-              "value": "PageView"
-            },
-            {
-              "name": "Lead",
-              "value": "Lead"
-            },
-            {
-              "name": "CompleteRegistration",
-              "value": "CompleteRegistration"
-            },
-            {
-              "name": "Contact",
-              "value": "Contact"
-            },
-            {
-              "name": "CustomizeProduct",
-              "value": "CustomizeProduct"
-            },
-            {
-              "name": "Donate",
-              "value": "Donate"
-            },
-            {
-              "name": "FindLocation",
-              "value": "FindLocation"
-            },
-            {
-              "name": "Schedule",
-              "value": "Schedule"
-            },
-            {
-              "name": "StartTrial",
-              "value": "StartTrial"
-            },
-            {
-              "name": "SubmitApplication",
-              "value": "SubmitApplication"
-            },
-            {
-              "name": "Subscribe",
-              "value": "Subscribe"
-            }
-          ]
-        },
-        {
-          "type": "singleSelect",
-          "label": "Value Field Identifier",
-          "value": "valueFieldIdentifier",
-          "required": false,
-          "options": [
-            {
-              "name": "properties.value",
-              "value": "properties.value"
-            },
-            {
-              "name": "properties.price",
-              "value": "properties.price"
-            }
-          ],
-          "defaultOption": {
-            "name": "properties.price",
-            "value": "properties.price"
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Pixel ID",
+                    "note": "Your Pixel ID, from the snippet created on the Facebook Pixel creation page.",
+                    "configKey": "pixelId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Pixel ID",
+                    "placeholder": "e.g: 1234567898765"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Business Access Token",
+                    "note": "Your Business Access token from your Business Account. Required for cloud-mode.",
+                    "configKey": "accessToken",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,300})$",
+                    "regexErrorMessage": "Invalid Business Access Token",
+                    "placeholder": "e.g: EAALPFdyOVl4BAKEXmVR...",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.cloud",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.shopify",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.android",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.unity",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.ios",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.amp",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.flutter",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.reactnative",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.warehouse",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.cordova",
+                          "value": "cloud"
+                        }
+                      ],
+                      "condition": "or"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": [],
+                "callout": {
+                  "message": "Cloud mode for this destination will be deprecated soon. Please migrate to Facebook Conversions destination for cloud mode.",
+                  "type": "info"
+                }
+              }
+            ]
           }
-        },
-        {
-          "type": "checkbox",
-          "label": "Enable Advanced Matching",
-          "value": "advancedMapping"
-        }
-      ]
-    },
-    {
-      "title": "3. PII Properties Settings",
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Event settings",
+                "note": "Configure a few advanced event settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Enable Standard Event (PageView) for all Page and Screen Calls",
+                    "configKey": "standardPageCall",
+                    "default": false
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Value Field Identifier",
+                    "note": "RudderStack sets Revenue from below selected field.",
+                    "configKey": "valueFieldIdentifier",
+                    "options": [
+                      {
+                        "name": "properties.value",
+                        "value": "properties.value"
+                      },
+                      {
+                        "name": "properties.price",
+                        "value": "properties.price"
+                      }
+                    ],
+                    "default": "properties.price"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Enable Advanced Matching",
+                    "configKey": "advancedMapping",
+                    "default": false
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Use Updated Mapping",
+                    "note": "It is recomended to set this to on as we are deprecating support for the old mapping soon.",
+                    "configKey": "useUpdatedMapping",
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.webDevice",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Destination and event level setting",
+                "note": "Configure advanced destination and event-specific settings here",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Limited Data Usage",
+                    "configKey": "limitedDataUSage",
+                    "default": false
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Use as Test Destination",
+                    "configKey": "testDestination",
+                    "default": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Test Event Code",
+                    "note": "Your test event code from your Facebook Datasets dashboard. Required if Test Destination flag is turned ON",
+                    "configKey": "testEventCode",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Please put a valid Test event code",
+                    "placeholder": "e.g: TEST80569"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Don't send external_id for user",
+                    "note": "Turn this on to send neither userId nor anonymousId as external_id.",
+                    "configKey": "removeExternalId",
+                    "default": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "OneTrust consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
+                  },
+                  "about RudderStack's OneTrust Consent Management feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Consent categories",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: C0001",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
+              },
+              {
+                "title": "Ketch consent purpose settings",
+                "note": [
+                  "Enter your Ketch purpose Id if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/ketch/"
+                  },
+                  "about RudderStack and Ketch Consent Manager integration."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Purpose ID",
+                    "note": "Input your Ketch purpose Id by pressing 'Enter' after each entry",
+                    "configKey": "ketchConsentPurposes",
+                    "tagKey": "purpose",
+                    "placeholder": "e.g: Marketing",
+                    "default": [
+                      {
+                        "purpose": ""
+                      }
+                    ]
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Client-side event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on events filtering:",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
+                      {
+                        "label": "Disabled",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input separate events by pressing 'Enter'.\nInput the events you want to allowlist.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input separate events by pressing 'Enter'.\nInput the events you want to denylist. ",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Event mapping",
+        "note": "Map RudderStack to Facebook events",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "RudderStack to Facebook event mappings",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "customEventMapping",
+                    "label": "Event and property mappings",
+                    "note": "Map RudderStack events/properties to Facebook custom events/properties"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
       "fields": [
         {
-          "type": "dynamicCustomForm",
-          "value": "blacklistPiiProperties",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "blacklistPiiProperties",
-              "label": "Denylist PII Properties",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "regexErrorMessage": "Invalid Denylist PII Properties",
-              "placeholder": "e.g. phone",
-              "required": false
-            },
-            {
-              "type": "checkbox",
-              "value": "blacklistPiiHash",
-              "label": "Blacklist PII Hash Property",
-              "required": false
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistPiiProperties",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "e.g. email",
-              "value": "whitelistPiiProperties",
-              "label": "Allowlist PII Properties",
-              "required": false,
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "regexErrorMessage": "Invalid Allowlist PII Properties"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "4. Other Settings",
-      "fields": [
-        {
-          "type": "dynamicForm",
+          "type": "redirect",
+          "redirectGroupKey": "legacyConversionMapping",
           "label": "Legacy Conversion Pixel IDs",
-          "value": "legacyConversionPixelId",
-          "required": false,
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g. Product Searched",
-          "placeholderRight": "e.g 12345678987654",
-          "labelLeft": "Event Name",
-          "labelRight": "Pixel Id"
+          "note": "Map RudderStack events to Facebook Pixel IDs"
         },
         {
           "type": "checkbox",
-          "label": "Limited Data Usage",
-          "value": "limitedDataUSage"
-        },
-        {
-          "type": "checkbox",
-          "label": "Use as Test Destination",
-          "value": "testDestination",
-          "default": false
-        },
-        {
-          "type": "textInput",
-          "label": "Test Event Code",
-          "value": "testEventCode",
-          "regex": "^(.{0,100})$",
-          "required": false,
-          "placeholder": "e.g: TEST80569",
-          "footerNote": "Your test event code from your Facebook Pixel dashboard. Required if Test Destination flag is turned ON"
-        },
-        {
-          "type": "checkbox",
-          "label": "Don't send external_id for user",
-          "value": "removeExternalId",
-          "default": false,
-          "footerNote": "Turn this on to send neither userId nor anonymousId as external_id."
+          "label": "Enable Automatic Configuration",
+          "configKey": "autoConfig",
+          "default": true,
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "connectionModes.webDevice",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     },
-    {
-      "title": "5. Native SDK",
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
       "fields": [
         {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Use Updated Mapping",
-          "value": "useUpdatedMapping",
-          "default": false,
-          "footerNote": "It is recomended to set this to on as we are deprecating support for the old mapping soon."
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
             {
-              "name": "Disable",
-              "value": "disable"
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "default": "oneTrust",
+              "required": true
             },
             {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
             },
             {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
+              "type": "tagInput",
+              "label": "Enter consent category ID’s",
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
             }
           ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
           }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
         }
       ]
     },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "ketchConsentPurposes",
-          "label": "Ketch Consent Purposes",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "purpose",
-              "label": "Purpose ID",
-              "regex": "^(.{0,100})$",
-              "required": false
-            }
-          ]
-        }
-      ]
+    "redirectGroups": {
+      "customEventMapping": {
+        "tabs": [
+          {
+            "name": "Custom event",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map RudderStack event to Facebook standard event",
+                "note": "Input the RudderStack event to map to Facebook's standard event.",
+                "configKey": "eventsToEvents",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "RudderStack Event",
+                    "placeholder": "e.g: Product Searched"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "key": "to",
+                    "label": "Facebook custom event",
+                    "options": [
+                      {
+                        "name": "ViewContent",
+                        "value": "ViewContent"
+                      },
+                      {
+                        "name": "Search",
+                        "value": "Search"
+                      },
+                      {
+                        "name": "AddToCart",
+                        "value": "AddToCart"
+                      },
+                      {
+                        "name": "AddToWishlist",
+                        "value": "AddToWishlist"
+                      },
+                      {
+                        "name": "InitiateCheckout",
+                        "value": "InitiateCheckout"
+                      },
+                      {
+                        "name": "AddPaymentInfo",
+                        "value": "AddPaymentInfo"
+                      },
+                      {
+                        "name": "Purchase",
+                        "value": "Purchase"
+                      },
+                      {
+                        "name": "PageView",
+                        "value": "PageView"
+                      },
+                      {
+                        "name": "Lead",
+                        "value": "Lead"
+                      },
+                      {
+                        "name": "CompleteRegistration",
+                        "value": "CompleteRegistration"
+                      },
+                      {
+                        "name": "Contact",
+                        "value": "Contact"
+                      },
+                      {
+                        "name": "CustomizeProduct",
+                        "value": "CustomizeProduct"
+                      },
+                      {
+                        "name": "Donate",
+                        "value": "Donate"
+                      },
+                      {
+                        "name": "FindLocation",
+                        "value": "FindLocation"
+                      },
+                      {
+                        "name": "Schedule",
+                        "value": "Schedule"
+                      },
+                      {
+                        "name": "StartTrial",
+                        "value": "StartTrial"
+                      },
+                      {
+                        "name": "SubmitApplication",
+                        "value": "SubmitApplication"
+                      },
+                      {
+                        "name": "Subscribe",
+                        "value": "Subscribe"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "PII properties",
+            "fields": [
+              {
+                "type": "dynamicCustomForm",
+                "label": "Input PII properties you want to denylist",
+                "configKey": "blacklistPiiProperties",
+                "rowFields": [
+                  {
+                    "type": "textInput",
+                    "configKey": "blacklistPiiProperties",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Denylist PII Properties",
+                    "label": "Denylist PII Properties",
+                    "placeholder": "e.g: phone"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Hash Denylist PII Property",
+                    "configKey": "blacklistPiiHash",
+                    "default": false
+                  }
+                ]
+              },
+              {
+                "type": "tagInput",
+                "label": "Input PII properties you want to allowlist",
+                "configKey": "whitelistPiiProperties",
+                "tagKey": "whitelistPiiProperties",
+                "placeholder": "e.g: email",
+                "default": []
+              }
+            ]
+          }
+        ]
+      },
+      "legacyConversionMapping": {
+        "fields": [
+          {
+            "type": "mapping",
+            "label": "Map your RudderStack Events to Facebook Pixel IDs",
+            "note": "Input the RudderStack event to map to Facebook's pixel id.",
+            "configKey": "legacyConversionPixelId",
+            "default": [],
+            "columns": [
+              {
+                "type": "textInput",
+                "key": "from",
+                "label": "Event name",
+                "placeholder": "e.g: Product Searched"
+              },
+              {
+                "type": "textInput",
+                "key": "to",
+                "label": "Pixel ID",
+                "placeholder": "e.g: 234567654654"
+              }
+            ]
+          }
+        ]
+      }
     }
-  ]
+  }
 }

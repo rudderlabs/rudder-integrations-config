@@ -2,17 +2,19 @@
   "name": "AF",
   "displayName": "AppsFlyer",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
       "devKey",
+      "authVersion",
+      "s2sKey",
       "appleAppId",
       "useRichEventName",
       "blacklistedEvents",
       "whitelistedEvents",
       "eventFilteringOption",
-      "oneTrustCookieCategories"
+      "oneTrustCookieCategories",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
@@ -28,12 +30,38 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": ["track", "screen", "page"],
+    "supportedMessageTypes": {
+      "cloud": ["track", "screen", "page"],
+      "device": {
+        "android": ["track", "screen", "identify"],
+        "cordova": ["track", "screen", "identify"],
+        "ios": ["track", "screen", "identify"],
+        "flutter": ["track", "screen", "identify"],
+        "reactnative": ["track", "screen", "identify"]
+      }
+    },
+    "supportedConnectionModes": {
+      "cordova": ["cloud", "device"],
+      "android": ["cloud", "device"],
+      "ios": ["cloud", "device"],
+      "flutter": ["cloud", "device"],
+      "reactnative": ["cloud", "device"],
+      "web": ["cloud"],
+      "amp": ["cloud"],
+      "unity": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"],
+      "shopify": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
+        "authVersion",
+        "s2sKey",
         "devKey",
         "sharingFilter",
         "useRichEventName",
+        "addPropertiesAtRoot",
+        "afCurrencyAtRoot",
         "androidAppId",
         "appleAppId",
         "blacklistedEvents",
@@ -43,12 +71,18 @@
         "apiToken",
         "oneTrustCookieCategories"
       ],
-      "android": ["useNativeSDK"],
-      "ios": ["useNativeSDK"],
-      "reactnative": ["useNativeSDK"],
-      "flutter": ["useNativeSDK"],
-      "cordova": ["useNativeSDK"]
+      "android": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "ios": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "reactnative": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "flutter": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "cordova": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "web": ["connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     },
-    "secretKeys": []
+    "secretKeys": ["apiToken", "s2sKey", "devKey"]
   }
 }

@@ -2,10 +2,15 @@
   "name": "AWIN",
   "displayName": "Awin",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
-    "includeKeys": ["advertiserId", "eventsToTrack", "oneTrustCookieCategories"],
+    "includeKeys": [
+      "advertiserId",
+      "eventsToTrack",
+      "customFieldMap",
+      "oneTrustCookieCategories",
+      "consentManagement"
+    ],
     "excludeKeys": [],
     "supportedSourceTypes": [
       "android",
@@ -20,9 +25,38 @@
       "warehouse",
       "shopify"
     ],
-    "supportedMessageTypes": ["track"],
+    "supportedMessageTypes": { "cloud": ["track"] },
+    "supportedConnectionModes": {
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "web": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "destConfig": {
-      "defaultConfig": ["advertiserId", "eventsToTrack", "oneTrustCookieCategories"]
+      "defaultConfig": [
+        "advertiserId",
+        "eventsToTrack",
+        "customFieldMap",
+        "oneTrustCookieCategories"
+      ],
+      "android": ["connectionMode", "consentManagement"],
+      "ios": ["connectionMode", "consentManagement"],
+      "web": ["connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "reactnative": ["connectionMode", "consentManagement"],
+      "flutter": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     },
     "secretKeys": ["advertiserId"]
   }

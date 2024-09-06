@@ -4,21 +4,21 @@
   "config": {
     "cdkV2Enabled": true,
     "supportsVisualMapper": true,
-    "auth": {
-      "type": "OAuth"
-    },
-    "transformAt": "processor",
+    "auth": { "type": "OAuth" },
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
-    "includeKeys": ["oneTrustCookieCategories"],
+    "includeKeys": ["oneTrustCookieCategories", "consentManagement"],
     "excludeKeys": [],
     "supportedSourceTypes": ["cloud", "warehouse", "shopify"],
-    "supportedMessageTypes": ["audiencelist"],
-    "syncBehaviours": [
-      "mirror"
-    ],
+    "supportedMessageTypes": { "cloud": ["audiencelist"] },
+    "syncBehaviours": ["mirror"],
     "disableJsonMapper": true,
     "isAudienceSupported": true,
+    "supportedConnectionModes": {
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "rudderAccountId",
@@ -27,7 +27,10 @@
         "audienceId",
         "hashEmail",
         "oneTrustCookieCategories"
-      ]
+      ],
+      "cloud": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     }
   },
   "options": { "isBeta": true }

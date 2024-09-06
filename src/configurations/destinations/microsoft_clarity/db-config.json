@@ -2,7 +2,6 @@
   "name": "MICROSOFT_CLARITY",
   "displayName": "Microsoft Clarity",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -11,11 +10,13 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "eventFilteringOption",
-      "oneTrustCookieCategories"
+      "oneTrustCookieCategories",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": ["web"],
-    "supportedMessageTypes": ["identify"],
+    "supportedMessageTypes": { "device": { "web": ["identify"] } },
+    "supportedConnectionModes": { "web": ["device"] },
     "destConfig": {
       "defaultConfig": [
         "projectId",
@@ -25,7 +26,7 @@
         "blacklistedEvents",
         "oneTrustCookieCategories"
       ],
-      "web": ["useNativeSDK"]
+      "web": ["useNativeSDK", "connectionMode", "consentManagement"]
     }
   }
 }

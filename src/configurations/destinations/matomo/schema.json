@@ -1,13 +1,10 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["serverUrl", "siteId"],
+    "required": ["matomoVersion", "siteId"],
     "type": "object",
     "properties": {
-      "serverUrl": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$"
-      },
+      "matomoVersion": { "type": "string", "enum": ["premise", "cloud"], "default": "cloud" },
       "siteId": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,10})$"
@@ -75,9 +72,94 @@
             }
           }
         }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": { "web": { "type": "string", "enum": ["device"] } }
+      },
+      "consentManagement": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "ketch", "oneTrust"],
+                  "default": "oneTrust"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            }
+          }
+        }
       }
     },
     "allOf": [
+      {
+        "if": {
+          "properties": { "matomoVersion": { "const": "premise" } },
+          "required": ["matomoVersion"]
+        },
+        "then": {
+          "properties": {
+            "premiseUrl": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$"
+            }
+          },
+          "required": ["premiseUrl"]
+        }
+      },
+      {
+        "if": {
+          "properties": { "matomoVersion": { "const": "cloud" } },
+          "required": ["matomoVersion"]
+        },
+        "then": {
+          "properties": {
+            "serverUrl": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$"
+            }
+          },
+          "required": ["serverUrl"]
+        }
+      },
       {
         "if": {
           "properties": { "trackVisibleContentImpressions": { "const": true } },

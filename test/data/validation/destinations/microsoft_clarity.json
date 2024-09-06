@@ -40,7 +40,7 @@
   },
   {
     "config": {
-      "projectId": "ej81fqgqfc",
+      "projectId": "ejXXXXgqfc",
       "cookieConsent": "true",
       "eventFilteringOption": "disable",
       "whitelistedEvents": [
@@ -56,5 +56,103 @@
     },
     "result": false,
     "err": ["cookieConsent must be boolean"]
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "projectId": "ejXXXXgqfc",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "projectId": "ejXXXXgqfc",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "projectId": "ejXXXXgqfc",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0 must have required property 'resolutionStrategy'",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "projectId": "ejXXXXgqfc",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "projectId": "ejXXXXgqfc",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.web.0.provider must be equal to one of the allowed values"]
   }
 ]

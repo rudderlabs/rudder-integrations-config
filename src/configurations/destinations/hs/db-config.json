@@ -4,7 +4,6 @@
   "config": {
     "isAudienceSupported": true,
     "supportsVisualMapper": true,
-    "transformAt": "router",
     "transformAtV1": "router",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -12,6 +11,8 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "oneTrustCookieCategories",
+      "ketchConsentPurposes",
+      "consentManagement",
       "eventFilteringOption"
     ],
     "excludeKeys": [],
@@ -29,9 +30,22 @@
       "shopify"
     ],
     "supportedConnectionModes": {
-      "web": ["cloud", "device"]
+      "web": ["cloud", "device"],
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
     },
-    "supportedMessageTypes": ["identify", "track"],
+    "supportedMessageTypes": {
+      "cloud": ["identify", "track"],
+      "device": { "web": ["identify", "track", "page"] }
+    },
     "destConfig": {
       "defaultConfig": [
         "authorizationType",
@@ -48,10 +62,21 @@
         "whitelistedEvents",
         "eventFilteringOption",
         "doAssociation",
-        "oneTrustCookieCategories"
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
       ],
-      "web": ["useNativeSDK", "connectionMode"]
+      "web": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "android": ["consentManagement", "connectionMode"],
+      "ios": ["consentManagement", "connectionMode"],
+      "unity": ["consentManagement", "connectionMode"],
+      "amp": ["consentManagement", "connectionMode"],
+      "cloud": ["consentManagement", "connectionMode"],
+      "warehouse": ["consentManagement", "connectionMode"],
+      "reactnative": ["consentManagement", "connectionMode"],
+      "flutter": ["consentManagement", "connectionMode"],
+      "cordova": ["consentManagement", "connectionMode"],
+      "shopify": ["consentManagement", "connectionMode"]
     },
-    "secretKeys": []
+    "secretKeys": ["apiKey", "accessToken"]
   }
 }

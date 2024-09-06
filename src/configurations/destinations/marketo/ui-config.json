@@ -1,131 +1,340 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Munchkin Account Id",
-          "value": "accountId",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Munchkin Account Id",
-          "required": true,
-          "footerNote": "Your Marketo Accound ID from Admin settings section",
-          "placeholder": "e.g: 585-AXP-446"
-        },
-        {
-          "type": "textInput",
-          "label": "Client ID",
-          "value": "clientId",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Client ID",
-          "required": true,
-          "placeholder": "e.g: 53b1934e-51dd-4599-b24b-92612c71515f",
-          "footerNote": "Your REST API Client ID"
-        },
-        {
-          "type": "textInput",
-          "label": "Client Secret",
-          "value": "clientSecret",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Client Secret",
-          "required": true,
-          "placeholder": "e.g: oxzXtNhcuw9YGsdhplKUeEMi8765dsfw",
-          "secret": true,
-          "footerNote": "Your REST API Client Secret"
-        }
-      ]
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Munchkin Account Id",
+                    "configKey": "accountId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Munchkin Account Id",
+                    "note": "Your Marketo Account ID from Admin settings section",
+                    "placeholder": "e.g: 5X5-AXP-4X6"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Client ID",
+                    "configKey": "clientId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Client ID",
+                    "placeholder": "e.g: 53b1934e-XXXX-XXXX-XXXX-92612cX1515f",
+                    "note": "Your REST API Client ID"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Client Secret",
+                    "configKey": "clientSecret",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Client Secret",
+                    "placeholder": "e.g: oxzXtNhcuwXXXXsdhplKUeEMi8765dsfw",
+                    "secret": true,
+                    "note": "Your REST API Client Secret"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Custom Activity Settings",
+                "note": "Configure your Custom Activity Settings",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Track anonymous events",
+                    "configKey": "trackAnonymousEvents",
+                    "default": false,
+                    "note": "If turned on, you need to send userId with every track call"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Create Lead if it does not exist",
+                    "configKey": "createIfNotExist",
+                    "default": true,
+                    "note": "If turned on, we will create a new lead if the user is not present"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "OneTrust consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
+                  },
+                  "about RudderStack's OneTrust Consent Management feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category ID",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit"
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Mappings",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Rudderstack to Marketo Event Mappings",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "eventMapping",
+                    "label": "Event and property mappings"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "empty",
+      "fields": []
     },
-    {
-      "title": "Custom Activity Settings",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Track anonymous events",
-          "value": "trackAnonymousEvents",
-          "default": false,
-          "footerNote": "If turned on, you need to send userId with every track call"
-        },
-        {
-          "type": "checkbox",
-          "label": "Create Lead if it does not exist",
-          "value": "createIfNotExist",
-          "default": true,
-          "footerNote": "If turned on, we will create a new lead if the user is not present"
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Map events to Marketo Activity ID",
-          "labelLeft": "Event Name",
-          "labelRight": "Activity ID",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g: Product Clicked",
-          "placeholderRight": "e.g: 100001",
-          "value": "customActivityEventMap",
-          "footerNote": "You can find the Activity ID in your Admin section under Custom Activity on your Marketo dashboard"
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Map your event properties to Marketo custom activity's field",
-          "labelLeft": "Event Property",
-          "labelRight": "Marketo Custom Activity field",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g: name",
-          "placeholderRight": "e.g: productName",
-          "value": "customActivityPropertyMap",
-          "footerNote": "The value passed in Event Property name here will be sent in the corresponding mapped field."
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Map event name to Marketo primary key",
-          "labelLeft": "Event Name",
-          "labelRight": "Marketo Primary Key",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g: Product Clicked",
-          "placeholderRight": "e.g: name",
-          "value": "customActivityPrimaryKeyMap",
-          "footerNote": "Map your event name to the desired primary key field."
-        }
-      ]
+    "redirectGroups": {
+      "eventMapping": {
+        "tabs": [
+          {
+            "name": "Custom events",
+            "note": "Map RudderStack events/properties to Marketo custom Activity ID/Primary Key",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map events to Marketo Activity ID and Primary Key",
+                "note": [
+                  "You can find the Activity ID in your Admin section under Custom Activity on your Marketo dashboard",
+                  "Map your event name to the desired primary key field."
+                ],
+                "configKey": "rudderEventsMapping",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "event",
+                    "label": "RudderStack Event Name",
+                    "placeholder": "e.g: Product Searched"
+                  },
+                  {
+                    "type": "textInput",
+                    "key": "marketoPrimarykey",
+                    "label": "Marketo Primary Key",
+                    "placeholder": "e.g: name"
+                  },
+                  {
+                    "type": "textInput",
+                    "key": "marketoActivityId",
+                    "label": "Activity ID",
+                    "placeholder": "e.g: 100001"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Lead trait Mapping",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map your traits to Marketo custom fields",
+                "note": "Map your user traits to your desired custom field's api name.",
+                "configKey": "leadTraitMapping",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "Traits name",
+                    "placeholder": "e.g: leadScore"
+                  },
+                  {
+                    "type": "textInput",
+                    "key": "to",
+                    "label": "Custom field api name",
+                    "placeholder": "e.g: customLeadScore"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Custom Activity Property Map",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map your event properties to Marketo custom activity's field",
+                "note": "The configKey passed in Event Property name here will be sent in the corresponding mapped field.",
+                "configKey": "customActivityPropertyMap",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "Event Property",
+                    "placeholder": "e.g: name"
+                  },
+                  {
+                    "type": "textInput",
+                    "key": "to",
+                    "label": "Marketo Custom Activity field",
+                    "placeholder": "e.g: productName"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
-    {
-      "title": "Lead Mapping",
-      "fields": [
-        {
-          "type": "dynamicForm",
-          "label": "Map your traits to Marketo custom fields",
-          "labelLeft": "Traits name",
-          "labelRight": "Custom field api name",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g: leadScore",
-          "placeholderRight": "e.g: customLeadScore",
-          "value": "leadTraitMapping",
-          "footerNote": "Map your user traits to your desired custom field's api name."
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
       "fields": [
         {
           "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
-          "customFields": [
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
             {
-              "type": "textInput",
-              "placeholder": "Marketing",
-              "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
-              "required": false
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "default": "oneTrust",
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category ID’s",
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }
-  ]
+  }
 }

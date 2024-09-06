@@ -1,0 +1,235 @@
+[
+  {
+    "config": {
+      "accountId": "testACCID",
+      "clientId": "testCLIENTID",
+      "trackAnonymousEvents": false,
+      "createIfNotExist": true,
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": ""
+        }
+      ],
+      "android-connectionMode": "cloud",
+      "rudderEventsMapping": [
+        {
+          "event": "test Mapping",
+          "marketoPrimarykey": "name",
+          "marketoActivityId": "1023"
+        }
+      ],
+      "leadTraitMapping": [
+        {
+          "from": "leadScore",
+          "to": "customLeadScore"
+        }
+      ]
+    },
+    "result": false,
+    "err": [" must have required property 'clientSecret'"]
+  },
+  {
+    "config": {
+      "accountId": "testACCID",
+      "clientId": "testCLIENTID",
+      "clientSecret": "******",
+      "trackAnonymousEvents": false,
+      "createIfNotExist": true,
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": ""
+        }
+      ],
+      "android-connectionMode": "cloud",
+      "rudderEventsMapping": [
+        {
+          "event": "test Mapping",
+          "marketoPrimarykey": "name",
+          "marketoActivityId": "1023"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "clientId": "1234",
+      "clientSecret": "******",
+      "trackAnonymousEvents": false,
+      "createIfNotExist": true,
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": ""
+        }
+      ],
+      "android-connectionMode": "cloud",
+      "rudderEventsMapping": [
+        {
+          "event": "test Mapping",
+          "marketoPrimarykey": "name",
+          "marketoActivityId": "1023"
+        }
+      ]
+    },
+    "result": false,
+    "err": [" must have required property 'accountId'"]
+  },
+  {
+    "config": {
+      "accountId": "testACCID",
+      "clientId": "testCLIENTID",
+      "clientSecret": "******",
+      "trackAnonymousEvents": true,
+      "createIfNotExist": false,
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": ""
+        }
+      ],
+      "android-connectionMode": "cloud"
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "accountId": "testACCID",
+      "clientId": "testCLIENTID",
+      "clientSecret": "******",
+      "trackAnonymousEvents": false,
+      "createIfNotExist": true,
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": ""
+        }
+      ],
+      "leadTraitMapping": [],
+      "android-connectionMode": "cloud",
+      "rudderEventsMapping": [],
+      "customActivityPropertyMap": [
+        {
+          "from": "name",
+          "to": "pagename"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "accountId": "testACCID",
+      "clientId": "testCLIENTID",
+      "clientSecret": "******",
+      "trackAnonymousEvents": false,
+      "createIfNotExist": true,
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "accountId": "testACCID",
+      "clientId": "testCLIENTID",
+      "clientSecret": "******",
+      "trackAnonymousEvents": false,
+      "createIfNotExist": true,
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "accountId": "testACCID",
+      "clientId": "testCLIENTID",
+      "clientSecret": "******",
+      "trackAnonymousEvents": false,
+      "createIfNotExist": true,
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "accountId": "testACCID",
+      "clientId": "testCLIENTID",
+      "clientSecret": "******",
+      "trackAnonymousEvents": false,
+      "createIfNotExist": true,
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "accountId": "testACCID",
+      "clientId": "testCLIENTID",
+      "clientSecret": "******",
+      "trackAnonymousEvents": false,
+      "createIfNotExist": true,
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
+  }
+]

@@ -2,7 +2,44 @@
   {
     "config": {
       "siteId": "1",
-      "serverUrl": "com.yara.fw.stage",
+      "matomoVersion": "premise",
+      "serverUrl": "com.test.fw.stage",
+      "eventsMapToGoalId": [
+        {
+          "from": "Set GoalId",
+          "to": "123"
+        }
+      ],
+      "eventsToStandard": [
+        {
+          "from": "Track Ping",
+          "to": "ping"
+        }
+      ],
+      "trackAllContentImpressions": true,
+      "trackVisibleContentImpressions": true,
+      "checkOnScroll": true,
+      "timeIntervalInMs": "15",
+      "logAllContentBlocksOnPage": true,
+      "enableHeartBeatTimer": true,
+      "activeTimeInseconds": "25",
+      "enableLinkTracking": true,
+      "disablePerformanceTracking": true,
+      "enableCrossDomainLinking": true,
+      "setCrossDomainLinkingTimeout": true,
+      "timeout": "10",
+      "getCrossDomainLinkingUrlParameter": true,
+      "disableBrowserFeatureDetection": true
+    },
+    "result": false,
+    "err": [" must have required property 'premiseUrl'", " must match \"then\" schema"]
+  },
+  {
+    "config": {
+      "siteId": "1",
+      "matomoVersion": "premise",
+      "serverUrl": "com.test.fw.stage",
+      "premiseUrl": "com.test.fw.stage",
       "eventsMapToGoalId": [
         {
           "from": "Set GoalId",
@@ -35,7 +72,43 @@
   {
     "config": {
       "siteId": "1",
-      "serverUrl": "com.yara.fw.stage",
+      "matomoVersion": "cloud",
+      "serverUrl": "com.test.fw.stage",
+      "premiseUrl": "com.test.fw.stage",
+      "eventsMapToGoalId": [
+        {
+          "from": "Set GoalId",
+          "to": "123"
+        }
+      ],
+      "eventsToStandard": [
+        {
+          "from": "Track Ping",
+          "to": "ping"
+        }
+      ],
+      "trackAllContentImpressions": true,
+      "trackVisibleContentImpressions": true,
+      "checkOnScroll": true,
+      "timeIntervalInMs": "15",
+      "logAllContentBlocksOnPage": true,
+      "enableHeartBeatTimer": true,
+      "activeTimeInseconds": "25",
+      "enableLinkTracking": true,
+      "disablePerformanceTracking": true,
+      "enableCrossDomainLinking": true,
+      "setCrossDomainLinkingTimeout": true,
+      "timeout": "10",
+      "getCrossDomainLinkingUrlParameter": true,
+      "disableBrowserFeatureDetection": true
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "siteId": "1",
+      "serverUrl": "com.test.fw.stage",
+      "matomoVersion": "cloud",
       "eventsMapToGoalId": [
         {
           "from": "Set GoalId",
@@ -72,7 +145,8 @@
   {
     "config": {
       "siteId": "3",
-      "serverUrl": "com.yara.fw.stage",
+      "serverUrl": "com.test.fw.stage",
+      "matomoVersion": "cloud",
       "eventsMapToGoalId": [
         {
           "from": "Set GoalId",
@@ -113,7 +187,8 @@
   {
     "config": {
       "siteId": "3",
-      "serverUrl": "com.yara.fw.stage",
+      "matomoVersion": "cloud",
+      "serverUrl": "com.test.fw.stage",
       "eventsMapToGoalId": [
         {
           "from": "Set GoalId",
@@ -153,8 +228,9 @@
   },
   {
     "config": {
-      "serverUrl": "com.yara.fw.stage",
+      "serverUrl": "com.test.fw.stage",
       "eventsMapToGoalId": [],
+      "matomoVersion": "cloud",
       "eventsToStandard": [],
       "trackAllContentImpressions": false,
       "trackVisibleContentImpressions": false,
@@ -173,7 +249,8 @@
   {
     "config": {
       "siteId": "34b",
-      "serverUrl": "com.yara.fw.stage",
+      "matomoVersion": "cloud",
+      "serverUrl": "com.test.fw.stage",
       "eventsMapToGoalId": [],
       "eventsToStandard": [],
       "trackAllContentImpressions": true,
@@ -188,5 +265,173 @@
       "disableBrowserFeatureDetection": false
     },
     "result": true
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "siteId": "34b",
+      "matomoVersion": "cloud",
+      "serverUrl": "com.test.fw.stage",
+      "eventsMapToGoalId": [],
+      "eventsToStandard": [],
+      "trackAllContentImpressions": true,
+      "trackVisibleContentImpressions": false,
+      "logAllContentBlocksOnPage": false,
+      "enableHeartBeatTimer": false,
+      "enableLinkTracking": false,
+      "disablePerformanceTracking": false,
+      "enableCrossDomainLinking": false,
+      "setCrossDomainLinkingTimeout": false,
+      "getCrossDomainLinkingUrlParameter": false,
+      "disableBrowserFeatureDetection": false,
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "siteId": "34b",
+      "matomoVersion": "cloud",
+      "serverUrl": "com.test.fw.stage",
+      "eventsMapToGoalId": [],
+      "eventsToStandard": [],
+      "trackAllContentImpressions": true,
+      "trackVisibleContentImpressions": false,
+      "logAllContentBlocksOnPage": false,
+      "enableHeartBeatTimer": false,
+      "enableLinkTracking": false,
+      "disablePerformanceTracking": false,
+      "enableCrossDomainLinking": false,
+      "setCrossDomainLinkingTimeout": false,
+      "getCrossDomainLinkingUrlParameter": false,
+      "disableBrowserFeatureDetection": false,
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "siteId": "34b",
+      "matomoVersion": "cloud",
+      "serverUrl": "com.test.fw.stage",
+      "eventsMapToGoalId": [],
+      "eventsToStandard": [],
+      "trackAllContentImpressions": true,
+      "trackVisibleContentImpressions": false,
+      "logAllContentBlocksOnPage": false,
+      "enableHeartBeatTimer": false,
+      "enableLinkTracking": false,
+      "disablePerformanceTracking": false,
+      "enableCrossDomainLinking": false,
+      "setCrossDomainLinkingTimeout": false,
+      "getCrossDomainLinkingUrlParameter": false,
+      "disableBrowserFeatureDetection": false,
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0 must have required property 'resolutionStrategy'",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "siteId": "34b",
+      "matomoVersion": "cloud",
+      "serverUrl": "com.test.fw.stage",
+      "eventsMapToGoalId": [],
+      "eventsToStandard": [],
+      "trackAllContentImpressions": true,
+      "trackVisibleContentImpressions": false,
+      "logAllContentBlocksOnPage": false,
+      "enableHeartBeatTimer": false,
+      "enableLinkTracking": false,
+      "disablePerformanceTracking": false,
+      "enableCrossDomainLinking": false,
+      "setCrossDomainLinkingTimeout": false,
+      "getCrossDomainLinkingUrlParameter": false,
+      "disableBrowserFeatureDetection": false,
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "siteId": "34b",
+      "matomoVersion": "cloud",
+      "serverUrl": "com.test.fw.stage",
+      "eventsMapToGoalId": [],
+      "eventsToStandard": [],
+      "trackAllContentImpressions": true,
+      "trackVisibleContentImpressions": false,
+      "logAllContentBlocksOnPage": false,
+      "enableHeartBeatTimer": false,
+      "enableLinkTracking": false,
+      "disablePerformanceTracking": false,
+      "enableCrossDomainLinking": false,
+      "setCrossDomainLinkingTimeout": false,
+      "getCrossDomainLinkingUrlParameter": false,
+      "disableBrowserFeatureDetection": false,
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.web.0.provider must be equal to one of the allowed values"]
   }
 ]

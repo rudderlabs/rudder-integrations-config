@@ -2,10 +2,9 @@
   "name": "LAMBDA",
   "displayName": "AWS Lambda",
   "config": {
-    "transformAt": "router",
     "transformAtV1": "router",
     "saveDestinationResponse": true,
-    "includeKeys": ["oneTrustCookieCategories"],
+    "includeKeys": ["oneTrustCookieCategories", "consentManagement"],
     "excludeKeys": [],
     "supportedSourceTypes": [
       "amp",
@@ -20,7 +19,20 @@
       "web",
       "shopify"
     ],
-    "supportedMessageTypes": ["identify", "page", "screen", "track", "alias", "group"],
+    "supportedMessageTypes": { "cloud": ["identify", "page", "screen", "track", "alias", "group"] },
+    "supportedConnectionModes": {
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "web": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "region",
@@ -33,7 +45,18 @@
         "roleBasedAuth",
         "maxBatchSize",
         "oneTrustCookieCategories"
-      ]
+      ],
+      "amp": ["connectionMode", "consentManagement"],
+      "android": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "flutter": ["connectionMode", "consentManagement"],
+      "ios": ["connectionMode", "consentManagement"],
+      "reactnative": ["connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "web": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     },
     "secretKeys": ["accessKeyId", "accessKey"]
   }

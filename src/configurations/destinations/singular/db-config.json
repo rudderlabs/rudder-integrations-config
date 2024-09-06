@@ -2,7 +2,6 @@
   "name": "SINGULAR",
   "displayName": "Singular",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -12,7 +11,8 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "eventFilteringOption",
-      "oneTrustCookieCategories"
+      "oneTrustCookieCategories",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
@@ -21,12 +21,35 @@
       "flutter",
       "reactnative",
       "cordova",
-      "web",
       "amp",
       "cloud",
       "warehouse",
-      "shopify"
+      "shopify",
+      "web",
+      "unity"
     ],
+    "supportedConnectionModes": {
+      "android": ["cloud", "device"],
+      "ios": ["cloud", "device"],
+      "reactnative": ["cloud", "device"],
+      "cordova": ["cloud", "device"],
+      "web": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "flutter": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
+    "supportedMessageTypes": {
+      "cloud": ["track"],
+      "device": {
+        "android": ["identify", "track", "screen"],
+        "ios": ["identify", "track", "screen"],
+        "reactnative": ["identify", "track", "screen"],
+        "cordova": ["identify", "track", "screen"]
+      }
+    },
     "destConfig": {
       "defaultConfig": [
         "apiKey",
@@ -37,10 +60,17 @@
         "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
-      "android": ["useNativeSDK"],
-      "ios": ["useNativeSDK"],
-      "reactnative": ["useNativeSDK"],
-      "cordova": ["useNativeSDK"]
-    }
+      "android": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "ios": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement", "match_id"],
+      "reactnative": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "cordova": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "flutter": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
+    },
+    "secretKeys": ["apiKey", "apiSecret"]
   }
 }

@@ -8,7 +8,7 @@
           {
             "groups": [
               {
-                "title": "One click checkout",
+                "title": "Connection settings",
                 "note": "Update your connection settings here",
                 "icon": "settings",
                 "fields": [
@@ -19,7 +19,7 @@
                     "configKey": "apiSecret",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
                     "regexErrorMessage": "Invalid API Secret",
-                    "placeholder": "e.g: QuIUHRj7QhG2L7eZDZiPQU",
+                    "placeholder": "e.g: QuIUHRj7XXXXX7eZDZiPQU",
                     "secret": true
                   },
                   {
@@ -71,7 +71,7 @@
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid Firebase App Id",
                     "note": "Enter the ID associated with your stream.  Find this under Admin > Data Streams > choose your stream > Firebase App ID",
-                    "placeholder": "e.g: 2:637908496727:web:a4284b4c99e329d5",
+                    "placeholder": "e.g: 2:637XX8496727:web:a4284b4cXXe329d5",
                     "secret": false
                   }
                 ]
@@ -106,8 +106,55 @@
             "icon": "settings",
             "groups": [
               {
-                "title": "GA4 IT",
+                "title": "GA4 Additional Settings",
                 "fields": [
+                  {
+                    "type": "textInput",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "hybrid"
+                        }
+                      ],
+                      "condition": "or"
+                    },
+                    "label": "SDK Base URL",
+                    "configKey": "sdkBaseUrl",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]*|^$",
+                    "regexErrorMessage": "Please input a valid URL.",
+                    "note": "Enter your GA4 SDK base URL, https://{SDK Base URL}/gtag/js. By default, it is https://www.googletagmanager.com.",
+                    "placeholder": "e.g: https://www.example.com",
+                    "default": "https://www.googletagmanager.com",
+                    "secret": false
+                  },
+                  {
+                    "type": "textInput",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "device"
+                        },
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "hybrid"
+                        }
+                      ],
+                      "condition": "or"
+                    },
+                    "label": "Server Side Container URL",
+                    "configKey": "serverContainerUrl",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]*|^$",
+                    "regexErrorMessage": "Please input a valid URL.",
+                    "note": "Enter your GA4 Server Side Container URL",
+                    "placeholder": "e.g: https://analytics.example.com",
+                    "secret": false
+                  },
                   {
                     "type": "checkbox",
                     "label": "Debug via Validation Server",
@@ -122,10 +169,51 @@
                     "preRequisites": {
                       "fields": [
                         {
-                          "configKey": "connectionModes.cloud",
-                          "value": true
+                          "configKey": "connectionMode.cloud",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.shopify",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.android",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.unity",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.ios",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.amp",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.flutter",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.reactnative",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.warehouse",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.cordova",
+                          "value": "cloud"
                         }
-                      ]
+                      ],
+                      "condition": "or"
                     },
                     "configKey": "debugMode",
                     "default": false
@@ -145,6 +233,13 @@
                 ]
               }
             ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
           },
           {
             "title": "Other settings",
@@ -192,7 +287,7 @@
                   {
                     "type": "tagInput",
                     "label": "Allowlisted events",
-                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
+                    "note": "Input separate events by pressing 'Enter'.\nInput the events you want to allowlist.",
                     "configKey": "whitelistedEvents",
                     "tagKey": "eventName",
                     "placeholder": "e.g: Anonymous page visit",
@@ -213,7 +308,7 @@
                   {
                     "type": "tagInput",
                     "label": "Denylisted events",
-                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
+                    "note": "Input separate events by pressing 'Enter'.\nInput the events you want to denylist. ",
                     "configKey": "blacklistedEvents",
                     "tagKey": "eventName",
                     "placeholder": "e.g: Anonymous page visit",
@@ -230,58 +325,6 @@
                         }
                       ]
                     }
-                  }
-                ]
-              },
-              {
-                "title": "OneTrust cookie consent settings",
-                "note": [
-                  "Enter your OneTrust category names if you have them configured. ",
-                  {
-                    "text": "Learn more ",
-                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
-                  },
-                  "about RudderStack’s OneTrust Consent Manager feature."
-                ],
-                "fields": [
-                  {
-                    "type": "tagInput",
-                    "label": "Cookie category name",
-                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
-                    "configKey": "oneTrustCookieCategories",
-                    "tagKey": "oneTrustCookieCategory",
-                    "placeholder": "e.g: Marketing",
-                    "default": [
-                      {
-                        "oneTrustCookieCategory": ""
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "title": "Ketch consent purpose settings",
-                "note": [
-                  "Enter your Ketch purpose Id if you have them configured. ",
-                  {
-                    "text": "Learn more ",
-                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/ketch/"
-                  },
-                  "about RudderStack and Ketch Consent Manager integration."
-                ],
-                "fields": [
-                  {
-                    "type": "tagInput",
-                    "label": "Purpose ID",
-                    "note": "Input your Ketch purpose Id by pressing ‘Enter’ after each entry",
-                    "configKey": "ketchConsentPurposes",
-                    "tagKey": "purpose",
-                    "placeholder": "e.g: Marketing",
-                    "default": [
-                      {
-                        "purpose": ""
-                      }
-                    ]
                   }
                 ]
               }
@@ -358,7 +401,137 @@
               "link": "https://www.rudderstack.com/docs/destinations/streaming-destinations/google-analytics-4/setting-up-google-analytics-4-in-rudderstack/#hybrid-mode"
             }
           ],
-          "default": true
+          "default": false
+        }
+      ]
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "tagInput",
+          "label": "OneTrust consent category IDs",
+          "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "configKey": "oneTrustCookieCategories",
+          "tagKey": "oneTrustCookieCategory",
+          "placeholder": "e.g: C0001",
+          "default": [
+            {
+              "oneTrustCookieCategory": ""
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "tagInput",
+          "label": "Ketch consent purpose IDs",
+          "note": "Input your Ketch consent purpose IDs by pressing 'Enter' after each entry.",
+          "configKey": "ketchConsentPurposes",
+          "tagKey": "purpose",
+          "placeholder": "e.g: marketing",
+          "default": [
+            {
+              "purpose": ""
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "default": "oneTrust",
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category ID’s",
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }

@@ -1,0 +1,339 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Advertiser ID",
+                    "note": "Enter your Advertiser Id from advertiser preferences page in The Trade Desk platform UI.",
+                    "configKey": "advertiserId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Advertiser ID",
+                    "placeholder": "e.g: jxXXXph"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Tracking Tag ID",
+                    "note": "Enter the tracking tag ID. Contact your The Trade Desk representative to obtain it.",
+                    "configKey": "trackerId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Tracking Tag ID",
+                    "placeholder": "e.g: hcXXXke"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "OneTrust cookie consent settings",
+                "note": [
+                  "Enter your OneTrust category names if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                  },
+                  "about RudderStack's OneTrust Consent Manager feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Cookie category name",
+                    "note": "Input your OneTrust category names by pressing 'Enter' after each entry",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Event mapping",
+        "note": "Map RudderStack to Trade Desk events",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "RudderStack to Trade Desk event mappings",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "eventAndPropertiesMapping",
+                    "label": "Event and property mappings",
+                    "note": "Map RudderStack events/properties to Trade Desk events/properties"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "redirectGroups": {
+      "eventAndPropertiesMapping": {
+        "tabs": [
+          {
+            "name": "Event",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map your RudderStack Events to Trade Desk Events",
+                "note": "Enter the input event name which you want to map with a Trade Desk Event Name",
+                "configKey": "eventsMapping",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "RudderStack Event",
+                    "placeholder": "e.g: Product Searched"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "key": "to",
+                    "label": "Trade Desk Event",
+                    "options": [
+                      {
+                        "name": "searchitem",
+                        "value": "searchitem"
+                      },
+                      {
+                        "name": "searchcategory",
+                        "value": "searchcategory"
+                      },
+                      {
+                        "name": "login",
+                        "value": "login"
+                      },
+                      {
+                        "name": "messagebusiness",
+                        "value": "messagebusiness"
+                      },
+                      {
+                        "name": "direction",
+                        "value": "direction"
+                      },
+                      {
+                        "name": "sitevisit",
+                        "value": "sitevisit"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Custom properties",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map custom properties",
+                "configKey": "customProperties",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "rudderProperty",
+                    "label": "RudderStack property path",
+                    "placeholder": "e.g properties.key1"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "key": "tradeDeskProperty",
+                    "label": "Trade Desk custom property",
+                    "options": [
+                      {
+                        "label": "td1",
+                        "value": "td1"
+                      },
+                      {
+                        "label": "td2",
+                        "value": "td2"
+                      },
+                      {
+                        "label": "td3",
+                        "value": "td3"
+                      },
+                      {
+                        "label": "td4",
+                        "value": "td4"
+                      },
+                      {
+                        "label": "td5",
+                        "value": "td5"
+                      },
+                      {
+                        "label": "td6",
+                        "value": "td6"
+                      },
+                      {
+                        "label": "td7",
+                        "value": "td7"
+                      },
+                      {
+                        "label": "td8",
+                        "value": "td8"
+                      },
+                      {
+                        "label": "td9",
+                        "value": "td9"
+                      },
+                      {
+                        "label": "td10",
+                        "value": "td10"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "default": "oneTrust",
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category ID’s",
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

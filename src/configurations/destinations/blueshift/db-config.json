@@ -2,12 +2,9 @@
   "name": "BLUESHIFT",
   "displayName": "Blueshift",
   "config": {
-    "transformAt": "router",
     "transformAtV1": "router",
     "saveDestinationResponse": true,
-    "includeKeys": [
-      "oneTrustCookieCategories"
-    ],
+    "includeKeys": ["oneTrustCookieCategories", "consentManagement"],
     "excludeKeys": [],
     "supportedSourceTypes": [
       "android",
@@ -22,22 +19,34 @@
       "shopify",
       "warehouse"
     ],
-    "supportedMessageTypes": [
-      "identify",
-      "track",
-      "group"
-    ],
-    "destConfig": {
-      "defaultConfig": [
-        "eventApiKey",
-        "usersApiKey",
-        "dataCenter",
-        "oneTrustCookieCategories"
-      ]
+    "supportedConnectionModes": {
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "web": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
     },
-    "secretKeys": [
-      "eventApiKey",
-      "usersApiKey"
-    ]
+    "supportedMessageTypes": { "cloud": ["identify", "track", "group"] },
+    "destConfig": {
+      "defaultConfig": ["eventApiKey", "usersApiKey", "dataCenter", "oneTrustCookieCategories"],
+      "android": ["connectionMode", "consentManagement"],
+      "ios": ["connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "reactnative": ["connectionMode", "consentManagement"],
+      "flutter": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "web": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"]
+    },
+    "secretKeys": ["eventApiKey", "usersApiKey"]
   }
 }

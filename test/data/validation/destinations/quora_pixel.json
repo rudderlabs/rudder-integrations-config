@@ -1,7 +1,7 @@
 [
   {
     "config": {
-      "pixelId": "d2bnp1ubi9x6zq1p89h5hyx2hf5q1k3v",
+      "pixelId": "d2bnp1ubi9x6zq1p89hXXXXx2hf5q1k3v",
       "eventsToQPEvents": [
         {
           "from": "Order Completed",
@@ -9,24 +9,45 @@
         }
       ],
       "eventFilteringOption": "disable",
-      "whitelistedEvents": [{ "eventName": "" }],
-      "blacklistedEvents": [{ "eventName": "" }]
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ]
     },
     "result": true
   },
   {
     "config": {
-      "pixelId": "d2bnp1ubi9x6zq1p89h5hyx2hf5q1k3v",
-      "eventsToQPEvents": [{ "from": "", "to": "" }],
+      "pixelId": "d2bnp1ubi9x6zq1p89hXXXXx2hf5q1k3v",
+      "eventsToQPEvents": [
+        {
+          "from": "",
+          "to": ""
+        }
+      ],
       "eventFilteringOption": "disable",
-      "whitelistedEvents": [{ "eventName": "" }],
-      "blacklistedEvents": [{ "eventName": "" }]
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ]
     },
     "result": true
   },
   {
     "config": {
-      "pixelId": "d2bnp1ubi9x6zq1p89h5hyx2hf5q1k3v",
+      "pixelId": "d2bnp1ubi9x6zq1p89hXXXXx2hf5q1k3v",
       "eventsToQPEvents": [
         {
           "from": "Order Completed",
@@ -42,8 +63,16 @@
         }
       ],
       "eventFilteringOption": "whitelistedEvents",
-      "whitelistedEvents": [{ "eventName": "Anonymous Page Visit" }],
-      "blacklistedEvents": [{ "eventName": "Credit Card Added" }]
+      "whitelistedEvents": [
+        {
+          "eventName": "Anonymous Page Visit"
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": "Credit Card Added"
+        }
+      ]
     },
     "result": true
   },
@@ -57,8 +86,16 @@
         }
       ],
       "eventFilteringOption": "disable",
-      "whitelistedEvents": [{ "eventName": "" }],
-      "blacklistedEvents": [{ "eventName": "" }]
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ]
     },
     "result": false,
     "err": ["pixelId must be string"]
@@ -73,8 +110,16 @@
         }
       ],
       "eventFilteringOption": "disable",
-      "whitelistedEvents": [{ "eventName": "" }],
-      "blacklistedEvents": [{ "eventName": "" }]
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ]
     },
     "result": false,
     "err": ["pixelId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""]
@@ -88,10 +133,116 @@
         }
       ],
       "eventFilteringOption": "disable",
-      "whitelistedEvents": [{ "eventName": "" }],
-      "blacklistedEvents": [{ "eventName": "" }]
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ]
     },
     "result": false,
     "err": [" must have required property 'pixelId'"]
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "pixelId": "d2bnp1ubi9x6zq1p89hXXXXx2hf5q1k3v",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "pixelId": "d2bnp1ubi9x6zq1p89hXXXXx2hf5q1k3v",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "pixelId": "d2bnp1ubi9x6zq1p89hXXXXx2hf5q1k3v",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0 must have required property 'resolutionStrategy'",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "pixelId": "d2bnp1ubi9x6zq1p89hXXXXx2hf5q1k3v",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "pixelId": "d2bnp1ubi9x6zq1p89hXXXXx2hf5q1k3v",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.web.0.provider must be equal to one of the allowed values"]
   }
 ]

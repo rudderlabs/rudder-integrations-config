@@ -2,11 +2,12 @@
   "name": "MATOMO",
   "displayName": "Matomo",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
       "serverUrl",
+      "matomoVersion",
+      "premiseUrl",
       "siteId",
       "eventsMapToGoalId",
       "eventsToStandard",
@@ -24,14 +25,18 @@
       "timeout",
       "getCrossDomainLinkingUrlParameter",
       "disableBrowserFeatureDetection",
-      "oneTrustCookieCategories"
+      "oneTrustCookieCategories",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": ["web"],
-    "supportedMessageTypes": ["identify", "track", "page"],
+    "supportedMessageTypes": { "device": { "web": ["identify", "track", "page"] } },
+    "supportedConnectionModes": { "web": ["device"] },
     "destConfig": {
       "defaultConfig": [
+        "matomoVersion",
         "serverUrl",
+        "premiseUrl",
         "siteId",
         "eventsMapToGoalId",
         "eventsToStandard",
@@ -51,7 +56,7 @@
         "disableBrowserFeatureDetection",
         "oneTrustCookieCategories"
       ],
-      "web": ["useNativeSDK"]
+      "web": ["useNativeSDK", "connectionMode", "consentManagement"]
     },
     "secretKeys": ["serverUrl", "siteId"]
   }

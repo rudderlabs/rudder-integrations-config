@@ -1,7 +1,7 @@
 {
   "uiConfig": [
     {
-      "title": "1. Connection Settings",
+      "title": "Connection Settings",
       "fields": [
         {
           "type": "textInput",
@@ -10,12 +10,131 @@
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Branch Key",
           "required": true,
-          "placeholder": "e.g: key_live_mfMJCn7WLNeXte2aZIDOeobdrvmbZpgD"
+          "placeholder": "e.g: key_live_mfXXXXXNeXte2aZIDOeobdrvmbZpgD"
         }
       ]
     },
     {
-      "title": "2. Native SDK",
+      "title": "Other Settings",
+      "fields": [
+        {
+          "type": "dynamicSelectForm",
+          "label": "Map Your Events To Branch Events",
+          "labelLeft": "Event Name",
+          "labelRight": "Branch Event Name",
+          "value": "eventsMapping",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "required": false,
+          "placeholderLeft": "e.g: Order Completed",
+          "placeholderRight": "e.g: PURCHASE",
+          "options": [
+            {
+              "name": "ACHIEVE_LEVEL",
+              "value": "ACHIEVE_LEVEL"
+            },
+            {
+              "name": "ADD_PAYMENT_INFO",
+              "value": "ADD_PAYMENT_INFO"
+            },
+            {
+              "name": "ADD_TO_CART",
+              "value": "ADD_TO_CART"
+            },
+            {
+              "name": "ADD_TO_WISHLIST",
+              "value": "ADD_TO_WISHLIST"
+            },
+            {
+              "name": "CLICK_AD",
+              "value": "CLICK_AD"
+            },
+            {
+              "name": "COMPLETE_REGISTRATION",
+              "value": "COMPLETE_REGISTRATION"
+            },
+            {
+              "name": "COMPLETE_STREAM",
+              "value": "COMPLETE_STREAM"
+            },
+            {
+              "name": "COMPLETE_TUTORIAL",
+              "value": "COMPLETE_TUTORIAL"
+            },
+            {
+              "name": "INVITE",
+              "value": "INVITE"
+            },
+            {
+              "name": "INITIATE_PURCHASE",
+              "value": "INITIATE_PURCHASE"
+            },
+            {
+              "name": "INITIATE_STREAM",
+              "value": "INITIATE_STREAM"
+            },
+            {
+              "name": "LOGIN",
+              "value": "LOGIN"
+            },
+            {
+              "name": "PURCHASE",
+              "value": "PURCHASE"
+            },
+            {
+              "name": "RATE",
+              "value": "RATE"
+            },
+            {
+              "name": "RESERVE",
+              "value": "RESERVE"
+            },
+            {
+              "name": "SEARCH",
+              "value": "SEARCH"
+            },
+            {
+              "name": "SHARE",
+              "value": "SHARE"
+            },
+            {
+              "name": "SPEND_CREDITS",
+              "value": "SPEND_CREDITS"
+            },
+            {
+              "name": "START_TRIAL",
+              "value": "START_TRIAL"
+            },
+            {
+              "name": "SUBSCRIBE",
+              "value": "SUBSCRIBE"
+            },
+            {
+              "name": "UNLOCK_ACHIEVEMENT",
+              "value": "UNLOCK_ACHIEVEMENT"
+            },
+            {
+              "name": "VIEW_AD",
+              "value": "VIEW_AD"
+            },
+            {
+              "name": "VIEW_CART",
+              "value": "VIEW_CART"
+            },
+            {
+              "name": "VIEW_ITEM",
+              "value": "VIEW_ITEM"
+            },
+            {
+              "name": "VIEW_ITEMS",
+              "value": "VIEW_ITEMS"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Native SDK",
       "fields": [
         {
           "type": "checkbox",
@@ -26,7 +145,7 @@
       ]
     },
     {
-      "title": "3. Client-side Events Filtering",
+      "title": "Client-side Events Filtering",
       "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
       "fields": [
         {
@@ -86,16 +205,109 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "consentManagement",
+          "label": "Consent management settings",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "customFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "value": "provider",
+              "options": [
+                {
+                  "name": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "name": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "name": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "defaultOption": {
+                "name": "OneTrust",
+                "value": "oneTrust"
+              },
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "value": "resolutionStrategy",
+              "options": [
+                {
+                  "name": "AND",
+                  "value": "and"
+                },
+                {
+                  "name": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "dynamicCustomForm",
+              "value": "consents",
+              "label": "Enter consent category ID’s",
+              "customFields": [
+                {
+                  "type": "textInput",
+                  "placeholder": "Marketing",
+                  "value": "consent",
+                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "required": false
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }

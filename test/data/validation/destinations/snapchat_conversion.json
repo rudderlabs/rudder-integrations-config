@@ -1,7 +1,7 @@
 [
   {
     "config": {
-      "apiKey": "MTp6WHZyNbJXZVNMMm11AlJ1R1BXeVVBOkk0dFk5dkEybUVEWAw5NHk5dXBYUjBIdWp6QzZCNC1TMEFGU9QwYVdnUjg",
+      "apiKey": "MTp6WHZyNbJXZVNMMm11AlJ1R1BXeVVBOkk0dFk5dkEybUVEWAw5NHXXXXBYUjBIdWp6QzZCNC1TMEFGU9QwYVdnUjg",
       "pixelId": "836d6231-aad6-4e41-9cbb-5854565cad8e",
       "enableDeduplication": false
     },
@@ -18,7 +18,7 @@
   },
   {
     "config": {
-      "apiKey": "MTp6WHZyNbJXZVNMMm11AlJ1R1BXeVVBOkk0dFk5dkEybUVEWAw5NHk5dXBYUjBIdWp6QzZCNC1TMEFGU9QwYVdnUjg",
+      "apiKey": "MTp6WHZyNbJXZVNMMm11AlJ1R1BXeVVBOkk0dFk5dkEybUVEWAw5NHXXXXBYUjBIdWp6QzZCNC1TMEFGU9QwYVdnUjg",
       "pixelId": "836d6231-aad6-4e41-9cbb-5854565cad8e",
       "enableDeduplication": true,
       "deduplicationKey": "messageId",
@@ -30,5 +30,118 @@
       ]
     },
     "result": true
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "apiKey": "MTp6WHZyNbJXZVNMMm11AlJ1R1BXeVVBOkk0dFk5dkEybUVEWAw5NHXXXXBYUjBIdWp6QzZCNC1TMEFGU9QwYVdnUjg",
+      "pixelId": "836d6231-aad6-4e41-9cbb-5854565cad8e",
+      "enableDeduplication": true,
+      "deduplicationKey": "messageId",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "apiKey": "MTp6WHZyNbJXZVNMMm11AlJ1R1BXeVVBOkk0dFk5dkEybUVEWAw5NHXXXXBYUjBIdWp6QzZCNC1TMEFGU9QwYVdnUjg",
+      "pixelId": "836d6231-aad6-4e41-9cbb-5854565cad8e",
+      "enableDeduplication": true,
+      "deduplicationKey": "messageId",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "apiKey": "MTp6WHZyNbJXZVNMMm11AlJ1R1BXeVVBOkk0dFk5dkEybUVEWAw5NHXXXXBYUjBIdWp6QzZCNC1TMEFGU9QwYVdnUjg",
+      "pixelId": "836d6231-aad6-4e41-9cbb-5854565cad8e",
+      "enableDeduplication": true,
+      "deduplicationKey": "messageId",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "apiKey": "MTp6WHZyNbJXZVNMMm11AlJ1R1BXeVVBOkk0dFk5dkEybUVEWAw5NHXXXXBYUjBIdWp6QzZCNC1TMEFGU9QwYVdnUjg",
+      "pixelId": "836d6231-aad6-4e41-9cbb-5854565cad8e",
+      "enableDeduplication": true,
+      "deduplicationKey": "messageId",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "apiKey": "MTp6WHZyNbJXZVNMMm11AlJ1R1BXeVVBOkk0dFk5dkEybUVEWAw5NHXXXXBYUjBIdWp6QzZCNC1TMEFGU9QwYVdnUjg",
+      "pixelId": "836d6231-aad6-4e41-9cbb-5854565cad8e",
+      "enableDeduplication": true,
+      "deduplicationKey": "messageId",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]

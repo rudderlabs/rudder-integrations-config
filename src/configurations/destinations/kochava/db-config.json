@@ -2,9 +2,8 @@
   "name": "KOCHAVA",
   "displayName": "Kochava",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
-    "cdkEnabled": true,
+    "cdkV2Enabled": true,
     "saveDestinationResponse": true,
     "includeKeys": [
       "apiKey",
@@ -13,7 +12,8 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "eventFilteringOption",
-      "oneTrustCookieCategories"
+      "oneTrustCookieCategories",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
@@ -29,7 +29,23 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": ["screen", "track"],
+    "supportedMessageTypes": {
+      "cloud": ["screen", "track"],
+      "device": { "android": ["screen", "track"], "ios": ["screen", "track"] }
+    },
+    "supportedConnectionModes": {
+      "android": ["cloud", "device"],
+      "ios": ["cloud", "device"],
+      "flutter": ["cloud", "device"],
+      "web": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"],
+      "reactnative": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "apiKey",
@@ -38,9 +54,30 @@
         "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
-      "android": ["useNativeSDK"],
-      "ios": ["useNativeSDK", "appTrackingTransparency", "skAdNetwork"]
+      "android": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "flutter": [
+        "useNativeSDK",
+        "appTrackingTransparency",
+        "skAdNetwork",
+        "connectionMode",
+        "consentManagement"
+      ],
+      "ios": [
+        "useNativeSDK",
+        "appTrackingTransparency",
+        "skAdNetwork",
+        "connectionMode",
+        "consentManagement"
+      ],
+      "web": ["connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "reactnative": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     },
-    "secretKeys": []
+    "secretKeys": ["apiKey"]
   }
 }

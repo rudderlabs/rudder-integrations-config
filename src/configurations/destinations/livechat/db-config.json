@@ -2,7 +2,6 @@
   "name": "LIVECHAT",
   "displayName": "livechat",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -14,11 +13,13 @@
       "eventFilteringOption",
       "blacklistedEvents",
       "whitelistedEvents",
-      "oneTrustCookieCategories"
+      "oneTrustCookieCategories",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": ["web"],
-    "supportedMessageTypes": ["identify", "track"],
+    "supportedMessageTypes": { "device": { "web": ["identify", "track"] } },
+    "supportedConnectionModes": { "web": ["device"] },
     "destConfig": {
       "defaultConfig": [
         "licenseId",
@@ -31,7 +32,7 @@
         "whitelistedEvents",
         "oneTrustCookieCategories"
       ],
-      "web": ["useNativeSDK"]
+      "web": ["useNativeSDK", "connectionMode", "consentManagement"]
     },
     "secretKeys": ["licenseId"]
   }

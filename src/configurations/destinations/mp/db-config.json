@@ -2,7 +2,6 @@
   "name": "MP",
   "displayName": "Mixpanel",
   "config": {
-    "transformAt": "router",
     "transformAtV1": "router",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -13,6 +12,7 @@
       "people",
       "setAllTraitsByDefault",
       "superProperties",
+      "setOnceProperties",
       "peopleProperties",
       "eventIncrements",
       "propIncrements",
@@ -28,8 +28,15 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "oneTrustCookieCategories",
+      "ketchConsentPurposes",
+      "consentManagement",
       "eventFilteringOption",
-      "identityMergeApi"
+      "identityMergeApi",
+      "ignoreDnt",
+      "useUserDefinedPageEventName",
+      "userDefinedPageEventTemplate",
+      "useUserDefinedScreenEventName",
+      "userDefinedScreenEventTemplate"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
@@ -45,7 +52,25 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": ["alias", "group", "identify", "page", "screen", "track"],
+    "supportedMessageTypes": {
+      "cloud": ["alias", "group", "identify", "page", "screen", "track"],
+      "device": {
+        "web": ["identify", "track", "page", "group", "alias"]
+      }
+    },
+    "supportedConnectionModes": {
+      "web": ["cloud", "device"],
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "token",
@@ -55,6 +80,7 @@
         "people",
         "setAllTraitsByDefault",
         "superProperties",
+        "setOnceProperties",
         "peopleProperties",
         "eventIncrements",
         "propIncrements",
@@ -74,15 +100,84 @@
         "serviceAccountUserName",
         "serviceAccountSecret",
         "projectId",
-        "oneTrustCookieCategories",
         "identityMergeApi",
         "userDeletionApi",
         "gdprApiToken",
         "strictMode",
-        "ignoreDnt"
+        "ignoreDnt",
+        "useUserDefinedPageEventName",
+        "userDefinedPageEventTemplate",
+        "useUserDefinedScreenEventName",
+        "userDefinedScreenEventTemplate"
       ],
-      "web": ["useNativeSDK"]
+      "android": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "web": [
+        "useNativeSDK",
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "ios": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "unity": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "amp": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "cloud": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "reactnative": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "flutter": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "cordova": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "shopify": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "warehouse": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ]
     },
-    "secretKeys": ["token", "gdprApiToken"]
+    "secretKeys": ["token", "gdprApiToken", "apiSecret"]
   }
 }

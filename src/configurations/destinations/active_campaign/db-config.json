@@ -2,11 +2,11 @@
   "name": "ACTIVE_CAMPAIGN",
   "displayName": "ActiveCampaign",
   "config": {
-    "transformAt": "router",
     "transformAtV1": "router",
     "saveDestinationResponse": true,
     "isAudienceSupported": true,
-    "includeKeys": ["oneTrustCookieCategories", "connectionMode", "actid"],
+    "throttlingCost": { "eventType": { "track": 2, "identify": 4, "screen": 2 } },
+    "includeKeys": ["oneTrustCookieCategories", "connectionMode", "actid", "consentManagement"],
     "excludeKeys": [],
     "supportedSourceTypes": [
       "android",
@@ -21,18 +21,37 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": ["identify", "page", "screen", "track"],
+    "supportedMessageTypes": {
+      "cloud": ["identify", "page", "screen", "track"],
+      "device": { "web": ["identify", "page", "screen", "track"] }
+    },
     "supportedConnectionModes": {
-      "web": ["cloud", "device", "hybrid"]
+      "web": ["cloud", "device", "hybrid"],
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
     },
-    "hybridModeCloudEventsFilter": {
-      "web": {
-        "messageType": ["track", "screen", "identify"]
-      }
-    },
+    "hybridModeCloudEventsFilter": { "web": { "messageType": ["track", "screen", "identify"] } },
     "destConfig": {
       "defaultConfig": ["apiUrl", "apiKey", "eventKey", "actid", "oneTrustCookieCategories"],
-      "web": ["useNativeSDK", "connectionMode"]
+      "web": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "android": ["connectionMode", "consentManagement"],
+      "ios": ["connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "amp": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "reactnative": ["connectionMode", "consentManagement"],
+      "flutter": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     },
     "secretKeys": ["apiKey", "eventKey", "actid"]
   }

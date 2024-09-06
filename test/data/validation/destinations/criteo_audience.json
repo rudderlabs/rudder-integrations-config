@@ -1,28 +1,34 @@
 [
   {
     "config": {
-      "audienceId": { "cloud": "138383" },
+      "audienceId": {
+        "cloud": "000000"
+      },
       "audienceType": "email",
-      "adAccountId": { "warehouse": "4343434" }
+      "adAccountId": {
+        "warehouse": "0000000"
+      }
     },
     "result": true
   },
   {
     "config": {
-      "audienceId": { "cloud": "" },
       "audienceType": "email",
-      "adAccountId": { "warehouse": "4343434" }
+      "adAccountId": {
+        "warehouse": "0000000"
+      }
     },
-    "result": false,
-    "err": [
-      "audienceId.cloud must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$\""
-    ]
+    "result": true
   },
   {
     "config": {
-      "audienceId": { "cloud": "138383" },
+      "audienceId": {
+        "cloud": "000000"
+      },
       "audienceType": "email",
-      "adAccountId": { "warehouse": "" }
+      "adAccountId": {
+        "warehouse": ""
+      }
     },
     "result": false,
     "err": [
@@ -31,7 +37,7 @@
   },
   {
     "config": {
-      "audienceId": "134567",
+      "audienceId": "000000",
       "audienceType": "gum",
       "gumCallerId": ""
     },
@@ -39,17 +45,145 @@
     "err": [
       "gumCallerId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$\"",
       " must match \"then\" schema",
-      " must match a schema in anyOf",
-      "audienceId must be object"
+      " must match a schema in anyOf"
     ]
   },
   {
     "config": {
-      "audienceId": "134567",
+      "audienceId": {
+        "cloud": "000000"
+      },
       "audienceType": "gum",
-      "gumCallerId": "14245"
+      "gumCallerId": "00000"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "audienceId": {
+        "cloud": "000000"
+      },
+      "audienceType": "email",
+      "adAccountId": {
+        "warehouse": "0000000"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "audienceId": {
+        "cloud": "000000"
+      },
+      "audienceType": "email",
+      "adAccountId": {
+        "warehouse": "0000000"
+      },
+      "consentManagement": {
+        "shopify": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
     },
     "result": false,
-    "err": ["audienceId must be object"]
+    "err": [
+      "consentManagement.shopify.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.shopify.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "audienceId": {
+        "cloud": "000000"
+      },
+      "audienceType": "email",
+      "adAccountId": {
+        "warehouse": "0000000"
+      },
+      "consentManagement": {
+        "shopify": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.shopify.0 must have required property 'resolutionStrategy'",
+      "consentManagement.shopify.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "audienceId": {
+        "cloud": "000000"
+      },
+      "audienceType": "email",
+      "adAccountId": {
+        "warehouse": "0000000"
+      },
+      "consentManagement": {
+        "shopify": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "audienceId": {
+        "cloud": "000000"
+      },
+      "audienceType": "email",
+      "adAccountId": {
+        "warehouse": "0000000"
+      },
+      "consentManagement": {
+        "shopify": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.shopify.0.provider must be equal to one of the allowed values"]
   }
 ]

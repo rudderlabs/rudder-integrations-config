@@ -1,7 +1,7 @@
 [
   {
     "config": {
-      "accountId": "68869",
+      "accountId": "6XX69",
       "isSPA": true,
       "sendExperimentTrack": false,
       "sendExperimentIdentify": true,
@@ -26,7 +26,7 @@
   },
   {
     "config": {
-      "accountId": "68869",
+      "accountId": "6XX69",
       "isSPA": true,
       "sendExperimentTrack": false,
       "sendExperimentIdentify": true,
@@ -83,7 +83,7 @@
   },
   {
     "config": {
-      "accountId": "68869",
+      "accountId": "6XX69",
       "isSPA": true,
       "sendExperimentTrack": true,
       "sendExperimentIdentify": false,
@@ -105,5 +105,103 @@
     },
     "result": false,
     "err": ["whitelistedEvents.0.eventName must be string"]
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "accountId": "6XX69",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "accountId": "6XX69",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "accountId": "6XX69",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0 must have required property 'resolutionStrategy'",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "accountId": "6XX69",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "accountId": "6XX69",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.web.0.provider must be equal to one of the allowed values"]
   }
 ]

@@ -1,0 +1,292 @@
+[
+  {
+    "config": {
+      "organisationId": "testorgid",
+      "environment": "main",
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "sendPageInDevice": {
+        "web": true
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "environment": "main",
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "sendPageInDevice": {
+        "web": false
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "environment": "main",
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "cloud",
+        "flutter": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'organisationId'", " must match \"then\" schema"]
+  },
+  {
+    "config": {
+      "organisationId": "testorgid",
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device",
+        "flutter": "cloud"
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "connectionMode": {
+        "web": "cloud",
+        "flutter": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'organisationId'", " must match \"then\" schema"]
+  },
+  {
+    "config": {
+      "organisationId": "",
+      "environment": "main",
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "connectionMode": {
+        "flutter": "cloud"
+      }
+    },
+    "result": false,
+    "err": ["organisationId must match pattern \"^(.{1,100})$\"", " must match \"then\" schema"]
+  },
+  {
+    "config": {
+      "environment": "main",
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "connectionMode": {
+        "shopify": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'organisationId'", " must match \"then\" schema"]
+  },
+  {
+    "config": {
+      "organisationId": "1234",
+      "environment": "main",
+      "eventFilteringOption": "disable",
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "organisationId": "testorgid",
+      "environment": "main",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "organisationId": "testorgid",
+      "environment": "main",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "organisationId": "testorgid",
+      "environment": "main",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "organisationId": "testorgid",
+      "environment": "main",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "organisationId": "testorgid",
+      "environment": "main",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
+  }
+]

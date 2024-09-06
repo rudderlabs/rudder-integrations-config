@@ -24,6 +24,118 @@
       "database": "test-database",
       "user": "test-user",
       "password": "test-password",
+      "useIAMForAuth": false,
+      "port": "0000",
+      "useSSH": false,
+      "syncFrequency": "30",
+      "enableSSE": false,
+      "useRudderStorage": false,
+      "useSTSTokens": false,
+      "bucketName": "test-bucket",
+      "roleBasedAuth": false,
+      "accessKeyID": "",
+      "accessKey": ""
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "host": "test-host",
+      "database": "test-database",
+      "user": "test-user",
+      "password": "test-password",
+      "useIAMForAuth": false,
+      "iamRoleARNForAuth": "",
+      "clusterId": "",
+      "clusterRegion": "",
+      "port": "0000",
+      "useSSH": false,
+      "syncFrequency": "30",
+      "enableSSE": false,
+      "useRudderStorage": false,
+      "useSTSTokens": false,
+      "bucketName": "test-bucket",
+      "roleBasedAuth": false,
+      "accessKeyID": "",
+      "accessKey": ""
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "database": "test-database",
+      "user": "test-user",
+      "useIAMForAuth": false,
+      "useSSH": false,
+      "syncFrequency": "30",
+      "enableSSE": false,
+      "useRudderStorage": false,
+      "useSTSTokens": false,
+      "bucketName": "test-bucket",
+      "roleBasedAuth": false,
+      "accessKeyID": "",
+      "accessKey": ""
+    },
+    "result": false,
+    "err": [
+      " must have required property 'host'",
+      " must have required property 'port'",
+      " must have required property 'password'",
+      " must match \"then\" schema"
+    ]
+  },
+  {
+    "config": {
+      "host": "",
+      "password": "",
+      "port": "",
+      "database": "test-database",
+      "user": "test-user",
+      "useIAMForAuth": true,
+      "iamRoleARNForAuth": "iamRoleARNForAuth",
+      "clusterId": "clusterId",
+      "clusterRegion": "clusterRegion",
+      "useSSH": false,
+      "syncFrequency": "30",
+      "enableSSE": false,
+      "useRudderStorage": false,
+      "useSTSTokens": false,
+      "bucketName": "test-bucket",
+      "roleBasedAuth": false,
+      "accessKeyID": "",
+      "accessKey": ""
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "database": "test-database",
+      "user": "test-user",
+      "useIAMForAuth": true,
+      "useSSH": false,
+      "syncFrequency": "30",
+      "enableSSE": false,
+      "useRudderStorage": false,
+      "useSTSTokens": false,
+      "bucketName": "test-bucket",
+      "roleBasedAuth": false,
+      "accessKeyID": "",
+      "accessKey": ""
+    },
+    "result": false,
+    "err": [
+      " must have required property 'clusterId'",
+      " must have required property 'clusterRegion'",
+      " must have required property 'iamRoleARNForAuth'",
+      " must match \"then\" schema"
+    ]
+  },
+  {
+    "config": {
+      "host": "test-host",
+      "database": "test-database",
+      "user": "test-user",
+      "password": "test-password",
       "port": "0000",
       "useSSH": false,
       "syncFrequency": "30",
@@ -192,5 +304,168 @@
       "useSTSTokens": false
     },
     "result": true
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "host": "test-host",
+      "database": "test-database",
+      "user": "test-user",
+      "password": "test-password",
+      "port": "0000",
+      "useSSH": false,
+      "syncFrequency": "30",
+      "enableSSE": false,
+      "useRudderStorage": false,
+      "useSTSTokens": false,
+      "bucketName": "test-bucket",
+      "roleBasedAuth": false,
+      "accessKeyID": "",
+      "accessKey": "",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "host": "test-host",
+      "database": "test-database",
+      "user": "test-user",
+      "password": "test-password",
+      "port": "0000",
+      "useSSH": false,
+      "syncFrequency": "30",
+      "enableSSE": false,
+      "useRudderStorage": false,
+      "useSTSTokens": false,
+      "bucketName": "test-bucket",
+      "roleBasedAuth": false,
+      "accessKeyID": "",
+      "accessKey": "",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "host": "test-host",
+      "database": "test-database",
+      "user": "test-user",
+      "password": "test-password",
+      "port": "0000",
+      "useSSH": false,
+      "syncFrequency": "30",
+      "enableSSE": false,
+      "useRudderStorage": false,
+      "useSTSTokens": false,
+      "bucketName": "test-bucket",
+      "roleBasedAuth": false,
+      "accessKeyID": "",
+      "accessKey": "",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "host": "test-host",
+      "database": "test-database",
+      "user": "test-user",
+      "password": "test-password",
+      "port": "0000",
+      "useSSH": false,
+      "syncFrequency": "30",
+      "enableSSE": false,
+      "useRudderStorage": false,
+      "useSTSTokens": false,
+      "bucketName": "test-bucket",
+      "roleBasedAuth": false,
+      "accessKeyID": "",
+      "accessKey": "",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "host": "test-host",
+      "database": "test-database",
+      "user": "test-user",
+      "password": "test-password",
+      "port": "0000",
+      "useSSH": false,
+      "syncFrequency": "30",
+      "enableSSE": false,
+      "useRudderStorage": false,
+      "useSTSTokens": false,
+      "bucketName": "test-bucket",
+      "roleBasedAuth": false,
+      "accessKeyID": "",
+      "accessKey": "",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]

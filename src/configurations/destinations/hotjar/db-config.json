@@ -2,7 +2,6 @@
   "name": "HOTJAR",
   "displayName": "Hotjar",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -10,19 +9,29 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "oneTrustCookieCategories",
-      "eventFilteringOption"
+      "eventFilteringOption",
+      "consentManagement",
+      "ketchConsentPurposes"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": ["web"],
+    "supportedConnectionModes": {
+      "web": ["device"]
+    },
+    "supportedMessageTypes": {
+      "device": {
+        "web": ["identify", "track", "page"]
+      }
+    },
     "destConfig": {
-      "defaultConfig": [
-        "siteID",
-        "blacklistedEvents",
-        "whitelistedEvents",
-        "eventFilteringOption",
-        "oneTrustCookieCategories"
-      ],
-      "web": ["useNativeSDK"]
+      "defaultConfig": ["siteID", "blacklistedEvents", "whitelistedEvents", "eventFilteringOption"],
+      "web": [
+        "useNativeSDK",
+        "connectionMode",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ]
     },
     "secretKeys": []
   }

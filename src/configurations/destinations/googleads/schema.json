@@ -4,6 +4,8 @@
     "required": ["conversionID"],
     "type": "object",
     "properties": {
+      "v2": { "type": "boolean", "default": true },
+      "allowIdentify": { "type": "boolean", "default": false },
       "conversionID": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^AW-(.{0,100})$"
@@ -119,6 +121,61 @@
             }
           }
         }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": { "web": { "type": "string", "enum": ["device"] } }
+      },
+      "consentManagement": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "ketch", "oneTrust"],
+                  "default": "oneTrust"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            }
+          }
+        }
       }
     },
     "allOf": [
@@ -139,7 +196,7 @@
           "properties": {
             "trackConversions": { "const": true },
             "enableConversionEventsFiltering": { "const": true }
-            },
+          },
           "required": ["trackConversions", "enableConversionEventsFiltering"]
         },
         "then": {
@@ -177,7 +234,7 @@
           "properties": {
             "trackDynamicRemarketing": { "const": true },
             "enableDynamicRemarketingEventsFiltering": { "const": true }
-            },
+          },
           "required": ["trackDynamicRemarketing", "enableDynamicRemarketingEventsFiltering"]
         },
         "then": {

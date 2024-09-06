@@ -34,8 +34,9 @@
                     "configKey": "apiKey",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid API Key",
-                    "placeholder": "e.g: 05afa518-132c-40db-830a-de0f688902f7",
+                    "placeholder": "e.g: 05aXa518-XXXX-XXXX-XXXX-de0f68X902f7",
                     "note": "Your API Key (Settings -> Integrations -> API Key)",
+                    "secret": true,
                     "preRequisites": {
                       "fields": [
                         {
@@ -51,8 +52,9 @@
                     "configKey": "accessToken",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid Access Token",
-                    "placeholder": "e.g: pat-eu1-kjg875ya-9de4-98uu-8171-62875ht847r9",
+                    "placeholder": "e.g: pat-eu1-kjg875ya-XXXX-XXXX-XXXX-628XXht847r9",
                     "note": "Your private app access token",
+                    "secret": true,
                     "preRequisites": {
                       "fields": [
                         {
@@ -86,6 +88,20 @@
                     "regexErrorMessage": "Invalid Property Name",
                     "placeholder": "e.g: lookupField",
                     "note": "Provide unique Hubspot property field, which could be used for contact lookup. The provided lookup field key will be retrieved from traits. eg: traits: { lookupField: 'alex@example.com' }",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "apiVersion",
+                          "value": "newApi"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Create associations between object records",
+                    "configKey": "doAssociation",
+                    "default": false,
                     "preRequisites": {
                       "fields": [
                         {
@@ -134,24 +150,94 @@
                     "configKey": "hubID",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
                     "regexErrorMessage": "Invalid Hub ID",
-                    "placeholder": "e.g: 748991",
+                    "placeholder": "e.g: 74X991",
                     "note": "Your Hub ID (under account name)"
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "Create associations between object records",
-                    "configKey": "doAssociation",
-                    "default": false,
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "apiVersion",
-                          "value": "newApi"
-                        }
-                      ]
-                    }
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "OneTrust consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
+                  },
+                  "about RudderStack's OneTrust Consent Management feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Consent categories",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: C0001",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
+              },
+              {
+                "title": "Ketch consent purpose settings",
+                "note": [
+                  "Enter your Ketch purpose Id if you have them configured. ",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/ketch/"
+                  },
+                  "about RudderStack and Ketch Consent Manager integration."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Purpose ID",
+                    "note": "Input your Ketch purpose Id by pressing 'Enter' after each entry",
+                    "configKey": "ketchConsentPurposes",
+                    "tagKey": "purpose",
+                    "placeholder": "e.g: Marketing",
+                    "default": [
+                      {
+                        "purpose": ""
+                      }
+                    ]
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
               }
             ]
           },
@@ -196,7 +282,7 @@
                   {
                     "type": "tagInput",
                     "label": "Allowlisted events",
-                    "note": "Input the events you want to allowlist.\nInput separate events by pressing ‘Enter’.",
+                    "note": "Input the events you want to allowlist.\nInput separate events by pressing 'Enter'.",
                     "configKey": "whitelistedEvents",
                     "tagKey": "eventName",
                     "placeholder": "e.g: Anonymous page visit",
@@ -212,7 +298,7 @@
                   {
                     "type": "tagInput",
                     "label": "Denylisted events",
-                    "note": "Input the events you want to denylist.\nInput separate events by pressing ‘Enter’.",
+                    "note": "Input the events you want to denylist.\nInput separate events by pressing 'Enter'.",
                     "configKey": "blacklistedEvents",
                     "tagKey": "eventName",
                     "placeholder": "e.g: Anonymous page visit",
@@ -224,27 +310,6 @@
                         }
                       ]
                     }
-                  }
-                ]
-              },
-              {
-                "title": "OneTrust cookie consent settings",
-                "note": [
-                  "Enter your OneTrust consent category IDs or names if you have them configured. We recommend providing category IDs over names, as the category names only work in the device connection mode. So, you can seamlessly switch between the connection modes.",
-                  {
-                    "text": "Learn more",
-                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
-                  },
-                  " about RudderStack’s OneTrust Consent Manager feature."
-                ],
-                "fields": [
-                  {
-                    "type": "tagInput",
-                    "label": "Consent categories",
-                    "note": "Input your OneTrust consent category IDs or names by pressing ‘Enter’ after each entry. You should prefer category IDs over names. Refer to this section's note.",
-                    "configKey": "oneTrustCookieCategories",
-                    "tagKey": "oneTrustCookieCategory",
-                    "placeholder": "e.g: C0001"
                   }
                 ]
               }
@@ -285,6 +350,86 @@
     "sdkTemplate": {
       "title": "SDK settings",
       "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "default": "oneTrust",
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category ID’s",
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
+        }
+      ]
     },
     "redirectGroups": {
       "customEventMapping": {

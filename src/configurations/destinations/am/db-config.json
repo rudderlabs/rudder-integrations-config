@@ -4,7 +4,6 @@
   "config": {
     "isAudienceSupported": false,
     "supportsVisualMapper": true,
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -37,7 +36,12 @@
       "attribution",
       "eventUploadThreshold",
       "eventUploadPeriodMillis",
-      "trackNewCampaigns"
+      "trackNewCampaigns",
+      "userProvidedScreenEventString",
+      "useUserDefinedScreenEventName",
+      "proxyServerUrl",
+      "consentManagement",
+      "ketchConsentPurposes"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
@@ -53,13 +57,28 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": ["alias", "group", "identify", "page", "screen", "track"],
+    "supportedMessageTypes": {
+      "cloud": ["alias", "group", "identify", "page", "screen", "track"],
+      "device": {
+        "web": ["identify", "track", "page", "group"],
+        "android": ["identify", "track", "screen"],
+        "ios": ["identify", "track", "screen"],
+        "reactnative": ["identify", "track", "screen"],
+        "flutter": ["identify", "track", "screen"]
+      }
+    },
     "supportedConnectionModes": {
       "web": ["cloud", "device"],
       "android": ["cloud", "device"],
       "ios": ["cloud", "device"],
       "flutter": ["cloud", "device"],
-      "reactnative": ["cloud", "device"]
+      "reactnative": ["cloud", "device"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
     },
     "destConfig": {
       "defaultConfig": [
@@ -82,9 +101,11 @@
         "whitelistedEvents",
         "eventFilteringOption",
         "mapDeviceBrand",
-        "oneTrustCookieCategories",
         "userProvidedPageEventString",
-        "useUserDefinedPageEventName"
+        "useUserDefinedPageEventName",
+        "userProvidedScreenEventString",
+        "useUserDefinedScreenEventName",
+        "enableEnhancedUserOperations"
       ],
       "web": [
         "useNativeSDK",
@@ -93,7 +114,11 @@
         "attribution",
         "eventUploadThreshold",
         "eventUploadPeriodMillis",
-        "trackNewCampaigns"
+        "trackNewCampaigns",
+        "proxyServerUrl",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
       ],
       "android": [
         "eventUploadPeriodMillis",
@@ -102,7 +127,10 @@
         "connectionMode",
         "enableLocationListening",
         "trackSessionEvents",
-        "useAdvertisingIdForDeviceId"
+        "useAdvertisingIdForDeviceId",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
       ],
       "ios": [
         "eventUploadPeriodMillis",
@@ -110,7 +138,10 @@
         "useNativeSDK",
         "connectionMode",
         "trackSessionEvents",
-        "useIdfaAsDeviceId"
+        "useIdfaAsDeviceId",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
       ],
       "reactnative": [
         "eventUploadPeriodMillis",
@@ -120,7 +151,10 @@
         "enableLocationListening",
         "trackSessionEvents",
         "useAdvertisingIdForDeviceId",
-        "useIdfaAsDeviceId"
+        "useIdfaAsDeviceId",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
       ],
       "flutter": [
         "eventUploadPeriodMillis",
@@ -130,7 +164,46 @@
         "enableLocationListening",
         "trackSessionEvents",
         "useAdvertisingIdForDeviceId",
-        "useIdfaAsDeviceId"
+        "useIdfaAsDeviceId",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "unity": [
+        "connectionMode",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "amp": [
+        "connectionMode",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "cloud": [
+        "connectionMode",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "warehouse": [
+        "connectionMode",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "cordova": [
+        "connectionMode",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "shopify": [
+        "connectionMode",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
       ]
     },
     "secretKeys": ["apiKey", "apiSecret"]

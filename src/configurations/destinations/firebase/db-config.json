@@ -2,17 +2,33 @@
   "name": "FIREBASE",
   "displayName": "Firebase",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": false,
     "includeKeys": [
       "blacklistedEvents",
       "whitelistedEvents",
       "eventFilteringOption",
-      "oneTrustCookieCategories"
+      "oneTrustCookieCategories",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": ["android", "ios", "unity", "reactnative", "flutter"],
+    "supportedMessageTypes": {
+      "device": {
+        "android": ["identify", "track", "screen"],
+        "ios": ["identify", "track", "screen"],
+        "unity": ["identify", "track", "screen"],
+        "flutter": ["identify", "track", "screen"],
+        "reactnative": ["identify", "track", "screen"]
+      }
+    },
+    "supportedConnectionModes": {
+      "android": ["device"],
+      "ios": ["device"],
+      "unity": ["device"],
+      "flutter": ["device"],
+      "reactnative": ["device"]
+    },
     "destConfig": {
       "defaultConfig": [
         "blacklistedEvents",
@@ -20,11 +36,11 @@
         "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
-      "android": ["useNativeSDK"],
-      "ios": ["useNativeSDK"],
-      "unity": ["useNativeSDK"],
-      "reactnative": ["useNativeSDK"],
-      "flutter": ["useNativeSDK"]
+      "android": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "ios": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "unity": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "reactnative": ["useNativeSDK", "connectionMode", "consentManagement"],
+      "flutter": ["useNativeSDK", "connectionMode", "consentManagement"]
     },
     "secretKeys": []
   }

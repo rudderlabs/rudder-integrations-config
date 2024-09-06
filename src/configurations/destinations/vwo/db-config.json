@@ -2,7 +2,6 @@
   "name": "VWO",
   "displayName": "VWO",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -16,10 +15,14 @@
       "blacklistedEvents",
       "whitelistedEvents",
       "eventFilteringOption",
-      "oneTrustCookieCategories"
+      "oneTrustCookieCategories",
+      "ketchConsentPurposes",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": ["web"],
+    "supportedConnectionModes": { "web": ["device"] },
+    "supportedMessageTypes": { "device": { "web": ["identify", "track", "page"] } },
     "destConfig": {
       "defaultConfig": [
         "accountId",
@@ -32,9 +35,10 @@
         "blacklistedEvents",
         "whitelistedEvents",
         "eventFilteringOption",
-        "oneTrustCookieCategories"
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
       ],
-      "web": ["useNativeSDK"]
+      "web": ["useNativeSDK", "consentManagement", "connectionMode"]
     },
     "secretKeys": []
   }

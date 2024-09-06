@@ -25,34 +25,34 @@
                     "configKey": "accessToken",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid Access Token",
-                    "placeholder": "e.g: api-4b50335d-133a-47b3-b918-654c7199e2de",
+                    "placeholder": "e.g: api-4b50X35d-XXXX-XXXX-XXXX-654c71X9e2de",
                     "secret": true
                   },
                   {
                     "type": "textInput",
                     "label": "Client Side ID",
-                    "note": "Enter the Client Side Id associated with your LaunchDarkly project and environment. You can get this from Account Settings → Projects Tab → Click project name → Click the environment's client-side ID to copy it to your clipboard.",
+                    "note": "Enter the Client Side Id associated with your LaunchDarkly project and environment. You can get this from Account Settings -> Projects Tab -> Click project name -> Click the environment's client-side ID to copy it to your clipboard.",
                     "configKey": "clientSideId",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid Client Side Id",
-                    "placeholder": "e.g: 6123931929849919"
+                    "placeholder": "e.g: 612393XXX9849919"
                   },
                   {
                     "type": "textInput",
-                    "label": "Audience ID",
-                    "note": "Enter the Audience ID that you want to sync. This will be mapped to LaunchDarkly's Cohort ID. A Segment (or Audience or Cohort) will be created/updated in LaunchDarkly with this ID.",
+                    "label": "Segment ID",
+                    "note": "Enter the Segment ID that you want to sync. This will be mapped to LaunchDarkly's Cohort ID. A Segment or Cohort will be created/updated in LaunchDarkly with this ID.",
                     "configKey": "audienceId",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-                    "regexErrorMessage": "Invalid Audience Id",
-                    "placeholder": "e.g: example-audience-id"
+                    "regexErrorMessage": "Invalid Segment Id",
+                    "placeholder": "e.g: example-segment-id"
                   },
                   {
                     "type": "textInput",
-                    "label": "Audience Name",
-                    "note": "Enter the Audience name that you want to sync. This will be mapped to LaunchDarkly's Cohort Name.",
+                    "label": "Segment Name",
+                    "note": "Enter the Segment name that you want to sync. This will be mapped to LaunchDarkly's Cohort Name.",
                     "configKey": "audienceName",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-                    "regexErrorMessage": "Invalid Audience Name",
+                    "regexErrorMessage": "Invalid Segment Name",
                     "placeholder": "e.g: Logged in users"
                   }
                 ]
@@ -92,18 +92,18 @@
                 "fields": [
                   {
                     "type": "textInput",
-                    "label": "Audience Type",
+                    "label": "Segment Type",
                     "note": [
-                      "Enter the Audience Type. This will be mapped to LaunchDarkly's ",
+                      "Enter the Segment Type. This will be mapped to LaunchDarkly's ",
                       {
                         "text": "Context Kind .",
                         "link": "https://docs.launchdarkly.com/home/contexts/context-kinds"
                       },
-                      "By default, a Segment (or Audience or Cohort) will be created with 'user' as the context kind."
+                      "By default, a Segment or Cohort will be created with 'user' as the context kind."
                     ],
                     "configKey": "audienceType",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                    "regexErrorMessage": "Invalid Audience Type",
+                    "regexErrorMessage": "Invalid Segment Type",
                     "placeholder": "e.g: user"
                   }
                 ]
@@ -111,35 +111,48 @@
             ]
           },
           {
-            "title": "Other settings",
-            "note": "Configure advanced RudderStack features here",
-            "icon": "otherSettings",
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
             "groups": [
               {
-                "title": "OneTrust cookie consent settings",
+                "title": "OneTrust consent settings",
                 "note": [
-                  "Enter your OneTrust category names if you have them configured. ",
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
                   {
                     "text": "Learn more ",
-                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
                   },
-                  "about RudderStack's OneTrust Consent Manager feature."
+                  "about RudderStack's OneTrust Consent Management feature."
                 ],
                 "fields": [
                   {
                     "type": "tagInput",
-                    "label": "Cookie category name",
-                    "note": "Input your OneTrust category names by pressing 'Enter' after each entry",
+                    "label": "Consent categories",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
                     "configKey": "oneTrustCookieCategories",
                     "tagKey": "oneTrustCookieCategory",
-                    "placeholder": "e.g: Credit card visit",
+                    "placeholder": "e.g: C0001",
                     "default": [
                       {
                         "oneTrustCookieCategory": ""
                       }
                     ]
                   }
-                ]
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
               }
             ]
           }
@@ -150,6 +163,86 @@
       "title": "SDK settings",
       "note": "not visible in the ui",
       "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "default": "oneTrust",
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category ID’s",
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
+        }
+      ]
     }
   }
 }

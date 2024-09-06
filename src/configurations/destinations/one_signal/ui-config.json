@@ -10,9 +10,29 @@
           "regex": "^(.{1,100})$",
           "regexErrorMessage": "Invalid App Id",
           "required": true,
-          "placeholder": "e.g. 7acc2c99-818c-4a28-b98e-6cd8a994da65",
+          "placeholder": "e.g. 7acc2c99-XXXX-XXXX-XXXX-6cd8a994da65",
           "secret": true,
           "footerNote": "Your OneSignal App Id"
+        },
+        {
+          "type": "singleSelect",
+          "label": "Event Version to use",
+          "value": "version",
+          "options": [
+            {
+              "name": "Device Model (Deprecated)",
+              "value": "V1"
+            },
+            {
+              "name": "User Model",
+              "value": "V2"
+            }
+          ],
+          "defaultOption": {
+            "name": "Device Model (Deprecated)",
+            "value": "V1"
+          },
+          "footerNote": "Please Select the API version to use. User Model is recommended."
         }
       ]
     },
@@ -21,13 +41,13 @@
       "fields": [
         {
           "type": "checkbox",
-          "label": "Toggle on to add a device using email",
+          "label": "Toggle on to add a device/subscription using email",
           "value": "emailDeviceType",
           "default": false
         },
         {
           "type": "checkbox",
-          "label": "Toggle on to add a device using phone number",
+          "label": "Toggle on to add a device/subscription using phone number",
           "value": "smsDeviceType",
           "default": false
         }
@@ -46,7 +66,13 @@
           "type": "dynamicCustomForm",
           "value": "allowedProperties",
           "label": "Allowed Property List",
-          "customFields": [{ "type": "textInput", "value": "propertyName", "required": false }]
+          "customFields": [
+            {
+              "type": "textInput",
+              "value": "propertyName",
+              "required": false
+            }
+          ]
         }
       ]
     },
@@ -56,16 +82,109 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "consentManagement",
+          "label": "Consent management settings",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "customFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "value": "provider",
+              "options": [
+                {
+                  "name": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "name": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "name": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "defaultOption": {
+                "name": "OneTrust",
+                "value": "oneTrust"
+              },
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "value": "resolutionStrategy",
+              "options": [
+                {
+                  "name": "AND",
+                  "value": "and"
+                },
+                {
+                  "name": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "dynamicCustomForm",
+              "value": "consents",
+              "label": "Enter consent category ID’s",
+              "customFields": [
+                {
+                  "type": "textInput",
+                  "placeholder": "Marketing",
+                  "value": "consent",
+                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "required": false
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }

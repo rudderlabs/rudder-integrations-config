@@ -2,10 +2,9 @@
   "name": "REDIS",
   "displayName": "Redis",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
-    "includeKeys": ["oneTrustCookieCategories"],
+    "includeKeys": ["oneTrustCookieCategories", "ketchConsentPurposes", "consentManagement"],
     "excludeKeys": [],
     "secretKeys": ["password", "caCertificate"],
     "supportedSourceTypes": [
@@ -21,7 +20,20 @@
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": ["identify"],
+    "supportedMessageTypes": { "cloud": ["identify"] },
+    "supportedConnectionModes": {
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "web": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "destConfig": {
       "defaultConfig": [
         "address",
@@ -32,8 +44,21 @@
         "skipVerify",
         "caCertificate",
         "clusterMode",
-        "oneTrustCookieCategories"
-      ]
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes",
+        "useJSONModule"
+      ],
+      "android": ["consentManagement", "connectionMode"],
+      "ios": ["consentManagement", "connectionMode"],
+      "web": ["consentManagement", "connectionMode"],
+      "unity": ["consentManagement", "connectionMode"],
+      "amp": ["consentManagement", "connectionMode"],
+      "cloud": ["consentManagement", "connectionMode"],
+      "warehouse": ["consentManagement", "connectionMode"],
+      "reactnative": ["consentManagement", "connectionMode"],
+      "flutter": ["consentManagement", "connectionMode"],
+      "cordova": ["consentManagement", "connectionMode"],
+      "shopify": ["consentManagement", "connectionMode"]
     }
   }
 }

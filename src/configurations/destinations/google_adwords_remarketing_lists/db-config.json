@@ -8,16 +8,22 @@
       "role": "google_adwords_remarketing_lists_v1",
       "rudderScopes": ["delivery"]
     },
-    "transformAt": "router",
     "transformAtV1": "router",
     "saveDestinationResponse": true,
-    "includeKeys": ["oneTrustCookieCategories"],
+    "includeKeys": ["oneTrustCookieCategories", "consentManagement"],
     "excludeKeys": [],
     "supportedSourceTypes": ["cloud", "warehouse", "shopify"],
     "syncBehaviours": ["mirror"],
     "disableJsonMapper": true,
     "supportsVisualMapper": true,
-    "supportedMessageTypes": ["audiencelist"],
+    "supportedMessageTypes": {
+      "cloud": ["audiencelist", "record"]
+    },
+    "supportedConnectionModes": {
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
     "isAudienceSupported": true,
     "supportsBlankAudienceCreation": true,
     "destConfig": {
@@ -30,22 +36,24 @@
         "userSchema",
         "isHashRequired",
         "typeOfList",
+        "userDataConsent",
+        "personalizationConsent",
         "oneTrustCookieCategories"
       ],
-      "cloud": [
-        "audienceId"
-      ]
+      "cloud": ["audienceId", "connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"]
     },
     "secretKeys": []
   },
-  "options": { 
+  "options": {
     "isBeta": false,
     "destinationFeatures": {
-            "vdmLabels": {
-                "newAudienceAlternateLabel": "Create New List",
-                "existingAudienceAlternateLabel": "Use Existing List",
-                "audienceAlternateLabel": "List Id"
-            }
-        }
+      "vdmLabels": {
+        "newAudienceAlternateLabel": "Create New List",
+        "existingAudienceAlternateLabel": "Use Existing List",
+        "audienceAlternateLabel": "List Id"
+      }
+    }
   }
 }

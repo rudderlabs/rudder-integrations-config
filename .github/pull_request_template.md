@@ -1,20 +1,51 @@
-## Description of the change
+## What are the changes introduced in this PR?
 
-< Description >
+Write a brief explainer on your code changes.
 
-## Checklists
+## What is the related Linear task?
 
-### Development
+Resolves INT-XXX
+
+## Please explain the objectives of your changes below
+
+Put down any required details on the broader aspect of your changes. If there are any dependent changes, **mandatorily** mention them here
+
+### Any changes to existing capabilities/behaviour, mention the reason & what are the changes ?
+
+N/A
+
+### Any new dependencies introduced with this change?
+
+N/A
+
+### Any new checks got introduced or modified in test suites. Please explain the changes.
+
+N/A
+
+<hr>
+
+### Developer checklist
 
 - [ ] My code follows the style guidelines of this project
-- [ ] I have performed a self-review of my own code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] The code changed/added as part of this pull request has been covered with tests
-- [ ] All tests related to the changed code pass in development
 
-### Code review
+- [ ] **No breaking changes are being introduced.**
 
-- [ ] This pull request has a descriptive title and information useful to a reviewer. There may be a screenshot or screencast attached
-- [ ] Changes have been reviewed by at least one other engineer
-- [ ] Issue from task tracker has a link to this pull request
+- [ ] All related docs linked with the PR?
+
+- [ ] All changes manually tested?
+
+- [ ] Any documentation changes needed with this change?
+
+- [ ] I have executed schemaGenerator tests and updated schema if needed
+
+- [ ] Are sensitive fields marked as secret in definition config?
+
+- [ ] My test cases and placeholders use only masked/sample values for sensitive fields
+
+- [ ] Is the PR limited to 10 file changes & one task?
+
+### Reviewer checklist
+
+- [ ] Is the type of change in the PR title appropriate as per the changes?
+
+- [ ] Verified that there are no credentials or confidential data exposed with the changes.

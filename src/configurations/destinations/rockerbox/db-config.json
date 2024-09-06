@@ -2,7 +2,6 @@
   "name": "ROCKERBOX",
   "displayName": "Rockerbox",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -16,7 +15,8 @@
       "clientAuthId",
       "customDomain",
       "enableCookieSync",
-      "connectionMode"
+      "connectionMode",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
@@ -32,11 +32,24 @@
       "web",
       "shopify"
     ],
-    "supportedMessageTypes": ["identify", "track", "page"],
+    "supportedMessageTypes": {
+      "cloud": ["identify", "track", "page"],
+      "device": { "web": ["identify", "track", "page"] }
+    },
     "supportedConnectionModes": {
       "web": ["cloud", "device", "hybrid"],
-      "shopify": ["cloud"]
+      "android": ["cloud"],
+      "ios": ["cloud"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
     },
+    "hybridModeCloudEventsFilter": { "web": { "messageType": ["track"] } },
     "destConfig": {
       "defaultConfig": [
         "advertiserId",
@@ -52,8 +65,19 @@
         "useNativeSDKToSend",
         "clientAuthId",
         "customDomain",
-        "enableCookieSync"
-      ]
+        "enableCookieSync",
+        "consentManagement"
+      ],
+      "amp": ["connectionMode", "consentManagement"],
+      "android": ["connectionMode", "consentManagement"],
+      "cordova": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
+      "flutter": ["connectionMode", "consentManagement"],
+      "ios": ["connectionMode", "consentManagement"],
+      "reactnative": ["connectionMode", "consentManagement"],
+      "unity": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
+      "shopify": ["connectionMode", "consentManagement"]
     }
   }
 }

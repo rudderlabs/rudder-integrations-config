@@ -10,7 +10,7 @@
           "regex": "^(.{1,100})$",
           "regexErrorMessage": "Advertiser Id should be less than 100 characters",
           "required": true,
-          "placeholder": "e.g. 17038",
+          "placeholder": "e.g. 1XX31",
           "secret": true,
           "footerNote": "Advertiser Id of your AWIN account"
         }
@@ -28,10 +28,27 @@
               "type": "textInput",
               "value": "eventName",
               "required": false,
-              "placeholder": "e.g: Pruduct Added"
+              "placeholder": "e.g: Product Added"
             }
           ],
           "footerNote": "Provide the list of events for which we need to call conversions"
+        }
+      ]
+    },
+    {
+      "title": "Transaction Level Custom Field Mapping",
+      "fields": [
+        {
+          "type": "dynamicForm",
+          "label": "Map Rudder payload property to Custom Awin Field",
+          "labelLeft": "Rudder Payload Field",
+          "labelRight": "AWIN Custom Field",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "placeholderLeft": "e.g: customProperty1",
+          "placeholderRight": "p1",
+          "value": "customFieldMap",
+          "footerNote": "Map Rudder Properties to AWIN Custom Fields. Here, properties will be fetched from properties object(message.properties). Remember AWIN properties need to be of pattern p1, p2 etc."
         }
       ]
     },
@@ -41,16 +58,109 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "consentManagement",
+          "label": "Consent management settings",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "customFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "value": "provider",
+              "options": [
+                {
+                  "name": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "name": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "name": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "defaultOption": {
+                "name": "OneTrust",
+                "value": "oneTrust"
+              },
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "value": "resolutionStrategy",
+              "options": [
+                {
+                  "name": "AND",
+                  "value": "and"
+                },
+                {
+                  "name": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "dynamicCustomForm",
+              "value": "consents",
+              "label": "Enter consent category ID’s",
+              "customFields": [
+                {
+                  "type": "textInput",
+                  "placeholder": "Marketing",
+                  "value": "consent",
+                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "required": false
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }

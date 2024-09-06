@@ -2,7 +2,6 @@
   "name": "QUALAROO",
   "displayName": "Qualaroo",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
     "includeKeys": [
@@ -15,11 +14,13 @@
       "eventFilteringOption",
       "whitelistedEvents",
       "blacklistedEvents",
-      "oneTrustCookieCategories"
+      "oneTrustCookieCategories",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": ["web"],
-    "supportedMessageTypes": ["page", "identify", "track"],
+    "supportedMessageTypes": { "device": { "web": ["identify", "track", "page"] } },
+    "supportedConnectionModes": { "web": ["device"] },
     "destConfig": {
       "defaultConfig": [
         "customerId",
@@ -33,7 +34,7 @@
         "blacklistedEvents",
         "oneTrustCookieCategories"
       ],
-      "web": ["useNativeSDK"]
+      "web": ["useNativeSDK", "connectionMode", "consentManagement"]
     },
     "secretKeys": ["customerId", "siteToken"]
   }

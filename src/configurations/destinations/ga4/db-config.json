@@ -2,7 +2,6 @@
   "name": "GA4",
   "displayName": "Google Analytics 4 (GA4)",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": false,
     "includeKeys": [
@@ -16,9 +15,12 @@
       "eventFilteringOption",
       "extendPageViewParams",
       "piiPropertiesToIgnore",
-      "oneTrustCookieCategories",
       "overrideClientAndSessionId",
-      "ketchConsentPurposes"
+      "oneTrustCookieCategories",
+      "ketchConsentPurposes",
+      "consentManagement",
+      "sdkBaseUrl",
+      "serverContainerUrl"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": [
@@ -34,32 +36,30 @@
       "warehouse",
       "shopify"
     ],
-    "supportedMessageTypes": [
-      "track",
-      "group",
-      "page"
-    ],
+    "supportedMessageTypes": {
+      "cloud": ["track", "group", "page"],
+      "device": {
+        "web": ["identify", "track", "page", "group"],
+        "android": ["identify", "track", "screen"],
+        "ios": ["identify", "track", "screen"]
+      }
+    },
     "supportedConnectionModes": {
-      "android": [
-        "cloud",
-        "device"
-      ],
-      "web": [
-        "cloud",
-        "device",
-        "hybrid"
-      ],
-      "ios": [
-        "cloud",
-        "device"
-      ]
+      "android": ["cloud", "device"],
+      "web": ["cloud", "device", "hybrid"],
+      "ios": ["cloud", "device"],
+      "unity": ["cloud"],
+      "amp": ["cloud"],
+      "reactnative": ["cloud"],
+      "flutter": ["cloud"],
+      "cordova": ["cloud"],
+      "shopify": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
     },
     "hybridModeCloudEventsFilter": {
       "web": {
-        "messageType": [
-          "track",
-          "group"
-        ]
+        "messageType": ["track", "group"]
       }
     },
     "destConfig": {
@@ -73,8 +73,8 @@
         "blacklistedEvents",
         "eventFilteringOption",
         "piiPropertiesToIgnore",
-        "ketchConsentPurposes",
-        "oneTrustCookieCategories"
+        "sdkBaseUrl",
+        "serverContainerUrl"
       ],
       "web": [
         "debugView",
@@ -83,22 +83,77 @@
         "capturePageView",
         "useNativeSDKToSend",
         "extendPageViewParams",
-        "overrideClientAndSessionId"
+        "overrideClientAndSessionId",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
       ],
       "android": [
         "useNativeSDK",
-        "connectionMode"
+        "connectionMode",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
       ],
       "ios": [
         "useNativeSDK",
-        "connectionMode"
+        "connectionMode",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "unity": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "amp": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "cloud": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "reactnative": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "flutter": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "cordova": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "shopify": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "warehouse": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
       ]
     },
-    "secretKeys": [
-      "apiSecret"
-    ]
+    "secretKeys": ["apiSecret"]
   },
   "options": {
-    "isBeta": true
+    "isBeta": false
   }
 }

@@ -2,27 +2,32 @@
   "name": "BINGADS",
   "displayName": "Bing Ads",
   "config": {
-    "transformAt": "processor",
     "transformAtV1": "processor",
     "saveDestinationResponse": false,
     "includeKeys": [
       "tagID",
+      "enableEnhancedConversions",
       "blacklistedEvents",
       "whitelistedEvents",
       "oneTrustCookieCategories",
-      "eventFilteringOption"
+      "eventFilteringOption",
+      "consentManagement"
     ],
     "excludeKeys": [],
     "supportedSourceTypes": ["web"],
+    "supportedConnectionModes": { "web": ["device"] },
+    "supportedMessageTypes": { "device": { "web": ["track", "page"] } },
     "destConfig": {
       "defaultConfig": [
         "tagID",
+        "enableEnhancedConversions",
+        "isHashRequired",
         "blacklistedEvents",
         "whitelistedEvents",
         "eventFilteringOption",
         "oneTrustCookieCategories"
       ],
-      "web": ["useNativeSDK"]
+      "web": ["useNativeSDK", "connectionMode", "consentManagement"]
     },
     "secretKeys": ["tagID"]
   }

@@ -1,0 +1,553 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Dataset ID",
+                    "note": "Your Dataset ID, from the snippet created on the Facebook Dataset creation page.",
+                    "configKey": "datasetId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Dataset ID",
+                    "placeholder": "e.g: 1234567898765"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Business Access Token",
+                    "note": "Your Business Access token from your Business Account. Required for cloud-mode.",
+                    "configKey": "accessToken",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,500})$",
+                    "regexErrorMessage": "Invalid Business Access Token",
+                    "placeholder": "e.g: EAALPFdyOVl4BAKEXmVR...",
+                    "secret": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your \ndestination",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Event settings",
+                "note": "Configure a few advanced event settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Action Source",
+                    "note": "Choose the fallback action_source value you want to set if action_source is not found in event properties",
+                    "configKey": "actionSource",
+                    "options": [
+                      {
+                        "label": "website",
+                        "value": "website"
+                      },
+                      {
+                        "label": "email",
+                        "value": "email"
+                      },
+                      {
+                        "label": "app",
+                        "value": "app"
+                      },
+                      {
+                        "label": "phone_call",
+                        "value": "phone_call"
+                      },
+                      {
+                        "label": "chat",
+                        "value": "chat"
+                      },
+                      {
+                        "label": "physical_store",
+                        "value": "physical_store"
+                      },
+                      {
+                        "label": "system_generated",
+                        "value": "system_generated"
+                      },
+                      {
+                        "label": "other",
+                        "value": "other"
+                      }
+                    ],
+                    "default": "website"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Destination settings",
+                "note": "Configure advanced destination-specific settings heree",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Limited Data Usage",
+                    "configKey": "limitedDataUSage",
+                    "default": false
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Use as Test Destination",
+                    "configKey": "testDestination",
+                    "default": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Test Event Code",
+                    "note": "Your test event code from your Facebook Datasets dashboard. Required if Test Destination flag is turned ON",
+                    "configKey": "testEventCode",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Please put a valid Test event code",
+                    "placeholder": "e.g: TEST80569"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Don't send external_id for user",
+                    "note": "Turn this on to send neither userId nor anonymousId as external_id.",
+                    "configKey": "removeExternalId",
+                    "default": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Client-side event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on events filtering:",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
+                      {
+                        "label": "Disabled",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input separate events by pressing 'Enter'.\nInput the events you want to allowlist.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input separate events by pressing 'Enter'.\nInput the events you want to denylist. ",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "OneTrust consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
+                  },
+                  "about RudderStack's OneTrust Consent Management feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Consent categories",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: C0001",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ]
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
+              },
+              {
+                "title": "Ketch consent settings",
+                "note": "Enter your Ketch Consent Purposes if you have them configured.",
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "Ketch consent purpose",
+                    "note": "Input your Ketch consent purpose by pressing 'Enter' after each entry",
+                    "configKey": "ketchConsentPurposes",
+                    "tagKey": "purpose",
+                    "placeholder": "e.g: Marketing",
+                    "default": [
+                      {
+                        "purpose": ""
+                      }
+                    ]
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Event mapping",
+        "note": "Map RudderStack to Facebook events",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "RudderStack to Facebook event mappings",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "customEventMapping",
+                    "label": "Event and property mappings",
+                    "note": "Map RudderStack events/properties to Facebook custom events/properties"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "redirectGroups": {
+      "customEventMapping": {
+        "tabs": [
+          {
+            "name": "Custom event",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map RudderStack event to Facebook standard event",
+                "note": "Input the RudderStack event to map to Facebook's standard event.",
+                "configKey": "eventsToEvents",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "RudderStack Event",
+                    "placeholder": "e.g: Product Searched"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "key": "to",
+                    "label": "Facebook custom event",
+                    "options": [
+                      {
+                        "name": "ViewContent",
+                        "value": "ViewContent"
+                      },
+                      {
+                        "name": "Search",
+                        "value": "Search"
+                      },
+                      {
+                        "name": "AddToCart",
+                        "value": "AddToCart"
+                      },
+                      {
+                        "name": "AddToWishlist",
+                        "value": "AddToWishlist"
+                      },
+                      {
+                        "name": "InitiateCheckout",
+                        "value": "InitiateCheckout"
+                      },
+                      {
+                        "name": "AddPaymentInfo",
+                        "value": "AddPaymentInfo"
+                      },
+                      {
+                        "name": "Purchase",
+                        "value": "Purchase"
+                      },
+                      {
+                        "name": "PageView",
+                        "value": "PageView"
+                      },
+                      {
+                        "name": "Lead",
+                        "value": "Lead"
+                      },
+                      {
+                        "name": "CompleteRegistration",
+                        "value": "CompleteRegistration"
+                      },
+                      {
+                        "name": "Contact",
+                        "value": "Contact"
+                      },
+                      {
+                        "name": "CustomizeProduct",
+                        "value": "CustomizeProduct"
+                      },
+                      {
+                        "name": "Donate",
+                        "value": "Donate"
+                      },
+                      {
+                        "name": "FindLocation",
+                        "value": "FindLocation"
+                      },
+                      {
+                        "name": "Schedule",
+                        "value": "Schedule"
+                      },
+                      {
+                        "name": "StartTrial",
+                        "value": "StartTrial"
+                      },
+                      {
+                        "name": "SubmitApplication",
+                        "value": "SubmitApplication"
+                      },
+                      {
+                        "name": "Subscribe",
+                        "value": "Subscribe"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "PII properties",
+            "fields": [
+              {
+                "type": "dynamicCustomForm",
+                "label": "Input PII properties you want to denylist",
+                "configKey": "blacklistPiiProperties",
+                "rowFields": [
+                  {
+                    "type": "textInput",
+                    "configKey": "blacklistPiiProperties",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Denylist PII Properties",
+                    "label": "Denylist PII Properties",
+                    "placeholder": "e.g: phone"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Hash Denylist PII Property",
+                    "configKey": "blacklistPiiHash",
+                    "default": false
+                  }
+                ]
+              },
+              {
+                "type": "tagInput",
+                "label": "Input PII properties you want to allowlist",
+                "configKey": "whitelistPiiProperties",
+                "tagKey": "whitelistPiiProperties",
+                "placeholder": "e.g: email",
+                "default": []
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "default": "oneTrust",
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category ID’s",
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -19,7 +19,7 @@
                     "configKey": "advertiserId",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid Advertiser Id",
-                    "placeholder": "e.g: MOx2ZmMwLNE2A2IdNKL0N2VhN2I3ZGY1MTVmMzA1ODk0YmIkN"
+                    "placeholder": "e.g: MOx2ZmMwLNE2A2IdNKL0NXXXX2I3ZGY1MTVmMzA1ODk0YmIkN"
                   }
                 ]
               }
@@ -64,12 +64,24 @@
                 "preRequisites": {
                   "fields": [
                     {
-                      "configKey": "connectionModes.webDevice",
-                      "value": true
+                      "configKey": "connectionModes.web",
+                      "value": "device"
                     },
                     {
-                      "configKey": "connectionModes.mobileDevice",
-                      "value": true
+                      "configKey": "connectionMode.android",
+                      "value": "device"
+                    },
+                    {
+                      "configKey": "connectionMode.ios",
+                      "value": "device"
+                    },
+                    {
+                      "configKey": "connectionMode.flutter",
+                      "value": "device"
+                    },
+                    {
+                      "configKey": "connectionMode.reactnative",
+                      "value": "device"
                     }
                   ],
                   "condition": "or"
@@ -99,7 +111,7 @@
                   {
                     "type": "tagInput",
                     "label": "Allowlisted events",
-                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
+                    "note": "Input separate events by pressing 'Enter'.\nInput the events you want to allowlist.",
                     "configKey": "whitelistedEvents",
                     "tagKey": "eventName",
                     "placeholder": "e.g: Anonymous page visit",
@@ -120,7 +132,7 @@
                   {
                     "type": "tagInput",
                     "label": "Denylisted events",
-                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
+                    "note": "Input separate events by pressing 'Enter'.\nInput the events you want to denylist. ",
                     "configKey": "blacklistedEvents",
                     "tagKey": "eventName",
                     "placeholder": "e.g: Anonymous page visit",
@@ -139,32 +151,52 @@
                     }
                   }
                 ]
-              },
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": [
               {
-                "title": "OneTrust cookie consent settings",
+                "title": "OneTrust consent settings",
                 "note": [
-                  "Enter your OneTrust category names if you have them configured. ",
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
                   {
                     "text": "Learn more ",
-                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/onetrust-consent-manager/"
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
                   },
-                  "about RudderStack’s OneTrust Consent Manager feature."
+                  "about RudderStack's OneTrust Consent Management feature."
                 ],
                 "fields": [
                   {
                     "type": "tagInput",
-                    "label": "Cookie category name",
-                    "note": "Input your OneTrust category names by pressing ‘Enter’ after each entry",
+                    "label": "Consent categories",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
                     "configKey": "oneTrustCookieCategories",
                     "tagKey": "oneTrustCookieCategory",
-                    "placeholder": "e.g: Credit card visit",
+                    "placeholder": "e.g: C0001",
                     "default": [
                       {
                         "oneTrustCookieCategory": ""
                       }
                     ]
                   }
-                ]
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-gcm",
+                      "value": false
+                    },
+                    {
+                      "configKey": "AMP_enable-gcm"
+                    }
+                  ],
+                  "featureFlagsCondition": "or"
+                }
               }
             ]
           }
@@ -204,7 +236,7 @@
           "configKey": "clientAuthId",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
           "regexErrorMessage": "Length of API Key must be below 50 characters.",
-          "placeholder": "e.g: 755fc11162r14c41ar7e7df232f305984bb021a1"
+          "placeholder": "e.g: 755fc11162r14c41aXXXXdf232f305984bb021a1"
         },
         {
           "type": "textInput",
@@ -250,6 +282,86 @@
           }
         ]
       }
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "default": "oneTrust",
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category ID’s",
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
+        }
+      ]
     }
   }
 }

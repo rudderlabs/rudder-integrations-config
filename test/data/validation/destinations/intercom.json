@@ -1,41 +1,249 @@
 [
   {
     "config": {
-      "apiKey": "cdsfvgertefdvcdfgrtfvdgrfvd",
+      "appId": "",
+      "apiVersion": "v2",
+      "connectionMode": {
+        "ios": "cloud"
+      },
+      "blacklistedEvents": [
+        {
+          "eventName": "Pin Generated"
+        },
+        {
+          "eventName": "Pin Expired"
+        }
+      ],
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "eventFilteringOption": "blacklistedEvents",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": ""
+        }
+      ]
+    },
+    "result": false,
+    "err": [" must have required property 'apiKey'", " must match \"then\" schema"]
+  },
+  {
+    "config": {
+      "apiKey": "",
+      "apiVersion": "v2",
+      "connectionMode": { "web": "cloud" },
+      "blacklistedEvents": [{ "eventName": "Pin Generated" }, { "eventName": "Pin Expired" }],
+      "whitelistedEvents": [{ "eventName": "" }],
+      "eventFilteringOption": "blacklistedEvents",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": ""
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "apiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
+      " must match \"then\" schema"
+    ]
+  },
+  {
+    "config": {
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "blacklistedEvents": [
+        {
+          "eventName": "Pin Generated"
+        },
+        {
+          "eventName": "Pin Expired"
+        }
+      ],
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "eventFilteringOption": "blacklistedEvents",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": ""
+        }
+      ]
+    },
+    "result": false,
+    "err": [" must have required property 'appId'", " must match \"then\" schema"]
+  },
+  {
+    "config": {
+      "appId": "",
+      "useNativeSDK": {
+        "web": true
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "blacklistedEvents": [
+        {
+          "eventName": "Pin Generated"
+        },
+        {
+          "eventName": "Pin Expired"
+        }
+      ],
+      "whitelistedEvents": [
+        {
+          "eventName": ""
+        }
+      ],
+      "eventFilteringOption": "blacklistedEvents",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": ""
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "appId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
+      " must match \"then\" schema"
+    ]
+  },
+  {
+    "config": {
+      "apiKey": "dfvgtbhXXXrefdbfgtXXXfghtgrfdv",
+      "appId": "bhjjknlmnbhjnklm",
+      "apiServer": "standard",
+      "apiVersion": "v2",
       "useNativeSDK": { "web": false },
       "blacklistedEvents": [{ "eventName": "Pin Generated" }, { "eventName": "Pin Expired" }],
       "whitelistedEvents": [{ "eventName": "" }],
       "eventFilteringOption": "blacklistedEvents",
       "oneTrustCookieCategories": [
-        { "oneTrustCookieCategory": "Sales" },
-        { "oneTrustCookieCategory": "Marketing" }
+        {
+          "oneTrustCookieCategory": ""
+        }
       ]
     },
-    "result": false,
-    "err": [" must have required property 'appId'"]
+    "result": true
   },
   {
+    "testTitle": "With valid multiple consent management providers config",
     "config": {
+      "apiKey": "dfvgtbhXXXrefdbfgtXXXfghtgrfdv",
       "appId": "bhjjknlmnbhjnklm",
-      "useNativeSDK": { "web": false },
-      "blacklistedEvents": [{ "eventName": "Pin Generated" }, { "eventName": "Pin Expired" }],
-      "whitelistedEvents": [{ "eventName": "" }],
-      "eventFilteringOption": "blacklistedEvents",
-      "oneTrustCookieCategories": [{ "oneTrustCookieCategory": "" }]
-    },
-    "result": false,
-    "error": [" must have required property 'apiKey'"]
-  },
-  {
-    "config": {
-      "apiKey": "dfvgtbheygrefdbfgtyhrgfghtgrfdv",
-      "appId": "bhjjknlmnbhjnklm",
-      "useNativeSDK": { "web": false },
-      "blacklistedEvents": [{ "eventName": "Pin Generated" }, { "eventName": "Pin Expired" }],
-      "whitelistedEvents": [{ "eventName": "" }],
-      "eventFilteringOption": "blacklistedEvents",
-      "oneTrustCookieCategories": [{ "oneTrustCookieCategory": "" }]
+      "apiServer": "standard",
+      "apiVersion": "v2",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
     },
     "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "apiKey": "dfvgtbhXXXrefdbfgtXXXfghtgrfdv",
+      "appId": "bhjjknlmnbhjnklm",
+      "apiServer": "standard",
+      "apiVersion": "v2",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "apiKey": "dfvgtbhXXXrefdbfgtXXXfghtgrfdv",
+      "appId": "bhjjknlmnbhjnklm",
+      "apiServer": "standard",
+      "apiVersion": "v2",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "apiKey": "dfvgtbhXXXrefdbfgtXXXfghtgrfdv",
+      "appId": "bhjjknlmnbhjnklm",
+      "apiServer": "standard",
+      "apiVersion": "v2",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "apiKey": "dfvgtbhXXXrefdbfgtXXXfghtgrfdv",
+      "appId": "bhjjknlmnbhjnklm",
+      "apiServer": "standard",
+      "apiVersion": "v2",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]

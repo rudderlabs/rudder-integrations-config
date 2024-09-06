@@ -26,7 +26,10 @@
           "value": "region",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
           "required": true,
-          "preRequisiteField": { "name": "useGlue", "selectedValue": true }
+          "preRequisiteField": {
+            "name": "useGlue",
+            "selectedValue": true
+          }
         },
         {
           "type": "textInput",
@@ -44,7 +47,8 @@
           "labelNote": "Defaults to source name.",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
           "required": false,
-          "footerNote": "All data for the destination would be pushed to s3://<bucketName>/<prefix>/rudder-datalake/<namespace>.If glue is enabled, all table definitions are created in a database with name set to namespace."
+          "footerNote": "All data for the destination would be pushed to s3://<bucketName>/<prefix>/rudder-datalake/<namespace>.If glue is enabled, all table definitions are created in a database with name set to namespace.",
+          "immutable": true
         },
         {
           "type": "checkbox",
@@ -54,13 +58,18 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": [{ "name": "roleBasedAuth", "selectedValue": true }],
+          "preRequisiteField": [
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": true
+            }
+          ],
           "label": "IAM Role ARN",
           "value": "iamRoleARN",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
           "regexErrorMessage": "Invalid Role ARN",
           "required": true,
-          "placeholder": "e.g: arn:aws:iam::123456789012:role/S3Access",
+          "placeholder": "e.g: arn:aws:iam::12345X789012:role/S3Access",
           "footerURL": {
             "link": "https://www.rudderstack.com/docs/destinations/aws-iam-role-for-rudderstack/",
             "text": "Instructions for creating IAM Role"
@@ -68,7 +77,12 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": [{ "name": "roleBasedAuth", "selectedValue": false }],
+          "preRequisiteField": [
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": false
+            }
+          ],
           "label": "AWS Access Key ID",
           "value": "accessKeyID",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
@@ -78,7 +92,12 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": [{ "name": "roleBasedAuth", "selectedValue": false }],
+          "preRequisiteField": [
+            {
+              "name": "roleBasedAuth",
+              "selectedValue": false
+            }
+          ],
           "label": "AWS Secret Access Key",
           "value": "accessKey",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
@@ -97,23 +116,65 @@
           "label": "Sync Frequency",
           "value": "syncFrequency",
           "options": [
-            { "name": "Every 30 minutes", "value": "30" },
-            { "name": "Every 1 hour", "value": "60" },
-            { "name": "Every 3 hours", "value": "180" },
-            { "name": "Every 6 hours", "value": "360" },
-            { "name": "Every 12 hours", "value": "720" },
-            { "name": "Every 24 hours", "value": "1440" }
+            {
+              "name": "Every 30 minutes",
+              "value": "30"
+            },
+            {
+              "name": "Every 1 hour",
+              "value": "60"
+            },
+            {
+              "name": "Every 3 hours",
+              "value": "180"
+            },
+            {
+              "name": "Every 6 hours",
+              "value": "360"
+            },
+            {
+              "name": "Every 12 hours",
+              "value": "720"
+            },
+            {
+              "name": "Every 24 hours",
+              "value": "1440"
+            }
           ],
-          "defaultOption": { "name": "Every 30 minutes", "value": "30" },
+          "defaultOption": {
+            "name": "Every 3 hours",
+            "value": "180"
+          },
           "required": false
         },
         {
           "type": "timePicker",
           "label": "Sync Starting At (Optional)",
           "value": "syncStartAt",
-          "options": { "omitSeconds": true },
+          "options": {
+            "omitSeconds": true
+          },
           "required": false,
           "footerNote": "Note: Please specify time in UTC"
+        }
+      ]
+    },
+    {
+      "title": "Advanced Settings",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Skip User Table",
+          "value": "skipUsersTable",
+          "footerNote": "Enable this feature to send event data exclusively to the Identify table, and skip user table. Eliminates the need for merge operation on the user table",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "Skip Tracks Table",
+          "value": "skipTracksTable",
+          "footerNote": "Enable this feature to skip sending the event data to the “tracks” table",
+          "default": false
         }
       ]
     },
@@ -123,16 +184,109 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "consentManagement",
+          "label": "Consent management settings",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "customFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "value": "provider",
+              "options": [
+                {
+                  "name": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "name": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "name": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "defaultOption": {
+                "name": "OneTrust",
+                "value": "oneTrust"
+              },
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "value": "resolutionStrategy",
+              "options": [
+                {
+                  "name": "AND",
+                  "value": "and"
+                },
+                {
+                  "name": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "dynamicCustomForm",
+              "value": "consents",
+              "label": "Enter consent category ID’s",
+              "customFields": [
+                {
+                  "type": "textInput",
+                  "placeholder": "Marketing",
+                  "value": "consent",
+                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "required": false
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }

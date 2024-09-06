@@ -1,7 +1,7 @@
 [
   {
     "config": {
-      "apiKey": "a8df6629b0be0cf6xxa22fb2220e929_811168a9",
+      "apiKey": "a8df6629b0be0cf6xxa2XXXXX20e929_811168a9",
       "listId": "58769"
     },
     "result": false,
@@ -9,7 +9,7 @@
   },
   {
     "config": {
-      "apiKey": "a8df6629b0be0cf6xxa22fb2220e929_811168a9",
+      "apiKey": "a8df6629b0be0cf6xxa2XXXXX20e929_811168a9",
       "apiSecret": "",
       "listId": "58757"
     },
@@ -20,8 +20,8 @@
   },
   {
     "config": {
-      "apiKey": "a8df6629b0be0cf6xxa22fb2220e929_811168a9",
-      "apiSecret": "jw38478843bviubuehiufew8iurf387847389574",
+      "apiKey": "a8df6629b0be0cf6xxa2XXXXX20e929_811168a9",
+      "apiSecret": "jw38478843bviubXXXXXew8iurf387847389574",
       "listId": 58289
     },
     "result": false,
@@ -29,10 +29,118 @@
   },
   {
     "config": {
-      "apiKey": "a8df6629b0be0cf6xxa22fb2220e929_811168a9",
-      "apiSecret": "jw38478843bviubuehiufew8iurf387847389574",
+      "apiKey": "a8df6629b0be0cf6xxa2XXXXX20e929_811168a9",
+      "apiSecret": "jw38478843bviubXXXXXew8iurf387847389574",
       "listId": "58345"
     },
     "result": true
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "apiKey": "a8df6629b0be0cf6xxa2XXXXX20e929_811168a9",
+      "apiSecret": "jw38478843bviubXXXXXew8iurf387847389574",
+      "listId": "58345",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "apiKey": "a8df6629b0be0cf6xxa2XXXXX20e929_811168a9",
+      "apiSecret": "jw38478843bviubXXXXXew8iurf387847389574",
+      "listId": "58345",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "apiKey": "a8df6629b0be0cf6xxa2XXXXX20e929_811168a9",
+      "apiSecret": "jw38478843bviubXXXXXew8iurf387847389574",
+      "listId": "58345",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "apiKey": "a8df6629b0be0cf6xxa2XXXXX20e929_811168a9",
+      "apiSecret": "jw38478843bviubXXXXXew8iurf387847389574",
+      "listId": "58345",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "apiKey": "a8df6629b0be0cf6xxa2XXXXX20e929_811168a9",
+      "apiSecret": "jw38478843bviubXXXXXew8iurf387847389574",
+      "listId": "58345",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   }
 ]

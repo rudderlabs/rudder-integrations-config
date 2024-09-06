@@ -8,7 +8,7 @@
           "label": "Client Id",
           "value": "clientId",
           "required": true,
-          "placeholder": "e.g. ow081701234iblovt1z0j8hm",
+          "placeholder": "e.g. ow08170123XXXlovt1z0j8hm",
           "secret": true
         },
         {
@@ -16,7 +16,7 @@
           "label": "Client Secret",
           "value": "clientSecret",
           "required": true,
-          "placeholder": "e.g. Sm7Yoqpx1jpn1234Juvl61Ag",
+          "placeholder": "e.g. Sm7Yoqpx1XXX1234Juvl61Ag",
           "secret": true
         },
         {
@@ -24,7 +24,7 @@
           "label": "Subdomain",
           "value": "subDomain",
           "required": true,
-          "placeholder": "e.g. mcxt4zx46412341jd9rp300hdc8y",
+          "placeholder": "e.g. mcxt4zx4641XXX1jd9rp300hdc8y",
           "secret": true
         }
       ]
@@ -44,7 +44,7 @@
           "label": "Identify Data External Key",
           "value": "externalKey",
           "required": false,
-          "placeholder": "e.g. mcxt4zx46412341jd9rp300hdc8y",
+          "placeholder": "e.g. mcxt4zx4641XXX1jd9rp300hdc8y",
           "footerNote": "Use this setting if you would like Rudder identify events to create or update Data Extensions in SFMC. The External Key of the Salesforce Marketing Cloud Data Extension to which you'd like to send Identify data. You can find this in the SFMC interface by navigating to Data & Analytics > Contact Builder > Data Extensions; the extension's name will appear in the External Key column."
         }
       ]
@@ -60,7 +60,7 @@
           "keyLeft": "from",
           "keyRight": "to",
           "placeholderLeft": "e.g: Product Clicked",
-          "placeholderRight": "eg: 69364906-1111-1111-1111-7D9CD87F16EC",
+          "placeholderRight": "eg: 69364906-XXXX-XXXX-XXXX-7D9CD87F16EC",
           "value": "eventToExternalKey"
         },
         {
@@ -74,6 +74,18 @@
           "placeholderRight": "eg: Contact Key",
           "value": "eventToPrimaryKey",
           "footerNote": "The target Data Extension's Primary Key. If a value is not provided, defaults to Contact Key. You can add multiple primary keys by separating them with commas. The primary key names should be same as that you have set in SFMC data extensions."
+        },
+        {
+          "type": "dynamicForm",
+          "label": "Map events to event definition key",
+          "labelLeft": "Event Name",
+          "labelRight": "Event Definition Key",
+          "keyLeft": "from",
+          "keyRight": "to",
+          "placeholderLeft": "e.g: Product Clicked",
+          "placeholderRight": "eg: AcmeBank-AccountAccessed",
+          "value": "eventToDefinitionMapping",
+          "footerNote": "Map your event names to the respective event definition keys."
         },
         {
           "type": "dynamicCustomForm",
@@ -103,16 +115,109 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Cookie Categories",
+          "label": "OneTrust Consent Categories",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "C0001",
               "value": "oneTrustCookieCategory",
-              "label": "Category Name/ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "label": "Category ID",
               "required": false
             }
-          ]
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "consentManagement",
+          "label": "Consent management settings",
+          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "customFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "value": "provider",
+              "options": [
+                {
+                  "name": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "name": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "name": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "defaultOption": {
+                "name": "OneTrust",
+                "value": "oneTrust"
+              },
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "value": "resolutionStrategy",
+              "options": [
+                {
+                  "name": "AND",
+                  "value": "and"
+                },
+                {
+                  "name": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "dynamicCustomForm",
+              "value": "consents",
+              "label": "Enter consent category ID’s",
+              "customFields": [
+                {
+                  "type": "textInput",
+                  "placeholder": "Marketing",
+                  "value": "consent",
+                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "required": false
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
         }
       ]
     }
