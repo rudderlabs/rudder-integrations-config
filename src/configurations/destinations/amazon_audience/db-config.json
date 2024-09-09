@@ -1,0 +1,35 @@
+{
+  "name": "AMAZON_AUDIENCE",
+  "displayName": "Amazon Audience",
+  "config": {
+    "auth": { "type": "OAuth", "role": "amazon_audience", "rudderScopes": ["delivery"] },
+    "transformAtV1": "router",
+    "excludeKeys": [],
+    "supportedSourceTypes": ["cloud", "warehouse"],
+    "supportedConnectionModes": {
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"]
+    },
+    "supportsBlankAudienceCreation": true,
+    "syncBehaviours": ["mirror"],
+    "disableJsonMapper": true,
+    "supportsVisualMapper": true,
+    "destConfig": {
+      "defaultConfig": [
+        "rudderAccountId",
+        "audienceId",
+        "authServer",
+        "advertiserId",
+        "externalAudienceId",
+        "ttl",
+        "dataSourceCountry",
+        "enableHash"
+      ],
+      "cloud": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"]
+    },
+    "secretKeys": [],
+    "supportedMessageTypes": { "cloud": ["record"] }
+  },
+  "options": { "isBeta": true }
+}

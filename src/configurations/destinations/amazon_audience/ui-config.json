@@ -1,0 +1,146 @@
+{
+  "description": "GENERATED CODE DO NOT EDIT",
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "configKey": "advertiserId",
+                    "type": "nestedSelect",
+                    "label": "Select your Account",
+                    "apiName": "getAmazonAdvertiser",
+                    "placeholder": "Select Advertiser Id details",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "rudderAdvertiserId",
+                          "exists": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Authorization servers",
+                    "note": " Support for more servers will be supported soon",
+                    "configKey": "authServer",
+                    "options": [
+                      {
+                        "name": "North America",
+                        "value": "NA"
+                      }
+                    ],
+                    "default": "NA"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Optional configuration settings",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Enable user data hashing",
+                    "note": [
+                      "Enabling this will hash all the user data before sending it to X(Twitter)",
+                      "Do not enable it if you already pass hash data to rudderstack"
+                    ],
+                    "configKey": "enableHash",
+                    "default": false
+                  }
+                ]
+              },
+              {
+                "title": "Optional Audience Creation Configuration settings",
+                "fields": [
+                  {
+                    "configKey": "externalAudienceId",
+                    "type": "textInput",
+                    "label": "Type External Audience Id to use while creating Audience",
+                    "placeholder": "Default: Rudderstack Audience",
+                    "default": "Rudderstack Audience"
+                  },
+                  {
+                    "configKey": "ttl",
+                    "type": "textInput",
+                    "label": "Time To Live",
+                    "placeholder": "Default: 34300800(13 Months)",
+                    "note": [
+                      "Refer below link for more info",
+                      {
+                        "text": "Time To live",
+                        "link": "https://advertising.amazon.com/API/docs/en-us/guides/amazon-marketing-cloud/audiences/audience-management-service#:~:text=a%20given%20invocation.-,Note,-The%20time%2Dto"
+                      }
+                    ],
+                    "default": "34300800"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Data Source Countries",
+                    "configKey": "dataSourceCountry",
+                    "tagKey": "country",
+                    "placeholder": "e.g: US",
+                    "note": [
+                      "Refer below link for more info",
+                      {
+                        "text": "Time To live",
+                        "link": "https://advertising.amazon.com/API/docs/en-us/guides/amazon-marketing-cloud/audiences/audience-management-service#:~:text=a%20given%20invocation.-,Note,-The%20time%2Dto"
+                      }
+                    ],
+                    "default": [
+                      {
+                        "traits": "US"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["advertiserId"],
+    "properties": {
+      "authServer": {
+        "type": "string",
+        "enum": ["NA"],
+        "default": "NA"
+      },
+      "advertiserId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,50})$"
+      },
+      "externalAudienceId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,50})$"
+      },
+      "ttl": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]\\d*$"
+      },
+      "enableHash": {
+        "type": "boolean",
+        "default": false
+      },
+      "dataSourceCountry": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "country": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,5})$"
+            }
+          }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "cloud": { "type": "string", "enum": ["cloud"] },
+          "warehouse": { "type": "string", "enum": ["cloud"] }
+        }
+      }
+    }
+  }
+}
