@@ -13,10 +13,18 @@
                 "fields": [
                   {
                     "type": "textInput",
-                    "label": "Webhook URL",
-                    "configKey": "webhookUrl",
+                    "label": "API URL",
+                    "configKey": "apiUrl",
+                    "note": [
+                      "Enter the API URL. You can configure dynamic path variables in the URL using JSON template syntax, e.g., http://www.abcd.com/{{$.traits.userId}}.",
+                      {
+                        "text": "Learn more",
+                        "link": "https://www.rudderstack.com/docs/destinations/http/setup-guide/#connection-settings"
+                      },
+                      " including path variables."
+                    ],
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$|^$",
-                    "regexErrorMessage": "Invalid Webhook URL",
+                    "regexErrorMessage": "Invalid API URL",
                     "placeholder": "e.g. http://www.abcd.com"
                   },
                   {
@@ -223,7 +231,7 @@
             "icon": "settings",
             "groups": [
               {
-                "title": "Webhook Configuration Settings",
+                "title": "HTTP Configuration Settings",
                 "fields": [
                   {
                     "type": "checkbox",
@@ -495,7 +503,7 @@
             "fields": [
               {
                 "type": "mapping",
-                "label": "Map your RudderStack properties to Webhook properties",
+                "label": "Map your RudderStack properties to HTTP properties",
                 "configKey": "propertiesMapping",
                 "default": [],
                 "columns": [
@@ -508,7 +516,7 @@
                   {
                     "type": "textInput",
                     "key": "to",
-                    "label": "Webhook",
+                    "label": "HTTP",
                     "placeholder": "e.g: $.events.key2"
                   }
                 ]
