@@ -2,7 +2,7 @@
   {
     "testTitle": "With basic authentication",
     "config": {
-      "apiUrl": "http://sample.com/api/hooks/url",
+      "apiUrl": "http://sample.com/api/hooks/{{$.traits.userId}}/url/{{$.properties.event}}",
       "auth": "basicAuth",
       "username": "test-user",
       "password": "",
@@ -98,7 +98,20 @@
     },
     "result": false,
     "err": [
-      "apiUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$|^$\""
+      "apiUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+(?:[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=]|\\{\\{[^}]+\\}\\})+$|^$\""
+    ]
+  },
+  {
+    "testTitle": "With invalid api url",
+    "config": {
+      "apiUrl": "http://sample.com/api/hooks/url/{{http://23452345.ngrok.io/}}",
+      "auth": "noAuth",
+      "method": "POST",
+      "format": "JSON"
+    },
+    "result": false,
+    "err": [
+      "apiUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+(?:[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=]|\\{\\{[^}]+\\}\\})+$|^$\""
     ]
   },
   {
