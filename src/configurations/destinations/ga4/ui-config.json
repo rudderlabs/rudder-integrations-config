@@ -169,10 +169,51 @@
                     "preRequisites": {
                       "fields": [
                         {
-                          "configKey": "connectionModes.cloud",
-                          "value": true
+                          "configKey": "connectionMode.cloud",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.shopify",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.android",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.unity",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.ios",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.amp",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.flutter",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.reactnative",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.warehouse",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.cordova",
+                          "value": "cloud"
                         }
-                      ]
+                      ],
+                      "condition": "or"
                     },
                     "configKey": "debugMode",
                     "default": false
@@ -198,84 +239,7 @@
             "title": "Consent settings",
             "note": "Configure consent settings for each provider here",
             "icon": "settings",
-            "groups": [
-              {
-                "title": "OneTrust consent settings",
-                "note": [
-                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-                  {
-                    "text": "Learn more ",
-                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
-                  },
-                  "about RudderStack's OneTrust Consent Management feature."
-                ],
-                "fields": [
-                  {
-                    "type": "tagInput",
-                    "label": "Consent categories",
-                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
-                    "configKey": "oneTrustCookieCategories",
-                    "tagKey": "oneTrustCookieCategory",
-                    "placeholder": "e.g: C0001",
-                    "default": [
-                      {
-                        "oneTrustCookieCategory": ""
-                      }
-                    ]
-                  }
-                ],
-                "preRequisites": {
-                  "featureFlags": [
-                    {
-                      "configKey": "AMP_enable-gcm",
-                      "value": false
-                    },
-                    {
-                      "configKey": "AMP_enable-gcm"
-                    }
-                  ],
-                  "featureFlagsCondition": "or"
-                }
-              },
-              {
-                "title": "Ketch consent purpose settings",
-                "note": [
-                  "Enter your Ketch purpose Id if you have them configured. ",
-                  {
-                    "text": "Learn more ",
-                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/ketch/"
-                  },
-                  "about RudderStack and Ketch Consent Manager integration."
-                ],
-                "fields": [
-                  {
-                    "type": "tagInput",
-                    "label": "Purpose ID",
-                    "note": "Input your Ketch purpose Id by pressing 'Enter' after each entry",
-                    "configKey": "ketchConsentPurposes",
-                    "tagKey": "purpose",
-                    "placeholder": "e.g: Marketing",
-                    "default": [
-                      {
-                        "purpose": ""
-                      }
-                    ]
-                  }
-                ],
-                "preRequisites": {
-                  "featureFlags": [
-                    {
-                      "configKey": "AMP_enable-gcm",
-                      "value": false
-                    },
-                    {
-                      "configKey": "AMP_enable-gcm"
-                    }
-                  ],
-                  "featureFlagsCondition": "or"
-                }
-              }
-            ]
+            "groups": []
           },
           {
             "title": "Other settings",
@@ -445,6 +409,56 @@
       "title": "Consent settings",
       "note": "not visible in the ui",
       "fields": [
+        {
+          "type": "tagInput",
+          "label": "OneTrust consent category IDs",
+          "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "configKey": "oneTrustCookieCategories",
+          "tagKey": "oneTrustCookieCategory",
+          "placeholder": "e.g: C0001",
+          "default": [
+            {
+              "oneTrustCookieCategory": ""
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "tagInput",
+          "label": "Ketch consent purpose IDs",
+          "note": "Input your Ketch consent purpose IDs by pressing 'Enter' after each entry.",
+          "configKey": "ketchConsentPurposes",
+          "tagKey": "purpose",
+          "placeholder": "e.g: marketing",
+          "default": [
+            {
+              "purpose": ""
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
         {
           "type": "dynamicCustomForm",
           "configKey": "consentManagement",

@@ -1,0 +1,88 @@
+{
+  "description": "GENERATED CODE DO NOT EDIT",
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "configKey": "accountId",
+                    "type": "nestedSelect",
+                    "label": "Select your Account",
+                    "apiName": "getXAccounts",
+                    "placeholder": "Select account details",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "rudderAccountId",
+                          "exists": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Optional configuration settings",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Enable user data hashing",
+                    "note": [
+                      "Enabling this will hash all the user data before sending it to X(Twitter)",
+                      "Do not enable it if you already pass hash data to rudderstack"
+                    ],
+                    "configKey": "enableHash",
+                    "default": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    }
+  }
+}
