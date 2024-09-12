@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.90.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.90.0...v1.90.2) (2024-09-10)
+
+
+### Bug Fixes
+
+* **iterable:** remove enum and default for closeButtonPosition field ([de36c4d](https://github.com/rudderlabs/rudder-config-schema/commit/de36c4d61921b6a89649a45ca585e6dd37fec8c5))
+
+### [1.90.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.90.0...v1.90.1) (2024-09-06)
+
+## [1.90.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.89.0...v1.90.0) (2024-09-02)
+
+
+### Features
+
+* onboarding lytics bulk upload ([#1611](https://github.com/rudderlabs/rudder-config-schema/issues/1611)) ([d5d6d9c](https://github.com/rudderlabs/rudder-config-schema/commit/d5d6d9cd3157739e9073329b3225424d2d6165e4))
+* update webhook v2 ui label ([#1652](https://github.com/rudderlabs/rudder-config-schema/issues/1652)) ([a7dc8d7](https://github.com/rudderlabs/rudder-config-schema/commit/a7dc8d7976a0ea2bb9b6cd5af82524e382ad8685))
+* webhook v2 ([#1610](https://github.com/rudderlabs/rudder-config-schema/issues/1610)) ([856736a](https://github.com/rudderlabs/rudder-config-schema/commit/856736a3d674af59e59c487997ae86af40624fe0))
+
+
+### Bug Fixes
+
+* npm vulnerabilities ([593de69](https://github.com/rudderlabs/rudder-config-schema/commit/593de692ea2ccfcf54c70a935ac02cd15f2c10c3))
+
 ## [1.89.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.88.0...v1.89.0) (2024-08-27)
 
 
