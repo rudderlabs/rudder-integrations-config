@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.90.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.90.2...v1.90.3) (2024-09-13)
+
+
+### Bug Fixes
+
+* rename mixpanel api token to project token ([#1678](https://github.com/rudderlabs/rudder-config-schema/issues/1678)) ([17c63bf](https://github.com/rudderlabs/rudder-config-schema/commit/17c63bf9e3d3a5030b2afa14af1965d38fe8dcdb))
+
 ### [1.90.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.90.0...v1.90.2) (2024-09-10)
 
 
