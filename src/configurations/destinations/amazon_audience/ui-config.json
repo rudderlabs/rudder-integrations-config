@@ -22,7 +22,7 @@
                     "preRequisites": {
                       "fields": [
                         {
-                          "configKey": "rudderAdvertiserId",
+                          "configKey": "rudderAccountId",
                           "exists": true
                         }
                       ]
@@ -95,6 +95,8 @@
                     "type": "textInput",
                     "label": "Type External Audience Id to use while creating Audience",
                     "placeholder": "Default: Rudderstack Audience",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,50})$",
+                    "regexErrorMessage": "Invalid External Audience Id",
                     "default": "Rudderstack Audience"
                   },
                   {
@@ -102,6 +104,8 @@
                     "type": "textInput",
                     "label": "Time To Live",
                     "placeholder": "Default: 34300800(13 Months)",
+                    "regexErrorMessage": "ttl should be in number",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]\\d*$",
                     "note": [
                       "Refer below link for more info",
                       {
