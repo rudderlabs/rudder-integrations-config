@@ -2,55 +2,32 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "required": ["lyticsAccountId", "lyticsApiKey"],
+    "required": ["accountId"],
     "properties": {
-      "lyticsAccountId": {
+      "accountId": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,50})$"
       },
-      "lyticsApiKey": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      "enableHash": {
+        "type": "boolean",
+        "default": false
       },
-      "lyticsStreamName": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "timestampField": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "streamTraitsMapping": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "rudderProperty": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "lyticsProperty": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "cloud": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "warehouse": {
+            "type": "string",
+            "enum": ["cloud"]
           }
         }
       },
       "oneTrustCookieCategories": {
         "type": "object",
         "properties": {
-          "warehouse": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
           "cloud": {
             "type": "array",
             "items": {
@@ -62,30 +39,25 @@
                 }
               }
             }
-          }
-        }
-      },
-      "connectionMode": {
-        "type": "object",
-        "properties": {
-          "shopify": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "cloud": {
-            "type": "string",
-            "enum": ["cloud"]
           },
           "warehouse": {
-            "type": "string",
-            "enum": ["cloud"]
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
           }
         }
       },
       "ketchConsentPurposes": {
         "type": "object",
         "properties": {
-          "warehouse": {
+          "cloud": {
             "type": "array",
             "items": {
               "type": "object",
@@ -97,7 +69,7 @@
               }
             }
           },
-          "cloud": {
+          "warehouse": {
             "type": "array",
             "items": {
               "type": "object",

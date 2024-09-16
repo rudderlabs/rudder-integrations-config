@@ -2,7 +2,7 @@
   {
     "testTitle": "With basic authentication",
     "config": {
-      "webhookUrl": "http://sample.com/api/hooks/url",
+      "apiUrl": "http://sample.com/api/hooks/{{$.traits.userId}}/url/{{$.properties.event}}",
       "auth": "basicAuth",
       "username": "test-user",
       "password": "",
@@ -47,7 +47,7 @@
   {
     "testTitle": "With api key authentication",
     "config": {
-      "webhookUrl": "http://sample.com/api/hooks/url",
+      "apiUrl": "http://sample.com/api/hooks/url",
       "auth": "apiKeyAuth",
       "apiKeyName": "x-api-key",
       "apiKeyValue": "123",
@@ -65,7 +65,7 @@
   {
     "testTitle": "With invalid max batch size",
     "config": {
-      "webhookUrl": "http://sample.com/api/hooks/url",
+      "apiUrl": "http://sample.com/api/hooks/url",
       "auth": "noAuth",
       "method": "POST",
       "format": "JSON",
@@ -79,22 +79,35 @@
     ]
   },
   {
-    "testTitle": "With invalid webhook url",
+    "testTitle": "With invalid api url",
     "config": {
-      "webhookUrl": "http://23452345.ngrok.io/",
+      "apiUrl": "http://23452345.ngrok.io/",
       "auth": "noAuth",
       "method": "POST",
       "format": "JSON"
     },
     "result": false,
     "err": [
-      "webhookUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$|^$\""
+      "apiUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+(?:[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=]|\\{\\{[^}]+\\}\\})+$|^$\""
+    ]
+  },
+  {
+    "testTitle": "With invalid api url",
+    "config": {
+      "apiUrl": "http://sample.com/api/hooks/url/{{http://23452345.ngrok.io/}}",
+      "auth": "noAuth",
+      "method": "POST",
+      "format": "JSON"
+    },
+    "result": false,
+    "err": [
+      "apiUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+(?:[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=]|\\{\\{[^}]+\\}\\})+$|^$\""
     ]
   },
   {
     "testTitle": "With valid multiple consent management providers config",
     "config": {
-      "webhookUrl": "http://test.ec-example.example.com",
+      "apiUrl": "http://test.ec-example.example.com",
       "method": "POST",
       "format": "JSON",
       "consentManagement": {
@@ -128,7 +141,7 @@
   {
     "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
     "config": {
-      "webhookUrl": "http://test.ec-example.example.com",
+      "apiUrl": "http://test.ec-example.example.com",
       "method": "POST",
       "format": "JSON",
       "headers": [
@@ -155,7 +168,7 @@
   {
     "testTitle": "With consent management custom provider config and no resolutionStrategy value",
     "config": {
-      "webhookUrl": "http://test.ec-example.example.com",
+      "apiUrl": "http://test.ec-example.example.com",
       "method": "POST",
       "format": "JSON",
       "headers": [
@@ -181,7 +194,7 @@
   {
     "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
     "config": {
-      "webhookUrl": "http://test.ec-example.example.com",
+      "apiUrl": "http://test.ec-example.example.com",
       "method": "POST",
       "format": "JSON",
       "headers": [
@@ -203,7 +216,7 @@
   {
     "testTitle": "With consent management custom provider config invalid provider value",
     "config": {
-      "webhookUrl": "http://test.ec-example.example.com",
+      "apiUrl": "http://test.ec-example.example.com",
       "method": "POST",
       "format": "JSON",
       "headers": [
@@ -226,7 +239,7 @@
   {
     "testTitle": "With basic authentication",
     "config": {
-      "webhookUrl": "http://sample.com/api/hooks/url",
+      "apiUrl": "http://sample.com/api/hooks/{{$.traits.userId}}/url/{{$.properties.event}}",
       "auth": "basicAuth",
       "username": "test-user",
       "password": "",
@@ -393,7 +406,7 @@
   {
     "testTitle": "With basic authentication",
     "config": {
-      "webhookUrl": "http://sample.com/api/hooks/url",
+      "apiUrl": "http://sample.com/api/hooks/{{$.traits.userId}}/url/{{$.properties.event}}",
       "auth": "basicAuth",
       "username": "test-user",
       "password": "",
@@ -455,7 +468,7 @@
   {
     "testTitle": "With basic authentication",
     "config": {
-      "webhookUrl": "http://sample.com/api/hooks/url",
+      "apiUrl": "http://sample.com/api/hooks/{{$.traits.userId}}/url/{{$.properties.event}}",
       "auth": "basicAuth",
       "username": "test-user",
       "password": "",

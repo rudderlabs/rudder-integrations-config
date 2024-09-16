@@ -1,7 +1,7 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["accessToken", "maxUserCount"],
+    "required": ["accessToken"],
     "type": "object",
     "properties": {
       "accessToken": {
@@ -12,253 +12,117 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$"
       },
-      "adAccountId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
       "maxUserCount": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "userSchema": {
-        "type": "object",
-        "properties": {
-          "cloud": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": [
-                "EMAIL",
-                "PHONE",
-                "GEN",
-                "MADID",
-                "EXTERN_ID",
-                "DOBY",
-                "DOBM",
-                "DOBD",
-                "LN",
-                "FN",
-                "FI",
-                "CT",
-                "ST",
-                "ZIP",
-                "COUNTRY"
-              ]
-            },
-            "default": ["EMAIL"]
-          },
-          "shopify": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": [
-                "EMAIL",
-                "PHONE",
-                "GEN",
-                "MADID",
-                "EXTERN_ID",
-                "DOBY",
-                "DOBM",
-                "DOBD",
-                "LN",
-                "FN",
-                "FI",
-                "CT",
-                "ST",
-                "ZIP",
-                "COUNTRY"
-              ]
-            },
-            "default": ["EMAIL"]
-          }
-        }
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "EMAIL",
+            "PHONE",
+            "GEN",
+            "MADID",
+            "EXTERN_ID",
+            "DOBY",
+            "DOBM",
+            "DOBD",
+            "LN",
+            "FN",
+            "FI",
+            "CT",
+            "ST",
+            "ZIP",
+            "COUNTRY"
+          ]
+        },
+        "default": ["EMAIL"]
       },
       "isHashRequired": {
-        "type": "object",
-        "properties": {
-          "cloud": {
-            "type": "boolean"
-          },
-          "shopify": {
-            "type": "boolean"
-          }
-        }
+        "type": "boolean",
+        "default": true
       },
       "isRaw": {
-        "type": "object",
-        "properties": {
-          "cloud": {
-            "type": "boolean"
-          },
-          "shopify": {
-            "type": "boolean"
-          }
-        }
+        "type": "boolean",
+        "default": false
       },
       "disableFormat": {
-        "type": "object",
-        "properties": {
-          "cloud": {
-            "type": "boolean"
-          },
-          "shopify": {
-            "type": "boolean"
-          }
-        }
+        "type": "boolean",
+        "default": false
       },
       "type": {
-        "type": "object",
-        "properties": {
-          "cloud": {
-            "type": "string",
-            "enum": [
-              "UNKNOWN",
-              "FILE_IMPORTED",
-              "EVENT_BASED",
-              "SEED_BASED",
-              "THIRD_PARTY_IMPORTED",
-              "COPY_PASTE",
-              "CONTACT_IMPORTER",
-              "HOUSEHOLD_AUDIENCE",
-              "NA"
-            ],
-            "default": "NA"
-          },
-          "shopify": {
-            "type": "string",
-            "enum": [
-              "UNKNOWN",
-              "FILE_IMPORTED",
-              "EVENT_BASED",
-              "SEED_BASED",
-              "THIRD_PARTY_IMPORTED",
-              "COPY_PASTE",
-              "CONTACT_IMPORTER",
-              "HOUSEHOLD_AUDIENCE",
-              "NA"
-            ],
-            "default": "NA"
-          }
-        }
+        "type": "string",
+        "enum": [
+          "UNKNOWN",
+          "FILE_IMPORTED",
+          "EVENT_BASED",
+          "SEED_BASED",
+          "THIRD_PARTY_IMPORTED",
+          "COPY_PASTE",
+          "CONTACT_IMPORTER",
+          "HOUSEHOLD_AUDIENCE",
+          "NA"
+        ],
+        "default": "NA"
       },
       "subType": {
-        "type": "object",
-        "properties": {
-          "cloud": {
-            "type": "string",
-            "enum": [
-              "ANYTHING",
-              "NOTHING",
-              "HASHES",
-              "USER_IDS",
-              "HASHES_OR_USER_IDS",
-              "MOBILE_ADVERTISER_IDS",
-              "FB_EVENT_SIGNALS",
-              "EXTERNAL_IDS",
-              "MULTI_HASHES",
-              "TOKENS",
-              "EXTERNAL_IDS_MIX",
-              "WEB_PIXEL_HITS",
-              "MOBILE_APP_EVENTS",
-              "MOBILE_APP_COMBINATION_EVENTS",
-              "VIDEO_EVENTS",
-              "WEB_PIXEL_COMBINATION_EVENTS",
-              "IG_BUSINESS_EVENTS",
-              "MULTI_DATA_EVENTS",
-              "STORE_VISIT_EVENTS",
-              "INSTANT_ARTICLE_EVENTS",
-              "ENGAGEMENT_EVENT_USERS",
-              "FACEBOOK_WIFI_EVENTS",
-              "CUSTOM_AUDIENCE_USERS",
-              "S_EXPR",
-              "DYNAMIC_RULE",
-              "CONVERSION_PIXEL_HITS",
-              "APP_USERS",
-              "CAMPAIGN_CONVERSIONS",
-              "WEB_PIXEL_HITS_CUSTOM_AUDIENCE_USERS",
-              "MOBILE_APP_CUSTOM_AUDIENCE_USERS",
-              "VIDEO_EVENT_USERS",
-              "FB_PIXEL_HITS",
-              "IG_PROMOTED_POST",
-              "PLACE_VISITS",
-              "OFFLINE_EVENT_USERS",
-              "EXPANDED_AUDIENCE",
-              "SEED_LIST",
-              "PARTNER_CATEGORY_USERS",
-              "PAGE_SMART_AUDIENCE",
-              "MULTICOUNTRY_COMBINATION",
-              "PLATFORM_USERS",
-              "MULTI_EVENT_SOURCE",
-              "SMART_AUDIENCE",
-              "LOOKALIKE_PLATFORM",
-              "SIGNAL_SOURCE",
-              "MAIL_CHIMP_EMAIL_HASHES",
-              "CONSTANT_CONTACTS_EMAIL_HASHES",
-              "COPY_PASTE_EMAIL_HASHES",
-              "CONTACT_IMPORTER",
-              "DATA_FILE",
-              "NA"
-            ],
-            "default": "NA"
-          },
-          "shopify": {
-            "type": "string",
-            "enum": [
-              "ANYTHING",
-              "NOTHING",
-              "HASHES",
-              "USER_IDS",
-              "HASHES_OR_USER_IDS",
-              "MOBILE_ADVERTISER_IDS",
-              "FB_EVENT_SIGNALS",
-              "EXTERNAL_IDS",
-              "MULTI_HASHES",
-              "TOKENS",
-              "EXTERNAL_IDS_MIX",
-              "WEB_PIXEL_HITS",
-              "MOBILE_APP_EVENTS",
-              "MOBILE_APP_COMBINATION_EVENTS",
-              "VIDEO_EVENTS",
-              "WEB_PIXEL_COMBINATION_EVENTS",
-              "IG_BUSINESS_EVENTS",
-              "MULTI_DATA_EVENTS",
-              "STORE_VISIT_EVENTS",
-              "INSTANT_ARTICLE_EVENTS",
-              "ENGAGEMENT_EVENT_USERS",
-              "FACEBOOK_WIFI_EVENTS",
-              "CUSTOM_AUDIENCE_USERS",
-              "S_EXPR",
-              "DYNAMIC_RULE",
-              "CONVERSION_PIXEL_HITS",
-              "APP_USERS",
-              "CAMPAIGN_CONVERSIONS",
-              "WEB_PIXEL_HITS_CUSTOM_AUDIENCE_USERS",
-              "MOBILE_APP_CUSTOM_AUDIENCE_USERS",
-              "VIDEO_EVENT_USERS",
-              "FB_PIXEL_HITS",
-              "IG_PROMOTED_POST",
-              "PLACE_VISITS",
-              "OFFLINE_EVENT_USERS",
-              "EXPANDED_AUDIENCE",
-              "SEED_LIST",
-              "PARTNER_CATEGORY_USERS",
-              "PAGE_SMART_AUDIENCE",
-              "MULTICOUNTRY_COMBINATION",
-              "PLATFORM_USERS",
-              "MULTI_EVENT_SOURCE",
-              "SMART_AUDIENCE",
-              "LOOKALIKE_PLATFORM",
-              "SIGNAL_SOURCE",
-              "MAIL_CHIMP_EMAIL_HASHES",
-              "CONSTANT_CONTACTS_EMAIL_HASHES",
-              "COPY_PASTE_EMAIL_HASHES",
-              "CONTACT_IMPORTER",
-              "DATA_FILE",
-              "NA"
-            ],
-            "default": "NA"
-          }
-        }
+        "type": "string",
+        "enum": [
+          "ANYTHING",
+          "NOTHING",
+          "HASHES",
+          "USER_IDS",
+          "HASHES_OR_USER_IDS",
+          "MOBILE_ADVERTISER_IDS",
+          "FB_EVENT_SIGNALS",
+          "EXTERNAL_IDS",
+          "MULTI_HASHES",
+          "TOKENS",
+          "EXTERNAL_IDS_MIX",
+          "WEB_PIXEL_HITS",
+          "MOBILE_APP_EVENTS",
+          "MOBILE_APP_COMBINATION_EVENTS",
+          "VIDEO_EVENTS",
+          "WEB_PIXEL_COMBINATION_EVENTS",
+          "IG_BUSINESS_EVENTS",
+          "MULTI_DATA_EVENTS",
+          "STORE_VISIT_EVENTS",
+          "INSTANT_ARTICLE_EVENTS",
+          "ENGAGEMENT_EVENT_USERS",
+          "FACEBOOK_WIFI_EVENTS",
+          "CUSTOM_AUDIENCE_USERS",
+          "S_EXPR",
+          "DYNAMIC_RULE",
+          "CONVERSION_PIXEL_HITS",
+          "APP_USERS",
+          "CAMPAIGN_CONVERSIONS",
+          "WEB_PIXEL_HITS_CUSTOM_AUDIENCE_USERS",
+          "MOBILE_APP_CUSTOM_AUDIENCE_USERS",
+          "VIDEO_EVENT_USERS",
+          "FB_PIXEL_HITS",
+          "IG_PROMOTED_POST",
+          "PLACE_VISITS",
+          "OFFLINE_EVENT_USERS",
+          "EXPANDED_AUDIENCE",
+          "SEED_LIST",
+          "PARTNER_CATEGORY_USERS",
+          "PAGE_SMART_AUDIENCE",
+          "MULTICOUNTRY_COMBINATION",
+          "PLATFORM_USERS",
+          "MULTI_EVENT_SOURCE",
+          "SMART_AUDIENCE",
+          "LOOKALIKE_PLATFORM",
+          "SIGNAL_SOURCE",
+          "MAIL_CHIMP_EMAIL_HASHES",
+          "CONSTANT_CONTACTS_EMAIL_HASHES",
+          "COPY_PASTE_EMAIL_HASHES",
+          "CONTACT_IMPORTER",
+          "DATA_FILE",
+          "NA"
+        ],
+        "default": "NA"
       },
       "oneTrustCookieCategories": {
         "type": "object",
@@ -305,6 +169,52 @@
         "type": "object",
         "properties": {
           "cloud": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "ketch", "oneTrust"],
+                  "default": "oneTrust"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            }
+          },
+          "warehouse": {
             "type": "array",
             "items": {
               "type": "object",
@@ -401,38 +311,6 @@
       "connectionMode": {
         "type": "object",
         "properties": {
-          "android": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "ios": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "web": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "unity": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "amp": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "reactnative": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "flutter": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "cordova": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
           "shopify": {
             "type": "string",
             "enum": ["cloud"]
@@ -488,6 +366,58 @@
           }
         }
       }
-    }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "properties": {
+                "cloud": {
+                  "const": "cloud"
+                }
+              },
+              "required": ["cloud"]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "audienceId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          },
+          "required": ["audienceId"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "properties": {
+                "warehouse": {
+                  "const": "cloud"
+                }
+              },
+              "required": ["warehouse"]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "adAccountId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          },
+          "required": ["adAccountId"]
+        }
+      }
+    ]
   }
 }
