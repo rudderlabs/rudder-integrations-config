@@ -1,7 +1,7 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["accessToken", "maxUserCount"],
+    "required": ["accessToken"],
     "type": "object",
     "properties": {
       "accessToken": {
@@ -11,15 +11,6 @@
       "appSecret": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$"
-      },
-      "adAccountId": {
-        "type": "object",
-        "properties": {
-          "warehouse": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-          }
-        }
       },
       "maxUserCount": {
         "type": "string",
@@ -282,19 +273,63 @@
       "connectionMode": {
         "type": "object",
         "properties": {
-          "android": { "type": "string", "enum": ["cloud"] },
-          "ios": { "type": "string", "enum": ["cloud"] },
-          "web": { "type": "string", "enum": ["cloud"] },
-          "unity": { "type": "string", "enum": ["cloud"] },
-          "amp": { "type": "string", "enum": ["cloud"] },
-          "reactnative": { "type": "string", "enum": ["cloud"] },
-          "flutter": { "type": "string", "enum": ["cloud"] },
-          "cordova": { "type": "string", "enum": ["cloud"] },
           "shopify": { "type": "string", "enum": ["cloud"] },
           "cloud": { "type": "string", "enum": ["cloud"] },
           "warehouse": { "type": "string", "enum": ["cloud"] }
         }
       }
-    }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "properties": {
+                "cloud": {
+                  "const": "cloud"
+                }
+              },
+              "required": ["cloud"]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "audienceId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          },
+          "required": ["audienceId"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "properties": {
+                "warehouse": {
+                  "const": "cloud"
+                }
+              },
+              "required": ["warehouse"]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "adAccountId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          },
+          "required": ["adAccountId"]
+        }
+      }
+    ]
   }
 }
