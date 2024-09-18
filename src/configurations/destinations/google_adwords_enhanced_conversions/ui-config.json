@@ -8,22 +8,85 @@
           {
             "groups": [
               {
-                "title": "Connection Settings",
-                "note": "Update your connection settings here",
                 "icon": "settings",
+                "note": "Update your connection settings here",
+                "title": "Connection Settings",
                 "fields": [
                   {
-                    "configKey": "configData",
+                    "type": "checkbox",
+                    "label": "Select account using access token",
+                    "configKey": "fetchCustomerIdUsingOAuth",
+                    "default": false
+                  },
+                  {
                     "type": "nestedSelect",
                     "label": "Select Account -> SubAccount -> Login CustomerId",
                     "apiName": "getConfigData",
-                    "apiDependencies": ["rudderAccountId"],
+                    "configKey": "configData",
                     "placeholder": "Select config details",
                     "preRequisites": {
                       "fields": [
                         {
-                          "configKey": "rudderAccountId",
-                          "exists": true
+                          "exists": true,
+                          "configKey": "rudderAccountId"
+                        },
+                        {
+                          "configKey": "fetchCustomerIdUsingOAuth",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "apiDependencies": [
+                      "rudderAccountId"
+                    ]
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Customer ID",
+                    "note": "Enter the Customer ID",
+                    "configKey": "customerId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Customer Id",
+                    "placeholder": "e.g: 9693XX9833",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "fetchCustomerIdUsingOAuth",
+                          "value": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Sub Account",
+                    "configKey": "subAccount",
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "fetchCustomerIdUsingOAuth",
+                          "value": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Login Customer ID",
+                    "note": "Enter the Login Customer ID",
+                    "configKey": "loginCustomerId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Login Customer Id",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "subAccount",
+                          "value": true
+                        },
+                        {
+                          "configKey": "fetchCustomerIdUsingOAuth",
+                          "value": false
                         }
                       ]
                     }
@@ -63,17 +126,18 @@
                 "note": "Enter your list of Conversions",
                 "fields": [
                   {
-                    "type": "tagInput",
-                    "label": "List of Conversion",
                     "note": "Add your conversions names",
-                    "configKey": "listOfConversions",
+                    "type": "dynamicDataSelect",
+                    "apiName": "getConversionId",
+                    "label": "List of Conversion",
                     "tagKey": "conversions",
-                    "placeholder": "e.g: Credit card visit",
                     "default": [
                       {
                         "conversions": ""
                       }
-                    ]
+                    ],
+                    "configKey": "listOfConversions",
+                    "placeholder": "e.g: Credit card visit"
                   },
                   {
                     "type": "checkbox",
