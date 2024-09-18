@@ -61,12 +61,17 @@
             "oneTrustCookieCategory": "C0002"
           }
         ],
-        "cloud": [
+        "web": [
           {
             "oneTrustCookieCategory": "C0003"
           },
           {
             "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "cloud": [
+          {
+            "oneTrustCookieCategory": ""
           }
         ]
       },
@@ -79,12 +84,17 @@
             "purpose": "P2"
           }
         ],
-        "cloud": [
+        "web": [
           {
             "purpose": "P3"
           },
           {
             "purpose": "P4"
+          }
+        ],
+        "cloud": [
+          {
+            "purpose": ""
           }
         ]
       }
@@ -103,37 +113,8 @@
         }
       ],
       "oneTrustCookieCategories": {
-        "warehouse": [
-          {
-            "oneTrustCookieCategory": ""
-          }
-        ],
-        "cloud": []
-      },
-      "ketchConsentPurposes": {
-        "warehouse": [
-          {
-            "purpose": ""
-          }
-        ],
-        "cloud": []
-      }
-    },
-    "result": true
-  },
-  {
-    "config": {
-      "lyticsAccountId": "434342324",
-      "lyticsApiKey": "447477473",
-      "lyticsStreamName": "Rudderstack",
-      "streamTraitsMapping": [
-        {
-          "rudderProperty": "Email",
-          "lyticsProperty": "Email"
-        }
-      ],
-      "oneTrustCookieCategories": {
-        "warehouse": [
+        "warehouse": [],
+        "web": [
           {
             "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
           }
@@ -145,7 +126,8 @@
         ]
       },
       "ketchConsentPurposes": {
-        "warehouse": [
+        "warehouse": [],
+        "web": [
           {
             "purpose": "env.ENVIRONMENT_VARIABLE"
           }
@@ -210,7 +192,7 @@
             "oneTrustCookieCategory": "C0004"
           }
         ],
-        "cloud": [
+        "web": [
           {
             "oneTrustCookieCategory": {
               "not": "a string"
@@ -219,7 +201,10 @@
           {
             "oneTrustCookieCategory": "C0004"
           }
-        ]
+        ],
+        "cloud": {
+          "not": "an array"
+        }
       },
       "ketchConsentPurposes": {
         "warehouse": [
@@ -230,7 +215,7 @@
             "purpose": "P4"
           }
         ],
-        "cloud": [
+        "web": [
           {
             "purpose": {
               "not": "a string"
@@ -239,15 +224,20 @@
           {
             "purpose": "P4"
           }
-        ]
+        ],
+        "cloud": {
+          "not": "an array"
+        }
       }
     },
     "result": false,
     "err": [
       "oneTrustCookieCategories.warehouse.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
-      "oneTrustCookieCategories.cloud.0.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.web.0.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.cloud must be array",
       "ketchConsentPurposes.warehouse.0.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
-      "ketchConsentPurposes.cloud.0.purpose must be string"
+      "ketchConsentPurposes.web.0.purpose must be string",
+      "ketchConsentPurposes.cloud must be array"
     ]
   },
   {
@@ -262,10 +252,7 @@
         }
       ],
       "oneTrustCookieCategories": {
-        "warehouse": {
-          "not": "an array"
-        },
-        "cloud": [
+        "warehouse": [
           "not an object",
           {
             "oneTrustCookieCategory": "C0004"
@@ -273,10 +260,7 @@
         ]
       },
       "ketchConsentPurposes": {
-        "warehouse": {
-          "not": "an array"
-        },
-        "cloud": [
+        "warehouse": [
           "not an object",
           {
             "purpose": "P4"
@@ -286,10 +270,8 @@
     },
     "result": false,
     "err": [
-      "oneTrustCookieCategories.warehouse must be array",
-      "oneTrustCookieCategories.cloud.0 must be object",
-      "ketchConsentPurposes.warehouse must be array",
-      "ketchConsentPurposes.cloud.0 must be object"
+      "oneTrustCookieCategories.warehouse.0 must be object",
+      "ketchConsentPurposes.warehouse.0 must be object"
     ]
   }
 ]
