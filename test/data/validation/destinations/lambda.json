@@ -171,5 +171,242 @@
     },
     "result": false,
     "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "config": {
+      "accessKeyId": "test-access-key-id",
+      "accessKey": "test-access-key",
+      "roleBasedAuth": false,
+      "region": "us-east-1",
+      "lambda": "myFunction",
+      "oneTrustCookieCategories": {
+        "amp": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "android": [
+          {
+            "oneTrustCookieCategory": "C0003"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "cordova": [
+          {
+            "oneTrustCookieCategory": ""
+          }
+        ],
+        "cloud": [],
+        "flutter": [
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 'val' }}"
+          }
+        ],
+        "reactnative": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "unity": [
+          {
+            "oneTrustCookieCategory": "C0003"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "warehouse": [
+          {
+            "oneTrustCookieCategory": ""
+          }
+        ],
+        "web": [],
+        "shopify": [
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "amp": [
+          {
+            "purpose": "P1"
+          },
+          {
+            "purpose": "P2"
+          }
+        ],
+        "android": [
+          {
+            "purpose": "P3"
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "cordova": [
+          {
+            "purpose": ""
+          }
+        ],
+        "cloud": [],
+        "flutter": [
+          {
+            "purpose": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "ios": [
+          {
+            "purpose": "{{ event.properties.prop1 || 'val' }}"
+          }
+        ],
+        "reactnative": [
+          {
+            "purpose": "P1"
+          },
+          {
+            "purpose": "P2"
+          }
+        ],
+        "unity": [
+          {
+            "purpose": "P3"
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "warehouse": [
+          {
+            "purpose": ""
+          }
+        ],
+        "web": [],
+        "shopify": [
+          {
+            "purpose": "env.ENVIRONMENT_VARIABLE"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "accessKeyId": "test-access-key-id",
+      "accessKey": "test-access-key",
+      "roleBasedAuth": false,
+      "region": "us-east-1",
+      "lambda": "myFunction",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        },
+        {
+          "oneTrustCookieCategory": "C0002"
+        }
+      ],
+      "ketchConsentPurposes": [
+        {
+          "purpose": "P1"
+        },
+        {
+          "purpose": "P2"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["oneTrustCookieCategories must be object", "ketchConsentPurposes must be object"]
+  },
+  {
+    "config": {
+      "accessKeyId": "test-access-key-id",
+      "accessKey": "test-access-key",
+      "roleBasedAuth": false,
+      "region": "us-east-1",
+      "lambda": "myFunction",
+      "oneTrustCookieCategories": {
+        "amp": [
+          {
+            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "android": [
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "cordova": {
+          "not": "an array"
+        },
+        "cloud": [
+          "not an object",
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "amp": [
+          {
+            "purpose": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "android": [
+          {
+            "purpose": {
+              "not": "a string"
+            }
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "cordova": {
+          "not": "an array"
+        },
+        "cloud": [
+          "not an object",
+          {
+            "purpose": "P4"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "oneTrustCookieCategories.amp.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.android.0.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.cordova must be array",
+      "oneTrustCookieCategories.cloud.0 must be object",
+      "ketchConsentPurposes.amp.0.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "ketchConsentPurposes.android.0.purpose must be string",
+      "ketchConsentPurposes.cordova must be array",
+      "ketchConsentPurposes.cloud.0 must be object"
+    ]
   }
 ]

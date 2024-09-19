@@ -40,13 +40,18 @@
         "default": true
       },
       "oneTrustCookieCategories": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "oneTrustCookieCategory": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "type": "object",
+        "properties": {
+          "warehouse": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
             }
           }
         }
@@ -54,7 +59,10 @@
       "connectionMode": {
         "type": "object",
         "properties": {
-          "warehouse": { "type": "string", "enum": ["cloud"] }
+          "warehouse": {
+            "type": "string",
+            "enum": ["cloud"]
+          }
         }
       },
       "consentManagement": {
@@ -104,6 +112,23 @@
                   }
                 }
               ]
+            }
+          }
+        }
+      },
+      "ketchConsentPurposes": {
+        "type": "object",
+        "properties": {
+          "warehouse": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
             }
           }
         }
