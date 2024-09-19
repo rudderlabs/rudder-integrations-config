@@ -450,6 +450,8 @@ def update_ui_config_file(name, dir_path):
                             other_settings["groups"].remove(ketch_consent_settings)
             elif not consent_settings_template and key == "consentSettingsTemplate":
                 consent_settings_template = ui_config["uiConfig"][key]
+                one_trust_consent_settings_found = False
+                ketch_consent_settings_found = False
 
                 for field in consent_settings_template["fields"]:
                     if (
@@ -638,6 +640,8 @@ def restructure_legacy_consent_fields(dest_names, dir_path):
         # check if name is a directory
         if not os.path.isdir(f"./{dir_path}/{name}"):
             continue
+
+        print(f"Processing {name}")
 
         update_db_config_file(name, dir_path)
         supported_source_types = get_supported_source_types(name, dir_path)
