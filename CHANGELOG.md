@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.92.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.92.0...v1.92.1) (2024-09-20)
+
+
+### Bug Fixes
+
+* kafka topic name regex ([#1698](https://github.com/rudderlabs/rudder-config-schema/issues/1698)) ([3583ce8](https://github.com/rudderlabs/rudder-config-schema/commit/3583ce8dcefead90ba10b7750bd5333e89dc41c3))
+* set wunderkind accountId and instanceId as secret in ui ([#1697](https://github.com/rudderlabs/rudder-config-schema/issues/1697)) ([860a9bb](https://github.com/rudderlabs/rudder-config-schema/commit/860a9bb6e6e5d7aceacb83c6a0b7792e88705a71))
+
 ## [1.92.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.91.0...v1.92.0) (2024-09-19)
 
 
