@@ -74,7 +74,6 @@
           "regexErrorMessage": "Invalid Namespace",
           "required": true,
           "placeholder": "e.g: RUDDER_NAMESPACE",
-          "footerNote": "Default will be the source name",
           "immutable": true
         }
       ]
@@ -82,6 +81,13 @@
     {
       "title": "Advanced Settings",
       "fields": [
+        {
+          "type": "checkbox",
+          "label": "Skip Tracks Table",
+          "value": "skipTracksTable",
+          "footerNote": "Enable this feature to skip sending the event data to the “tracks” table",
+          "default": false
+        },
         {
           "type": "textInput",
           "label": "JSON columns (Optional)",
@@ -91,7 +97,7 @@
           "placeholder": "e.g: testMap.nestedMap, testArray",
           "required": false,
           "footerURL": {
-            "link": "https://www.rudderstack.com/docs/destinations/warehouse-destinations/snowflake/#configuring-snowflake-destination-in-rudderstack",
+            "link": "https://www.rudderstack.com/docs/destinations/warehouse-destinations/json-column-support/",
             "text": "Instructions for setting up the JSON columns"
           }
         }
@@ -103,7 +109,7 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Consent Categories",
+          "label": "OneTrust Consent Category IDs",
           "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
@@ -131,14 +137,14 @@
         {
           "type": "dynamicCustomForm",
           "value": "ketchConsentPurposes",
-          "label": "Ketch Consent Purposes",
+          "label": "Ketch Consent Purpose IDs",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "marketing",
               "value": "purpose",
               "label": "Purpose ID",
-              "regex": "^(.{0,100})$",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
               "required": false
             }
           ],
