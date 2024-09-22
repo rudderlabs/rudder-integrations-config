@@ -6,12 +6,16 @@
     "saveDestinationResponse": true,
     "includeKeys": ["oneTrustCookieCategories"],
     "excludeKeys": [],
-    "supportedSourceTypes": ["warehouse"],
-    "supportedMessageTypes": { "cloud": ["track"] },
+    "supportedSourceTypes": ["warehouse", "web", "cloud"],
+    "supportedMessageTypes": {
+      "cloud": ["track"]
+    },
     "syncBehaviours": ["upsert"],
     "disableJsonMapper": false,
     "supportedConnectionModes": {
-      "warehouse": ["cloud"]
+      "warehouse": ["cloud"],
+      "web": ["cloud"],
+      "cloud": ["cloud"]
     },
     "destConfig": {
       "defaultConfig": [
@@ -19,12 +23,14 @@
         "lyticsAccountId",
         "lyticsStreamName",
         "timestampField",
-        "streamTraitsMapping",
-        "oneTrustCookieCategories"
+        "streamTraitsMapping"
       ],
-      "cloud": ["connectionMode"],
-      "warehouse": ["connectionMode"]
+      "cloud": ["connectionMode", "oneTrustCookieCategories", "ketchConsentPurposes"],
+      "warehouse": ["connectionMode", "oneTrustCookieCategories", "ketchConsentPurposes"],
+      "web": ["connectionMode", "oneTrustCookieCategories", "ketchConsentPurposes"]
     }
   },
-  "options": { "isBeta": true }
+  "options": {
+    "isBeta": true
+  }
 }

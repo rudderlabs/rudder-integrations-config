@@ -8,10 +8,26 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "isSPA": { "type": "boolean", "default": false },
-      "sendExperimentTrack": { "type": "boolean", "default": false },
-      "sendExperimentIdentify": { "type": "boolean", "default": false },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "isSPA": {
+        "type": "boolean",
+        "default": false
+      },
+      "sendExperimentTrack": {
+        "type": "boolean",
+        "default": false
+      },
+      "sendExperimentIdentify": {
+        "type": "boolean",
+        "default": false
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
       "eventFilteringOption": {
         "type": "string",
         "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
@@ -49,24 +65,42 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "useExistingJquery": { "type": "boolean", "default": false },
+      "useExistingJquery": {
+        "type": "boolean",
+        "default": false
+      },
       "oneTrustCookieCategories": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "oneTrustCookieCategory": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
             }
           }
         }
       },
       "ketchConsentPurposes": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": { "purpose": { "type": "string", "pattern": "^(.{0,100})$" } }
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
         }
       },
       "consentManagement": {
@@ -98,12 +132,19 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": { "provider": { "const": "custom" } },
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -115,7 +156,12 @@
       },
       "connectionMode": {
         "type": "object",
-        "properties": { "web": { "type": "string", "enum": ["device"] } }
+        "properties": {
+          "web": {
+            "type": "string",
+            "enum": ["device"]
+          }
+        }
       }
     }
   }

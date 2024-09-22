@@ -4,41 +4,211 @@
     "type": "object",
     "required": ["host", "port", "path", "token", "syncFrequency", "bucketProvider"],
     "properties": {
-      "host": { "type": "string", "pattern": "(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$" },
-      "port": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
-      "path": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
-      "token": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" },
-      "catalog": { "type": "string", "pattern": "(^env[.].*)|^(.*)$" },
-      "namespace": { "type": "string", "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$" },
-      "skipTracksTable": { "type": "boolean", "default": false },
-      "skipUsersTable": { "type": "boolean", "default": false },
+      "host": {
+        "type": "string",
+        "pattern": "(^env[.].+)|(?!.*\\.ngrok\\.io)^(.{1,100})$"
+      },
+      "port": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "path": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "token": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "catalog": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.*)$"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
+      },
+      "skipTracksTable": {
+        "type": "boolean",
+        "default": false
+      },
+      "skipUsersTable": {
+        "type": "boolean",
+        "default": false
+      },
       "syncFrequency": {
         "type": "string",
         "pattern": "^(30|60|180|360|720|1440)$",
         "default": "180"
       },
-      "syncStartAt": { "type": "string" },
+      "syncStartAt": {
+        "type": "string"
+      },
       "excludeWindow": {
         "type": "object",
         "required": ["excludeWindowStartTime", "excludeWindowEndTime"],
         "properties": {
-          "excludeWindowStartTime": { "type": "string" },
-          "excludeWindowEndTime": { "type": "string" }
+          "excludeWindowStartTime": {
+            "type": "string"
+          },
+          "excludeWindowEndTime": {
+            "type": "string"
+          }
         }
       },
-      "prefix": { "type": "string", "pattern": "(^env[.].*)|^(.{0,100})$" },
-      "bucketProvider": { "type": "string", "pattern": "^(S3|GCS|AZURE_BLOB)$" },
-      "enableExternalLocation": { "type": "boolean", "default": false },
-      "useRudderStorage": { "type": "boolean", "default": false },
-      "preferAppend": { "type": "boolean", "default": true },
+      "prefix": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,100})$"
+      },
+      "bucketProvider": {
+        "type": "string",
+        "pattern": "^(S3|GCS|AZURE_BLOB)$"
+      },
+      "enableExternalLocation": {
+        "type": "boolean",
+        "default": false
+      },
+      "useRudderStorage": {
+        "type": "boolean",
+        "default": false
+      },
+      "preferAppend": {
+        "type": "boolean",
+        "default": true
+      },
       "oneTrustCookieCategories": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "oneTrustCookieCategory": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "ios": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "unity": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "amp": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "cloud": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "reactnative": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "cloudSource": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "flutter": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "cordova": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "shopify": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
             }
           }
         }
@@ -46,17 +216,50 @@
       "connectionMode": {
         "type": "object",
         "properties": {
-          "android": { "type": "string", "enum": ["cloud"] },
-          "ios": { "type": "string", "enum": ["cloud"] },
-          "web": { "type": "string", "enum": ["cloud"] },
-          "unity": { "type": "string", "enum": ["cloud"] },
-          "amp": { "type": "string", "enum": ["cloud"] },
-          "cloud": { "type": "string", "enum": ["cloud"] },
-          "reactnative": { "type": "string", "enum": ["cloud"] },
-          "cloudSource": { "type": "string", "enum": ["cloud"] },
-          "flutter": { "type": "string", "enum": ["cloud"] },
-          "cordova": { "type": "string", "enum": ["cloud"] },
-          "shopify": { "type": "string", "enum": ["cloud"] }
+          "android": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "ios": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "web": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "unity": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "amp": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cloud": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "reactnative": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cloudSource": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "flutter": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cordova": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "shopify": {
+            "type": "string",
+            "enum": ["cloud"]
+          }
         }
       },
       "consentManagement": {
@@ -569,31 +772,187 @@
             }
           }
         }
+      },
+      "ketchConsentPurposes": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "ios": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "unity": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "amp": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "cloud": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "reactnative": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "cloudSource": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "flutter": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "cordova": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "shopify": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "allOf": [
       {
         "if": {
-          "properties": { "useRudderStorage": { "const": false } },
+          "properties": {
+            "useRudderStorage": {
+              "const": false
+            }
+          },
           "required": ["useRudderStorage"]
         },
-        "then": { "required": ["bucketProvider"] }
+        "then": {
+          "required": ["bucketProvider"]
+        }
       },
       {
         "if": {
-          "properties": { "enableExternalLocation": { "const": "true" } },
+          "properties": {
+            "enableExternalLocation": {
+              "const": "true"
+            }
+          },
           "required": ["enableExternalLocation"]
         },
         "then": {
-          "properties": { "externalLocation": { "type": "string", "pattern": "(^env[.].*)|.*" } },
+          "properties": {
+            "externalLocation": {
+              "type": "string",
+              "pattern": "(^env[.].*)|.*"
+            }
+          },
           "required": ["externalLocation"]
         }
       },
       {
         "if": {
           "properties": {
-            "bucketProvider": { "const": "S3" },
-            "useRudderStorage": { "const": false }
+            "bucketProvider": {
+              "const": "S3"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
           },
           "required": ["bucketProvider", "useRudderStorage"]
         },
@@ -603,8 +962,12 @@
               "type": "string",
               "pattern": "(^env[.].*)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
             },
-            "enableSSE": { "type": "boolean" },
-            "useSTSTokens": { "type": "boolean" }
+            "enableSSE": {
+              "type": "boolean"
+            },
+            "useSTSTokens": {
+              "type": "boolean"
+            }
           },
           "required": ["bucketName", "enableSSE", "useSTSTokens"]
         },
@@ -612,8 +975,12 @@
           {
             "if": {
               "properties": {
-                "useSTSTokens": { "const": true },
-                "useRudderStorage": { "const": false }
+                "useSTSTokens": {
+                  "const": true
+                },
+                "useRudderStorage": {
+                  "const": false
+                }
               },
               "required": ["useSTSTokens", "useRudderStorage"]
             },
@@ -622,16 +989,26 @@
                 {
                   "type": "object",
                   "properties": {
-                    "accessKeyID": { "type": "string", "pattern": "(^env[.].+)|^(.{0,100})$" },
-                    "accessKey": { "type": "string", "pattern": "(^env[.].+)|^(.{0,100})$" }
+                    "accessKeyID": {
+                      "type": "string",
+                      "pattern": "(^env[.].+)|^(.{0,100})$"
+                    },
+                    "accessKey": {
+                      "type": "string",
+                      "pattern": "(^env[.].+)|^(.{0,100})$"
+                    }
                   },
                   "required": ["accessKeyID", "accessKey"]
                 },
                 {
                   "type": "object",
                   "properties": {
-                    "iamRoleARN": { "type": "string" },
-                    "roleBasedAuth": { "const": true }
+                    "iamRoleARN": {
+                      "type": "string"
+                    },
+                    "roleBasedAuth": {
+                      "const": true
+                    }
                   },
                   "required": ["iamRoleARN", "roleBasedAuth"]
                 }
@@ -643,8 +1020,12 @@
       {
         "if": {
           "properties": {
-            "bucketProvider": { "const": "GCS" },
-            "useRudderStorage": { "const": false }
+            "bucketProvider": {
+              "const": "GCS"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
           },
           "required": ["bucketProvider", "useRudderStorage"]
         },
@@ -654,7 +1035,10 @@
               "type": "string",
               "pattern": "(^env[.].*)|^((?!goog)(?!.*google.*)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$"
             },
-            "credentials": { "type": "string", "pattern": "(^env[.].+)|.+" }
+            "credentials": {
+              "type": "string",
+              "pattern": "(^env[.].+)|.+"
+            }
           },
           "required": ["bucketName", "credentials"]
         }
@@ -662,8 +1046,12 @@
       {
         "if": {
           "properties": {
-            "bucketProvider": { "const": "AZURE_BLOB" },
-            "useRudderStorage": { "const": false }
+            "bucketProvider": {
+              "const": "AZURE_BLOB"
+            },
+            "useRudderStorage": {
+              "const": false
+            }
           },
           "required": ["bucketProvider", "useRudderStorage"]
         },
@@ -673,20 +1061,31 @@
               "type": "string",
               "pattern": "(^env[.].*)|^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$"
             },
-            "accountName": { "type": "string", "pattern": "(^env[.].*)|^(.{1,100})$" }
+            "accountName": {
+              "type": "string",
+              "pattern": "(^env[.].*)|^(.{1,100})$"
+            }
           },
           "required": ["containerName", "accountName"],
           "anyOf": [
             {
               "properties": {
-                "accountKey": { "type": "string", "pattern": "(^env[.].+)|^(.{1,100})$" }
+                "accountKey": {
+                  "type": "string",
+                  "pattern": "(^env[.].+)|^(.{1,100})$"
+                }
               },
               "required": ["accountKey"]
             },
             {
               "properties": {
-                "sasToken": { "type": "string", "pattern": "(^env[.].+)|^(.+)$" },
-                "useSASTokens": { "const": true }
+                "sasToken": {
+                  "type": "string",
+                  "pattern": "(^env[.].+)|^(.+)$"
+                },
+                "useSASTokens": {
+                  "const": true
+                }
               },
               "required": ["useSASTokens", "sasToken"]
             }

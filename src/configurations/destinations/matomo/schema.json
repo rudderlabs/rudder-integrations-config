@@ -4,12 +4,23 @@
     "required": ["matomoVersion", "siteId"],
     "type": "object",
     "properties": {
-      "matomoVersion": { "type": "string", "enum": ["premise", "cloud"], "default": "cloud" },
+      "matomoVersion": {
+        "type": "string",
+        "enum": ["premise", "cloud"],
+        "default": "cloud"
+      },
       "siteId": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,10})$"
       },
-      "useNativeSDK": { "type": "object", "properties": { "web": { "type": "boolean" } } },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
       "eventsMapToGoalId": {
         "type": "array",
         "items": {
@@ -51,31 +62,71 @@
           }
         }
       },
-      "trackAllContentImpressions": { "type": "boolean", "default": false },
-      "trackVisibleContentImpressions": { "type": "boolean", "default": false },
-      "logAllContentBlocksOnPage": { "type": "boolean", "default": false },
-      "enableHeartBeatTimer": { "type": "boolean", "default": false },
-      "enableLinkTracking": { "type": "boolean", "default": false },
-      "disablePerformanceTracking": { "type": "boolean", "default": false },
-      "enableCrossDomainLinking": { "type": "boolean", "default": false },
-      "setCrossDomainLinkingTimeout": { "type": "boolean", "default": false },
-      "getCrossDomainLinkingUrlParameter": { "type": "boolean", "default": false },
-      "disableBrowserFeatureDetection": { "type": "boolean", "default": false },
+      "trackAllContentImpressions": {
+        "type": "boolean",
+        "default": false
+      },
+      "trackVisibleContentImpressions": {
+        "type": "boolean",
+        "default": false
+      },
+      "logAllContentBlocksOnPage": {
+        "type": "boolean",
+        "default": false
+      },
+      "enableHeartBeatTimer": {
+        "type": "boolean",
+        "default": false
+      },
+      "enableLinkTracking": {
+        "type": "boolean",
+        "default": false
+      },
+      "disablePerformanceTracking": {
+        "type": "boolean",
+        "default": false
+      },
+      "enableCrossDomainLinking": {
+        "type": "boolean",
+        "default": false
+      },
+      "setCrossDomainLinkingTimeout": {
+        "type": "boolean",
+        "default": false
+      },
+      "getCrossDomainLinkingUrlParameter": {
+        "type": "boolean",
+        "default": false
+      },
+      "disableBrowserFeatureDetection": {
+        "type": "boolean",
+        "default": false
+      },
       "oneTrustCookieCategories": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "oneTrustCookieCategory": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
             }
           }
         }
       },
       "connectionMode": {
         "type": "object",
-        "properties": { "web": { "type": "string", "enum": ["device"] } }
+        "properties": {
+          "web": {
+            "type": "string",
+            "enum": ["device"]
+          }
+        }
       },
       "consentManagement": {
         "type": "object",
@@ -127,12 +178,33 @@
             }
           }
         }
+      },
+      "ketchConsentPurposes": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "allOf": [
       {
         "if": {
-          "properties": { "matomoVersion": { "const": "premise" } },
+          "properties": {
+            "matomoVersion": {
+              "const": "premise"
+            }
+          },
           "required": ["matomoVersion"]
         },
         "then": {
@@ -147,7 +219,11 @@
       },
       {
         "if": {
-          "properties": { "matomoVersion": { "const": "cloud" } },
+          "properties": {
+            "matomoVersion": {
+              "const": "cloud"
+            }
+          },
           "required": ["matomoVersion"]
         },
         "then": {
@@ -162,12 +238,19 @@
       },
       {
         "if": {
-          "properties": { "trackVisibleContentImpressions": { "const": true } },
+          "properties": {
+            "trackVisibleContentImpressions": {
+              "const": true
+            }
+          },
           "required": ["trackVisibleContentImpressions"]
         },
         "then": {
           "properties": {
-            "checkOnScroll": { "type": "boolean", "default": true },
+            "checkOnScroll": {
+              "type": "boolean",
+              "default": true
+            },
             "timeIntervalInMs": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
@@ -178,7 +261,11 @@
       },
       {
         "if": {
-          "properties": { "enableHeartBeatTimer": { "const": true } },
+          "properties": {
+            "enableHeartBeatTimer": {
+              "const": true
+            }
+          },
           "required": ["enableHeartBeatTimer"]
         },
         "then": {
@@ -193,7 +280,11 @@
       },
       {
         "if": {
-          "properties": { "setCrossDomainLinkingTimeout": { "const": true } },
+          "properties": {
+            "setCrossDomainLinkingTimeout": {
+              "const": true
+            }
+          },
           "required": ["setCrossDomainLinkingTimeout"]
         },
         "then": {
