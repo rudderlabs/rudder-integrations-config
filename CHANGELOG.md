@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.93.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.92.1...v1.93.0) (2024-09-24)
+
+
+### Features
+
+* **fb_custom_audience:** hide particular fields from ui config when VDMv2 is enabled ([#1706](https://github.com/rudderlabs/rudder-config-schema/issues/1706)) ([016e822](https://github.com/rudderlabs/rudder-config-schema/commit/016e82250c08dfd0db12fdb107905a25a746a9e8))
+
 ### [1.92.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.92.0...v1.92.1) (2024-09-20)
 
 
