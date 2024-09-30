@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.93.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.92.1...v1.93.0) (2024-09-24)
+
+
+### Features
+
+* **fb_custom_audience:** hide particular fields from ui config when VDMv2 is enabled ([#1706](https://github.com/rudderlabs/rudder-config-schema/issues/1706)) ([016e822](https://github.com/rudderlabs/rudder-config-schema/commit/016e82250c08dfd0db12fdb107905a25a746a9e8))
+
+### [1.92.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.92.0...v1.92.1) (2024-09-20)
+
+
+### Bug Fixes
+
+* kafka topic name regex ([#1698](https://github.com/rudderlabs/rudder-config-schema/issues/1698)) ([3583ce8](https://github.com/rudderlabs/rudder-config-schema/commit/3583ce8dcefead90ba10b7750bd5333e89dc41c3))
+* set wunderkind accountId and instanceId as secret in ui ([#1697](https://github.com/rudderlabs/rudder-config-schema/issues/1697)) ([860a9bb](https://github.com/rudderlabs/rudder-config-schema/commit/860a9bb6e6e5d7aceacb83c6a0b7792e88705a71))
+
+## [1.92.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.91.0...v1.92.0) (2024-09-19)
+
+
+### Features
+
+* make legacy consent management fields source specific ([#1692](https://github.com/rudderlabs/rudder-config-schema/issues/1692)) ([d46d632](https://github.com/rudderlabs/rudder-config-schema/commit/d46d6329755950c7431a4fb3017cb2f7f09cea3d))
+
+## [1.91.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.90.2...v1.91.0) (2024-09-16)
+
+
+### Features
+
+* added sync behaviours for s3 ([#1666](https://github.com/rudderlabs/rudder-config-schema/issues/1666)) ([0408bf1](https://github.com/rudderlabs/rudder-config-schema/commit/0408bf166f8e4cb67cedeb9cc738bcc6d36bb2a6))
+* deprecate connectionModes.mobileDevice and connectionModes.webDevice keys ([#1647](https://github.com/rudderlabs/rudder-config-schema/issues/1647)) ([7a65529](https://github.com/rudderlabs/rudder-config-schema/commit/7a655293c26aa1782d3ff20f6fefbc3ddd9ae7ec))
+* **fb_custom_audience:** move FBCA to form builder v2 ([#1681](https://github.com/rudderlabs/rudder-config-schema/issues/1681)) ([eae00a1](https://github.com/rudderlabs/rudder-config-schema/commit/eae00a1f01d98f81c908ed3b3c558a2dbedbed2f))
+* onboard X(Twiiter) Audience ([#1657](https://github.com/rudderlabs/rudder-config-schema/issues/1657)) ([130aae2](https://github.com/rudderlabs/rudder-config-schema/commit/130aae272dc71b725d28b7b744583950b59861e9))
+* rearranged config fields to enhance UX ([#1661](https://github.com/rudderlabs/rudder-config-schema/issues/1661)) ([d03cf40](https://github.com/rudderlabs/rudder-config-schema/commit/d03cf404b6eb17a031ef2eba60c463f0e46422f5))
+* replaced connectionModes.cloud with respective source type specific fields ([#1620](https://github.com/rudderlabs/rudder-config-schema/issues/1620)) ([4c804c4](https://github.com/rudderlabs/rudder-config-schema/commit/4c804c4ef5e4c0c844423b6fdde62419556ca9b2))
+
+
+### Bug Fixes
+
+* correct supported sources ([#1675](https://github.com/rudderlabs/rudder-config-schema/issues/1675)) ([2907281](https://github.com/rudderlabs/rudder-config-schema/commit/290728175249f8709e0771533209b0651c47c263))
+* http schema to allow dynamic path variables ([#1670](https://github.com/rudderlabs/rudder-config-schema/issues/1670)) ([6ca9c3f](https://github.com/rudderlabs/rudder-config-schema/commit/6ca9c3f5618fdd73580a0e66ccaee1642007d161))
+
 ### [1.90.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.90.2...v1.90.3) (2024-09-13)
 
 
