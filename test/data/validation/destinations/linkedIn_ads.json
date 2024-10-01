@@ -1,6 +1,79 @@
 [
   {
     "config": {
+      "hashData": true,
+      "deduplicationKey": "properties.eventId",
+      "adAccountId": "1234",
+      "conversionMapping": [
+        {
+          "from": "Order Completed",
+          "to": "1234567"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "hashData": true,
+      "deduplicationKey": "properties.eventId",
+      "adAccountId": "1234",
+      "conversionMapping": [
+        {
+          "from": "Order Completed",
+          "to": ""
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "conversionMapping.0.to must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
+    ]
+  },
+  {
+    "config": {
+      "hashData": true,
+      "deduplicationKey": "properties.eventId",
+      "adAccountId": "1234",
+      "conversionMapping": [
+        {
+          "from": "",
+          "to": "123454"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "conversionMapping.0.from must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
+    ]
+  },
+  {
+    "config": {
+      "hashData": "",
+      "adAccountId": "1234"
+    },
+    "result": false,
+    "err": ["hashData must be boolean"]
+  },
+  {
+    "config": {
+      "hashData": true,
+      "deduplicationKey": "properties.eventId",
+      "adAccountId": "1234"
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "hashData": true,
+      "deduplicationKey": "properties.eventId",
+      "adAccountId": "1234",
+      "conversionMapping": [
+        {
+          "from": "Order Completed",
+          "to": "1234567"
+        }
+      ],
       "oneTrustCookieCategories": {
         "android": [
           {
@@ -128,6 +201,15 @@
   },
   {
     "config": {
+      "hashData": true,
+      "deduplicationKey": "properties.eventId",
+      "adAccountId": "1234",
+      "conversionMapping": [
+        {
+          "from": "Order Completed",
+          "to": "1234567"
+        }
+      ],
       "oneTrustCookieCategories": [
         {
           "oneTrustCookieCategory": "C0001"
@@ -150,6 +232,15 @@
   },
   {
     "config": {
+      "hashData": true,
+      "deduplicationKey": "properties.eventId",
+      "adAccountId": "1234",
+      "conversionMapping": [
+        {
+          "from": "Order Completed",
+          "to": "1234567"
+        }
+      ],
       "oneTrustCookieCategories": {
         "android": [
           {
@@ -209,6 +300,7 @@
         ]
       }
     },
+    "result": false,
     "err": [
       "oneTrustCookieCategories.android.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
       "oneTrustCookieCategories.ios.0.oneTrustCookieCategory must be string",
@@ -218,7 +310,6 @@
       "ketchConsentPurposes.ios.0.purpose must be string",
       "ketchConsentPurposes.web must be array",
       "ketchConsentPurposes.unity.0 must be object"
-    ],
-    "result": false
+    ]
   }
 ]
