@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.94.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.94.0...v1.94.1) (2024-10-01)
+
+
+### Bug Fixes
+
+* revert redshift serverless bq partitioning configuration changes ([#1727](https://github.com/rudderlabs/rudder-config-schema/issues/1727)) ([f2011dc](https://github.com/rudderlabs/rudder-config-schema/commit/f2011dce9330e697eca5d9d762a11580cc28ea66))
+
 ## [1.94.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.93.1...v1.94.0) (2024-09-30)
 
 
