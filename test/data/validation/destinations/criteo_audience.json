@@ -209,6 +209,105 @@
   {
     "testTitle": "Without audienceId",
     "config": {
+      "audienceId": {
+        "cloud": "000000"
+      },
+      "audienceType": "email",
+      "adAccountId": {
+        "warehouse": "0000000"
+      },
+      "oneTrustCookieCategories": {
+        "cloud": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "warehouse": [
+          {
+            "oneTrustCookieCategory": "C0003"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "shopify": [
+          {
+            "oneTrustCookieCategory": ""
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "cloud": [
+          {
+            "purpose": "P1"
+          },
+          {
+            "purpose": "P2"
+          }
+        ],
+        "warehouse": [
+          {
+            "purpose": "P3"
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "shopify": [
+          {
+            "purpose": ""
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "audienceId": {
+        "cloud": "000000"
+      },
+      "audienceType": "email",
+      "adAccountId": {
+        "warehouse": "0000000"
+      },
+      "oneTrustCookieCategories": {
+        "cloud": [],
+        "warehouse": [
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "shopify": [
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 'val' }}"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "cloud": [],
+        "warehouse": [
+          {
+            "purpose": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "shopify": [
+          {
+            "purpose": "{{ event.properties.prop1 || 'val' }}"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "audienceId": {
+        "cloud": "000000"
+      },
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
@@ -220,6 +319,27 @@
   },
   {
     "testTitle": "Without adAccountId",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        },
+        {
+          "oneTrustCookieCategory": "C0002"
+        }
+      ],
+      "ketchConsentPurposes": [
+        {
+          "purpose": "P1"
+        },
+        {
+          "purpose": "P2"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["oneTrustCookieCategories must be object", "ketchConsentPurposes must be object"]
+  },
+  {
     "config": {
       "audienceId": {
         "cloud": "000000"
@@ -232,6 +352,67 @@
   },
   {
     "testTitle": "Without gumCallerId",
+      "adAccountId": {
+        "warehouse": "0000000"
+      },
+      "oneTrustCookieCategories": {
+        "cloud": [
+          {
+            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "warehouse": [
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "shopify": {
+          "not": "an array"
+        }
+      },
+      "ketchConsentPurposes": {
+        "cloud": [
+          {
+            "purpose": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "warehouse": [
+          {
+            "purpose": {
+              "not": "a string"
+            }
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "shopify": {
+          "not": "an array"
+        }
+      }
+    },
+    "result": false,
+    "err": [
+      "oneTrustCookieCategories.cloud.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.warehouse.0.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.shopify must be array",
+      "ketchConsentPurposes.cloud.0.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "ketchConsentPurposes.warehouse.0.purpose must be string",
+      "ketchConsentPurposes.shopify must be array"
+    ]
+  },
+  {
     "config": {
       "audienceId": {
         "cloud": "000000"
@@ -243,5 +424,28 @@
     },
     "result": false,
     "err": [" must have required property 'gumCallerId'"]
+      },
+      "oneTrustCookieCategories": {
+        "cloud": [
+          "not an object",
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "cloud": [
+          "not an object",
+          {
+            "purpose": "P4"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "oneTrustCookieCategories.cloud.0 must be object",
+      "ketchConsentPurposes.cloud.0 must be object"
+    ]
   }
 ]

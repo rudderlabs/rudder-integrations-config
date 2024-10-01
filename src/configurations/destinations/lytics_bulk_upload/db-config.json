@@ -1,0 +1,36 @@
+{
+  "name": "LYTICS_BULK_UPLOAD",
+  "displayName": "Lytics Bulk Upload",
+  "config": {
+    "transformAtV1": "none",
+    "saveDestinationResponse": true,
+    "includeKeys": ["oneTrustCookieCategories"],
+    "excludeKeys": [],
+    "supportedSourceTypes": ["warehouse", "web", "cloud"],
+    "supportedMessageTypes": {
+      "cloud": ["track"]
+    },
+    "syncBehaviours": ["upsert"],
+    "disableJsonMapper": false,
+    "supportedConnectionModes": {
+      "warehouse": ["cloud"],
+      "web": ["cloud"],
+      "cloud": ["cloud"]
+    },
+    "destConfig": {
+      "defaultConfig": [
+        "lyticsApiKey",
+        "lyticsAccountId",
+        "lyticsStreamName",
+        "timestampField",
+        "streamTraitsMapping"
+      ],
+      "cloud": ["connectionMode", "oneTrustCookieCategories", "ketchConsentPurposes"],
+      "warehouse": ["connectionMode", "oneTrustCookieCategories", "ketchConsentPurposes"],
+      "web": ["connectionMode", "oneTrustCookieCategories", "ketchConsentPurposes"]
+    }
+  },
+  "options": {
+    "isBeta": true
+  }
+}

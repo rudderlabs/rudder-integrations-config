@@ -1,0 +1,232 @@
+[
+  {
+    "config": {
+      "accessToken": "123",
+      "clientSideId": "123",
+      "audienceId": "123",
+      "audienceName": "123"
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "accessToken": "123",
+      "clientSideId": "123",
+      "audienceId": "123",
+      "audienceName": "123",
+      "oneTrustCookieCategories": {
+        "cloud": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "warehouse": [
+          {
+            "oneTrustCookieCategory": "C0003"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "cloud": [
+          {
+            "purpose": "P1"
+          },
+          {
+            "purpose": "P2"
+          }
+        ],
+        "warehouse": [
+          {
+            "purpose": "P3"
+          },
+          {
+            "purpose": "P4"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "accessToken": "123",
+      "clientSideId": "123",
+      "audienceId": "123",
+      "audienceName": "123",
+      "oneTrustCookieCategories": {
+        "cloud": [
+          {
+            "oneTrustCookieCategory": ""
+          }
+        ],
+        "warehouse": []
+      },
+      "ketchConsentPurposes": {
+        "cloud": [
+          {
+            "purpose": ""
+          }
+        ],
+        "warehouse": []
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "accessToken": "123",
+      "clientSideId": "123",
+      "audienceId": "123",
+      "audienceName": "123",
+      "oneTrustCookieCategories": {
+        "cloud": [
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "warehouse": [
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 'val' }}"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "cloud": [
+          {
+            "purpose": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "warehouse": [
+          {
+            "purpose": "{{ event.properties.prop1 || 'val' }}"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "accessToken": "123",
+      "clientSideId": "123",
+      "audienceId": "123",
+      "audienceName": "123",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        },
+        {
+          "oneTrustCookieCategory": "C0002"
+        }
+      ],
+      "ketchConsentPurposes": [
+        {
+          "purpose": "P1"
+        },
+        {
+          "purpose": "P2"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["oneTrustCookieCategories must be object", "ketchConsentPurposes must be object"]
+  },
+  {
+    "config": {
+      "accessToken": "123",
+      "clientSideId": "123",
+      "audienceId": "123",
+      "audienceName": "123",
+      "oneTrustCookieCategories": {
+        "cloud": [
+          {
+            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "warehouse": [
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "cloud": [
+          {
+            "purpose": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "warehouse": [
+          {
+            "purpose": {
+              "not": "a string"
+            }
+          },
+          {
+            "purpose": "P4"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "oneTrustCookieCategories.cloud.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.warehouse.0.oneTrustCookieCategory must be string",
+      "ketchConsentPurposes.cloud.0.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "ketchConsentPurposes.warehouse.0.purpose must be string"
+    ]
+  },
+  {
+    "config": {
+      "accessToken": "123",
+      "clientSideId": "123",
+      "audienceId": "123",
+      "audienceName": "123",
+      "oneTrustCookieCategories": {
+        "cloud": {
+          "not": "an array"
+        },
+        "warehouse": [
+          "not an object",
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "cloud": {
+          "not": "an array"
+        },
+        "warehouse": [
+          "not an object",
+          {
+            "purpose": "P4"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "oneTrustCookieCategories.cloud must be array",
+      "oneTrustCookieCategories.warehouse.0 must be object",
+      "ketchConsentPurposes.cloud must be array",
+      "ketchConsentPurposes.warehouse.0 must be object"
+    ]
+  }
+]
