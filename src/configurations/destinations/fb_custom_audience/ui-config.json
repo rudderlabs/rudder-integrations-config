@@ -1,424 +1,542 @@
 {
-  "uiConfig": [
-    {
-      "title": "Destination Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Access Token",
-          "value": "accessToken",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,500})$",
-          "required": true,
-          "placeholder": "EAALmZAOFOFpXXXXXXPl4uSHPxQDZCrU6KbZB1gICD9y1ZBNpevRXXXXXO06WZCUuySAX7vw2Re7vmZAHo6OFFZA4vsCUqq2XqBQgkbbgXXXXXXQ4wJFJ2GXGe69qaOXgugjkdjfgRjkknkfOUUTJfmGnzShXXXXX1kDX7xZB8IX9vdfEIZBZBhHQo4ZD"
-        },
-        {
-          "type": "textInput",
-          "label": "App Secret",
-          "value": "appSecret",
-          "secret": true,
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$",
-          "placeholder": "f65c45d8e013faXXXXXe1759c123456",
-          "footerNote": "Provide App Secret from your Facebook Developer App's basic settings."
-        },
-        {
-          "type": "textInput",
-          "label": "Ad Account id",
-          "value": "adAccountId",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-          "required": false,
-          "placeholder": "2309XXX5483"
-        },
-        {
-          "type": "textInput",
-          "label": "Audience Id",
-          "value": "audienceId",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-          "required": true,
-          "placeholder": "238476XXXX5910030"
-        },
-        {
-          "type": "textInput",
-          "label": "Audience Batch Size",
-          "value": "maxUserCount",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-          "required": true,
-          "placeholder": "50"
-        },
-        {
-          "type": "singleSelect",
-          "label": "Schema Fields",
-          "value": "userSchema",
-          "placeholder": "EMAIL",
-          "mode": "multiple",
-          "options": [
-            {
-              "name": "EMAIL",
-              "value": "EMAIL"
-            },
-            {
-              "name": "PHONE",
-              "value": "PHONE"
-            },
-            {
-              "name": "GENDER",
-              "value": "GEN"
-            },
-            {
-              "name": "MADID",
-              "value": "MADID"
-            },
-            {
-              "name": "EXTERN_ID",
-              "value": "EXTERN_ID"
-            },
-            {
-              "name": "DOB YEAR (YYYY)",
-              "value": "DOBY"
-            },
-            {
-              "name": "DOB MONTH (MM)",
-              "value": "DOBM"
-            },
-            {
-              "name": "DOB DATE (DD)",
-              "value": "DOBD"
-            },
-            {
-              "name": "LAST NAME",
-              "value": "LN"
-            },
-            {
-              "name": "FIRST NAME",
-              "value": "FN"
-            },
-            {
-              "name": "FIRST NAME INITIAL",
-              "value": "FI"
-            },
-            {
-              "name": "CITY",
-              "value": "CT"
-            },
-            {
-              "name": "US STATES",
-              "value": "ST"
-            },
-            {
-              "name": "ZIP",
-              "value": "ZIP"
-            },
-            {
-              "name": "COUNTRY",
-              "value": "COUNTRY"
-            }
-          ],
-          "defaultOption": {
-            "value": ["EMAIL"]
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Access Token",
+                    "note": "Enter the access token of your business application set up for accessing the Facebook Marketing API.",
+                    "configKey": "accessToken",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,500})$",
+                    "regexErrorMessage": "Invalid Access Token",
+                    "placeholder": "e.g: EAALmZAOFOFpXXXXXXPl4uSHPxQDZCrU6KbZB1gICD9y1ZBNpevRXXXXXO06WZCUuySAX7vw2Re7vmZAHo6OFFZA4vsCUqq2XqBQgkbbgXXXXXXQ4wJFJ2GXGe69qaOXgugjkdjfgRjkknkfOUUTJfmGnzShXXXXX1kDX7xZB8IX9vdfEIZBZBhHQo4ZD",
+                    "secret": true
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Ad Account id",
+                    "note": "Enter the Ad Account id of your business application set up",
+                    "configKey": "adAccountId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Ad Account id",
+                    "placeholder": "e.g: 2309XXX5483",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.warehouse",
+                          "value": "cloud"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Audience Id",
+                    "note": "Enter your audience id",
+                    "configKey": "audienceId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "placeholder": "e.g: 238476XXXX5910030",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.cloud",
+                          "value": "cloud"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
           },
-          "footerNote": "The Allowed Parameter List : https://developers.facebook.com/docs/marketing-api/audiences/guides/custom-audiences/#hash"
-        },
-        {
-          "type": "checkbox",
-          "label": "Enable Hashing",
-          "value": "isHashRequired",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Is The Data Raw",
-          "value": "isRaw",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Disable Formatting",
-          "value": "disableFormat",
-          "default": false
-        },
-        {
-          "type": "singleSelect",
-          "label": "Type",
-          "value": "type",
-          "placeholder": "NA",
-          "mode": "single",
-          "options": [
-            {
-              "name": "UNKNOWN",
-              "value": "UNKNOWN"
-            },
-            {
-              "name": "FILE_IMPORTED",
-              "value": "FILE_IMPORTED"
-            },
-            {
-              "name": "EVENT_BASED",
-              "value": "EVENT_BASED"
-            },
-            {
-              "name": "SEED_BASED",
-              "value": "SEED_BASED"
-            },
-            {
-              "name": "THIRD_PARTY_IMPORTED",
-              "value": "THIRD_PARTY_IMPORTED"
-            },
-            {
-              "name": "COPY_PASTE",
-              "value": "COPY_PASTE"
-            },
-            {
-              "name": "CONTACT_IMPORTER",
-              "value": "CONTACT_IMPORTER"
-            },
-            {
-              "name": "HOUSEHOLD_AUDIENCE",
-              "value": "HOUSEHOLD_AUDIENCE"
-            },
-            {
-              "name": "NA",
-              "value": "NA"
-            }
-          ],
-          "defaultOption": {
-            "name": "NA",
-            "value": "NA"
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": [],
+                "callout": {
+                  "message": "Cloud mode for this destination will be deprecated soon. Please migrate to Facebook Conversions destination for cloud mode.",
+                  "type": "info"
+                }
+              }
+            ]
           }
-        },
-        {
-          "type": "singleSelect",
-          "label": "Sub Type",
-          "value": "subType",
-          "placeholder": "NA",
-          "mode": "single",
-          "options": [
-            {
-              "name": "ANYTHING",
-              "value": "ANYTHING"
-            },
-            {
-              "name": "NOTHING",
-              "value": "NOTHING"
-            },
-            {
-              "name": "HASHES",
-              "value": "HASHES"
-            },
-            {
-              "name": "USER_IDS",
-              "value": "USER_IDS"
-            },
-            {
-              "name": "HASHES_OR_USER_IDS",
-              "value": "HASHES_OR_USER_IDS"
-            },
-            {
-              "name": "MOBILE_ADVERTISER_IDS",
-              "value": "MOBILE_ADVERTISER_IDS"
-            },
-            {
-              "name": "FB_EVENT_SIGNALS",
-              "value": "FB_EVENT_SIGNALS"
-            },
-            {
-              "name": "EXTERNAL_IDS",
-              "value": "EXTERNAL_IDS"
-            },
-            {
-              "name": "MULTI_HASHES",
-              "value": "MULTI_HASHES"
-            },
-            {
-              "name": "TOKENS",
-              "value": "TOKENS"
-            },
-            {
-              "name": "EXTERNAL_IDS_MIX",
-              "value": "EXTERNAL_IDS_MIX"
-            },
-            {
-              "name": "WEB_PIXEL_HITS",
-              "value": "WEB_PIXEL_HITS"
-            },
-            {
-              "name": "MOBILE_APP_EVENTS",
-              "value": "MOBILE_APP_EVENTS"
-            },
-            {
-              "name": "MOBILE_APP_COMBINATION_EVENTS",
-              "value": "MOBILE_APP_COMBINATION_EVENTS"
-            },
-            {
-              "name": "VIDEO_EVENTS",
-              "value": "VIDEO_EVENTS"
-            },
-            {
-              "name": "WEB_PIXEL_COMBINATION_EVENTS",
-              "value": "WEB_PIXEL_COMBINATION_EVENTS"
-            },
-            {
-              "name": "IG_BUSINESS_EVENTS",
-              "value": "IG_BUSINESS_EVENTS"
-            },
-            {
-              "name": "MULTI_DATA_EVENTS",
-              "value": "MULTI_DATA_EVENTS"
-            },
-            {
-              "name": "STORE_VISIT_EVENTS",
-              "value": "STORE_VISIT_EVENTS"
-            },
-            {
-              "name": "INSTANT_ARTICLE_EVENTS",
-              "value": "INSTANT_ARTICLE_EVENTS"
-            },
-            {
-              "name": "ENGAGEMENT_EVENT_USERS",
-              "value": "ENGAGEMENT_EVENT_USERS"
-            },
-            {
-              "name": "FACEBOOK_WIFI_EVENTS",
-              "value": "FACEBOOK_WIFI_EVENTS"
-            },
-            {
-              "name": "CUSTOM_AUDIENCE_USERS",
-              "value": "CUSTOM_AUDIENCE_USERS"
-            },
-            {
-              "name": "S_EXPR",
-              "value": "S_EXPR"
-            },
-            {
-              "name": "DYNAMIC_RULE",
-              "value": "DYNAMIC_RULE"
-            },
-            {
-              "name": "CONVERSION_PIXEL_HITS",
-              "value": "CONVERSION_PIXEL_HITS"
-            },
-            {
-              "name": "APP_USERS",
-              "value": "APP_USERS"
-            },
-            {
-              "name": "CAMPAIGN_CONVERSIONS",
-              "value": "CAMPAIGN_CONVERSIONS"
-            },
-            {
-              "name": "WEB_PIXEL_HITS_CUSTOM_AUDIENCE_USERS",
-              "value": "WEB_PIXEL_HITS_CUSTOM_AUDIENCE_USERS"
-            },
-            {
-              "name": "MOBILE_APP_CUSTOM_AUDIENCE_USERS",
-              "value": "MOBILE_APP_CUSTOM_AUDIENCE_USERS"
-            },
-            {
-              "name": "VIDEO_EVENT_USERS",
-              "value": "VIDEO_EVENT_USERS"
-            },
-            {
-              "name": "FB_PIXEL_HITS",
-              "value": "FB_PIXEL_HITS"
-            },
-            {
-              "name": "IG_PROMOTED_POST",
-              "value": "IG_PROMOTED_POST"
-            },
-            {
-              "name": "PLACE_VISITS",
-              "value": "PLACE_VISITS"
-            },
-            {
-              "name": "OFFLINE_EVENT_USERS",
-              "value": "OFFLINE_EVENT_USERS"
-            },
-            {
-              "name": "EXPANDED_AUDIENCE",
-              "value": "EXPANDED_AUDIENCE"
-            },
-            {
-              "name": "SEED_LIST",
-              "value": "SEED_LIST"
-            },
-            {
-              "name": "PARTNER_CATEGORY_USERS",
-              "value": "PARTNER_CATEGORY_USERS"
-            },
-            {
-              "name": "PAGE_SMART_AUDIENCE",
-              "value": "PAGE_SMART_AUDIENCE"
-            },
-            {
-              "name": "MULTICOUNTRY_COMBINATION",
-              "value": "MULTICOUNTRY_COMBINATION"
-            },
-            {
-              "name": "PLATFORM_USERS",
-              "value": "PLATFORM_USERS"
-            },
-            {
-              "name": "MULTI_EVENT_SOURCE",
-              "value": "MULTI_EVENT_SOURCE"
-            },
-            {
-              "name": "SMART_AUDIENCE",
-              "value": "SMART_AUDIENCE"
-            },
-            {
-              "name": "LOOKALIKE_PLATFORM",
-              "value": "LOOKALIKE_PLATFORM"
-            },
-            {
-              "name": "SIGNAL_SOURCE",
-              "value": "SIGNAL_SOURCE"
-            },
-            {
-              "name": "MAIL_CHIMP_EMAIL_HASHES",
-              "value": "MAIL_CHIMP_EMAIL_HASHES"
-            },
-            {
-              "name": "CONSTANT_CONTACTS_EMAIL_HASHES",
-              "value": "CONSTANT_CONTACTS_EMAIL_HASHES"
-            },
-            {
-              "name": "COPY_PASTE_EMAIL_HASHES",
-              "value": "COPY_PASTE_EMAIL_HASHES"
-            },
-            {
-              "name": "CONTACT_IMPORTER",
-              "value": "CONTACT_IMPORTER"
-            },
-            {
-              "name": "DATA_FILE",
-              "value": "DATA_FILE"
-            },
-            {
-              "name": "NA",
-              "value": "NA"
-            }
-          ],
-          "defaultOption": {
-            "name": "NA",
-            "value": "NA"
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Event Settings",
+                "note": "Configure event-specific settings here",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "App Secret",
+                    "note": "Provide App Secret from your Facebook Developer App's basic settings.",
+                    "configKey": "appSecret",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$",
+                    "regexErrorMessage": "Invalid App Secret",
+                    "placeholder": "e.g: f65c45d8e013faXXXXXe1759c123456",
+                    "secret": true
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Audience Batch Size",
+                    "configKey": "maxUserCount",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Audience Batch Size",
+                    "default": "10000"
+                  }
+                ]
+              },
+              {
+                "title": "Destination and event level setting",
+                "note": "Configure advanced destination and event-specific settings here",
+                "fields": [
+                  {
+                    "type": "multiSelect",
+                    "label": "Schema Fields",
+                    "note": "The Allowed Parameter List : https://developers.facebook.com/docs/marketing-api/audiences/guides/custom-audiences/#hash",
+                    "configKey": "userSchema",
+                    "placeholder": "e.g: EMAIL",
+                    "options": [
+                      {
+                        "label": "EMAIL",
+                        "value": "EMAIL"
+                      },
+                      {
+                        "label": "PHONE",
+                        "value": "PHONE"
+                      },
+                      {
+                        "label": "GENDER",
+                        "value": "GEN"
+                      },
+                      {
+                        "label": "MADID",
+                        "value": "MADID"
+                      },
+                      {
+                        "label": "EXTERN_ID",
+                        "value": "EXTERN_ID"
+                      },
+                      {
+                        "label": "DOB YEAR (YYYY)",
+                        "value": "DOBY"
+                      },
+                      {
+                        "label": "DOB MONTH (MM)",
+                        "value": "DOBM"
+                      },
+                      {
+                        "label": "DOB DATE (DD)",
+                        "value": "DOBD"
+                      },
+                      {
+                        "label": "LAST NAME",
+                        "value": "LN"
+                      },
+                      {
+                        "label": "FIRST NAME",
+                        "value": "FN"
+                      },
+                      {
+                        "label": "FIRST NAME INITIAL",
+                        "value": "FI"
+                      },
+                      {
+                        "label": "CITY",
+                        "value": "CT"
+                      },
+                      {
+                        "label": "US STATES",
+                        "value": "ST"
+                      },
+                      {
+                        "label": "ZIP",
+                        "value": "ZIP"
+                      },
+                      {
+                        "label": "COUNTRY",
+                        "value": "COUNTRY"
+                      }
+                    ],
+                    "default": ["EMAIL"]
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Enable Hashing",
+                    "configKey": "isHashRequired",
+                    "default": true
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Is The Data Raw",
+                    "configKey": "isRaw",
+                    "default": false
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Disable Formatting",
+                    "configKey": "disableFormat",
+                    "default": false
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Type",
+                    "configKey": "type",
+                    "placeholder": "e.g: NA",
+                    "options": [
+                      {
+                        "label": "UNKNOWN",
+                        "value": "UNKNOWN"
+                      },
+                      {
+                        "label": "FILE_IMPORTED",
+                        "value": "FILE_IMPORTED"
+                      },
+                      {
+                        "label": "EVENT_BASED",
+                        "value": "EVENT_BASED"
+                      },
+                      {
+                        "label": "SEED_BASED",
+                        "value": "SEED_BASED"
+                      },
+                      {
+                        "label": "THIRD_PARTY_IMPORTED",
+                        "value": "THIRD_PARTY_IMPORTED"
+                      },
+                      {
+                        "label": "COPY_PASTE",
+                        "value": "COPY_PASTE"
+                      },
+                      {
+                        "label": "CONTACT_IMPORTER",
+                        "value": "CONTACT_IMPORTER"
+                      },
+                      {
+                        "label": "HOUSEHOLD_AUDIENCE",
+                        "value": "HOUSEHOLD_AUDIENCE"
+                      },
+                      {
+                        "label": "NA",
+                        "value": "NA"
+                      }
+                    ],
+                    "default": "NA"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Sub Type",
+                    "configKey": "subType",
+                    "placeholder": "e.g: NA",
+                    "options": [
+                      {
+                        "label": "ANYTHING",
+                        "value": "ANYTHING"
+                      },
+                      {
+                        "label": "NOTHING",
+                        "value": "NOTHING"
+                      },
+                      {
+                        "label": "HASHES",
+                        "value": "HASHES"
+                      },
+                      {
+                        "label": "USER_IDS",
+                        "value": "USER_IDS"
+                      },
+                      {
+                        "label": "HASHES_OR_USER_IDS",
+                        "value": "HASHES_OR_USER_IDS"
+                      },
+                      {
+                        "label": "MOBILE_ADVERTISER_IDS",
+                        "value": "MOBILE_ADVERTISER_IDS"
+                      },
+                      {
+                        "label": "FB_EVENT_SIGNALS",
+                        "value": "FB_EVENT_SIGNALS"
+                      },
+                      {
+                        "label": "EXTERNAL_IDS",
+                        "value": "EXTERNAL_IDS"
+                      },
+                      {
+                        "label": "MULTI_HASHES",
+                        "value": "MULTI_HASHES"
+                      },
+                      {
+                        "label": "TOKENS",
+                        "value": "TOKENS"
+                      },
+                      {
+                        "label": "EXTERNAL_IDS_MIX",
+                        "value": "EXTERNAL_IDS_MIX"
+                      },
+                      {
+                        "label": "WEB_PIXEL_HITS",
+                        "value": "WEB_PIXEL_HITS"
+                      },
+                      {
+                        "label": "MOBILE_APP_EVENTS",
+                        "value": "MOBILE_APP_EVENTS"
+                      },
+                      {
+                        "label": "MOBILE_APP_COMBINATION_EVENTS",
+                        "value": "MOBILE_APP_COMBINATION_EVENTS"
+                      },
+                      {
+                        "label": "VIDEO_EVENTS",
+                        "value": "VIDEO_EVENTS"
+                      },
+                      {
+                        "label": "WEB_PIXEL_COMBINATION_EVENTS",
+                        "value": "WEB_PIXEL_COMBINATION_EVENTS"
+                      },
+                      {
+                        "label": "IG_BUSINESS_EVENTS",
+                        "value": "IG_BUSINESS_EVENTS"
+                      },
+                      {
+                        "label": "MULTI_DATA_EVENTS",
+                        "value": "MULTI_DATA_EVENTS"
+                      },
+                      {
+                        "label": "STORE_VISIT_EVENTS",
+                        "value": "STORE_VISIT_EVENTS"
+                      },
+                      {
+                        "label": "INSTANT_ARTICLE_EVENTS",
+                        "value": "INSTANT_ARTICLE_EVENTS"
+                      },
+                      {
+                        "label": "ENGAGEMENT_EVENT_USERS",
+                        "value": "ENGAGEMENT_EVENT_USERS"
+                      },
+                      {
+                        "label": "FACEBOOK_WIFI_EVENTS",
+                        "value": "FACEBOOK_WIFI_EVENTS"
+                      },
+                      {
+                        "label": "CUSTOM_AUDIENCE_USERS",
+                        "value": "CUSTOM_AUDIENCE_USERS"
+                      },
+                      {
+                        "label": "S_EXPR",
+                        "value": "S_EXPR"
+                      },
+                      {
+                        "label": "DYNAMIC_RULE",
+                        "value": "DYNAMIC_RULE"
+                      },
+                      {
+                        "label": "CONVERSION_PIXEL_HITS",
+                        "value": "CONVERSION_PIXEL_HITS"
+                      },
+                      {
+                        "label": "APP_USERS",
+                        "value": "APP_USERS"
+                      },
+                      {
+                        "label": "CAMPAIGN_CONVERSIONS",
+                        "value": "CAMPAIGN_CONVERSIONS"
+                      },
+                      {
+                        "label": "WEB_PIXEL_HITS_CUSTOM_AUDIENCE_USERS",
+                        "value": "WEB_PIXEL_HITS_CUSTOM_AUDIENCE_USERS"
+                      },
+                      {
+                        "label": "MOBILE_APP_CUSTOM_AUDIENCE_USERS",
+                        "value": "MOBILE_APP_CUSTOM_AUDIENCE_USERS"
+                      },
+                      {
+                        "label": "VIDEO_EVENT_USERS",
+                        "value": "VIDEO_EVENT_USERS"
+                      },
+                      {
+                        "label": "FB_PIXEL_HITS",
+                        "value": "FB_PIXEL_HITS"
+                      },
+                      {
+                        "label": "IG_PROMOTED_POST",
+                        "value": "IG_PROMOTED_POST"
+                      },
+                      {
+                        "label": "PLACE_VISITS",
+                        "value": "PLACE_VISITS"
+                      },
+                      {
+                        "label": "OFFLINE_EVENT_USERS",
+                        "value": "OFFLINE_EVENT_USERS"
+                      },
+                      {
+                        "label": "EXPANDED_AUDIENCE",
+                        "value": "EXPANDED_AUDIENCE"
+                      },
+                      {
+                        "label": "SEED_LIST",
+                        "value": "SEED_LIST"
+                      },
+                      {
+                        "label": "PARTNER_CATEGORY_USERS",
+                        "value": "PARTNER_CATEGORY_USERS"
+                      },
+                      {
+                        "label": "PAGE_SMART_AUDIENCE",
+                        "value": "PAGE_SMART_AUDIENCE"
+                      },
+                      {
+                        "label": "MULTICOUNTRY_COMBINATION",
+                        "value": "MULTICOUNTRY_COMBINATION"
+                      },
+                      {
+                        "label": "PLATFORM_USERS",
+                        "value": "PLATFORM_USERS"
+                      },
+                      {
+                        "label": "MULTI_EVENT_SOURCE",
+                        "value": "MULTI_EVENT_SOURCE"
+                      },
+                      {
+                        "label": "SMART_AUDIENCE",
+                        "value": "SMART_AUDIENCE"
+                      },
+                      {
+                        "label": "LOOKALIKE_PLATFORM",
+                        "value": "LOOKALIKE_PLATFORM"
+                      },
+                      {
+                        "label": "SIGNAL_SOURCE",
+                        "value": "SIGNAL_SOURCE"
+                      },
+                      {
+                        "label": "MAIL_CHIMP_EMAIL_HASHES",
+                        "value": "MAIL_CHIMP_EMAIL_HASHES"
+                      },
+                      {
+                        "label": "CONSTANT_CONTACTS_EMAIL_HASHES",
+                        "value": "CONSTANT_CONTACTS_EMAIL_HASHES"
+                      },
+                      {
+                        "label": "COPY_PASTE_EMAIL_HASHES",
+                        "value": "COPY_PASTE_EMAIL_HASHES"
+                      },
+                      {
+                        "label": "CONTACT_IMPORTER",
+                        "value": "CONTACT_IMPORTER"
+                      },
+                      {
+                        "label": "DATA_FILE",
+                        "value": "DATA_FILE"
+                      },
+                      {
+                        "label": "NA",
+                        "value": "NA"
+                      }
+                    ],
+                    "default": "NA"
+                  }
+                ],
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionMode.cloud",
+                      "value": "cloud"
+                    }
+                  ],
+                  "prerequisitesCondition": "or",
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_vdm-next",
+                      "value": false
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
           }
-        }
-      ]
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     },
-    {
-      "title": "Consent Settings",
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
       "fields": [
         {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Consent Categories",
-          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
+          "type": "tagInput",
+          "label": "OneTrust consent category IDs",
+          "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "configKey": "oneTrustCookieCategories",
+          "tagKey": "oneTrustCookieCategory",
+          "placeholder": "e.g: C0001",
+          "default": [
             {
-              "type": "textInput",
-              "placeholder": "C0001",
-              "value": "oneTrustCookieCategory",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category ID",
-              "required": false
+              "oneTrustCookieCategory": ""
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "tagInput",
+          "label": "Ketch consent purpose IDs",
+          "note": "Input your Ketch consent purpose IDs by pressing 'Enter' after each entry.",
+          "configKey": "ketchConsentPurposes",
+          "tagKey": "purpose",
+          "placeholder": "e.g: marketing",
+          "default": [
+            {
+              "purpose": ""
             }
           ],
           "preRequisites": {
@@ -436,45 +554,41 @@
         },
         {
           "type": "dynamicCustomForm",
-          "value": "consentManagement",
-          "label": "Consent management settings",
-          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
             {
               "type": "singleSelect",
               "label": "Consent management provider",
-              "value": "provider",
+              "configKey": "provider",
               "options": [
                 {
-                  "name": "Custom",
+                  "label": "Custom",
                   "value": "custom"
                 },
                 {
-                  "name": "Ketch",
+                  "label": "Ketch",
                   "value": "ketch"
                 },
                 {
-                  "name": "OneTrust",
+                  "label": "OneTrust",
                   "value": "oneTrust"
                 }
               ],
-              "defaultOption": {
-                "name": "OneTrust",
-                "value": "oneTrust"
-              },
+              "default": "oneTrust",
               "required": true
             },
             {
               "type": "singleSelect",
               "label": "the required consent logic",
-              "value": "resolutionStrategy",
+              "configKey": "resolutionStrategy",
               "options": [
                 {
-                  "name": "AND",
+                  "label": "AND",
                   "value": "and"
                 },
                 {
-                  "name": "OR",
+                  "label": "OR",
                   "value": "or"
                 }
               ],
@@ -490,16 +604,15 @@
               }
             },
             {
-              "type": "dynamicCustomForm",
-              "value": "consents",
+              "type": "tagInput",
               "label": "Enter consent category ID’s",
-              "customFields": [
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
                 {
-                  "type": "textInput",
-                  "placeholder": "Marketing",
-                  "value": "consent",
-                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "required": false
+                  "consent": ""
                 }
               ]
             }
@@ -515,5 +628,5 @@
         }
       ]
     }
-  ]
+  }
 }
