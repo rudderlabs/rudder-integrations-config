@@ -8,14 +8,17 @@
           {
             "groups": [
               {
-                "title": "Connection settings",
-                "note": ["Update your connection settings here."],
-                "icon": "settings",
+                "title": "Auth settings",
+                "note": ["Update your auth settings here."],
+                "icon": "user",
+                "kind": "authSettings",
+                "rudderCategory": "eventDelivery",
                 "fields": [
                   {
                     "type": "singleSelect",
                     "label": "Authorization Type",
-                    "configKey": "authorizationType",
+                    "configKey": "authType",
+                    "kind": "authType",
                     "options": [
                       {
                         "label": "API Key (deprecating soon)",
@@ -24,6 +27,10 @@
                       {
                         "label": "Private Apps",
                         "value": "newPrivateAppApi"
+                      },
+                      {
+                        "label": "OAuth",
+                        "value": "OAuth"
                       }
                     ],
                     "default": "legacyApiKey"
@@ -37,10 +44,11 @@
                     "placeholder": "e.g: 05aXa518-XXXX-XXXX-XXXX-de0f68X902f7",
                     "note": "Your API Key (Settings -> Integrations -> API Key)",
                     "secret": true,
+                    "kind": "accountsField",
                     "preRequisites": {
                       "fields": [
                         {
-                          "configKey": "authorizationType",
+                          "configKey": "authType",
                           "value": "legacyApiKey"
                         }
                       ]
@@ -54,16 +62,24 @@
                     "regexErrorMessage": "Invalid Access Token",
                     "placeholder": "e.g: pat-eu1-kjg875ya-XXXX-XXXX-XXXX-628XXht847r9",
                     "note": "Your private app access token",
+                    "kind": "accountsField",
                     "secret": true,
                     "preRequisites": {
                       "fields": [
                         {
-                          "configKey": "authorizationType",
+                          "configKey": "authType",
                           "value": "newPrivateAppApi"
                         }
                       ]
                     }
-                  },
+                  }
+                ]
+              },
+              {
+                "title": "Connection settings",
+                "note": ["Update your connection settings here."],
+                "icon": "settings",
+                "fields": [
                   {
                     "type": "singleSelect",
                     "label": "API Version",
@@ -136,6 +152,7 @@
       {
         "title": "Configuration settings",
         "note": "Manage the settings for your destination",
+        "kind": "configurationSettings",
         "sections": [
           {
             "groups": [
@@ -321,6 +338,7 @@
         "title": "Event mapping",
         "note": "Map RudderStack to Hubspot events (available only when New API(v3) is selected)",
         "hideEditIcon": true,
+        "kind": "eventMapping",
         "sections": [
           {
             "groups": [
