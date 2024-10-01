@@ -50,13 +50,45 @@
                 }
               }
             }
+          },
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "cloud": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
           }
         }
       },
       "connectionMode": {
         "type": "object",
         "properties": {
+          "cloud": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
           "warehouse": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "web": {
             "type": "string",
             "enum": ["cloud"]
           }
@@ -66,6 +98,30 @@
         "type": "object",
         "properties": {
           "warehouse": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "cloud": {
             "type": "array",
             "items": {
               "type": "object",
