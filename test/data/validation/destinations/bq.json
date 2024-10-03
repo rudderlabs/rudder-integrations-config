@@ -17,6 +17,74 @@
     "config": {
       "project": "test-gcs-project",
       "location": "",
+      "bucketName": "test-bucket",
+      "prefix": "xyzxx",
+      "namespace": "eu_new3",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "credentials": "{}",
+      "syncFrequency": "30",
+      "testConnection": false,
+      "testConnectionTS": 1621402528550
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "project": "test-gcs-project",
+      "location": "",
+      "bucketName": "test-bucket",
+      "prefix": "xyzxx",
+      "namespace": "eu_new3",
+      "partitionColumn": "received_at",
+      "partitionType": "hour",
+      "credentials": "{}",
+      "syncFrequency": "30",
+      "testConnection": false,
+      "testConnectionTS": 1621402528550
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "project": "test-gcs-project",
+      "location": "",
+      "bucketName": "test-bucket",
+      "prefix": "xyzxx",
+      "namespace": "eu_new3",
+      "partitionColumn": "invalid",
+      "partitionType": "day",
+      "credentials": "{}",
+      "syncFrequency": "30",
+      "testConnection": false,
+      "testConnectionTS": 1621402528550
+    },
+    "result": false,
+    "error": [
+      "partitionColumn must match pattern \"^(_PARTITIONTIME|loaded_at|received_at|timestamp)$\""
+    ]
+  },
+  {
+    "config": {
+      "project": "test-gcs-project",
+      "location": "",
+      "bucketName": "test-bucket",
+      "prefix": "xyzxx",
+      "namespace": "eu_new3",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "invalid",
+      "credentials": "{}",
+      "syncFrequency": "30",
+      "testConnection": false,
+      "testConnectionTS": 1621402528550
+    },
+    "result": false,
+    "error": ["partitionType must match pattern \"^(hour|day|month|year)$\""]
+  },
+  {
+    "config": {
+      "project": "test-gcs-project",
+      "location": "",
       "bucketName": "test-bucket-test-bucket-test-bucket-test-bucket-test-bucket-test-bucket-test-bucket-test-bucket-test-bucket",
       "prefix": "xyzxx",
       "namespace": "eu_new3",
