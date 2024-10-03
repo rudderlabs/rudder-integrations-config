@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.94.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.94.0...v1.94.1) (2024-10-01)
+
+
+### Bug Fixes
+
+* revert redshift serverless bq partitioning configuration changes ([#1727](https://github.com/rudderlabs/rudder-config-schema/issues/1727)) ([f2011dc](https://github.com/rudderlabs/rudder-config-schema/commit/f2011dce9330e697eca5d9d762a11580cc28ea66))
+
+## [1.94.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.93.1...v1.94.0) (2024-09-30)
+
+
+### Features
+
+* add 5 min and 15 min WH sync options, controlled by LOW_GRANULAR_WH_SYNC ff ([#1703](https://github.com/rudderlabs/rudder-config-schema/issues/1703)) ([21a5015](https://github.com/rudderlabs/rudder-config-schema/commit/21a50153194c6db5da563858953ae39ed638b662))
+* adding cloud source and web source for lytics bulk ([#1685](https://github.com/rudderlabs/rudder-config-schema/issues/1685)) ([b2a433b](https://github.com/rudderlabs/rudder-config-schema/commit/b2a433b6f6515ef0818aaa0746225bc6c4f1049d))
+* bq configurable partitions ([#1630](https://github.com/rudderlabs/rudder-config-schema/issues/1630)) ([a7e21e5](https://github.com/rudderlabs/rudder-config-schema/commit/a7e21e542e41c761c66394731772703ec48bb553))
+* enable support for RN device mode in the Facebook App Events ([#1701](https://github.com/rudderlabs/rudder-config-schema/issues/1701)) ([a193c6e](https://github.com/rudderlabs/rudder-config-schema/commit/a193c6e518bf6c914a3c99656ea6d3c0aeb8d946))
+* **fb_custom_audience:** hide particular fields from ui config when VDMv2 is enabled ([#1702](https://github.com/rudderlabs/rudder-config-schema/issues/1702)) ([1791773](https://github.com/rudderlabs/rudder-config-schema/commit/1791773d94da4872d5bd1d8d048cc6f07efe7e61))
+* hide mixpanel service account settings ([#1714](https://github.com/rudderlabs/rudder-config-schema/issues/1714)) ([1f73739](https://github.com/rudderlabs/rudder-config-schema/commit/1f73739087e3e734cf83b360dee1b1c28f6d9528))
+* redshift serverless ([#1710](https://github.com/rudderlabs/rudder-config-schema/issues/1710)) ([6ac3dd6](https://github.com/rudderlabs/rudder-config-schema/commit/6ac3dd6761bf7a3b1d9ac73c4540f14092fb5c21))
+
+
+### Bug Fixes
+
+* add `device` mode enum to FB App Events in reactnative schema.json ([#1707](https://github.com/rudderlabs/rudder-config-schema/issues/1707)) ([879b966](https://github.com/rudderlabs/rudder-config-schema/commit/879b966c39df9039f3e673ffb13b78ee126cd18a))
+* fixing labels for snapchat conversion event mapping ([#1713](https://github.com/rudderlabs/rudder-config-schema/issues/1713)) ([4a00440](https://github.com/rudderlabs/rudder-config-schema/commit/4a0044014c043871b002404004e2de0895ad3421))
+* **ga4_v2:** update ui-config.jt file to reflect consent management changes ([#1717](https://github.com/rudderlabs/rudder-config-schema/issues/1717)) ([103745a](https://github.com/rudderlabs/rudder-config-schema/commit/103745a8715b4e450d809812c21a67443473e0c2))
+* legacy consent management fields data in lytics bulk upload destination ([5d4d116](https://github.com/rudderlabs/rudder-config-schema/commit/5d4d116cb7763e69b10ed2993e278b78039ca3a2))
+* webhook url regex to restrict localhost and private ips ([#1696](https://github.com/rudderlabs/rudder-config-schema/issues/1696)) ([774bd43](https://github.com/rudderlabs/rudder-config-schema/commit/774bd43e43f0576e9d6e9b5e046ec19c1c13b7e9))
+* webhook url regex to restrict private ipv6 ([#1705](https://github.com/rudderlabs/rudder-config-schema/issues/1705)) ([5b91bc7](https://github.com/rudderlabs/rudder-config-schema/commit/5b91bc7f841e830edefc2add80d1ba6b7a98d7d3))
+
 ### [1.93.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.93.0...v1.93.1) (2024-09-30)
 
 
