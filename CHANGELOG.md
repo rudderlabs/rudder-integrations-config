@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.94.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.94.1...v1.94.2) (2024-10-04)
+
+
+### Bug Fixes
+
+* redshift serverless bq partitioning configuration changes ([#1730](https://github.com/rudderlabs/rudder-config-schema/issues/1730)) ([57563e1](https://github.com/rudderlabs/rudder-config-schema/commit/57563e193fd3a52609c8ddceeca243238db7a079))
+* update image for singer zendesk support to v8.3.9 ([#1731](https://github.com/rudderlabs/rudder-config-schema/issues/1731)) ([a7b6d10](https://github.com/rudderlabs/rudder-config-schema/commit/a7b6d10dbcdbaaf660e32f3a72e7ca406ba980d4))
+* webhook url regex to block ftp ([#1735](https://github.com/rudderlabs/rudder-config-schema/issues/1735)) ([92401fc](https://github.com/rudderlabs/rudder-config-schema/commit/92401fc02df8ebfacd43e327be62b5d0d8aac126))
+* salesforce v2 sandbox config remove ([#1737](https://github.com/rudderlabs/rudder-config-schema/issues/1737)) ([7b93a38](https://github.com/rudderlabs/rudder-config-schema/commit/7b93a38a68743fd12cb13ea769c004e0a4f288b8))
+
 ### [1.94.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.94.0...v1.94.1) (2024-10-01)
 
 
