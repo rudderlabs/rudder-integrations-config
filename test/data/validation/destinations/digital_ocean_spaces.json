@@ -118,6 +118,54 @@
     "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   },
   {
+    "testTitle": "Without endPoint",
+    "config": {
+      "accessKeyID": "test-database",
+      "accessKey": "test-user",
+      "bucketName": "test-password",
+      "oneTrustCookieCategories": {
+        "oneTrustCookieCategory": "C0001"
+      },
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'endPoint'"]
+  },
+  {
+    "testTitle": "Without accessKeyID",
+    "config": {
+      "endPoint": "test-host",
+      "accessKey": "test-user",
+      "bucketName": "test-password",
+      "oneTrustCookieCategories": {
+        "oneTrustCookieCategory": "C0001"
+      },
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'accessKeyID'"]
+  },
+  {
+    "testTitle": "Without accessKey",
+    "config": {
+      "endPoint": "test-host",
+      "accessKeyID": "test-database",
+      "bucketName": "test-password",
+      "oneTrustCookieCategories": {
+        "oneTrustCookieCategory": "C0001"
+      },
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'accessKey'"]
+  },
+  {
     "testTitle": "With valid multiple consent management providers config",
     "config": {
       "endPoint": "test-host",
@@ -329,11 +377,27 @@
     "err": ["oneTrustCookieCategories must be object", "ketchConsentPurposes must be object"]
   },
   {
-    "testTitle": "With valid multiple consent management providers config",
+    "testTitle": "Without bucketName",
     "config": {
       "endPoint": "test-host",
       "accessKeyID": "test-database",
       "accessKey": "test-user",
+      "oneTrustCookieCategories": {
+        "oneTrustCookieCategory": "C0001"
+      },
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'bucketName'"]
+  },
+  {
+    "testTitle": "With invalid multiple consent management providers config",
+    "config": {
+      "accessKeyID": "test-database",
+      "accessKey": "test-user",
+      "endPoint": "test-host",
       "bucketName": "test-password",
       "prefix": "0000",
       "consentManagement": {

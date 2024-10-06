@@ -5,7 +5,7 @@
       "accountId": "test-host",
       "apiKey": "test-database",
       "campaignId": "test-user",
-      "enableUserCreation": "test-password",
+      "enableUserCreation": true,
       "consentManagement": {
         "web": [
           {
@@ -40,7 +40,7 @@
       "accountId": "test-host",
       "apiKey": "test-database",
       "campaignId": "test-user",
-      "enableUserCreation": "test-password",
+      "enableUserCreation": true,
       "consentManagement": {
         "android": [
           {
@@ -62,7 +62,7 @@
       "accountId": "test-host",
       "apiKey": "test-database",
       "campaignId": "test-user",
-      "enableUserCreation": "test-password",
+      "enableUserCreation": false,
       "consentManagement": {
         "android": [
           {
@@ -83,7 +83,7 @@
       "accountId": "test-host",
       "apiKey": "test-database",
       "campaignId": "test-user",
-      "enableUserCreation": "test-password",
+      "enableUserCreation": true,
       "consentManagement": {
         "android": [
           {
@@ -100,7 +100,7 @@
       "accountId": "test-host",
       "apiKey": "test-database",
       "campaignId": "test-user",
-      "enableUserCreation": "test-password",
+      "enableUserCreation": false,
       "consentManagement": {
         "android": [
           {
@@ -113,12 +113,27 @@
     "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   },
   {
+    "testTitle": "Without accountId",
+    "config": {
+      "apiKey": "test-database",
+      "campaignId": "test-user",
+      "oneTrustCookieCategories": {
+        "oneTrustCookieCategory": "C0001"
+      },
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'accountId'"]
+  },
+  {
     "testTitle": "With valid multiple consent management providers config",
     "config": {
       "accountId": "test-host",
       "apiKey": "test-database",
       "campaignId": "test-user",
-      "enableUserCreation": "test-password",
+      "enableUserCreation": true,
       "consentManagement": {
         "web": [
           {
@@ -270,12 +285,27 @@
     "result": true
   },
   {
-    "testTitle": "With valid multiple consent management providers config",
+    "testTitle": "Invalid enableUserCreation",
     "config": {
       "accountId": "test-host",
       "apiKey": "test-database",
       "campaignId": "test-user",
-      "enableUserCreation": "test-password",
+      "enableUserCreation": "test",
+      "oneTrustCookieCategories": {
+        "oneTrustCookieCategory": "C0001"
+      },
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": ["enableUserCreation must be boolean"]
+  },
+  {
+    "testTitle": "With invalid multiple consent management providers config",
+    "config": {
+      "accountId": "test-host",
+      "enableUserCreation": false,
       "consentManagement": {
         "web": [
           {
@@ -327,7 +357,7 @@
       "accountId": "test-host",
       "apiKey": "test-database",
       "campaignId": "test-user",
-      "enableUserCreation": "test-password",
+      "enableUserCreation": false,
       "consentManagement": {
         "web": [
           {
