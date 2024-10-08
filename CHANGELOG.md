@@ -2,6 +2,93 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.94.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.94.1...v1.94.2) (2024-10-04)
+
+
+### Bug Fixes
+
+* redshift serverless bq partitioning configuration changes ([#1730](https://github.com/rudderlabs/rudder-config-schema/issues/1730)) ([57563e1](https://github.com/rudderlabs/rudder-config-schema/commit/57563e193fd3a52609c8ddceeca243238db7a079))
+* update image for singer zendesk support to v8.3.9 ([#1731](https://github.com/rudderlabs/rudder-config-schema/issues/1731)) ([a7b6d10](https://github.com/rudderlabs/rudder-config-schema/commit/a7b6d10dbcdbaaf660e32f3a72e7ca406ba980d4))
+* webhook url regex to block ftp ([#1735](https://github.com/rudderlabs/rudder-config-schema/issues/1735)) ([92401fc](https://github.com/rudderlabs/rudder-config-schema/commit/92401fc02df8ebfacd43e327be62b5d0d8aac126))
+* salesforce v2 sandbox config remove ([#1737](https://github.com/rudderlabs/rudder-config-schema/issues/1737)) ([7b93a38](https://github.com/rudderlabs/rudder-config-schema/commit/7b93a38a68743fd12cb13ea769c004e0a4f288b8))
+
+### [1.94.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.94.0...v1.94.1) (2024-10-01)
+
+
+### Bug Fixes
+
+* revert redshift serverless bq partitioning configuration changes ([#1727](https://github.com/rudderlabs/rudder-config-schema/issues/1727)) ([f2011dc](https://github.com/rudderlabs/rudder-config-schema/commit/f2011dce9330e697eca5d9d762a11580cc28ea66))
+
+## [1.94.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.93.1...v1.94.0) (2024-09-30)
+
+
+### Features
+
+* add 5 min and 15 min WH sync options, controlled by LOW_GRANULAR_WH_SYNC ff ([#1703](https://github.com/rudderlabs/rudder-config-schema/issues/1703)) ([21a5015](https://github.com/rudderlabs/rudder-config-schema/commit/21a50153194c6db5da563858953ae39ed638b662))
+* adding cloud source and web source for lytics bulk ([#1685](https://github.com/rudderlabs/rudder-config-schema/issues/1685)) ([b2a433b](https://github.com/rudderlabs/rudder-config-schema/commit/b2a433b6f6515ef0818aaa0746225bc6c4f1049d))
+* bq configurable partitions ([#1630](https://github.com/rudderlabs/rudder-config-schema/issues/1630)) ([a7e21e5](https://github.com/rudderlabs/rudder-config-schema/commit/a7e21e542e41c761c66394731772703ec48bb553))
+* enable support for RN device mode in the Facebook App Events ([#1701](https://github.com/rudderlabs/rudder-config-schema/issues/1701)) ([a193c6e](https://github.com/rudderlabs/rudder-config-schema/commit/a193c6e518bf6c914a3c99656ea6d3c0aeb8d946))
+* **fb_custom_audience:** hide particular fields from ui config when VDMv2 is enabled ([#1702](https://github.com/rudderlabs/rudder-config-schema/issues/1702)) ([1791773](https://github.com/rudderlabs/rudder-config-schema/commit/1791773d94da4872d5bd1d8d048cc6f07efe7e61))
+* hide mixpanel service account settings ([#1714](https://github.com/rudderlabs/rudder-config-schema/issues/1714)) ([1f73739](https://github.com/rudderlabs/rudder-config-schema/commit/1f73739087e3e734cf83b360dee1b1c28f6d9528))
+* redshift serverless ([#1710](https://github.com/rudderlabs/rudder-config-schema/issues/1710)) ([6ac3dd6](https://github.com/rudderlabs/rudder-config-schema/commit/6ac3dd6761bf7a3b1d9ac73c4540f14092fb5c21))
+
+
+### Bug Fixes
+
+* add `device` mode enum to FB App Events in reactnative schema.json ([#1707](https://github.com/rudderlabs/rudder-config-schema/issues/1707)) ([879b966](https://github.com/rudderlabs/rudder-config-schema/commit/879b966c39df9039f3e673ffb13b78ee126cd18a))
+* fixing labels for snapchat conversion event mapping ([#1713](https://github.com/rudderlabs/rudder-config-schema/issues/1713)) ([4a00440](https://github.com/rudderlabs/rudder-config-schema/commit/4a0044014c043871b002404004e2de0895ad3421))
+* **ga4_v2:** update ui-config.jt file to reflect consent management changes ([#1717](https://github.com/rudderlabs/rudder-config-schema/issues/1717)) ([103745a](https://github.com/rudderlabs/rudder-config-schema/commit/103745a8715b4e450d809812c21a67443473e0c2))
+* legacy consent management fields data in lytics bulk upload destination ([5d4d116](https://github.com/rudderlabs/rudder-config-schema/commit/5d4d116cb7763e69b10ed2993e278b78039ca3a2))
+* webhook url regex to restrict localhost and private ips ([#1696](https://github.com/rudderlabs/rudder-config-schema/issues/1696)) ([774bd43](https://github.com/rudderlabs/rudder-config-schema/commit/774bd43e43f0576e9d6e9b5e046ec19c1c13b7e9))
+* webhook url regex to restrict private ipv6 ([#1705](https://github.com/rudderlabs/rudder-config-schema/issues/1705)) ([5b91bc7](https://github.com/rudderlabs/rudder-config-schema/commit/5b91bc7f841e830edefc2add80d1ba6b7a98d7d3))
+
+### [1.93.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.93.0...v1.93.1) (2024-09-30)
+
+
+### Bug Fixes
+
+* **ga4_v2:** update ui-config.jt file to reflect consent management c… ([#1718](https://github.com/rudderlabs/rudder-config-schema/issues/1718)) ([7945c0c](https://github.com/rudderlabs/rudder-config-schema/commit/7945c0c1f98191233025c48ced580d8804369ecd))
+
+## [1.93.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.92.1...v1.93.0) (2024-09-24)
+
+
+### Features
+
+* **fb_custom_audience:** hide particular fields from ui config when VDMv2 is enabled ([#1706](https://github.com/rudderlabs/rudder-config-schema/issues/1706)) ([016e822](https://github.com/rudderlabs/rudder-config-schema/commit/016e82250c08dfd0db12fdb107905a25a746a9e8))
+
+### [1.92.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.92.0...v1.92.1) (2024-09-20)
+
+
+### Bug Fixes
+
+* kafka topic name regex ([#1698](https://github.com/rudderlabs/rudder-config-schema/issues/1698)) ([3583ce8](https://github.com/rudderlabs/rudder-config-schema/commit/3583ce8dcefead90ba10b7750bd5333e89dc41c3))
+* set wunderkind accountId and instanceId as secret in ui ([#1697](https://github.com/rudderlabs/rudder-config-schema/issues/1697)) ([860a9bb](https://github.com/rudderlabs/rudder-config-schema/commit/860a9bb6e6e5d7aceacb83c6a0b7792e88705a71))
+
+## [1.92.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.91.0...v1.92.0) (2024-09-19)
+
+
+### Features
+
+* make legacy consent management fields source specific ([#1692](https://github.com/rudderlabs/rudder-config-schema/issues/1692)) ([d46d632](https://github.com/rudderlabs/rudder-config-schema/commit/d46d6329755950c7431a4fb3017cb2f7f09cea3d))
+
+## [1.91.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.90.2...v1.91.0) (2024-09-16)
+
+
+### Features
+
+* added sync behaviours for s3 ([#1666](https://github.com/rudderlabs/rudder-config-schema/issues/1666)) ([0408bf1](https://github.com/rudderlabs/rudder-config-schema/commit/0408bf166f8e4cb67cedeb9cc738bcc6d36bb2a6))
+* deprecate connectionModes.mobileDevice and connectionModes.webDevice keys ([#1647](https://github.com/rudderlabs/rudder-config-schema/issues/1647)) ([7a65529](https://github.com/rudderlabs/rudder-config-schema/commit/7a655293c26aa1782d3ff20f6fefbc3ddd9ae7ec))
+* **fb_custom_audience:** move FBCA to form builder v2 ([#1681](https://github.com/rudderlabs/rudder-config-schema/issues/1681)) ([eae00a1](https://github.com/rudderlabs/rudder-config-schema/commit/eae00a1f01d98f81c908ed3b3c558a2dbedbed2f))
+* onboard X(Twiiter) Audience ([#1657](https://github.com/rudderlabs/rudder-config-schema/issues/1657)) ([130aae2](https://github.com/rudderlabs/rudder-config-schema/commit/130aae272dc71b725d28b7b744583950b59861e9))
+* rearranged config fields to enhance UX ([#1661](https://github.com/rudderlabs/rudder-config-schema/issues/1661)) ([d03cf40](https://github.com/rudderlabs/rudder-config-schema/commit/d03cf404b6eb17a031ef2eba60c463f0e46422f5))
+* replaced connectionModes.cloud with respective source type specific fields ([#1620](https://github.com/rudderlabs/rudder-config-schema/issues/1620)) ([4c804c4](https://github.com/rudderlabs/rudder-config-schema/commit/4c804c4ef5e4c0c844423b6fdde62419556ca9b2))
+
+
+### Bug Fixes
+
+* correct supported sources ([#1675](https://github.com/rudderlabs/rudder-config-schema/issues/1675)) ([2907281](https://github.com/rudderlabs/rudder-config-schema/commit/290728175249f8709e0771533209b0651c47c263))
+* http schema to allow dynamic path variables ([#1670](https://github.com/rudderlabs/rudder-config-schema/issues/1670)) ([6ca9c3f](https://github.com/rudderlabs/rudder-config-schema/commit/6ca9c3f5618fdd73580a0e66ccaee1642007d161))
+
 ### [1.90.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.90.2...v1.90.3) (2024-09-13)
 
 

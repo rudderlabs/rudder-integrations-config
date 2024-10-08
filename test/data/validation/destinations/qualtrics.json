@@ -1,0 +1,190 @@
+[
+  {
+    "config": {
+      "oneTrustCookieCategories": {
+        "web": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "android": [
+          {
+            "oneTrustCookieCategory": "C0003"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": ""
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "web": [
+          {
+            "purpose": "P1"
+          },
+          {
+            "purpose": "P2"
+          }
+        ],
+        "android": [
+          {
+            "purpose": "P3"
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "ios": [
+          {
+            "purpose": ""
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "oneTrustCookieCategories": {
+        "web": [],
+        "android": [
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 'val' }}"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "web": [],
+        "android": [
+          {
+            "purpose": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "ios": [
+          {
+            "purpose": "{{ event.properties.prop1 || 'val' }}"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        },
+        {
+          "oneTrustCookieCategory": "C0002"
+        }
+      ],
+      "ketchConsentPurposes": [
+        {
+          "purpose": "P1"
+        },
+        {
+          "purpose": "P2"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["oneTrustCookieCategories must be object", "ketchConsentPurposes must be object"]
+  },
+  {
+    "config": {
+      "oneTrustCookieCategories": {
+        "web": [
+          {
+            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "android": [
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "ios": {
+          "not": "an array"
+        }
+      },
+      "ketchConsentPurposes": {
+        "web": [
+          {
+            "purpose": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "android": [
+          {
+            "purpose": {
+              "not": "a string"
+            }
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "ios": {
+          "not": "an array"
+        }
+      }
+    },
+    "err": [
+      "oneTrustCookieCategories.web.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.android.0.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.ios must be array",
+      "ketchConsentPurposes.web.0.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "ketchConsentPurposes.android.0.purpose must be string",
+      "ketchConsentPurposes.ios must be array"
+    ],
+    "result": false
+  },
+  {
+    "config": {
+      "oneTrustCookieCategories": {
+        "web": [
+          "not an object",
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "web": [
+          "not an object",
+          {
+            "purpose": "P4"
+          }
+        ]
+      }
+    },
+    "err": [
+      "oneTrustCookieCategories.web.0 must be object",
+      "ketchConsentPurposes.web.0 must be object"
+    ],
+    "result": false
+  }
+]

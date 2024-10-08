@@ -30,19 +30,16 @@ const deepSearch = (obj: any, value: string, count = 0) => {
   return count;
 };
 
-// These are names of the directories under src/configuration/destinations
-const DESTINATIONS_CONSIDERED = ['am', 'postgres', 'ga4', 'gtm', 'mp', 'hotjar'];
-
 describe('Consent Management Fields Integrity tests', () => {
   // Read db-config.json, ui-config.json, and schema.json files in each of the directories
   // under src/configuration/destinations
   // and ensure the fields oneTrustCookieCategories and ketchConsentPurposes are present
 
   const destDir = path.resolve('src/configurations/destinations');
-  // const dests = fs
-  //   .readdirSync(destDir)
-  //   .filter((f) => fs.statSync(path.join(destDir, f)).isDirectory());
-  DESTINATIONS_CONSIDERED.forEach((destName) => {
+  const dests = fs
+    .readdirSync(destDir)
+    .filter((f) => fs.statSync(path.join(destDir, f)).isDirectory());
+  dests.forEach((destName) => {
     // Validate db-config.json
     const dbConfigFilePath = path.resolve(`${destDir}/${destName}/db-config.json`);
     const dbConfig = getJSONDataFromFile(dbConfigFilePath);
