@@ -1,0 +1,391 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection Settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": []
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Client-side event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionMode.web",
+                      "value": "cloud"
+                    }
+                  ],
+                  "condition": "or"
+                },
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on events filtering:",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
+                      {
+                        "label": "No events filtering",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to allowlist.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input separate events by pressing ‘Enter’.\nInput the events you want to denylist. ",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Event mapping",
+        "note": "Map RudderStack events to Tune events",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "RudderStack Event to Tune Event Mapping",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "conversionMapping",
+                    "label": "Event and property mappings",
+                    "note": "Map RudderStack events/properties to Tune events/properties"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "redirectGroups": {
+      "conversionMapping": {
+        "fields": [
+          {
+            "type": "dynamicCustomForm",
+            "label": "Map RudderStack event to Tune event",
+            "configKey": "tuneEvents",
+            "default": [
+              {
+                "rsField": "Purchase Event",
+                "destField": "purchase",
+                "eventProperties": [
+                  {
+                    "from": "advSub",
+                    "to": "adv_sub"
+                  },
+                  {
+                    "from": "advSub2",
+                    "to": "adv_sub2"
+                  },
+                  {
+                    "from": "advSub3",
+                    "to": "adv_sub3"
+                  },
+                  {
+                    "from": "advSub4",
+                    "to": "adv_sub4"
+                  },
+                  {
+                    "from": "advSub5",
+                    "to": "adv_sub5"
+                  },
+                  {
+                    "from": "advUnique1",
+                    "to": "adv_unique1"
+                  },
+                  {
+                    "from": "advUnique2",
+                    "to": "adv_unique2"
+                  },
+                  {
+                    "from": "advUnique3",
+                    "to": "adv_unique3"
+                  },
+                  {
+                    "from": "advUnique4",
+                    "to": "adv_unique4"
+                  },
+                  {
+                    "from": "advUnique5",
+                    "to": "adv_unique5"
+                  },
+                  {
+                    "from": "affId",
+                    "to": "aff_id"
+                  },
+                  {
+                    "from": "promoCode",
+                    "to": "promo_code"
+                  },
+                  {
+                    "from": "amount",
+                    "to": "amount"
+                  },
+                  {
+                    "from": "conversionUniqueId",
+                    "to": "conversion_unique_id"
+                  },
+                  {
+                    "from": "goalId",
+                    "to": "goal_id"
+                  },
+                  {
+                    "from": "goalRef",
+                    "to": "goal_ref"
+                  },
+                  {
+                    "from": "offerId",
+                    "to": "offer_id"
+                  },
+                  {
+                    "from": "payout",
+                    "to": "payout"
+                  },
+                  {
+                    "from": "revenue",
+                    "to": "revenue"
+                  },
+                  {
+                    "from": "securityToken",
+                    "to": "security_token"
+                  },
+                  {
+                    "from": "status",
+                    "to": "status"
+                  },
+                  {
+                    "from": "transactionId",
+                    "to": "transaction_id"
+                  }
+                ]
+              }
+            ],
+            "rowFields": [
+              {
+                "type": "textInput",
+                "label": "URL",
+                "configKey": "url",
+                "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$|^$",
+                "regexErrorMessage": "Invalid URL",
+                "placeholder": "e.g. https://demo.go2cloud.org/aff_l?offer_id=45&aff_id=1029"
+              },
+              {
+                "type": "textInput",
+                "label": "Event name",
+                "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                "configKey": "eventName",
+                "placeholder": "e.g: Product Added"
+              },
+              {
+                "label": "Map Rudder payload property to Tune Field",
+                "type": "mapping",
+                "configKey": "eventsMapping",
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "configKey": "rsField",
+                    "label": "Rudder Payload Field",
+                    "placeholder": "e.g: Purchase Event"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "key": "to",
+                    "label": "Tune Custom Field",
+                    "configKey": "destField",
+                    "placeholder": "e.g: purchase",
+                    "options": [
+                      {
+                        "name": "adv_sub",
+                        "value": "adv_sub"
+                      },
+                      {
+                        "name": "adv_sub2",
+                        "value": "adv_sub2"
+                      },
+                      {
+                        "name": "adv_sub3",
+                        "value": "adv_sub3"
+                      },
+                      {
+                        "name": "adv_sub4",
+                        "value": "adv_sub4"
+                      },
+                      {
+                        "name": "adv_sub5",
+                        "value": "adv_sub5"
+                      },
+                      {
+                        "name": "adv_unique1",
+                        "value": "adv_unique1"
+                      },
+                      {
+                        "name": "adv_unique2",
+                        "value": "adv_unique2"
+                      },
+                      {
+                        "name": "adv_unique3",
+                        "value": "adv_unique3"
+                      },
+                      {
+                        "name": "adv_unique4",
+                        "value": "adv_unique4"
+                      },
+                      {
+                        "name": "adv_unique5",
+                        "value": "adv_unique5"
+                      },
+                      {
+                        "name": "aff_id",
+                        "value": "aff_id"
+                      },
+                      {
+                        "name": "promo_code",
+                        "value": "promo_code"
+                      },
+                      {
+                        "name": "amount",
+                        "value": "amount"
+                      },
+                      {
+                        "name": "conversion_unique_id",
+                        "value": "conversion_unique_id"
+                      },
+                      {
+                        "name": "goal_id",
+                        "value": "goal_id"
+                      },
+                      {
+                        "name": "goal_ref",
+                        "value": "goal_ref"
+                      },
+                      {
+                        "name": "offer_id",
+                        "value": "offer_id"
+                      },
+                      {
+                        "name": "payout",
+                        "value": "payout"
+                      },
+                      {
+                        "name": "revenue",
+                        "value": "revenue"
+                      },
+                      {
+                        "name": "security_token",
+                        "value": "security_token"
+                      },
+                      {
+                        "name": "status",
+                        "value": "status"
+                      },
+                      {
+                        "name": "transaction_id",
+                        "value": "transaction_id"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
