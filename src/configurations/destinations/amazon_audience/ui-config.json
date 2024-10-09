@@ -78,7 +78,7 @@
                     "type": "checkbox",
                     "label": "Enable user data hashing",
                     "note": [
-                      "Enabling this will hash all the user data before sending it to X(Twitter)",
+                      "Enabling this will hash all the user data before sending it to Amazon Audience",
                       "Do not enable it if you already pass hash data to rudderstack"
                     ],
                     "configKey": "enableHash",
@@ -124,7 +124,7 @@
                     "note": [
                       "Refer below link for more info",
                       {
-                        "text": "Time To live",
+                        "text": "Data Source Countries",
                         "link": "https://advertising.amazon.com/API/docs/en-us/guides/amazon-marketing-cloud/audiences/audience-management-service#:~:text=a%20given%20invocation.-,Note,-The%20time%2Dto"
                       }
                     ],
@@ -156,8 +156,8 @@
                 "fields": [
                   {
                     "type": "tagInput",
-                    "label": "Consent categories",
-                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry.",
+                    "label": "OneTrust consent category IDs",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
                     "configKey": "oneTrustCookieCategories",
                     "tagKey": "oneTrustCookieCategory",
                     "placeholder": "e.g: C0001",
@@ -165,7 +165,19 @@
                       {
                         "oneTrustCookieCategory": ""
                       }
-                    ]
+                    ],
+                    "preRequisites": {
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-gcm",
+                          "value": false
+                        },
+                        {
+                          "configKey": "AMP_enable-gcm"
+                        }
+                      ],
+                      "featureFlagsCondition": "or"
+                    }
                   }
                 ]
               }
@@ -208,6 +220,31 @@
               ],
               "default": "oneTrust",
               "required": true
+            },
+            {
+              "type": "tagInput",
+              "label": "Ketch consent purpose IDs",
+              "note": "Input your Ketch consent purpose IDs by pressing 'Enter' after each entry.",
+              "configKey": "ketchConsentPurposes",
+              "tagKey": "purpose",
+              "placeholder": "e.g: marketing",
+              "default": [
+                {
+                  "purpose": ""
+                }
+              ],
+              "preRequisites": {
+                "featureFlags": [
+                  {
+                    "configKey": "AMP_enable-gcm",
+                    "value": false
+                  },
+                  {
+                    "configKey": "AMP_enable-gcm"
+                  }
+                ],
+                "featureFlagsCondition": "or"
+              }
             },
             {
               "type": "singleSelect",
