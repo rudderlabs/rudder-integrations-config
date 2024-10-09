@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.95.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.94.2...v1.95.0) (2024-10-09)
+
+
+### Features
+
+* add Iubenda support to ga4 destination ([#1691](https://github.com/rudderlabs/rudder-config-schema/issues/1691)) ([2ef7ae4](https://github.com/rudderlabs/rudder-config-schema/commit/2ef7ae497b3bad172024d1eeb54beb223ddf296a))
+* added test cases ([#1659](https://github.com/rudderlabs/rudder-config-schema/issues/1659)) ([6339410](https://github.com/rudderlabs/rudder-config-schema/commit/6339410ecec4f6739df44383b866b82662642ae6))
+
+
+### Bug Fixes
+
+* add new field for list of props ([#1734](https://github.com/rudderlabs/rudder-config-schema/issues/1734)) ([d45386b](https://github.com/rudderlabs/rudder-config-schema/commit/d45386b4081d0d910b078c073147257842b78772))
+
 ### [1.94.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.94.1...v1.94.2) (2024-10-04)
 
 
