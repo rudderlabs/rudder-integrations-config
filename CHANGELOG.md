@@ -9,11 +9,13 @@ All notable changes to this project will be documented in this file. See [standa
 
 * add Iubenda support to ga4 destination ([#1691](https://github.com/rudderlabs/rudder-config-schema/issues/1691)) ([2ef7ae4](https://github.com/rudderlabs/rudder-config-schema/commit/2ef7ae497b3bad172024d1eeb54beb223ddf296a))
 * added test cases ([#1659](https://github.com/rudderlabs/rudder-config-schema/issues/1659)) ([6339410](https://github.com/rudderlabs/rudder-config-schema/commit/6339410ecec4f6739df44383b866b82662642ae6))
+* onboard Amazon Audience ([#1667](https://github.com/rudderlabs/rudder-config-schema/issues/1667)) ([d841adf](https://github.com/rudderlabs/rudder-config-schema/commit/d841adfc5103978a6a83412a51a00f87a9b7f28f))
 
 
 ### Bug Fixes
 
 * add new field for list of props ([#1734](https://github.com/rudderlabs/rudder-config-schema/issues/1734)) ([d45386b](https://github.com/rudderlabs/rudder-config-schema/commit/d45386b4081d0d910b078c073147257842b78772))
+* webhook regex url ([#1743](https://github.com/rudderlabs/rudder-config-schema/issues/174)) ([3435280](https://github.com/rudderlabs/rudder-config-schema/commit/3435280b68b6dbf30bdeddc751143994ad07f3f4))
 
 ### [1.94.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.94.1...v1.94.2) (2024-10-04)
 
