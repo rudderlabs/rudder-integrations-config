@@ -113,6 +113,72 @@
     "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   },
   {
+    "testTitle": "Without apiKey",
+    "config": {
+      "bootstrapServer": "test-host",
+      "topic": "test-database",
+      "apiSecret": "test-password",
+      "oneTrustCookieCategories": {
+        "oneTrustCookieCategory": "C0001"
+      },
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'apiKey'"]
+  },
+  {
+    "testTitle": "Without bootstrapServer",
+    "config": {
+      "topic": "test-database",
+      "apiKey": "test-user",
+      "apiSecret": "test-password",
+      "oneTrustCookieCategories": {
+        "oneTrustCookieCategory": "C0001"
+      },
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'bootstrapServer'"]
+  },
+  {
+    "testTitle": "Without apiSecret",
+    "config": {
+      "bootstrapServer": "test-host",
+      "topic": "test-database",
+      "apiKey": "test-user",
+      "oneTrustCookieCategories": [
+        {
+          "oneTrustCookieCategory": "C0001"
+        }
+      ],
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'apiSecret'", "oneTrustCookieCategories must be object"]
+  },
+  {
+    "testTitle": "Without topic",
+    "config": {
+      "bootstrapServer": "test-host",
+      "apiKey": "test-user",
+      "apiSecret": "test-password",
+      "oneTrustCookieCategories": {
+        "oneTrustCookieCategory": "C0001"
+      },
+      "connectionMode": {
+        "web": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'topic'"]
+  },
+  {
     "testTitle": "With valid multiple consent management providers config",
     "config": {
       "bootstrapServer": "test-host",

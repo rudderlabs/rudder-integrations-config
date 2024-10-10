@@ -1,58 +1,63 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["domain", "uid"],
     "type": "object",
+    "required": ["authServer"],
     "properties": {
-      "domain": {
+      "authServer": {
         "type": "string",
-        "pattern": "^(.{0,100})$"
+        "enum": ["North America"],
+        "default": "North America"
       },
-      "uid": {
+      "advertiserId": {
         "type": "string",
-        "pattern": "^(.{0,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,150})$"
       },
-      "eventFilteringOption": {
+      "externalAudienceId": {
         "type": "string",
-        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
-        "default": "disable"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,50})$"
       },
-      "whitelistedEvents": {
+      "ttl": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]\\d*$"
+      },
+      "enableHash": {
+        "type": "boolean",
+        "default": false
+      },
+      "dataSourceCountry": {
         "type": "array",
         "items": {
           "type": "object",
           "properties": {
-            "eventName": {
+            "country": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           }
         }
       },
-      "blacklistedEvents": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "eventName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "useNativeSDK": {
+      "oneTrustCookieCategories": {
         "type": "object",
         "properties": {
-          "web": {
-            "type": "boolean"
+          "warehouse": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
           }
         }
       },
       "consentManagement": {
         "type": "object",
         "properties": {
-          "web": {
+          "warehouse": {
             "type": "array",
             "items": {
               "type": "object",
@@ -100,27 +105,10 @@
           }
         }
       },
-      "oneTrustCookieCategories": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          }
-        }
-      },
       "ketchConsentPurposes": {
         "type": "object",
         "properties": {
-          "web": {
+          "warehouse": {
             "type": "array",
             "items": {
               "type": "object",
@@ -132,6 +120,13 @@
               }
             }
           }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "cloud": { "type": "string", "enum": ["cloud"] },
+          "warehouse": { "type": "string", "enum": ["cloud"] }
         }
       }
     }
