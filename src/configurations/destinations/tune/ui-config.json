@@ -159,11 +159,27 @@
             "type": "dynamicCustomForm",
             "label": "Map RudderStack event to Tune event",
             "configKey": "tuneEvents",
-            "default": [
+            "rowFields": [
               {
-                "rsField": "Purchase Event",
-                "destField": "purchase",
-                "eventProperties": [
+                "type": "textInput",
+                "label": "URL",
+                "configKey": "url",
+                "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$|^$",
+                "regexErrorMessage": "Invalid URL",
+                "placeholder": "e.g. https://demo.go2cloud.org/aff_l?offer_id=45&aff_id=1029"
+              },
+              {
+                "type": "textInput",
+                "label": "Event name",
+                "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                "configKey": "eventName",
+                "placeholder": "e.g: Product Added"
+              },
+              {
+                "label": "Map Rudder payload property to Tune Field",
+                "type": "mapping",
+                "configKey": "eventsMapping",
+                "default": [
                   {
                     "from": "advSub",
                     "to": "adv_sub"
@@ -252,29 +268,7 @@
                     "from": "transactionId",
                     "to": "transaction_id"
                   }
-                ]
-              }
-            ],
-            "rowFields": [
-              {
-                "type": "textInput",
-                "label": "URL",
-                "configKey": "url",
-                "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$|^$",
-                "regexErrorMessage": "Invalid URL",
-                "placeholder": "e.g. https://demo.go2cloud.org/aff_l?offer_id=45&aff_id=1029"
-              },
-              {
-                "type": "textInput",
-                "label": "Event name",
-                "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                "configKey": "eventName",
-                "placeholder": "e.g: Product Added"
-              },
-              {
-                "label": "Map Rudder payload property to Tune Field",
-                "type": "mapping",
-                "configKey": "eventsMapping",
+                ],
                 "columns": [
                   {
                     "type": "textInput",
