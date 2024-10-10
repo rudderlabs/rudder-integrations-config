@@ -660,5 +660,27 @@
       "ketchConsentPurposes.web must be array",
       "ketchConsentPurposes.unity.0 must be object"
     ]
+  },
+  {
+    "testTitle": "localhost with port",
+    "config": {
+      "webhookUrl": "http://127.1.2.3:8080",
+      "webhookMethod": "GET"
+    },
+    "result": false,
+    "err": [
+      "webhookUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(https?:\\/\\/)?(?![a-zA-Z0-9-]*\\.ngrok\\.io)([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,}(\\/.*)?$\""
+    ]
+  },
+  {
+    "testTitle": "ipv4 address with port",
+    "config": {
+      "webhookUrl": "http://192.168.1.100:8080",
+      "webhookMethod": "GET"
+    },
+    "result": false,
+    "err": [
+      "webhookUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(https?:\\/\\/)?(?![a-zA-Z0-9-]*\\.ngrok\\.io)([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,}(\\/.*)?$\""
+    ]
   }
 ]
