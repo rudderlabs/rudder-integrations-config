@@ -8,13 +8,30 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "appName": { "type": "string" },
-      "foregroundOnly": { "type": "boolean", "default": true },
-      "foregroundAndBackground": { "type": "boolean", "default": false },
-      "autoUpdateInterval": { "type": "string" },
+      "appName": {
+        "type": "string"
+      },
+      "foregroundOnly": {
+        "type": "boolean",
+        "default": true
+      },
+      "foregroundAndBackground": {
+        "type": "boolean",
+        "default": false
+      },
+      "autoUpdateInterval": {
+        "type": "string"
+      },
       "useNativeSDK": {
         "type": "object",
-        "properties": { "android": { "type": "boolean" }, "ios": { "type": "boolean" } }
+        "properties": {
+          "android": {
+            "type": "boolean"
+          },
+          "ios": {
+            "type": "boolean"
+          }
+        }
       },
       "eventFilteringOption": {
         "type": "string",
@@ -46,13 +63,30 @@
         }
       },
       "oneTrustCookieCategories": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "oneTrustCookieCategory": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "ios": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
             }
           }
         }
@@ -157,8 +191,43 @@
       "connectionMode": {
         "type": "object",
         "properties": {
-          "android": { "type": "string", "enum": ["device"] },
-          "ios": { "type": "string", "enum": ["device"] }
+          "android": {
+            "type": "string",
+            "enum": ["device"]
+          },
+          "ios": {
+            "type": "string",
+            "enum": ["device"]
+          }
+        }
+      },
+      "ketchConsentPurposes": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "ios": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
         }
       }
     }
