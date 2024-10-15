@@ -12,7 +12,7 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "eventsMapping": {
+      "standardMapping": {
         "type": "array",
         "items": {
           "type": "object",
@@ -24,16 +24,6 @@
             "to": {
               "type": "string",
               "enum": [
-                "adv_sub",
-                "adv_sub2",
-                "adv_sub3",
-                "adv_sub4",
-                "adv_sub5",
-                "adv_unique1",
-                "adv_unique2",
-                "adv_unique3",
-                "adv_unique4",
-                "adv_unique5",
                 "aff_id",
                 "promo_code",
                 "amount",
@@ -52,10 +42,37 @@
           }
         }
       },
-      "eventFilteringOption": {
-        "type": "string",
-        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
-        "default": "disable"
+      "advSubIdMapping": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "to": {
+              "type": "string",
+              "enum": ["adv_sub", "adv_sub2", "adv_sub3", "adv_sub4", "adv_sub5"]
+            }
+          }
+        }
+      },
+      "advUniqueIdMapping": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "to": {
+              "type": "string",
+              "enum": ["adv_unique1", "adv_unique2", "adv_unique3", "adv_unique4", "adv_unique5"]
+            }
+          }
+        }
       },
       "oneTrustCookieCategories": {
         "type": "object",

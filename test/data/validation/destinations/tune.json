@@ -5,14 +5,32 @@
         "web": "cloud"
       },
       "consentManagement": {},
+      "oneTrustCookieCategories": {},
+      "ketchConsentPurposes": {},
       "tuneEvents": [
         {
-          "url": "https://abc.com",
-          "eventName": "Product added",
-          "eventsMapping": [
+          "url": "https://demo.com",
+          "eventName": "product added",
+          "standardMapping": [
             {
-              "from": "Purchase",
-              "to": "adv_sub5"
+              "to": "aff_id",
+              "from": "affId"
+            },
+            {
+              "to": "transaction_id",
+              "from": "transactionId"
+            }
+          ],
+          "advSubIdMapping": [
+            {
+              "from": "purchase event",
+              "to": "adv_sub2"
+            }
+          ],
+          "advUniqueIdMapping": [
+            {
+              "from": "oder completed",
+              "to": "adv_unique3"
             }
           ]
         }
@@ -26,28 +44,54 @@
         "web": "cloud"
       },
       "consentManagement": {},
+      "oneTrustCookieCategories": {},
+      "ketchConsentPurposes": {},
       "tuneEvents": [
         {
           "url": "https://demo.com",
-          "eventName": "Order completed",
-          "eventsMapping": [
+          "eventName": "product added",
+          "standardMapping": [
             {
-              "from": "Order1",
-              "to": "adv_unique1"
+              "to": "aff_id",
+              "from": "affId"
+            },
+            {
+              "to": "transaction_id",
+              "from": "transactionId"
+            }
+          ],
+          "advSubIdMapping": [
+            {
+              "from": "purchase event",
+              "to": "adv_sub2"
+            }
+          ],
+          "advUniqueIdMapping": [
+            {
+              "from": "oder completed",
+              "to": "adv_unique3"
             }
           ]
         },
         {
-          "url": "https://abc.com",
-          "eventName": "Product added",
-          "eventsMapping": [
+          "url": "https://demo11.com",
+          "eventName": "order completed",
+          "standardMapping": [
             {
-              "from": "Purchase",
-              "to": "adv_sub5"
-            },
+              "to": "aff_id",
+              "from": "affId"
+            }
+          ],
+          "advSubIdMapping": [
             {
-              "from": "Purchase2",
-              "to": "revenue"
+              "from": "purchase event",
+              "to": "adv_sub2"
+            }
+          ],
+          "advUniqueIdMapping": [
+            {
+              "from": "oder completed",
+              "to": "adv_unique3"
             }
           ]
         }
@@ -61,14 +105,32 @@
         "web": "abc"
       },
       "consentManagement": {},
+      "oneTrustCookieCategories": {},
+      "ketchConsentPurposes": {},
       "tuneEvents": [
         {
           "url": "https://demo.com",
-          "eventName": "Product added",
-          "eventsMapping": [
+          "eventName": "product added",
+          "standardMapping": [
             {
-              "from": "Purchase",
-              "to": "adv_sub1"
+              "to": "aff_id",
+              "from": "affId"
+            },
+            {
+              "to": "transaction_id",
+              "from": "transactionId"
+            }
+          ],
+          "advSubIdMapping": [
+            {
+              "from": "purchase event",
+              "to": "adv_sub2"
+            }
+          ],
+          "advUniqueIdMapping": [
+            {
+              "from": "oder completed",
+              "to": "adv_unique3"
             }
           ]
         }
@@ -83,14 +145,28 @@
         "web": "device"
       },
       "consentManagement": {},
+      "oneTrustCookieCategories": {},
+      "ketchConsentPurposes": {},
       "tuneEvents": [
         {
           "url": "https://demo.com",
-          "eventName": "Product added",
-          "eventsMapping": [
+          "eventName": "product added",
+          "standardMapping": [
             {
-              "from": "Purchase",
-              "to": "adv_sub1"
+              "to": "aff_id",
+              "from": "affId"
+            }
+          ],
+          "advSubIdMapping": [
+            {
+              "from": "purchase event",
+              "to": "adv_sub2"
+            }
+          ],
+          "advUniqueIdMapping": [
+            {
+              "from": "oder completed",
+              "to": "adv_unique3"
             }
           ]
         }
@@ -102,7 +178,6 @@
   {
     "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
     "config": {
-      "advertiserId": "12345",
       "consentManagement": {
         "android": [
           {
@@ -121,7 +196,6 @@
   {
     "testTitle": "With consent management custom provider config and no resolutionStrategy value",
     "config": {
-      "advertiserId": "12345",
       "consentManagement": {
         "android": [
           {
@@ -130,6 +204,8 @@
         ]
       }
     },
+    "oneTrustCookieCategories": {},
+    "ketchConsentPurposes": {},
     "result": false,
     "err": [
       "consentManagement.android.0 must have required property 'resolutionStrategy'",
@@ -139,14 +215,15 @@
   {
     "testTitle": "With consent management custom provider config invalid provider value",
     "config": {
-      "advertiserId": "12345",
       "consentManagement": {
         "android": [
           {
             "provider": "dummyProvider"
           }
         ]
-      }
+      },
+      "oneTrustCookieCategories": {},
+      "ketchConsentPurposes": {}
     },
     "result": false,
     "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
