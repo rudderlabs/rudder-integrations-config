@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file. See [standa
 ### [1.95.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.95.0...v1.95.1) (2024-10-14)
 
 
+### Features
+
+* posthog person profile option ([#1747](https://github.com/rudderlabs/rudder-config-schema/issues/1747)) ([03b918d](https://github.com/rudderlabs/rudder-config-schema/commit/03b918d3f7454f432df494106a4130b40cd68152))
+
+
 ### Bug Fixes
 
 * http destination fixes ([#1740](https://github.com/rudderlabs/rudder-config-schema/issues/1740)) ([1c3809e](https://github.com/rudderlabs/rudder-config-schema/commit/1c3809e6530086534833ae27e26560aeb5c30482))
