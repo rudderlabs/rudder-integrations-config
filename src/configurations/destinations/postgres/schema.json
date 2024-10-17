@@ -45,6 +45,10 @@
         "type": "string",
         "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
       },
+      "useSSH": {
+        "type": "boolean",
+        "default": false
+      },
       "sslMode": {
         "type": "string",
         "pattern": "^(disable|require|verify-ca)$"
@@ -1152,6 +1156,36 @@
             }
           },
           "required": ["clientKey", "clientCert", "serverCA"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "useSSH": {
+              "const": true
+            }
+          },
+          "required": ["useSSH"]
+        },
+        "then": {
+          "properties": {
+            "sshHost": {
+              "type": "string",
+              "pattern": "^(.{0,100})$"
+            },
+            "sshPort": {
+              "type": "string",
+              "pattern": "^(.{0,100})$"
+            },
+            "sshUser": {
+              "type": "string",
+              "pattern": "^(.{0,100})$"
+            },
+            "sshPublicKey": {
+              "type": "string"
+            }
+          },
+          "required": ["sshHost", "sshPort", "sshUser", "sshPublicKey"]
         }
       }
     ],
