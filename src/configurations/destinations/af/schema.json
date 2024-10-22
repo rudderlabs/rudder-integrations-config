@@ -4,7 +4,11 @@
     "required": ["authVersion"],
     "type": "object",
     "properties": {
-      "authVersion": { "type": "string", "enum": ["v1", "v2"], "default": "v1" },
+      "authVersion": {
+        "type": "string",
+        "enum": ["v1", "v2"],
+        "default": "v1"
+      },
       "androidAppId": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
@@ -13,9 +17,29 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "useRichEventName": { "type": "boolean", "default": false },
-      "addPropertiesAtRoot": { "type": "boolean", "default": false },
-      "afCurrencyAtRoot": { "type": "boolean", "default": false },
+      "useRichEventName": {
+        "type": "boolean",
+        "default": false
+      },
+      "addPropertiesAtRoot": {
+        "type": "boolean",
+        "default": false
+      },
+      "listOfProps": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "property": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "afCurrencyAtRoot": {
+        "type": "boolean",
+        "default": false
+      },
       "sharingFilter": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
@@ -23,11 +47,21 @@
       "useNativeSDK": {
         "type": "object",
         "properties": {
-          "android": { "type": "boolean" },
-          "ios": { "type": "boolean" },
-          "reactnative": { "type": "boolean" },
-          "flutter": { "type": "boolean" },
-          "cordova": { "type": "boolean" }
+          "android": {
+            "type": "boolean"
+          },
+          "ios": {
+            "type": "boolean"
+          },
+          "reactnative": {
+            "type": "boolean"
+          },
+          "flutter": {
+            "type": "boolean"
+          },
+          "cordova": {
+            "type": "boolean"
+          }
         }
       },
       "eventFilteringOption": {
@@ -63,15 +97,142 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(?!.*\\.ngrok\\.io).*$"
       },
-      "apiToken": { "type": "string" },
+      "apiToken": {
+        "type": "string"
+      },
       "oneTrustCookieCategories": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "oneTrustCookieCategory": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "ios": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "unity": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "amp": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "cloud": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "warehouse": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "reactnative": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "flutter": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "cordova": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "shopify": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
             }
           }
         }
@@ -105,12 +266,19 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": { "provider": { "const": "custom" } },
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -144,12 +312,19 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": { "provider": { "const": "custom" } },
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -183,12 +358,19 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": { "provider": { "const": "custom" } },
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -222,12 +404,19 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": { "provider": { "const": "custom" } },
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -261,12 +450,19 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": { "provider": { "const": "custom" } },
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -300,12 +496,19 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": { "provider": { "const": "custom" } },
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -339,12 +542,19 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": { "provider": { "const": "custom" } },
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -378,12 +588,19 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": { "provider": { "const": "custom" } },
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -417,12 +634,19 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": { "provider": { "const": "custom" } },
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -456,12 +680,19 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": { "provider": { "const": "custom" } },
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -495,12 +726,19 @@
               "allOf": [
                 {
                   "if": {
-                    "properties": { "provider": { "const": "custom" } },
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
                     "required": ["provider"]
                   },
                   "then": {
                     "properties": {
-                      "resolutionStrategy": { "type": "string", "enum": ["and", "or"] }
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
                     },
                     "required": ["resolutionStrategy"]
                   }
@@ -513,17 +751,187 @@
       "connectionMode": {
         "type": "object",
         "properties": {
-          "cordova": { "type": "string", "enum": ["cloud", "device"] },
-          "android": { "type": "string", "enum": ["cloud", "device"] },
-          "ios": { "type": "string", "enum": ["cloud", "device"] },
-          "flutter": { "type": "string", "enum": ["cloud", "device"] },
-          "reactnative": { "type": "string", "enum": ["cloud", "device"] },
-          "web": { "type": "string", "enum": ["cloud"] },
-          "amp": { "type": "string", "enum": ["cloud"] },
-          "unity": { "type": "string", "enum": ["cloud"] },
-          "cloud": { "type": "string", "enum": ["cloud"] },
-          "warehouse": { "type": "string", "enum": ["cloud"] },
-          "shopify": { "type": "string", "enum": ["cloud"] }
+          "cordova": {
+            "type": "string",
+            "enum": ["cloud", "device"]
+          },
+          "android": {
+            "type": "string",
+            "enum": ["cloud", "device"]
+          },
+          "ios": {
+            "type": "string",
+            "enum": ["cloud", "device"]
+          },
+          "flutter": {
+            "type": "string",
+            "enum": ["cloud", "device"]
+          },
+          "reactnative": {
+            "type": "string",
+            "enum": ["cloud", "device"]
+          },
+          "web": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "amp": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "unity": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cloud": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "warehouse": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "shopify": {
+            "type": "string",
+            "enum": ["cloud"]
+          }
+        }
+      },
+      "ketchConsentPurposes": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "ios": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "unity": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "amp": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "cloud": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "warehouse": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "reactnative": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "flutter": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "cordova": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          },
+          "shopify": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
         }
       }
     },

@@ -1,7 +1,7 @@
 {
   "uiConfig": [
     {
-      "title": "1. Connection Credentials",
+      "title": "Connection Credentials",
       "fields": [
         {
           "type": "textInput",
@@ -63,13 +63,19 @@
           "placeholder": "e.g: RUDDER_PASSWORD",
           "required": true,
           "secret": true,
-          "preRequisiteField": { "name": "useKeyPairAuth", "selectedValue": false }
+          "preRequisiteField": {
+            "name": "useKeyPairAuth",
+            "selectedValue": false
+          }
         },
         {
           "type": "textareaInput",
           "required": true,
           "regex": "-----BEGIN (?:ENCRYPTED )?PRIVATE KEY-----[\\s\\S]+?-----END (?:ENCRYPTED )?PRIVATE KEY-----",
-          "preRequisiteField": { "name": "useKeyPairAuth", "selectedValue": true },
+          "preRequisiteField": {
+            "name": "useKeyPairAuth",
+            "selectedValue": true
+          },
           "label": "Private Key",
           "value": "privateKey",
           "secret": true
@@ -78,7 +84,10 @@
           "type": "textInput",
           "regex": "^(.{0,100})$",
           "secret": true,
-          "preRequisiteField": { "name": "useKeyPairAuth", "selectedValue": true },
+          "preRequisiteField": {
+            "name": "useKeyPairAuth",
+            "selectedValue": true
+          },
           "label": "Private Key Passphrase",
           "value": "privateKeyPassphrase",
           "footerNote": "Use the password you set when encrypting the private key. Leave it blank if the private key is not encrypted."
@@ -100,6 +109,16 @@
           "label": "Sync Frequency",
           "value": "syncFrequency",
           "options": [
+            {
+              "name": "Every 5 minutes",
+              "value": "5",
+              "featureFlag": "HIGH_GRANULARITY_WH_SYNC"
+            },
+            {
+              "name": "Every 15 minutes",
+              "value": "15",
+              "featureFlag": "HIGH_GRANULARITY_WH_SYNC"
+            },
             {
               "name": "Every 30 minutes",
               "value": "30"
@@ -603,7 +622,7 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Consent Categories",
+          "label": "OneTrust Consent Category IDs",
           "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
@@ -631,14 +650,14 @@
         {
           "type": "dynamicCustomForm",
           "value": "ketchConsentPurposes",
-          "label": "Ketch Consent Purposes",
+          "label": "Ketch Consent Purpose IDs",
           "customFields": [
             {
               "type": "textInput",
-              "placeholder": "Marketing",
+              "placeholder": "marketing",
               "value": "purpose",
               "label": "Purpose ID",
-              "regex": "^(.{0,100})$",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
               "required": false
             }
           ],

@@ -43,6 +43,26 @@
           "footerNote": "Enabling this will reduce the amount of data stored in cookies by storing it in local storage instead."
         },
         {
+          "type": "singleSelect",
+          "value": "personProfiles",
+          "label": "Posthog Person Profile Option",
+          "required": false,
+          "options": [
+            {
+              "name": "Always",
+              "value": "always"
+            },
+            {
+              "name": "Identified Only",
+              "value": "identified_only"
+            }
+          ],
+          "defaultOption": {
+            "name": "Always",
+            "value": "always"
+          }
+        },
+        {
           "type": "checkbox",
           "label": "Enable autocapture with PostHog",
           "value": "autocapture",
@@ -156,7 +176,7 @@
         {
           "type": "dynamicCustomForm",
           "value": "oneTrustCookieCategories",
-          "label": "OneTrust Consent Categories",
+          "label": "OneTrust Consent Category IDs",
           "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
           "customFields": [
             {
@@ -165,6 +185,33 @@
               "value": "oneTrustCookieCategory",
               "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
               "label": "Category ID",
+              "required": false
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "value": "ketchConsentPurposes",
+          "label": "Ketch Consent Purpose IDs",
+          "customFields": [
+            {
+              "type": "textInput",
+              "placeholder": "marketing",
+              "value": "purpose",
+              "label": "Purpose ID",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
               "required": false
             }
           ],
