@@ -1,0 +1,231 @@
+[
+  {
+    "config": {
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "consentManagement": {},
+      "oneTrustCookieCategories": {},
+      "ketchConsentPurposes": {},
+      "tuneEvents": [
+        {
+          "url": "https://demo.com",
+          "eventName": "product added",
+          "standardMapping": [
+            {
+              "to": "aff_id",
+              "from": "affId"
+            },
+            {
+              "to": "transaction_id",
+              "from": "transactionId"
+            }
+          ],
+          "advSubIdMapping": [
+            {
+              "from": "purchase event",
+              "to": "adv_sub2"
+            }
+          ],
+          "advUniqueIdMapping": [
+            {
+              "from": "oder completed",
+              "to": "adv_unique3"
+            }
+          ]
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "consentManagement": {},
+      "oneTrustCookieCategories": {},
+      "ketchConsentPurposes": {},
+      "tuneEvents": [
+        {
+          "url": "https://demo.com",
+          "eventName": "product added",
+          "standardMapping": [
+            {
+              "to": "aff_id",
+              "from": "affId"
+            },
+            {
+              "to": "transaction_id",
+              "from": "transactionId"
+            }
+          ],
+          "advSubIdMapping": [
+            {
+              "from": "purchase event",
+              "to": "adv_sub2"
+            }
+          ],
+          "advUniqueIdMapping": [
+            {
+              "from": "oder completed",
+              "to": "adv_unique3"
+            }
+          ]
+        },
+        {
+          "url": "https://demo11.com",
+          "eventName": "order completed",
+          "standardMapping": [
+            {
+              "to": "aff_id",
+              "from": "affId"
+            }
+          ],
+          "advSubIdMapping": [
+            {
+              "from": "purchase event",
+              "to": "adv_sub2"
+            }
+          ],
+          "advUniqueIdMapping": [
+            {
+              "from": "oder completed",
+              "to": "adv_unique3"
+            }
+          ]
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "connectionMode": {
+        "web": "abc"
+      },
+      "consentManagement": {},
+      "oneTrustCookieCategories": {},
+      "ketchConsentPurposes": {},
+      "tuneEvents": [
+        {
+          "url": "https://demo.com",
+          "eventName": "product added",
+          "standardMapping": [
+            {
+              "to": "aff_id",
+              "from": "affId"
+            },
+            {
+              "to": "transaction_id",
+              "from": "transactionId"
+            }
+          ],
+          "advSubIdMapping": [
+            {
+              "from": "purchase event",
+              "to": "adv_sub2"
+            }
+          ],
+          "advUniqueIdMapping": [
+            {
+              "from": "oder completed",
+              "to": "adv_unique3"
+            }
+          ]
+        }
+      ]
+    },
+    "result": false,
+    "err": ["connectionMode.web must be equal to one of the allowed values"]
+  },
+  {
+    "config": {
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {},
+      "oneTrustCookieCategories": {},
+      "ketchConsentPurposes": {},
+      "tuneEvents": [
+        {
+          "url": "https://demo.com",
+          "eventName": "product added",
+          "standardMapping": [
+            {
+              "to": "aff_id",
+              "from": "affId"
+            }
+          ],
+          "advSubIdMapping": [
+            {
+              "from": "purchase event",
+              "to": "adv_sub2"
+            }
+          ],
+          "advUniqueIdMapping": [
+            {
+              "from": "oder completed",
+              "to": "adv_unique3"
+            }
+          ]
+        }
+      ]
+    },
+    "result": false,
+    "err": ["connectionMode.web must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "oneTrustCookieCategories": {},
+    "ketchConsentPurposes": {},
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      },
+      "oneTrustCookieCategories": {},
+      "ketchConsentPurposes": {}
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
+  }
+]
