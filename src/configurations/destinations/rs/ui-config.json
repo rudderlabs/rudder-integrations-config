@@ -167,6 +167,65 @@
           "immutable": true
         },
         {
+          "type": "checkbox",
+          "label": "SSH Connection",
+          "value": "useSSH",
+          "default": false,
+          "footerNote": "Establish ssh tunnel connection",
+          "preRequisiteFeatureFlag": "WAREHOUSE_SSH_TUNNELLING"
+        },
+        {
+          "type": "textInput",
+          "label": "SSH Host",
+          "value": "sshHost",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid SSH Host",
+          "placeholder": "e.g: www.abc.com",
+          "required": true,
+          "preRequisiteField": {
+            "name": "useSSH",
+            "selectedValue": true
+          }
+        },
+        {
+          "type": "textInput",
+          "label": "SSH Port",
+          "value": "sshPort",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Port",
+          "placeholder": "e.g: 22",
+          "required": true,
+          "preRequisiteField": {
+            "name": "useSSH",
+            "selectedValue": true
+          }
+        },
+        {
+          "type": "textInput",
+          "label": "SSH User",
+          "value": "sshUser",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid User",
+          "placeholder": "e.g: user1",
+          "required": true,
+          "preRequisiteField": {
+            "name": "useSSH",
+            "selectedValue": true
+          }
+        },
+        {
+          "type": "textareaInputCopy",
+          "label": "SSH Public Key",
+          "value": "sshPublicKey",
+          "default": "",
+          "required": true,
+          "preRequisiteField": {
+            "name": "useSSH",
+            "selectedValue": true
+          },
+          "readOnly": true
+        },
+        {
           "type": "singleSelect",
           "label": "Sync Frequency",
           "value": "syncFrequency",

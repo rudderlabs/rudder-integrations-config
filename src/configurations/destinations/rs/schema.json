@@ -24,6 +24,10 @@
         "type": "boolean",
         "default": false
       },
+      "useSSH": {
+        "type": "boolean",
+        "default": false
+      },
       "syncFrequency": {
         "type": "string",
         "enum": ["5", "15", "30", "60", "180", "360", "720", "1440"],
@@ -1062,6 +1066,50 @@
             }
           },
           "required": []
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "useSSH": {
+              "const": false
+            }
+          },
+          "required": []
+        },
+        "then": {
+          "properties": {},
+          "required": []
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "useSSH": {
+              "const": true
+            }
+          },
+          "required": ["useSSH"]
+        },
+        "then": {
+          "properties": {
+            "sshHost": {
+              "type": "string",
+              "pattern": "^(.{0,100})$"
+            },
+            "sshPort": {
+              "type": "string",
+              "pattern": "^(.{0,100})$"
+            },
+            "sshUser": {
+              "type": "string",
+              "pattern": "^(.{0,100})$"
+            },
+            "sshPublicKey": {
+              "type": "string"
+            }
+          },
+          "required": ["sshHost", "sshPort", "sshUser", "sshPublicKey"]
         }
       }
     ]
