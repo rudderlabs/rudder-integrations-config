@@ -24,6 +24,10 @@
         "type": "boolean",
         "default": false
       },
+      "useSSH": {
+        "type": "boolean",
+        "default": false
+      },
       "syncFrequency": {
         "type": "string",
         "enum": ["5", "15", "30", "60", "180", "360", "720", "1440"],
@@ -941,19 +945,51 @@
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             },
-            "clusterId": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,255})$"
-            },
             "clusterRegion": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,255})$"
             },
             "useIAMForAuth": {
               "const": true
+            },
+            "useServerless": {
+              "type": "boolean",
+              "default": false
             }
           },
-          "required": ["clusterId", "clusterRegion", "iamRoleARNForAuth", "useIAMForAuth"]
+          "anyOf": [
+            {
+              "properties": {
+                "clusterId": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,255})$"
+                },
+                "useServerless": {
+                  "const": false
+                },
+                "useIAMForAuth": {
+                  "const": true
+                }
+              },
+              "required": ["clusterId", "useIAMForAuth"]
+            },
+            {
+              "properties": {
+                "workgroupName": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,255})$"
+                },
+                "useIAMForAuth": {
+                  "const": true
+                },
+                "useServerless": {
+                  "const": true
+                }
+              },
+              "required": ["workgroupName", "useIAMForAuth", "useServerless"]
+            }
+          ],
+          "required": ["clusterRegion", "iamRoleARNForAuth", "useIAMForAuth"]
         }
       },
       {
@@ -1030,6 +1066,50 @@
             }
           },
           "required": []
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "useSSH": {
+              "const": false
+            }
+          },
+          "required": []
+        },
+        "then": {
+          "properties": {},
+          "required": []
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "useSSH": {
+              "const": true
+            }
+          },
+          "required": ["useSSH"]
+        },
+        "then": {
+          "properties": {
+            "sshHost": {
+              "type": "string",
+              "pattern": "^(.{0,100})$"
+            },
+            "sshPort": {
+              "type": "string",
+              "pattern": "^(.{0,100})$"
+            },
+            "sshUser": {
+              "type": "string",
+              "pattern": "^(.{0,100})$"
+            },
+            "sshPublicKey": {
+              "type": "string"
+            }
+          },
+          "required": ["sshHost", "sshPort", "sshUser", "sshPublicKey"]
         }
       }
     ]

@@ -215,7 +215,11 @@
                     "type": "redirect",
                     "redirectGroupKey": "advancedMapping"
                   }
-                ]
+                ],
+                "callout": {
+                  "message": "Mappings take precedence over any transformations for the destination.",
+                  "type": "info"
+                }
               }
             ]
           }
@@ -516,7 +520,12 @@
                 "type": "mapping",
                 "label": "Map your RudderStack properties to HTTP properties",
                 "configKey": "propertiesMapping",
-                "default": [],
+                "default": [
+                  {
+                    "from": "$.",
+                    "to": "$."
+                  }
+                ],
                 "columns": [
                   {
                     "type": "textInput",
@@ -547,13 +556,13 @@
                     "type": "textInput",
                     "key": "to",
                     "label": "Key",
-                    "placeholder": "e.g: key"
+                    "placeholder": "e.g: customerId"
                   },
                   {
                     "type": "textInput",
                     "key": "from",
                     "label": "Value",
-                    "placeholder": "e.g: value"
+                    "placeholder": "e.g: $.userId"
                   }
                 ]
               }

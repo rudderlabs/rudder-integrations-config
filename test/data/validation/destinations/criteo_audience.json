@@ -7,16 +7,21 @@
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
-      }
+      },
+      "gumCallerId": "532445"
     },
     "result": true
   },
   {
     "config": {
+      "audienceId": {
+        "cloud": "000000"
+      },
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
-      }
+      },
+      "gumCallerId": "5445"
     },
     "result": true
   },
@@ -28,7 +33,8 @@
       "audienceType": "email",
       "adAccountId": {
         "warehouse": ""
-      }
+      },
+      "gumCallerId": "53445"
     },
     "result": false,
     "err": [
@@ -37,7 +43,12 @@
   },
   {
     "config": {
-      "audienceId": "000000",
+      "adAccountId": {
+        "warehouse": "0000000"
+      },
+      "audienceId": {
+        "cloud": "000000"
+      },
       "audienceType": "gum",
       "gumCallerId": ""
     },
@@ -45,7 +56,8 @@
     "err": [
       "gumCallerId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$\"",
       " must match \"then\" schema",
-      " must match a schema in anyOf"
+      " must match a schema in anyOf",
+      "gumCallerId must match pattern \"^[0-9]+$\""
     ]
   },
   {
@@ -54,6 +66,9 @@
         "cloud": "000000"
       },
       "audienceType": "gum",
+      "adAccountId": {
+        "warehouse": "0000000"
+      },
       "gumCallerId": "00000"
     },
     "result": true
@@ -68,6 +83,7 @@
       "adAccountId": {
         "warehouse": "0000000"
       },
+      "gumCallerId": "00000",
       "consentManagement": {
         "web": [
           {
@@ -106,6 +122,7 @@
       "adAccountId": {
         "warehouse": "0000000"
       },
+      "gumCallerId": "00000",
       "consentManagement": {
         "shopify": [
           {
@@ -131,6 +148,7 @@
       "adAccountId": {
         "warehouse": "0000000"
       },
+      "gumCallerId": "00000",
       "consentManagement": {
         "shopify": [
           {
@@ -155,6 +173,7 @@
       "adAccountId": {
         "warehouse": "0000000"
       },
+      "gumCallerId": "00000",
       "consentManagement": {
         "shopify": [
           {
@@ -175,6 +194,7 @@
       "adAccountId": {
         "warehouse": "0000000"
       },
+      "gumCallerId": "00000",
       "consentManagement": {
         "shopify": [
           {
@@ -187,6 +207,7 @@
     "err": ["consentManagement.shopify.0.provider must be equal to one of the allowed values"]
   },
   {
+    "testTitle": "Without audienceId",
     "config": {
       "audienceId": {
         "cloud": "000000"
@@ -195,6 +216,7 @@
       "adAccountId": {
         "warehouse": "0000000"
       },
+      "gumCallerId": "00000",
       "oneTrustCookieCategories": {
         "cloud": [
           {
@@ -253,6 +275,7 @@
       "adAccountId": {
         "warehouse": "0000000"
       },
+      "gumCallerId": "00000",
       "oneTrustCookieCategories": {
         "cloud": [],
         "warehouse": [
@@ -283,6 +306,18 @@
     "result": true
   },
   {
+    "testTitle": "Without audienceId",
+    "config": {
+      "audienceType": "email",
+      "adAccountId": {
+        "warehouse": "0000000"
+      },
+      "gumCallerId": "53445"
+    },
+    "result": false,
+    "err": [" must have required property 'audienceId'"]
+  },
+  {
     "config": {
       "audienceId": {
         "cloud": "000000"
@@ -291,6 +326,7 @@
       "adAccountId": {
         "warehouse": "0000000"
       },
+      "gumCallerId": "53445",
       "oneTrustCookieCategories": [
         {
           "oneTrustCookieCategory": "C0001"
@@ -317,6 +353,18 @@
         "cloud": "000000"
       },
       "audienceType": "email",
+      "gumCallerId": "532445"
+    },
+    "result": false,
+    "err": [" must have required property 'adAccountId'"]
+  },
+  {
+    "testTitle": "Without gumCallerId",
+    "config": {
+      "audienceId": {
+        "cloud": "000000"
+      },
+      "gumCallerId": "00000",
       "adAccountId": {
         "warehouse": "0000000"
       },
@@ -385,7 +433,20 @@
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'gumCallerId'"]
+  },
+  {
+    "config": {
+      "adAccountId": {
+        "warehouse": "0000000"
       },
+      "audienceId": {
+        "cloud": "000000"
+      },
+      "gumCallerId": "00000",
       "oneTrustCookieCategories": {
         "cloud": [
           "not an object",
