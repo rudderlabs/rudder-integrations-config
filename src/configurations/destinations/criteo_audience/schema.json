@@ -1,7 +1,7 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["audienceType"],
+    "required": ["adAccountId", "audienceId", "audienceType", "gumCallerId"],
     "type": "object",
     "additionalProperties": true,
     "properties": {
@@ -18,6 +18,19 @@
         "type": "string",
         "enum": ["email", "madid", "identityLink", "gum"],
         "default": "email"
+      },
+      "audienceId": {
+        "type": "object",
+        "properties": {
+          "cloud": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+          }
+        }
+      },
+      "gumCallerId": {
+        "type": "string",
+        "pattern": "^[0-9]+$"
       },
       "oneTrustCookieCategories": {
         "type": "object",

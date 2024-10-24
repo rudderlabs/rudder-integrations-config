@@ -1,0 +1,299 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "configKey": "advertiserId",
+                    "type": "nestedSelect",
+                    "label": "Select your Account",
+                    "apiName": "getAmazonAdvertiser",
+                    "placeholder": "Select Advertiser Id details",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "rudderAccountId",
+                          "exists": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Authorization servers",
+                    "note": " Support for more servers will be added soon",
+                    "configKey": "authServer",
+                    "options": [
+                      {
+                        "name": "North America",
+                        "value": "North America"
+                      }
+                    ],
+                    "default": "North America"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Optional configuration settings",
+                "note": "Configure advanced destination-specific settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Enable user data hashing",
+                    "note": [
+                      "Enabling this will hash all the user data before sending it to Amazon Audience",
+                      "Do not enable it if you already pass hash data to rudderstack"
+                    ],
+                    "configKey": "enableHash",
+                    "default": true
+                  }
+                ]
+              },
+              {
+                "title": "Optional Audience Creation Configuration settings",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "configKey": "externalAudienceId",
+                    "type": "textInput",
+                    "label": "Type External Audience Id to use while creating Audience",
+                    "placeholder": "Default: Rudderstack Audience",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,50})$",
+                    "regexErrorMessage": "Invalid External Audience Id",
+                    "default": "Rudderstack Audience"
+                  },
+                  {
+                    "configKey": "ttl",
+                    "type": "textInput",
+                    "label": "Time To Live",
+                    "placeholder": "Default: 34300800(13 Months)",
+                    "regexErrorMessage": "ttl should be in number",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]\\d*$",
+                    "note": [
+                      "Refer below link for more info",
+                      {
+                        "text": "Time To live",
+                        "link": "https://advertising.amazon.com/API/docs/en-us/guides/amazon-marketing-cloud/audiences/audience-management-service#:~:text=a%20given%20invocation.-,Note,-The%20time%2Dto"
+                      }
+                    ],
+                    "default": "34300800"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Data Source Countries",
+                    "configKey": "dataSourceCountry",
+                    "tagKey": "country",
+                    "placeholder": "e.g: US",
+                    "note": [
+                      "Refer below link for more info",
+                      {
+                        "text": "Data Source Countries",
+                        "link": "https://advertising.amazon.com/API/docs/en-us/guides/amazon-marketing-cloud/audiences/audience-management-service#:~:text=a%20given%20invocation.-,Note,-The%20time%2Dto"
+                      }
+                    ],
+                    "default": [
+                      {
+                        "country": "US"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "OneTrust consent settings",
+                "note": [
+                  "Enter your OneTrust consent category IDs if you have them configured. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                  {
+                    "text": "Learn more ",
+                    "link": "https://www.rudderstack.com/docs/sources/event-streams/sdks/consent-manager/onetrust/"
+                  },
+                  "about RudderStack's OneTrust Consent Management feature."
+                ],
+                "fields": [
+                  {
+                    "type": "tagInput",
+                    "label": "OneTrust consent category IDs",
+                    "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+                    "configKey": "oneTrustCookieCategories",
+                    "tagKey": "oneTrustCookieCategory",
+                    "placeholder": "e.g: C0001",
+                    "default": [
+                      {
+                        "oneTrustCookieCategory": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-gcm",
+                          "value": false
+                        },
+                        {
+                          "configKey": "AMP_enable-gcm"
+                        }
+                      ],
+                      "featureFlagsCondition": "or"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "default": "oneTrust",
+              "required": true
+            },
+            {
+              "type": "tagInput",
+              "label": "Ketch consent purpose IDs",
+              "note": "Input your Ketch consent purpose IDs by pressing 'Enter' after each entry.",
+              "configKey": "ketchConsentPurposes",
+              "tagKey": "purpose",
+              "placeholder": "e.g: marketing",
+              "default": [
+                {
+                  "purpose": ""
+                }
+              ],
+              "preRequisites": {
+                "featureFlags": [
+                  {
+                    "configKey": "AMP_enable-gcm",
+                    "value": false
+                  },
+                  {
+                    "configKey": "AMP_enable-gcm"
+                  }
+                ],
+                "featureFlagsCondition": "or"
+              }
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category ID’s",
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
