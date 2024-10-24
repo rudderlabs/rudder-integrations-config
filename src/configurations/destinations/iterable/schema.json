@@ -1,12 +1,17 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["apiKey"],
+    "required": ["apiKey", "dataCenter"],
     "type": "object",
     "properties": {
       "apiKey": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "dataCenter": {
+        "type": "string",
+        "enum": ["USDC", "EUDC"],
+        "default": "USDC"
       },
       "registerDeviceOrBrowserApiKey": {
         "type": "string",
@@ -158,7 +163,9 @@
         "type": "object",
         "properties": {
           "web": {
-            "type": "string"
+            "type": "string",
+            "enum": ["top-right", "top-left"],
+            "default": "top-right"
           }
         }
       },
