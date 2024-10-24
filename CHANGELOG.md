@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.96.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.95.1...v1.96.0) (2024-10-24)
+
+
+### Features
+
+* add sprig mobile device mode support ([#1764](https://github.com/rudderlabs/rudder-config-schema/issues/1764)) ([8f81c06](https://github.com/rudderlabs/rudder-config-schema/commit/8f81c06e4e6e1d50a064bf9322ea4c586c9918f5))
+
 ### [1.95.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.95.0...v1.95.1) (2024-10-14)
 
 
