@@ -3,6 +3,49 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
     "properties": {
+      "isHashRequired": {
+        "type": "boolean",
+        "default": true
+      },
+      "audienceId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "customerId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "loginCustomerId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "subAccount": {
+        "type": "boolean",
+        "default": false
+      },
+      "userSchema": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": ["email", "phone", "addressInfo"]
+        },
+        "default": ["email"]
+      },
+      "typeOfList": {
+        "type": "string",
+        "enum": ["General", "userID", "mobileDeviceID"],
+        "default": "General"
+      },
+      "userDataConsent": {
+        "type": "string",
+        "enum": ["UNSPECIFIED", "UNKNOWN", "GRANTED", "DENIED"],
+        "default": "UNSPECIFIED"
+      },
+      "personalizationConsent": {
+        "type": "string",
+        "enum": ["UNSPECIFIED", "UNKNOWN", "GRANTED", "DENIED"],
+        "default": "UNSPECIFIED"
+      },
       "oneTrustCookieCategories": {
         "type": "object",
         "properties": {
