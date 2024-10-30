@@ -1,16 +1,10 @@
 {
-  "name": "GAINSIGHT_PX",
-  "displayName": "Gainsight PX",
+  "name": "SNOWPIPE_STREAMING",
+  "displayName": "Snowpipe Streaming",
+  "category": "warehouse",
   "config": {
-    "transformAtV1": "router",
+    "transformAtV1": "processor",
     "saveDestinationResponse": true,
-    "throttlingCost": {
-      "eventType": {
-        "group": 3,
-        "identify": 1
-      }
-    },
-    "includeKeys": ["oneTrustCookieCategories", "consentManagement", "dataCenter", "productTagKey"],
     "excludeKeys": [],
     "supportedSourceTypes": [
       "android",
@@ -20,21 +14,15 @@
       "amp",
       "cloud",
       "reactnative",
+      "cloudSource",
       "flutter",
       "cordova",
-      "warehouse",
       "shopify"
     ],
-    "supportedMessageTypes": {
-      "cloud": ["group", "identify", "track"],
-      "device": {
-        "web": ["group", "identify", "track"]
-      }
-    },
     "supportedConnectionModes": {
       "android": ["cloud"],
       "ios": ["cloud"],
-      "web": ["cloud", "device"],
+      "web": ["cloud"],
       "unity": ["cloud"],
       "amp": ["cloud"],
       "reactnative": ["cloud"],
@@ -42,85 +30,95 @@
       "cordova": ["cloud"],
       "shopify": ["cloud"],
       "cloud": ["cloud"],
-      "warehouse": ["cloud"]
+      "cloudSource": ["cloud"]
     },
     "destConfig": {
       "defaultConfig": [
-        "apiKey",
-        "productTagKey",
-        "userAttributeMap",
-        "accountAttributeMap",
-        "globalContextMap"
+        "account",
+        "database",
+        "warehouse",
+        "user",
+        "role",
+        "skipTracksTable",
+        "namespace",
+        "jsonPaths",
+        "privateKey",
+        "privateKeyPassphrase"
       ],
       "android": [
-        "connectionMode",
         "consentManagement",
+        "connectionMode",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
       "ios": [
-        "connectionMode",
         "consentManagement",
+        "connectionMode",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
       "web": [
-        "useNativeSDK",
-        "dataCenter",
-        "connectionMode",
         "consentManagement",
+        "connectionMode",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
       "unity": [
-        "connectionMode",
         "consentManagement",
+        "connectionMode",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
       "amp": [
-        "connectionMode",
         "consentManagement",
+        "connectionMode",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
       "cloud": [
-        "connectionMode",
         "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "cloudSource": [
+        "consentManagement",
+        "connectionMode",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
       "reactnative": [
-        "connectionMode",
         "consentManagement",
+        "connectionMode",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
       "flutter": [
-        "connectionMode",
         "consentManagement",
+        "connectionMode",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
       "cordova": [
-        "connectionMode",
         "consentManagement",
-        "oneTrustCookieCategories",
-        "ketchConsentPurposes"
-      ],
-      "warehouse": [
         "connectionMode",
-        "consentManagement",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
       "shopify": [
-        "connectionMode",
         "consentManagement",
+        "connectionMode",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ]
     },
-    "secretKeys": ["apiKey", "productTagKey"]
+    "secretKeys": ["privateKey", "privateKeyPassphrase"]
+  },
+  "options": {
+    "isBeta": true,
+    "hidden": {
+      "featureFlagName": "AMP_snowpipe_streaming",
+      "featureFlagValue": false
+    }
   }
 }

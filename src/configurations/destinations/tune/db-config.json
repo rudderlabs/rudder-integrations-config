@@ -1,40 +1,28 @@
 {
-  "name": "GAINSIGHT_PX",
-  "displayName": "Gainsight PX",
+  "name": "TUNE",
+  "displayName": "Tune",
   "config": {
-    "transformAtV1": "router",
+    "transformAtV1": "processor",
     "saveDestinationResponse": true,
-    "throttlingCost": {
-      "eventType": {
-        "group": 3,
-        "identify": 1
-      }
-    },
-    "includeKeys": ["oneTrustCookieCategories", "consentManagement", "dataCenter", "productTagKey"],
     "excludeKeys": [],
     "supportedSourceTypes": [
       "android",
       "ios",
-      "web",
       "unity",
       "amp",
+      "web",
       "cloud",
+      "warehouse",
       "reactnative",
       "flutter",
       "cordova",
-      "warehouse",
       "shopify"
     ],
-    "supportedMessageTypes": {
-      "cloud": ["group", "identify", "track"],
-      "device": {
-        "web": ["group", "identify", "track"]
-      }
-    },
+    "supportedMessageTypes": { "cloud": ["track"] },
     "supportedConnectionModes": {
       "android": ["cloud"],
       "ios": ["cloud"],
-      "web": ["cloud", "device"],
+      "web": ["cloud"],
       "unity": ["cloud"],
       "amp": ["cloud"],
       "reactnative": ["cloud"],
@@ -45,13 +33,7 @@
       "warehouse": ["cloud"]
     },
     "destConfig": {
-      "defaultConfig": [
-        "apiKey",
-        "productTagKey",
-        "userAttributeMap",
-        "accountAttributeMap",
-        "globalContextMap"
-      ],
+      "defaultConfig": ["subdomain", "tuneEvents"],
       "android": [
         "connectionMode",
         "consentManagement",
@@ -64,14 +46,6 @@
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
-      "web": [
-        "useNativeSDK",
-        "dataCenter",
-        "connectionMode",
-        "consentManagement",
-        "oneTrustCookieCategories",
-        "ketchConsentPurposes"
-      ],
       "unity": [
         "connectionMode",
         "consentManagement",
@@ -79,12 +53,6 @@
         "ketchConsentPurposes"
       ],
       "amp": [
-        "connectionMode",
-        "consentManagement",
-        "oneTrustCookieCategories",
-        "ketchConsentPurposes"
-      ],
-      "cloud": [
         "connectionMode",
         "consentManagement",
         "oneTrustCookieCategories",
@@ -108,7 +76,13 @@
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
-      "warehouse": [
+      "web": [
+        "connectionMode",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "cloud": [
         "connectionMode",
         "consentManagement",
         "oneTrustCookieCategories",
@@ -119,8 +93,21 @@
         "consentManagement",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
+      ],
+      "warehouse": [
+        "connectionMode",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
       ]
     },
-    "secretKeys": ["apiKey", "productTagKey"]
+    "secretKeys": []
+  },
+  "options": {
+    "isBeta": true,
+    "hidden": {
+      "featureFlagName": "AMP_tune_destination",
+      "featureFlagValue": false
+    }
   }
 }

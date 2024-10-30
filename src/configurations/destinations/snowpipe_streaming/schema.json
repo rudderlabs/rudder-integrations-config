@@ -1,93 +1,48 @@
 {
   "configSchema": {
-    "$schema": "http://json-schema.org/draft-07/schema",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["account", "database", "warehouse", "user", "privateKey", "namespace"],
     "type": "object",
-    "required": [
-      "host",
-      "database",
-      "user",
-      "password",
-      "port",
-      "sslMode",
-      "syncFrequency",
-      "useRudderStorage"
-    ],
     "properties": {
-      "host": {
+      "account": {
         "type": "string",
-        "pattern": "(^env[.].+)|(?!.*.ngrok.io)^(.{1,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
       "database": {
         "type": "string",
-        "pattern": "(^env[.].+)|^(.{1,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "warehouse": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
       "user": {
         "type": "string",
-        "pattern": "(^env[.].+)|^(.{1,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "password": {
+      "role": {
         "type": "string",
-        "pattern": "(^env[.].+)|.+"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
-      "port": {
+      "namespace": {
         "type": "string",
-        "pattern": "(^env[.].+)|^(.{1,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{1,64})$"
       },
       "skipTracksTable": {
         "type": "boolean",
         "default": false
       },
-      "skipUsersTable": {
-        "type": "boolean",
-        "default": false
-      },
-      "namespace": {
-        "type": "string",
-        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
-      },
-      "useSSH": {
-        "type": "boolean",
-        "default": false
-      },
-      "sslMode": {
-        "type": "string",
-        "pattern": "^(disable|require|verify-ca)$"
-      },
-      "syncFrequency": {
-        "type": "string",
-        "pattern": "^(5|15|30|60|180|360|720|1440)$",
-        "default": "180"
-      },
-      "syncStartAt": {
-        "type": "string"
-      },
-      "excludeWindow": {
-        "type": "object",
-        "required": ["excludeWindowStartTime", "excludeWindowEndTime"],
-        "properties": {
-          "excludeWindowStartTime": {
-            "type": "string"
-          },
-          "excludeWindowEndTime": {
-            "type": "string"
-          }
-        }
-      },
       "jsonPaths": {
         "type": "string",
-        "pattern": "(^env[.].*)|.*"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.*)$"
       },
-      "useRudderStorage": {
-        "type": "boolean",
-        "default": false
-      },
-      "preferAppend": {
-        "type": "boolean",
-        "default": true
-      },
-      "bucketProvider": {
+      "privateKey": {
         "type": "string",
-        "pattern": "^(S3|GCS|AZURE_BLOB|MINIO)$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|-----BEGIN (?:ENCRYPTED )?PRIVATE KEY-----[\\s\\S]+?-----END (?:ENCRYPTED )?PRIVATE KEY-----"
+      },
+      "privateKeyPassphrase": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "oneTrustCookieCategories": {
         "type": "object",
@@ -223,566 +178,6 @@
                 }
               }
             }
-          }
-        }
-      },
-      "consentManagement": {
-        "type": "object",
-        "properties": {
-          "cloud": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
-                  "default": "oneTrust"
-                },
-                "consents": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "consent": {
-                        "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                      }
-                    }
-                  }
-                }
-              },
-              "allOf": [
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
-                    "required": ["provider"]
-                  },
-                  "then": {
-                    "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
-                    },
-                    "required": ["resolutionStrategy"]
-                  }
-                }
-              ]
-            }
-          },
-          "cloudSource": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
-                  "default": "oneTrust"
-                },
-                "consents": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "consent": {
-                        "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                      }
-                    }
-                  }
-                }
-              },
-              "allOf": [
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
-                    "required": ["provider"]
-                  },
-                  "then": {
-                    "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
-                    },
-                    "required": ["resolutionStrategy"]
-                  }
-                }
-              ]
-            }
-          },
-          "android": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
-                  "default": "oneTrust"
-                },
-                "consents": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "consent": {
-                        "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                      }
-                    }
-                  }
-                }
-              },
-              "allOf": [
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
-                    "required": ["provider"]
-                  },
-                  "then": {
-                    "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
-                    },
-                    "required": ["resolutionStrategy"]
-                  }
-                }
-              ]
-            }
-          },
-          "ios": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
-                  "default": "oneTrust"
-                },
-                "consents": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "consent": {
-                        "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                      }
-                    }
-                  }
-                }
-              },
-              "allOf": [
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
-                    "required": ["provider"]
-                  },
-                  "then": {
-                    "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
-                    },
-                    "required": ["resolutionStrategy"]
-                  }
-                }
-              ]
-            }
-          },
-          "web": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
-                  "default": "oneTrust"
-                },
-                "consents": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "consent": {
-                        "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                      }
-                    }
-                  }
-                }
-              },
-              "allOf": [
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
-                    "required": ["provider"]
-                  },
-                  "then": {
-                    "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
-                    },
-                    "required": ["resolutionStrategy"]
-                  }
-                }
-              ]
-            }
-          },
-          "unity": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
-                  "default": "oneTrust"
-                },
-                "consents": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "consent": {
-                        "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                      }
-                    }
-                  }
-                }
-              },
-              "allOf": [
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
-                    "required": ["provider"]
-                  },
-                  "then": {
-                    "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
-                    },
-                    "required": ["resolutionStrategy"]
-                  }
-                }
-              ]
-            }
-          },
-          "amp": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
-                  "default": "oneTrust"
-                },
-                "consents": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "consent": {
-                        "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                      }
-                    }
-                  }
-                }
-              },
-              "allOf": [
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
-                    "required": ["provider"]
-                  },
-                  "then": {
-                    "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
-                    },
-                    "required": ["resolutionStrategy"]
-                  }
-                }
-              ]
-            }
-          },
-          "reactnative": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
-                  "default": "oneTrust"
-                },
-                "consents": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "consent": {
-                        "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                      }
-                    }
-                  }
-                }
-              },
-              "allOf": [
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
-                    "required": ["provider"]
-                  },
-                  "then": {
-                    "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
-                    },
-                    "required": ["resolutionStrategy"]
-                  }
-                }
-              ]
-            }
-          },
-          "flutter": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
-                  "default": "oneTrust"
-                },
-                "consents": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "consent": {
-                        "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                      }
-                    }
-                  }
-                }
-              },
-              "allOf": [
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
-                    "required": ["provider"]
-                  },
-                  "then": {
-                    "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
-                    },
-                    "required": ["resolutionStrategy"]
-                  }
-                }
-              ]
-            }
-          },
-          "cordova": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
-                  "default": "oneTrust"
-                },
-                "consents": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "consent": {
-                        "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                      }
-                    }
-                  }
-                }
-              },
-              "allOf": [
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
-                    "required": ["provider"]
-                  },
-                  "then": {
-                    "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
-                    },
-                    "required": ["resolutionStrategy"]
-                  }
-                }
-              ]
-            }
-          },
-          "shopify": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
-                  "default": "oneTrust"
-                },
-                "consents": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "consent": {
-                        "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                      }
-                    }
-                  }
-                }
-              },
-              "allOf": [
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
-                    "required": ["provider"]
-                  },
-                  "then": {
-                    "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
-                    },
-                    "required": ["resolutionStrategy"]
-                  }
-                }
-              ]
-            }
-          }
-        }
-      },
-      "connectionMode": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "ios": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "web": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "unity": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "amp": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "reactnative": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "flutter": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "cordova": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "shopify": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "cloud": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "cloudSource": {
-            "type": "string",
-            "enum": ["cloud"]
           }
         }
       },
@@ -922,273 +317,568 @@
             }
           }
         }
+      },
+      "consentManagement": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "ketch", "oneTrust"],
+                  "default": "oneTrust"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            }
+          },
+          "ios": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "ketch", "oneTrust"],
+                  "default": "oneTrust"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            }
+          },
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "ketch", "oneTrust"],
+                  "default": "oneTrust"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            }
+          },
+          "unity": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "ketch", "oneTrust"],
+                  "default": "oneTrust"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            }
+          },
+          "amp": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "ketch", "oneTrust"],
+                  "default": "oneTrust"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            }
+          },
+          "reactnative": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "ketch", "oneTrust"],
+                  "default": "oneTrust"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            }
+          },
+          "flutter": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "ketch", "oneTrust"],
+                  "default": "oneTrust"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            }
+          },
+          "cordova": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "ketch", "oneTrust"],
+                  "default": "oneTrust"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            }
+          },
+          "shopify": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "ketch", "oneTrust"],
+                  "default": "oneTrust"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            }
+          },
+          "cloud": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "ketch", "oneTrust"],
+                  "default": "oneTrust"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            }
+          },
+          "cloudSource": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "ketch", "oneTrust"],
+                  "default": "oneTrust"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "ios": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "web": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "unity": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "amp": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "reactnative": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "flutter": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cordova": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "shopify": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cloud": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cloudSource": {
+            "type": "string",
+            "enum": ["cloud"]
+          }
+        }
       }
     },
-    "allOf": [
-      {
-        "if": {
-          "properties": {
-            "useSSH": {
-              "const": true
-            }
-          },
-          "required": ["useSSH"]
-        },
-        "then": {
-          "properties": {
-            "sshHost": {
-              "type": "string",
-              "pattern": "(^env[.].+)|^(.{1,255})$"
-            },
-            "sshPort": {
-              "type": "string",
-              "pattern": "(^env[.].+)|^(.{1,255})$"
-            },
-            "sshUser": {
-              "type": "string",
-              "pattern": "(^env[.].+)|^(.{1,255})$"
-            },
-            "sshPublicKey": {
-              "type": "string",
-              "pattern": "(^env[.].+)|^(.{1,1000})$"
-            }
-          },
-          "required": ["sshHost", "sshPort", "sshUser", "sshPublicKey"]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "useRudderStorage": {
-              "const": false
-            }
-          },
-          "required": ["useRudderStorage"]
-        },
-        "then": {
-          "required": ["bucketProvider"]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "bucketProvider": {
-              "const": "S3"
-            },
-            "useRudderStorage": {
-              "const": false
-            }
-          },
-          "required": ["bucketProvider", "useRudderStorage"]
-        },
-        "then": {
-          "properties": {
-            "bucketName": {
-              "type": "string",
-              "pattern": "(^env[.].+)|^((?!^xn--)(?!.*\\.\\..*)(?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
-            }
-          },
-          "required": ["bucketName"],
-          "anyOf": [
-            {
-              "type": "object",
-              "properties": {
-                "accessKeyID": {
-                  "type": "string",
-                  "pattern": "(^env[.].+)|^(.{0,100})$"
-                },
-                "accessKey": {
-                  "type": "string",
-                  "pattern": "(^env[.].+)|^(.{0,100})$"
-                }
-              },
-              "required": ["accessKeyID", "accessKey"]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "iamRoleARN": {
-                  "type": "string"
-                },
-                "roleBasedAuth": {
-                  "const": true
-                }
-              },
-              "required": ["iamRoleARN", "roleBasedAuth"]
-            }
-          ]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "bucketProvider": {
-              "const": "GCS"
-            },
-            "useRudderStorage": {
-              "const": false
-            }
-          },
-          "required": ["bucketProvider", "useRudderStorage"]
-        },
-        "then": {
-          "properties": {
-            "bucketName": {
-              "type": "string",
-              "pattern": "(^env[.].+)|^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$"
-            },
-            "credentials": {
-              "type": "string",
-              "pattern": "(^env[.].+)|.+"
-            }
-          },
-          "required": ["bucketName", "credentials"]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "bucketProvider": {
-              "const": "AZURE_BLOB"
-            },
-            "useRudderStorage": {
-              "const": false
-            }
-          },
-          "required": ["bucketProvider", "useRudderStorage"]
-        },
-        "then": {
-          "properties": {
-            "containerName": {
-              "type": "string",
-              "pattern": "(^env[.].+)|^(?=.{3,63}$)[a-z0-9]+(-[a-z0-9]+)*$"
-            },
-            "accountName": {
-              "type": "string",
-              "pattern": "(^env[.].+)|^(.{1,100})$"
-            }
-          },
-          "required": ["containerName", "accountName"],
-          "anyOf": [
-            {
-              "properties": {
-                "accountKey": {
-                  "type": "string",
-                  "pattern": "(^env[.].+)|^(.{1,100})$"
-                }
-              },
-              "required": ["accountKey"]
-            },
-            {
-              "properties": {
-                "sasToken": {
-                  "type": "string",
-                  "pattern": "(^env[.].+)|^(.+)$"
-                },
-                "useSASTokens": {
-                  "const": true
-                }
-              },
-              "required": ["useSASTokens", "sasToken"]
-            }
-          ]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "bucketProvider": {
-              "const": "MINIO"
-            },
-            "useRudderStorage": {
-              "const": false
-            }
-          },
-          "required": ["bucketProvider", "useRudderStorage"]
-        },
-        "then": {
-          "properties": {
-            "bucketName": {
-              "type": "string",
-              "pattern": "(^env[.].+)|^((?!^(\\d+(\\.|$)){4}$)[a-z0-9][a-z0-9-.]{1,61}[a-z0-9])$"
-            },
-            "accessKeyID": {
-              "type": "string",
-              "pattern": "(^env[.].+)|^(.{1,100})$"
-            },
-            "endPoint": {
-              "type": "string",
-              "pattern": "(^env[.].+)|^(?!.*\\.ngrok\\.io)(.{1,100})$"
-            },
-            "secretAccessKey": {
-              "type": "string",
-              "pattern": "(^env[.].+)|^(.{1,100})$"
-            },
-            "useSSL": {
-              "type": "boolean"
-            }
-          },
-          "required": ["bucketName", "endPoint", "accessKeyID", "secretAccessKey", "useSSL"]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "sslMode": {
-              "const": "verify-ca"
-            }
-          },
-          "required": ["sslMode"]
-        },
-        "then": {
-          "properties": {
-            "clientKey": {
-              "type": "string",
-              "pattern": "-----BEGIN RSA PRIVATE KEY-----.*-----END RSA PRIVATE KEY-----"
-            },
-            "clientCert": {
-              "type": "string",
-              "pattern": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----"
-            },
-            "serverCA": {
-              "type": "string",
-              "pattern": "-----BEGIN CERTIFICATE-----.*-----END CERTIFICATE-----"
-            }
-          },
-          "required": ["clientKey", "clientCert", "serverCA"]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "useSSH": {
-              "const": true
-            }
-          },
-          "required": ["useSSH"]
-        },
-        "then": {
-          "properties": {
-            "sshHost": {
-              "type": "string",
-              "pattern": "^(.{0,100})$"
-            },
-            "sshPort": {
-              "type": "string",
-              "pattern": "^(.{0,100})$"
-            },
-            "sshUser": {
-              "type": "string",
-              "pattern": "^(.{0,100})$"
-            },
-            "sshPublicKey": {
-              "type": "string"
-            }
-          },
-          "required": ["sshHost", "sshPort", "sshUser", "sshPublicKey"]
-        }
-      }
-    ],
     "additionalProperties": true
   }
 }
