@@ -8,57 +8,31 @@
           {
             "groups": [
               {
-                "title": "Connection settings",
+                "title": "Connection Settings",
                 "note": "Update your connection settings here",
                 "icon": "settings",
                 "fields": [
                   {
-                    "type": "textInput",
-                    "label": "Customer ID",
-                    "note": "Enter the Customer ID of you Google remarketing list",
-                    "configKey": "customerId",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                    "regexErrorMessage": "Invalid Customer ID",
-                    "placeholder": "e.g: 9693X29833"
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "List Id",
-                    "note": "Enter your Google remarketing list ID",
-                    "configKey": "audienceId",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                    "regexErrorMessage": "Invalid Google remarketing list ID",
-                    "placeholder": "e.g: 7692X49833",
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "connectionMode.cloud",
-                          "value": "cloud"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "Sub Account",
-                    "configKey": "subAccount",
-                    "default": false
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "Login Customer ID",
-                    "note": "If customer ID is from a sub account, then provide the customer ID of manager account",
-                    "configKey": "loginCustomerId",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                    "regexErrorMessage": "Invalid Login Customer ID",
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "subAccount",
-                          "value": true
-                        }
-                      ]
-                    }
+                    "type": "singleSelect",
+                    "label": "API Server",
+                    "configKey": "apiServer",
+                    "options": [
+                      {
+                        "label": "US",
+                        "value": "US"
+                      },
+                      {
+                        "label": "Europe",
+                        "value": "Europe"
+                      },
+                      {
+                        "label": "Australia",
+                        "value": "Australia"
+                      }
+                    ],
+                    "default": "US",
+                    "note": "Select your Intercom API Server",
+                    "preRequisites": {}
                   }
                 ]
               }
@@ -92,109 +66,13 @@
             "icon": "settings",
             "groups": [
               {
-                "title": "Event Settings",
-                "note": "Configure event-specific settings here",
+                "title": "Intercom Additional Config",
                 "fields": [
                   {
-                    "type": "singleSelect",
-                    "label": "List Type",
-                    "note": "Select the type of List",
-                    "configKey": "typeOfList",
-                    "options": [
-                      {
-                        "label": "General",
-                        "value": "General"
-                      },
-                      {
-                        "label": "User ID",
-                        "value": "userID"
-                      },
-                      {
-                        "label": "Mobile Device ID",
-                        "value": "mobileDeviceID"
-                      }
-                    ],
-                    "default": "General"
-                  },
-                  {
-                    "type": "singleSelect",
-                    "label": "Specify the consent for uploaded users for using their data in Google Advertising Purpose",
-                    "configKey": "userDataConsent",
-                    "options": [
-                      {
-                        "label": "Unspecified",
-                        "value": "UNSPECIFIED"
-                      },
-                      {
-                        "label": "Unknown",
-                        "value": "UNKNOWN"
-                      },
-                      {
-                        "label": "Granted",
-                        "value": "GRANTED"
-                      },
-                      {
-                        "label": "Denied",
-                        "value": "DENIED"
-                      }
-                    ],
-                    "default": "UNSPECIFIED"
-                  },
-                  {
-                    "type": "singleSelect",
-                    "label": "Specify the consent for uploaded users regarding Ads Personalization",
-                    "configKey": "personalizationConsent",
-                    "options": [
-                      {
-                        "label": "Unspecified",
-                        "value": "UNSPECIFIED"
-                      },
-                      {
-                        "label": "Unknown",
-                        "value": "UNKNOWN"
-                      },
-                      {
-                        "label": "Granted",
-                        "value": "GRANTED"
-                      },
-                      {
-                        "label": "Denied",
-                        "value": "DENIED"
-                      }
-                    ],
-                    "default": "UNSPECIFIED"
-                  },
-                  {
                     "type": "checkbox",
-                    "label": "Hash Required",
-                    "configKey": "isHashRequired",
-                    "default": true
-                  },
-                  {
-                    "type": "multiSelect",
-                    "label": "Schema Fields",
-                    "preRequisites": [
-                      {
-                        "configKey": "typeOfList",
-                        "value": "General"
-                      }
-                    ],
-                    "configKey": "userSchema",
-                    "options": [
-                      {
-                        "label": "Email",
-                        "value": "email"
-                      },
-                      {
-                        "label": "Phone Number",
-                        "value": "phone"
-                      },
-                      {
-                        "label": "Address Info",
-                        "value": "addressInfo"
-                      }
-                    ],
-                    "default": ["email"]
+                    "label": "Send AnonymousId as Secondary UserId",
+                    "configKey": "sendAnonymousId",
+                    "default": false
                   }
                 ]
               }
@@ -211,7 +89,7 @@
       }
     ],
     "sdkTemplate": {
-      "title": "SDK settings",
+      "title": "Web SDK settings",
       "note": "not visible in the ui",
       "fields": []
     },

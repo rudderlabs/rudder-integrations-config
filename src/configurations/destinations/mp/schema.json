@@ -1,7 +1,7 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["token"],
+    "required": ["token", "dataResidency", "identityMergeApi"],
     "type": "object",
     "properties": {
       "token": {
@@ -122,6 +122,15 @@
       "sourceName": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "sessionReplayPercentage": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(100|[1-9]?[0-9])$"
+          }
+        }
       },
       "crossSubdomainCookie": {
         "type": "boolean",

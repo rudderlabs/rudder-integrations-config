@@ -1,0 +1,438 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection Settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Subdomain",
+                    "placeholder": "examplenetwork",
+                    "configKey": "subdomain",
+                    "required": true,
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          }
+        ]
+      },
+      {
+        "title": "Event mapping",
+        "note": "Map RudderStack events to Tune events",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "RudderStack Event to Tune Event Mapping",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "conversionMapping",
+                    "label": "Event and property mappings",
+                    "note": "Map RudderStack events/properties to Tune events/properties"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "redirectGroups": {
+      "conversionMapping": {
+        "fields": [
+          {
+            "type": "dynamicCustomForm",
+            "label": "Map RudderStack event to Tune event",
+            "configKey": "tuneEvents",
+            "rowFields": [
+              {
+                "type": "textInput",
+                "label": "Event name",
+                "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                "configKey": "eventName",
+                "placeholder": "e.g: Product Added"
+              },
+              {
+                "label": "Map Rudder properties to Tune properties",
+                "type": "mapping",
+                "configKey": "standardMapping",
+                "default": [
+                  {
+                    "from": "transactionId",
+                    "to": "transaction_id"
+                  },
+                  {
+                    "from": "offerId",
+                    "to": "offer_id"
+                  },
+                  {
+                    "from": "affId",
+                    "to": "aff_id"
+                  },
+                  {
+                    "from": "promoCode",
+                    "to": "promo_code"
+                  },
+                  {
+                    "from": "amount",
+                    "to": "amount"
+                  },
+                  {
+                    "from": "conversionUniqueId",
+                    "to": "conversion_unique_id"
+                  },
+                  {
+                    "from": "goalId",
+                    "to": "goal_id"
+                  },
+                  {
+                    "from": "goalRef",
+                    "to": "goal_ref"
+                  },
+                  {
+                    "from": "payout",
+                    "to": "payout"
+                  },
+                  {
+                    "from": "revenue",
+                    "to": "revenue"
+                  },
+                  {
+                    "from": "securityToken",
+                    "to": "security_token"
+                  },
+                  {
+                    "from": "status",
+                    "to": "status"
+                  }
+                ],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "Rudder Payload Field",
+                    "placeholder": "e.g: Purchase Event"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "key": "to",
+                    "label": "Tune Field",
+                    "placeholder": "e.g: purchase",
+                    "options": [
+                      {
+                        "name": "transaction_id",
+                        "value": "transaction_id"
+                      },
+                      {
+                        "name": "offer_id",
+                        "value": "offer_id"
+                      },
+                      {
+                        "name": "aff_id",
+                        "value": "aff_id"
+                      },
+                      {
+                        "name": "promo_code",
+                        "value": "promo_code"
+                      },
+                      {
+                        "name": "amount",
+                        "value": "amount"
+                      },
+                      {
+                        "name": "conversion_unique_id",
+                        "value": "conversion_unique_id"
+                      },
+                      {
+                        "name": "goal_id",
+                        "value": "goal_id"
+                      },
+                      {
+                        "name": "goal_ref",
+                        "value": "goal_ref"
+                      },
+                      {
+                        "name": "payout",
+                        "value": "payout"
+                      },
+                      {
+                        "name": "revenue",
+                        "value": "revenue"
+                      },
+                      {
+                        "name": "security_token",
+                        "value": "security_token"
+                      },
+                      {
+                        "name": "status",
+                        "value": "status"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "label": "Map Rudder properties to Tune Advertiser Sub Ids",
+                "type": "mapping",
+                "configKey": "advSubIdMapping",
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "Rudder Payload Field",
+                    "placeholder": "e.g: Purchase Event"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "key": "to",
+                    "label": "Tune Field",
+                    "placeholder": "e.g: purchase",
+                    "options": [
+                      {
+                        "name": "adv_sub",
+                        "value": "adv_sub"
+                      },
+                      {
+                        "name": "adv_sub2",
+                        "value": "adv_sub2"
+                      },
+                      {
+                        "name": "adv_sub3",
+                        "value": "adv_sub3"
+                      },
+                      {
+                        "name": "adv_sub4",
+                        "value": "adv_sub4"
+                      },
+                      {
+                        "name": "adv_sub5",
+                        "value": "adv_sub5"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "label": "Map Rudder properties to Tune Advertiser Unique Ids",
+                "type": "mapping",
+                "configKey": "advUniqueIdMapping",
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "key": "from",
+                    "label": "Rudder Payload Field",
+                    "placeholder": "e.g: Purchase Event"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "key": "to",
+                    "label": "Tune Field",
+                    "placeholder": "e.g: purchase",
+                    "options": [
+                      {
+                        "name": "adv_unique1",
+                        "value": "adv_unique1"
+                      },
+                      {
+                        "name": "adv_unique2",
+                        "value": "adv_unique2"
+                      },
+                      {
+                        "name": "adv_unique3",
+                        "value": "adv_unique3"
+                      },
+                      {
+                        "name": "adv_unique4",
+                        "value": "adv_unique4"
+                      },
+                      {
+                        "name": "adv_unique5",
+                        "value": "adv_unique5"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "tagInput",
+          "label": "OneTrust consent category IDs",
+          "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "configKey": "oneTrustCookieCategories",
+          "tagKey": "oneTrustCookieCategory",
+          "placeholder": "e.g: C0001",
+          "default": [
+            {
+              "oneTrustCookieCategory": ""
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "tagInput",
+          "label": "Ketch consent purpose IDs",
+          "note": "Input your Ketch consent purpose IDs by pressing 'Enter' after each entry.",
+          "configKey": "ketchConsentPurposes",
+          "tagKey": "purpose",
+          "placeholder": "e.g: marketing",
+          "default": [
+            {
+              "purpose": ""
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
+          }
+        },
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "default": "oneTrust",
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category ID’s",
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ],
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": true
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
