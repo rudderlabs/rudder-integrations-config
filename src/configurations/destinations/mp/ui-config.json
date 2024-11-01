@@ -188,6 +188,22 @@
                     "regex": "^(.{0,100})$",
                     "regexErrorMessage": "Invalid Property Name",
                     "placeholder": "e.g: Cart-Value"
+                  },
+                  {
+                    "type": "tagInput",
+                    "configKey": "setOnceProperties",
+                    "label": "Properties to set only once",
+                    "note": [
+                      "Set this for those properties who's values are not supposed to change in profile level.",
+                      {
+                        "text": "Reference",
+                        "link": "https://developer.mixpanel.com/reference/profile-set-property-once"
+                      }
+                    ],
+                    "tagKey": "property",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Property Name",
+                    "placeholder": "e.g: joiningDate"
                   }
                 ]
               },
@@ -434,12 +450,12 @@
         {
           "type": "textInput",
           "label": "Percentage of SDK initializations that will qualify for replay data capture",
-          "value": "sessionReplayPercentage",
+          "configKey": "sessionReplayPercentage",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(100|[1-9]?[0-9])$",
           "regexErrorMessage": "Invalid Percentage",
-          "required": false,
           "placeholder": "e.g: 1",
-          "note": "This value, if it's not blank, will be sent as record_sessions_percent to Mixpanel for every event/page/screen call."
+          "default": "0",
+          "note": "This value, if it's not zero, will be sent as record_sessions_percent to Mixpanel for every event/page/screen call."
         },
         {
           "type": "checkbox",
@@ -491,16 +507,6 @@
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Property Name",
           "placeholder": "e.g: residence"
-        },
-        {
-          "type": "tagInput",
-          "configKey": "setOnceProperties",
-          "label": "Properties to set only once",
-          "note": "Set this for those properties who's values are not supposed to change in profile level. Reference: https://developer.mixpanel.com/reference/profile-set-property-once",
-          "tagKey": "property",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-          "regexErrorMessage": "Invalid Property Name",
-          "placeholder": "e.g: joiningDate"
         },
         {
           "type": "tagInput",
