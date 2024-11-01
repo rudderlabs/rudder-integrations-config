@@ -1,5 +1,6 @@
 [
   {
+    "testTitle": "With all valid fields",
     "config": {
       "connectionMode": {
         "web": "cloud"
@@ -7,9 +8,9 @@
       "consentManagement": {},
       "oneTrustCookieCategories": {},
       "ketchConsentPurposes": {},
+      "subdomain": "demo",
       "tuneEvents": [
         {
-          "url": "https://demo.com",
           "eventName": "product added",
           "standardMapping": [
             {
@@ -39,6 +40,7 @@
     "result": true
   },
   {
+    "testTitle": "With two events and their respective mappings",
     "config": {
       "connectionMode": {
         "web": "cloud"
@@ -46,9 +48,9 @@
       "consentManagement": {},
       "oneTrustCookieCategories": {},
       "ketchConsentPurposes": {},
+      "subdomain": "demo",
       "tuneEvents": [
         {
-          "url": "https://demo.com",
           "eventName": "product added",
           "standardMapping": [
             {
@@ -74,7 +76,6 @@
           ]
         },
         {
-          "url": "https://demo11.com",
           "eventName": "order completed",
           "standardMapping": [
             {
@@ -100,6 +101,7 @@
     "result": true
   },
   {
+    "testTitle": "With invalid connectionMode value",
     "config": {
       "connectionMode": {
         "web": "abc"
@@ -107,9 +109,9 @@
       "consentManagement": {},
       "oneTrustCookieCategories": {},
       "ketchConsentPurposes": {},
+      "subdomain": "demo",
       "tuneEvents": [
         {
-          "url": "https://demo.com",
           "eventName": "product added",
           "standardMapping": [
             {
@@ -140,6 +142,7 @@
     "err": ["connectionMode.web must be equal to one of the allowed values"]
   },
   {
+    "testTitle": "Device mode is not supported",
     "config": {
       "connectionMode": {
         "web": "device"
@@ -147,9 +150,9 @@
       "consentManagement": {},
       "oneTrustCookieCategories": {},
       "ketchConsentPurposes": {},
+      "subdomain": "demo",
       "tuneEvents": [
         {
-          "url": "https://demo.com",
           "eventName": "product added",
           "standardMapping": [
             {
@@ -176,8 +179,49 @@
     "err": ["connectionMode.web must be equal to one of the allowed values"]
   },
   {
+    "testTitle": "Without subdomain",
+    "config": {
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "consentManagement": {},
+      "oneTrustCookieCategories": {},
+      "ketchConsentPurposes": {},
+      "tuneEvents": [
+        {
+          "eventName": "product added",
+          "standardMapping": [
+            {
+              "to": "aff_id",
+              "from": "affId"
+            },
+            {
+              "to": "transaction_id",
+              "from": "transactionId"
+            }
+          ],
+          "advSubIdMapping": [
+            {
+              "from": "purchase event",
+              "to": "adv_sub2"
+            }
+          ],
+          "advUniqueIdMapping": [
+            {
+              "from": "oder completed",
+              "to": "adv_unique3"
+            }
+          ]
+        }
+      ]
+    },
+    "result": false,
+    "err": [" must have required property 'subdomain'"]
+  },
+  {
     "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
     "config": {
+      "subdomain": "demo",
       "consentManagement": {
         "android": [
           {
@@ -196,6 +240,7 @@
   {
     "testTitle": "With consent management custom provider config and no resolutionStrategy value",
     "config": {
+      "subdomain": "demo",
       "consentManagement": {
         "android": [
           {
@@ -215,6 +260,7 @@
   {
     "testTitle": "With consent management custom provider config invalid provider value",
     "config": {
+      "subdomain": "demo",
       "consentManagement": {
         "android": [
           {
