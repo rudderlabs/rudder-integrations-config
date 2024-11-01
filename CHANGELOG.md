@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.97.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.97.0...v1.97.1) (2024-11-01)
+
+
+### Bug Fixes
+
+* **MP:** now showing setOnceProperties in cloud mode also ([#1779](https://github.com/rudderlabs/rudder-config-schema/issues/1779)) ([760e5cb](https://github.com/rudderlabs/rudder-config-schema/commit/760e5cbcc43c4661a5f0c9bd3ae0762f8b3fb43e))
+
 ## [1.97.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.96.0...v1.97.0) (2024-10-25)
 
 
