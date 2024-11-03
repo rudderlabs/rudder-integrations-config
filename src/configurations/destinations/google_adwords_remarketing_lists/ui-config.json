@@ -1,177 +1,259 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "List ID",
-          "value": "audienceId",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid Google remarketing list ID",
-          "required": true,
-          "placeholder": "e.g: 7692X49833"
-        },
-        {
-          "type": "textInput",
-          "label": "Customer ID",
-          "value": "customerId",
-          "regex": "^(.{1,100})$",
-          "regexErrorMessage": "Invalid Customer ID",
-          "required": true,
-          "placeholder": "e.g: 9693X29833"
-        },
-        {
-          "type": "checkbox",
-          "label": "Sub Account",
-          "value": "subAccount",
-          "required": false,
-          "default": false
-        },
-        {
-          "type": "textInput",
-          "label": "Login Customer ID",
-          "preRequisiteField": [
-            {
-              "name": "subAccount",
-              "selectedValue": true
-            }
-          ],
-          "value": "loginCustomerId",
-          "regex": "^(.{0,100})$",
-          "required": true,
-          "footerNote": "If customer ID is from a sub account, then provide the customer ID of manager account"
-        }
-      ]
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Customer ID",
+                    "note": "Enter the Customer ID of you Google remarketing list",
+                    "configKey": "customerId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Customer ID",
+                    "placeholder": "e.g: 9693X29833"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "List Id",
+                    "note": "Enter your Google remarketing list ID",
+                    "configKey": "audienceId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Google remarketing list ID",
+                    "placeholder": "e.g: 7692X49833",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.cloud",
+                          "value": "cloud"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Sub Account",
+                    "configKey": "subAccount",
+                    "default": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Login Customer ID",
+                    "note": "If customer ID is from a sub account, then provide the customer ID of manager account",
+                    "configKey": "loginCustomerId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Login Customer ID",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "subAccount",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Event Settings",
+                "note": "Configure event-specific settings here",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "List Type",
+                    "note": "Select the type of List",
+                    "configKey": "typeOfList",
+                    "options": [
+                      {
+                        "label": "General",
+                        "value": "General"
+                      },
+                      {
+                        "label": "User ID",
+                        "value": "userID"
+                      },
+                      {
+                        "label": "Mobile Device ID",
+                        "value": "mobileDeviceID"
+                      }
+                    ],
+                    "default": "General"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Specify the consent for uploaded users for using their data in Google Advertising Purpose",
+                    "configKey": "userDataConsent",
+                    "options": [
+                      {
+                        "label": "Unspecified",
+                        "value": "UNSPECIFIED"
+                      },
+                      {
+                        "label": "Unknown",
+                        "value": "UNKNOWN"
+                      },
+                      {
+                        "label": "Granted",
+                        "value": "GRANTED"
+                      },
+                      {
+                        "label": "Denied",
+                        "value": "DENIED"
+                      }
+                    ],
+                    "default": "UNSPECIFIED"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Specify the consent for uploaded users regarding Ads Personalization",
+                    "configKey": "personalizationConsent",
+                    "options": [
+                      {
+                        "label": "Unspecified",
+                        "value": "UNSPECIFIED"
+                      },
+                      {
+                        "label": "Unknown",
+                        "value": "UNKNOWN"
+                      },
+                      {
+                        "label": "Granted",
+                        "value": "GRANTED"
+                      },
+                      {
+                        "label": "Denied",
+                        "value": "DENIED"
+                      }
+                    ],
+                    "default": "UNSPECIFIED"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Hash Required",
+                    "configKey": "isHashRequired",
+                    "default": true
+                  },
+                  {
+                    "type": "multiSelect",
+                    "label": "Schema Fields",
+                    "preRequisites": [
+                      {
+                        "configKey": "typeOfList",
+                        "value": "General"
+                      }
+                    ],
+                    "configKey": "userSchema",
+                    "options": [
+                      {
+                        "label": "Email",
+                        "value": "email"
+                      },
+                      {
+                        "label": "Phone Number",
+                        "value": "phone"
+                      },
+                      {
+                        "label": "Address Info",
+                        "value": "addressInfo"
+                      }
+                    ],
+                    "default": ["email"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     },
-    {
-      "title": "Event Settings",
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
       "fields": [
         {
-          "type": "singleSelect",
-          "label": "List Type",
-          "value": "typeOfList",
-          "mode": "single",
-          "options": [
+          "type": "tagInput",
+          "label": "OneTrust consent category IDs",
+          "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "configKey": "oneTrustCookieCategories",
+          "tagKey": "oneTrustCookieCategory",
+          "placeholder": "e.g: C0001",
+          "default": [
             {
-              "name": "General",
-              "value": "General"
-            },
-            {
-              "name": "User ID",
-              "value": "userID"
-            },
-            {
-              "name": "Mobile Device ID",
-              "value": "mobileDeviceID"
+              "oneTrustCookieCategory": ""
             }
           ],
-          "defaultOption": {
-            "value": "General"
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-gcm",
+                "value": false
+              },
+              {
+                "configKey": "AMP_enable-gcm"
+              }
+            ],
+            "featureFlagsCondition": "or"
           }
         },
         {
-          "type": "singleSelect",
-          "label": "Specify the consent for uploaded users for using their data in Google Advertising Purpose",
-          "value": "userDataConsent",
-          "options": [
+          "type": "tagInput",
+          "label": "Ketch consent purpose IDs",
+          "note": "Input your Ketch consent purpose IDs by pressing 'Enter' after each entry.",
+          "configKey": "ketchConsentPurposes",
+          "tagKey": "purpose",
+          "placeholder": "e.g: marketing",
+          "default": [
             {
-              "name": "Unspecified",
-              "value": "UNSPECIFIED"
-            },
-            {
-              "name": "Unknown",
-              "value": "UNKNOWN"
-            },
-            {
-              "name": "Granted",
-              "value": "GRANTED"
-            },
-            {
-              "name": "Denied",
-              "value": "DENIED"
-            }
-          ],
-          "default": "UNSPECIFIED"
-        },
-        {
-          "type": "singleSelect",
-          "label": "Specify the consent for uploaded users regarding Ads Personalization",
-          "value": "personalizationConsent",
-          "options": [
-            {
-              "name": "Unspecified",
-              "value": "UNSPECIFIED"
-            },
-            {
-              "name": "Unknown",
-              "value": "UNKNOWN"
-            },
-            {
-              "name": "Granted",
-              "value": "GRANTED"
-            },
-            {
-              "name": "Denied",
-              "value": "DENIED"
-            }
-          ],
-          "default": "UNSPECIFIED"
-        },
-        {
-          "type": "checkbox",
-          "label": "Hash Required",
-          "value": "isHashRequired",
-          "default": true
-        },
-        {
-          "type": "singleSelect",
-          "label": "Schema Fields",
-          "preRequisiteField": [
-            {
-              "name": "typeOfList",
-              "selectedValue": "General"
-            }
-          ],
-          "value": "userSchema",
-          "mode": "multiple",
-          "options": [
-            {
-              "name": "Email",
-              "value": "email"
-            },
-            {
-              "name": "Phone Number",
-              "value": "phone"
-            },
-            {
-              "name": "Address Info",
-              "value": "addressInfo"
-            }
-          ],
-          "defaultOption": {
-            "name": "Email",
-            "value": ["email"]
-          }
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "oneTrustCookieCategories",
-          "label": "OneTrust Consent Category IDs",
-          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "C0001",
-              "value": "oneTrustCookieCategory",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "label": "Category ID",
-              "required": false
+              "purpose": ""
             }
           ],
           "preRequisites": {
@@ -189,72 +271,41 @@
         },
         {
           "type": "dynamicCustomForm",
-          "value": "ketchConsentPurposes",
-          "label": "Ketch Consent Purpose IDs",
-          "customFields": [
-            {
-              "type": "textInput",
-              "placeholder": "marketing",
-              "value": "purpose",
-              "label": "Purpose ID",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "required": false
-            }
-          ],
-          "preRequisites": {
-            "featureFlags": [
-              {
-                "configKey": "AMP_enable-gcm",
-                "value": false
-              },
-              {
-                "configKey": "AMP_enable-gcm"
-              }
-            ],
-            "featureFlagsCondition": "or"
-          }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "consentManagement",
-          "label": "Consent management settings",
-          "footerNote": "The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
             {
               "type": "singleSelect",
               "label": "Consent management provider",
-              "value": "provider",
+              "configKey": "provider",
               "options": [
                 {
-                  "name": "Custom",
+                  "label": "Custom",
                   "value": "custom"
                 },
                 {
-                  "name": "Ketch",
+                  "label": "Ketch",
                   "value": "ketch"
                 },
                 {
-                  "name": "OneTrust",
+                  "label": "OneTrust",
                   "value": "oneTrust"
                 }
               ],
-              "defaultOption": {
-                "name": "OneTrust",
-                "value": "oneTrust"
-              },
+              "default": "oneTrust",
               "required": true
             },
             {
               "type": "singleSelect",
               "label": "the required consent logic",
-              "value": "resolutionStrategy",
+              "configKey": "resolutionStrategy",
               "options": [
                 {
-                  "name": "AND",
+                  "label": "AND",
                   "value": "and"
                 },
                 {
-                  "name": "OR",
+                  "label": "OR",
                   "value": "or"
                 }
               ],
@@ -270,16 +321,15 @@
               }
             },
             {
-              "type": "dynamicCustomForm",
-              "value": "consents",
+              "type": "tagInput",
               "label": "Enter consent category ID’s",
-              "customFields": [
+              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
                 {
-                  "type": "textInput",
-                  "placeholder": "Marketing",
-                  "value": "consent",
-                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "required": false
+                  "consent": ""
                 }
               ]
             }
@@ -295,5 +345,5 @@
         }
       ]
     }
-  ]
+  }
 }

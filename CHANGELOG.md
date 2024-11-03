@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.97.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.97.0...v1.97.1) (2024-11-01)
+
+
+### Bug Fixes
+
+* **MP:** now showing setOnceProperties in cloud mode also ([#1779](https://github.com/rudderlabs/rudder-config-schema/issues/1779)) ([760e5cb](https://github.com/rudderlabs/rudder-config-schema/commit/760e5cbcc43c4661a5f0c9bd3ae0762f8b3fb43e))
+
+## [1.97.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.96.0...v1.97.0) (2024-10-25)
+
+
+### Features
+
+* gainsight px device mode support ([#1741](https://github.com/rudderlabs/rudder-config-schema/issues/1741)) ([fae32ff](https://github.com/rudderlabs/rudder-config-schema/commit/fae32ff1d659308effc2b2a83034006abc1d9dfd))
+* mixpanel session replay ([#1760](https://github.com/rudderlabs/rudder-config-schema/issues/1760)) ([c6c2124](https://github.com/rudderlabs/rudder-config-schema/commit/c6c21249ffe4ef158e1f727043dcc9042ab8faaf))
+* onboard mixpanel on new form builder ([#1733](https://github.com/rudderlabs/rudder-config-schema/issues/1733)) ([9e2d536](https://github.com/rudderlabs/rudder-config-schema/commit/9e2d536cba53e1d031cb5767d3867378d4489ef1))
+* onboard tune destination ([#1744](https://github.com/rudderlabs/rudder-config-schema/issues/1744)) ([2565f39](https://github.com/rudderlabs/rudder-config-schema/commit/2565f39709cb581244257f4aaa43b57f0272b7da))
+* onboarding intercom v2 destination ([#1655](https://github.com/rudderlabs/rudder-config-schema/issues/1655)) ([11494f2](https://github.com/rudderlabs/rudder-config-schema/commit/11494f2bbbe944b0e2a6263db990812440765128))
+* snowpipe streaming ([#1688](https://github.com/rudderlabs/rudder-config-schema/issues/1688)) ([ae753c7](https://github.com/rudderlabs/rudder-config-schema/commit/ae753c7cc7d3a3e1bef00ad3b2f700841da3ce32))
+* ssh config for RS and POSTGRES destinations ([#1751](https://github.com/rudderlabs/rudder-config-schema/issues/1751)) ([b7d98d2](https://github.com/rudderlabs/rudder-config-schema/commit/b7d98d2d034646fac05a6569af319bf78021f708))
+
 ## [1.96.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.95.1...v1.96.0) (2024-10-24)
 
 

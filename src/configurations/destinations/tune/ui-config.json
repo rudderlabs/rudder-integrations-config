@@ -11,7 +11,16 @@
                 "title": "Connection Settings",
                 "note": "Update your connection settings here",
                 "icon": "settings",
-                "fields": []
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Subdomain",
+                    "placeholder": "examplenetwork",
+                    "configKey": "subdomain",
+                    "required": true,
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  }
+                ]
               }
             ]
           },
@@ -84,14 +93,6 @@
             "rowFields": [
               {
                 "type": "textInput",
-                "label": "URL",
-                "configKey": "url",
-                "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$|^$",
-                "regexErrorMessage": "Invalid URL",
-                "placeholder": "e.g. https://demo.go2cloud.org/aff_l?offer_id=45&aff_id=1029"
-              },
-              {
-                "type": "textInput",
                 "label": "Event name",
                 "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
                 "configKey": "eventName",
@@ -102,6 +103,14 @@
                 "type": "mapping",
                 "configKey": "standardMapping",
                 "default": [
+                  {
+                    "from": "transactionId",
+                    "to": "transaction_id"
+                  },
+                  {
+                    "from": "offerId",
+                    "to": "offer_id"
+                  },
                   {
                     "from": "affId",
                     "to": "aff_id"
@@ -127,10 +136,6 @@
                     "to": "goal_ref"
                   },
                   {
-                    "from": "offerId",
-                    "to": "offer_id"
-                  },
-                  {
                     "from": "payout",
                     "to": "payout"
                   },
@@ -145,10 +150,6 @@
                   {
                     "from": "status",
                     "to": "status"
-                  },
-                  {
-                    "from": "transactionId",
-                    "to": "transaction_id"
                   }
                 ],
                 "columns": [
@@ -164,6 +165,14 @@
                     "label": "Tune Field",
                     "placeholder": "e.g: purchase",
                     "options": [
+                      {
+                        "name": "transaction_id",
+                        "value": "transaction_id"
+                      },
+                      {
+                        "name": "offer_id",
+                        "value": "offer_id"
+                      },
                       {
                         "name": "aff_id",
                         "value": "aff_id"
@@ -189,10 +198,6 @@
                         "value": "goal_ref"
                       },
                       {
-                        "name": "offer_id",
-                        "value": "offer_id"
-                      },
-                      {
                         "name": "payout",
                         "value": "payout"
                       },
@@ -207,10 +212,6 @@
                       {
                         "name": "status",
                         "value": "status"
-                      },
-                      {
-                        "name": "transaction_id",
-                        "value": "transaction_id"
                       }
                     ]
                   }
