@@ -998,5 +998,38 @@
     "err": [
       "webhookUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(https?://)(?![a-zA-Z0-9-]*\\.ngrok\\.io)(?!localhost|.*\\.localhost)([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,}(:\\d+)?(/.*)?$\""
     ]
+  },
+  {
+    "testTitle": ".localhost with port",
+    "config": {
+      "webhookUrl": "https://test.localhost:443",
+      "webhookMethod": "GET"
+    },
+    "result": false,
+    "err": [
+      "webhookUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(https?://)(?![a-zA-Z0-9-]*\\.ngrok\\.io)(?!localhost|.*\\.localhost)([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,}(:\\d+)?(/.*)?$\""
+    ]
+  },
+  {
+    "testTitle": "valid dns with port with invalid port",
+    "config": {
+      "webhookUrl": "https://example.com:abc",
+      "webhookMethod": "GET"
+    },
+    "result": false,
+    "err": [
+      "webhookUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(https?://)(?![a-zA-Z0-9-]*\\.ngrok\\.io)(?!localhost|.*\\.localhost)([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,}(:\\d+)?(/.*)?$\""
+    ]
+  },
+  {
+    "testTitle": "https://localhost with port",
+    "config": {
+      "webhookUrl": "http://localhost:9090",
+      "webhookMethod": "GET"
+    },
+    "result": false,
+    "err": [
+      "webhookUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(https?://)(?![a-zA-Z0-9-]*\\.ngrok\\.io)(?!localhost|.*\\.localhost)([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,}(:\\d+)?(/.*)?$\""
+    ]
   }
 ]
