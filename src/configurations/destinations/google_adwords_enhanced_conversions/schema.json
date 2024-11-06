@@ -2,7 +2,29 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
+    "required": ["configData"],
+    "additionalProperties": false,
     "properties": {
+      "configData": {
+        "type": "string",
+        "default": "{\"customerId\": \"123\"}"
+      },
+      "requireHash": {
+        "type": "boolean",
+        "default": true
+      },
+      "listOfConversions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "conversions": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
       "oneTrustCookieCategories": {
         "type": "object",
         "properties": {
