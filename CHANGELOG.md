@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.97.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.97.1...v1.97.2) (2024-11-07)
+
+
+### Bug Fixes
+
+* webhook url regex to support ports with valid dns ([#1788](https://github.com/rudderlabs/rudder-config-schema/issues/1788)) ([3d91ced](https://github.com/rudderlabs/rudder-config-schema/commit/3d91ced7213453e1c7c8128c0367ac13cf3cc868))
+
 ### [1.97.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.97.0...v1.97.1) (2024-11-01)
 
 
