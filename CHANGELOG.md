@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.98.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.97.2...v1.98.0) (2024-11-11)
+
+
+### Features
+
+* gaec migration ([#1783](https://github.com/rudderlabs/rudder-config-schema/issues/1783)) ([6e42f7f](https://github.com/rudderlabs/rudder-config-schema/commit/6e42f7f3b333642d5302f0ababac482fa852d3b5))
+* muliselect int-info component ([#1792](https://github.com/rudderlabs/rudder-config-schema/issues/1792)) ([2e64eca](https://github.com/rudderlabs/rudder-config-schema/commit/2e64ecac8d7fe981f327e8253cd13821d7927c3c))
+
+
+### Bug Fixes
+
+* gaec schema ([#1787](https://github.com/rudderlabs/rudder-config-schema/issues/1787)) ([faa4fa6](https://github.com/rudderlabs/rudder-config-schema/commit/faa4fa61a60edae5a9aaf3242b9d61da8654c2f9))
+* http enchancements ([#1759](https://github.com/rudderlabs/rudder-config-schema/issues/1759)) ([3886598](https://github.com/rudderlabs/rudder-config-schema/commit/38865980a34deb77fb33e9b6f8948fa37aeee10b))
+
 ### [1.97.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.97.1...v1.97.2) (2024-11-07)
 
 
