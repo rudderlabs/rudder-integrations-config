@@ -1,33 +1,24 @@
 {
-  "name": "GOOGLE_ADWORDS_ENHANCED_CONVERSIONS",
-  "displayName": "Google Ads Enhanced Conversions",
+  "name": "TUNE",
+  "displayName": "Tune",
   "config": {
-    "auth": {
-      "type": "OAuth",
-      "provider": "Google",
-      "role": "google_adwords_enhanced_conversions_v1",
-      "rudderScopes": ["delivery"]
-    },
-    "transformAtV1": "router",
+    "transformAtV1": "processor",
     "saveDestinationResponse": true,
-    "includeKeys": ["oneTrustCookieCategories", "consentManagement"],
     "excludeKeys": [],
-    "supportedMessageTypes": {
-      "cloud": ["track"]
-    },
     "supportedSourceTypes": [
       "android",
       "ios",
-      "web",
       "unity",
       "amp",
+      "web",
       "cloud",
+      "warehouse",
       "reactnative",
       "flutter",
       "cordova",
-      "warehouse",
       "shopify"
     ],
+    "supportedMessageTypes": { "cloud": ["track"] },
     "supportedConnectionModes": {
       "android": ["cloud"],
       "ios": ["cloud"],
@@ -42,7 +33,7 @@
       "warehouse": ["cloud"]
     },
     "destConfig": {
-      "defaultConfig": ["rudderAccountId", "listOfConversions", "requireHash", "configData"],
+      "defaultConfig": ["subdomain", "tuneEvents"],
       "android": [
         "connectionMode",
         "consentManagement",
@@ -50,12 +41,6 @@
         "ketchConsentPurposes"
       ],
       "ios": [
-        "connectionMode",
-        "consentManagement",
-        "oneTrustCookieCategories",
-        "ketchConsentPurposes"
-      ],
-      "web": [
         "connectionMode",
         "consentManagement",
         "oneTrustCookieCategories",
@@ -91,13 +76,19 @@
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
-      "shopify": [
+      "web": [
         "connectionMode",
         "consentManagement",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
       "cloud": [
+        "connectionMode",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "shopify": [
         "connectionMode",
         "consentManagement",
         "oneTrustCookieCategories",
@@ -113,6 +104,10 @@
     "secretKeys": []
   },
   "options": {
-    "isBeta": false
+    "isBeta": true,
+    "hidden": {
+      "featureFlagName": "AMP_tune_destination",
+      "featureFlagValue": false
+    }
   }
 }

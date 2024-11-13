@@ -1,20 +1,11 @@
 {
-  "name": "GOOGLE_ADWORDS_ENHANCED_CONVERSIONS",
-  "displayName": "Google Ads Enhanced Conversions",
+  "name": "SNOWPIPE_STREAMING",
+  "displayName": "Snowpipe Streaming",
+  "category": "warehouse",
   "config": {
-    "auth": {
-      "type": "OAuth",
-      "provider": "Google",
-      "role": "google_adwords_enhanced_conversions_v1",
-      "rudderScopes": ["delivery"]
-    },
-    "transformAtV1": "router",
+    "transformAtV1": "processor",
     "saveDestinationResponse": true,
-    "includeKeys": ["oneTrustCookieCategories", "consentManagement"],
     "excludeKeys": [],
-    "supportedMessageTypes": {
-      "cloud": ["track"]
-    },
     "supportedSourceTypes": [
       "android",
       "ios",
@@ -23,9 +14,9 @@
       "amp",
       "cloud",
       "reactnative",
+      "cloudSource",
       "flutter",
       "cordova",
-      "warehouse",
       "shopify"
     ],
     "supportedConnectionModes": {
@@ -39,80 +30,95 @@
       "cordova": ["cloud"],
       "shopify": ["cloud"],
       "cloud": ["cloud"],
-      "warehouse": ["cloud"]
+      "cloudSource": ["cloud"]
     },
     "destConfig": {
-      "defaultConfig": ["rudderAccountId", "listOfConversions", "requireHash", "configData"],
+      "defaultConfig": [
+        "account",
+        "database",
+        "warehouse",
+        "user",
+        "role",
+        "skipTracksTable",
+        "namespace",
+        "jsonPaths",
+        "privateKey",
+        "privateKeyPassphrase"
+      ],
       "android": [
-        "connectionMode",
         "consentManagement",
+        "connectionMode",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
       "ios": [
-        "connectionMode",
         "consentManagement",
+        "connectionMode",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
       "web": [
-        "connectionMode",
         "consentManagement",
+        "connectionMode",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
       "unity": [
-        "connectionMode",
         "consentManagement",
+        "connectionMode",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
       "amp": [
-        "connectionMode",
         "consentManagement",
-        "oneTrustCookieCategories",
-        "ketchConsentPurposes"
-      ],
-      "reactnative": [
         "connectionMode",
-        "consentManagement",
-        "oneTrustCookieCategories",
-        "ketchConsentPurposes"
-      ],
-      "flutter": [
-        "connectionMode",
-        "consentManagement",
-        "oneTrustCookieCategories",
-        "ketchConsentPurposes"
-      ],
-      "cordova": [
-        "connectionMode",
-        "consentManagement",
-        "oneTrustCookieCategories",
-        "ketchConsentPurposes"
-      ],
-      "shopify": [
-        "connectionMode",
-        "consentManagement",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
       "cloud": [
-        "connectionMode",
         "consentManagement",
+        "connectionMode",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
-      "warehouse": [
-        "connectionMode",
+      "cloudSource": [
         "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "reactnative": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "flutter": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "cordova": [
+        "consentManagement",
+        "connectionMode",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "shopify": [
+        "consentManagement",
+        "connectionMode",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ]
     },
-    "secretKeys": []
+    "secretKeys": ["privateKey", "privateKeyPassphrase"]
   },
   "options": {
-    "isBeta": false
+    "isBeta": true,
+    "hidden": {
+      "featureFlagName": "AMP_snowpipe_streaming",
+      "featureFlagValue": false
+    }
   }
 }

@@ -1,93 +1,105 @@
 {
   "uiConfig": [
     {
-      "title": "Connection Settings",
+      "title": "Connection Credentials",
       "fields": [
         {
           "type": "textInput",
-          "label": "Container ID",
-          "value": "containerID",
+          "label": "Account",
+          "value": "account",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "regexErrorMessage": "Invalid Container ID",
-          "required": true,
-          "placeholder": "e.g: GTM-ABCDEFG"
+          "regexErrorMessage": "Invalid Account",
+          "placeholder": "e.g: qya5X180.us-east-1",
+          "required": true
         },
         {
           "type": "textInput",
-          "label": "Server Container URL",
-          "value": "serverUrl",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]*|^$",
-          "regexErrorMessage": "Invalid URL",
-          "required": false,
-          "placeholder": "e.g: https://example.com"
+          "label": "Database",
+          "value": "database",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regexErrorMessage": "Invalid Database",
+          "placeholder": "e.g: RUDDER_EVENTS",
+          "required": true
+        },
+        {
+          "type": "textInput",
+          "label": "Warehouse",
+          "value": "warehouse",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regexErrorMessage": "Invalid Database",
+          "placeholder": "e.g: RUDDER_WAREHOUSE",
+          "required": true
+        },
+        {
+          "type": "textInput",
+          "label": "User",
+          "value": "user",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regexErrorMessage": "Invalid User",
+          "placeholder": "e.g: RUDDER_USER",
+          "required": true
+        },
+        {
+          "type": "textInput",
+          "label": "Role",
+          "value": "role",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+          "regexErrorMessage": "Invalid Role",
+          "placeholder": "e.g: RUDDER_ROLE",
+          "required": false
+        },
+        {
+          "type": "textareaInput",
+          "required": true,
+          "regex": "-----BEGIN (?:ENCRYPTED )?PRIVATE KEY-----[\\s\\S]+?-----END (?:ENCRYPTED )?PRIVATE KEY-----",
+          "label": "Private Key",
+          "value": "privateKey",
+          "secret": true
+        },
+        {
+          "type": "textInput",
+          "regex": "^(.{0,100})$",
+          "secret": true,
+          "label": "Private Key Passphrase",
+          "value": "privateKeyPassphrase",
+          "footerNote": "Use the password you set when encrypting the private key. Leave it blank if the private key is not encrypted.",
+          "required": false
+        },
+        {
+          "type": "textInput",
+          "label": "Namespace",
+          "labelNote": "Schema name for the warehouse where the tables are created",
+          "value": "namespace",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{1,64})$",
+          "regexErrorMessage": "Invalid Namespace",
+          "required": true,
+          "placeholder": "e.g: RUDDER_NAMESPACE",
+          "immutable": true
         }
       ]
     },
     {
-      "title": "Native SDK",
+      "title": "Advanced Settings",
       "fields": [
         {
-          "type": "defaultCheckbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
+          "type": "checkbox",
+          "label": "Skip Tracks Table",
+          "value": "skipTracksTable",
+          "footerNote": "Enable this feature to skip sending the event data to the “tracks” table",
+          "default": false
+        },
         {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
+          "type": "textInput",
+          "label": "JSON columns (Optional)",
+          "labelNote": "Specify required JSON properties in dot notation separated by commas",
+          "value": "jsonPaths",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.*)$",
+          "placeholder": "e.g: testMap.nestedMap, testArray",
           "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
+          "footerURL": {
+            "link": "https://www.rudderstack.com/docs/destinations/warehouse-destinations/json-column-support/",
+            "text": "Instructions for setting up the JSON columns"
           }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
         }
       ]
     },

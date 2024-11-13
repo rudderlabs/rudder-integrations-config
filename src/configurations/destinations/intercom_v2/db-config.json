@@ -1,20 +1,16 @@
 {
-  "name": "GOOGLE_ADWORDS_ENHANCED_CONVERSIONS",
-  "displayName": "Google Ads Enhanced Conversions",
+  "name": "INTERCOM_V2",
+  "displayName": "Intercom V2",
   "config": {
-    "auth": {
-      "type": "OAuth",
-      "provider": "Google",
-      "role": "google_adwords_enhanced_conversions_v1",
-      "rudderScopes": ["delivery"]
-    },
     "transformAtV1": "router",
     "saveDestinationResponse": true,
-    "includeKeys": ["oneTrustCookieCategories", "consentManagement"],
-    "excludeKeys": [],
-    "supportedMessageTypes": {
-      "cloud": ["track"]
+    "throttlingCost": { "eventType": { "group": 3, "identify": 3 } },
+    "auth": {
+      "type": "OAuth",
+      "role": "intercom",
+      "rudderScopes": ["delivery"]
     },
+    "excludeKeys": [],
     "supportedSourceTypes": [
       "android",
       "ios",
@@ -24,25 +20,24 @@
       "cloud",
       "reactnative",
       "flutter",
-      "cordova",
-      "warehouse",
-      "shopify"
+      "cordova"
     ],
+    "supportedMessageTypes": {
+      "cloud": ["identify", "track", "group"]
+    },
     "supportedConnectionModes": {
+      "web": ["cloud"],
       "android": ["cloud"],
       "ios": ["cloud"],
-      "web": ["cloud"],
       "unity": ["cloud"],
       "amp": ["cloud"],
       "reactnative": ["cloud"],
       "flutter": ["cloud"],
       "cordova": ["cloud"],
-      "shopify": ["cloud"],
-      "cloud": ["cloud"],
-      "warehouse": ["cloud"]
+      "cloud": ["cloud"]
     },
     "destConfig": {
-      "defaultConfig": ["rudderAccountId", "listOfConversions", "requireHash", "configData"],
+      "defaultConfig": ["rudderAccountId", "apiServer", "sendAnonymousId"],
       "android": [
         "connectionMode",
         "consentManagement",
@@ -73,6 +68,12 @@
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
+      "cloud": [
+        "connectionMode",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
       "reactnative": [
         "connectionMode",
         "consentManagement",
@@ -90,29 +91,15 @@
         "consentManagement",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
-      ],
-      "shopify": [
-        "connectionMode",
-        "consentManagement",
-        "oneTrustCookieCategories",
-        "ketchConsentPurposes"
-      ],
-      "cloud": [
-        "connectionMode",
-        "consentManagement",
-        "oneTrustCookieCategories",
-        "ketchConsentPurposes"
-      ],
-      "warehouse": [
-        "connectionMode",
-        "consentManagement",
-        "oneTrustCookieCategories",
-        "ketchConsentPurposes"
       ]
     },
     "secretKeys": []
   },
   "options": {
-    "isBeta": false
+    "isBeta": true,
+    "hidden": {
+      "featureFlagName": "AMP_intercom_v2",
+      "featureFlagValue": false
+    }
   }
 }
