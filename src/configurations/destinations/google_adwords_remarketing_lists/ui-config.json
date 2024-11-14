@@ -59,6 +59,81 @@
                         }
                       ]
                     }
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "List Type",
+                    "note": "Select the type of List",
+                    "configKey": "typeOfList",
+                    "options": [
+                      {
+                        "label": "General",
+                        "value": "General"
+                      },
+                      {
+                        "label": "User ID",
+                        "value": "userID"
+                      },
+                      {
+                        "label": "Mobile Device ID",
+                        "value": "mobileDeviceID"
+                      }
+                    ],
+                    "default": "General",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.cloud",
+                          "value": "cloud"
+                        }
+                      ],
+                      "prerequisitesCondition": "or",
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_vdm-next",
+                          "value": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "multiSelect",
+                    "label": "Schema Fields",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.cloud",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "typeOfList",
+                          "value": "General"
+                        }
+                      ],
+                      "prerequisitesCondition": "or",
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_vdm-next",
+                          "value": false
+                        }
+                      ]
+                    },
+                    "configKey": "userSchema",
+                    "options": [
+                      {
+                        "label": "Email",
+                        "value": "email"
+                      },
+                      {
+                        "label": "Phone Number",
+                        "value": "phone"
+                      },
+                      {
+                        "label": "Address Info",
+                        "value": "addressInfo"
+                      }
+                    ],
+                    "default": ["email"]
                   }
                 ]
               }
@@ -95,27 +170,6 @@
                 "title": "Event Settings",
                 "note": "Configure event-specific settings here",
                 "fields": [
-                  {
-                    "type": "singleSelect",
-                    "label": "List Type",
-                    "note": "Select the type of List",
-                    "configKey": "typeOfList",
-                    "options": [
-                      {
-                        "label": "General",
-                        "value": "General"
-                      },
-                      {
-                        "label": "User ID",
-                        "value": "userID"
-                      },
-                      {
-                        "label": "Mobile Device ID",
-                        "value": "mobileDeviceID"
-                      }
-                    ],
-                    "default": "General"
-                  },
                   {
                     "type": "singleSelect",
                     "label": "Specify the consent for uploaded users for using their data in Google Advertising Purpose",
@@ -169,34 +223,23 @@
                     "label": "Hash Required",
                     "configKey": "isHashRequired",
                     "default": true
-                  },
-                  {
-                    "type": "multiSelect",
-                    "label": "Schema Fields",
-                    "preRequisites": [
-                      {
-                        "configKey": "typeOfList",
-                        "value": "General"
-                      }
-                    ],
-                    "configKey": "userSchema",
-                    "options": [
-                      {
-                        "label": "Email",
-                        "value": "email"
-                      },
-                      {
-                        "label": "Phone Number",
-                        "value": "phone"
-                      },
-                      {
-                        "label": "Address Info",
-                        "value": "addressInfo"
-                      }
-                    ],
-                    "default": ["email"]
                   }
-                ]
+                ],
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionMode.cloud",
+                      "value": "cloud"
+                    }
+                  ],
+                  "prerequisitesCondition": "or",
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_vdm-next",
+                      "value": false
+                    }
+                  ]
+                }
               }
             ]
           },
