@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.97.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.97.2...v1.97.3) (2024-11-14)
+
+
+### Bug Fixes
+
+* bq partitioning for additional columns ([#1797](https://github.com/rudderlabs/rudder-config-schema/issues/1797)) ([498f0b0](https://github.com/rudderlabs/rudder-config-schema/commit/498f0b0afa11ef8e18902950de00f01651e440c4))
+
 ### [1.97.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.97.1...v1.97.2) (2024-11-07)
 
 
