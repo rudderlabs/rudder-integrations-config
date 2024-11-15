@@ -1,114 +1,105 @@
 {
   "uiConfig": [
     {
-      "title": "Connection Settings",
+      "title": "Connection Credentials",
       "fields": [
         {
           "type": "textInput",
-          "label": "API Key",
-          "value": "apiKey",
+          "label": "Account",
+          "value": "account",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "footerNote": "Your Gainsight PX API Key",
+          "regexErrorMessage": "Invalid Account",
+          "placeholder": "e.g: qya5X180.us-east-1",
+          "required": true
+        },
+        {
+          "type": "textInput",
+          "label": "Database",
+          "value": "database",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regexErrorMessage": "Invalid Database",
+          "placeholder": "e.g: RUDDER_EVENTS",
+          "required": true
+        },
+        {
+          "type": "textInput",
+          "label": "Warehouse",
+          "value": "warehouse",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regexErrorMessage": "Invalid Database",
+          "placeholder": "e.g: RUDDER_WAREHOUSE",
+          "required": true
+        },
+        {
+          "type": "textInput",
+          "label": "User",
+          "value": "user",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regexErrorMessage": "Invalid User",
+          "placeholder": "e.g: RUDDER_USER",
+          "required": true
+        },
+        {
+          "type": "textInput",
+          "label": "Role",
+          "value": "role",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+          "regexErrorMessage": "Invalid Role",
+          "placeholder": "e.g: RUDDER_ROLE",
+          "required": false
+        },
+        {
+          "type": "textareaInput",
           "required": true,
-          "placeholder": "e.g: 94f71917XXX93k90caa4c-us20143",
+          "regex": "-----BEGIN (?:ENCRYPTED )?PRIVATE KEY-----[\\s\\S]+?-----END (?:ENCRYPTED )?PRIVATE KEY-----",
+          "label": "Private Key",
+          "value": "privateKey",
           "secret": true
         },
         {
           "type": "textInput",
-          "label": "Product Tag Key",
-          "value": "productTagKey",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "regexErrorMessage": "Invalid Product Tag Key",
-          "required": true,
-          "placeholder": "e.g: AP-XXXXXX-1",
-          "footerNote": "Your Webapp Product Tag Key",
-          "secret": true
+          "regex": "^(.{0,100})$",
+          "secret": true,
+          "label": "Private Key Passphrase",
+          "value": "privateKeyPassphrase",
+          "footerNote": "Use the password you set when encrypting the private key. Leave it blank if the private key is not encrypted.",
+          "required": false
         },
         {
-          "type": "singleSelect",
-          "label": "Data Center",
-          "value": "dataCenter",
+          "type": "textInput",
+          "label": "Namespace",
+          "labelNote": "Schema name for the warehouse where the tables are created",
+          "value": "namespace",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{1,64})$",
+          "regexErrorMessage": "Invalid Namespace",
           "required": true,
-          "options": [
-            {
-              "name": "US",
-              "value": "US"
-            },
-            {
-              "name": "EU",
-              "value": "EU"
-            },
-            {
-              "name": "US2",
-              "value": "US2"
-            }
-          ],
-          "defaultOption": {
-            "name": "US",
-            "value": "US"
-          }
+          "placeholder": "e.g: RUDDER_NAMESPACE",
+          "immutable": true
         }
       ]
     },
     {
-      "title": "Native SDK",
+      "title": "Advanced Settings",
       "fields": [
         {
           "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
+          "label": "Skip Tracks Table",
+          "value": "skipTracksTable",
+          "footerNote": "Enable this feature to skip sending the event data to the “tracks” table",
           "default": false
-        }
-      ]
-    },
-    {
-      "title": "User Attribute Mapping",
-      "fields": [
+        },
         {
-          "type": "dynamicForm",
-          "label": "Map Rudder payload property to Custom User Attribute",
-          "labelLeft": "Rudder Payload Field",
-          "labelRight": "Custom Attribute",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g: rating",
-          "placeholderRight": "e.g: Rating",
-          "footerNote": "Provide the Custom Attribute API Name",
-          "value": "userAttributeMap"
-        }
-      ]
-    },
-    {
-      "title": "Account Attribute Mapping",
-      "fields": [
-        {
-          "type": "dynamicForm",
-          "label": "Map Rudder payload property to Custom Account Attribute",
-          "labelLeft": "Rudder Payload Field",
-          "labelRight": "Custom Attribute",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g: revenue",
-          "placeholderRight": "e.g: annualRevenue",
-          "footerNote": "Provide the Custom Attribute API Name",
-          "value": "accountAttributeMap"
-        }
-      ]
-    },
-    {
-      "title": "Global Context Mapping",
-      "fields": [
-        {
-          "type": "dynamicForm",
-          "label": "Provide Key Value pairs for Global Context Object",
-          "labelLeft": "Key",
-          "labelRight": "Value",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g: projectId",
-          "placeholderRight": "e.g: p-123",
-          "footerNote": "Used with Custom Events",
-          "value": "globalContextMap"
+          "type": "textInput",
+          "label": "JSON columns (Optional)",
+          "labelNote": "Specify required JSON properties in dot notation separated by commas",
+          "value": "jsonPaths",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.*)$",
+          "placeholder": "e.g: testMap.nestedMap, testArray",
+          "required": false,
+          "footerURL": {
+            "link": "https://www.rudderstack.com/docs/destinations/warehouse-destinations/json-column-support/",
+            "text": "Instructions for setting up the JSON columns"
+          }
         }
       ]
     },

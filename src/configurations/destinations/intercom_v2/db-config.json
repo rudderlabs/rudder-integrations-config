@@ -1,39 +1,43 @@
 {
-  "name": "TUNE",
-  "displayName": "Tune",
+  "name": "INTERCOM_V2",
+  "displayName": "Intercom V2",
   "config": {
-    "transformAtV1": "processor",
+    "transformAtV1": "router",
     "saveDestinationResponse": true,
+    "throttlingCost": { "eventType": { "group": 3, "identify": 3 } },
+    "auth": {
+      "type": "OAuth",
+      "role": "intercom",
+      "rudderScopes": ["delivery"]
+    },
     "excludeKeys": [],
     "supportedSourceTypes": [
       "android",
       "ios",
+      "web",
       "unity",
       "amp",
-      "web",
       "cloud",
-      "warehouse",
       "reactnative",
       "flutter",
-      "cordova",
-      "shopify"
+      "cordova"
     ],
-    "supportedMessageTypes": { "cloud": ["track"] },
+    "supportedMessageTypes": {
+      "cloud": ["identify", "track", "group"]
+    },
     "supportedConnectionModes": {
+      "web": ["cloud"],
       "android": ["cloud"],
       "ios": ["cloud"],
-      "web": ["cloud"],
       "unity": ["cloud"],
       "amp": ["cloud"],
       "reactnative": ["cloud"],
       "flutter": ["cloud"],
       "cordova": ["cloud"],
-      "shopify": ["cloud"],
-      "cloud": ["cloud"],
-      "warehouse": ["cloud"]
+      "cloud": ["cloud"]
     },
     "destConfig": {
-      "defaultConfig": ["subdomain", "tuneEvents"],
+      "defaultConfig": ["rudderAccountId", "apiServer", "sendAnonymousId"],
       "android": [
         "connectionMode",
         "consentManagement",
@@ -46,6 +50,12 @@
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
+      "web": [
+        "connectionMode",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
       "unity": [
         "connectionMode",
         "consentManagement",
@@ -53,6 +63,12 @@
         "ketchConsentPurposes"
       ],
       "amp": [
+        "connectionMode",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "cloud": [
         "connectionMode",
         "consentManagement",
         "oneTrustCookieCategories",
@@ -75,30 +91,6 @@
         "consentManagement",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
-      ],
-      "web": [
-        "connectionMode",
-        "consentManagement",
-        "oneTrustCookieCategories",
-        "ketchConsentPurposes"
-      ],
-      "cloud": [
-        "connectionMode",
-        "consentManagement",
-        "oneTrustCookieCategories",
-        "ketchConsentPurposes"
-      ],
-      "shopify": [
-        "connectionMode",
-        "consentManagement",
-        "oneTrustCookieCategories",
-        "ketchConsentPurposes"
-      ],
-      "warehouse": [
-        "connectionMode",
-        "consentManagement",
-        "oneTrustCookieCategories",
-        "ketchConsentPurposes"
       ]
     },
     "secretKeys": []
@@ -106,7 +98,7 @@
   "options": {
     "isBeta": true,
     "hidden": {
-      "featureFlagName": "AMP_tune_destination",
+      "featureFlagName": "AMP_intercom_v2",
       "featureFlagValue": false
     }
   }

@@ -1,15 +1,27 @@
 [
   {
+    "config": {
+      "apiServer": "Europe",
+      "connectionMode": {
+        "ios": "cloud"
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "apiServer": "dummyServer",
+      "connectionMode": {
+        "ios": "cloud"
+      }
+    },
+    "result": false,
+    "err": ["apiServer must be equal to one of the allowed values"]
+  },
+  {
     "testTitle": "With valid multiple consent management providers config",
     "config": {
-      "apiKey": "test-host",
-      "productTagKey": "AP-XXXXXX-1",
-      "dataCenter": {
-        "web": "EU"
-      },
-      "useNativeSDK": {
-        "web": true
-      },
+      "apiServer": "US",
       "consentManagement": {
         "web": [
           {
@@ -41,8 +53,7 @@
   {
     "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
     "config": {
-      "apiKey": "test-host",
-      "productTagKey": "AP-XXXXXX-1",
+      "apiServer": "US",
       "consentManagement": {
         "android": [
           {
@@ -61,8 +72,7 @@
   {
     "testTitle": "With consent management custom provider config and no resolutionStrategy value",
     "config": {
-      "apiKey": "test-host",
-      "productTagKey": "AP-XXXXXX-1",
+      "apiServer": "US",
       "consentManagement": {
         "android": [
           {
@@ -80,8 +90,7 @@
   {
     "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
     "config": {
-      "apiKey": "test-host",
-      "productTagKey": "AP-XXXXXX-1",
+      "apiServer": "US",
       "consentManagement": {
         "android": [
           {
@@ -95,8 +104,7 @@
   {
     "testTitle": "With consent management custom provider config invalid provider value",
     "config": {
-      "apiKey": "test-host",
-      "productTagKey": "AP-XXXXXX-1",
+      "apiServer": "US",
       "consentManagement": {
         "android": [
           {
@@ -109,75 +117,10 @@
     "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   },
   {
-    "testTitle": "Without apiKey",
     "config": {
-      "productTagKey": "AP-XXXXXX-1",
-      "oneTrustCookieCategories": {
-        "oneTrustCookieCategory": "C0001"
-      },
-      "connectionMode": {
-        "web": "cloud"
-      }
-    },
-    "result": false,
-    "err": [" must have required property 'apiKey'"]
-  },
-  {
-    "testTitle": "Without productTagKey",
-    "config": {
-      "apiKey": "test-host",
-      "oneTrustCookieCategories": {
-        "oneTrustCookieCategory": "C0001"
-      },
-      "connectionMode": {
-        "web": "cloud"
-      }
-    },
-    "result": false,
-    "err": [" must have required property 'productTagKey'"]
-  },
-  {
-    "testTitle": "Without apiKey and productTagKey",
-    "config": {
-      "oneTrustCookieCategories": {
-        "oneTrustCookieCategory": "C0001"
-      },
-      "connectionMode": {
-        "web": "cloud"
-      }
-    },
-    "result": false,
-    "err": [" must have required property 'apiKey'", " must have required property 'productTagKey'"]
-  },
-  {
-    "testTitle": "With valid multiple consent management providers config",
-    "config": {
-      "apiKey": "test-host",
-      "productTagKey": "AP-XXXXXX-1",
-      "consentManagement": {
-        "web": [
-          {
-            "provider": "custom",
-            "consents": [
-              {
-                "consent": "Marketing"
-              }
-            ],
-            "resolutionStrategy": "or"
-          },
-          {
-            "provider": "oneTrust",
-            "consents": [
-              {
-                "consent": "Marketing"
-              }
-            ]
-          },
-          {
-            "provider": "ketch",
-            "consents": []
-          }
-        ]
+      "apiServer": "US",
+      "useNativeSDK": {
+        "web": false
       },
       "oneTrustCookieCategories": {
         "android": [
@@ -214,26 +157,18 @@
         ],
         "reactnative": [
           {
-            "oneTrustCookieCategory": "C0001"
-          },
-          {
-            "oneTrustCookieCategory": "C0002"
-          }
-        ],
-        "flutter": [
-          {
             "oneTrustCookieCategory": "C0003"
           },
           {
             "oneTrustCookieCategory": "C0004"
           }
         ],
-        "cordova": [
+        "flutter": [
           {
             "oneTrustCookieCategory": ""
           }
         ],
-        "warehouse": [],
+        "cordova": [],
         "shopify": [
           {
             "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
@@ -275,26 +210,18 @@
         ],
         "reactnative": [
           {
-            "purpose": "P1"
-          },
-          {
-            "purpose": "P2"
-          }
-        ],
-        "flutter": [
-          {
             "purpose": "P3"
           },
           {
             "purpose": "P4"
           }
         ],
-        "cordova": [
+        "flutter": [
           {
             "purpose": ""
           }
         ],
-        "warehouse": [],
+        "cordova": [],
         "shopify": [
           {
             "purpose": "env.ENVIRONMENT_VARIABLE"
@@ -305,34 +232,10 @@
     "result": true
   },
   {
-    "testTitle": "With valid multiple consent management providers config",
     "config": {
-      "apiKey": "test-host",
-      "productTagKey": "AP-XXXXXX-1",
-      "consentManagement": {
-        "web": [
-          {
-            "provider": "custom",
-            "consents": [
-              {
-                "consent": "Marketing"
-              }
-            ],
-            "resolutionStrategy": "or"
-          },
-          {
-            "provider": "oneTrust",
-            "consents": [
-              {
-                "consent": "Marketing"
-              }
-            ]
-          },
-          {
-            "provider": "ketch",
-            "consents": []
-          }
-        ]
+      "apiServer": "US",
+      "useNativeSDK": {
+        "web": false
       },
       "oneTrustCookieCategories": [
         {
@@ -355,34 +258,10 @@
     "err": ["oneTrustCookieCategories must be object", "ketchConsentPurposes must be object"]
   },
   {
-    "testTitle": "With valid multiple consent management providers config",
     "config": {
-      "apiKey": "test-host",
-      "productTagKey": "AP-XXXXXX-1",
-      "consentManagement": {
-        "web": [
-          {
-            "provider": "custom",
-            "consents": [
-              {
-                "consent": "Marketing"
-              }
-            ],
-            "resolutionStrategy": "or"
-          },
-          {
-            "provider": "oneTrust",
-            "consents": [
-              {
-                "consent": "Marketing"
-              }
-            ]
-          },
-          {
-            "provider": "ketch",
-            "consents": []
-          }
-        ]
+      "apiServer": "US",
+      "useNativeSDK": {
+        "web": false
       },
       "oneTrustCookieCategories": {
         "android": [
