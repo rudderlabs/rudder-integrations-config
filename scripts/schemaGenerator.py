@@ -68,10 +68,12 @@ def is_field_purpose(field):
         bool: True if field is a purpose field, False otherwise.
     """
     return (
-        "value" in field and field["value"] == "purpose"
-        or
-        "configKey" in field and field["configKey"] == "purpose"
+        "value" in field
+        and field["value"] == "purpose"
+        or "configKey" in field
+        and field["configKey"] == "purpose"
     )
+
 
 def generate_for_regexed_field(field) -> str:
     pattern = field["regex"]
@@ -93,6 +95,7 @@ def generate_for_regexed_field(field) -> str:
 
     return pattern
 
+
 def generate_for_non_regexed_field(field) -> str:
     # TODO: we should not use a case here for the individual properties. Just pass the desired pattern as regex property
     #  in ketch purpose fields and delete next case
@@ -105,6 +108,7 @@ def generate_for_non_regexed_field(field) -> str:
     if defaultEnvPattern not in pattern:
         pattern = "|".join([defaultEnvPattern, pattern])
     return pattern
+
 
 def generalize_regex_pattern(field):
     """Generates the pattern for schema based on the type of field.
