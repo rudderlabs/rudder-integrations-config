@@ -103,10 +103,10 @@ def generate_for_non_regexed_field(field) -> str:
     if is_field_purpose(field):
         return pattern
     # non purpose field & regex is not present in the field
-    if field["dynamicConfigSupported"]:
-        pattern = "|".join([defaultSubPattern, pattern])
     if defaultEnvPattern not in pattern:
         pattern = "|".join([defaultEnvPattern, pattern])
+    if "dynamicConfigSupported" in field and field["dynamicConfigSupported"]:
+        pattern = "|".join([defaultSubPattern, pattern])
     return pattern
 
 
