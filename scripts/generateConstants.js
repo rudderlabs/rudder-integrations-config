@@ -30,22 +30,12 @@ function filterLanguages(destination, langCode) {
 
 }
 
-// Check if the generated directory exists, if not, create it
-if (!fs.existsSync(generatedDir)) {
-    fs.mkdirSync(generatedDir, { recursive: true });
-    console.log('Created "generated/" directory');
-}
 
 // Function to read the template file and process it
 function processTemplate(template, data) {
     // Create a function to evaluate the template with the data
     // eslint-disable-next-line no-new-func
     return new Function('destinations', `return \`${template}\`;`)(data);
-}
-
-// Ensure the 'generated' directory exists
-if (!fs.existsSync(generatedDir)) {
-    fs.mkdirSync(generatedDir);
 }
 
 function prepareDestinations(langCode) {
@@ -62,11 +52,19 @@ function prepareDestinations(langCode) {
 // Function to get the language code from the template file name
 // Format: <template-name>.<lang-code>.template
 function getLangCode(templateFileName) {
-    return templateFileName.split('.')[1];
+    const parts = templateFileName.split('.');
+    if (parts.length === 3) {
+        return parts[1];
+    }
+    throw new Error(`Invalid template file name: ${templateFileName}`);
 }
 
 // Function to read and process templates in the templates folder
 function generateFiles() {
+    // Ensure the 'generated' directory exists
+    if (!fs.existsSync(generatedDir)) {
+        fs.mkdirSync(generatedDir);
+    }
     // Read all files in the templates directory
     fs.readdirSync(templatesDir)
         .filter((file) => file.endsWith('.template'))
