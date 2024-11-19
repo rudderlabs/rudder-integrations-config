@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const fs = require('fs');
 const path = require('path');
 
@@ -15,7 +16,12 @@ const languageMap = {
 
 // Function to check if the template should be generated for a specific language
 function filterLanguages(destination, langCode) {
+    if (!destination?.config?.supportedConnectionModes) {
+        console.warn(`Destination ${destination.name} is missing supportedConnectionModes`);
+        return false;
+    }
     const { supportedConnectionModes } = destination.config;
+
     // Filtering logic
     return Object.keys(supportedConnectionModes)
         .filter(platform => {
