@@ -10,7 +10,7 @@ const destinationsDir = path.join(__dirname, '../src/configurations/destinations
 const languageMap = {
   web: ['ts'],
   flutter: ['dart'],
-  ios: ['java', 'm', 'swift'],
+  ios: ['m', 'swift'],
   android: ['kt', 'java'],
 };
 
