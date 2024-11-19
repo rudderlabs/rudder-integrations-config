@@ -2,6 +2,7 @@
  GENERATED - DO NOT EDIT
  This file is generated from the templates/Destinations.ts.template file.
  NOTE: Containly only constants for device mode destinations
+ Orginal file: https://github.com/rudderlabs/rudder-integrations-config/blob/main/generated/Destinations.ts
  */
 export const ACTIVE_CAMPAIGN_NAME = 'ACTIVE_CAMPAIGN';
 export const ACTIVE_CAMPAIGN_DISPLAY_NAME = 'ActiveCampaign';
