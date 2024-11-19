@@ -1,7 +1,9 @@
 /*
  GENERATED - DO NOT EDIT
  This file is generated from the templates/Destinations.swift.template file.
-  NOTE: Containly only constants for device mode destinations
+ Orginal file: https://github.com/rudderlabs/rudder-integrations-config/blob/main/generated/Destinations.swift
+
+ NOTE: Containly only constants for device mode destinations
  */
 
 struct Destinations {

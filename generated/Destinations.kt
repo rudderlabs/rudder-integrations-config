@@ -1,6 +1,8 @@
 /*
  GENERATED - DO NOT EDIT
  This file is generated from the templates/Destinations.kt.template file.
+ Orginal file: https://github.com/rudderlabs/rudder-integrations-config/blob/main/generated/Destinations.kt
+
  NOTE: Containly only constants for device mode destinations
  */
 
