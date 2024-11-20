@@ -2,6 +2,8 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
+    "required": ["customerId", "subAccount"],
+    "additionalProperties": true,
     "properties": {
       "oneTrustCookieCategories": {
         "type": "object",
@@ -276,6 +278,30 @@
             }
           }
         }
+      },
+      "requireHash": {
+        "type": "boolean",
+        "default": true
+      },
+      "subAccount": {
+        "type": "boolean",
+        "default": false
+      },
+      "listOfConversions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "conversions": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "customerId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       }
     }
   }
