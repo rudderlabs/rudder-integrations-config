@@ -2,24 +2,9 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "required": ["configData"],
+    "required": ["customerId", "subAccount"],
     "additionalProperties": true,
     "properties": {
-      "configData": {
-        "type": "string",
-        "default": "{\"customerId\": \"123\"}"
-      },
-      "requireHash": {
-        "type": "boolean",
-        "default": true
-      },
-      "listOfConversions": {
-        "type": "array",
-        "items": {
-          "type": "string",
-          "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-        }
-      },
       "oneTrustCookieCategories": {
         "type": "object",
         "properties": {
@@ -803,6 +788,30 @@
               ]
             }
           }
+        },
+        "requireHash": {
+          "type": "boolean",
+          "default": true
+        },
+        "subAccount": {
+          "type": "boolean",
+          "default": false
+        },
+        "listOfConversions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "conversions": {
+                "type": "string",
+                "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+              }
+            }
+          }
+        },
+        "customerId": {
+          "type": "string",
+          "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
         }
       }
     }
