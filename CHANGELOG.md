@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.98.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.98.0...v1.98.1) (2024-11-21)
+
+## [1.98.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.97.3...v1.98.0) (2024-11-18)
+
+
+### Features
+
+* gaec migration ([#1783](https://github.com/rudderlabs/rudder-config-schema/issues/1783)) ([6e42f7f](https://github.com/rudderlabs/rudder-config-schema/commit/6e42f7f3b333642d5302f0ababac482fa852d3b5))
+* iterable eudc ([#1762](https://github.com/rudderlabs/rudder-config-schema/issues/1762)) ([fb89118](https://github.com/rudderlabs/rudder-config-schema/commit/fb89118b5b883787705b1c12f5e93ca13fd5acfe))
+* muliselect int-info component ([#1792](https://github.com/rudderlabs/rudder-config-schema/issues/1792)) ([2e64eca](https://github.com/rudderlabs/rudder-config-schema/commit/2e64ecac8d7fe981f327e8253cd13821d7927c3c))
+* onboard linkedin audience destination ([#1758](https://github.com/rudderlabs/rudder-config-schema/issues/1758)) ([a039627](https://github.com/rudderlabs/rudder-config-schema/commit/a039627f5ed48cfb40f18198df3e742a219f705b))
+* onboarding intercom v2 retl support ([#1781](https://github.com/rudderlabs/rudder-config-schema/issues/1781)) ([076d6a9](https://github.com/rudderlabs/rudder-config-schema/commit/076d6a901fb4372a66183a0b5c9f2fdf65b24b8d))
+
+
+### Bug Fixes
+
+* gaec schema ([#1787](https://github.com/rudderlabs/rudder-config-schema/issues/1787)) ([faa4fa6](https://github.com/rudderlabs/rudder-config-schema/commit/faa4fa61a60edae5a9aaf3242b9d61da8654c2f9))
+* http enchancements ([#1759](https://github.com/rudderlabs/rudder-config-schema/issues/1759)) ([3886598](https://github.com/rudderlabs/rudder-config-schema/commit/38865980a34deb77fb33e9b6f8948fa37aeee10b))
+* revert develop changes gaec ([#1802](https://github.com/rudderlabs/rudder-config-schema/issues/1802)) ([c70c6b0](https://github.com/rudderlabs/rudder-config-schema/commit/c70c6b0c0942ac4999ac5511a5659014d1fc85ee))
+
 ### [1.97.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.97.2...v1.97.3) (2024-11-14)
 
 
