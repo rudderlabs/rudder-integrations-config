@@ -1,0 +1,231 @@
+[
+  {
+    "config": {
+      "appKey": "dfregth",
+      "accessToken": "345fghyj",
+      "connectionMode": {
+        "warehouse": "cloud"
+      }
+    },
+    "result": true
+  },
+  {
+    "config": {
+      "appKey": "dfregth",
+      "accessToken": "345fghyj",
+      "useNativeSDK": {
+        "web": false
+      },
+      "oneTrustCookieCategories": {
+        "android": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": "C0003"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "web": [
+          {
+            "oneTrustCookieCategory": ""
+          }
+        ],
+        "unity": [],
+        "amp": [
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "cloud": [
+          {
+            "oneTrustCookieCategory": "{{ event.properties.prop1 || 'val' }}"
+          }
+        ],
+        "reactnative": [
+          {
+            "oneTrustCookieCategory": "C0003"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "flutter": [
+          {
+            "oneTrustCookieCategory": ""
+          }
+        ],
+        "cordova": [],
+        "shopify": [
+          {
+            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "android": [
+          {
+            "purpose": "P1"
+          },
+          {
+            "purpose": "P2"
+          }
+        ],
+        "ios": [
+          {
+            "purpose": "P3"
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "web": [
+          {
+            "purpose": ""
+          }
+        ],
+        "unity": [],
+        "amp": [
+          {
+            "purpose": "env.ENVIRONMENT_VARIABLE"
+          }
+        ],
+        "cloud": [
+          {
+            "purpose": "{{ event.properties.prop1 || 'val' }}"
+          }
+        ],
+        "reactnative": [
+          {
+            "purpose": "P3"
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "flutter": [
+          {
+            "purpose": ""
+          }
+        ],
+        "cordova": [],
+        "shopify": [
+          {
+            "purpose": "env.ENVIRONMENT_VARIABLE"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With valid multiple consent management providers config",
+    "config": {
+      "appKey": "dfregth",
+      "accessToken": "345fghyj",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "appKey": "dfregth",
+      "accessToken": "345fghyj",
+      "consentManagement": {
+        "warehouse": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.warehouse.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.warehouse.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "appKey": "dfregth",
+      "accessToken": "345fghyj",
+      "consentManagement": {
+        "warehouse": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.warehouse.0 must have required property 'resolutionStrategy'",
+      "consentManagement.warehouse.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
+    "config": {
+      "appKey": "dfregth",
+      "accessToken": "345fghyj",
+      "consentManagement": {
+        "warehouse": [
+          {
+            "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "appKey": "dfregth",
+      "accessToken": "345fghyj",
+      "consentManagement": {
+        "warehouse": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.warehouse.0.provider must be equal to one of the allowed values"]
+  }
+]
