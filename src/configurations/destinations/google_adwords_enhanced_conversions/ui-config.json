@@ -13,20 +13,35 @@
                 "icon": "settings",
                 "fields": [
                   {
-                    "type": "nestedSelect",
-                    "label": "Select account",
-                    "apiName": "getConfigData",
-                    "configKey": "configData",
-                    "placeholder": "Select account details",
+                    "type": "textInput",
+                    "label": "Customer ID",
+                    "note": "Enter the Customer ID",
+                    "configKey": "customerId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Customer Id",
+                    "placeholder": "e.g: 9693XX9833"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Sub Account",
+                    "configKey": "subAccount",
+                    "default": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Login Customer ID",
+                    "note": "Enter the Login Customer ID",
+                    "configKey": "loginCustomerId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Login Customer Id",
                     "preRequisites": {
                       "fields": [
                         {
-                          "exists": true,
-                          "configKey": "rudderAccountId"
+                          "configKey": "subAccount",
+                          "value": true
                         }
                       ]
-                    },
-                    "apiDependencies": ["rudderAccountId"]
+                    }
                   }
                 ]
               }
@@ -63,13 +78,17 @@
                 "note": "Enter your list of Conversions",
                 "fields": [
                   {
-                    "note": "Add your conversions names",
-                    "type": "dynamicMultiSelect",
+                    "type": "tagInput",
                     "label": "List of Conversion",
+                    "note": "Add your conversions names",
                     "configKey": "listOfConversions",
-                    "mode": "tags",
-                    "apiName": "getConversionId",
-                    "placeholder": "e.g: Credit card visit"
+                    "tagKey": "conversions",
+                    "placeholder": "e.g: Credit card visit",
+                    "default": [
+                      {
+                        "conversions": ""
+                      }
+                    ]
                   },
                   {
                     "type": "checkbox",
@@ -164,6 +183,10 @@
                 {
                   "label": "Custom",
                   "value": "custom"
+                },
+                {
+                  "label": "iubenda",
+                  "value": "iubenda"
                 },
                 {
                   "label": "Ketch",
