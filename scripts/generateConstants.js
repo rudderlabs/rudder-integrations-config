@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
+const destinationNameRegex = /^\w+$/;
 // Path to the templates and generated files
 const templatesDir = path.join(__dirname, '../templates');
 const generatedDir = path.join(__dirname, '../generated');
@@ -39,10 +40,6 @@ function processTemplate(template, data) {
   return new Function('destinations', `return \`${template}\`;`)(data);
 }
 
-function cleanDestinationName(name) {
-  return name.replace(/\W/g, '_').replace(/_+/g, '_').toUpperCase();
-}
-
 function prepareDestinations(langCode) {
   return fs
     .readdirSync(destinationsDir)
@@ -55,6 +52,10 @@ function prepareDestinations(langCode) {
           console.warn(`Skipping ${destination}: Missing displayName or name`);
           return null;
         }
+        if (!destinationNameRegex.test(destinationDef.name)) {
+          console.warn(`Skipping ${destination}: Invalid name`);
+          return null;
+        }
         return destinationDef;
       } catch (err) {
         console.error(`Error processing ${destination}:`, err.message);
@@ -64,7 +65,7 @@ function prepareDestinations(langCode) {
     .filter(Boolean)
     .filter((destination) => filterLanguages(destination, langCode))
     .map((destination) => ({
-      name: cleanDestinationName(destination.name),
+      name: destination.name,
       displayName: destination.displayName,
     }));
 }
