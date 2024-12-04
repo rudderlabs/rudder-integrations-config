@@ -13,7 +13,6 @@ import os
 import warnings
 from enum import Enum
 import argparse
-from legacyConsentConfigMigrator import restructure_legacy_consent_fields
 from utils import (
     get_json_from_file,
     get_json_diff,
@@ -1513,7 +1512,6 @@ if __name__ == "__main__":
         action="store_true",
         help="Will update existing schema with any changes",
     )
-    parser.add_argument("-restructureLegacyConsentFields", action="store_true")
     group.add_argument(
         "-name", metavar="name", type=str, help="Enter the folder name under selector"
     )
@@ -1527,27 +1525,15 @@ if __name__ == "__main__":
     selector = args.selector
     shouldUpdateSchema = args.update
 
-    # THIS IS A TEMPORARY OPTION TO RESTRUCTURE LEGACY CONSENT FIELDS
-    # THIS WILL BE REMOVED ONCE ALL THE DESTINATIONS ARE UPDATED
-    restructureLegacyConsentFields = args.restructureLegacyConsentFields
-
     dir_path = f"./{CONFIG_DIR}/{selector}s"
     if args.all:
         if not os.path.isdir(dir_path):
             print(f"No {selector}s folder found")
             exit(1)
 
-        if restructureLegacyConsentFields:
-            restructure_legacy_consent_fields(os.listdir(dir_path), dir_path)
-        else:
-            current_items = os.listdir(dir_path)
-            for name in current_items:
-                get_schema_diff(name, selector, shouldUpdateSchema)
+        current_items = os.listdir(dir_path)
+        for name in current_items:
+            get_schema_diff(name, selector, shouldUpdateSchema)
     else:
         name = args.name
-        if restructureLegacyConsentFields:
-            restructure_legacy_consent_fields(
-                [dest_name.strip() for dest_name in name.split(",")], dir_path
-            )
-        else:
-            get_schema_diff(name, selector, shouldUpdateSchema)
+        get_schema_diff(name, selector, shouldUpdateSchema)
