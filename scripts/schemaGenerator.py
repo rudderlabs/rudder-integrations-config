@@ -1512,7 +1512,6 @@ if __name__ == "__main__":
         action="store_true",
         help="Will update existing schema with any changes",
     )
-    parser.add_argument("-restructureLegacyConsentFields", action="store_true")
     group.add_argument(
         "-name", metavar="name", type=str, help="Enter the folder name under selector"
     )
@@ -1525,10 +1524,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     selector = args.selector
     shouldUpdateSchema = args.update
-
-    # THIS IS A TEMPORARY OPTION TO RESTRUCTURE LEGACY CONSENT FIELDS
-    # THIS WILL BE REMOVED ONCE ALL THE DESTINATIONS ARE UPDATED
-    restructureLegacyConsentFields = args.restructureLegacyConsentFields
 
     dir_path = f"./{CONFIG_DIR}/{selector}s"
     if args.all:
