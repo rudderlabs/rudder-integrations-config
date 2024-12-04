@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.98.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.98.1...v1.98.2) (2024-12-04)
+
+
+### Bug Fixes
+
+* clean up legacy consent management UI fields ([#1826](https://github.com/rudderlabs/rudder-config-schema/issues/1826)) ([f9ced4e](https://github.com/rudderlabs/rudder-config-schema/commit/f9ced4ec96b9ec26e41083d9632ef5225d2b8a30))
+
 ### [1.98.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.98.0...v1.98.1) (2024-11-21)
 
 ## [1.98.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.97.3...v1.98.0) (2024-11-18)

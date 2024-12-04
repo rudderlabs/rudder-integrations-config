@@ -43,9 +43,9 @@ describe('Consent Management Fields Integrity tests', () => {
     // Validate db-config.json
     const dbConfigFilePath = path.resolve(`${destDir}/${destName}/db-config.json`);
     const dbConfig = getJSONDataFromFile(dbConfigFilePath);
-    const { destConfig, supportedSourceTypes } = dbConfig.config;
+    const { destConfig, supportedSourceTypes, includeKeys } = dbConfig.config;
 
-    it(`should have oneTrustCookieCategories and ketchConsentPurposes defined per source type instead of the defaultConfig in ${destName}`, () => {
+    it(`should have oneTrustCookieCategories and ketchConsentPurposes fields defined per source type instead of the defaultConfig for ${destName}`, () => {
       const { defaultConfig } = destConfig;
 
       expect(
@@ -73,11 +73,44 @@ describe('Consent Management Fields Integrity tests', () => {
       expect(destConfigSrcTypes.sort()).toEqual(supportedSourceTypes.sort());
     });
 
+    it(`should have consentManagement field defined per source type for ${destName}`, () => {
+      const { defaultConfig } = destConfig;
+
+      expect(defaultConfig.includes('consentManagement')).toBe(false);
+
+      let fail = false;
+      supportedSourceTypes.forEach((srcType: string) => {
+        if (!destConfig[srcType].includes('consentManagement')) {
+          fail = true;
+        }
+      });
+
+      expect(fail).toBe(false);
+
+      // Remove defaultConfig from the list of source types
+      const destConfigSrcTypes = Object.keys(destConfig);
+      destConfigSrcTypes.splice(destConfigSrcTypes.indexOf('defaultConfig'), 1);
+      expect(destConfigSrcTypes.sort()).toEqual(supportedSourceTypes.sort());
+    });
+
+    it(`should have oneTrustCookieCategories and ketchConsentPurposes fields defined in includeKeys for ${destName}`, () => {
+      if (includeKeys) {
+        expect(includeKeys.includes('oneTrustCookieCategories')).toBe(true);
+        expect(includeKeys.includes('ketchConsentPurposes')).toBe(true);
+      }
+    });
+
+    it(`should have consentManagement field defined in includeKeys for ${destName}`, () => {
+      if (includeKeys) {
+        expect(includeKeys.includes('consentManagement')).toBe(true);
+      }
+    });
+
     // Validate schema.json
     const schemaFilePath = path.resolve(`${destDir}/${destName}/schema.json`);
     const schema = getJSONDataFromFile(schemaFilePath);
 
-    it(`should have oneTrustCookieCategories and ketchConsentPurposes properly defined in schema.json in ${destName}`, () => {
+    it(`should have oneTrustCookieCategories and ketchConsentPurposes fields properly defined in schema.json for ${destName}`, () => {
       expect(schema.configSchema.properties.oneTrustCookieCategories).toBeDefined();
       expect(schema.configSchema.properties.ketchConsentPurposes).toBeDefined();
 
@@ -95,16 +128,33 @@ describe('Consent Management Fields Integrity tests', () => {
       ).toEqual(supportedSourceTypes.sort());
     });
 
+    it(`should have consentManagement field properly defined in schema.json for ${destName}`, () => {
+      expect(schema.configSchema.properties.consentManagement).toBeDefined();
+
+      expect(schema.configSchema.properties.consentManagement.type).toBe('object');
+
+      expect(schema.configSchema.properties.consentManagement.properties).toBeDefined();
+
+      expect(
+        Object.keys(schema.configSchema.properties.consentManagement.properties).sort(),
+      ).toEqual(supportedSourceTypes.sort());
+    });
+
     // Validate ui-config.json
     const uiConfigFilePath = path.resolve(`${destDir}/${destName}/ui-config.json`);
     const uiConfig = getJSONDataFromFile(uiConfigFilePath);
 
-    it(`should have oneTrustCookieCategories and ketchConsentPurposes properly defined in ui-config.json in ${destName}`, () => {
+    it(`should not have oneTrustCookieCategories and ketchConsentPurposes fields defined in ui-config.json for ${destName}`, () => {
       const oneTrustUIElementCount = deepSearch(uiConfig, 'oneTrustCookieCategories');
-      expect(oneTrustUIElementCount).toEqual(1);
+      expect(oneTrustUIElementCount).toEqual(0);
 
       const ketchUIElementCount = deepSearch(uiConfig, 'ketchConsentPurposes');
-      expect(ketchUIElementCount).toEqual(1);
+      expect(ketchUIElementCount).toEqual(0);
+    });
+
+    it(`should have consentManagement field properly defined in ui-config.json for ${destName}`, () => {
+      const consentManagementUIElementCount = deepSearch(uiConfig, 'consentManagement');
+      expect(consentManagementUIElementCount).toEqual(1);
     });
   });
 });
