@@ -13,7 +13,6 @@ import os
 import warnings
 from enum import Enum
 import argparse
-from legacyConsentConfigMigrator import restructure_legacy_consent_fields
 from utils import (
     get_json_from_file,
     get_json_diff,
@@ -1537,17 +1536,9 @@ if __name__ == "__main__":
             print(f"No {selector}s folder found")
             exit(1)
 
-        if restructureLegacyConsentFields:
-            restructure_legacy_consent_fields(os.listdir(dir_path), dir_path)
-        else:
-            current_items = os.listdir(dir_path)
-            for name in current_items:
-                get_schema_diff(name, selector, shouldUpdateSchema)
+        current_items = os.listdir(dir_path)
+        for name in current_items:
+            get_schema_diff(name, selector, shouldUpdateSchema)
     else:
         name = args.name
-        if restructureLegacyConsentFields:
-            restructure_legacy_consent_fields(
-                [dest_name.strip() for dest_name in name.split(",")], dir_path
-            )
-        else:
-            get_schema_diff(name, selector, shouldUpdateSchema)
+        get_schema_diff(name, selector, shouldUpdateSchema)
