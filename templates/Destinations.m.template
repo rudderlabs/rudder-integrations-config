@@ -1,7 +1,7 @@
 /*
  GENERATED - DO NOT EDIT
  This file is generated from the templates/Destinations.m.template file.
- Orginal file: https://github.com/rudderlabs/rudder-integrations-config/blob/main/generated/Destinations.m
+ Orginal file: https://github.com/rudderlabs/rudder-integrations-config/blob/develop/generated/Destinations.m
 
  NOTE: Containly only constants for device mode destinations */
 
