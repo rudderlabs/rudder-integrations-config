@@ -468,19 +468,22 @@
                     "to": "$."
                   }
                 ],
-                "jsonPathValidation": true,
                 "columns": [
                   {
                     "type": "textInput",
-                    "key": "from",
-                    "label": "RudderStack",
-                    "placeholder": "e.g: $.properties.key1"
+                    "key": "to",
+                    "label": "Destination property",
+                    "regex": "^\\$(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*$|^(?!\\$).{0,100}$",
+                    "regexErrorMessage": "Please enter a valid JSON path or a constant",
+                    "placeholder": "e.g: $.events.key2"
                   },
                   {
                     "type": "textInput",
-                    "key": "to",
-                    "label": "HTTP",
-                    "placeholder": "e.g: $.events.key2"
+                    "key": "from",
+                    "label": "RudderStack property",
+                    "regex": "^\\$(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*$",
+                    "regexErrorMessage": "Please enter a valid JSON path",
+                    "placeholder": "e.g: $.properties.key1"
                   }
                 ]
               }
@@ -494,19 +497,22 @@
                 "label": "Map your query parameters",
                 "configKey": "queryParams",
                 "default": [],
-                "jsonPathValidation": true,
                 "hideKeysJsonView": true,
                 "columns": [
                   {
                     "type": "textInput",
                     "key": "to",
                     "label": "Key",
+                    "regex": "^(?!\\$).{0,100}$",
+                    "regexErrorMessage": "JSON path is not supported. Please enter a constant",
                     "placeholder": "e.g: customerId"
                   },
                   {
                     "type": "textInput",
                     "key": "from",
                     "label": "Value",
+                    "regex": "^\\$(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*$|^(?!\\$).{0,100}$",
+                    "regexErrorMessage": "Please enter a valid JSON path or a constant",
                     "placeholder": "e.g: $.userId or \"userId\""
                   }
                 ]
@@ -522,18 +528,21 @@
                 "configKey": "headers",
                 "default": [],
                 "hideKeysJsonView": true,
-                "jsonPathValidation": true,
                 "columns": [
                   {
                     "type": "textInput",
                     "key": "to",
                     "label": "Key",
+                    "regex": "^(?!\\$).{0,100}$",
+                    "regexErrorMessage": "JSON path is not supported. Please enter a constant",
                     "placeholder": "e.g. content-type"
                   },
                   {
                     "type": "textInput",
                     "key": "from",
                     "label": "Value",
+                    "regex": "^\\$(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*$|^(?!\\$).{0,100}$",
+                    "regexErrorMessage": "Please enter a valid JSON path or a constant",
                     "placeholder": "e.g. \"application/json\""
                   }
                 ]
