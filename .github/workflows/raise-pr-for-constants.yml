@@ -1,0 +1,72 @@
+name: Raise PR for Destination Constants
+
+on:
+  push:
+    branches:
+      - develop
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  BRANCH_NAME: chore/gh-update-destinations-ts
+
+jobs:
+  check_changes:
+    runs-on: ubuntu-latest
+    outputs:
+      pr_required: ${{ steps.compare_files.outputs.pr_required }}
+    steps:
+      - name: Checkout Source Repo
+        uses: actions/checkout@v4
+        with:
+          ref: develop
+
+      - name: Checkout Destination Repo
+        run: |
+          DEST_REPO="rudderlabs/rudder-sdk-js"
+          git clone https://github.com/${DEST_REPO}.git dest-repo
+          cd dest-repo
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "noreply@github.com"
+          git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          git checkout -b ${{ env.BRANCH_NAME }}
+          git pull origin ${{ env.BRANCH_NAME }} || echo "No updates to pull"
+          
+      - name: Compare Destinations.ts
+        id: compare_files
+        run: |
+          SRC_FILE="generated/Destinations.ts"
+          DEST_REPO="rudderlabs/rudder-sdk-js"
+          DEST_PATH="packages/analytics-js-common/src/constants/integrations/Destinations.ts"
+
+          if cmp -s "$SRC_FILE" "dest-repo/$DEST_PATH"; then
+            echo "No changes detected." > result.txt
+            echo "pr_required=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changes detected." > result.txt
+            echo "pr_required=true" >> $GITHUB_OUTPUT
+          fi
+  raise_pr:
+    needs: check_changes
+    if: needs.check_changes.outputs.pr_required == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Commit and Push Changes
+        run: |
+          cd dest-repo
+          cp "../generated/Destinations.ts" "packages/analytics-js-common/src/constants/integrations/Destinations.ts"
+          git add packages/analytics-js-common/src/constants/integrations/Destinations.ts
+          git commit -m "chore: update destinations.ts"
+          git push origin ${{ env.BRANCH_NAME }}
+
+      - name: Create or Update PR
+        run: |
+          cd dest-repo
+          EXISTING_PR=$(gh pr list --head ${{ env.BRANCH_NAME }} --json number --jq ".[0].number")
+          if [ -z "$EXISTING_PR" ]; then
+            gh pr create -f
+          else
+            echo "PR already exists: $EXISTING_PR"
+          fi

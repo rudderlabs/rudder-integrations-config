@@ -1,9 +1,9 @@
 /*
  GENERATED - DO NOT EDIT
  This file is generated from the templates/Destinations.dart.template file.
- Orginal file: https://github.com/rudderlabs/rudder-integrations-config/blob/develop/generated/Destinations.dart
+ Original file: https://github.com/rudderlabs/rudder-integrations-config/blob/develop/generated/Destinations.dart
 
- NOTE: Containly only constants for device mode destinations
+ NOTE: Contains only constants for device mode destinations
  */
 
 class Destinations {
