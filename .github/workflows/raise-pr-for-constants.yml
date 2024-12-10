@@ -28,9 +28,6 @@ jobs:
           DEST_REPO="rudderlabs/rudder-sdk-js"
           git clone https://github.com/${DEST_REPO}.git dest-repo || exit 1
           cd dest-repo
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "noreply@github.com"
-          git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
           git checkout ${{ env.BRANCH_NAME }} || git checkout -b ${{ env.BRANCH_NAME }}
 
       - name: Compare Destinations.ts
@@ -46,17 +43,21 @@ jobs:
 
       - name: Commit and Push Changes
         if: steps.compare_files.outputs.pr_required == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.PAT }}
         run: |
           cd dest-repo
           cp "../generated/Destinations.ts" "packages/analytics-js-common/src/constants/integrations/Destinations.ts"
           git add packages/analytics-js-common/src/constants/integrations/Destinations.ts
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "noreply@github.com"
           git commit -m "fix: update destinations.ts"
           git push origin ${{ env.BRANCH_NAME }}
 
       - name: Create or Update PR
         if: steps.compare_files.outputs.pr_required == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PAT }}
         run: |
           cd dest-repo
           EXISTING_PR=$(gh pr list --head ${{ env.BRANCH_NAME }} --json number --jq ".[0].number")
