@@ -15,10 +15,8 @@ env:
   DEST_PATH: packages/analytics-js-common/src/constants/integrations/Destinations.ts
 
 jobs:
-  check_changes:
+  check_changes_and_raise_pr:
     runs-on: ubuntu-latest
-    outputs:
-      pr_required: ${{ steps.compare_files.outputs.pr_required }}
     steps:
       - name: Checkout Source Repo
         uses: actions/checkout@v4
@@ -46,12 +44,8 @@ jobs:
             echo "pr_required=true" >> $GITHUB_OUTPUT
           fi
 
-  raise_pr:
-    needs: check_changes
-    if: needs.check_changes.outputs.pr_required == 'true'
-    runs-on: ubuntu-latest
-    steps:
       - name: Commit and Push Changes
+        if: steps.compare_files.outputs.pr_required == 'true'
         run: |
           cd dest-repo
           cp "../generated/Destinations.ts" "packages/analytics-js-common/src/constants/integrations/Destinations.ts"
@@ -60,6 +54,7 @@ jobs:
           git push origin ${{ env.BRANCH_NAME }}
 
       - name: Create or Update PR
+        if: steps.compare_files.outputs.pr_required == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
