@@ -10,7 +10,7 @@ permissions:
   pull-requests: write
 
 env:
-  BRANCH_NAME: chore/gh-update-destinations-ts
+  BRANCH_NAME: fix/gh-update-destinations-ts
   SRC_FILE: generated/Destinations.ts
   DEST_PATH: packages/analytics-js-common/src/constants/integrations/Destinations.ts
 
@@ -33,8 +33,7 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "noreply@github.com"
           git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
-          git checkout -b ${{ env.BRANCH_NAME }}
-          git pull origin ${{ env.BRANCH_NAME }} || true
+          git checkout ${{ env.BRANCH_NAME }} || git checkout -b ${{ env.BRANCH_NAME }}
 
       - name: Compare Destinations.ts
         id: compare_files
@@ -57,7 +56,7 @@ jobs:
           cd dest-repo
           cp "../generated/Destinations.ts" "packages/analytics-js-common/src/constants/integrations/Destinations.ts"
           git add packages/analytics-js-common/src/constants/integrations/Destinations.ts
-          git commit -m "chore: update destinations.ts"
+          git commit -m "fix: update destinations.ts"
           git push origin ${{ env.BRANCH_NAME }}
 
       - name: Create or Update PR
@@ -68,7 +67,7 @@ jobs:
           EXISTING_PR=$(gh pr list --head ${{ env.BRANCH_NAME }} --json number --jq ".[0].number")
           if [ -z "$EXISTING_PR" ]; then
             gh pr create \
-              --title "chore: update destination constants" \
+              --title "fix: update destination constants" \
               --body "This PR updates the destination constants file.
 
               **Changes:**
