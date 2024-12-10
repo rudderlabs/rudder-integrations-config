@@ -33,7 +33,7 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             echo "::error::Generated constants are not up-to-date. Run 'npm run generate:constants' and commit the changes.";
             echo "Here are the differences:";
-            git diff;
+            git diff || true 2>&1;
             exit 1;
           else
             echo "Git state is clean.";
