@@ -25,8 +25,7 @@ jobs:
 
       - name: Checkout Destination Repo
         run: |
-          DEST_REPO="rudderlabs/rudder-sdk-js"
-          git clone https://github.com/${DEST_REPO}.git dest-repo || exit 1
+          git clone https://github.com/rudderlabs/rudder-sdk-js.git dest-repo || exit 1
           cd dest-repo
           git checkout ${{ env.BRANCH_NAME }} || git checkout -b ${{ env.BRANCH_NAME }}
 
@@ -43,14 +42,13 @@ jobs:
 
       - name: Commit and Push Changes
         if: steps.compare_files.outputs.pr_required == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.PAT }}
         run: |
           cd dest-repo
           cp "../generated/Destinations.ts" "packages/analytics-js-common/src/constants/integrations/Destinations.ts"
           git add packages/analytics-js-common/src/constants/integrations/Destinations.ts
           git config --global user.name "GitHub Actions"
           git config --global user.email "noreply@github.com"
+          git config --global url."https://${{ secrets.PAT }}@github.com/".insteadOf "https://github.com/"
           git commit -m "fix: update destinations.ts"
           git push origin ${{ env.BRANCH_NAME }}
 
