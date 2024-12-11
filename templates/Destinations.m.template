@@ -1,0 +1,25 @@
+/*
+ GENERATED - DO NOT EDIT
+ This file is generated from the templates/Destinations.m.template file.
+ Original file: https://github.com/rudderlabs/rudder-integrations-config/blob/develop/generated/Destinations.m
+
+ NOTE: Contains only constants for device mode destinations */
+
+#import <Foundation/Foundation.h>
+
+@interface Destinations : NSObject
+
+${destinations.map((dest) => `
+extern NSString * const ${dest.name}_NAME;
+
+extern NSString * const ${dest.name}_DISPLAY_NAME;`).join('\n')}
+
+@end
+
+@implementation Destinations
+${destinations.map((dest) => `
+NSString * const ${dest.name}_NAME = @"${dest.name}";
+
+NSString * const ${dest.name}_DISPLAY_NAME = @"${dest.displayName}";`).join('\n')}
+
+@end
