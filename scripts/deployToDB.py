@@ -8,11 +8,20 @@ import argparse
 from constants import CONFIG_DIR
 
 
+ALL_SELECTORS = ["destination", "source", "wht-lib-project"]
+
+
 def get_command_line_arguments():
     parser = argparse.ArgumentParser(description="Script to deploy config files to DB.")
     parser.add_argument("control_plane_url", nargs="?", help="Control plane URL")
     parser.add_argument("username", nargs="?", help="Control plane admin username")
     parser.add_argument("password", nargs="?", help="Control plane admin password")
+    parser.add_argument(
+        "selector",
+        nargs="?",
+        help="Specify destination, source or wht-lib-project",
+        default=None,
+    )
     parser.add_argument(
         "item_name", nargs="?", help="Specific item name to update.", default=None
     )
@@ -22,31 +31,44 @@ def get_command_line_arguments():
     control_plane_url = args.control_plane_url or os.getenv("CONTROL_PLANE_URL")
     username = args.username or os.getenv("API_USER")
     password = args.password or os.getenv("API_PASSWORD")
+    selector = args.selector or os.getenv("SELECTOR")
     item_name = args.item_name or os.getenv("ITEM_NAME")
 
-    missing_args = []
+    invalid_args = []
 
     if control_plane_url is None:
-        missing_args.append(
-            "1st positional argument or CONTROL_PLANE_URL environment variable"
+        invalid_args.append(
+            "1st positional argument or CONTROL_PLANE_URL environment variable is missing"
         )
     if username is None:
-        missing_args.append("2nd positional argument or API_USER environment variable")
-    if password is None:
-        missing_args.append(
-            "3rd positional argument or API_PASSWORD environment variable"
+        invalid_args.append(
+            "2nd positional argument or API_USER environment variable is missing"
         )
+    if password is None:
+        invalid_args.append(
+            "3rd positional argument or API_PASSWORD environment variable is missing"
+        )
+    if selector is None:
+        SELECTORS = ALL_SELECTORS
+    elif selector not in ALL_SELECTORS:
+        invalid_args.append(
+            "4th positional argument or SELECTOR environment variable is invalid"
+        )
+    else:
+        SELECTORS = [selector]
 
-    if missing_args:
-        print("Error: Missing the following arguments or environment variables:")
-        for arg in missing_args:
+    if invalid_args:
+        print("Error: The following arguments or environment variables are invalid:")
+        for arg in invalid_args:
             print(arg)
         sys.exit(1)
 
-    return control_plane_url, username, password, item_name
+    return control_plane_url, username, password, SELECTORS, item_name
 
 
-CONTROL_PLANE_URL, USERNAME, PASSWORD, ITEM_NAME = get_command_line_arguments()
+CONTROL_PLANE_URL, USERNAME, PASSWORD, SELECTORS, ITEM_NAME = (
+    get_command_line_arguments()
+)
 
 # CONSTANTS
 HEADER = {"Content-Type": "application/json"}
@@ -212,48 +234,18 @@ def get_stale_data(selector, report):
 
 
 if __name__ == "__main__":
+    for selector in SELECTORS:
+        print("\n")
+        print("#" * 50)
+        print("Running {} Definitions Updates".format(selector.capitalize()))
+        final_report = update_diff_db(selector, ITEM_NAME)
 
-    print("\n")
-    print("#" * 50)
-    print("Running Destination Definitions Updates")
-    dest_final_report = update_diff_db("destination", ITEM_NAME)
+        print("\n")
+        print("#" * 50)
+        print("{} Definition Update Report".format(selector.capitalize()))
+        print(get_formatted_json(final_report))
 
-    print("\n")
-    print("#" * 50)
-    print("Destination Definition Update Report")
-    print(get_formatted_json(dest_final_report))
-
-    print("\n")
-    print("#" * 50)
-    print("Stale Destinations Report")
-    print(get_formatted_json(get_stale_data("destination", dest_final_report)))
-
-    print("\n")
-    print("#" * 50)
-    print("Running Source Definitions Updates")
-    src_final_report = update_diff_db("source", ITEM_NAME)
-
-    print("\n")
-    print("#" * 50)
-    print("Source Definition Update Report")
-    print(get_formatted_json(src_final_report))
-
-    print("\n")
-    print("#" * 50)
-    print("Stale Sources Report")
-    print(get_formatted_json(get_stale_data("source", src_final_report)))
-
-    print("\n")
-    print("#" * 50)
-    print("Running Wht Lib Project Definitions Updates")
-    wht_final_report = update_diff_db("wht-lib-project", ITEM_NAME)
-
-    print("\n")
-    print("#" * 50)
-    print("Wht Lib Project Definition Update Report")
-    print(get_formatted_json(wht_final_report))
-
-    print("\n")
-    print("#" * 50)
-    print("Stale Wht Lib Projects Report")
-    print(get_formatted_json(get_stale_data("wht-lib-project", wht_final_report)))
+        print("\n")
+        print("#" * 50)
+        print("Stale {}s Report".format(selector.capitalize()))
+        print(get_formatted_json(get_stale_data(selector, final_report)))
