@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.99.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.99.0...v1.99.1) (2024-12-12)
+
+
+### Bug Fixes
+
+* **http:** update the default for propertiesMapping ([#1838](https://github.com/rudderlabs/rudder-config-schema/issues/1838)) ([5fc592f](https://github.com/rudderlabs/rudder-config-schema/commit/5fc592f4d52697737f6716a93e5b6372d3211e98))
+
 ## [1.99.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.98.2...v1.99.0) (2024-12-10)
 
 
