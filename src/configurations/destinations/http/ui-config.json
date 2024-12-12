@@ -490,8 +490,24 @@
             ]
           },
           {
-            "name": "Query Parameters",
+            "name": "URL Parameters",
             "fields": [
+              {
+                "type": "mapping",
+                "label": "Enter your path parameters in sequence",
+                "columns": [
+                  {
+                    "key": "path",
+                    "type": "textInput",
+                    "label": "Path",
+                    "placeholder": "$.userId or users",
+                    "regex": "^\\$(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*$|^(?!\\\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{1,100}$",
+                    "regexErrorMessage": "Please enter a valid JSON path or a constant"
+                  }
+                ],
+                "default": [],
+                "configKey": "pathParams"
+              },
               {
                 "type": "mapping",
                 "label": "Map your query parameters",

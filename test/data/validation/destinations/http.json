@@ -577,5 +577,123 @@
       "ketchConsentPurposes.web must be array",
       "ketchConsentPurposes.unity.0 must be object"
     ]
+  },
+  {
+    "testTitle": "With pathParams",
+    "config": {
+      "apiUrl": "http://sample.com/api/hooks/{{$.traits.userId}}/url/{{$.properties.event}}",
+      "auth": "basicAuth",
+      "username": "test-user",
+      "password": "",
+      "method": "POST",
+      "format": "JSON",
+      "http-connectionMode": "cloud",
+      "connectionMode": {
+        "cloud": "cloud"
+      },
+      "consentManagement": {},
+      "isBatchingEnabled": true,
+      "maxBatchSize": "10",
+      "headers": [
+        {
+          "from": "$.h1",
+          "to": "'val1'"
+        },
+        {
+          "from": "$.h2",
+          "to": "2"
+        },
+        {
+          "to": "testProp",
+          "from": "$.properties.testProp"
+        }
+      ],
+      "queryParams": [
+        {
+          "from": "$.q1",
+          "to": "'val1'"
+        }
+      ],
+      "propertiesMapping": [
+        {
+          "from": "$.properties.key1",
+          "to": "$.events.key2"
+        }
+      ],
+      "pathParams": [
+        {
+          "path": "$.properties.key1"
+        }
+      ],
+      "oneTrustCookieCategories": {
+        "android": [
+          {
+            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "web": {
+          "not": "an array"
+        },
+        "unity": [
+          "not an object",
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "android": [
+          {
+            "purpose": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "ios": [
+          {
+            "purpose": {
+              "not": "a string"
+            }
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "web": {
+          "not": "an array"
+        },
+        "unity": [
+          "not an object",
+          {
+            "purpose": "P4"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "oneTrustCookieCategories.android.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.ios.0.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.web must be array",
+      "oneTrustCookieCategories.unity.0 must be object",
+      "ketchConsentPurposes.android.0.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "ketchConsentPurposes.ios.0.purpose must be string",
+      "ketchConsentPurposes.web must be array",
+      "ketchConsentPurposes.unity.0 must be object"
+    ]
   }
 ]
