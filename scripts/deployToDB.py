@@ -13,12 +13,16 @@ def get_command_line_arguments():
     parser.add_argument("control_plane_url", nargs="?", help="Control plane URL")
     parser.add_argument("username", nargs="?", help="Control plane admin username")
     parser.add_argument("password", nargs="?", help="Control plane admin password")
+    parser.add_argument(
+        "item_name", nargs="?", help="Specific item name to update.", default=None
+    )
 
     args = parser.parse_args()
 
     control_plane_url = args.control_plane_url or os.getenv("CONTROL_PLANE_URL")
     username = args.username or os.getenv("API_USER")
     password = args.password or os.getenv("API_PASSWORD")
+    item_name = args.item_name or os.getenv("ITEM_NAME")
 
     missing_args = []
 
@@ -39,10 +43,10 @@ def get_command_line_arguments():
             print(arg)
         sys.exit(1)
 
-    return control_plane_url, username, password
+    return control_plane_url, username, password, item_name
 
 
-CONTROL_PLANE_URL, USERNAME, PASSWORD = get_command_line_arguments()
+CONTROL_PLANE_URL, USERNAME, PASSWORD, ITEM_NAME = get_command_line_arguments()
 
 # CONSTANTS
 HEADER = {"Content-Type": "application/json"}
@@ -139,11 +143,16 @@ def update_config(data_diff, selector):
     return json.dumps(results, indent=2)
 
 
-def update_diff_db(selector):
+def update_diff_db(selector, item_name=None):
     final_report = []
 
     ## data sets
-    current_items = os.listdir(f"./{CONFIG_DIR}/{selector}s")
+    if item_name:
+        current_items = [item_name]
+    else:
+        current_items = os.listdir(f"./{CONFIG_DIR}/{selector}s")
+
+    print(f"Current items: {current_items}")
 
     for item in current_items:
         # check if item is a directory
@@ -203,10 +212,11 @@ def get_stale_data(selector, report):
 
 
 if __name__ == "__main__":
+
     print("\n")
     print("#" * 50)
     print("Running Destination Definitions Updates")
-    dest_final_report = update_diff_db("destination")
+    dest_final_report = update_diff_db("destination", ITEM_NAME)
 
     print("\n")
     print("#" * 50)
@@ -221,7 +231,7 @@ if __name__ == "__main__":
     print("\n")
     print("#" * 50)
     print("Running Source Definitions Updates")
-    src_final_report = update_diff_db("source")
+    src_final_report = update_diff_db("source", ITEM_NAME)
 
     print("\n")
     print("#" * 50)
@@ -236,7 +246,7 @@ if __name__ == "__main__":
     print("\n")
     print("#" * 50)
     print("Running Wht Lib Project Definitions Updates")
-    wht_final_report = update_diff_db("wht-lib-project")
+    wht_final_report = update_diff_db("wht-lib-project", ITEM_NAME)
 
     print("\n")
     print("#" * 50)
