@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.100.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.99.1...v1.100.0) (2024-12-13)
+
+
+### Features
+
+* add tags for sdk source types ([#1841](https://github.com/rudderlabs/rudder-config-schema/issues/1841)) ([1f4e1c5](https://github.com/rudderlabs/rudder-config-schema/commit/1f4e1c5edb6fb95be21e62d5671427a91a371a50))
+* onboard topsort destination ([#1842](https://github.com/rudderlabs/rudder-config-schema/issues/1842)) ([2c683fe](https://github.com/rudderlabs/rudder-config-schema/commit/2c683fec0ac8d8518096413c6d2b018a1e7b4d1e))
+
+
+### Bug Fixes
+
+* pr body in constants pr workflow ([83d7b26](https://github.com/rudderlabs/rudder-config-schema/commit/83d7b2674f2b4bc209331d1dcd2b3c3bacafb4ab))
+* pr body in constants pr workflow ([3d227f7](https://github.com/rudderlabs/rudder-config-schema/commit/3d227f7126c96df9bf64fbd9587ac5d8f19fe17c))
+* pr labels in constants pr workflow ([e8c5167](https://github.com/rudderlabs/rudder-config-schema/commit/e8c5167cad5f9792e2621ddc7695fe85b7aa8fb4))
+
 ### [1.99.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.99.0...v1.99.1) (2024-12-12)
 
 
