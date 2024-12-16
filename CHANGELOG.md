@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.99.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.99.0...v1.99.1) (2024-12-12)
+
+
+### Bug Fixes
+
+* **http:** update the default for propertiesMapping ([#1838](https://github.com/rudderlabs/rudder-config-schema/issues/1838)) ([5fc592f](https://github.com/rudderlabs/rudder-config-schema/commit/5fc592f4d52697737f6716a93e5b6372d3211e98))
+
+## [1.99.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.98.2...v1.99.0) (2024-12-10)
+
+
+### Features
+
+* add iubenda to a subset of destinations ([#1795](https://github.com/rudderlabs/rudder-config-schema/issues/1795)) ([65b6f16](https://github.com/rudderlabs/rudder-config-schema/commit/65b6f16bc5de853c0dca0b6fe031f3e323b3ba73))
+* add iubenda to shopify source in tiktok ads dest ([#1824](https://github.com/rudderlabs/rudder-config-schema/issues/1824)) ([0d681b1](https://github.com/rudderlabs/rudder-config-schema/commit/0d681b10bd46b1bdb84d42b48b06f1d01daad785))
+* generate destination constants ([#1800](https://github.com/rudderlabs/rudder-config-schema/issues/1800)) ([5f58915](https://github.com/rudderlabs/rudder-config-schema/commit/5f589157b7c947ae7fd4ae46fe908588f8c67abf))
+* update mapping component regex for HTTP destination ([#1820](https://github.com/rudderlabs/rudder-config-schema/issues/1820)) ([54c5b17](https://github.com/rudderlabs/rudder-config-schema/commit/54c5b17e87eccbf77dc911ed1449f272917f3084))
+
+
+### Bug Fixes
+
+* constants pr workflow to keep all steps under the same job ([#1834](https://github.com/rudderlabs/rudder-config-schema/issues/1834)) ([e57aa07](https://github.com/rudderlabs/rudder-config-schema/commit/e57aa07e578f4017d06465baf82bca580233f8aa))
+* **http:** updated property mapping regex ([#1830](https://github.com/rudderlabs/rudder-config-schema/issues/1830)) ([186f04a](https://github.com/rudderlabs/rudder-config-schema/commit/186f04a63533a4240998e7eb26afd3a8b610e629))
+* pr body in constants pr workflow ([133681a](https://github.com/rudderlabs/rudder-config-schema/commit/133681ab820690d07c3c3364d573557215ea5fe9))
+* tokens in constants pr workflow ([05eaf6e](https://github.com/rudderlabs/rudder-config-schema/commit/05eaf6e594d2106844797a3ff88787f7752afcc0))
+* tokens in constants pr workflow ([676e0b0](https://github.com/rudderlabs/rudder-config-schema/commit/676e0b0ffb9adf5a7a13544be7d1a601f602ec50))
+
 ### [1.98.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.98.1...v1.98.2) (2024-12-04)
 
 
