@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.100.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.99.1...v1.100.0) (2024-12-18)
+
+
+### Features
+
+* onboard topsort destination ([#1842](https://github.com/rudderlabs/rudder-config-schema/issues/1842)) ([#1846](https://github.com/rudderlabs/rudder-config-schema/issues/1846)) ([0ce45b6](https://github.com/rudderlabs/rudder-config-schema/commit/0ce45b6bc44a29226353b2ad8d929f7372eac235))
+
 ### [1.99.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.99.0...v1.99.1) (2024-12-12)
 
 
