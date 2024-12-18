@@ -14,20 +14,11 @@
                 "fields": [
                   {
                     "type": "textInput",
-                    "label": "Pixel Id",
-                    "note": "Enter the Pixel ID of your Reddit Ads account associated with the conversion events",
-                    "configKey": "accountId",
+                    "label": "API Key",
+                    "configKey": "apiKey",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-                    "regexErrorMessage": "Invalid Pixel Id",
-                    "placeholder": "e.g: a2_dfsdfsXXXne",
-                    "secret": false
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "Hash Data",
-                    "configKey": "hashData",
-                    "default": true,
-                    "note": "Disable it if you are sending hashed data for fields (email, userId, ip, advertiserId)"
+                    "regexErrorMessage": "Invalid API Key",
+                    "placeholder": "e.g. 88a1b72e-a017-4803-9854-0c447045c29e"
                   }
                 ]
               }
@@ -40,7 +31,7 @@
                 "note": [
                   "Update how you want to route events from your source to destination. ",
                   {
-                    "text": "Get help deciding.",
+                    "text": "Get help deciding",
                     "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
                   }
                 ],
@@ -66,19 +57,19 @@
       },
       {
         "title": "Event mapping",
-        "note": "Map RudderStack to Reddit events",
+        "note": "Map RudderStack events to Topsort events",
         "hideEditIcon": true,
         "sections": [
           {
             "groups": [
               {
-                "title": "RudderStack to Reddit event mappings",
+                "title": "RudderStack Event to Topsort Event Mapping",
                 "fields": [
                   {
                     "type": "redirect",
-                    "redirectGroupKey": "customEventMapping",
-                    "label": "Events mapping",
-                    "note": "Map RudderStack events to Reddit events"
+                    "redirectGroupKey": "eventsMapping",
+                    "label": "Event and property mappings",
+                    "note": "Map RudderStack events/properties to Topsort events/properties"
                   }
                 ]
               }
@@ -88,50 +79,103 @@
       }
     ],
     "sdkTemplate": {
-      "title": "Web SDK settings",
+      "title": "SDK settings",
       "note": "not visible in the ui",
       "fields": []
     },
     "redirectGroups": {
-      "customEventMapping": {
+      "eventsMapping": {
         "fields": [
           {
             "type": "mapping",
-            "label": "Map your RudderStack Events to Reddit Events",
-            "note": "Enter the input event name which you want to map with a Reddit Event Name",
-            "configKey": "eventsMapping",
-            "default": [],
+            "label": "Map RudderStack event to Topsort event",
+            "configKey": "topsortEvents",
+            "default": [
+              {
+                "from": "Product Clicked",
+                "to": "clicks"
+              },
+              {
+                "from": "Product Viewed",
+                "to": "impressions"
+              },
+              {
+                "from": "Order Completed",
+                "to": "purchases"
+              }
+            ],
             "columns": [
               {
-                "type": "textInput",
-                "configKey": "from",
+                "type": "singleSelect",
+                "key": "from",
                 "label": "RudderStack Event",
-                "placeholder": "e.g: Product Viewed"
+                "options": [
+                  {
+                    "label": "Product Clicked",
+                    "value": "Product Clicked"
+                  },
+                  {
+                    "label": "Product Viewed",
+                    "value": "Product Viewed"
+                  },
+                  {
+                    "label": "Product Added",
+                    "value": "Product Added"
+                  },
+                  {
+                    "label": "Product Removed",
+                    "value": "Product Removed"
+                  },
+                  {
+                    "label": "Cart Viewed",
+                    "value": "Cart Viewed"
+                  },
+                  {
+                    "label": "Checkout Started",
+                    "value": "Checkout Started"
+                  },
+                  {
+                    "label": "Checkout Step Viewed",
+                    "value": "Checkout Step Viewed"
+                  },
+                  {
+                    "label": "Payment Info Entered",
+                    "value": "Payment Info Entered"
+                  },
+                  {
+                    "label": "Order Updated",
+                    "value": "Order Updated"
+                  },
+                  {
+                    "label": "Order Completed",
+                    "value": "Order Completed"
+                  },
+                  {
+                    "label": "Order Refunded",
+                    "value": "Order Refunded"
+                  },
+                  {
+                    "label": "Order Cancelled",
+                    "value": "Order Cancelled"
+                  }
+                ]
               },
               {
                 "type": "singleSelect",
-                "configKey": "to",
-                "label": "Reddit Event",
+                "key": "to",
+                "label": "Topsort event",
                 "options": [
                   {
-                    "name": "ViewContent",
-                    "value": "ViewContent"
+                    "label": "clicks",
+                    "value": "clicks"
                   },
                   {
-                    "name": "Search",
-                    "value": "Search"
+                    "label": "impressions",
+                    "value": "impressions"
                   },
                   {
-                    "name": "AddToCart",
-                    "value": "AddToCart"
-                  },
-                  {
-                    "name": "AddToWishlist",
-                    "value": "AddToWishlist"
-                  },
-                  {
-                    "name": "Purchase",
-                    "value": "Purchase"
+                    "label": "purchases",
+                    "value": "purchases"
                   }
                 ]
               }
