@@ -23,7 +23,7 @@
                       }
                     ],
                     "configKey": "apiKey",
-                    "regex": "^(.{1,100})$",
+                    "regex": "^(?!.*\\{\\{.*\\|\\|(.*)\\}\\}).{1,100}$",
                     "regexErrorMessage": "Invalid Api Key",
                     "placeholder": "e.g: bAjsdGXXXXo9sjw23Slj",
                     "secret": true
@@ -238,7 +238,7 @@
                     "label": "Screen Event Name Format",
                     "note": "Assign a event name for your screen calls. Text {{ }} will be replaced with event payload value",
                     "configKey": "userProvidedScreenEventString",
-                    "regex": "^(.{0,200})$",
+                    "regex": "^(?!.*\\{\\{.*\\|\\|(.*)\\}\\}).{0,200}$",
                     "regexErrorMessage": "Invalid Screen Event Name",
                     "placeholder": "e.g: Viewed a {{ name }}",
                     "secret": false,
@@ -270,9 +270,9 @@
                     "note": "Specify the type of group (group_type) for your group calls to Amplitude. Examples of a group_type could be: Org ID, Org Name, or Industry",
                     "configKey": "groupTypeTrait",
                     "placeholder": "e.g: company_id",
-                    "regex": "^(.{0,100})$",
-                    "regexErrorMessage": "Invalid Group Name Trait",
-                    "dynamicConfigSupported": true
+                    "dynamicConfigSupported": true,
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Group Name Trait"
                   },
                   {
                     "type": "textInput",
@@ -280,9 +280,9 @@
                     "note": "Specify the group value (group_value) for your group calls to Amplitude. For example, if you set group_type: \"industry\", group_value might be \"retail\"",
                     "configKey": "groupValueTrait",
                     "placeholder": "e.g: company_name",
+                    "dynamicConfigSupported": true,
                     "regex": "^(.{0,100})$",
-                    "regexErrorMessage": "Invalid Group Name Trait",
-                    "dynamicConfigSupported": true
+                    "regexErrorMessage": "Invalid Group Name Trait"
                   }
                 ]
               },
@@ -437,7 +437,7 @@
                         "link": "https://help.amplitude.com/hc/en-us/articles/360058073772-Create-and-manage-organizations-and-projects#view-and-edit-your-project-information"
                       }
                     ],
-                    "regex": "^(.{0,100})$",
+                    "regex": "^(?!.*\\{\\{.*\\|\\|(.*)\\}\\}).{0,100}$",
                     "regexErrorMessage": "Invalid Api Key",
                     "placeholder": "e.g: bSjsdXXXX9sjw23Ahj",
                     "secret": true
@@ -447,7 +447,7 @@
                     "label": "Version Name",
                     "note": "Assign a version name for your page, and we'll send it to Amplitude for more detailed events",
                     "configKey": "versionName",
-                    "regex": "^(.{0,100})$",
+                    "regex": "^(?!.*\\{\\{.*\\|\\|(.*)\\}\\}).{0,100}$",
                     "regexErrorMessage": "Invalid Version Name",
                     "placeholder": "e.g: 1.12.3",
                     "secret": false,
@@ -696,7 +696,7 @@
           "note": "Set the time limit (in ms) between batch uploads",
           "configKey": "eventUploadPeriodMillis",
           "default": "1000",
-          "regex": "^([0-9]{0,100})$",
+          "regex": "^(?!.*\\{\\{.*\\|\\|(.*)\\}\\})([0-9]{0,100})$",
           "regexErrorMessage": "Invalid Value",
           "placeholder": "e.g: 1000"
         },
@@ -705,7 +705,7 @@
           "label": "Batch event upload threshold",
           "note": "Set the minimum number of events to be sent in a batch",
           "configKey": "eventUploadThreshold",
-          "regex": "^([0-9]{0,100})$",
+          "regex": "^(?!.*\\{\\{.*\\|\\|(.*)\\}\\})([0-9]{0,100})$",
           "regexErrorMessage": "Invalid Value",
           "default": "30",
           "placeholder": "e.g: 30"
