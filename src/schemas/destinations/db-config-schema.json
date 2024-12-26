@@ -1,7 +1,11 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "required": ["name", "displayName", "config"],
+  "required": [
+    "name",
+    "displayName",
+    "config"
+  ],
   "title": "Destination definition schema",
   "description": "The schema for a destination definition. This is used to validate the destination definition configuration files (db-config.json).",
   "properties": {
@@ -11,7 +15,11 @@
       "description": "A unique name for a destination without any whitespace or special characters.",
       "$comment": "Typically, all the characters are in uppercase with words separated by underscores.",
       "pattern": "^[a-zA-Z0-9_-]+$",
-      "examples": ["BING_ADS", "GOOGLE_ANALYTICS", "FACEBOOK_ADS"]
+      "examples": [
+        "BING_ADS",
+        "GOOGLE_ANALYTICS",
+        "FACEBOOK_ADS"
+      ]
     },
     "displayName": {
       "type": "string",
@@ -31,13 +39,18 @@
       "title": "Category",
       "description": "The category of the destination.",
       "$comment": "Typically, needs to be defined only for warehouse destinations.",
-      "enum": ["warehouse"]
+      "enum": [
+        "warehouse"
+      ]
     },
     "config": {
       "type": "object",
       "title": "Configuration",
       "description": "This hosts all the destination parameters.",
-      "required": ["supportedSourceTypes", "destConfig"],
+      "required": [
+        "supportedSourceTypes",
+        "destConfig"
+      ],
       "additionalProperties": false,
       "properties": {
         "transformAtV1": {
@@ -45,7 +58,11 @@
           "title": "Transform At V1",
           "description": "The module in the server that should initiate destination transformation.",
           "$comment": "This field deprecates 'transformAt'.",
-          "enum": ["processor", "router", "none"],
+          "enum": [
+            "processor",
+            "router",
+            "none"
+          ],
           "default": "processor"
         },
         "features": {
@@ -54,7 +71,9 @@
           "description": "The list of features supported by the destination.",
           "items": {
             "type": "string",
-            "enum": ["vdm-next"]
+            "enum": [
+              "vdm-next"
+            ]
           },
           "minItems": 1,
           "uniqueItems": true
@@ -217,7 +236,9 @@
               "type": "object",
               "title": "Source Type Filter Map",
               "description": "The event types supported by the destination for the source type.",
-              "required": ["messageType"],
+              "required": [
+                "messageType"
+              ],
               "properties": {
                 "messageType": {
                   "type": "array",
@@ -311,19 +332,25 @@
           "type": "object",
           "title": "Authentication",
           "description": "The authentication parameters for the destination.",
-          "required": ["type"],
+          "required": [
+            "type"
+          ],
           "properties": {
             "type": {
               "type": "string",
               "title": "Type",
               "description": "The mechanism of authentication active for the destination.",
-              "enum": ["OAuth"]
+              "enum": [
+                "OAuth"
+              ]
             },
             "provider": {
               "type": "string",
               "title": "Provider",
               "description": "The authentication provider's name.",
-              "enum": ["Google"]
+              "enum": [
+                "Google"
+              ]
             },
             "role": {
               "type": "string",
@@ -338,7 +365,10 @@
               "$comment": "'delivery' - event delivery requests. 'delete' - user deletion requests",
               "items": {
                 "type": "string",
-                "enum": ["delivery", "delete"]
+                "enum": [
+                  "delivery",
+                  "delete"
+                ]
               },
               "minItems": 1,
               "uniqueItems": true
@@ -375,9 +405,56 @@
           "description": "TBD",
           "items": {
             "type": "string",
-            "enum": ["mirror", "upsert"]
+            "enum": [
+              "mirror",
+              "upsert"
+            ]
           },
           "uniqueItems": true
+        },
+        "versions": {
+          "type": "array",
+          "title": "Versions",
+          "description": "The versions supported by the destination.",
+          "items": {
+            "type": "object",
+            "required": [
+              "type",
+              "actions",
+              "sourceCategory"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "title": "Type",
+                "description": "The version type supported by the destination.",
+                "$comment": "This is used to identify the version of the destination.",
+                "enum": [
+                  "es-v1",
+                  "retl-v1",
+                  "retl-v2"
+                ]
+              },
+              "actions": {
+                "type": "array",
+                "title": "Actions",
+                "description": "The actions supported by the version.",
+                "$comment": "This is used to identify the actions supported by the version.",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "create",
+                    "update"
+                  ]
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "prerequisite": {
+                "$ref": "#/definitions/logicalOrBasePrerequisite"
+              }
+            }
+          }
         }
       },
       "allOf": [
@@ -391,90 +468,130 @@
                     "properties": {
                       "web": {
                         "type": "array",
-                        "contains": { "const": "hybrid" }
+                        "contains": {
+                          "const": "hybrid"
+                        }
                       }
                     },
-                    "required": ["web"]
+                    "required": [
+                      "web"
+                    ]
                   },
                   {
                     "properties": {
                       "android": {
                         "type": "array",
-                        "contains": { "const": "hybrid" }
+                        "contains": {
+                          "const": "hybrid"
+                        }
                       }
                     },
-                    "required": ["android"]
+                    "required": [
+                      "android"
+                    ]
                   },
                   {
                     "properties": {
                       "ios": {
                         "type": "array",
-                        "contains": { "const": "hybrid" }
+                        "contains": {
+                          "const": "hybrid"
+                        }
                       }
                     },
-                    "required": ["ios"]
+                    "required": [
+                      "ios"
+                    ]
                   },
                   {
                     "properties": {
                       "unity": {
                         "type": "array",
-                        "contains": { "const": "hybrid" }
+                        "contains": {
+                          "const": "hybrid"
+                        }
                       }
                     },
-                    "required": ["unity"]
+                    "required": [
+                      "unity"
+                    ]
                   },
                   {
                     "properties": {
                       "amp": {
                         "type": "array",
-                        "contains": { "const": "hybrid" }
+                        "contains": {
+                          "const": "hybrid"
+                        }
                       }
                     },
-                    "required": ["amp"]
+                    "required": [
+                      "amp"
+                    ]
                   },
                   {
                     "properties": {
                       "reactnative": {
                         "type": "array",
-                        "contains": { "const": "hybrid" }
+                        "contains": {
+                          "const": "hybrid"
+                        }
                       }
                     },
-                    "required": ["reactnative"]
+                    "required": [
+                      "reactnative"
+                    ]
                   },
                   {
                     "properties": {
                       "flutter": {
                         "type": "array",
-                        "contains": { "const": "hybrid" }
+                        "contains": {
+                          "const": "hybrid"
+                        }
                       }
                     },
-                    "required": ["flutter"]
+                    "required": [
+                      "flutter"
+                    ]
                   },
                   {
                     "properties": {
                       "cordova": {
                         "type": "array",
-                        "contains": { "const": "hybrid" }
+                        "contains": {
+                          "const": "hybrid"
+                        }
                       }
                     },
-                    "required": ["cordova"]
+                    "required": [
+                      "cordova"
+                    ]
                   },
                   {
                     "properties": {
                       "shopify": {
                         "type": "array",
-                        "contains": { "const": "hybrid" }
+                        "contains": {
+                          "const": "hybrid"
+                        }
                       }
                     },
-                    "required": ["shopify"]
+                    "required": [
+                      "shopify"
+                    ]
                   }
                 ]
               }
             },
-            "required": ["supportedConnectionModes"]
+            "required": [
+              "supportedConnectionModes"
+            ]
           },
           "then": {
-            "required": ["hybridModeCloudEventsFilter"],
+            "required": [
+              "hybridModeCloudEventsFilter"
+            ],
             "properties": {
               "hybridModeCloudEventsFilter": {
                 "type": "object"
@@ -530,7 +647,6 @@
             }
           ]
         },
-
         "deprecated": {
           "type": "boolean",
           "title": "Deprecated",
@@ -603,14 +719,20 @@
       "description": "Some destinations send 2xx as status code even when the request has some errors. Hence, we have to parse the response body to determine the actual status.",
       "$comment": "This method of parsing the response is DEPRECATED now in lieu of transformer proxy.",
       "additionalProperties": false,
-      "required": ["responseType", "rules"],
+      "required": [
+        "responseType",
+        "rules"
+      ],
       "properties": {
         "responseType": {
           "type": "string",
           "title": "Response Type",
           "description": "The response type from the destination.",
           "$comment": "This indicates the type of response returned by the destination.",
-          "enum": ["JSON", "TXT"]
+          "enum": [
+            "JSON",
+            "TXT"
+          ]
         },
         "rules": {
           "type": "object",
@@ -652,13 +774,82 @@
     }
   },
   "definitions": {
+    "basePrerequisite": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "featureFlag"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "logicalPrerequisite": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "or",
+            "and"
+          ]
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/logicalOrBasePrerequisite"
+          }
+        }
+      },
+      "required": [
+        "type",
+        "prerequisites"
+      ],
+      "additionalProperties": false
+    },
+    "logicalOrBasePrerequisite": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/basePrerequisite"
+        },
+        {
+          "$ref": "#/definitions/logicalPrerequisite"
+        }
+      ]
+    },
     "eventType": {
       "type": "string",
-      "enum": ["track", "identify", "page", "screen", "alias", "group", "audiencelist", "record"]
+      "enum": [
+        "track",
+        "identify",
+        "page",
+        "screen",
+        "alias",
+        "group",
+        "audiencelist",
+        "record"
+      ]
     },
     "connectionMode": {
       "type": "string",
-      "enum": ["cloud", "device", "hybrid"]
+      "enum": [
+        "cloud",
+        "device",
+        "hybrid"
+      ]
     },
     "sourceType": {
       "type": "string",
@@ -691,7 +882,10 @@
         "success": {
           "type": "string",
           "title": "Success",
-          "enum": ["true", "false"]
+          "enum": [
+            "true",
+            "false"
+          ]
         }
       },
       "minProperties": 1,

@@ -2,24 +2,78 @@
   "name": "FB_CUSTOM_AUDIENCE",
   "displayName": "Facebook Custom Audience",
   "config": {
-    "features": ["vdm-next"],
+    "features": [
+      "vdm-next"
+    ],
     "supportsBlankAudienceCreation": true,
     "disableJsonMapper": true,
     "supportsVisualMapper": true,
-    "syncBehaviours": ["mirror"],
+    "syncBehaviours": [
+      "mirror"
+    ],
     "transformAtV1": "router",
     "saveDestinationResponse": true,
-    "includeKeys": ["oneTrustCookieCategories", "ketchConsentPurposes", "consentManagement"],
+    "includeKeys": [
+      "oneTrustCookieCategories",
+      "ketchConsentPurposes",
+      "consentManagement"
+    ],
     "excludeKeys": [],
-    "supportedSourceTypes": ["cloud", "warehouse", "shopify"],
+    "supportedSourceTypes": [
+      "cloud",
+      "warehouse",
+      "shopify"
+    ],
+    "versions": [
+      {
+        "type": "es-v1",
+        "actions": [
+          "create",
+          "update"
+        ]
+      },
+      {
+        "type": "retl-v1",
+        "actions": [
+          "create",
+          "update"
+        ],
+        "prerequisite": {
+          "type": "featureFlag",
+          "name": "AMP_fbca-retl-v2-enabled",
+          "value": "false"
+        }
+      },
+      {
+        "type": "retl-v2",
+        "actions": [
+          "create",
+          "update"
+        ],
+        "prerequisite": {
+          "type": "featureFlag",
+          "name": "AMP_fbca-retl-v2-enabled",
+          "value": "true"
+        }
+      }
+    ],
     "supportedMessageTypes": {
-      "cloud": ["audiencelist", "record"]
+      "cloud": [
+        "audiencelist",
+        "record"
+      ]
     },
     "isAudienceSupported": true,
     "supportedConnectionModes": {
-      "cloud": ["cloud"],
-      "warehouse": ["cloud"],
-      "shopify": ["cloud"]
+      "cloud": [
+        "cloud"
+      ],
+      "warehouse": [
+        "cloud"
+      ],
+      "shopify": [
+        "cloud"
+      ]
     },
     "destConfig": {
       "defaultConfig": [
@@ -54,7 +108,10 @@
         "ketchConsentPurposes"
       ]
     },
-    "secretKeys": ["accessToken", "appSecret"]
+    "secretKeys": [
+      "accessToken",
+      "appSecret"
+    ]
   },
   "responseRules": {
     "responseType": "JSON",
