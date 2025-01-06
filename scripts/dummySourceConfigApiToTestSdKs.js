@@ -64,7 +64,7 @@ const getSourceConfig = (writeKey) => ({
 // Function to decode and validate Basic Auth
 function getAuthInfo(authHeader) {
   if (!authHeader || !authHeader.startsWith('Basic ')) {
-    return false;
+    return {};
   }
 
   // Decode the Base64 string
@@ -101,7 +101,7 @@ const server = http.createServer((req, res) => {
   const authHeader = req.headers.authorization;
 
   const authInfo = getAuthInfo(authHeader);
-  const writeKey = authInfo.username || query.writeKey;
+  const writeKey = authInfo?.username || query.writeKey;
 
   // Set response headers
   res.writeHead(200, { 'Content-Type': 'application/json' });
