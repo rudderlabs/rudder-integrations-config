@@ -8,7 +8,7 @@ import argparse
 from constants import CONFIG_DIR
 
 
-ALL_SELECTORS = ["destination", "source", "wht-lib-project"]
+ALL_SELECTORS = ["destination", "source"]
 
 
 def get_command_line_arguments():
@@ -19,7 +19,7 @@ def get_command_line_arguments():
     parser.add_argument(
         "selector",
         nargs="?",
-        help="Specify destination, source or wht-lib-project",
+        help="Specify destination or source",
         default=None,
     )
     parser.add_argument(
