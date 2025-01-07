@@ -1,37 +1,13 @@
 /* eslint-disable no-console */
 const fs = require('fs');
 const path = require('path');
+const { filterLanguages } = require('./common');
 
 const destinationNameRegex = /^\w+$/;
 // Path to the templates and generated files
 const templatesDir = path.join(__dirname, '../templates');
 const generatedDir = path.join(__dirname, '../generated');
 const destinationsDir = path.join(__dirname, '../src/configurations/destinations');
-
-const languageMap = {
-  web: ['ts', 'js'],
-  flutter: ['dart'],
-  ios: ['m', 'swift'],
-  android: ['kt', 'java'],
-};
-
-// Function to check if the template should be generated for a specific language
-function filterLanguages(destination, langCode) {
-  if (!destination?.config?.supportedConnectionModes) {
-    console.warn(`Destination ${destination.name} is missing supportedConnectionModes`);
-    return false;
-  }
-  const { supportedConnectionModes } = destination.config;
-
-  // Filtering logic
-  return Object.keys(supportedConnectionModes)
-    .filter((platform) => {
-      const modes = supportedConnectionModes[platform];
-      // Check if "device" or "hybrid" mode is present
-      return modes.includes('device') || modes.includes('hybrid');
-    })
-    .some((platform) => languageMap[platform]?.includes(langCode));
-}
 
 // Function to read the template file and process it
 function processTemplate(template, data) {
