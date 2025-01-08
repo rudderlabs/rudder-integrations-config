@@ -75,7 +75,6 @@ def generate_uiconfig_pattern(field, dbConfig=None) -> str:
     destName = ""
     if "name" in dbConfig:
         destName = dbConfig["name"].lower()
-    # configKey = field["configKey"]
     # TODO: remove this once all the destinations have been updated with dynamicConfigSupported field
     if destName not in CLEANED_DESTINATIONS:
         return generalize_regex_pattern(field)
