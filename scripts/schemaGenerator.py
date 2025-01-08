@@ -24,6 +24,8 @@ from constants import CONFIG_DIR
 
 EXCLUDED_DEST = ["postgres", "bq", "azure_synapse", "clickhouse", "deltalake", "kafka"]
 
+# TODO: remove this once all the destinations have been updated with dynamicConfigSupported field
+CLEANED_DESTINATIONS = ["adobe_analytics"]
 
 class FieldTypeEnum(Enum):
     STRING = "string"
@@ -54,6 +56,34 @@ def get_options_list_for_enum(field):
         options_list.append("")
     return options_list
 
+def is_dynamic_config_supported_field(field, dbConfig=None):
+    if dbConfig is None:
+        # Case where dbConfig doesn't contain dynamicConfigSupported field at all
+        return False
+    dynamicConfigSupported = dbConfig["dynamicConfigSupported"]
+    configKey = ""
+    if "configKey" in field:
+        configKey = field["configKey"]
+    isDynamicConfigSupportedField = configKey in dynamicConfigSupported
+    return isDynamicConfigSupportedField
+
+def generate_uiconfig_pattern(field, dbConfig=None) -> str:
+    field_supports_dynamic_config = is_dynamic_config_supported_field(field, dbConfig)
+    destName = ""
+    if "name" in dbConfig:
+        destName = dbConfig["name"].lower()
+    configKey = field["configKey"]
+    # TODO: remove this once all the destinations have been updated with dynamicConfigSupported field
+    if destName not in CLEANED_DESTINATIONS:
+        return generalize_regex_pattern(field)
+
+    if field_supports_dynamic_config:
+        return generalize_regex_pattern(field)
+    # regex from ui-config
+    if "regex" in field:
+        return field["regex"]
+    else:
+        return "^(.{0,100})$"
 
 def generalize_regex_pattern(field):
     """Generates the pattern for schema based on the type of field.
@@ -269,12 +299,12 @@ def generate_schema_for_textinput(field, dbConfig, schema_field_name):
                 }
                 if "regex" in field:
                     textInputSchemaObj["properties"][sourceType]["pattern"] = (
-                        generalize_regex_pattern(field)
+                        generate_uiconfig_pattern(field, dbConfig)
                     )
     else:
         textInputSchemaObj = {"type": FieldTypeEnum.STRING.value}
         if "regex" in field:
-            textInputSchemaObj["pattern"] = generalize_regex_pattern(field)
+            textInputSchemaObj["pattern"] = generate_uiconfig_pattern(field, dbConfig)
     return textInputSchemaObj
 
 
@@ -292,7 +322,7 @@ def generate_schema_for_textarea_input(field, dbConfig, schema_field_name):
     """
     textareaInputObj = {"type": FieldTypeEnum.STRING.value}
     if "regex" in field:
-        textareaInputObj["pattern"] = generalize_regex_pattern(field)
+        textareaInputObj["pattern"] = generate_uiconfig_pattern(field, dbConfig)
     return textareaInputObj
 
 
@@ -394,7 +424,7 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
             and customField["type"] != "singleSelect"
             and customField["type"] != "dynamicSelectForm"
         ):
-            customFieldSchemaObj["pattern"] = generalize_regex_pattern(customField)
+            customFieldSchemaObj["pattern"] = generate_uiconfig_pattern(customField, dbConfig)
 
         # If the custom field is source dependent, we remove the source keys as it's not required inside custom fields, rather they need to be moved to top.
         if isCustomFieldDependentOnSource:
@@ -510,13 +540,13 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
         }
         if field["type"] == "dynamicSelectForm":
             if forFieldWithTo != (field.get("reverse", False) == False):
-                obj["pattern"] = generalize_regex_pattern(field)
+                obj["pattern"] = generate_uiconfig_pattern(field, dbConfig)
             else:
                 if "defaultOption" in field:
                     obj["default"] = field["defaultOption"]["value"]
                 obj["enum"] = get_options_list_for_enum(field)
         else:
-            obj["pattern"] = generalize_regex_pattern(field)
+            obj["pattern"] = generate_uiconfig_pattern(field, dbConfig)
         return obj
 
     dynamicFormSchemaObject = {}
@@ -602,7 +632,7 @@ def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
     tagItemProps = {
         str(field["tagKey"]): {
             "type": FieldTypeEnum.STRING.value,
-            "pattern": generalize_regex_pattern(field),
+            "pattern": generate_uiconfig_pattern(field, dbConfig),
         }
     }
     tagItem["properties"] = tagItemProps
@@ -1490,6 +1520,9 @@ def get_schema_diff(name, selector, shouldUpdateSchema=False):
         uiConfig = file_content.get("uiConfig")
         schema = file_content.get("configSchema")
         dbConfig = file_content.get("config")
+        # introduced for dynamic config pattern generation part
+        # TODO: remove this once all the destinations have been updated with dynamicConfigSupported field
+        dbConfig["name"] = name
 
         validate_config_consistency(
             name, selector, uiConfig, dbConfig, schema, shouldUpdateSchema
