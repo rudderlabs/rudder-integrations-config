@@ -62,7 +62,7 @@
           "properties": {
             "to": {
               "type": "string",
-              "pattern": "^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{1,100}$"
+              "pattern": "^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- ]{1,100}$"
             },
             "from": {
               "type": "string",
@@ -82,7 +82,7 @@
             },
             "from": {
               "type": "string",
-              "pattern": "^\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{1,100}$"
+              "pattern": "^\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- /\\\\]{1,100}$"
             }
           }
         }
@@ -965,7 +965,7 @@
           "properties": {
             "username": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+              "pattern": "^(.{0,100})$"
             }
           },
           "required": ["username"]
@@ -984,7 +984,7 @@
           "properties": {
             "password": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+              "pattern": "^(.{0,100})$"
             }
           },
           "required": ["password"]
@@ -1003,7 +1003,7 @@
           "properties": {
             "bearerToken": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,255})$"
+              "pattern": "^(.{1,255})$"
             }
           },
           "required": ["bearerToken"]
@@ -1020,9 +1020,9 @@
         },
         "then": {
           "properties": {
-            "bearerToken": {
+            "apiKeyName": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+              "pattern": "^(\\S{1,100})$"
             }
           },
           "required": ["apiKeyName"]
@@ -1039,9 +1039,9 @@
         },
         "then": {
           "properties": {
-            "bearerToken": {
+            "apiKeyValue": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+              "pattern": "^(.{1,100})$"
             }
           },
           "required": ["apiKeyValue"]
@@ -1060,7 +1060,7 @@
           "properties": {
             "maxBatchSize": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([1-9][0-9]{0,1}|100)$"
+              "pattern": "^([1-9][0-9]{0,1}|100)$"
             }
           },
           "required": ["maxBatchSize"]
