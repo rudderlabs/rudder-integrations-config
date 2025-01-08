@@ -27,6 +27,7 @@ EXCLUDED_DEST = ["postgres", "bq", "azure_synapse", "clickhouse", "deltalake", "
 # TODO: remove this once all the destinations have been updated with dynamicConfigSupported field
 CLEANED_DESTINATIONS = ["adobe_analytics"]
 
+
 class FieldTypeEnum(Enum):
     STRING = "string"
     OBJECT = "object"
@@ -56,6 +57,7 @@ def get_options_list_for_enum(field):
         options_list.append("")
     return options_list
 
+
 def is_dynamic_config_supported_field(field, dbConfig=None):
     if dbConfig is None:
         # Case where dbConfig doesn't contain dynamicConfigSupported field at all
@@ -66,6 +68,7 @@ def is_dynamic_config_supported_field(field, dbConfig=None):
         configKey = field["configKey"]
     isDynamicConfigSupportedField = configKey in dynamicConfigSupported
     return isDynamicConfigSupportedField
+
 
 def generate_uiconfig_pattern(field, dbConfig=None) -> str:
     field_supports_dynamic_config = is_dynamic_config_supported_field(field, dbConfig)
@@ -84,6 +87,7 @@ def generate_uiconfig_pattern(field, dbConfig=None) -> str:
         return field["regex"]
     else:
         return "^(.{0,100})$"
+
 
 def generalize_regex_pattern(field):
     """Generates the pattern for schema based on the type of field.
@@ -424,7 +428,9 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
             and customField["type"] != "singleSelect"
             and customField["type"] != "dynamicSelectForm"
         ):
-            customFieldSchemaObj["pattern"] = generate_uiconfig_pattern(customField, dbConfig)
+            customFieldSchemaObj["pattern"] = generate_uiconfig_pattern(
+                customField, dbConfig
+            )
 
         # If the custom field is source dependent, we remove the source keys as it's not required inside custom fields, rather they need to be moved to top.
         if isCustomFieldDependentOnSource:
