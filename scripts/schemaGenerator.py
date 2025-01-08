@@ -59,7 +59,7 @@ def get_options_list_for_enum(field):
 
 
 def is_dynamic_config_supported_field(field, dbConfig=None):
-    if dbConfig is None:
+    if dbConfig is None or "dynamicConfigSupported" not in dbConfig:
         # Case where dbConfig doesn't contain dynamicConfigSupported field at all
         return False
     dynamicConfigSupported = dbConfig["dynamicConfigSupported"]
@@ -75,7 +75,7 @@ def generate_uiconfig_pattern(field, dbConfig=None) -> str:
     destName = ""
     if "name" in dbConfig:
         destName = dbConfig["name"].lower()
-    configKey = field["configKey"]
+    # configKey = field["configKey"]
     # TODO: remove this once all the destinations have been updated with dynamicConfigSupported field
     if destName not in CLEANED_DESTINATIONS:
         return generalize_regex_pattern(field)

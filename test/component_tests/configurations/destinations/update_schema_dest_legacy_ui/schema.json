@@ -1,7 +1,7 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["secretTextInputField"],
+    "required": ["secretTextInputField", "textareaInputField"],
     "type": "object",
     "properties": {
       "secretTextInputField": {
@@ -21,7 +21,8 @@
         "type": "object",
         "properties": {
           "android": {
-            "type": "string"
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
           }
         }
       },
@@ -29,6 +30,9 @@
         "type": "object",
         "properties": {
           "web": {
+            "type": "boolean"
+          },
+          "android": {
             "type": "boolean"
           }
         }
@@ -100,6 +104,10 @@
       },
       "timePickerField": {
         "type": "string"
+      },
+      "checkboxField": {
+        "type": "boolean",
+        "default": true
       }
     }
   }
