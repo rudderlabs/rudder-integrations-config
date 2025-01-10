@@ -25,7 +25,7 @@ from constants import CONFIG_DIR
 EXCLUDED_DEST = ["postgres", "bq", "azure_synapse", "clickhouse", "deltalake", "kafka"]
 
 # TODO: remove this once all the destinations have been updated with dynamicConfigSupported field
-CLEANED_DESTINATIONS = ["adobe_analytics"]
+DYNAMIC_CONFIG_SUPPORTED_DESTINATIONS = ["adobe_analytics"]
 
 
 class FieldTypeEnum(Enum):
@@ -71,12 +71,33 @@ def is_dynamic_config_supported_field(field, dbConfig=None):
 
 
 def generate_uiconfig_pattern(field, dbConfig=None) -> str:
+    """
+    Generates the pattern for schema based on the type of field.
+
+    Cases:
+    1. Destination in DYNAMIC_CONFIG_SUPPORTED_DESTINATIONS
+        1. Field supports dynamic config
+            a. Regex is present in ui-config for the field
+                i. Use the regex mentioned in ui-config & includes dynamic config regex & env regex(if not already present).
+            b. Regex is not present in ui-config for the field
+                i. Use the regex `^(.{0,100})$` & includes dynamic config regex & env regex(if not already present).
+        2. Field does not support dynamic config
+            a. Regex is present in ui-config for the field
+                i. Use the regex mentioned in ui-config.
+            b. Regex is not present in ui-config for the field
+                i. Use the regex `^(.{0,100})$`.
+    2. Destination not in DYNAMIC_CONFIG_SUPPORTED_DESTINATIONS
+        a. Regex is present in ui-config for the field
+            i. Use the regex mentioned in ui-config & includes dynamic config regex & env regex(if not already present).
+        b. Regex is not present in ui-config for the field
+            i. Use the regex `^(.{0,100})$` & includes dynamic config regex & env regex(if not already present).
+    """
     field_supports_dynamic_config = is_dynamic_config_supported_field(field, dbConfig)
     destName = ""
     if "name" in dbConfig:
         destName = dbConfig["name"].lower()
     # TODO: remove this once all the destinations have been updated with dynamicConfigSupported field
-    if destName not in CLEANED_DESTINATIONS:
+    if destName not in DYNAMIC_CONFIG_SUPPORTED_DESTINATIONS:
         return generalize_regex_pattern(field)
 
     if field_supports_dynamic_config:
