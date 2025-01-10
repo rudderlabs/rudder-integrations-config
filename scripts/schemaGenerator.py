@@ -24,9 +24,6 @@ from constants import CONFIG_DIR
 
 EXCLUDED_DEST = ["postgres", "bq", "azure_synapse", "clickhouse", "deltalake", "kafka"]
 
-# TODO: remove this once all the destinations have been updated with dynamicConfigSupported field
-DYNAMIC_CONFIG_SUPPORTED_DESTINATIONS = ["adobe_analytics"]
-
 
 class FieldTypeEnum(Enum):
     STRING = "string"
@@ -58,48 +55,26 @@ def get_options_list_for_enum(field):
     return options_list
 
 
-def is_dynamic_config_supported_field(field, dbConfig=None):
-    if dbConfig is None or "dynamicConfigSupported" not in dbConfig:
-        # Case where dbConfig doesn't contain dynamicConfigSupported field at all
-        return False
-    dynamicConfigSupported = dbConfig["dynamicConfigSupported"]
-    configKey = ""
-    if "configKey" in field:
-        configKey = field["configKey"]
-    isDynamicConfigSupportedField = configKey in dynamicConfigSupported
-    return isDynamicConfigSupportedField
-
-
 def generate_uiconfig_pattern(field, dbConfig=None) -> str:
     """
     Generates the pattern for schema based on the type of field.
 
     Cases:
-    1. Destination in DYNAMIC_CONFIG_SUPPORTED_DESTINATIONS
-        1. Field supports dynamic config
-            a. Regex is present in ui-config for the field
-                i. Use the regex mentioned in ui-config & includes dynamic config regex & env regex(if not already present).
-            b. Regex is not present in ui-config for the field
-                i. Use the regex `^(.{0,100})$` & includes dynamic config regex & env regex(if not already present).
-        2. Field does not support dynamic config
-            a. Regex is present in ui-config for the field
-                i. Use the regex mentioned in ui-config.
-            b. Regex is not present in ui-config for the field
-                i. Use the regex `^(.{0,100})$`.
-    2. Destination not in DYNAMIC_CONFIG_SUPPORTED_DESTINATIONS
-        a. Regex is present in ui-config for the field
-            i. Use the regex mentioned in ui-config & includes dynamic config regex & env regex(if not already present).
-        b. Regex is not present in ui-config for the field
-            i. Use the regex `^(.{0,100})$` & includes dynamic config regex & env regex(if not already present).
+    If dynamicConfigSupported is present in dbConfig:
+        - Regex is present in ui-config for the field
+            - Use the regex mentioned in ui-config.
+        - Regex is not present in ui-config for the field
+            - Use the regex ^(.{0,100})$.
+    If dynamicConfigSupported is not present in dbConfig:
+        - Regex is present in ui-config for the field
+            - Use the regex mentioned in ui-config & includes dynamic config regex & env regex(if not already present).
+        - Regex is not present in ui-config for the field
+            - Use the regex ^(.{0,100})$ & includes dynamic config regex & env regex(if not already present).
     """
-    field_supports_dynamic_config = is_dynamic_config_supported_field(field, dbConfig)
-    destName = dbConfig["name"].lower()
     # TODO: remove this once all the destinations have been updated with dynamicConfigSupported field
-    if destName not in DYNAMIC_CONFIG_SUPPORTED_DESTINATIONS:
-        return generalize_regex_pattern(field)
+    if "dynamicConfigSupported" not in dbConfig:
+        return generalize_regex_pattern(field)  # old way
 
-    if field_supports_dynamic_config:
-        return generalize_regex_pattern(field)
     # regex from ui-config
     if "regex" in field:
         return field["regex"]
@@ -1544,9 +1519,6 @@ def get_schema_diff(name, selector, shouldUpdateSchema=False):
         uiConfig = file_content.get("uiConfig")
         schema = file_content.get("configSchema")
         dbConfig = file_content.get("config")
-        # introduced for dynamic config pattern generation part
-        # TODO: remove this once all the destinations have been updated with dynamicConfigSupported field
-        dbConfig["name"] = name
 
         validate_config_consistency(
             name, selector, uiConfig, dbConfig, schema, shouldUpdateSchema
