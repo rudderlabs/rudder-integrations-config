@@ -93,9 +93,7 @@ def generate_uiconfig_pattern(field, dbConfig=None) -> str:
             i. Use the regex `^(.{0,100})$` & includes dynamic config regex & env regex(if not already present).
     """
     field_supports_dynamic_config = is_dynamic_config_supported_field(field, dbConfig)
-    destName = ""
-    if "name" in dbConfig:
-        destName = dbConfig["name"].lower()
+    destName = dbConfig["name"].lower()
     # TODO: remove this once all the destinations have been updated with dynamicConfigSupported field
     if destName not in DYNAMIC_CONFIG_SUPPORTED_DESTINATIONS:
         return generalize_regex_pattern(field)
