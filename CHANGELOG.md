@@ -6,7 +6,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
-* enable ga4 v2 as beta ([4ba0df7](https://github.com/rudderlabs/rudder-config-schema/pull/1863/commits/4ba0df7dc0694e6469b6aa9fa6db427b54b5dc90))
 * update config for klaviyo and ga4 v2 ([09d4977](https://github.com/rudderlabs/rudder-config-schema/pull/1863/commits/7efcfd1c017a5608710babb40a28d3c145cd8c85))
 
 ## [1.100.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.99.1...v1.100.0) (2024-12-18)
@@ -19,6 +18,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
+* enable ga4 v2 as beta ([4ba0df7](https://github.com/rudderlabs/rudder-config-schema/pull/1863/commits/4ba0df7dc0694e6469b6aa9fa6db427b54b5dc90))
 * pr body in constants pr workflow ([83d7b26](https://github.com/rudderlabs/rudder-config-schema/commit/83d7b2674f2b4bc209331d1dcd2b3c3bacafb4ab))
 * pr body in constants pr workflow ([3d227f7](https://github.com/rudderlabs/rudder-config-schema/commit/3d227f7126c96df9bf64fbd9587ac5d8f19fe17c))
 * pr labels in constants pr workflow ([e8c5167](https://github.com/rudderlabs/rudder-config-schema/commit/e8c5167cad5f9792e2621ddc7695fe85b7aa8fb4))
