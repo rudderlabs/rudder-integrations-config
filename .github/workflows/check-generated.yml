@@ -1,0 +1,40 @@
+name: Check Generated Constants
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  check-generated:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v4.0.2
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm run setup
+
+      - name: Run generate constants
+        run: npm run generate:constants
+
+      - name: Check Git state
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Generated constants are not up-to-date. Run 'npm run generate:constants' and commit the changes.";
+            echo "Here are the differences:";
+            git diff || true 2>&1;
+            exit 1;
+          else
+            echo "Git state is clean.";
+          fi

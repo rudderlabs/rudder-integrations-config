@@ -17,22 +17,22 @@
       "maxBatchSize": "10",
       "headers": [
         {
-          "to": "$.h1",
-          "from": "'val1'"
+          "to": "val",
+          "from": "adfg"
         },
         {
-          "to": "$.h2",
+          "to": "val2",
           "from": "2"
         },
         {
-          "to": "$.h3",
+          "to": "auth",
           "from": "$.properties.testProp"
         }
       ],
       "queryParams": [
         {
-          "to": "$.q1",
-          "from": "'val1'"
+          "from": "$.q1",
+          "to": "'val1'"
         }
       ],
       "propertiesMapping": [
@@ -74,7 +74,7 @@
     },
     "result": false,
     "err": [
-      "maxBatchSize must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([1-9][0-9]{0,1}|100)$\"",
+      "maxBatchSize must match pattern \"^([1-9][0-9]{0,1}|100)$\"",
       " must match \"then\" schema"
     ]
   },
@@ -88,20 +88,20 @@
     },
     "result": false,
     "err": [
-      "apiUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+(?:[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=]|\\{\\{[^}]+\\}\\})+$|^$\""
+      "apiUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(https?://)(?![a-zA-Z0-9-]*\\.ngrok\\.io)(?!localhost|.*\\.localhost)([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,}(:(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5]\\d{4}|[1-9]\\d{1,3}))?(/.*)?$\""
     ]
   },
   {
     "testTitle": "With invalid api url",
     "config": {
-      "apiUrl": "http://sample.com/api/hooks/url/{{http://23452345.ngrok.io/}}",
+      "apiUrl": "sample.com/api/hooks/url/{{http://23452345.ngrok.io/}}",
       "auth": "noAuth",
       "method": "POST",
       "format": "JSON"
     },
     "result": false,
     "err": [
-      "apiUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+(?:[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=]|\\{\\{[^}]+\\}\\})+$|^$\""
+      "apiUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(https?://)(?![a-zA-Z0-9-]*\\.ngrok\\.io)(?!localhost|.*\\.localhost)([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,}(:(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5]\\d{4}|[1-9]\\d{1,3}))?(/.*)?$\""
     ]
   },
   {
@@ -254,22 +254,22 @@
       "maxBatchSize": "10",
       "headers": [
         {
-          "to": "$.h1",
-          "from": "'val1'"
+          "from": "$.h1",
+          "to": "'val1'"
         },
         {
-          "to": "$.h2",
-          "from": "2"
+          "from": "$.h2",
+          "to": "2"
         },
         {
-          "to": "$.h3",
+          "to": "testProp",
           "from": "$.properties.testProp"
         }
       ],
       "queryParams": [
         {
-          "to": "$.q1",
-          "from": "'val1'"
+          "from": "$.q1",
+          "to": "'val1'"
         }
       ],
       "propertiesMapping": [
@@ -421,22 +421,22 @@
       "maxBatchSize": "10",
       "headers": [
         {
-          "to": "$.h1",
-          "from": "'val1'"
+          "from": "$.h1",
+          "to": "'val1'"
         },
         {
-          "to": "$.h2",
-          "from": "2"
+          "from": "$.h2",
+          "to": "2"
         },
         {
-          "to": "$.h3",
+          "to": "testProp",
           "from": "$.properties.testProp"
         }
       ],
       "queryParams": [
         {
-          "to": "$.q1",
-          "from": "'val1'"
+          "from": "$.q1",
+          "to": "'val1'"
         }
       ],
       "propertiesMapping": [
@@ -483,28 +483,146 @@
       "maxBatchSize": "10",
       "headers": [
         {
-          "to": "$.h1",
-          "from": "'val1'"
+          "from": "$.h1",
+          "to": "'val1'"
         },
         {
-          "to": "$.h2",
-          "from": "2"
+          "from": "$.h2",
+          "to": "2"
         },
         {
-          "to": "$.h3",
+          "to": "testProp",
           "from": "$.properties.testProp"
         }
       ],
       "queryParams": [
         {
-          "to": "$.q1",
-          "from": "'val1'"
+          "from": "$.q1",
+          "to": "'val1'"
         }
       ],
       "propertiesMapping": [
         {
           "from": "$.properties.key1",
           "to": "$.events.key2"
+        }
+      ],
+      "oneTrustCookieCategories": {
+        "android": [
+          {
+            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "ios": [
+          {
+            "oneTrustCookieCategory": {
+              "not": "a string"
+            }
+          },
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ],
+        "web": {
+          "not": "an array"
+        },
+        "unity": [
+          "not an object",
+          {
+            "oneTrustCookieCategory": "C0004"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "android": [
+          {
+            "purpose": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "ios": [
+          {
+            "purpose": {
+              "not": "a string"
+            }
+          },
+          {
+            "purpose": "P4"
+          }
+        ],
+        "web": {
+          "not": "an array"
+        },
+        "unity": [
+          "not an object",
+          {
+            "purpose": "P4"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "oneTrustCookieCategories.android.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.ios.0.oneTrustCookieCategory must be string",
+      "oneTrustCookieCategories.web must be array",
+      "oneTrustCookieCategories.unity.0 must be object",
+      "ketchConsentPurposes.android.0.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "ketchConsentPurposes.ios.0.purpose must be string",
+      "ketchConsentPurposes.web must be array",
+      "ketchConsentPurposes.unity.0 must be object"
+    ]
+  },
+  {
+    "testTitle": "With pathParams",
+    "config": {
+      "apiUrl": "http://sample.com/api/hooks/{{$.traits.userId}}/url/{{$.properties.event}}",
+      "auth": "basicAuth",
+      "username": "test-user",
+      "password": "",
+      "method": "POST",
+      "format": "JSON",
+      "http-connectionMode": "cloud",
+      "connectionMode": {
+        "cloud": "cloud"
+      },
+      "consentManagement": {},
+      "isBatchingEnabled": true,
+      "maxBatchSize": "10",
+      "headers": [
+        {
+          "from": "$.h1",
+          "to": "'val1'"
+        },
+        {
+          "from": "$.h2",
+          "to": "2"
+        },
+        {
+          "to": "testProp",
+          "from": "$.properties.testProp"
+        }
+      ],
+      "queryParams": [
+        {
+          "from": "$.q1",
+          "to": "'val1'"
+        }
+      ],
+      "propertiesMapping": [
+        {
+          "from": "$.properties.key1",
+          "to": "$.events.key2"
+        }
+      ],
+      "pathParams": [
+        {
+          "path": "$.properties.key1"
         }
       ],
       "oneTrustCookieCategories": {

@@ -147,19 +147,19 @@
                 "columns": [
                   {
                     "type": "textInput",
-                    "key": "event",
+                    "configKey": "event",
                     "label": "RudderStack Event Name",
                     "placeholder": "e.g: Product Searched"
                   },
                   {
                     "type": "textInput",
-                    "key": "marketoPrimarykey",
+                    "configKey": "marketoPrimarykey",
                     "label": "Marketo Primary Key",
                     "placeholder": "e.g: name"
                   },
                   {
                     "type": "textInput",
-                    "key": "marketoActivityId",
+                    "configKey": "marketoActivityId",
                     "label": "Activity ID",
                     "placeholder": "e.g: 100001"
                   }
@@ -179,13 +179,13 @@
                 "columns": [
                   {
                     "type": "textInput",
-                    "key": "from",
+                    "configKey": "from",
                     "label": "Traits name",
                     "placeholder": "e.g: leadScore"
                   },
                   {
                     "type": "textInput",
-                    "key": "to",
+                    "configKey": "to",
                     "label": "Custom field api name",
                     "placeholder": "e.g: customLeadScore"
                   }
@@ -205,13 +205,13 @@
                 "columns": [
                   {
                     "type": "textInput",
-                    "key": "from",
+                    "configKey": "from",
                     "label": "Event Property",
                     "placeholder": "e.g: name"
                   },
                   {
                     "type": "textInput",
-                    "key": "to",
+                    "configKey": "to",
                     "label": "Marketo Custom Activity field",
                     "placeholder": "e.g: productName"
                   }
@@ -226,56 +226,6 @@
       "title": "Consent settings",
       "note": "not visible in the ui",
       "fields": [
-        {
-          "type": "tagInput",
-          "label": "OneTrust consent category IDs",
-          "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "configKey": "oneTrustCookieCategories",
-          "tagKey": "oneTrustCookieCategory",
-          "placeholder": "e.g: C0001",
-          "default": [
-            {
-              "oneTrustCookieCategory": ""
-            }
-          ],
-          "preRequisites": {
-            "featureFlags": [
-              {
-                "configKey": "AMP_enable-gcm",
-                "value": false
-              },
-              {
-                "configKey": "AMP_enable-gcm"
-              }
-            ],
-            "featureFlagsCondition": "or"
-          }
-        },
-        {
-          "type": "tagInput",
-          "label": "Ketch consent purpose IDs",
-          "note": "Input your Ketch consent purpose IDs by pressing 'Enter' after each entry.",
-          "configKey": "ketchConsentPurposes",
-          "tagKey": "purpose",
-          "placeholder": "e.g: marketing",
-          "default": [
-            {
-              "purpose": ""
-            }
-          ],
-          "preRequisites": {
-            "featureFlags": [
-              {
-                "configKey": "AMP_enable-gcm",
-                "value": false
-              },
-              {
-                "configKey": "AMP_enable-gcm"
-              }
-            ],
-            "featureFlagsCondition": "or"
-          }
-        },
         {
           "type": "dynamicCustomForm",
           "configKey": "consentManagement",
@@ -329,8 +279,8 @@
             },
             {
               "type": "tagInput",
-              "label": "Enter consent category ID’s",
-              "note": "Input your consent category IDs by pressing ‘Enter’ after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "label": "Enter consent category IDs",
+              "note": "Input your consent category IDs by pressing 'Enter' after each entry. We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
               "configKey": "consents",
               "tagKey": "consent",
               "placeholder": "e.g: Marketing",
@@ -340,15 +290,7 @@
                 }
               ]
             }
-          ],
-          "preRequisites": {
-            "featureFlags": [
-              {
-                "configKey": "AMP_enable-gcm",
-                "value": true
-              }
-            ]
-          }
+          ]
         }
       ]
     }
