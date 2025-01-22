@@ -7,7 +7,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Features
 
-* added drop traits in track call feature for mixpanel ([#1870](https://github.com/rudderlabs/rudder-config-schema/issues/1870)) ([474cde5](https://github.com/rudderlabs/rudder-config-schema/commit/474cde545d8d2786e49dfe18ef656209e1c31b67))
 * **http:** add urlPreview custom field to ui-config ([#1869](https://github.com/rudderlabs/rudder-config-schema/issues/1869)) ([41be203](https://github.com/rudderlabs/rudder-config-schema/commit/41be20376268251ebe06c6dd909f0e8752006647))
 
 ### [1.101.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.101.0...v1.101.1) (2025-01-14)
