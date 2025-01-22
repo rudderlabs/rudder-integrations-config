@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.102.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.101.1...v1.102.0) (2025-01-20)
+
+
+### Features
+
+* **http:** add urlPreview custom field to ui-config ([#1869](https://github.com/rudderlabs/rudder-config-schema/issues/1869)) ([41be203](https://github.com/rudderlabs/rudder-config-schema/commit/41be20376268251ebe06c6dd909f0e8752006647))
+
 ### [1.101.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.101.0...v1.101.1) (2025-01-14)
 
 ## [1.101.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.100.0...v1.101.0) (2025-01-14)
