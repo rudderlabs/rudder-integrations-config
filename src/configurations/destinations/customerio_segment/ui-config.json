@@ -14,10 +14,10 @@
                 "fields": [
                   {
                     "type": "textInput",
-                    "label": "Customer.io Site ID",
+                    "label": "Site ID",
                     "note": "Settings > Account Settings > API Credentials > Track APP Keys > Site ID",
                     "configKey": "siteId",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,500})$",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
                     "regexErrorMessage": "Invalid Site Id",
                     "placeholder": "e.g: 88f02580XXXXXXXcf18",
                     "secret": true
@@ -35,9 +35,9 @@
                   {
                     "type": "textInput",
                     "label": "APP API Key",
-                    "note": "Settings > Account Settings > API Credentials > APP API Keys > API KEY of the corresponding Site ID",
+                    "note": "Settings > Account Settings > API Credentials > APP API Keys > API KEY",
                     "configKey": "appApiKey",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid Ad Account id",
                     "placeholder": "e.g: 2309XXX5483",
                     "secret": true
@@ -73,37 +73,6 @@
         "note": "Manage the settings for your destination",
         "sections": [
           {
-            "title": "Destination settings",
-            "note": "Configure advanced destination-specific settings here",
-            "icon": "settings",
-            "groups": [
-              {
-                "title": "Event Settings",
-                "note": "Configure event-specific settings here",
-                "fields": [
-                  {
-                    "type": "textInput",
-                    "label": "App Secret",
-                    "note": "Provide App Secret from your Facebook Developer App's basic settings.",
-                    "configKey": "appSecret",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$",
-                    "regexErrorMessage": "Invalid App Secret",
-                    "placeholder": "e.g: f65c45d8e013faXXXXXe1759c123456",
-                    "secret": true
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "Audience Batch Size",
-                    "configKey": "maxUserCount",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                    "regexErrorMessage": "Invalid Audience Batch Size",
-                    "default": "10000"
-                  }
-                ]
-              }
-            ]
-          },
-          {
             "id": "consentSettings",
             "title": "Consent settings",
             "note": "Configure consent settings for each provider here",
@@ -122,56 +91,6 @@
       "title": "Consent settings",
       "note": "not visible in the ui",
       "fields": [
-        {
-          "type": "tagInput",
-          "label": "OneTrust consent category IDs",
-          "note": "Input your OneTrust category IDs by pressing 'Enter' after each entry. The support for category names is deprecated. We recommend using the category IDs instead of the names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "configKey": "oneTrustCookieCategories",
-          "tagKey": "oneTrustCookieCategory",
-          "placeholder": "e.g: C0001",
-          "default": [
-            {
-              "oneTrustCookieCategory": ""
-            }
-          ],
-          "preRequisites": {
-            "featureFlags": [
-              {
-                "configKey": "AMP_enable-gcm",
-                "value": false
-              },
-              {
-                "configKey": "AMP_enable-gcm"
-              }
-            ],
-            "featureFlagsCondition": "or"
-          }
-        },
-        {
-          "type": "tagInput",
-          "label": "Ketch consent purpose IDs",
-          "note": "Input your Ketch consent purpose IDs by pressing 'Enter' after each entry.",
-          "configKey": "ketchConsentPurposes",
-          "tagKey": "purpose",
-          "placeholder": "e.g: marketing",
-          "default": [
-            {
-              "purpose": ""
-            }
-          ],
-          "preRequisites": {
-            "featureFlags": [
-              {
-                "configKey": "AMP_enable-gcm",
-                "value": false
-              },
-              {
-                "configKey": "AMP_enable-gcm"
-              }
-            ],
-            "featureFlagsCondition": "or"
-          }
-        },
         {
           "type": "dynamicCustomForm",
           "configKey": "consentManagement",
