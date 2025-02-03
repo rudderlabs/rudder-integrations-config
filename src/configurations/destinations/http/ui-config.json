@@ -458,6 +458,23 @@
             "name": "Request Body",
             "fields": [
               {
+                "type": "textInput",
+                "label": "XML Root Key",
+                "note": "Enter the root key to be used as a common prefix for all field mappings being defined below",
+                "configKey": "xmlRootKey",
+                "regex": "^(.{0,100})$",
+                "regexErrorMessage": "Invalid XML root key",
+                "placeholder": "e.g. root",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "format",
+                      "value": "XML"
+                    }
+                  ]
+                }
+              },
+              {
                 "type": "mapping",
                 "label": "Map your RudderStack properties to HTTP properties",
                 "configKey": "propertiesMapping",
@@ -480,7 +497,7 @@
                     "type": "textInput",
                     "configKey": "from",
                     "label": "Value",
-                    "regex": "^\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{1,100}$",
+                    "regex": "^\\$(?:\\.|(?:\\.\\.(\\w+|\\*)|\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{1,100}$",
                     "regexErrorMessage": "Please enter a valid JSON path or a constant",
                     "placeholder": "e.g: $.properties.key1"
                   }
@@ -530,7 +547,7 @@
                     "type": "textInput",
                     "configKey": "from",
                     "label": "Value",
-                    "regex": "^\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{1,100}$",
+                    "regex": "^\\$(?:\\.|(?:\\.\\.(\\w+|\\*)|\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{1,100}$",
                     "regexErrorMessage": "Please enter a valid JSON path or a constant",
                     "placeholder": "e.g: $.userId or userId"
                   }
@@ -560,7 +577,7 @@
                     "type": "textInput",
                     "configKey": "from",
                     "label": "Value",
-                    "regex": "^\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- /\\\\]{1,100}$",
+                    "regex": "^\\$(?:\\.|(?:\\.\\.(\\w+|\\*)|\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- /\\\\]{1,100}$",
                     "regexErrorMessage": "Please enter a valid JSON path or a constant",
                     "placeholder": "e.g. application/json"
                   }
