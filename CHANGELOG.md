@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.104.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.103.0...v1.104.0) (2025-02-04)
+
+
+### Features
+
+* **http:** add new field xmlRootKey and updated regex for some fields ([#1884](https://github.com/rudderlabs/rudder-config-schema/issues/1884)) ([a9c3a6d](https://github.com/rudderlabs/rudder-config-schema/commit/a9c3a6d1faf05af21766f8296ffda3930575d479))
+* **http:** add support for form format ([#1876](https://github.com/rudderlabs/rudder-config-schema/issues/1876)) ([10ebbd9](https://github.com/rudderlabs/rudder-config-schema/commit/10ebbd9e66c07f88c6798182e1f91242d11a2408))
+* onboarding customerio segment  ([#1853](https://github.com/rudderlabs/rudder-config-schema/issues/1853)) ([fe53d8c](https://github.com/rudderlabs/rudder-config-schema/commit/fe53d8c103b4d4e8899e7fd614511f843743487b))
+
+
+### Bug Fixes
+
+* clean up adobe analytics dynamic config support ([#1857](https://github.com/rudderlabs/rudder-config-schema/issues/1857)) ([fed05fa](https://github.com/rudderlabs/rudder-config-schema/commit/fed05faaf99472c31c413b17502ca498ae9b6acf))
+
 ## [1.103.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.102.0...v1.103.0) (2025-02-04)
 
 
