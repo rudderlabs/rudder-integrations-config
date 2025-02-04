@@ -902,56 +902,79 @@
     "allOf": [
       {
         "if": {
-          "anyOf": [
-            {
-              "properties": {
-                "connectionMode": {
-                  "type": "object",
+          "properties": {
+            "connectionMode": {
+              "anyOf": [
+                {
                   "properties": {
-                    "web": {
-                      "type": "string",
-                      "enum": ["cloud"]
-                    }
+                    "warehouse": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["warehouse"]
+                },
+                {
+                  "properties": {
+                    "cloud": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["cloud"]
+                },
+                {
+                  "properties": {
+                    "web": { "type": "string", "enum": ["cloud"] }
                   },
                   "required": ["web"]
-                }
-              }
-            },
-            {
-              "properties": {
-                "connectionMode": {
-                  "type": "object",
+                },
+                {
                   "properties": {
-                    "android": {
-                      "type": "string",
-                      "enum": ["cloud"]
-                    }
+                    "unity": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["unity"]
+                },
+                {
+                  "properties": {
+                    "ios": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["ios"]
+                },
+                {
+                  "properties": {
+                    "amp": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["amp"]
+                },
+                {
+                  "properties": {
+                    "flutter": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["flutter"]
+                },
+                {
+                  "properties": {
+                    "reactnative": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["reactnative"]
+                },
+                {
+                  "properties": {
+                    "cordova": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["cordova"]
+                },
+                {
+                  "properties": {
+                    "android": { "type": "string", "enum": ["cloud"] }
                   },
                   "required": ["android"]
                 }
-              }
-            },
-            {
-              "properties": {
-                "connectionMode": {
-                  "type": "object",
-                  "properties": {
-                    "ios": {
-                      "type": "string",
-                      "enum": ["cloud"]
-                    }
-                  },
-                  "required": ["ios"]
-                }
-              }
+              ]
             }
-          ]
+          },
+          "required": ["connectionMode"]
         },
         "then": {
           "properties": {
             "apiKey": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$"
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,200})$"
             }
           },
           "required": ["apiKey"]
@@ -970,13 +993,14 @@
               },
               "required": ["web"]
             }
-          }
+          },
+          "required": ["connectionMode"]
         },
         "then": {
           "properties": {
             "fs_org": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
             }
           },
           "required": ["fs_org"]
