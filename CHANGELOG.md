@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.103.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.102.0...v1.103.0) (2025-02-04)
+
+
+### Features
+
+* **new-form-builder:** updated the regex for initial fields to not allow empty string ([#1888](https://github.com/rudderlabs/rudder-config-schema/issues/1888)) ([00e105f](https://github.com/rudderlabs/rudder-config-schema/commit/00e105f384fd2a3795661eaf38af43746defe340))
+
 ## [1.102.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.101.1...v1.102.0) (2025-01-20)
 
 
