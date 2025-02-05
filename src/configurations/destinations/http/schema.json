@@ -965,7 +965,7 @@
           "properties": {
             "username": {
               "type": "string",
-              "pattern": "^(.{0,100})$"
+              "pattern": "^(.{1,100})$"
             }
           },
           "required": ["username"]
@@ -1064,6 +1064,24 @@
             }
           },
           "required": ["maxBatchSize"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "format": {
+              "const": "XML"
+            }
+          },
+          "required": ["format"]
+        },
+        "then": {
+          "properties": {
+            "xmlRootKey": {
+              "type": "string",
+              "pattern": "^(.{0,100})$"
+            }
+          }
         }
       }
     ]
