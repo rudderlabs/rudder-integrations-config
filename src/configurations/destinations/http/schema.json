@@ -31,22 +31,6 @@
         "type": "boolean",
         "default": true
       },
-      "propertiesMapping": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "to": {
-              "type": "string",
-              "pattern": "^\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$"
-            },
-            "from": {
-              "type": "string",
-              "pattern": "^\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{1,100}$"
-            }
-          }
-        }
-      },
       "pathParams": {
         "type": "array",
         "items": {
@@ -1084,6 +1068,36 @@
             "xmlRootKey": {
               "type": "string",
               "pattern": "^(.{0,100})$"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "isDefaultMapping": {
+              "const": false
+            }
+          },
+          "required": ["isDefaultMapping"]
+        },
+        "then": {
+          "properties": {
+            "propertiesMapping": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "to": {
+                    "type": "string",
+                    "pattern": "^\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$"
+                  },
+                  "from": {
+                    "type": "string",
+                    "pattern": "^\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{1,100}$"
+                  }
+                }
+              }
             }
           }
         }
