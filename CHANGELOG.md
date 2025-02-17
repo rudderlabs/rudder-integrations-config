@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.105.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.104.0...v1.105.0) (2025-02-17)
+
+
+### Features
+
+* added drop traits in track call feature for mixpanel ([#1882](https://github.com/rudderlabs/rudder-config-schema/issues/1882)) ([c6d8b7b](https://github.com/rudderlabs/rudder-config-schema/commit/c6d8b7b653d45ac672413612cbb708a03b9b5519))
+* allow configuring of object storage files deletion for warehouse destinations ([#1896](https://github.com/rudderlabs/rudder-config-schema/issues/1896)) ([2547b0c](https://github.com/rudderlabs/rudder-config-schema/commit/2547b0cfd63787f45afec75e06af5e1450950214))
+* **http:** updated labels and addressed product feedback ([#1898](https://github.com/rudderlabs/rudder-config-schema/issues/1898)) ([0f29945](https://github.com/rudderlabs/rudder-config-schema/commit/0f29945ca72c0025b64b7bb9378dd45dcae8be73))
+* **http:** updated regex and some labels ([#1895](https://github.com/rudderlabs/rudder-config-schema/issues/1895)) ([f5cd4cf](https://github.com/rudderlabs/rudder-config-schema/commit/f5cd4cf6b3b49788c3ee6f1e2ec2a7a4b1105437))
+
 ## [1.104.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.103.0...v1.104.0) (2025-02-04)
 
 
