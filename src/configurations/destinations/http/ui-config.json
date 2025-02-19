@@ -13,13 +13,13 @@
                 "fields": [
                   {
                     "type": "textInput",
-                    "label": "API URL",
+                    "label": "Base URL",
                     "configKey": "apiUrl",
                     "note": [
-                      "Enter the API URL. For adding path parameters please go to Event Configurations > Request URL > Path Params"
+                      "Enter the Base URL. For adding path parameters and/or query parameters, please go to Event Configurations > Request URL"
                     ],
                     "regex": "^(https?://)(?![a-zA-Z0-9-]*\\.ngrok\\.io)(?!localhost|.*\\.localhost)([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,}(:(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5]\\d{4}|[1-9]\\d{1,3}))?(/.*)?$",
-                    "regexErrorMessage": "Invalid API URL",
+                    "regexErrorMessage": "Invalid Base URL",
                     "placeholder": "e.g. http://www.abcd.com"
                   },
                   {
@@ -253,6 +253,7 @@
                   {
                     "type": "textInput",
                     "label": "Maximum Batch Size",
+                    "note": "Maximum batch size allowed is 100",
                     "configKey": "maxBatchSize",
                     "regex": "^([1-9][0-9]{0,1}|100)$",
                     "regexErrorMessage": "Invalid Batch Size",
@@ -455,8 +456,100 @@
       "advancedMapping": {
         "tabs": [
           {
+            "name": "Request URL",
+            "fields": [
+              {
+                "type": "customComponent",
+                "componentId": "urlPreview"
+              },
+              {
+                "type": "mapping",
+                "label": "Enter your path parameters in sequence",
+                "note": "You could dynamically add values from fields in the RudderStack payload(using JSON path) or constants.",
+                "columns": [
+                  {
+                    "key": "path",
+                    "type": "textInput",
+                    "label": "Path",
+                    "placeholder": "$.userId or users",
+                    "regex": "^\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{0,100}$",
+                    "regexErrorMessage": "Please enter a valid JSON path or a constant"
+                  }
+                ],
+                "default": [],
+                "configKey": "pathParams",
+                "addButtonLabel": "Add path parameter"
+              },
+              {
+                "type": "mapping",
+                "label": "Map your query parameters",
+                "note": "Map the query parameter keys to the values from fields in the RudderStack payload(using JSON path) or constants.",
+                "configKey": "queryParams",
+                "default": [],
+                "separatorIcon": "colon",
+                "addButtonLabel": "Add query parameter",
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "configKey": "to",
+                    "label": "Key",
+                    "regex": "^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- ]{0,100}$",
+                    "regexErrorMessage": "JSON path is not supported. Please enter a constant",
+                    "placeholder": "e.g: customerId"
+                  },
+                  {
+                    "type": "textInput",
+                    "configKey": "from",
+                    "label": "Value",
+                    "regex": "^\\$(?:\\.|(?:\\.\\.(\\w+|\\*)|\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{0,100}$",
+                    "regexErrorMessage": "Please enter a valid JSON path or a constant",
+                    "placeholder": "e.g: $.userId or userId"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Headers",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map your headers",
+                "note": "Map the header keys to the values from fields in the RudderStack payload(using JSON path) or constants.",
+                "configKey": "headers",
+                "default": [],
+                "separatorIcon": "colon",
+                "addButtonLabel": "Add header",
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "configKey": "to",
+                    "label": "Key",
+                    "regex": "^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{0,100}$",
+                    "regexErrorMessage": "JSON path is not supported. Please enter a constant",
+                    "placeholder": "e.g. content-type"
+                  },
+                  {
+                    "type": "textInput",
+                    "configKey": "from",
+                    "label": "Value",
+                    "regex": "^\\$(?:\\.|(?:\\.\\.(\\w+|\\*)|\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- /\\\\]{0,100}$",
+                    "regexErrorMessage": "Please enter a valid JSON path or a constant",
+                    "placeholder": "e.g. application/json"
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "name": "Request Body",
             "fields": [
+              {
+                "type": "checkbox",
+                "label": "Send the event payload as it is",
+                "configKey": "isDefaultMapping",
+                "default": true
+              },
               {
                 "type": "textInput",
                 "label": "XML Root Key",
@@ -476,14 +569,11 @@
               },
               {
                 "type": "mapping",
-                "label": "Map your RudderStack properties to HTTP properties",
+                "label": "Map your request payload",
+                "note": "Build your HTTP request payload using JSON path, then map the values from fields in the RudderStack payload(using JSON path) or constants.",
                 "configKey": "propertiesMapping",
-                "default": [
-                  {
-                    "from": "$",
-                    "to": "$"
-                  }
-                ],
+                "separatorIcon": "colon",
+                "addButtonLabel": "Add request mapping",
                 "columns": [
                   {
                     "type": "textInput",
@@ -501,87 +591,15 @@
                     "regexErrorMessage": "Please enter a valid JSON path or a constant",
                     "placeholder": "e.g: $.properties.key1"
                   }
-                ]
-              }
-            ]
-          },
-          {
-            "name": "Request URL",
-            "fields": [
-              {
-                "type": "customComponent",
-                "componentId": "urlPreview"
-              },
-              {
-                "type": "mapping",
-                "label": "Enter your path parameters in sequence",
-                "columns": [
-                  {
-                    "key": "path",
-                    "type": "textInput",
-                    "label": "Path",
-                    "placeholder": "$.userId or users",
-                    "regex": "^\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{1,100}$",
-                    "regexErrorMessage": "Please enter a valid JSON path or a constant"
-                  }
                 ],
-                "default": [],
-                "configKey": "pathParams"
-              },
-              {
-                "type": "mapping",
-                "label": "Map your query parameters",
-                "configKey": "queryParams",
-                "default": [],
-                "separatorIcon": "colon",
-                "columns": [
-                  {
-                    "type": "textInput",
-                    "configKey": "to",
-                    "label": "Key",
-                    "regex": "^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- ]{1,100}$",
-                    "regexErrorMessage": "JSON path is not supported. Please enter a constant",
-                    "placeholder": "e.g: customerId"
-                  },
-                  {
-                    "type": "textInput",
-                    "configKey": "from",
-                    "label": "Value",
-                    "regex": "^\\$(?:\\.|(?:\\.\\.(\\w+|\\*)|\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{1,100}$",
-                    "regexErrorMessage": "Please enter a valid JSON path or a constant",
-                    "placeholder": "e.g: $.userId or userId"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "name": "Headers",
-            "fields": [
-              {
-                "type": "mapping",
-                "label": "Map your headers",
-                "configKey": "headers",
-                "default": [],
-                "separatorIcon": "colon",
-                "columns": [
-                  {
-                    "type": "textInput",
-                    "configKey": "to",
-                    "label": "Key",
-                    "regex": "^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{1,100}$",
-                    "regexErrorMessage": "JSON path is not supported. Please enter a constant",
-                    "placeholder": "e.g. content-type"
-                  },
-                  {
-                    "type": "textInput",
-                    "configKey": "from",
-                    "label": "Value",
-                    "regex": "^\\$(?:\\.|(?:\\.\\.(\\w+|\\*)|\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- /\\\\]{1,100}$",
-                    "regexErrorMessage": "Please enter a valid JSON path or a constant",
-                    "placeholder": "e.g. application/json"
-                  }
-                ]
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "isDefaultMapping",
+                      "value": false
+                    }
+                  ]
+                }
               }
             ]
           }
