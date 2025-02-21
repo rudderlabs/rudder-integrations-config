@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.106.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.105.0...v1.106.0) (2025-02-21)
+
+
+### Features
+
+* **gtm:** added support for environment configs ([#1906](https://github.com/rudderlabs/rudder-config-schema/issues/1906)) ([302d2c7](https://github.com/rudderlabs/rudder-config-schema/commit/302d2c7d56bc2abe19d2547dbb7e8c142471543e))
+* **http:** update labels and regex for a couple of field ([#1903](https://github.com/rudderlabs/rudder-config-schema/issues/1903)) ([2b51393](https://github.com/rudderlabs/rudder-config-schema/commit/2b513939f0c31829733b2ab966a959ef60f024b1))
+
+
+### Bug Fixes
+
+* incorrect preRequisiteField of "cleanupObjectStorageFiles" in s3 datalake ([#1905](https://github.com/rudderlabs/rudder-config-schema/issues/1905)) ([ca53abb](https://github.com/rudderlabs/rudder-config-schema/commit/ca53abb9328ce1162dc55d4086cb7aa7bede2afa))
+
 ## [1.105.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.104.0...v1.105.0) (2025-02-17)
 
 
