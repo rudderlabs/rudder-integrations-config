@@ -1,26 +1,18 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["apiBaseUrl", "apiKey", "apiSecret", "projectToken", "catalogID"],
+    "required": ["siteId", "apiKey", "appApiKey"],
     "type": "object",
     "properties": {
-      "apiBaseUrl": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]{1,500}$"
-      },
       "apiKey": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "apiSecret": {
+      "appApiKey": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "projectToken": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-      },
-      "catalogID": {
+      "siteId": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
@@ -38,15 +30,6 @@
                 }
               }
             }
-          }
-        }
-      },
-      "connectionMode": {
-        "type": "object",
-        "properties": {
-          "warehouse": {
-            "type": "string",
-            "enum": ["cloud"]
           }
         }
       },
@@ -98,6 +81,15 @@
                 }
               ]
             }
+          }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "warehouse": {
+            "type": "string",
+            "enum": ["cloud"]
           }
         }
       },

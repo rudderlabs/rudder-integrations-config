@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.106.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.105.0...v1.106.0) (2025-02-21)
+
+
+### Features
+
+* **gtm:** added support for environment configs ([#1906](https://github.com/rudderlabs/rudder-config-schema/issues/1906)) ([302d2c7](https://github.com/rudderlabs/rudder-config-schema/commit/302d2c7d56bc2abe19d2547dbb7e8c142471543e))
+* **http:** update labels and regex for a couple of field ([#1903](https://github.com/rudderlabs/rudder-config-schema/issues/1903)) ([2b51393](https://github.com/rudderlabs/rudder-config-schema/commit/2b513939f0c31829733b2ab966a959ef60f024b1))
+
+
+### Bug Fixes
+
+* incorrect preRequisiteField of "cleanupObjectStorageFiles" in s3 datalake ([#1905](https://github.com/rudderlabs/rudder-config-schema/issues/1905)) ([ca53abb](https://github.com/rudderlabs/rudder-config-schema/commit/ca53abb9328ce1162dc55d4086cb7aa7bede2afa))
+
+## [1.105.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.104.0...v1.105.0) (2025-02-17)
+
+
+### Features
+
+* added drop traits in track call feature for mixpanel ([#1882](https://github.com/rudderlabs/rudder-config-schema/issues/1882)) ([c6d8b7b](https://github.com/rudderlabs/rudder-config-schema/commit/c6d8b7b653d45ac672413612cbb708a03b9b5519))
+* allow configuring of object storage files deletion for warehouse destinations ([#1896](https://github.com/rudderlabs/rudder-config-schema/issues/1896)) ([2547b0c](https://github.com/rudderlabs/rudder-config-schema/commit/2547b0cfd63787f45afec75e06af5e1450950214))
+* **http:** updated labels and addressed product feedback ([#1898](https://github.com/rudderlabs/rudder-config-schema/issues/1898)) ([0f29945](https://github.com/rudderlabs/rudder-config-schema/commit/0f29945ca72c0025b64b7bb9378dd45dcae8be73))
+* **http:** updated regex and some labels ([#1895](https://github.com/rudderlabs/rudder-config-schema/issues/1895)) ([f5cd4cf](https://github.com/rudderlabs/rudder-config-schema/commit/f5cd4cf6b3b49788c3ee6f1e2ec2a7a4b1105437))
+
+## [1.104.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.103.0...v1.104.0) (2025-02-04)
+
+
+### Features
+
+* **http:** add new field xmlRootKey and updated regex for some fields ([#1884](https://github.com/rudderlabs/rudder-config-schema/issues/1884)) ([a9c3a6d](https://github.com/rudderlabs/rudder-config-schema/commit/a9c3a6d1faf05af21766f8296ffda3930575d479))
+* **http:** add support for form format ([#1876](https://github.com/rudderlabs/rudder-config-schema/issues/1876)) ([10ebbd9](https://github.com/rudderlabs/rudder-config-schema/commit/10ebbd9e66c07f88c6798182e1f91242d11a2408))
+* onboarding customerio segment  ([#1853](https://github.com/rudderlabs/rudder-config-schema/issues/1853)) ([fe53d8c](https://github.com/rudderlabs/rudder-config-schema/commit/fe53d8c103b4d4e8899e7fd614511f843743487b))
+
+
+### Bug Fixes
+
+* clean up adobe analytics dynamic config support ([#1857](https://github.com/rudderlabs/rudder-config-schema/issues/1857)) ([fed05fa](https://github.com/rudderlabs/rudder-config-schema/commit/fed05faaf99472c31c413b17502ca498ae9b6acf))
+
+## [1.103.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.102.0...v1.103.0) (2025-02-04)
+
+
+### Features
+
+* **new-form-builder:** updated the regex for initial fields to not allow empty string ([#1888](https://github.com/rudderlabs/rudder-config-schema/issues/1888)) ([00e105f](https://github.com/rudderlabs/rudder-config-schema/commit/00e105f384fd2a3795661eaf38af43746defe340))
+
 ## [1.102.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.101.1...v1.102.0) (2025-01-20)
 
 

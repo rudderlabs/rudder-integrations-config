@@ -559,6 +559,16 @@
           "label": "Use SSL for connection",
           "value": "useSSL",
           "default": true
+        },
+        {
+          "type": "checkbox",
+          "label": "Enable for cleanup of object storage files (deletion) after successful sync",
+          "value": "cleanupObjectStorageFiles",
+          "default": false,
+          "preRequisiteField": {
+            "name": "useRudderStorage",
+            "selectedValue": false
+          }
         }
       ]
     },
@@ -576,8 +586,8 @@
           "type": "checkbox",
           "label": "Skip User Table",
           "value": "skipUsersTable",
-          "footerNote": "Enable this feature to send event data exclusively to the Identify table, and skip user table. Eliminates the need for merge operation on the user table",
-          "default": false
+          "footerNote": "Disable the creation of a Users table. The table stores all unique users, but note that due to merge operations, it can significantly increase warehouse operation time.",
+          "default": true
         },
         {
           "type": "checkbox",

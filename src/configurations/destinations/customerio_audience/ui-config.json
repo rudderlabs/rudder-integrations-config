@@ -9,70 +9,37 @@
             "groups": [
               {
                 "title": "Connection settings",
-                "note": [
-                  "Update your connection settings here.",
-                  {
-                    "text": "Follow this guide for detailed instructions on retrieving the required settings from Bloomreach.",
-                    "link": "https://documentation.bloomreach.com/engagement/reference/authentication"
-                  }
-                ],
+                "note": "Update your connection settings here",
                 "icon": "settings",
                 "fields": [
                   {
                     "type": "textInput",
-                    "label": "API Base URL",
-                    "note": "URL of the Bloomreach instance",
-                    "configKey": "apiBaseUrl",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]{1,500}$",
-                    "regexErrorMessage": "Invalid API Base URl",
-                    "placeholder": "e.g. https://demoapp-api.bloomreach.com"
+                    "label": "Site ID",
+                    "note": "Settings > Account Settings > API Credentials > Track APP Keys > Site ID",
+                    "configKey": "siteId",
+                    "regex": "(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Site Id",
+                    "placeholder": "e.g: 88f02580XXXXXXXcf18"
                   },
                   {
                     "type": "textInput",
                     "label": "API Key",
-                    "note": "API Key from Project settings > Access management > API",
+                    "note": "Settings > Account Settings > API Credentials > Track APP Keys > API KEY of the corresponding Site ID",
                     "configKey": "apiKey",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regex": "(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid API Key",
-                    "placeholder": "e.g. eb3hb4***123",
+                    "placeholder": "e.g: 2309XXX5483",
                     "secret": true
                   },
                   {
                     "type": "textInput",
-                    "label": "API Secret",
-                    "note": "API Secret from Project settings > Access management> API",
-                    "configKey": "apiSecret",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-                    "regexErrorMessage": "Invalid API Secret",
-                    "placeholder": "e.g. 9p7v71***123",
+                    "label": "APP API Key",
+                    "note": "Settings > Account Settings > API Credentials > APP API Keys > API KEY",
+                    "configKey": "appApiKey",
+                    "regex": "(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid App API Key",
+                    "placeholder": "e.g: 2309XXX5483",
                     "secret": true
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "Project Token",
-                    "note": "Project Token from Project settings > Access management> API",
-                    "configKey": "projectToken",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-                    "regexErrorMessage": "Invalid Project Token",
-                    "placeholder": "e.g. geu9qu-***-x0i983-***"
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "Hard ID",
-                    "note": "Enter the hard Id that will be used in Bloomreach to identify a customer. Most common one is `registered`. Make sure this id exist in your project",
-                    "configKey": "hardID",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-                    "regexErrorMessage": "Invalid Hard ID",
-                    "placeholder": "e.g. registered"
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "Soft ID",
-                    "note": "Enter the soft Id that will be used in Bloomreach to identify a customer. Most common one is `cookie`. Make sure this id exist in your project",
-                    "configKey": "softID",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-                    "regexErrorMessage": "Invalid Soft ID",
-                    "placeholder": "e.g. cookie"
                   }
                 ]
               }
@@ -93,19 +60,6 @@
                 "fields": []
               }
             ]
-          }
-        ]
-      },
-      {
-        "title": "Configuration settings",
-        "note": "Manage the settings for your destination",
-        "sections": [
-          {
-            "id": "consentSettings",
-            "title": "Consent settings",
-            "note": "Configure consent settings for each provider here",
-            "icon": "settings",
-            "groups": []
           }
         ]
       }

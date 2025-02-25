@@ -902,56 +902,89 @@
     "allOf": [
       {
         "if": {
-          "anyOf": [
-            {
-              "properties": {
-                "connectionMode": {
+          "properties": {
+            "connectionMode": {
+              "anyOf": [
+                {
                   "type": "object",
                   "properties": {
-                    "web": {
-                      "type": "string",
-                      "enum": ["cloud"]
-                    }
+                    "warehouse": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["warehouse"]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "cloud": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["cloud"]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "web": { "type": "string", "enum": ["cloud"] }
                   },
                   "required": ["web"]
-                }
-              }
-            },
-            {
-              "properties": {
-                "connectionMode": {
+                },
+                {
                   "type": "object",
                   "properties": {
-                    "android": {
-                      "type": "string",
-                      "enum": ["cloud"]
-                    }
+                    "unity": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["unity"]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "ios": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["ios"]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "amp": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["amp"]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "flutter": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["flutter"]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "reactnative": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["reactnative"]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "cordova": { "type": "string", "enum": ["cloud"] }
+                  },
+                  "required": ["cordova"]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "android": { "type": "string", "enum": ["cloud"] }
                   },
                   "required": ["android"]
                 }
-              }
-            },
-            {
-              "properties": {
-                "connectionMode": {
-                  "type": "object",
-                  "properties": {
-                    "ios": {
-                      "type": "string",
-                      "enum": ["cloud"]
-                    }
-                  },
-                  "required": ["ios"]
-                }
-              }
+              ]
             }
-          ]
+          },
+          "required": ["connectionMode"]
         },
         "then": {
           "properties": {
             "apiKey": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$"
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,200})$"
             }
           },
           "required": ["apiKey"]
@@ -970,13 +1003,14 @@
               },
               "required": ["web"]
             }
-          }
+          },
+          "required": ["connectionMode"]
         },
         "then": {
           "properties": {
             "fs_org": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
             }
           },
           "required": ["fs_org"]
