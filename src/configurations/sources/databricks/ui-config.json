@@ -2,7 +2,7 @@
   "uiConfig": [
     {
       "title": "Connection Credentials",
-      "secretFields": ["token"],
+      "secretFields": ["token", "oauthClientSecret"],
       "docLinks": {
         "grantPermissions": "https://www.rudderstack.com/docs/reverse-etl/databricks/#granting-permissions",
         "verifyingCredentials": "https://www.rudderstack.com/docs/reverse-etl/databricks/#what-do-the-three-validations-under-verifying-credentials-imply",
@@ -42,6 +42,25 @@
           "trim": true
         },
         {
+          "type": "singleSelect",
+          "label": "Authentication Type",
+          "value": "authenticationType",
+          "required": true,
+          "options": [
+            {
+              "name": "Personal Access Token",
+              "value": "pat"
+            },
+            {
+              "name": "M2M OAuth",
+              "value": "oauth"
+            }
+          ],
+          "defaultOption": {
+            "value": "oauth"
+          }
+        },
+        {
           "type": "textInput",
           "label": "Token",
           "value": "token",
@@ -50,7 +69,39 @@
           "required": true,
           "addInAccountSummary": false,
           "secret": true,
-          "inputFieldType": "password"
+          "inputFieldType": "password",
+          "preRequisiteField": {
+            "name": "authenticationType",
+            "selectedValue": "pat"
+          }
+        },
+        {
+          "type": "textInput",
+          "label": "Client ID",
+          "value": "oauthClientId",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "required": true,
+          "addInAccountSummary": false,
+          "trim": true,
+          "preRequisiteField": {
+            "name": "authenticationType",
+            "selectedValue": "oauth"
+          }
+        },
+        {
+          "type": "textInput",
+          "label": "Client secret",
+          "value": "oauthClientSecret",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Value",
+          "required": true,
+          "addInAccountSummary": false,
+          "secret": true,
+          "preRequisiteField": {
+            "name": "authenticationType",
+            "selectedValue": "oauth"
+          }
         },
         {
           "type": "textInput",
