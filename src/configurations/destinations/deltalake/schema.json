@@ -16,10 +16,6 @@
         "type": "string",
         "pattern": "(^env[.].+)|^(.{1,100})$"
       },
-      "token": {
-        "type": "string",
-        "pattern": "(^env[.].+)|^(.{1,100})$"
-      },
       "catalog": {
         "type": "string",
         "pattern": "(^env[.].*)|^(.*)$"
@@ -912,6 +908,48 @@
       }
     },
     "allOf": [
+      {
+        "if": {
+          "properties": {
+            "useOauth": {
+              "const": false
+            }
+          },
+          "required": ["useOauth"]
+        },
+        "then": {
+          "properties": {
+            "token": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["token"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "useOauth": {
+              "const": true
+            }
+          },
+          "required": ["useOauth"]
+        },
+        "then": {
+          "properties": {
+            "oauthClientId": {
+              "type": "string",
+              "pattern": "^(.{1,100})$"
+            },
+            "oauthClientSecret": {
+              "type": "string",
+              "pattern": "^(.{1,100})$"
+            }
+          },
+          "required": ["oauthClientId", "oauthClientSecret"]
+        }
+      },
       {
         "if": {
           "properties": {
