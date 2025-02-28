@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.106.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.105.0...v1.106.0) (2025-02-21)
+
+
+### Features
+
+* **gtm:** added support for environment configs ([#1906](https://github.com/rudderlabs/rudder-config-schema/issues/1906)) ([302d2c7](https://github.com/rudderlabs/rudder-config-schema/commit/302d2c7d56bc2abe19d2547dbb7e8c142471543e))
+* **http:** update labels and regex for a couple of field ([#1903](https://github.com/rudderlabs/rudder-config-schema/issues/1903)) ([2b51393](https://github.com/rudderlabs/rudder-config-schema/commit/2b513939f0c31829733b2ab966a959ef60f024b1))
+
+
+### Bug Fixes
+
+* incorrect preRequisiteField of "cleanupObjectStorageFiles" in s3 datalake ([#1905](https://github.com/rudderlabs/rudder-config-schema/issues/1905)) ([ca53abb](https://github.com/rudderlabs/rudder-config-schema/commit/ca53abb9328ce1162dc55d4086cb7aa7bede2afa))
+
+## [1.105.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.104.0...v1.105.0) (2025-02-17)
+
+
+### Features
+
+* added drop traits in track call feature for mixpanel ([#1882](https://github.com/rudderlabs/rudder-config-schema/issues/1882)) ([c6d8b7b](https://github.com/rudderlabs/rudder-config-schema/commit/c6d8b7b653d45ac672413612cbb708a03b9b5519))
+* allow configuring of object storage files deletion for warehouse destinations ([#1896](https://github.com/rudderlabs/rudder-config-schema/issues/1896)) ([2547b0c](https://github.com/rudderlabs/rudder-config-schema/commit/2547b0cfd63787f45afec75e06af5e1450950214))
+* **http:** updated labels and addressed product feedback ([#1898](https://github.com/rudderlabs/rudder-config-schema/issues/1898)) ([0f29945](https://github.com/rudderlabs/rudder-config-schema/commit/0f29945ca72c0025b64b7bb9378dd45dcae8be73))
+* **http:** updated regex and some labels ([#1895](https://github.com/rudderlabs/rudder-config-schema/issues/1895)) ([f5cd4cf](https://github.com/rudderlabs/rudder-config-schema/commit/f5cd4cf6b3b49788c3ee6f1e2ec2a7a4b1105437))
+
 ## [1.104.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.103.0...v1.104.0) (2025-02-04)
 
 
