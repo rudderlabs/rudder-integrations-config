@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.106.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.106.0...v1.106.1) (2025-03-03)
 
+### Features
+
+* adds iubenda to subset of destinations ([#1915](https://github.com/rudderlabs/rudder-config-schema/issues/1915)) ([0f6bc16](https://github.com/rudderlabs/rudder-config-schema/commit/0f6bc1673b024ea1500496625ba3c79638d14e3f))
+
 ## [1.106.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.105.0...v1.106.0) (2025-02-21)
 
 
