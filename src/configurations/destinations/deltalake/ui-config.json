@@ -31,6 +31,12 @@
           "required": true
         },
         {
+          "type": "checkbox",
+          "label": "Use M2M OAuth",
+          "value": "useOauth",
+          "default": false
+        },
+        {
           "type": "textInput",
           "label": "Personal Access Token",
           "value": "token",
@@ -38,7 +44,38 @@
           "regexErrorMessage": "Invalid Access Token",
           "placeholder": "e.g: <personal-access-token>",
           "required": true,
-          "secret": true
+          "secret": true,
+          "preRequisiteField": {
+            "name": "useOauth",
+            "selectedValue": false
+          }
+        },
+        {
+          "type": "textInput",
+          "label": "Client ID",
+          "value": "oauthClientId",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Client ID",
+          "placeholder": "e.g: <client-id>",
+          "required": true,
+          "preRequisiteField": {
+            "name": "useOauth",
+            "selectedValue": true
+          }
+        },
+        {
+          "type": "textInput",
+          "label": "Client Secret",
+          "value": "oauthClientSecret",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Client Secret",
+          "placeholder": "e.g: <client-secret>",
+          "required": true,
+          "secret": true,
+          "preRequisiteField": {
+            "name": "useOauth",
+            "selectedValue": true
+          }
         },
         {
           "type": "checkbox",
