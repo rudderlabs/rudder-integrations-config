@@ -1,93 +1,109 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Loops API key",
-          "value": "apiKey",
-          "regex": "^[a-f0-9]{32}$",
-          "regexErrorMessage": "Invalid Loops API key",
-          "required": true,
-          "placeholder": "Paste your Loops API key here...",
-          "secret": true
-        }
-      ]
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "API Key",
+                    "note": "Go to Settings -> API in Loops and click Generate key",
+                    "configKey": "apiKey",
+                    "regex": "^[a-f0-9]{32}$",
+                    "regexErrorMessage": "Invalid Loops API key",
+                    "placeholder": "e.g: abcXXXXXXXXXX",
+                    "secret": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     },
-    {
-      "title": "Event Settings",
-      "fields": [
-        {
-          "type": "dynamicSelectForm",
-          "label": "Event Name to Event Type Mapping",
-          "labelLeft": "Event Name",
-          "labelRight": "Event Type",
-          "value": "eventTypeSettings",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g. item clicked",
-          "options": [
-            {
-              "name": "Click",
-              "value": "click"
-            },
-            {
-              "name": "View",
-              "value": "view"
-            },
-            {
-              "name": "Conversion",
-              "value": "conversion"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
       "fields": [
         {
           "type": "dynamicCustomForm",
-          "value": "consentManagement",
-          "label": "Consent management settings",
-          "footerNote": "We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
             {
               "type": "singleSelect",
               "label": "Consent management provider",
-              "value": "provider",
+              "configKey": "provider",
               "options": [
                 {
-                  "name": "Custom",
+                  "label": "Custom",
                   "value": "custom"
                 },
                 {
-                  "name": "Ketch",
+                  "label": "Ketch",
                   "value": "ketch"
                 },
                 {
-                  "name": "OneTrust",
+                  "label": "OneTrust",
                   "value": "oneTrust"
                 }
               ],
-              "defaultOption": {
-                "name": "OneTrust",
-                "value": "oneTrust"
-              },
+              "default": "oneTrust",
               "required": true
             },
             {
               "type": "singleSelect",
               "label": "the required consent logic",
-              "value": "resolutionStrategy",
+              "configKey": "resolutionStrategy",
               "options": [
                 {
-                  "name": "AND",
+                  "label": "AND",
                   "value": "and"
                 },
                 {
-                  "name": "OR",
+                  "label": "OR",
                   "value": "or"
                 }
               ],
@@ -103,16 +119,15 @@
               }
             },
             {
-              "type": "dynamicCustomForm",
-              "value": "consents",
+              "type": "tagInput",
               "label": "Enter consent category IDs",
-              "customFields": [
+              "note": "Input your consent category IDs by pressing 'Enter' after each entry. We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
                 {
-                  "type": "textInput",
-                  "placeholder": "Marketing",
-                  "value": "consent",
-                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "required": false
+                  "consent": ""
                 }
               ]
             }
@@ -120,5 +135,5 @@
         }
       ]
     }
-  ]
+  }
 }

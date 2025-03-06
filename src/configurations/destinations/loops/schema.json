@@ -6,7 +6,7 @@
     "properties": {
       "apiKey": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[a-f0-9]{32}$"
       },
       "oneTrustCookieCategories": {
         "type": "object",
@@ -83,18 +83,6 @@
               }
             }
           },
-          "warehouse": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
           "reactnative": {
             "type": "array",
             "items": {
@@ -149,52 +137,6 @@
         "type": "object",
         "properties": {
           "cloud": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
-                  "default": "oneTrust"
-                },
-                "consents": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "consent": {
-                        "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                      }
-                    }
-                  }
-                }
-              },
-              "allOf": [
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
-                    "required": ["provider"]
-                  },
-                  "then": {
-                    "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
-                    },
-                    "required": ["resolutionStrategy"]
-                  }
-                }
-              ]
-            }
-          },
-          "warehouse": {
             "type": "array",
             "items": {
               "type": "object",
@@ -698,10 +640,6 @@
           "cloud": {
             "type": "string",
             "enum": ["cloud"]
-          },
-          "warehouse": {
-            "type": "string",
-            "enum": ["cloud"]
           }
         }
       },
@@ -769,18 +707,6 @@
             }
           },
           "cloud": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "warehouse": {
             "type": "array",
             "items": {
               "type": "object",
