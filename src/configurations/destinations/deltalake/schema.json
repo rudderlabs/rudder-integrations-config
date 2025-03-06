@@ -2,7 +2,7 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema",
     "type": "object",
-    "required": ["host", "port", "path", "token", "syncFrequency", "bucketProvider"],
+    "required": ["host", "port", "path", "syncFrequency", "bucketProvider"],
     "properties": {
       "host": {
         "type": "string",
@@ -912,6 +912,50 @@
       }
     },
     "allOf": [
+      {
+        "if": {
+          "not": {
+            "properties": {
+              "useOauth": {
+                "const": true
+              }
+            },
+            "required": ["useOauth"]
+          }
+        },
+        "then": {
+          "properties": {
+            "token": {
+              "type": "string",
+              "pattern": "(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["token"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "useOauth": {
+              "const": true
+            }
+          },
+          "required": ["useOauth"]
+        },
+        "then": {
+          "properties": {
+            "oauthClientId": {
+              "type": "string",
+              "pattern": "^(.{1,100})$"
+            },
+            "oauthClientSecret": {
+              "type": "string",
+              "pattern": "^(.{1,100})$"
+            }
+          },
+          "required": ["oauthClientId", "oauthClientSecret"]
+        }
+      },
       {
         "if": {
           "properties": {
