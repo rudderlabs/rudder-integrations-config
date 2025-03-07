@@ -10,6 +10,10 @@ on:
         type: boolean
       version:
         type: string
+      checkout_ref:
+        type: string
+        required: false
+
     secrets:
       API_USERNAME:
         required: true
@@ -29,7 +33,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4.1.1
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ inputs.checkout_ref }}
           fetch-depth: 1
 
       - name: Setup Node
