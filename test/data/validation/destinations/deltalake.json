@@ -391,7 +391,7 @@
       "accessKey": "test-access-key"
     },
     "result": false,
-    "err": ["token must be string", " must match \"then\" schema", "token must be string"]
+    "err": ["token must be string", " must match \"then\" schema"]
   },
   {
     "testTitle": "With empty token",
@@ -410,11 +410,7 @@
       "accessKey": "test-access-key"
     },
     "result": false,
-    "err": [
-      "token must match pattern \"(^env[.].+)|^(.{1,100})$\"",
-      " must match \"then\" schema",
-      "token must match pattern \"(^env[.].+)|^(.{1,100})$\""
-    ]
+    "err": ["token must match pattern \"(^env[.].+)|^(.{1,100})$\"", " must match \"then\" schema"]
   },
   {
     "testTitle": "With valid token for PAT authentication",
@@ -479,12 +475,33 @@
     "err": [" must have required property 'oauthClientSecret'", " must match \"then\" schema"]
   },
   {
-    "testTitle": "With valid config for Oauth authentication",
+    "testTitle": "With valid config for Oauth authentication with token",
     "config": {
       "host": "test-host",
       "path": "test-path",
       "port": "0000",
       "token": "test-token",
+      "useOauth": true,
+      "oauthClientId": "test-oauth-client-id",
+      "oauthClientSecret": "test-oauth-client-secret",
+      "bucketProvider": "S3",
+      "syncFrequency": "30",
+      "enableSSE": false,
+      "useRudderStorage": false,
+      "useSTSTokens": false,
+      "bucketName": "test-bucket",
+      "accessKeyID": "test-access-key-id",
+      "accessKey": "test-access-key"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With valid config for Oauth authentication",
+    "config": {
+      "host": "test-host",
+      "path": "test-path",
+      "port": "0000",
+      "token": "",
       "useOauth": true,
       "oauthClientId": "test-oauth-client-id",
       "oauthClientSecret": "test-oauth-client-secret",
