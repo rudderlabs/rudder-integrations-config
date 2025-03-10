@@ -2,7 +2,80 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
+    "additionalProperties": false,
+    "required": ["apiId", "apiKey", "region"],
     "properties": {
+      "apiKey": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "apiId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "region": {
+        "type": "string",
+        "enum": ["US", "EU", "IND"],
+        "default": "US"
+      },
+      "useObjectData": {
+        "type": "boolean",
+        "default": false
+      },
+      "eventFilteringOption": {
+        "type": "string",
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
+      },
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "boolean"
+          },
+          "ios": {
+            "type": "boolean"
+          },
+          "web": {
+            "type": "boolean"
+          },
+          "reactnative": {
+            "type": "boolean"
+          }
+        }
+      },
+      "debug": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
       "oneTrustCookieCategories": {
         "type": "object",
         "properties": {
