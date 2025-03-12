@@ -29,16 +29,3 @@ jobs:
       API_PASSWORD: ${{ secrets.DEV_PASSWORD }}
       SLACK_BOT_TOKEN: $$ {{ secrets.SLACK_BOT_TOKEN }}
       SLACK_RELEASE_CHANNEL_ID: ${{ secrets.SLACK_RELEASE_CHANNEL_ID }}
-
-  deploy-to-sources-dev:
-    name: Deployment To Sources Development DB
-    # Only merged pull requests must trigger
-    if: github.event.pull_request.merged == true
-    uses: ./.github/workflows/deploy.yml
-    with:
-      deploy_url: https://sources-api.dev.rudderlabs.com
-    secrets:
-      API_USERNAME: ${{ secrets.DEV_USERNAME }}
-      API_PASSWORD: ${{ secrets.DEV_PASSWORD }}
-      SLACK_BOT_TOKEN: $$ {{ secrets.SLACK_BOT_TOKEN }}
-      SLACK_RELEASE_CHANNEL_ID: ${{ secrets.SLACK_RELEASE_CHANNEL_ID }}
