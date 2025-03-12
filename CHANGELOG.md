@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.107.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.106.1...v1.107.0) (2025-03-10)
+
+
+### Features
+
+* add object data support moengage ([#1909](https://github.com/rudderlabs/rudder-config-schema/issues/1909)) ([4049e30](https://github.com/rudderlabs/rudder-config-schema/commit/4049e30df6b9963eaf88b52be6e2cddf5024694e))
+* oauth support in databricks destination ([#1912](https://github.com/rudderlabs/rudder-config-schema/issues/1912)) ([98f74e4](https://github.com/rudderlabs/rudder-config-schema/commit/98f74e4af8a31686acebdc2f3482623051587cc5))
+* onboarding new source facebook lead ads ([#1910](https://github.com/rudderlabs/rudder-config-schema/issues/1910)) ([2d82dd1](https://github.com/rudderlabs/rudder-config-schema/commit/2d82dd1cd380c8f4b879173e496cd519dfed3c41))
+
 ### [1.106.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.106.0...v1.106.1) (2025-03-03)
 
 ### Features
