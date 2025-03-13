@@ -1,0 +1,386 @@
+[
+  {
+    "testTitle": "With valid minimum required fields",
+    "config": {
+      "token": {
+        "web": "NX-12345"
+      },
+      "connectionMode": {
+        "web": "device"
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With invalid connectionMode value",
+    "config": {
+      "token": {
+        "web": "NX-12345"
+      },
+      "connectionMode": {
+        "web": "invalid"
+      }
+    },
+    "result": false,
+    "err": ["connectionMode.web must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With complete device mode config",
+    "config": {
+      "token": {
+        "web": "NX-12345"
+      },
+      "endpoint": {
+        "web": "https://api.example.com/ws"
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "useNativeSDK": {
+        "web": true
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With invalid endpoint URL",
+    "config": {
+      "token": {
+        "web": "NX-12345"
+      },
+      "endpoint": {
+        "web": "invalid-url"
+      },
+      "connectionMode": {
+        "web": "device"
+      }
+    },
+    "result": false,
+    "err": ["endpoint.web must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(https?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$\""]
+  },
+  {
+    "testTitle": "With complete cloud mode config",
+    "config": {
+      "token": {
+        "web": "NX-12345"
+      },
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "apiKey": {
+        "cloud": "21axxxxxxxxxxxxxx"
+      },
+      "apiEndpoint": {
+        "cloud": "https://analytex.userpilot.io"
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With invalid apiEndpoint URL in cloud mode",
+    "config": {
+      "token": {
+        "web": "NX-12345"
+      },
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "apiKey": {
+        "cloud": "21axxxxxxxxxxxxxx"
+      },
+      "apiEndpoint": {
+        "cloud": "invalid-url"
+      }
+    },
+    "result": false,
+    "err": ["apiEndpoint.cloud must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(https?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$\""]
+  },
+  {
+    "testTitle": "With valid OneTrust consent settings",
+    "config": {
+      "token": {
+        "web": "NX-12345"
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "C0001"
+              },
+              {
+                "consent": "C0002"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With invalid consent provider",
+    "config": {
+      "token": {
+        "web": "NX-12345"
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "invalidProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.web.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With custom consent provider but missing resolutionStrategy",
+    "config": {
+      "token": {
+        "web": "NX-12345"
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0 must have required property 'resolutionStrategy'",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With custom consent provider and invalid resolutionStrategy",
+    "config": {
+      "token": {
+        "web": "NX-12345"
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "invalid"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With valid custom consent provider config",
+    "config": {
+      "token": {
+        "web": "NX-12345"
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              },
+              {
+                "consent": "Analytics"
+              }
+            ],
+            "resolutionStrategy": "and"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With multiple valid consent providers",
+    "config": {
+      "token": {
+        "web": "NX-12345"
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ],
+            "resolutionStrategy": "or"
+          },
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "C0001"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          },
+          {
+            "provider": "iubenda",
+            "consents": [
+              {
+                "consent": "1"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With OneTrust cookie categories",
+    "config": {
+      "token": {
+        "web": "NX-12345"
+      },
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "apiKey": {
+        "cloud": "21axxxxxxxxxxxxxx"
+      },
+      "apiEndpoint": {
+        "cloud": "https://analytex.userpilot.io"
+      },
+      "oneTrustCookieCategories": {
+        "web": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          },
+          {
+            "oneTrustCookieCategory": "C0002"
+          }
+        ],
+        "cloud": [
+          {
+            "oneTrustCookieCategory": "C0003"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With Ketch consent purposes",
+    "config": {
+      "token": {
+        "web": "NX-12345"
+      },
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "apiKey": {
+        "cloud": "21axxxxxxxxxxxxxx"
+      },
+      "apiEndpoint": {
+        "cloud": "https://analytex.userpilot.io"
+      },
+      "ketchConsentPurposes": {
+        "web": [
+          {
+            "purpose": "Marketing"
+          }
+        ],
+        "cloud": [
+          {
+            "purpose": "Analytics"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With full configuration",
+    "config": {
+      "token": {
+        "web": "NX-12345"
+      },
+      "endpoint": {
+        "web": "https://api.example.com/ws"
+      },
+      "connectionMode": {
+        "web": "device"
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "oneTrustCookieCategories": {
+        "web": [
+          {
+            "oneTrustCookieCategory": "C0001"
+          }
+        ]
+      },
+      "ketchConsentPurposes": {
+        "web": [
+          {
+            "purpose": "Marketing"
+          }
+        ]
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "C0001"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": true
+  }
+] 
