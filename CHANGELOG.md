@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.108.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.107.0...v1.108.0) (2025-03-13)
+
+
+### Features
+
+* disable json mapper in klaviyo bulk upload destination ([#1933](https://github.com/rudderlabs/rudder-config-schema/issues/1933)) ([6e1f997](https://github.com/rudderlabs/rudder-config-schema/commit/6e1f9974f9bcfd0b99fa0b0e9101f8d0a9eb57d9))
+
 ## [1.107.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.106.1...v1.107.0) (2025-03-10)
 
 
