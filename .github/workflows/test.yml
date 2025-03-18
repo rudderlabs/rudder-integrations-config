@@ -15,7 +15,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4.1.1
         with:
-          fetch-depth: 2 # Fetch previous commit for diff comparison
+          fetch-depth: 0  # Fetch all history for diff comparison
+
+      - name: Fetch base branch
+        run: git fetch origin ${{ github.base_ref }}
 
       - name: Setup Node
         uses: actions/setup-node@v4.2.0
