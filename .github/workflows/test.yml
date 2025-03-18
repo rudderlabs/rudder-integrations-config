@@ -1,0 +1,56 @@
+name: Tests
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: 0  # Fetch all history for diff comparison
+
+      - name: Fetch base branch
+        run: git fetch origin ${{ github.base_ref }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4.2.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm run setup
+
+      - name: Run Tests
+        run: npm run test:ci
+
+      - name: Get changed files
+        id: changed_files
+        run: |
+          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }})
+          echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
+          echo "$CHANGED_FILES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Filter changed files for schema validation
+        id: filter_changed_files
+        run: |
+          FILES_TO_VALIDATE=$(echo "$CHANGED_FILES" | grep -v "src/configurations/sources" || true)
+          FILES_TO_VALIDATE=$(echo "$FILES_TO_VALIDATE" | tr '\n' ' ')
+          echo "files_to_validate=$FILES_TO_VALIDATE" >> $GITHUB_ENV
+
+      - name: Output Filtered files (remove later after sanity)
+        run: echo "$files_to_validate"
+
+      - name: Run schema validation for changed files
+        run: |
+          chmod +x scripts/run-schema-validation.sh
+          scripts/run-schema-validation.sh $files_to_validate
