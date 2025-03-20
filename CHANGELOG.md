@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.109.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.108.0...v1.109.0) (2025-03-18)
+
+
+### Features
+
+* add iubenda to all remaining destinations ([#1916](https://github.com/rudderlabs/rudder-config-schema/issues/1916)) ([d0d0296](https://github.com/rudderlabs/rudder-config-schema/commit/d0d029615fd36773944ca74c135c00c8dc2952c7))
+* onboarding new destination accoil analytics ([#1928](https://github.com/rudderlabs/rudder-config-schema/issues/1928)) ([fa40695](https://github.com/rudderlabs/rudder-config-schema/commit/fa40695342157df02a69735bbc8e1f8b08d0504f))
+
+
+### Bug Fixes
+
+* missing token error in databricks oauth config ([#1925](https://github.com/rudderlabs/rudder-config-schema/issues/1925)) ([471e4de](https://github.com/rudderlabs/rudder-config-schema/commit/471e4dee142c6dc132687311696a34e08332051c))
+* remove workflows using tj-actions changed-files action ([44e712c](https://github.com/rudderlabs/rudder-config-schema/commit/44e712c0cbfe04a2573bd9fa6033e1ad095b52bf))
+
 ## [1.108.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.107.0...v1.108.0) (2025-03-13)
 
 
