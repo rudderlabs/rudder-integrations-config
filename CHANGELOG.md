@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.110.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.109.0...v1.110.0) (2025-03-24)
+
+
+### Features
+
+* added india residency support in mixpanel destination ([#1950](https://github.com/rudderlabs/rudder-config-schema/issues/1950)) ([8ecb2b0](https://github.com/rudderlabs/rudder-config-schema/commit/8ecb2b0afbd5399ac43b48f3b40f169133faa835))
+
 ## [1.109.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.108.0...v1.109.0) (2025-03-18)
 
 
