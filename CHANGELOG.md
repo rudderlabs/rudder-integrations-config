@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.111.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.110.0...v1.111.0) (2025-03-26)
+
+
+### Features
+
+* oauth support in databricks source ([#1911](https://github.com/rudderlabs/rudder-config-schema/issues/1911)) ([ed8a588](https://github.com/rudderlabs/rudder-config-schema/commit/ed8a588d8e63d4d200f7cd4eaa9525e37fe7045b))
+
+## [1.110.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.109.1...v1.110.0) (2025-03-24)
+
+
+### Features
+
+* added india residency support in mixpanel destination ([#1950](https://github.com/rudderlabs/rudder-config-schema/issues/1950)) ([8ecb2b0](https://github.com/rudderlabs/rudder-config-schema/commit/8ecb2b0afbd5399ac43b48f3b40f169133faa835))
+
+### [1.109.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.109.0...v1.109.1) (2025-03-24)
+
 ## [1.109.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.108.0...v1.109.0) (2025-03-18)
 
 
