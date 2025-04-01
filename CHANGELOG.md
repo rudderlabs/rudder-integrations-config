@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.112.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.111.0...v1.112.0) (2025-04-01)
+
+
+### Features
+
+* added tik tok ads standard events ([#1965](https://github.com/rudderlabs/rudder-config-schema/issues/1965)) ([2ff6ea8](https://github.com/rudderlabs/rudder-config-schema/commit/2ff6ea854045e87c5d0762348d1d01a6c8b220e4))
+
 ## [1.111.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.110.0...v1.111.0) (2025-03-26)
 
 
