@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.112.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.112.0...v1.112.1) (2025-04-04)
+
+
+### Bug Fixes
+
+* bigquery disable view creation option ([#1976](https://github.com/rudderlabs/rudder-config-schema/issues/1976)) ([35a1b80](https://github.com/rudderlabs/rudder-config-schema/commit/35a1b809ddfa1e8ef5322562c0bd7950cd430798))
+
 ## [1.112.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.111.0...v1.112.0) (2025-04-01)
 
 
