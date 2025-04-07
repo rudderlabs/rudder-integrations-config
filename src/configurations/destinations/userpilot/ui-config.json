@@ -1,0 +1,208 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "App Token",
+                    "value": "token",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid App Token",
+                    "required": true,
+                    "placeholder": "e.g: NX-XXXX",
+                    "prerequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "device"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "JS SDK ENDPOINT",
+                    "value": "endpoint",
+                    "regex": "^(https?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+                    "regexErrorMessage": "Invalid API Endpoint URL. It should be a valid URL starting with http:// or https://",
+                    "required": false,
+                    "placeholder": "e.g: wss://api.example.com/ws",
+                    "secret": false,
+                    "description": "Custom endpoint for the JavaScript SDK",
+                    "prerequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "device"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "API KEY",
+                    "value": "apiKey",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid API Key",
+                    "required": true,
+                    "placeholder": "e.g: 21axxxxxxxxxxxxxx",
+                    "secret": true,
+                    "description": "API Key for authenticating with the HTTP API",
+                    "prerequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.cloud",
+                          "value": "cloud"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "HTTP API ENDPOINT",
+                    "value": "apiEndpoint",
+                    "regex": "^(https?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+                    "regexErrorMessage": "Invalid API Endpoint URL. It should be a valid URL starting with http:// or https://",
+                    "required": true,
+                    "placeholder": "e.g: https://analytex.userpilot.io",
+                    "default": "https://analytex.userpilot.io",
+                    "secret": false,
+                    "description": "Endpoint for the HTTP API",
+                    "prerequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.cloud",
+                          "value": "cloud"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "iubenda",
+                  "value": "iubenda"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "default": "oneTrust",
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category IDs",
+              "note": "Input your consent category IDs by pressing 'Enter' after each entry. We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

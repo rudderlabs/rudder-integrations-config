@@ -1,0 +1,71 @@
+[
+  {
+    "testTitle": "Valid web device mode configuration",
+    "config": {
+      "token": "test-token",
+      "connectionMode": {
+        "web": "device"
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid cloud mode configuration",
+    "config": {
+      "apiKey": "test-api-key",
+      "apiEndpoint": "https://analytex.userpilot.io",
+      "connectionMode": {
+        "cloud": "cloud"
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Invalid web device mode - missing token",
+    "config": {
+      "connectionMode": {
+        "web": "device"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'token'"]
+  },
+  {
+    "testTitle": "Invalid cloud mode - missing apiKey",
+    "config": {
+      "apiEndpoint": "https://analytex.userpilot.io",
+      "connectionMode": {
+        "cloud": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'apiKey'"]
+  },
+  {
+    "testTitle": "Invalid cloud mode - missing apiEndpoint",
+    "config": {
+      "apiKey": "test-api-key",
+      "connectionMode": {
+        "cloud": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'apiEndpoint'"]
+  },
+  {
+    "testTitle": "Invalid endpoint URL format",
+    "config": {
+      "token": "test-token",
+      "endpoint": {
+        "web": "invalid-url"
+      },
+      "connectionMode": {
+        "web": "device"
+      }
+    },
+    "result": false,
+    "err": [
+      "endpoint.web must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(https?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$\""
+    ]
+  }
+]
