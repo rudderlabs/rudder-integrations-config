@@ -140,6 +140,12 @@ describe('Consent Management Fields Integrity tests', () => {
       ).toEqual(supportedSourceTypes.sort());
     });
 
+    it(`should have iubenda in consentManagement options in enum field properly defined in schema.json for ${destName}`, () => {
+      const iubendaCount = deepSearch(schema, 'iubenda');
+      const ketchCount = deepSearch(schema, 'ketch');
+      expect(iubendaCount).toEqual(ketchCount);
+    });
+
     // Validate ui-config.json
     const uiConfigFilePath = path.resolve(`${destDir}/${destName}/ui-config.json`);
     const uiConfig = getJSONDataFromFile(uiConfigFilePath);
@@ -155,6 +161,11 @@ describe('Consent Management Fields Integrity tests', () => {
     it(`should have consentManagement field properly defined in ui-config.json for ${destName}`, () => {
       const consentManagementUIElementCount = deepSearch(uiConfig, 'consentManagement');
       expect(consentManagementUIElementCount).toEqual(1);
+    });
+
+    it(`should have iubenda in customFields field properly defined in ui-config.json for ${destName}`, () => {
+      const consentManagementUIElementCount = deepSearch(uiConfig, 'iubenda');
+      expect(consentManagementUIElementCount).toEqual(2);
     });
   });
 });

@@ -2,6 +2,59 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.112.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.111.0...v1.112.0) (2025-04-01)
+
+
+### Features
+
+* added tik tok ads standard events ([#1965](https://github.com/rudderlabs/rudder-config-schema/issues/1965)) ([2ff6ea8](https://github.com/rudderlabs/rudder-config-schema/commit/2ff6ea854045e87c5d0762348d1d01a6c8b220e4))
+
+## [1.111.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.110.0...v1.111.0) (2025-03-26)
+
+
+### Features
+
+* oauth support in databricks source ([#1911](https://github.com/rudderlabs/rudder-config-schema/issues/1911)) ([ed8a588](https://github.com/rudderlabs/rudder-config-schema/commit/ed8a588d8e63d4d200f7cd4eaa9525e37fe7045b))
+
+## [1.110.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.109.1...v1.110.0) (2025-03-24)
+
+
+### Features
+
+* added india residency support in mixpanel destination ([#1950](https://github.com/rudderlabs/rudder-config-schema/issues/1950)) ([8ecb2b0](https://github.com/rudderlabs/rudder-config-schema/commit/8ecb2b0afbd5399ac43b48f3b40f169133faa835))
+
+### [1.109.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.109.0...v1.109.1) (2025-03-24)
+
+## [1.109.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.108.0...v1.109.0) (2025-03-18)
+
+
+### Features
+
+* add iubenda to all remaining destinations ([#1916](https://github.com/rudderlabs/rudder-config-schema/issues/1916)) ([d0d0296](https://github.com/rudderlabs/rudder-config-schema/commit/d0d029615fd36773944ca74c135c00c8dc2952c7))
+* onboarding new destination accoil analytics ([#1928](https://github.com/rudderlabs/rudder-config-schema/issues/1928)) ([fa40695](https://github.com/rudderlabs/rudder-config-schema/commit/fa40695342157df02a69735bbc8e1f8b08d0504f))
+
+
+### Bug Fixes
+
+* missing token error in databricks oauth config ([#1925](https://github.com/rudderlabs/rudder-config-schema/issues/1925)) ([471e4de](https://github.com/rudderlabs/rudder-config-schema/commit/471e4dee142c6dc132687311696a34e08332051c))
+* remove workflows using tj-actions changed-files action ([44e712c](https://github.com/rudderlabs/rudder-config-schema/commit/44e712c0cbfe04a2573bd9fa6033e1ad095b52bf))
+
+## [1.108.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.107.0...v1.108.0) (2025-03-13)
+
+
+### Features
+
+* disable json mapper in klaviyo bulk upload destination ([#1933](https://github.com/rudderlabs/rudder-config-schema/issues/1933)) ([6e1f997](https://github.com/rudderlabs/rudder-config-schema/commit/6e1f9974f9bcfd0b99fa0b0e9101f8d0a9eb57d9))
+
+## [1.107.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.106.1...v1.107.0) (2025-03-10)
+
+
+### Features
+
+* add object data support moengage ([#1909](https://github.com/rudderlabs/rudder-config-schema/issues/1909)) ([4049e30](https://github.com/rudderlabs/rudder-config-schema/commit/4049e30df6b9963eaf88b52be6e2cddf5024694e))
+* oauth support in databricks destination ([#1912](https://github.com/rudderlabs/rudder-config-schema/issues/1912)) ([98f74e4](https://github.com/rudderlabs/rudder-config-schema/commit/98f74e4af8a31686acebdc2f3482623051587cc5))
+* onboarding new source facebook lead ads ([#1910](https://github.com/rudderlabs/rudder-config-schema/issues/1910)) ([2d82dd1](https://github.com/rudderlabs/rudder-config-schema/commit/2d82dd1cd380c8f4b879173e496cd519dfed3c41))
+
 ### [1.106.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.106.0...v1.106.1) (2025-03-03)
 
 ### Features

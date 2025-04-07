@@ -2,7 +2,32 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
+    "required": ["apiKey"],
     "properties": {
+      "apiKey": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
+      },
+      "appKey": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
+      },
+      "timestampAttributes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "timestampAttribute": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "dataCenter": {
+        "type": "boolean",
+        "default": false
+      },
       "oneTrustCookieCategories": {
         "type": "object",
         "properties": {
@@ -287,7 +312,7 @@
               "properties": {
                 "provider": {
                   "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
                   "default": "oneTrust"
                 },
                 "consents": {
@@ -333,7 +358,7 @@
               "properties": {
                 "provider": {
                   "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
                   "default": "oneTrust"
                 },
                 "consents": {
@@ -379,7 +404,7 @@
               "properties": {
                 "provider": {
                   "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
                   "default": "oneTrust"
                 },
                 "consents": {
@@ -425,7 +450,7 @@
               "properties": {
                 "provider": {
                   "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
                   "default": "oneTrust"
                 },
                 "consents": {
@@ -471,7 +496,7 @@
               "properties": {
                 "provider": {
                   "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
                   "default": "oneTrust"
                 },
                 "consents": {
@@ -517,7 +542,7 @@
               "properties": {
                 "provider": {
                   "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
                   "default": "oneTrust"
                 },
                 "consents": {
@@ -563,7 +588,7 @@
               "properties": {
                 "provider": {
                   "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
                   "default": "oneTrust"
                 },
                 "consents": {
@@ -609,7 +634,7 @@
               "properties": {
                 "provider": {
                   "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
                   "default": "oneTrust"
                 },
                 "consents": {
@@ -655,7 +680,7 @@
               "properties": {
                 "provider": {
                   "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
                   "default": "oneTrust"
                 },
                 "consents": {
@@ -701,7 +726,7 @@
               "properties": {
                 "provider": {
                   "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
                   "default": "oneTrust"
                 },
                 "consents": {
@@ -747,7 +772,7 @@
               "properties": {
                 "provider": {
                   "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
                   "default": "oneTrust"
                 },
                 "consents": {
@@ -788,6 +813,7 @@
           }
         }
       }
-    }
+    },
+    "additionalProperties": true
   }
 }
