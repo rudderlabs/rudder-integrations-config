@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.113.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.112.1...v1.113.0) (2025-04-08)
+
+
+### Features
+
+* added union and append operation in mp ([#1973](https://github.com/rudderlabs/rudder-config-schema/issues/1973)) ([ef97a28](https://github.com/rudderlabs/rudder-config-schema/commit/ef97a28bf1966961a3652a27b4cb9fefb550c008))
+* onboard userpilot destination configuration ([0f506f1](https://github.com/rudderlabs/rudder-config-schema/commit/0f506f1baf7ce1074f7ede5b01b790a7d5a9ddc4))
+
+
 ### [1.112.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.112.0...v1.112.1) (2025-04-04)
 
 
