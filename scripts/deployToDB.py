@@ -8,7 +8,7 @@ import argparse
 from constants import CONFIG_DIR
 
 
-ALL_SELECTORS = ["destination", "source"]
+ALL_SELECTORS = ["destination", "source", "accounts"]
 
 
 def get_command_line_arguments():
@@ -87,21 +87,28 @@ def parse_response(resp):
 
 
 def get_persisted_store(base_url, selector):
+    if selector == "accounts":
+        selector = "account"
     request_url = f"{base_url}/{selector}-definitions"
-    response = requests.get(request_url, timeout=REQUEST_TIMEOUT)
+    response = requests.get(request_url, timeout=REQUEST_TIMEOUT, auth=AUTH)
     return json.loads(response.text)
 
 
-def get_config_definition(base_url, selector, name):
+def get_config_definition(base_url, selector, name=""):
     request_url = f"{base_url}/{selector}-definitions/{name}"
-    response = requests.get(request_url, timeout=REQUEST_TIMEOUT)
+    if selector == "accounts":
+        request_url = f"{base_url}/account-definitions"
+    response = requests.get(
+        request_url,
+        timeout=REQUEST_TIMEOUT,
+        auth=AUTH,
+    )
     return response
 
 
-def get_file_content(name, selector):
+def get_file_content(directory):
     file_selectors = ["db-config.json", "ui-config.json", "schema.json"]
 
-    directory = f"./{CONFIG_DIR}/{selector}s/{name}"
     available_files = os.listdir(directory)
 
     file_content = {}
@@ -116,7 +123,12 @@ def get_file_content(name, selector):
 
 def update_config_definition(selector, name, fileData):
     url = f"{CONTROL_PLANE_URL}/{selector}-definitions/{name}"
-    resp = requests.post(
+    method = "POST"
+    if selector == "accounts":
+        url = f"{CONTROL_PLANE_URL}/account-definitions/{name}"
+        method = "PUT"
+    resp = requests.request(
+        method=method,
         url=url,
         headers=HEADER,
         data=json.dumps(fileData),
@@ -127,6 +139,8 @@ def update_config_definition(selector, name, fileData):
 
 
 def create_config_definition(selector, fileData):
+    if selector == "accounts":
+        selector = "account"
     url = f"{CONTROL_PLANE_URL}/{selector}-definitions/"
     resp = requests.post(
         url=url,
@@ -138,11 +152,13 @@ def create_config_definition(selector, fileData):
     return parse_response(resp)
 
 
+# not used anywhere it can be removed
 def update_config(data_diff, selector):
     results = []
     for diff in data_diff:
         name = diff["name"]
-        fileData = get_file_content(name, selector)
+        directory = f"./{CONFIG_DIR}/{selector}s/{name}"
+        fileData = get_file_content(directory)
         nameInConfig = fileData["name"]
 
         if diff["action"] == "create":
@@ -167,6 +183,74 @@ def update_config(data_diff, selector):
 
 def update_diff_db(selector, item_name=None):
     final_report = []
+    # check if selector is valid
+    if selector == "accounts":
+        persisted_data = get_config_definition(CONTROL_PLANE_URL, selector)
+        if persisted_data.status_code == 200:
+            accountDefinitions = json.loads(persisted_data.text)
+        else:
+            print(
+                f"Error: Unable to fetch {selector} definitions from the control plane."
+            )
+            return
+        supported_categories = ["destinations", "sources"]
+        for category in supported_categories:
+            if item_name:
+                current_items = [item_name]
+            else:
+                current_items = os.listdir(f"./{CONFIG_DIR}/{category}")
+            for item in current_items:
+                if not os.path.isdir(f"./{CONFIG_DIR}/{category}/{item}/accounts"):
+                    continue
+                authentication_types = os.listdir(
+                    f"./{CONFIG_DIR}/{category}/{item}/accounts"
+                )
+                for authentication_type in authentication_types:
+                    if not os.path.isdir(
+                        f"./{CONFIG_DIR}/{category}/{item}/accounts/{authentication_type}"
+                    ):
+                        continue
+                    directory = f"./{CONFIG_DIR}/{category}/{item}/accounts/{authentication_type}"
+                    updated_data = get_file_content(directory)
+                    flag = False
+                    for accountDefinition in accountDefinitions:
+                        if accountDefinition["name"] == updated_data["name"]:
+                            flag = True
+                            diff = jsondiff.diff(
+                                accountDefinition,
+                                updated_data,
+                                marshal=True,
+                            )
+                            if len(diff.keys()) > 0:
+                                # changes exist
+                                status, _ = update_config_definition(
+                                    selector, updated_data["name"], updated_data
+                                )
+                                final_report.append(
+                                    {
+                                        "name": updated_data["name"],
+                                        "action": "update",
+                                        "status": status,
+                                    }
+                                )
+                            else:
+                                final_report.append(
+                                    {
+                                        "name": updated_data["name"],
+                                        "action": "N/A",
+                                        "status": "",
+                                    }
+                                )
+                    if flag == False:
+                        status, _ = create_config_definition(selector, updated_data)
+                        final_report.append(
+                            {
+                                "name": updated_data["name"],
+                                "action": "create",
+                                "status": status,
+                            }
+                        )
+        return final_report
 
     ## data sets
     if item_name:
@@ -180,8 +264,8 @@ def update_diff_db(selector, item_name=None):
         # check if item is a directory
         if not os.path.isdir(f"./{CONFIG_DIR}/{selector}s/{item}"):
             continue
-
-        updated_data = get_file_content(item, selector)
+        directory = f"./{CONFIG_DIR}/{selector}s/{item}"
+        updated_data = get_file_content(directory)
         persisted_data = get_config_definition(
             CONTROL_PLANE_URL, selector, updated_data["name"]
         )
@@ -235,6 +319,17 @@ def get_stale_data(selector, report):
 
 if __name__ == "__main__":
     for selector in SELECTORS:
+        # skipping accounts update for prod environment
+        if (
+            selector == "accounts"
+            and CONTROL_PLANE_URL == "https://api.rudderstack.com"
+        ):
+            print(
+                "Skipping accounts update for selector {} as it is not supported in this environment.".format(
+                    selector
+                )
+            )
+            continue
         print("\n")
         print("#" * 50)
         print("Running {} Definitions Updates".format(selector.capitalize()))
