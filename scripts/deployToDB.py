@@ -5,10 +5,17 @@ import os
 import sys
 import jsondiff
 import argparse
-from constants import CONFIG_DIR
+from constants import CONFIG_DIR, REQUEST_TIMEOUT, HEADER
+from utils import (
+    get_config_definition,
+    get_file_content,
+    update_config_definition,
+    create_config_definition,
+    parse_response,
+)
+from deployAccountsToDB import update_account_db
 
-
-ALL_SELECTORS = ["destination", "source", "accounts"]
+ALL_SELECTORS = ["accounts", "destination", "source"]
 
 
 def get_command_line_arguments():
@@ -71,19 +78,12 @@ CONTROL_PLANE_URL, USERNAME, PASSWORD, SELECTORS, ITEM_NAME = (
 )
 
 # CONSTANTS
-HEADER = {"Content-Type": "application/json"}
 AUTH = (USERNAME, PASSWORD)
-REQUEST_TIMEOUT = 10  # seconds
 #########################
 
 
 #########################
 # UTIL METHODS
-def parse_response(resp):
-    if resp.status_code >= 200 and resp.status_code <= 300:
-        return resp.status_code, resp.json()
-    else:
-        return resp.status_code, str(resp.content)
 
 
 def get_persisted_store(base_url, selector):
@@ -92,64 +92,6 @@ def get_persisted_store(base_url, selector):
     request_url = f"{base_url}/{selector}-definitions"
     response = requests.get(request_url, timeout=REQUEST_TIMEOUT, auth=AUTH)
     return json.loads(response.text)
-
-
-def get_config_definition(base_url, selector, name=""):
-    request_url = f"{base_url}/{selector}-definitions/{name}"
-    if selector == "accounts":
-        request_url = f"{base_url}/account-definitions"
-    response = requests.get(
-        request_url,
-        timeout=REQUEST_TIMEOUT,
-        auth=AUTH,
-    )
-    return response
-
-
-def get_file_content(directory):
-    file_selectors = ["db-config.json", "ui-config.json", "schema.json"]
-
-    available_files = os.listdir(directory)
-
-    file_content = {}
-
-    for file_selector in file_selectors:
-        if file_selector in available_files:
-            with open(f"{directory}/{file_selector}", "r") as f:
-                file_content.update(json.loads(f.read()))
-
-    return file_content
-
-
-def update_config_definition(selector, name, fileData):
-    url = f"{CONTROL_PLANE_URL}/{selector}-definitions/{name}"
-    method = "POST"
-    if selector == "accounts":
-        url = f"{CONTROL_PLANE_URL}/account-definitions/{name}"
-        method = "PUT"
-    resp = requests.request(
-        method=method,
-        url=url,
-        headers=HEADER,
-        data=json.dumps(fileData),
-        auth=AUTH,
-        timeout=REQUEST_TIMEOUT,
-    )
-    return parse_response(resp)
-
-
-def create_config_definition(selector, fileData):
-    if selector == "accounts":
-        selector = "account"
-    url = f"{CONTROL_PLANE_URL}/{selector}-definitions/"
-    resp = requests.post(
-        url=url,
-        headers=HEADER,
-        data=json.dumps(fileData),
-        auth=AUTH,
-        timeout=REQUEST_TIMEOUT,
-    )
-    return parse_response(resp)
 
 
 # not used anywhere it can be removed
@@ -181,75 +123,52 @@ def update_config(data_diff, selector):
     return json.dumps(results, indent=2)
 
 
+def validate_acc_def_diff(diff):
+    try:
+        if (
+            diff["config"]["supportedAccountDefinitions"]["rudderAccountId"]
+            or diff["config"]["supportedAccountDefinitions"]["rudderDeleteAccountId"]
+        ):
+            return True
+    except KeyError:
+        return False
+
+
+def validate_account_definitions(diff, persisted_account_def_data):
+    try:
+        accountIds = diff["config"]["supportedAccountDefinitions"]["rudderAccountId"]
+    except KeyError:
+        accountIds = []
+    try:
+        accountIds += diff["config"]["supportedAccountDefinitions"][
+            "rudderDeleteAccountId"
+        ]
+    except KeyError:
+        pass
+    flag = True
+    if persisted_account_def_data.status_code == 200:
+        account_definitions = json.loads(persisted_account_def_data.text)
+        account_definitions_arr = [account["name"] for account in account_definitions]
+        for accountId in accountIds:
+            if accountId not in account_definitions_arr:
+                flag = False
+                print(
+                    f"Error: {accountId} account definition is missing in the control plane."
+                )
+                return flag
+    else:
+        print(f"Error: Unable to fetch account definitions from the control plane.")
+        flag = False
+    return flag
+
+
 def update_diff_db(selector, item_name=None):
     final_report = []
-    # check if selector is valid
+    persisted_account_def_data = get_config_definition(
+        CONTROL_PLANE_URL, "accounts", "", AUTH
+    )
     if selector == "accounts":
-        persisted_data = get_config_definition(CONTROL_PLANE_URL, selector)
-        if persisted_data.status_code == 200:
-            accountDefinitions = json.loads(persisted_data.text)
-        else:
-            print(
-                f"Error: Unable to fetch {selector} definitions from the control plane."
-            )
-            return
-        supported_categories = ["destinations", "sources"]
-        for category in supported_categories:
-            if item_name:
-                current_items = [item_name]
-            else:
-                current_items = os.listdir(f"./{CONFIG_DIR}/{category}")
-            for item in current_items:
-                if not os.path.isdir(f"./{CONFIG_DIR}/{category}/{item}/accounts"):
-                    continue
-                authentication_types = os.listdir(
-                    f"./{CONFIG_DIR}/{category}/{item}/accounts"
-                )
-                for authentication_type in authentication_types:
-                    if not os.path.isdir(
-                        f"./{CONFIG_DIR}/{category}/{item}/accounts/{authentication_type}"
-                    ):
-                        continue
-                    directory = f"./{CONFIG_DIR}/{category}/{item}/accounts/{authentication_type}"
-                    updated_data = get_file_content(directory)
-                    flag = False
-                    for accountDefinition in accountDefinitions:
-                        if accountDefinition["name"] == updated_data["name"]:
-                            flag = True
-                            diff = jsondiff.diff(
-                                accountDefinition,
-                                updated_data,
-                                marshal=True,
-                            )
-                            if len(diff.keys()) > 0:
-                                # changes exist
-                                status, _ = update_config_definition(
-                                    selector, updated_data["name"], updated_data
-                                )
-                                final_report.append(
-                                    {
-                                        "name": updated_data["name"],
-                                        "action": "update",
-                                        "status": status,
-                                    }
-                                )
-                            else:
-                                final_report.append(
-                                    {
-                                        "name": updated_data["name"],
-                                        "action": "N/A",
-                                        "status": "",
-                                    }
-                                )
-                    if flag == False:
-                        status, _ = create_config_definition(selector, updated_data)
-                        final_report.append(
-                            {
-                                "name": updated_data["name"],
-                                "action": "create",
-                                "status": status,
-                            }
-                        )
+        final_report = update_account_db(CONTROL_PLANE_URL, AUTH, item_name)
         return final_report
 
     ## data sets
@@ -267,7 +186,7 @@ def update_diff_db(selector, item_name=None):
         directory = f"./{CONFIG_DIR}/{selector}s/{item}"
         updated_data = get_file_content(directory)
         persisted_data = get_config_definition(
-            CONTROL_PLANE_URL, selector, updated_data["name"]
+            CONTROL_PLANE_URL, selector, updated_data["name"], AUTH
         )
 
         if persisted_data.status_code == 200:
@@ -279,9 +198,25 @@ def update_diff_db(selector, item_name=None):
             del diff["$delete"]
 
             if len(diff.keys()) > 0:  # changes exist
-                # print(diff)
+                if validate_acc_def_diff(diff): # validate if any account definition related changes are present
+                    if (
+                        validate_account_definitions(diff, persisted_account_def_data)
+                        == False
+                    ): # validate if all account definitions are present in the control plane required for this changes
+                        final_report.append(
+                            {
+                                "name": updated_data["name"],
+                                "action": "update",
+                                "status": "Error: Account definitions are missing in the control plane.",
+                            }
+                        )
+                        continue
                 status, response = update_config_definition(
-                    selector, updated_data["name"], updated_data
+                    CONTROL_PLANE_URL,
+                    selector,
+                    updated_data["name"],
+                    updated_data,
+                    AUTH,
                 )
                 final_report.append(
                     {"name": updated_data["name"], "action": "update", "status": status}
@@ -292,7 +227,9 @@ def update_diff_db(selector, item_name=None):
                 )
 
         else:
-            status, response = create_config_definition(selector, updated_data)
+            status, response = create_config_definition(
+                CONTROL_PLANE_URL, selector, updated_data, AUTH
+            )
             final_report.append(
                 {"name": updated_data["name"], "action": "create", "status": status}
             )
