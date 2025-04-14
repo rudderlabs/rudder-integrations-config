@@ -1,7 +1,7 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": [],
+    "required": ["token", "sdkEndpoint", "apiKey", "apiEndpoint"],
     "type": "object",
     "properties": {
       "token": {
@@ -198,95 +198,6 @@
           }
         }
       }
-    },
-    "allOf": [
-      {
-        "if": {
-          "properties": {
-            "connectionMode": {
-              "type": "object",
-              "anyOf": [
-                {
-                  "required": ["web"],
-                  "properties": {
-                    "web": {
-                      "const": "device"
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          "required": ["connectionMode"]
-        },
-        "then": {
-          "properties": {
-            "token": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            }
-          },
-          "required": ["token"]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "connectionMode": {
-              "type": "object",
-              "anyOf": [
-                {
-                  "required": ["web"],
-                  "properties": {
-                    "web": {
-                      "const": "cloud"
-                    }
-                  }
-                },
-                {
-                  "required": ["android"],
-                  "properties": {
-                    "android": {
-                      "const": "cloud"
-                    }
-                  }
-                },
-                {
-                  "required": ["ios"],
-                  "properties": {
-                    "ios": {
-                      "const": "cloud"
-                    }
-                  }
-                },
-                {
-                  "required": ["cloud"],
-                  "properties": {
-                    "cloud": {
-                      "const": true
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          "required": ["connectionMode"]
-        },
-        "then": {
-          "properties": {
-            "apiKey": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            },
-            "apiEndpoint": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(https?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
-            }
-          },
-          "required": ["apiKey", "apiEndpoint"]
-        }
-      }
-    ],
-    "additionalProperties": false
+    }
   }
 }
