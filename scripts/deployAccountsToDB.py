@@ -69,7 +69,9 @@ def update_account_db(baseUrl, auth, item_name):
                                 }
                             )
                 if flag == False:
-                    status, _ = create_config_definition(selector, updated_data)
+                    status, _ = create_config_definition(
+                        baseUrl, "accounts", updated_data, auth
+                    )
                     final_report.append(
                         {
                             "name": updated_data["name"],
