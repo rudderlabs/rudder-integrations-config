@@ -39,6 +39,10 @@
                       {
                         "label": "EU",
                         "value": "eu"
+                      },
+                      {
+                        "label": "IN (Beta)",
+                        "value": "in"
                       }
                     ],
                     "default": "us"
@@ -163,6 +167,28 @@
                 ]
               },
               {
+                "title": "Track Settings",
+                "note": "Set how you want to send your track calls to Mixpanel",
+                "icon": "file",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Drop Traits",
+                    "configKey": "dropTraitsInTrackEvent",
+                    "note": "Drop traits from event property in track call",
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
                 "title": "Mixpanel Configuration Settings",
                 "fields": [
                   {
@@ -204,6 +230,54 @@
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
                     "regexErrorMessage": "Invalid Property Name",
                     "placeholder": "e.g: joiningDate"
+                  },
+                  {
+                    "type": "tagInput",
+                    "configKey": "unionProperties",
+                    "label": "Properties for Union",
+                    "note": [
+                      "Set the properties whose values appear only once in the list property.",
+                      {
+                        "text": "Reference",
+                        "link": "https://developer.mixpanel.com/reference/user-profile-union"
+                      }
+                    ],
+                    "tagKey": "property",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Property Name",
+                    "placeholder": "e.g: joiningDate",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "configKey": "appendProperties",
+                    "label": "Properties for Append",
+                    "note": [
+                      "Set the properties whose values need to be appended in the list property.",
+                      {
+                        "text": "Reference",
+                        "link": "https://developer.mixpanel.com/reference/profile-append-to-list-property"
+                      }
+                    ],
+                    "tagKey": "property",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Property Name",
+                    "placeholder": "e.g: joiningDate",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
                   }
                 ]
               },
@@ -545,6 +619,10 @@
                 {
                   "label": "Custom",
                   "value": "custom"
+                },
+                {
+                  "label": "iubenda",
+                  "value": "iubenda"
                 },
                 {
                   "label": "Ketch",

@@ -8,17 +8,9 @@
         "type": "boolean",
         "default": true
       },
-      "audienceId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
       "customerId": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "loginCustomerId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
       "subAccount": {
         "type": "boolean",
@@ -139,7 +131,7 @@
               "properties": {
                 "provider": {
                   "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
                   "default": "oneTrust"
                 },
                 "consents": {
@@ -185,7 +177,7 @@
               "properties": {
                 "provider": {
                   "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
                   "default": "oneTrust"
                 },
                 "consents": {
@@ -231,7 +223,7 @@
               "properties": {
                 "provider": {
                   "type": "string",
-                  "enum": ["custom", "ketch", "oneTrust"],
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
                   "default": "oneTrust"
                 },
                 "consents": {
@@ -272,6 +264,52 @@
           }
         }
       }
-    }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "properties": {
+                "cloud": {
+                  "const": "cloud"
+                }
+              },
+              "required": ["cloud"]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "audienceId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["audienceId"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "subAccount": {
+              "const": true
+            }
+          },
+          "required": ["subAccount"]
+        },
+        "then": {
+          "properties": {
+            "loginCustomerId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["loginCustomerId"]
+        }
+      }
+    ]
   }
 }

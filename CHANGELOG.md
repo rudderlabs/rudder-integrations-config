@@ -2,6 +2,125 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.113.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.112.1...v1.113.0) (2025-04-08)
+
+
+### Features
+
+* added union and append operation in mp ([#1973](https://github.com/rudderlabs/rudder-config-schema/issues/1973)) ([ef97a28](https://github.com/rudderlabs/rudder-config-schema/commit/ef97a28bf1966961a3652a27b4cb9fefb550c008))
+* onboard userpilot destination configuration ([0f506f1](https://github.com/rudderlabs/rudder-config-schema/commit/0f506f1baf7ce1074f7ede5b01b790a7d5a9ddc4))
+
+
+### [1.112.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.112.0...v1.112.1) (2025-04-04)
+
+
+### Bug Fixes
+
+* bigquery disable view creation option ([#1976](https://github.com/rudderlabs/rudder-config-schema/issues/1976)) ([35a1b80](https://github.com/rudderlabs/rudder-config-schema/commit/35a1b809ddfa1e8ef5322562c0bd7950cd430798))
+
+## [1.112.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.111.0...v1.112.0) (2025-04-01)
+
+
+### Features
+
+* added tik tok ads standard events ([#1965](https://github.com/rudderlabs/rudder-config-schema/issues/1965)) ([2ff6ea8](https://github.com/rudderlabs/rudder-config-schema/commit/2ff6ea854045e87c5d0762348d1d01a6c8b220e4))
+
+## [1.111.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.110.0...v1.111.0) (2025-03-26)
+
+
+### Features
+
+* oauth support in databricks source ([#1911](https://github.com/rudderlabs/rudder-config-schema/issues/1911)) ([ed8a588](https://github.com/rudderlabs/rudder-config-schema/commit/ed8a588d8e63d4d200f7cd4eaa9525e37fe7045b))
+
+## [1.110.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.109.1...v1.110.0) (2025-03-24)
+
+
+### Features
+
+* added india residency support in mixpanel destination ([#1950](https://github.com/rudderlabs/rudder-config-schema/issues/1950)) ([8ecb2b0](https://github.com/rudderlabs/rudder-config-schema/commit/8ecb2b0afbd5399ac43b48f3b40f169133faa835))
+
+### [1.109.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.109.0...v1.109.1) (2025-03-24)
+
+## [1.109.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.108.0...v1.109.0) (2025-03-18)
+
+
+### Features
+
+* add iubenda to all remaining destinations ([#1916](https://github.com/rudderlabs/rudder-config-schema/issues/1916)) ([d0d0296](https://github.com/rudderlabs/rudder-config-schema/commit/d0d029615fd36773944ca74c135c00c8dc2952c7))
+* onboarding new destination accoil analytics ([#1928](https://github.com/rudderlabs/rudder-config-schema/issues/1928)) ([fa40695](https://github.com/rudderlabs/rudder-config-schema/commit/fa40695342157df02a69735bbc8e1f8b08d0504f))
+
+
+### Bug Fixes
+
+* missing token error in databricks oauth config ([#1925](https://github.com/rudderlabs/rudder-config-schema/issues/1925)) ([471e4de](https://github.com/rudderlabs/rudder-config-schema/commit/471e4dee142c6dc132687311696a34e08332051c))
+* remove workflows using tj-actions changed-files action ([44e712c](https://github.com/rudderlabs/rudder-config-schema/commit/44e712c0cbfe04a2573bd9fa6033e1ad095b52bf))
+
+## [1.108.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.107.0...v1.108.0) (2025-03-13)
+
+
+### Features
+
+* disable json mapper in klaviyo bulk upload destination ([#1933](https://github.com/rudderlabs/rudder-config-schema/issues/1933)) ([6e1f997](https://github.com/rudderlabs/rudder-config-schema/commit/6e1f9974f9bcfd0b99fa0b0e9101f8d0a9eb57d9))
+
+## [1.107.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.106.1...v1.107.0) (2025-03-10)
+
+
+### Features
+
+* add object data support moengage ([#1909](https://github.com/rudderlabs/rudder-config-schema/issues/1909)) ([4049e30](https://github.com/rudderlabs/rudder-config-schema/commit/4049e30df6b9963eaf88b52be6e2cddf5024694e))
+* oauth support in databricks destination ([#1912](https://github.com/rudderlabs/rudder-config-schema/issues/1912)) ([98f74e4](https://github.com/rudderlabs/rudder-config-schema/commit/98f74e4af8a31686acebdc2f3482623051587cc5))
+* onboarding new source facebook lead ads ([#1910](https://github.com/rudderlabs/rudder-config-schema/issues/1910)) ([2d82dd1](https://github.com/rudderlabs/rudder-config-schema/commit/2d82dd1cd380c8f4b879173e496cd519dfed3c41))
+
+### [1.106.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.106.0...v1.106.1) (2025-03-03)
+
+### Features
+
+* adds iubenda to subset of destinations ([#1915](https://github.com/rudderlabs/rudder-config-schema/issues/1915)) ([0f6bc16](https://github.com/rudderlabs/rudder-config-schema/commit/0f6bc1673b024ea1500496625ba3c79638d14e3f))
+
+## [1.106.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.105.0...v1.106.0) (2025-02-21)
+
+
+### Features
+
+* **gtm:** added support for environment configs ([#1906](https://github.com/rudderlabs/rudder-config-schema/issues/1906)) ([302d2c7](https://github.com/rudderlabs/rudder-config-schema/commit/302d2c7d56bc2abe19d2547dbb7e8c142471543e))
+* **http:** update labels and regex for a couple of field ([#1903](https://github.com/rudderlabs/rudder-config-schema/issues/1903)) ([2b51393](https://github.com/rudderlabs/rudder-config-schema/commit/2b513939f0c31829733b2ab966a959ef60f024b1))
+
+
+### Bug Fixes
+
+* incorrect preRequisiteField of "cleanupObjectStorageFiles" in s3 datalake ([#1905](https://github.com/rudderlabs/rudder-config-schema/issues/1905)) ([ca53abb](https://github.com/rudderlabs/rudder-config-schema/commit/ca53abb9328ce1162dc55d4086cb7aa7bede2afa))
+
+## [1.105.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.104.0...v1.105.0) (2025-02-17)
+
+
+### Features
+
+* added drop traits in track call feature for mixpanel ([#1882](https://github.com/rudderlabs/rudder-config-schema/issues/1882)) ([c6d8b7b](https://github.com/rudderlabs/rudder-config-schema/commit/c6d8b7b653d45ac672413612cbb708a03b9b5519))
+* allow configuring of object storage files deletion for warehouse destinations ([#1896](https://github.com/rudderlabs/rudder-config-schema/issues/1896)) ([2547b0c](https://github.com/rudderlabs/rudder-config-schema/commit/2547b0cfd63787f45afec75e06af5e1450950214))
+* **http:** updated labels and addressed product feedback ([#1898](https://github.com/rudderlabs/rudder-config-schema/issues/1898)) ([0f29945](https://github.com/rudderlabs/rudder-config-schema/commit/0f29945ca72c0025b64b7bb9378dd45dcae8be73))
+* **http:** updated regex and some labels ([#1895](https://github.com/rudderlabs/rudder-config-schema/issues/1895)) ([f5cd4cf](https://github.com/rudderlabs/rudder-config-schema/commit/f5cd4cf6b3b49788c3ee6f1e2ec2a7a4b1105437))
+
+## [1.104.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.103.0...v1.104.0) (2025-02-04)
+
+
+### Features
+
+* **http:** add new field xmlRootKey and updated regex for some fields ([#1884](https://github.com/rudderlabs/rudder-config-schema/issues/1884)) ([a9c3a6d](https://github.com/rudderlabs/rudder-config-schema/commit/a9c3a6d1faf05af21766f8296ffda3930575d479))
+* **http:** add support for form format ([#1876](https://github.com/rudderlabs/rudder-config-schema/issues/1876)) ([10ebbd9](https://github.com/rudderlabs/rudder-config-schema/commit/10ebbd9e66c07f88c6798182e1f91242d11a2408))
+* onboarding customerio segment  ([#1853](https://github.com/rudderlabs/rudder-config-schema/issues/1853)) ([fe53d8c](https://github.com/rudderlabs/rudder-config-schema/commit/fe53d8c103b4d4e8899e7fd614511f843743487b))
+
+
+### Bug Fixes
+
+* clean up adobe analytics dynamic config support ([#1857](https://github.com/rudderlabs/rudder-config-schema/issues/1857)) ([fed05fa](https://github.com/rudderlabs/rudder-config-schema/commit/fed05faaf99472c31c413b17502ca498ae9b6acf))
+
+## [1.103.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.102.0...v1.103.0) (2025-02-04)
+
+
+### Features
+
+* **new-form-builder:** updated the regex for initial fields to not allow empty string ([#1888](https://github.com/rudderlabs/rudder-config-schema/issues/1888)) ([00e105f](https://github.com/rudderlabs/rudder-config-schema/commit/00e105f384fd2a3795661eaf38af43746defe340))
+
 ## [1.102.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.101.1...v1.102.0) (2025-01-20)
 
 

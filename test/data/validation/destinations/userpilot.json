@@ -1,0 +1,37 @@
+[
+  {
+    "testTitle": "Valid web device mode configuration",
+    "config": {
+      "token": "test-token",
+      "connectionMode": {
+        "web": "device"
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid cloud mode configuration",
+    "config": {
+      "apiKey": "test-api-key",
+      "apiEndpoint": "https://analytex.userpilot.io",
+      "connectionMode": {
+        "cloud": "cloud"
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Invalid endpoint URL format",
+    "config": {
+      "token": "test-token",
+      "sdkEndpoint": "invalid-url",
+      "connectionMode": {
+        "web": "device"
+      }
+    },
+    "result": false,
+    "err": [
+      "sdkEndpoint must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(https?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$\""
+    ]
+  }
+]

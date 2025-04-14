@@ -1,12 +1,12 @@
 """
-    Usage: schemaGenerator.py [-h] [-name name | -all] [-update] selector
-        1. selector - “source” or “destination”
-        2. all - runs the validator for all the selector.
-        3. name - any particular source or destination name such as `google_analytics`
-        3. update - updates existing schema with detected changes
-    Example:
-        1. python3 scripts/schemaGenerator.py -name="adobe_analytics" destination
-        2. python3 scripts/schemaGenerator.py -all source
+Usage: schemaGenerator.py [-h] [-name name | -all] [-update] selector
+    1. selector - “source” or “destination”
+    2. all - runs the validator for all the selector.
+    3. name - any particular source or destination name such as `google_analytics`
+    3. update - updates existing schema with detected changes
+Example:
+    1. python3 scripts/schemaGenerator.py -name="adobe_analytics" destination
+    2. python3 scripts/schemaGenerator.py -all source
 """
 
 import os
