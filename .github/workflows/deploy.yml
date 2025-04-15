@@ -67,7 +67,16 @@ jobs:
       - name: Display Current Package Version
         run: echo $(jq -r .version package.json)
 
-      - name: Deploy To DB
+      - name: Deploy Accounts To DB
+        id: deploy-accounts
+        env:
+          API_USER: ${{ secrets.API_USERNAME }}
+          API_PASSWORD: ${{ secrets.API_PASSWORD }}
+        run: |
+          python scripts/deployAccountsToDB.py ${{ inputs.deploy_url }}
+
+      - name: Deploy Destination & Source Definitions To DB
+        if: steps.deploy-accounts.outcome == 'success'
         env:
           API_USER: ${{ secrets.API_USERNAME }}
           API_PASSWORD: ${{ secrets.API_PASSWORD }}
