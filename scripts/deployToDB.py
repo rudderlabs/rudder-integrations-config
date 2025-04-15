@@ -13,9 +13,8 @@ from utils import (
     create_config_definition,
     parse_response,
 )
-from deployAccountsToDB import update_account_db
 
-ALL_SELECTORS = ["accounts", "destination", "source"]
+ALL_SELECTORS = ["destination", "source"]
 
 
 def get_command_line_arguments():
@@ -87,8 +86,6 @@ AUTH = (USERNAME, PASSWORD)
 
 
 def get_persisted_store(base_url, selector):
-    if selector == "accounts":
-        selector = "account"
     request_url = f"{base_url}/{selector}-definitions"
     response = requests.get(request_url, timeout=REQUEST_TIMEOUT, auth=AUTH)
     return json.loads(response.text)
@@ -122,54 +119,8 @@ def update_config(data_diff, selector):
 
     return json.dumps(results, indent=2)
 
-
-def validate_acc_def_diff(diff):
-    try:
-        if (
-            diff["config"]["supportedAccountDefinitions"]["rudderAccountId"]
-            or diff["config"]["supportedAccountDefinitions"]["rudderDeleteAccountId"]
-        ):
-            return True
-    except KeyError:
-        return False
-
-
-def validate_account_definitions(diff, persisted_account_def_data):
-    try:
-        accountIds = diff["config"]["supportedAccountDefinitions"]["rudderAccountId"]
-    except KeyError:
-        accountIds = []
-    try:
-        accountIds += diff["config"]["supportedAccountDefinitions"][
-            "rudderDeleteAccountId"
-        ]
-    except KeyError:
-        pass
-    flag = True
-    if persisted_account_def_data.status_code == 200:
-        account_definitions = json.loads(persisted_account_def_data.text)
-        account_definitions_arr = [account["name"] for account in account_definitions]
-        for accountId in accountIds:
-            if accountId not in account_definitions_arr:
-                flag = False
-                print(
-                    f"Error: {accountId} account definition is missing in the control plane."
-                )
-                return flag
-    else:
-        print(f"Error: Unable to fetch account definitions from the control plane.")
-        flag = False
-    return flag
-
-
 def update_diff_db(selector, item_name=None):
     final_report = []
-    persisted_account_def_data = get_config_definition(
-        CONTROL_PLANE_URL, "accounts", "", AUTH
-    )
-    if selector == "accounts":
-        final_report = update_account_db(CONTROL_PLANE_URL, AUTH, item_name)
-        return final_report
 
     ## data sets
     if item_name:
@@ -198,19 +149,6 @@ def update_diff_db(selector, item_name=None):
             del diff["$delete"]
 
             if len(diff.keys()) > 0:  # changes exist
-                if validate_acc_def_diff(diff): # validate if any account definition related changes are present
-                    if (
-                        validate_account_definitions(diff, persisted_account_def_data)
-                        == False
-                    ): # validate if all account definitions are present in the control plane required for this changes
-                        final_report.append(
-                            {
-                                "name": updated_data["name"],
-                                "action": "update",
-                                "status": "Error: Account definitions are missing in the control plane.",
-                            }
-                        )
-                        continue
                 status, response = update_config_definition(
                     CONTROL_PLANE_URL,
                     selector,
@@ -256,17 +194,6 @@ def get_stale_data(selector, report):
 
 if __name__ == "__main__":
     for selector in SELECTORS:
-        # skipping accounts update for prod environment
-        if (
-            selector == "accounts"
-            and CONTROL_PLANE_URL == "https://api.rudderstack.com"
-        ):
-            print(
-                "Skipping accounts update for selector {} as it is not supported in this environment.".format(
-                    selector
-                )
-            )
-            continue
         print("\n")
         print("#" * 50)
         print("Running {} Definitions Updates".format(selector.capitalize()))
