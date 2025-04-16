@@ -5,7 +5,7 @@ import os
 import sys
 import jsondiff
 import argparse
-from constants import CONFIG_DIR, REQUEST_TIMEOUT, HEADER
+from constants import CONFIG_DIR
 from utils import (
     get_config_definition,
     get_file_content,
@@ -23,7 +23,7 @@ def get_command_line_arguments():
     parser.add_argument("username", nargs="?", help="Control plane admin username")
     parser.add_argument("password", nargs="?", help="Control plane admin password")
     parser.add_argument(
-        "item_name", nargs="?", help="Specific item name to update.", default=None
+        "definition_name", nargs="?", help="Specific item name to update.", default=None
     )
 
     args = parser.parse_args()
@@ -31,7 +31,7 @@ def get_command_line_arguments():
     control_plane_url = args.control_plane_url or os.getenv("CONTROL_PLANE_URL")
     username = args.username or os.getenv("API_USER")
     password = args.password or os.getenv("API_PASSWORD")
-    item_name = args.item_name or os.getenv("ITEM_NAME")
+    definition_name = args.definition_name or os.getenv("DEFINITION_NAME")
 
     invalid_args = []
 
@@ -54,17 +54,17 @@ def get_command_line_arguments():
             print(arg)
         sys.exit(1)
 
-    return control_plane_url, username, password, item_name
+    return control_plane_url, username, password, definition_name
 
 
-def update_account_db(base_url, auth, item_name=None):
+def update_account_db(base_url, auth, definition_name=None):
     """
     Update account definitions in the database.
 
     Args:
         base_url: Control plane URL
         auth: Authentication tuple (username, password)
-        item_name: Optional specific item name to update
+        definition_name: Optional specific item name to update
 
     Returns:
         List of dictionaries with update results
@@ -90,8 +90,8 @@ def update_account_db(base_url, auth, item_name=None):
     # Process each category
     for category in supported_categories:
         # Determine which items to process
-        if item_name:
-            current_items = [item_name]
+        if definition_name:
+            current_items = [definition_name]
         else:
             try:
                 current_items = os.listdir(f"./{CONFIG_DIR}/{category}")
@@ -177,9 +177,11 @@ def update_account_db(base_url, auth, item_name=None):
 
 if __name__ == "__main__":
     # Get command line arguments
-    CONTROL_PLANE_URL, USERNAME, PASSWORD, ITEM_NAME = get_command_line_arguments()
+    CONTROL_PLANE_URL, USERNAME, PASSWORD, DEFINITION_NAME = (
+        get_command_line_arguments()
+    )
     AUTH = (USERNAME, PASSWORD)
-    
+
     if CONTROL_PLANE_URL == "https://api.rudderstack.com":
         print("Skipping accounts update for production.")
         sys.exit(0)
@@ -189,7 +191,7 @@ if __name__ == "__main__":
     print("#" * 50)
 
     # Update account definitions
-    final_report = update_account_db(CONTROL_PLANE_URL, AUTH, ITEM_NAME)
+    final_report = update_account_db(CONTROL_PLANE_URL, AUTH, DEFINITION_NAME)
 
     print("\n")
     print("#" * 50)
