@@ -7,9 +7,6 @@
 # Get the list of changed files
 changed_files=$(git diff --cached --name-only)
 
-# Check if any destination config files have been modified
-dest_config_pattern="src/configurations/destinations/.*/db-config\.json"
-account_config_pattern="src/configurations/destinations/.*/accounts/.*/db-config\.json"
 
 # Extract unique destination names from changed files
 destinations=()
