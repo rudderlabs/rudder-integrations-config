@@ -15,6 +15,7 @@ from utils import (
 )
 
 ALL_SELECTORS = ["destination", "source"]
+BLACK_LIST_DESTINATIONS = ["ZOHO_DEV"]
 
 
 def get_command_line_arguments():
@@ -133,16 +134,13 @@ def update_diff_db(selector, item_name=None):
 
     for item in current_items:
         # check if item is a directory
-        if not os.path.isdir(f"./{CONFIG_DIR}/{selector}s/{item}"):
+        if not os.path.isdir(f"./{CONFIG_DIR}/{selector}s/{item}") or (
+            item in BLACK_LIST_DESTINATIONS
+            and CONTROL_PLANE_URL == "https://api.rudderstack.com"
+        ):
             continue
         directory = f"./{CONFIG_DIR}/{selector}s/{item}"
         updated_data = get_file_content(directory)
-        if (
-            updated_data.get("isSkipForProd")
-            and CONTROL_PLANE_URL == "https://api.rudderstack.com"
-        ):
-            final_report.append({"name": updated_data["name"], "status": "skipped"})
-            continue
         persisted_data = get_config_definition(
             CONTROL_PLANE_URL, selector, updated_data["name"], AUTH
         )
