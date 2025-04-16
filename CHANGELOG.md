@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.113.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.113.1...v1.113.2) (2025-04-15)
+
+### [1.113.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.113.0...v1.113.1) (2025-04-14)
+
+
+### Bug Fixes
+
+* js sdk endpoint regex update and make it optional and add cdk flag ([98968c8](https://github.com/rudderlabs/rudder-config-schema/commit/98968c896ce75cf74a1e4b6ec0cc0198f2644ced))
+
 ## [1.113.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.112.1...v1.113.0) (2025-04-08)
 
 
