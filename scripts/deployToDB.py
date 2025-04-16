@@ -5,10 +5,17 @@ import os
 import sys
 import jsondiff
 import argparse
-from constants import CONFIG_DIR
-
+from constants import CONFIG_DIR, REQUEST_TIMEOUT, HEADER
+from utils import (
+    get_config_definition,
+    get_file_content,
+    update_config_definition,
+    create_config_definition,
+    parse_response,
+)
 
 ALL_SELECTORS = ["destination", "source"]
+BLACK_LIST_DESTINATIONS = ["ZOHO_DEV"]
 
 
 def get_command_line_arguments():
@@ -71,98 +78,18 @@ CONTROL_PLANE_URL, USERNAME, PASSWORD, SELECTORS, ITEM_NAME = (
 )
 
 # CONSTANTS
-HEADER = {"Content-Type": "application/json"}
 AUTH = (USERNAME, PASSWORD)
-REQUEST_TIMEOUT = 10  # seconds
 #########################
 
 
 #########################
 # UTIL METHODS
-def parse_response(resp):
-    if resp.status_code >= 200 and resp.status_code <= 300:
-        return resp.status_code, resp.json()
-    else:
-        return resp.status_code, str(resp.content)
 
 
 def get_persisted_store(base_url, selector):
     request_url = f"{base_url}/{selector}-definitions"
-    response = requests.get(request_url, timeout=REQUEST_TIMEOUT)
+    response = requests.get(request_url, timeout=REQUEST_TIMEOUT, auth=AUTH)
     return json.loads(response.text)
-
-
-def get_config_definition(base_url, selector, name):
-    request_url = f"{base_url}/{selector}-definitions/{name}"
-    response = requests.get(request_url, timeout=REQUEST_TIMEOUT)
-    return response
-
-
-def get_file_content(name, selector):
-    file_selectors = ["db-config.json", "ui-config.json", "schema.json"]
-
-    directory = f"./{CONFIG_DIR}/{selector}s/{name}"
-    available_files = os.listdir(directory)
-
-    file_content = {}
-
-    for file_selector in file_selectors:
-        if file_selector in available_files:
-            with open(f"{directory}/{file_selector}", "r") as f:
-                file_content.update(json.loads(f.read()))
-
-    return file_content
-
-
-def update_config_definition(selector, name, fileData):
-    url = f"{CONTROL_PLANE_URL}/{selector}-definitions/{name}"
-    resp = requests.post(
-        url=url,
-        headers=HEADER,
-        data=json.dumps(fileData),
-        auth=AUTH,
-        timeout=REQUEST_TIMEOUT,
-    )
-    return parse_response(resp)
-
-
-def create_config_definition(selector, fileData):
-    url = f"{CONTROL_PLANE_URL}/{selector}-definitions/"
-    resp = requests.post(
-        url=url,
-        headers=HEADER,
-        data=json.dumps(fileData),
-        auth=AUTH,
-        timeout=REQUEST_TIMEOUT,
-    )
-    return parse_response(resp)
-
-
-def update_config(data_diff, selector):
-    results = []
-    for diff in data_diff:
-        name = diff["name"]
-        fileData = get_file_content(name, selector)
-        nameInConfig = fileData["name"]
-
-        if diff["action"] == "create":
-            url = f"{CONTROL_PLANE_URL}/{selector}-definitions"
-        else:
-            url = f"{CONTROL_PLANE_URL}/{selector}-definitions/{nameInConfig}"
-
-        resp = requests.post(
-            url=url,
-            headers=HEADER,
-            data=json.dumps(fileData),
-            auth=AUTH,
-            timeout=REQUEST_TIMEOUT,
-        )
-        status, response = parse_response(resp)
-        diff["update"] = {"status": status, "response": response}
-        # results.append(diff)
-        results.append(name)
-
-    return json.dumps(results, indent=2)
 
 
 def update_diff_db(selector, item_name=None):
@@ -178,12 +105,15 @@ def update_diff_db(selector, item_name=None):
 
     for item in current_items:
         # check if item is a directory
-        if not os.path.isdir(f"./{CONFIG_DIR}/{selector}s/{item}"):
+        if not os.path.isdir(f"./{CONFIG_DIR}/{selector}s/{item}") or (
+            item in BLACK_LIST_DESTINATIONS
+            and CONTROL_PLANE_URL == "https://api.rudderstack.com"
+        ):
             continue
-
-        updated_data = get_file_content(item, selector)
+        directory = f"./{CONFIG_DIR}/{selector}s/{item}"
+        updated_data = get_file_content(directory)
         persisted_data = get_config_definition(
-            CONTROL_PLANE_URL, selector, updated_data["name"]
+            CONTROL_PLANE_URL, selector, updated_data["name"], AUTH
         )
 
         if persisted_data.status_code == 200:
@@ -195,9 +125,12 @@ def update_diff_db(selector, item_name=None):
             del diff["$delete"]
 
             if len(diff.keys()) > 0:  # changes exist
-                # print(diff)
                 status, response = update_config_definition(
-                    selector, updated_data["name"], updated_data
+                    CONTROL_PLANE_URL,
+                    selector,
+                    updated_data["name"],
+                    updated_data,
+                    AUTH,
                 )
                 final_report.append(
                     {"name": updated_data["name"], "action": "update", "status": status}
@@ -208,7 +141,9 @@ def update_diff_db(selector, item_name=None):
                 )
 
         else:
-            status, response = create_config_definition(selector, updated_data)
+            status, response = create_config_definition(
+                CONTROL_PLANE_URL, selector, updated_data, AUTH
+            )
             final_report.append(
                 {"name": updated_data["name"], "action": "create", "status": status}
             )
