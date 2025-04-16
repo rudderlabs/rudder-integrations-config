@@ -119,6 +119,7 @@ def update_config(data_diff, selector):
 
     return json.dumps(results, indent=2)
 
+
 def update_diff_db(selector, item_name=None):
     final_report = []
 
@@ -136,6 +137,12 @@ def update_diff_db(selector, item_name=None):
             continue
         directory = f"./{CONFIG_DIR}/{selector}s/{item}"
         updated_data = get_file_content(directory)
+        if (
+            updated_data.get("isSkipForProd")
+            and CONTROL_PLANE_URL == "https://api.rudderstack.com"
+        ):
+            final_report.append({"name": updated_data["name"], "status": "skipped"})
+            continue
         persisted_data = get_config_definition(
             CONTROL_PLANE_URL, selector, updated_data["name"], AUTH
         )
