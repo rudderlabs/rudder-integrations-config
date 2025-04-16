@@ -92,35 +92,6 @@ def get_persisted_store(base_url, selector):
     return json.loads(response.text)
 
 
-# not used anywhere it can be removed
-def update_config(data_diff, selector):
-    results = []
-    for diff in data_diff:
-        name = diff["name"]
-        directory = f"./{CONFIG_DIR}/{selector}s/{name}"
-        fileData = get_file_content(directory)
-        nameInConfig = fileData["name"]
-
-        if diff["action"] == "create":
-            url = f"{CONTROL_PLANE_URL}/{selector}-definitions"
-        else:
-            url = f"{CONTROL_PLANE_URL}/{selector}-definitions/{nameInConfig}"
-
-        resp = requests.post(
-            url=url,
-            headers=HEADER,
-            data=json.dumps(fileData),
-            auth=AUTH,
-            timeout=REQUEST_TIMEOUT,
-        )
-        status, response = parse_response(resp)
-        diff["update"] = {"status": status, "response": response}
-        # results.append(diff)
-        results.append(name)
-
-    return json.dumps(results, indent=2)
-
-
 def update_diff_db(selector, item_name=None):
     final_report = []
 
