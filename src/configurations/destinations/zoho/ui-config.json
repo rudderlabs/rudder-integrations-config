@@ -51,132 +51,11 @@
         "note": "Manage the settings for your destination",
         "sections": [
           {
-            "title": "Destination settings",
-            "note": "Configure advanced destination-specific settings here",
-            "icon": "settings",
-            "groups": [
-              {
-                "title": "Module Settings",
-                "fields": [
-                  {
-                    "type": "dynamicDataSelect",
-                    "configKey": "module",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-                    "regexErrorMessage": "Invalid Module",
-                    "label": "Zoho Module",
-                    "placeholder": "e.g 1234567",
-                    "apiName": "getModules"
-                  }
-                ],
-                "preRequisites": {
-                  "featureFlags": [
-                    {
-                      "configKey": "AMP_vdm-next",
-                      "value": false
-                    }
-                  ]
-                }
-              },
-              {
-                "title": "Optional configuration settings",
-                "fields": [
-                  {
-                    "type": "checkbox",
-                    "label": "Add Zoho System-defined Duplicate Check Fields as Secondary Duplicate check fields",
-                    "configKey": "addDefaultDuplicateCheck",
-                    "default": true,
-                    "note": "Rudderstack will use the identifier field as primary duplicate check field as primary.",
-                    "preRequisites": {
-                      "featureFlags": [
-                        {
-                          "configKey": "AMP_vdm-next",
-                          "value": false
-                        }
-                      ]
-                    }
-                  }
-                ]
-              },
-              {
-                "title": "Zoho Trigger Option",
-                "fields": [
-                  {
-                    "type": "singleSelect",
-                    "label": "Trigger Action",
-                    "configKey": "trigger",
-                    "note": "Select 'None' if you do not want to trigger anything, and 'default' if any trigger(s) is already configured in Zoho",
-                    "options": [
-                      {
-                        "name": "Workflow",
-                        "value": "workflow"
-                      },
-                      {
-                        "name": "Approval",
-                        "value": "approval"
-                      },
-                      {
-                        "name": "Blueprint",
-                        "value": "blueprint"
-                      },
-                      {
-                        "name": "Default",
-                        "value": "Default"
-                      },
-                      {
-                        "name": "None",
-                        "value": "None"
-                      }
-                    ],
-                    "default": "None",
-                    "preRequisites": {
-                      "featureFlags": [
-                        {
-                          "configKey": "AMP_vdm-next",
-                          "value": false
-                        }
-                      ]
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          {
             "id": "consentSettings",
             "title": "Consent settings",
             "note": "Configure consent settings for each provider here",
             "icon": "settings",
             "groups": []
-          }
-        ]
-      },
-      {
-        "title": "Field Level Specification",
-        "note": "Choose module specific Multi Select Picklist Field Actions",
-        "hideEditIcon": true,
-        "sections": [
-          {
-            "groups": [
-              {
-                "title": "Choose True if you want to always append values in multiselect fields or false if you want to entirely overrite the field values",
-                "fields": [
-                  {
-                    "type": "redirect",
-                    "redirectGroupKey": "multiSelectFieldLevelDecision",
-                    "label": "Module Specific Multi Select Pick List Field Action Mapping",
-                    "note": "Map Zoho Multi Select Pick List Field Action To Append or Replace",
-                    "preRequisites": {
-                      "featureFlags": [
-                        {
-                          "configKey": "AMP_vdm-next",
-                          "value": false
-                        }
-                      ]
-                    }
-                  }
-                ]
-              }
-            ]
           }
         ]
       }
@@ -261,52 +140,6 @@
           ]
         }
       ]
-    },
-    "redirectGroups": {
-      "multiSelectFieldLevelDecision": {
-        "fields": [
-          {
-            "type": "dynamicCustomForm",
-            "label": "Choose Module specific Multi Select Picklist Field Actions. Select 'True' for choosing Append and 'False' for replace operation.",
-            "configKey": "multiSelectFieldLevelDecision",
-            "rowFields": [
-              {
-                "type": "mappingRow",
-                "columns": [
-                  {
-                    "type": "dynamicDataSelect",
-                    "configKey": "from",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-                    "regexErrorMessage": "Invalid multi select field",
-                    "label": "Zoho Multi Select Picklist Type Fields",
-                    "placeholder": "e.g Search",
-                    "apiName": "getFields"
-                  },
-                  {
-                    "type": "singleSelect",
-                    "label": "Multiselect Field Action.",
-                    "value": "to",
-                    "options": [
-                      {
-                        "name": "Append",
-                        "value": "true"
-                      },
-                      {
-                        "name": "Replace",
-                        "value": "false"
-                      }
-                    ],
-                    "defaultOption": {
-                      "name": "Append",
-                      "value": "true"
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
     }
   }
 }
