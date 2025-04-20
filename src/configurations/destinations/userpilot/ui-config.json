@@ -30,24 +30,6 @@
                   },
                   {
                     "type": "textInput",
-                    "label": "JS SDK ENDPOINT",
-                    "configKey": "sdkEndpoint",
-                    "regex": "^(wss?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
-                    "regexErrorMessage": "Invalid SDK Endpoint URL. It should be a valid URL starting with wss:// or ws://",
-                    "placeholder": "e.g: wss://api.example.com/ws",
-                    "secret": false,
-                    "description": "Custom endpoint for the JavaScript SDK",
-                    "prerequisites": {
-                      "fields": [
-                        {
-                          "configKey": "connectionMode.web",
-                          "value": "device"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type": "textInput",
                     "label": "API KEY",
                     "configKey": "apiKey",
                     "regex": "^(.{0,100})$",
@@ -109,6 +91,36 @@
         "title": "Configuration settings",
         "note": "Manage the settings for your destination",
         "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "SDK Settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "JS SDK ENDPOINT",
+                    "configKey": "sdkEndpoint",
+                    "regex": "^$|^(wss?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+                    "regexErrorMessage": "Invalid SDK Endpoint URL. It should be a valid URL starting with wss:// or ws://",
+                    "placeholder": "e.g: wss://api.example.com/ws",
+                    "secret": false,
+                    "description": "Custom endpoint for the JavaScript SDK",
+                    "prerequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionMode.web",
+                          "value": "device"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
           {
             "id": "consentSettings",
             "title": "Consent settings",
