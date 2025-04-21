@@ -5,8 +5,8 @@
 # have corresponding account configuration files.
 
 # Get the list of changed files
-changed_files=$(git diff --cached --name-only)
-
+changed_files=$(git diff --name-only origin/develop)
+echo "$changed_files"
 
 # Extract unique destination names from changed files
 destinations=()
