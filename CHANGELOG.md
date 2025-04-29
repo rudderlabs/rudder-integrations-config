@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.114.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.113.2...v1.114.0) (2025-04-29)
+
+
+### Features
+
+* add support for account-definitions in ci/cd ([#1986](https://github.com/rudderlabs/rudder-config-schema/issues/1986)) ([fbe4bbf](https://github.com/rudderlabs/rudder-config-schema/commit/fbe4bbfcce8da6add58635954824060e0330dbf2))
+* add support for accountInput form builder v2 component in zoho_dev ([#1997](https://github.com/rudderlabs/rudder-config-schema/issues/1997)) ([5a23da9](https://github.com/rudderlabs/rudder-config-schema/commit/5a23da973308a8318401a3519df737de62a369c2))
+* **bot-blocking:** add bot-blocking support to js, amp, shopify, flutter ([#2000](https://github.com/rudderlabs/rudder-config-schema/issues/2000)) ([ef7b576](https://github.com/rudderlabs/rudder-config-schema/commit/ef7b576fb7f01c9efcd7d4cac76a65e68ad72852))
+* loops destination config ([#1860](https://github.com/rudderlabs/rudder-config-schema/issues/1860)) ([#1923](https://github.com/rudderlabs/rudder-config-schema/issues/1923)) ([54045fa](https://github.com/rudderlabs/rudder-config-schema/commit/54045fad9dff31c38d648e78fa33a869ab5b1f4d))
+* snapchat v3 ([#1883](https://github.com/rudderlabs/rudder-config-schema/issues/1883)) ([7024782](https://github.com/rudderlabs/rudder-config-schema/commit/70247822b530d9de103f6321082140b115f9687e))
+
 ### [1.113.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.113.1...v1.113.2) (2025-04-15)
 
 ### [1.113.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.113.0...v1.113.1) (2025-04-14)
