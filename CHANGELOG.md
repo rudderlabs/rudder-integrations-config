@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.113.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.113.2...v1.113.3) (2025-05-03)
+
+
+### Bug Fixes
+
+* test ([28fca4c](https://github.com/rudderlabs/rudder-config-schema/commit/28fca4ce4f7fdd65967df76a169f0e0ee7417832))
+
 ### [1.113.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.113.1...v1.113.2) (2025-04-15)
 
 ### [1.113.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.113.0...v1.113.1) (2025-04-14)
