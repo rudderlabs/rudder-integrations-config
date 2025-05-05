@@ -6,78 +6,7 @@
     "properties": {
       "apiKey": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,500})$"
-      },
-      "apiVersion": {
-        "type": "string",
-        "enum": ["legacyApi", "newApi"],
-        "default": "legacyApi"
-      },
-      "pixelId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "snapAppId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "appId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "rudderEventsToSnapEvents": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "from": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            },
-            "to": {
-              "type": "string",
-              "enum": [
-                "products_searched",
-                "product_list_viewed",
-                "promotion_viewed",
-                "promotion_clicked",
-                "product_viewed",
-                "checkout_started",
-                "payment_info_entered",
-                "order_completed",
-                "product_added",
-                "product_added_to_wishlist",
-                "sign_up",
-                "app_open",
-                "save",
-                "subscribe",
-                "complete_tutorial",
-                "invite",
-                "login",
-                "share",
-                "reserve",
-                "achievement_unlocked",
-                "level_complete",
-                "spent_credits",
-                "rate",
-                "start_trial",
-                "list_view",
-                "page_view",
-                "app_install",
-                "custom_event_1",
-                "custom_event_2",
-                "custom_event_3",
-                "custom_event_4",
-                "custom_event_5",
-                ""
-              ]
-            }
-          }
-        }
-      },
-      "enableDeduplication": {
-        "type": "boolean",
-        "default": false
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[a-f0-9]{32}$"
       },
       "oneTrustCookieCategories": {
         "type": "object",
@@ -154,18 +83,6 @@
               }
             }
           },
-          "warehouse": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
           "reactnative": {
             "type": "array",
             "items": {
@@ -220,52 +137,6 @@
         "type": "object",
         "properties": {
           "cloud": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "string",
-                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
-                  "default": "oneTrust"
-                },
-                "consents": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "consent": {
-                        "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                      }
-                    }
-                  }
-                }
-              },
-              "allOf": [
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
-                    "required": ["provider"]
-                  },
-                  "then": {
-                    "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
-                    },
-                    "required": ["resolutionStrategy"]
-                  }
-                }
-              ]
-            }
-          },
-          "warehouse": {
             "type": "array",
             "items": {
               "type": "object",
@@ -769,10 +640,6 @@
           "cloud": {
             "type": "string",
             "enum": ["cloud"]
-          },
-          "warehouse": {
-            "type": "string",
-            "enum": ["cloud"]
           }
         }
       },
@@ -851,18 +718,6 @@
               }
             }
           },
-          "warehouse": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
           "reactnative": {
             "type": "array",
             "items": {
@@ -913,27 +768,6 @@
           }
         }
       }
-    },
-    "anyOf": [
-      {
-        "if": {
-          "properties": {
-            "enableDeduplication": {
-              "const": true
-            }
-          },
-          "required": ["enableDeduplication"]
-        },
-        "then": {
-          "properties": {
-            "deduplicationKey": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            }
-          },
-          "required": ["deduplicationKey"]
-        }
-      }
-    ]
+    }
   }
 }
