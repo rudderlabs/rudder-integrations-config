@@ -1,27 +1,22 @@
 {
-  "name": "SNAPCHAT_CONVERSION",
-  "displayName": "Snapchat Conversion",
+  "name": "LOOPS",
+  "displayName": "Loops",
   "config": {
-    "transformAtV1": "router",
+    "cdkV2Enabled": true,
+    "transformAtV1": "processor",
     "saveDestinationResponse": true,
-    "includeKeys": ["oneTrustCookieCategories", "ketchConsentPurposes", "consentManagement"],
-    "excludeKeys": [],
     "supportedSourceTypes": [
+      "web",
       "android",
       "ios",
-      "web",
       "unity",
       "amp",
       "cloud",
-      "warehouse",
       "reactnative",
       "flutter",
       "cordova",
       "shopify"
     ],
-    "supportedMessageTypes": {
-      "cloud": ["track", "page"]
-    },
     "supportedConnectionModes": {
       "android": ["cloud"],
       "ios": ["cloud"],
@@ -32,19 +27,18 @@
       "flutter": ["cloud"],
       "cordova": ["cloud"],
       "shopify": ["cloud"],
-      "cloud": ["cloud"],
-      "warehouse": ["cloud"]
+      "cloud": ["cloud"]
+    },
+    "supportedMessageTypes": {
+      "cloud": ["identify", "track"]
     },
     "destConfig": {
-      "defaultConfig": [
-        "apiKey",
-        "pixelId",
-        "snapAppId",
-        "appId",
-        "rudderEventsToSnapEvents",
-        "enableDeduplication",
-        "deduplicationKey",
-        "apiVersion"
+      "defaultConfig": ["apiKey"],
+      "web": [
+        "connectionMode",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
       ],
       "android": [
         "connectionMode",
@@ -53,12 +47,6 @@
         "ketchConsentPurposes"
       ],
       "ios": [
-        "connectionMode",
-        "consentManagement",
-        "oneTrustCookieCategories",
-        "ketchConsentPurposes"
-      ],
-      "web": [
         "connectionMode",
         "consentManagement",
         "oneTrustCookieCategories",
@@ -77,12 +65,6 @@
         "ketchConsentPurposes"
       ],
       "cloud": [
-        "connectionMode",
-        "consentManagement",
-        "oneTrustCookieCategories",
-        "ketchConsentPurposes"
-      ],
-      "warehouse": [
         "connectionMode",
         "consentManagement",
         "oneTrustCookieCategories",
@@ -114,5 +96,8 @@
       ]
     },
     "secretKeys": ["apiKey"]
+  },
+  "options": {
+    "isBeta": true
   }
 }
