@@ -10,19 +10,26 @@
     "transformAtV1": "router",
     "saveDestinationResponse": true,
     "excludeKeys": [],
-    "supportedSourceTypes": ["warehouse"],
+    "supportedSourceTypes": ["warehouse", "cloud"],
     "supportedMessageTypes": {
       "cloud": ["record"]
     },
     "syncBehaviours": ["mirror"],
     "disableJsonMapper": true,
     "supportedConnectionModes": {
-      "warehouse": ["cloud"]
+      "warehouse": ["cloud"],
+      "cloud": ["cloud"]
     },
     "includeKeys": ["oneTrustCookieCategories", "ketchConsentPurposes", "consentManagement"],
     "destConfig": {
       "defaultConfig": ["rudderAccountId"],
       "warehouse": [
+        "connectionMode",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
+      ],
+      "cloud": [
         "connectionMode",
         "consentManagement",
         "oneTrustCookieCategories",
