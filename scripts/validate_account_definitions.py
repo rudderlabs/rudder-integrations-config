@@ -17,7 +17,7 @@ from pathlib import Path
 def load_json_file(file_path):
     """Load and parse a JSON file."""
     try:
-        with open(file_path, 'r') as f:
+        with open(file_path, "r") as f:
             return json.load(f)
     except (json.JSONDecodeError, FileNotFoundError) as e:
         print(f"Error loading {file_path}: {e}")
@@ -53,23 +53,33 @@ def validate_destination_accounts(destination_name):
 
     # Extract rudderAccountId values
     try:
-        account_definitions = main_config.get("config", {}).get("supportedAccountDefinitions", {})
+        account_definitions = main_config.get("config", {}).get(
+            "supportedAccountDefinitions", {}
+        )
         if not account_definitions:
-            print(f"Warning: No supportedAccountDefinitions found in {main_config_path}")
+            print(
+                f"Warning: No supportedAccountDefinitions found in {main_config_path}"
+            )
             return True  # No accounts to validate
 
         required_account_ids = []
 
         # Extract account IDs from rudderAccountId array
-        if "rudderAccountId" in account_definitions and isinstance(account_definitions["rudderAccountId"], list):
+        if "rudderAccountId" in account_definitions and isinstance(
+            account_definitions["rudderAccountId"], list
+        ):
             required_account_ids.extend(account_definitions["rudderAccountId"])
 
         # Also check for rudderDeleteAccountId if present
-        if "rudderDeleteAccountId" in account_definitions and isinstance(account_definitions["rudderDeleteAccountId"], list):
+        if "rudderDeleteAccountId" in account_definitions and isinstance(
+            account_definitions["rudderDeleteAccountId"], list
+        ):
             required_account_ids.extend(account_definitions["rudderDeleteAccountId"])
 
         # Print debug information
-        print(f"Found {len(required_account_ids)} required account IDs: {required_account_ids}")
+        print(
+            f"Found {len(required_account_ids)} required account IDs: {required_account_ids}"
+        )
     except (KeyError, AttributeError) as e:
         print(f"Error extracting account definitions: {e}")
         return False
@@ -114,14 +124,20 @@ def validate_destination_accounts(destination_name):
             missing_accounts.append(account_id)
 
     if missing_accounts:
-        print(f"\nERROR: The following account IDs do not have corresponding account configurations:")
+        print(
+            f"\nERROR: The following account IDs do not have corresponding account configurations:"
+        )
         for account in missing_accounts:
             print(f"  - {account}")
-        print("\nPlease create the missing account configuration files or remove them from supportedAccountDefinitions.")
+        print(
+            "\nPlease create the missing account configuration files or remove them from supportedAccountDefinitions."
+        )
         return False
 
     print(f"\n✅ Validation successful for destination '{destination_name}'")
-    print(f"   All {len(required_account_ids)} required account(s) have corresponding configuration files")
+    print(
+        f"   All {len(required_account_ids)} required account(s) have corresponding configuration files"
+    )
     return True
 
 
