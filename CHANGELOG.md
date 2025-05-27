@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.115.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.114.3...v1.115.0) (2025-05-27)
+
+
+### Features
+
+* update zoho_dev destination with new config and schema ([#2013](https://github.com/rudderlabs/rudder-config-schema/issues/2013)) ([44e55eb](https://github.com/rudderlabs/rudder-config-schema/commit/44e55eb4a6af174741f7cbdb40989e12d96cce5b))
+
 ### [1.114.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.114.2...v1.114.3) (2025-05-12)
 
 ### [1.114.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.114.1...v1.114.2) (2025-05-09)
