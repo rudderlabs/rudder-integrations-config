@@ -70,9 +70,7 @@ def parse_response(resp):
         return resp.status_code, str(resp.content)
 
 def get_config_definition(base_url, selector, name="", auth=None):
-    request_url = f"{base_url}/{selector}-definitions/{name}"
-    if selector == "accounts":
-        request_url = f"{base_url}/account-definitions"
+    request_url = f"{base_url}/{selector}-definitions/{name}".rstrip("/")
     response = requests.get(
         request_url,
         timeout=REQUEST_TIMEOUT,
@@ -96,12 +94,11 @@ def get_file_content(directory):
     return file_content
 
 
-def update_config_definition(base_url, selector, name, fileData, auth=None):
+def update_config_definition(base_url, selector, name, fileData, method="POST", auth=None, dry_run=False):
+    if dry_run:
+        return "DRY RUN - Would update", {"message": "Dry run mode - no actual update performed"}
+
     url = f"{base_url}/{selector}-definitions/{name}"
-    method = "POST"
-    if selector == "accounts":
-        url = f"{base_url}/account-definitions/{name}"
-        method = "PUT"
     resp = requests.request(
         method=method,
         url=url,
@@ -113,9 +110,10 @@ def update_config_definition(base_url, selector, name, fileData, auth=None):
     return parse_response(resp)
 
 
-def create_config_definition(base_url, selector, fileData, auth):
-    if selector == "accounts":
-        selector = "account"
+def create_config_definition(base_url, selector, fileData, auth, dry_run=False):
+    if dry_run:
+        return "DRY RUN - Would create", {"message": "Dry run mode - no actual creation performed"}
+
     url = f"{base_url}/{selector}-definitions/"
     resp = requests.post(
         url=url,
