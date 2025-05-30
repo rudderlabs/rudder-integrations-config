@@ -5,32 +5,43 @@ import os
 import sys
 import jsondiff
 import argparse
-from constants import CONFIG_DIR, REQUEST_TIMEOUT, HEADER
+from constants import CONFIG_DIR, REQUEST_TIMEOUT
 from utils import (
     get_config_definition,
     get_file_content,
     update_config_definition,
     create_config_definition,
-    parse_response,
 )
 
 ALL_SELECTORS = ["destination", "source"]
-BLACK_LIST_DESTINATIONS = ["ZOHO_DEV"]
+BLACK_LIST_DESTINATIONS = ["ZOHO_DEV", "RUDDER_TEST"]
 
 
 def get_command_line_arguments():
-    parser = argparse.ArgumentParser(description="Script to deploy config files to DB.")
+    parser = argparse.ArgumentParser(description="Script to deploy definition config files to DB.")
     parser.add_argument("control_plane_url", nargs="?", help="Control plane URL")
     parser.add_argument("username", nargs="?", help="Control plane admin username")
     parser.add_argument("password", nargs="?", help="Control plane admin password")
     parser.add_argument(
         "selector",
         nargs="?",
-        help="Specify destination or source",
+        help="Specify (destination or source) to deploy corresponding definitions.",
         default=None,
     )
     parser.add_argument(
         "item_name", nargs="?", help="Specific item name to update.", default=None
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would be changed without making actual changes to the database",
+        default=False,
+    )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="Show detailed JSON reports in addition to summary",
+        default=False,
     )
 
     args = parser.parse_args()
@@ -70,10 +81,10 @@ def get_command_line_arguments():
             print(arg)
         sys.exit(1)
 
-    return control_plane_url, username, password, SELECTORS, item_name
+    return control_plane_url, username, password, SELECTORS, item_name, args.dry_run, args.verbose
 
 
-CONTROL_PLANE_URL, USERNAME, PASSWORD, SELECTORS, ITEM_NAME = (
+CONTROL_PLANE_URL, USERNAME, PASSWORD, SELECTORS, ITEM_NAME, DRY_RUN, VERBOSE = (
     get_command_line_arguments()
 )
 
@@ -92,7 +103,7 @@ def get_persisted_store(base_url, selector):
     return json.loads(response.text)
 
 
-def update_diff_db(selector, item_name=None):
+def update_diff_db(selector, item_name=None, dry_run=False):
     final_report = []
 
     ## data sets
@@ -105,13 +116,40 @@ def update_diff_db(selector, item_name=None):
 
     for item in current_items:
         # check if item is a directory
-        if not os.path.isdir(f"./{CONFIG_DIR}/{selector}s/{item}") or (
-            item.upper() in BLACK_LIST_DESTINATIONS
-            and CONTROL_PLANE_URL == "https://api.rudderstack.com"
-        ):
+        if not os.path.isdir(f"./{CONFIG_DIR}/{selector}s/{item}"):
+            print(f"Skipping {item} as it is not a directory")
             continue
+        # check if item is in black list
+        if item.upper() in BLACK_LIST_DESTINATIONS and CONTROL_PLANE_URL == "https://api.rudderstack.com":
+            print(f"Skipping {item} as it is in black list")
+            continue
+
         directory = f"./{CONFIG_DIR}/{selector}s/{item}"
         updated_data = get_file_content(directory)
+
+        if dry_run:
+            # In dry run mode, assume the item doesn't exist in DB to show what would be created
+            # This is a limitation of dry run mode - we can't check DB without making requests
+            print(f"  📁 Found local configuration: {updated_data['name']}")
+            print(f"     Directory: {directory}")
+            print(f"     Display Name: {updated_data.get('displayName', 'N/A')}")
+            print(f"     🔄 In normal mode: Would CREATE new database record")
+            print(f"     📡 API Endpoint: {CONTROL_PLANE_URL}/{selector}-definitions/")
+            print(f"     📊 Configuration size: {len(str(updated_data))} characters")
+
+            final_report.append(
+                {
+                    "name": updated_data["name"],
+                    "action": "create (dry run)",
+                    "status": "DRY RUN - Would create",
+                    "data": updated_data,
+                    "directory": directory,
+                    "api_endpoint": f"{CONTROL_PLANE_URL}/{selector}-definitions/",
+                    "config_size": len(str(updated_data))
+                }
+            )
+            continue
+
         persisted_data = get_config_definition(
             CONTROL_PLANE_URL, selector, updated_data["name"], AUTH
         )
@@ -125,27 +163,38 @@ def update_diff_db(selector, item_name=None):
             del diff["$delete"]
 
             if len(diff.keys()) > 0:  # changes exist
-                status, response = update_config_definition(
-                    CONTROL_PLANE_URL,
-                    selector,
-                    updated_data["name"],
-                    updated_data,
-                    AUTH,
-                )
+                if dry_run:
+                    status = "DRY RUN - Would update"
+                    action = "update (dry run)"
+                else:
+                    status, _ = update_config_definition(
+                        CONTROL_PLANE_URL,
+                        selector,
+                        updated_data["name"],
+                        updated_data,
+                        AUTH,
+                        dry_run,
+                    )
+                    action = "update"
                 final_report.append(
-                    {"name": updated_data["name"], "action": "update", "status": status}
+                    {"name": updated_data["name"], "action": action, "status": status, "diff": diff if dry_run else None}
                 )
             else:
                 final_report.append(
-                    {"name": updated_data["name"], "action": "N/A", "status": ""}
+                    {"name": updated_data["name"], "action": "N/A", "status": "No changes detected"}
                 )
 
         else:
-            status, response = create_config_definition(
-                CONTROL_PLANE_URL, selector, updated_data, AUTH
-            )
+            if dry_run:
+                status = "DRY RUN - Would create"
+                action = "create (dry run)"
+            else:
+                status, _ = create_config_definition(
+                    CONTROL_PLANE_URL, selector, updated_data, AUTH, dry_run
+                )
+                action = "create"
             final_report.append(
-                {"name": updated_data["name"], "action": "create", "status": status}
+                {"name": updated_data["name"], "action": action, "status": status, "data": updated_data if dry_run else None}
             )
 
     return final_report
@@ -155,7 +204,10 @@ def get_formatted_json(data):
     return json.dumps(data, indent=2)
 
 
-def get_stale_data(selector, report):
+def get_stale_data(selector, report, dry_run=False):
+    if dry_run:
+        return ["DRY RUN - Cannot determine stale data without database access"]
+
     stale_config_report = []
     persisted_data_set = get_persisted_store(CONTROL_PLANE_URL, selector)
     persisted_items = [item["name"] for item in persisted_data_set]
@@ -168,19 +220,122 @@ def get_stale_data(selector, report):
     return stale_config_report
 
 
+def log_execution_plan():
+    """Log detailed execution plan showing what would happen in normal mode"""
+    print("=" * 70)
+    print("EXECUTION PLAN")
+    print("=" * 70)
+    print(f"Control Plane URL: {CONTROL_PLANE_URL}")
+    print(f"Username: {USERNAME}")
+    print(f"Password: {'*' * len(PASSWORD)}")
+    print(f"Selectors to process: {', '.join(SELECTORS)}")
+    if ITEM_NAME:
+        print(f"Specific item: {ITEM_NAME}")
+    else:
+        print("Processing: ALL items in selected categories")
+
+    print("\nWhat would happen in NORMAL mode:")
+    print("1. Connect to the control plane database")
+    print("2. For each selector (destination/source):")
+    print("   - Scan local configuration directories")
+    print("   - For each configuration found:")
+    print("     a) Fetch existing configuration from database")
+    print("     b) Compare local vs remote configurations")
+    print("     c) If differences found: UPDATE the database record")
+    print("     d) If not found in database: CREATE new database record")
+    print("3. Generate stale data report (items in DB but not in files)")
+    print("4. All changes would be PERMANENTLY applied to the database")
+
+    if DRY_RUN:
+        print("\nDRY RUN MODE ACTIVE:")
+        print("- NO database connections will be made")
+        print("- NO data will be modified")
+        print("- Only local configurations will be analyzed")
+        print("- Reports will show what WOULD be changed")
+
+    print("=" * 70)
+
+
+def print_summary(selector, final_report, dry_run=False):
+    print("\n")
+    print("#" * 50)
+    if dry_run:
+        print(f"{selector.capitalize()} Summary - What Would Happen")
+    else:
+        print(f"{selector.capitalize()} Summary - What Happened")
+    print("#" * 50)
+
+    creates = [item for item in final_report if "create" in item["action"]]
+    updates = [item for item in final_report if "update" in item["action"]]
+    no_changes = [item for item in final_report if item["action"] == "N/A"]
+
+    print(f"📊 Total configurations processed: {len(final_report)}")
+    if dry_run:
+        print(f"🆕 Would CREATE: {len(creates)} new records")
+        print(f"🔄 Would UPDATE: {len(updates)} existing records")
+        print(f"✅ No changes needed: {len(no_changes)} records")
+    else:
+        print(f"🆕 CREATED: {len(creates)} new records")
+        print(f"🔄 UPDATED: {len(updates)} existing records")
+        print(f"✅ No changes needed: {len(no_changes)} records")
+
+    if creates:
+        if dry_run:
+            print(f"\n🆕 New records that would be CREATED:")
+        else:
+            print(f"\n🆕 New records that were CREATED:")
+        for item in creates:
+            config_size = item.get('config_size', len(str(item.get('data', ''))))
+            print(f"   - {item['name']} ({config_size} chars)")
+
+    if updates:
+        if dry_run:
+            print(f"\n🔄 Records that would be UPDATED:")
+        else:
+            print(f"\n🔄 Records that were UPDATED:")
+        for item in updates:
+            print(f"   - {item['name']}")
+
+    if dry_run:
+        print(f"\n⚠️  In normal mode, these changes would be PERMANENT!")
+        print(f"🌐 Database: {CONTROL_PLANE_URL}")
+        print(f"👤 User: {USERNAME}")
+    else:
+        print(f"\n✅ All changes have been applied to the database!")
+        print(f"🌐 Database: {CONTROL_PLANE_URL}")
+        print(f"👤 User: {USERNAME}")
+    print("#" * 50)
+
+
 if __name__ == "__main__":
+    # Log execution plan first
+    log_execution_plan()
+
+    if DRY_RUN:
+        print("\n" + "=" * 60)
+        print("DRY RUN MODE - No changes will be made to the database")
+        print("=" * 60)
+
     for selector in SELECTORS:
         print("\n")
         print("#" * 50)
-        print("Running {} Definitions Updates".format(selector.capitalize()))
-        final_report = update_diff_db(selector, ITEM_NAME)
+        mode_text = " (DRY RUN)" if DRY_RUN else ""
+        print("Running {} Definitions Updates{}".format(selector.capitalize(), mode_text))
+        final_report = update_diff_db(selector, ITEM_NAME, DRY_RUN)
 
-        print("\n")
-        print("#" * 50)
-        print("{} Definition Update Report".format(selector.capitalize()))
-        print(get_formatted_json(final_report))
+        # Always show summary first (most important for users)
+        print_summary(selector, final_report, DRY_RUN)
 
-        print("\n")
-        print("#" * 50)
-        print("Stale {}s Report".format(selector.capitalize()))
-        print(get_formatted_json(get_stale_data(selector, final_report)))
+        # Show detailed reports only when verbose flag is used
+        if VERBOSE:
+            print("\n")
+            print("#" * 50)
+            print("{} Definition Update Report{}".format(selector.capitalize(), mode_text))
+            print(get_formatted_json(final_report))
+
+            print("\n")
+            print("#" * 50)
+            print("Stale {}s Report".format(selector.capitalize()))
+            print(get_formatted_json(get_stale_data(selector, final_report, DRY_RUN)))
+
+
