@@ -106,7 +106,7 @@ def update_diff_db(selector, item_name=None):
     for item in current_items:
         # check if item is a directory
         if not os.path.isdir(f"./{CONFIG_DIR}/{selector}s/{item}") or (
-            item in BLACK_LIST_DESTINATIONS
+            item.upper() in BLACK_LIST_DESTINATIONS
             and CONTROL_PLANE_URL == "https://api.rudderstack.com"
         ):
             continue
