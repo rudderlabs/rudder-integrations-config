@@ -279,7 +279,7 @@ def update_account_db(base_url, auth, definition_name=None, dry_run=False):
 
                             if diff and len(diff.keys()) > 0:
                                 status, _ = update_config_definition(
-                                    base_url, "account", account_name, updated_data, auth, dry_run, method="PUT"
+                                    base_url, "account", account_name, updated_data, method="PUT", auth=auth, dry_run=dry_run
                                 )
                                 final_report.append(
                                     {
