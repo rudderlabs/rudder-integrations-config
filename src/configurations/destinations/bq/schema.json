@@ -22,7 +22,8 @@
       },
       "namespace": {
         "type": "string",
-        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
+        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+        "rs-immutable": true
       },
       "credentials": {
         "type": "string",
@@ -36,12 +37,14 @@
       "partitionColumn": {
         "type": "string",
         "pattern": "^(_PARTITIONTIME|loaded_at|received_at|timestamp|sent_at|original_timestamp)$",
-        "default": "_PARTITIONTIME"
+        "default": "_PARTITIONTIME",
+        "rs-immutable": true
       },
       "partitionType": {
         "type": "string",
         "pattern": "^(hour|day)$",
-        "default": "day"
+        "default": "day",
+        "rs-immutable": true
       },
       "syncStartAt": {
         "type": "string"
@@ -52,7 +55,8 @@
       },
       "skipViews": {
         "type": "boolean",
-        "default": false
+        "default": false,
+        "rs-immutable": true
       },
       "skipUsersTable": {
         "type": "boolean",
