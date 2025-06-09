@@ -171,23 +171,23 @@ def update_account_db(base_url, auth, definition_name=None, dry_run=False):
     """
     final_report = []
 
-    # Get existing account definitions from the control plane (unless in dry run mode)
+    # Get existing account definitions from the control plane
     if dry_run:
-        print("🔍 DRY RUN: Skipping database fetch - analyzing local configurations only")
-        account_definitions = []
-        account_map = {}
+        print("🔍 DRY RUN: Fetching existing accounts for accurate comparison")
     else:
-        persisted_data = get_config_definition(base_url, "accounts", "", auth)
-        if persisted_data.status_code == 200:
-            account_definitions = json.loads(persisted_data.text)
-        else:
-            print(
-                f"Error: Unable to fetch account definitions from the control plane. Status code: {persisted_data.status_code}"
-            )
-            sys.exit(1)
+        print("🔍 Fetching existing account definitions...")
 
-        # Create a map of account names for faster lookup
-        account_map = {account["name"]: account for account in account_definitions}
+    persisted_data = get_config_definition(base_url, "accounts", "", auth)
+    if persisted_data.status_code == 200:
+        account_definitions = json.loads(persisted_data.text)
+    else:
+        print(
+            f"Error: Unable to fetch account definitions from the control plane. Status code: {persisted_data.status_code}"
+        )
+        sys.exit(1)
+
+    # Create a map of account names for faster lookup
+    account_map = {account["name"]: account for account in account_definitions}
 
     # Determine which categories to process
     supported_categories = ["destinations", "sources"]
@@ -250,24 +250,37 @@ def update_account_db(base_url, auth, definition_name=None, dry_run=False):
                     account_name = updated_data["name"]
 
                     if dry_run:
-                        # In dry run mode, assume the account doesn't exist to show what would be created
                         print(f"  📁 Found local account configuration: {account_name}")
                         print(f"     Directory: {auth_type_path}")
-                        print(f"     🔄 In normal mode: Would CREATE new account record")
+
+                        if account_name in account_map:
+                            existing_account = account_map[account_name]
+                            diff = jsondiff.diff(existing_account, updated_data, marshal=True)
+                            if diff and len(diff.keys()) > 0:
+                                print(f"     🔄 In normal mode: Would UPDATE existing account")
+                                action = "update (dry run)"
+                                status = "DRY RUN - Would update"
+                            else:
+                                print(f"     ✅ In normal mode: No changes needed")
+                                action = "N/A"
+                                status = "DRY RUN - No changes needed"
+                        else:
+                            print(f"     🆕 In normal mode: Would CREATE new account")
+                            action = "create (dry run)"
+                            status = "DRY RUN - Would create"
+
                         print(f"     📡 API Endpoint: {base_url}/account-definitions/")
                         print(f"     📊 Configuration size: {len(str(updated_data))} characters")
 
-                        final_report.append(
-                            {
-                                "name": account_name,
-                                "action": "create (dry run)",
-                                "status": "DRY RUN - Would create",
-                                "data": updated_data,
-                                "directory": auth_type_path,
-                                "api_endpoint": f"{base_url}/account-definitions/",
-                                "config_size": len(str(updated_data))
-                            }
-                        )
+                        final_report.append({
+                            "name": account_name,
+                            "action": action,
+                            "status": status,
+                            "data": updated_data,
+                            "directory": auth_type_path,
+                            "api_endpoint": f"{base_url}/account-definitions/",
+                            "config_size": len(str(updated_data))
+                        })
                     else:
                         # Check if account already exists
                         if account_name in account_map:
