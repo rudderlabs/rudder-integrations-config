@@ -28,9 +28,16 @@ def get_command_line_arguments():
     )
     parser.add_argument(
         "--dry-run",
+        dest="dry_run",
         action="store_true",
         help="Show what would be changed without making actual changes to the database",
-        default=False,
+        default=True,
+    )
+    parser.add_argument(
+        "--no-dry-run",
+        dest="dry_run",
+        action="store_false",
+        help="Make actual changes to the database",
     )
     parser.add_argument(
         "--verbose",
@@ -149,6 +156,7 @@ def print_summary(final_report, dry_run=False, control_plane_url="", username=""
         print(f"\n⚠️  In normal mode, these changes would be PERMANENT!")
         print(f"🌐 Database: {control_plane_url}")
         print(f"👤 User: {username}")
+        print(f"🔍 To run this script in normal mode, use the --no-dry-run flag")
     else:
         print(f"\n✅ All changes have been applied to the database!")
         print(f"🌐 Database: {control_plane_url}")
@@ -172,12 +180,10 @@ def update_account_db(base_url, auth, definition_name=None, dry_run=False):
     final_report = []
 
     # Get existing account definitions from the control plane
-    if dry_run:
-        print("🔍 DRY RUN: Fetching existing accounts for accurate comparison")
-    else:
-        print("🔍 Fetching existing account definitions...")
+ 
+    print("🔍 Fetching existing account definitions...")
 
-    persisted_data = get_config_definition(base_url, "accounts", "", auth)
+    persisted_data = get_config_definition(base_url, "account", auth=auth)
     if persisted_data.status_code == 200:
         account_definitions = json.loads(persisted_data.text)
     else:
@@ -248,72 +254,39 @@ def update_account_db(base_url, auth, definition_name=None, dry_run=False):
                         continue
 
                     account_name = updated_data["name"]
-
-                    if dry_run:
-                        print(f"  📁 Found local account configuration: {account_name}")
-                        print(f"     Directory: {auth_type_path}")
-
-                        if account_name in account_map:
-                            existing_account = account_map[account_name]
-                            diff = jsondiff.diff(existing_account, updated_data, marshal=True)
-                            if diff and len(diff.keys()) > 0:
-                                print(f"     🔄 In normal mode: Would UPDATE existing account")
-                                action = "update (dry run)"
-                                status = "DRY RUN - Would update"
-                            else:
-                                print(f"     ✅ In normal mode: No changes needed")
-                                action = "N/A"
-                                status = "DRY RUN - No changes needed"
-                        else:
-                            print(f"     🆕 In normal mode: Would CREATE new account")
-                            action = "create (dry run)"
-                            status = "DRY RUN - Would create"
-
-                        print(f"     📡 API Endpoint: {base_url}/account-definitions/")
-                        print(f"     📊 Configuration size: {len(str(updated_data))} characters")
-
-                        final_report.append({
-                            "name": account_name,
-                            "action": action,
-                            "status": status,
-                            "data": updated_data,
-                            "directory": auth_type_path,
-                            "api_endpoint": f"{base_url}/account-definitions/",
-                            "config_size": len(str(updated_data))
-                        })
-                    else:
                         # Check if account already exists
-                        if account_name in account_map:
-                            # Update existing account if there are changes
-                            existing_account = account_map[account_name]
-                            diff = jsondiff.diff(
-                                existing_account, updated_data, marshal=True
-                            )
+                    if account_name in account_map:
+                        # Update existing account if there are changes
+                        existing_account = account_map[account_name]
+                        diff = jsondiff.diff(
+                            existing_account, updated_data, marshal=True
+                        )
+                        diff.pop("$delete", None)
 
-                            if diff and len(diff.keys()) > 0:
-                                status, _ = update_config_definition(
-                                    base_url, "account", account_name, updated_data, method="PUT", auth=auth, dry_run=dry_run
-                                )
-                                final_report.append(
-                                    {
-                                        "name": account_name,
-                                        "action": "update",
-                                        "status": status,
-                                        "diff": diff if dry_run else None
-                                    }
-                                )
-                            else:
-                                final_report.append(
-                                    {"name": account_name, "action": "N/A", "status": "No changes detected"}
-                                )
-                        else:
-                            # Create new account
-                            status, _ = create_config_definition(
-                                base_url, "accounts", updated_data, auth, dry_run
+                        if diff and len(diff.keys()) > 0:
+                            status, _ = update_config_definition(
+                                base_url, "account", account_name, updated_data, method="PUT", auth=auth, dry_run=dry_run
                             )
                             final_report.append(
-                                {"name": account_name, "action": "create", "status": status}
+                                {
+                                    "name": account_name,
+                                    "action": "update",
+                                    "status": status,
+                                    "diff": diff if dry_run else None
+                                }
                             )
+                        else:
+                            final_report.append(
+                                {"name": account_name, "action": "N/A", "status": "No changes detected"}
+                            )
+                    else:
+                        # Create new account
+                        status, _ = create_config_definition(
+                            base_url, "accounts", updated_data, auth, dry_run=dry_run
+                        )
+                        final_report.append(
+                            {"name": account_name, "action": "create", "status": status}
+                        )
                 except Exception as e:
                     print(f"Error processing {auth_type_path}: {str(e)}")
                     sys.exit(1)

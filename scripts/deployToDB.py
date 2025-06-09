@@ -33,9 +33,16 @@ def get_command_line_arguments():
     )
     parser.add_argument(
         "--dry-run",
+        dest="dry_run",
         action="store_true",
         help="Show what would be changed without making actual changes to the database",
-        default=False,
+        default=True,
+    )
+    parser.add_argument(
+        "--no-dry-run",
+        dest="dry_run",
+        action="store_false",
+        help="Make actual changes to the database",
     )
     parser.add_argument(
         "--verbose",
@@ -127,29 +134,6 @@ def update_diff_db(selector, item_name=None, dry_run=False):
         directory = f"./{CONFIG_DIR}/{selector}s/{item}"
         updated_data = get_file_content(directory)
 
-        if dry_run:
-            # In dry run mode, assume the item doesn't exist in DB to show what would be created
-            # This is a limitation of dry run mode - we can't check DB without making requests
-            print(f"  📁 Found local configuration: {updated_data['name']}")
-            print(f"     Directory: {directory}")
-            print(f"     Display Name: {updated_data.get('displayName', 'N/A')}")
-            print(f"     🔄 In normal mode: Would CREATE new database record")
-            print(f"     📡 API Endpoint: {CONTROL_PLANE_URL}/{selector}-definitions/")
-            print(f"     📊 Configuration size: {len(str(updated_data))} characters")
-
-            final_report.append(
-                {
-                    "name": updated_data["name"],
-                    "action": "create (dry run)",
-                    "status": "DRY RUN - Would create",
-                    "data": updated_data,
-                    "directory": directory,
-                    "api_endpoint": f"{CONTROL_PLANE_URL}/{selector}-definitions/",
-                    "config_size": len(str(updated_data))
-                }
-            )
-            continue
-
         persisted_data = get_config_definition(
             CONTROL_PLANE_URL, selector, updated_data["name"], AUTH
         )
@@ -160,22 +144,18 @@ def update_diff_db(selector, item_name=None, dry_run=False):
             )
             # ignore the $delete - values present in DB but missing in files. Anyways this doesn't get reflected in DB as keys are missing in files itself.
             # Best practice is to make sure all keys are maintained in the config files irrespective of them being null.
-            del diff["$delete"]
+            diff.pop("$delete", None)
 
             if len(diff.keys()) > 0:  # changes exist
-                if dry_run:
-                    status = "DRY RUN - Would update"
-                    action = "update (dry run)"
-                else:
-                    status, _ = update_config_definition(
-                        CONTROL_PLANE_URL,
-                        selector,
-                        updated_data["name"],
-                        updated_data,
-                        AUTH,
-                        dry_run,
-                    )
-                    action = "update"
+                status, _ = update_config_definition(
+                    CONTROL_PLANE_URL,
+                    selector,
+                    updated_data["name"],
+                    updated_data,
+                    auth=AUTH,
+                    dry_run=dry_run,
+                )
+                action = "update"
                 final_report.append(
                     {"name": updated_data["name"], "action": action, "status": status, "diff": diff if dry_run else None}
                 )
@@ -185,14 +165,10 @@ def update_diff_db(selector, item_name=None, dry_run=False):
                 )
 
         else:
-            if dry_run:
-                status = "DRY RUN - Would create"
-                action = "create (dry run)"
-            else:
-                status, _ = create_config_definition(
-                    CONTROL_PLANE_URL, selector, updated_data, AUTH, dry_run
-                )
-                action = "create"
+            status, _ = create_config_definition(
+                CONTROL_PLANE_URL, selector, updated_data, AUTH, dry_run=dry_run
+            )
+            action = "create"
             final_report.append(
                 {"name": updated_data["name"], "action": action, "status": status, "data": updated_data if dry_run else None}
             )
@@ -205,9 +181,6 @@ def get_formatted_json(data):
 
 
 def get_stale_data(selector, report, dry_run=False):
-    if dry_run:
-        return ["DRY RUN - Cannot determine stale data without database access"]
-
     stale_config_report = []
     persisted_data_set = get_persisted_store(CONTROL_PLANE_URL, selector)
     persisted_items = [item["name"] for item in persisted_data_set]
@@ -300,6 +273,7 @@ def print_summary(selector, final_report, dry_run=False):
         print(f"\n⚠️  In normal mode, these changes would be PERMANENT!")
         print(f"🌐 Database: {CONTROL_PLANE_URL}")
         print(f"👤 User: {USERNAME}")
+        print(f"🔍 To run this script in normal mode, use the --no-dry-run flag")
     else:
         print(f"\n✅ All changes have been applied to the database!")
         print(f"🌐 Database: {CONTROL_PLANE_URL}")
