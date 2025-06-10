@@ -1,7 +1,7 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["adAccountId", "audienceId", "audienceType"],
+    "required": ["audienceType"],
     "type": "object",
     "additionalProperties": true,
     "properties": {
@@ -18,10 +18,6 @@
         "type": "string",
         "enum": ["email", "madid", "identityLink", "gum"],
         "default": "email"
-      },
-      "audienceId": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
       },
       "gumCallerId": {
         "type": "string",
@@ -288,6 +284,58 @@
             }
           },
           "required": ["gumCallerId"]
+        }
+      }
+    ],
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "properties": {
+                "cloud": {
+                  "const": "cloud"
+                }
+              },
+              "required": ["cloud"]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "audienceId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+            }
+          },
+          "required": ["audienceId"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "properties": {
+                "warehouse": {
+                  "const": "cloud"
+                }
+              },
+              "required": ["warehouse"]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "adAccountId": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+            }
+          },
+          "required": ["adAccountId"]
         }
       }
     ]
