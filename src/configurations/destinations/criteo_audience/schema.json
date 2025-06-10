@@ -5,15 +5,6 @@
     "type": "object",
     "additionalProperties": true,
     "properties": {
-      "adAccountId": {
-        "type": "object",
-        "properties": {
-          "warehouse": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
-          }
-        }
-      },
       "audienceType": {
         "type": "string",
         "enum": ["email", "madid", "identityLink", "gum"],
@@ -331,8 +322,13 @@
         "then": {
           "properties": {
             "adAccountId": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+              "type": "object",
+              "properties": {
+                "warehouse": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$"
+                }
+              }
             }
           },
           "required": ["adAccountId"]
