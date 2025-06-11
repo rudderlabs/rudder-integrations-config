@@ -32,6 +32,13 @@ class FieldTypeEnum(Enum):
     ARRAY = "array"
 
 
+def add_immutable_property(field, schema_obj):
+    """If 'immutable' is set in the field, add 'rs-immutable' to the schema object."""
+    if field.get("immutable", False):
+        schema_obj["rs-immutable"] = True
+    return schema_obj
+
+
 def get_options_list_for_enum(field):
     """Creates the list of options given in field and return the list
     Args:
@@ -263,6 +270,7 @@ def generate_schema_for_checkbox(field, dbConfig, schema_field_name):
         checkboxSchemaObj["type"] = FieldTypeEnum.BOOLEAN.value
         if "default" in field:
             checkboxSchemaObj["default"] = field["default"]
+    add_immutable_property(field, checkboxSchemaObj)
     return checkboxSchemaObj
 
 
@@ -302,6 +310,7 @@ def generate_schema_for_textinput(field, dbConfig, schema_field_name):
         textInputSchemaObj = {"type": FieldTypeEnum.STRING.value}
         if "regex" in field:
             textInputSchemaObj["pattern"] = generate_uiconfig_pattern(field, dbConfig)
+    add_immutable_property(field, textInputSchemaObj)
     return textInputSchemaObj
 
 
