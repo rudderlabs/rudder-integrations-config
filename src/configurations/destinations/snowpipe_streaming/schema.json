@@ -44,6 +44,10 @@
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
+      "enableIceberg": {
+        "type": "boolean",
+        "default": false
+      },
       "oneTrustCookieCategories": {
         "type": "object",
         "properties": {
@@ -879,6 +883,23 @@
         }
       }
     },
+    "allOf": [
+      {
+        "if": {
+          "properties": { "enableIceberg": { "const": true } },
+          "required": ["enableIceberg"]
+        },
+        "then": {
+          "properties": {
+            "externalVolume": {
+              "type": "string",
+              "pattern": "^(.{1,100})$"
+            }
+          },
+          "required": ["externalVolume"]
+        }
+      }
+    ],
     "additionalProperties": true
   }
 }

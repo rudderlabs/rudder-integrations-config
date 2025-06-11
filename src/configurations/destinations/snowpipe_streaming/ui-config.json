@@ -79,6 +79,36 @@
       ]
     },
     {
+      "title": "Iceberg Tables",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Create Iceberg Tables",
+          "value": "enableIceberg",
+          "default": false,
+          "immutable": true
+        },
+        {
+          "type": "textInput",
+          "label": "External Volume",
+          "value": "externalVolume",
+          "required": true,
+          "immutable": true,
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid External Volume",
+          "placeholder": "e.g: EXTERNAL_VOLUME_NAME",
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "enableIceberg",
+                "value": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "title": "Advanced Settings",
       "fields": [
         {

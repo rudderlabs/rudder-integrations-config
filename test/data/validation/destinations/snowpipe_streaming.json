@@ -727,5 +727,77 @@
       "ketchConsentPurposes.web must be array",
       "ketchConsentPurposes.unity.0 must be object"
     ]
+  },
+  {
+    "testTitle": "enableIceberg false, no externalVolume (valid)",
+    "config": {
+      "account": "test-account",
+      "database": "test-database",
+      "warehouse": "test-warehouse",
+      "user": "test-user",
+      "role": "test-role",
+      "skipTracksTable": false,
+      "namespace": "test-namespace",
+      "jsonPaths": "testMap.nestedMap",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "enableIceberg": false
+    },
+    "result": true
+  },
+  {
+    "testTitle": "enableIceberg true, valid externalVolume (valid)",
+    "config": {
+      "account": "test-account",
+      "database": "test-database",
+      "warehouse": "test-warehouse",
+      "user": "test-user",
+      "role": "test-role",
+      "skipTracksTable": false,
+      "namespace": "test-namespace",
+      "jsonPaths": "testMap.nestedMap",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "enableIceberg": true,
+      "externalVolume": "my-volume"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "enableIceberg true, missing externalVolume (invalid)",
+    "config": {
+      "account": "test-account",
+      "database": "test-database",
+      "warehouse": "test-warehouse",
+      "user": "test-user",
+      "role": "test-role",
+      "skipTracksTable": false,
+      "namespace": "test-namespace",
+      "jsonPaths": "testMap.nestedMap",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "enableIceberg": true
+    },
+    "result": false,
+    "err": [" must have required property 'externalVolume'", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "enableIceberg true, externalVolume empty (invalid)",
+    "config": {
+      "account": "test-account",
+      "database": "test-database",
+      "warehouse": "test-warehouse",
+      "user": "test-user",
+      "role": "test-role",
+      "skipTracksTable": false,
+      "namespace": "test-namespace",
+      "jsonPaths": "testMap.nestedMap",
+      "privateKey": "-----BEGIN PRIVATE KEY-----\ntest\ntest\n-----END PRIVATE KEY-----\n",
+      "privateKeyPassphrase": "test-passphrase",
+      "enableIceberg": true,
+      "externalVolume": ""
+    },
+    "result": false,
+    "err": ["externalVolume must match pattern \"^(.{1,100})$\"", " must match \"then\" schema"]
   }
 ]
