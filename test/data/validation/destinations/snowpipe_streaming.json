@@ -779,7 +779,11 @@
       "enableIceberg": true
     },
     "result": false,
-    "err": [" must have required property 'externalVolume'", " must match \"then\" schema"]
+    "err": [
+      " must have required property 'externalVolume'",
+      " must match \"then\" schema",
+      " must match a schema in anyOf"
+    ]
   },
   {
     "testTitle": "enableIceberg true, externalVolume empty (invalid)",
@@ -798,6 +802,10 @@
       "externalVolume": ""
     },
     "result": false,
-    "err": ["externalVolume must match pattern \"^(.{1,100})$\"", " must match \"then\" schema"]
+    "err": [
+      "externalVolume must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
+      " must match \"then\" schema",
+      " must match a schema in anyOf"
+    ]
   }
 ]
