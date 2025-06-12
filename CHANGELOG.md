@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.116.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.115.0...v1.116.0) (2025-06-12)
+
+
+### Features
+
+* enable update of accountDefinition on production ([#2053](https://github.com/rudderlabs/rudder-config-schema/issues/2053)) ([0f4ed31](https://github.com/rudderlabs/rudder-config-schema/commit/0f4ed31561b0ed19f40513cf2fe0b2f76b5482a8))
+
+## [1.115.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.114.4...v1.115.0) (2025-06-11)
+
+
+### Features
+
+* **account-management:** add account management field to all oauth destinations ui-config ([#2046](https://github.com/rudderlabs/rudder-config-schema/issues/2046)) ([805193a](https://github.com/rudderlabs/rudder-config-schema/commit/805193a7ca97daec279e70e6dcdf4c0e353f36a9))
+* add backend validations for immutable fields in bq destination ([#2042](https://github.com/rudderlabs/rudder-config-schema/issues/2042)) ([a03cdba](https://github.com/rudderlabs/rudder-config-schema/commit/a03cdba1d48881c8dbda70d0d361f50241a5bb07))
+* add disable live events options config ([#2034](https://github.com/rudderlabs/rudder-config-schema/issues/2034)) ([10dbb9b](https://github.com/rudderlabs/rudder-config-schema/commit/10dbb9b61396b3ce500d2eb35fef2ecbfe2d0ce1))
+* add new account management field for zoho ([#2048](https://github.com/rudderlabs/rudder-config-schema/issues/2048)) ([7f960b3](https://github.com/rudderlabs/rudder-config-schema/commit/7f960b33c2a9bebf015454f07292dfff27f67f2b))
+* add oauth-account to zoho_dev ([#2036](https://github.com/rudderlabs/rudder-config-schema/issues/2036)) ([6378da5](https://github.com/rudderlabs/rudder-config-schema/commit/6378da5a885cc65bc67eb68c8973e8ce8114d611))
+* add support of accounts to zoho ([#2045](https://github.com/rudderlabs/rudder-config-schema/issues/2045)) ([90899f9](https://github.com/rudderlabs/rudder-config-schema/commit/90899f902c78cbd943dd69a428707adcba86f999))
+* update zoho_dev destination with new config and schema ([#2013](https://github.com/rudderlabs/rudder-config-schema/issues/2013)) ([44e55eb](https://github.com/rudderlabs/rudder-config-schema/commit/44e55eb4a6af174741f7cbdb40989e12d96cce5b))
+* **zoho:** hide region field when the account management feature flag is enabled ([#2049](https://github.com/rudderlabs/rudder-config-schema/issues/2049)) ([4c85985](https://github.com/rudderlabs/rudder-config-schema/commit/4c85985430d3be0843194a6541417127e4036c3f))
+
+
+### Bug Fixes
+
+* remove unused warehouse field from snowpipe streaming destination ([#2035](https://github.com/rudderlabs/rudder-config-schema/issues/2035)) ([2e72838](https://github.com/rudderlabs/rudder-config-schema/commit/2e728381a26a7e26245db12c85f08d243e3f6b5d))
+
 ### [1.114.4](https://github.com/rudderlabs/rudder-config-schema/compare/v1.114.3...v1.114.4) (2025-06-02)
 
 ### [1.114.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.114.2...v1.114.3) (2025-05-12)
