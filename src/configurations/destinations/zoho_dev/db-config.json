@@ -2,22 +2,27 @@
   "name": "ZOHO_DEV",
   "displayName": "ZOHO_DEV",
   "config": {
+    "isAudienceSupported": true,
     "supportedAccountDefinitions": {
       "rudderAccountId": ["DESTINATION_ZOHO_DEV_OAUTH"]
+    },
+    "auth": {
+      "type": "OAuth"
     },
     "cdkV2Enabled": true,
     "supportsVisualMapper": true,
     "transformAtV1": "router",
     "saveDestinationResponse": true,
     "excludeKeys": [],
-    "supportedSourceTypes": ["warehouse"],
+    "supportedSourceTypes": ["warehouse", "cloud"],
     "supportedMessageTypes": {
       "cloud": ["record"]
     },
     "syncBehaviours": ["mirror"],
     "disableJsonMapper": true,
     "supportedConnectionModes": {
-      "warehouse": ["cloud"]
+      "warehouse": ["cloud"],
+      "cloud": ["cloud"]
     },
     "includeKeys": ["oneTrustCookieCategories", "ketchConsentPurposes", "consentManagement"],
     "destConfig": {
@@ -27,10 +32,19 @@
         "consentManagement",
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
+      ],
+      "cloud": [
+        "connectionMode",
+        "consentManagement",
+        "oneTrustCookieCategories",
+        "ketchConsentPurposes"
       ]
     }
   },
   "options": {
-    "hidden": true
+    "hidden": {
+      "featureFlagName": "AMP_enable-zoho-dev-destination",
+      "featureFlagValue": false
+    }
   }
 }
