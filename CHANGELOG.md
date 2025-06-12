@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.116.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.115.0...v1.116.0) (2025-06-12)
+
+
+### Features
+
+* enable update of accountDefinition on production ([#2053](https://github.com/rudderlabs/rudder-config-schema/issues/2053)) ([0f4ed31](https://github.com/rudderlabs/rudder-config-schema/commit/0f4ed31561b0ed19f40513cf2fe0b2f76b5482a8))
+
 ## [1.115.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.114.4...v1.115.0) (2025-06-11)
 
 
