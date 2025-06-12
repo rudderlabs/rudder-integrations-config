@@ -191,10 +191,6 @@ if __name__ == "__main__":
     )
     AUTH = (USERNAME, PASSWORD)
 
-    if CONTROL_PLANE_URL == "https://api.rudderstack.com":
-        print("Skipping accounts update for production.")
-        sys.exit(0)
-
     print("#" * 50)
     print("Deploying Account Definitions")
     print("#" * 50)
