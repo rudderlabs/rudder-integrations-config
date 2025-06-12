@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.114.4](https://github.com/rudderlabs/rudder-config-schema/compare/v1.114.3...v1.114.4) (2025-06-02)
+
+### [1.114.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.114.2...v1.114.3) (2025-05-12)
+
 ### [1.114.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.114.1...v1.114.2) (2025-05-09)
 
 ### [1.114.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.114.0...v1.114.1) (2025-05-05)
