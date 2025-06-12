@@ -14,6 +14,8 @@ from utils import (
     get_formatted_json,
 )
 
+BLACK_LIST_DESTINATIONS = ["ZOHO_DEV"]
+
 
 def get_command_line_arguments():
     parser = argparse.ArgumentParser(
@@ -103,6 +105,13 @@ def update_account_db(base_url, auth, definition_name=None):
 
         # Process each item
         for item in current_items:
+            if (
+                item.upper() in BLACK_LIST_DESTINATIONS
+                and "api.rudderstack.com" in CONTROL_PLANE_URL
+            ):
+                print("Skipping BlakcListed Destination: ", item)
+                continue
+
             item_path = f"./{CONFIG_DIR}/{category}/{item}"
             accounts_path = f"{item_path}/accounts"
 
