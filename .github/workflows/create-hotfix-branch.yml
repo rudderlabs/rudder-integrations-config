@@ -45,7 +45,7 @@ jobs:
 
             // Fallback: static allowlist
             if (!isTeamMember && !allowedActors.includes(actor)) {
-              core.setFailed(`${actor} is not allowed to run this workflow`);
+              throw new Error(`${actor} is not allowed to run this workflow`);
             }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
