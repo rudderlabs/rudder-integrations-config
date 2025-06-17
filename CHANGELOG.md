@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.116.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.116.0...v1.116.1) (2025-06-17)
+
+
+### Bug Fixes
+
+* criteo audience incorrect schema ([#2044](https://github.com/rudderlabs/rudder-config-schema/issues/2044)) ([#2058](https://github.com/rudderlabs/rudder-config-schema/issues/2058)) ([ccd9651](https://github.com/rudderlabs/rudder-config-schema/commit/ccd965117ab2f912799e061d7f5979c60238b153))
+* update Attentive Tag signUpSourceId pattern to optional ([6cbe039](https://github.com/rudderlabs/rudder-config-schema/commit/6cbe03929afca85a8485e48464403ec3d9c9d82b))
+
 ## [1.116.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.115.0...v1.116.0) (2025-06-12)
 
 
