@@ -1,46 +1,42 @@
 [
   {
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "000000",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
       },
-      "gumCallerId": "532445",
       "rudderAccountId": "test-host"
     },
     "result": true
   },
   {
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "000000",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
       },
-      "gumCallerId": "5445",
       "rudderAccountId": "test-host"
     },
     "result": true
   },
   {
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "000000",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": ""
       },
-      "gumCallerId": "53445",
+      "connectionMode": {
+        "warehouse": "cloud"
+      },
       "rudderAccountId": "test-host"
     },
     "result": false,
     "err": [
+      "adAccountId.warehouse must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$\"",
+      " must match \"then\" schema",
       "adAccountId.warehouse must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$\""
     ]
   },
@@ -49,9 +45,7 @@
       "adAccountId": {
         "warehouse": "0000000"
       },
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "000000",
       "audienceType": "gum",
       "gumCallerId": "",
       "rudderAccountId": "test-host"
@@ -60,15 +54,12 @@
     "err": [
       "gumCallerId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[0-9]+$\"",
       " must match \"then\" schema",
-      " must match a schema in anyOf",
-      "gumCallerId must match pattern \"^[0-9]+$\""
+      " must match a schema in anyOf"
     ]
   },
   {
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "000000",
       "audienceType": "gum",
       "adAccountId": {
         "warehouse": "0000000"
@@ -81,14 +72,11 @@
   {
     "testTitle": "With valid multiple consent management providers config",
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "000000",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
       },
-      "gumCallerId": "00000",
       "consentManagement": {
         "web": [
           {
@@ -132,16 +120,13 @@
   {
     "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "000000",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
       },
-      "gumCallerId": "00000",
       "consentManagement": {
-        "shopify": [
+        "warehouse": [
           {
             "provider": "custom",
             "resolutionStrategy": "nor"
@@ -152,23 +137,20 @@
     },
     "result": false,
     "err": [
-      "consentManagement.shopify.0.resolutionStrategy must be equal to one of the allowed values",
-      "consentManagement.shopify.0 must match \"then\" schema"
+      "consentManagement.warehouse.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.warehouse.0 must match \"then\" schema"
     ]
   },
   {
     "testTitle": "With consent management custom provider config and no resolutionStrategy value",
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "000000",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
       },
-      "gumCallerId": "00000",
       "consentManagement": {
-        "shopify": [
+        "warehouse": [
           {
             "provider": "custom"
           }
@@ -178,21 +160,18 @@
     },
     "result": false,
     "err": [
-      "consentManagement.shopify.0 must have required property 'resolutionStrategy'",
-      "consentManagement.shopify.0 must match \"then\" schema"
+      "consentManagement.warehouse.0 must have required property 'resolutionStrategy'",
+      "consentManagement.warehouse.0 must match \"then\" schema"
     ]
   },
   {
     "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "000000",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
       },
-      "gumCallerId": "00000",
       "consentManagement": {
         "shopify": [
           {
@@ -207,16 +186,13 @@
   {
     "testTitle": "With consent management custom provider config invalid provider value",
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "000000",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
       },
-      "gumCallerId": "00000",
       "consentManagement": {
-        "shopify": [
+        "warehouse": [
           {
             "provider": "dummyProvider"
           }
@@ -225,19 +201,19 @@
       "rudderAccountId": "test-host"
     },
     "result": false,
-    "err": ["consentManagement.shopify.0.provider must be equal to one of the allowed values"]
+    "err": ["consentManagement.warehouse.0.provider must be equal to one of the allowed values"]
   },
   {
-    "testTitle": "Without audienceId",
+    "testTitle": "With audienceId",
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "000000",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
       },
-      "gumCallerId": "00000",
+      "connectionMode": {
+        "cloud": "cloud"
+      },
       "oneTrustCookieCategories": {
         "cloud": [
           {
@@ -290,14 +266,11 @@
   },
   {
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "000000",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
       },
-      "gumCallerId": "00000",
       "oneTrustCookieCategories": {
         "cloud": [],
         "warehouse": [
@@ -335,22 +308,21 @@
       "adAccountId": {
         "warehouse": "0000000"
       },
-      "gumCallerId": "53445",
+      "connectionMode": {
+        "warehouse": "cloud"
+      },
       "rudderAccountId": "test-host"
     },
     "result": false,
-    "err": [" must have required property 'audienceId'"]
+    "err": [" must have required property 'audienceId'", " must match \"then\" schema"]
   },
   {
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "000000",
       "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
       },
-      "gumCallerId": "53445",
       "oneTrustCookieCategories": [
         {
           "oneTrustCookieCategory": "C0001"
@@ -374,35 +346,24 @@
   },
   {
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
+      "audienceId": "000000",
       "audienceType": "email",
-      "gumCallerId": "532445",
+      "connectionMode": {
+        "warehouse": "cloud"
+      },
       "rudderAccountId": "test-host"
     },
     "result": false,
-    "err": [" must have required property 'adAccountId'"]
+    "err": [" must have required property 'adAccountId'", " must match \"then\" schema"]
   },
   {
     "testTitle": "Without gumCallerId",
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
-      "gumCallerId": "00000",
+      "audienceId": "000000",
       "adAccountId": {
         "warehouse": "0000000"
       },
       "oneTrustCookieCategories": {
-        "cloud": [
-          {
-            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-          },
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ],
         "warehouse": [
           {
             "oneTrustCookieCategory": {
@@ -412,20 +373,9 @@
           {
             "oneTrustCookieCategory": "C0004"
           }
-        ],
-        "shopify": {
-          "not": "an array"
-        }
+        ]
       },
       "ketchConsentPurposes": {
-        "cloud": [
-          {
-            "purpose": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-          },
-          {
-            "purpose": "P4"
-          }
-        ],
         "warehouse": [
           {
             "purpose": {
@@ -435,48 +385,24 @@
           {
             "purpose": "P4"
           }
-        ],
-        "shopify": {
-          "not": "an array"
-        }
+        ]
       },
       "rudderAccountId": "test-host"
     },
     "result": false,
     "err": [
-      "oneTrustCookieCategories.cloud.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
       "oneTrustCookieCategories.warehouse.0.oneTrustCookieCategory must be string",
-      "oneTrustCookieCategories.shopify must be array",
-      "ketchConsentPurposes.cloud.0.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
-      "ketchConsentPurposes.warehouse.0.purpose must be string",
-      "ketchConsentPurposes.shopify must be array"
+      "ketchConsentPurposes.warehouse.0.purpose must be string"
     ]
   },
   {
     "config": {
-      "audienceId": {
-        "cloud": "000000"
-      },
-      "audienceType": "email",
       "adAccountId": {
         "warehouse": "0000000"
       },
-      "rudderAccountId": "test-host"
-    },
-    "result": false,
-    "err": [" must have required property 'gumCallerId'"]
-  },
-  {
-    "config": {
-      "adAccountId": {
-        "warehouse": "0000000"
-      },
-      "audienceId": {
-        "cloud": "000000"
-      },
-      "gumCallerId": "00000",
+      "audienceId": "000000",
       "oneTrustCookieCategories": {
-        "cloud": [
+        "warehouse": [
           "not an object",
           {
             "oneTrustCookieCategory": "C0004"
@@ -484,7 +410,7 @@
         ]
       },
       "ketchConsentPurposes": {
-        "cloud": [
+        "warehouse": [
           "not an object",
           {
             "purpose": "P4"
@@ -495,8 +421,8 @@
     },
     "result": false,
     "err": [
-      "oneTrustCookieCategories.cloud.0 must be object",
-      "ketchConsentPurposes.cloud.0 must be object"
+      "oneTrustCookieCategories.warehouse.0 must be object",
+      "ketchConsentPurposes.warehouse.0 must be object"
     ]
   }
 ]
