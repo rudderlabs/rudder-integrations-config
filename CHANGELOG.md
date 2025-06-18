@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.116.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.116.1...v1.116.2) (2025-06-18)
+
+
+### Bug Fixes
+
+* increase length limit for host in postgres destination ([32910ea](https://github.com/rudderlabs/rudder-config-schema/commit/32910ea072028c55e22183d6a0c6a5ceb6ba2c26))
+* increase length limit for host in postgres destination ([#2062](https://github.com/rudderlabs/rudder-config-schema/issues/2062)) ([6acba41](https://github.com/rudderlabs/rudder-config-schema/commit/6acba415d6b2e6b28643d38cdb7f9d21c1751c6f))
+
 ### [1.116.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.116.0...v1.116.1) (2025-06-17)
 
 
