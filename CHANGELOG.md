@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.117.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.116.1...v1.117.0) (2025-06-23)
+
+
+### Features
+
+* **zoho:** remove region from the zoho configs ([#2067](https://github.com/rudderlabs/rudder-config-schema/issues/2067)) ([79349f6](https://github.com/rudderlabs/rudder-config-schema/commit/79349f6ae1f238cde013980d319cba51abd2a5ac))
+
+
+### Bug Fixes
+
+* criteo audience incorrect schema ([#2044](https://github.com/rudderlabs/rudder-config-schema/issues/2044)) ([b5111e8](https://github.com/rudderlabs/rudder-config-schema/commit/b5111e823f5d573f127180e734b4510d57d8371b))
+* increase length limit for host in postgres destination ([#2062](https://github.com/rudderlabs/rudder-config-schema/issues/2062)) ([6acba41](https://github.com/rudderlabs/rudder-config-schema/commit/6acba415d6b2e6b28643d38cdb7f9d21c1751c6f))
+* team slum while checking membership ([9146d3a](https://github.com/rudderlabs/rudder-config-schema/commit/9146d3a2864050192ab89cfcb79a25e01ae5a7a2))
+
 ### [1.116.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.116.1...v1.116.2) (2025-06-18)
 
 
