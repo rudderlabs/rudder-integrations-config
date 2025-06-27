@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import requests
 import json
 import os
 import sys
@@ -26,6 +25,25 @@ def get_command_line_arguments():
     parser.add_argument("password", nargs="?", help="Control plane admin password")
     parser.add_argument(
         "definition_name", nargs="?", help="Specific item name to update.", default=None
+    )
+    parser.add_argument(
+        "--dry-run",
+        dest="dry_run",
+        action="store_true",
+        help="Show what would be changed without making actual changes to the database",
+        default=True,
+    )
+    parser.add_argument(
+        "--no-dry-run",
+        dest="dry_run",
+        action="store_false",
+        help="Make actual changes to the database",
+    )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="Show detailed JSON reports in addition to summary",
+        default=False,
     )
 
     args = parser.parse_args()
@@ -56,10 +74,97 @@ def get_command_line_arguments():
             print(arg)
         sys.exit(1)
 
-    return control_plane_url, username, password, definition_name
+    return control_plane_url, username, password, definition_name, args.dry_run, args.verbose
 
 
-def update_account_db(base_url, auth, definition_name=None):
+def log_execution_plan(control_plane_url, username, password, definition_name, dry_run):
+    """Log detailed execution plan showing what would happen in normal mode"""
+    print("=" * 70)
+    print("EXECUTION PLAN")
+    print("=" * 70)
+    print(f"Control Plane URL: {control_plane_url}")
+    print(f"Username: {username}")
+    print(f"Password: {'*' * len(password)}")
+    if definition_name:
+        print(f"Specific account: {definition_name}")
+    else:
+        print("Processing: ALL account configurations")
+
+    print("\nWhat would happen in NORMAL mode:")
+    print("1. Connect to the control plane database")
+    print("2. Fetch existing account definitions from database")
+    print("3. Scan local account configuration directories:")
+    print("   - ./src/configurations/destinations/*/accounts/*")
+    print("   - ./src/configurations/sources/*/accounts/*")
+    print("4. For each account configuration found:")
+    print("   a) Compare local vs remote configurations")
+    print("   b) If differences found: UPDATE the database record")
+    print("   c) If not found in database: CREATE new database record")
+    print("5. All changes would be PERMANENTLY applied to the database")
+
+    if dry_run:
+        print("\nDRY RUN MODE ACTIVE:")
+        print("- Database connections will be made ONLY to fetch existing data")
+        print("- NO account data will be modified")
+        print("- Local configurations will be analyzed and compared")
+        print("- Reports will show what WOULD be changed")
+
+    print("=" * 70)
+
+
+def print_summary(final_report, dry_run=False, control_plane_url="", username=""):
+    """Print user-friendly summary of account deployment results"""
+    print("\n")
+    print("#" * 50)
+    if dry_run:
+        print("Account Summary - What Would Happen")
+    else:
+        print("Account Summary - What Happened")
+    print("#" * 50)
+
+    creates = [item for item in final_report if "create" in item["action"]]
+    updates = [item for item in final_report if "update" in item["action"]]
+    no_changes = [item for item in final_report if item["action"] == "N/A"]
+
+    print(f"📊 Total account configurations processed: {len(final_report)}")
+    if dry_run:
+        print(f"🆕 Would CREATE: {len(creates)} new accounts")
+        print(f"🔄 Would UPDATE: {len(updates)} existing accounts")
+        print(f"✅ No changes needed: {len(no_changes)} accounts")
+    else:
+        print(f"🆕 CREATED: {len(creates)} new accounts")
+        print(f"🔄 UPDATED: {len(updates)} existing accounts")
+        print(f"✅ No changes needed: {len(no_changes)} accounts")
+
+    if creates:
+        if dry_run:
+            print(f"\n🆕 New accounts that would be CREATED:")
+        else:
+            print(f"\n🆕 New accounts that were CREATED:")
+        for item in creates:
+            print(f"   - {item['name']}")
+
+    if updates:
+        if dry_run:
+            print(f"\n🔄 Accounts that would be UPDATED:")
+        else:
+            print(f"\n🔄 Accounts that were UPDATED:")
+        for item in updates:
+            print(f"   - {item['name']}")
+
+    if dry_run:
+        print(f"\n⚠️  In normal mode, these changes would be PERMANENT!")
+        print(f"🌐 Database: {control_plane_url}")
+        print(f"👤 User: {username}")
+        print(f"🔍 To run this script in normal mode, use the --no-dry-run flag")
+    else:
+        print(f"\n✅ All changes have been applied to the database!")
+        print(f"🌐 Database: {control_plane_url}")
+        print(f"👤 User: {username}")
+    print("#" * 50)
+
+
+def update_account_db(base_url, auth, definition_name=None, dry_run=False):
     """
     Update account definitions in the database.
 
@@ -67,6 +172,7 @@ def update_account_db(base_url, auth, definition_name=None):
         base_url: Control plane URL
         auth: Authentication tuple (username, password)
         definition_name: Optional specific item name to update
+        dry_run: If True, show what would be changed without making actual changes
 
     Returns:
         List of dictionaries with update results
@@ -74,7 +180,10 @@ def update_account_db(base_url, auth, definition_name=None):
     final_report = []
 
     # Get existing account definitions from the control plane
-    persisted_data = get_config_definition(base_url, "accounts", "", auth)
+ 
+    print("🔍 Fetching existing account definitions...")
+
+    persisted_data = get_config_definition(base_url, "account", auth=auth)
     if persisted_data.status_code == 200:
         account_definitions = json.loads(persisted_data.text)
     else:
@@ -145,34 +254,35 @@ def update_account_db(base_url, auth, definition_name=None):
                         continue
 
                     account_name = updated_data["name"]
-
-                    # Check if account already exists
+                        # Check if account already exists
                     if account_name in account_map:
                         # Update existing account if there are changes
                         existing_account = account_map[account_name]
                         diff = jsondiff.diff(
                             existing_account, updated_data, marshal=True
                         )
+                        diff.pop("$delete", None)
 
                         if diff and len(diff.keys()) > 0:
-                            status, response = update_config_definition(
-                                base_url, "accounts", account_name, updated_data, auth
+                            status, _ = update_config_definition(
+                                base_url, "account", account_name, updated_data, method="PUT", auth=auth, dry_run=dry_run
                             )
                             final_report.append(
                                 {
                                     "name": account_name,
                                     "action": "update",
                                     "status": status,
+                                    "diff": diff if dry_run else None
                                 }
                             )
                         else:
                             final_report.append(
-                                {"name": account_name, "action": "N/A", "status": ""}
+                                {"name": account_name, "action": "N/A", "status": "No changes detected"}
                             )
                     else:
                         # Create new account
-                        status, response = create_config_definition(
-                            base_url, "accounts", updated_data, auth
+                        status, _ = create_config_definition(
+                            base_url, "accounts", updated_data, auth, dry_run=dry_run
                         )
                         final_report.append(
                             {"name": account_name, "action": "create", "status": status}
@@ -186,37 +296,43 @@ def update_account_db(base_url, auth, definition_name=None):
 
 if __name__ == "__main__":
     # Get command line arguments
-    CONTROL_PLANE_URL, USERNAME, PASSWORD, DEFINITION_NAME = (
+    CONTROL_PLANE_URL, USERNAME, PASSWORD, DEFINITION_NAME, DRY_RUN, VERBOSE = (
         get_command_line_arguments()
     )
     AUTH = (USERNAME, PASSWORD)
 
+    # Log execution plan first
+    log_execution_plan(CONTROL_PLANE_URL, USERNAME, PASSWORD, DEFINITION_NAME, DRY_RUN)
+
+
+    if DRY_RUN:
+        print("\n" + "=" * 60)
+        print("DRY RUN MODE - No changes will be made to the database")
+        print("=" * 60)
+
+    print("\n")
     print("#" * 50)
-    print("Deploying Account Definitions")
+    mode_text = " (DRY RUN)" if DRY_RUN else ""
+    print("Deploying Account Definitions{}".format(mode_text))
     print("#" * 50)
 
     # Update account definitions
-    final_report = update_account_db(CONTROL_PLANE_URL, AUTH, DEFINITION_NAME)
+    final_report = update_account_db(CONTROL_PLANE_URL, AUTH, DEFINITION_NAME, DRY_RUN)
 
-    print("\n")
-    print("#" * 50)
-    print("Account Definition Update Report")
-    print(get_formatted_json(final_report))
+    # Always show summary first (most important for users)
+    print_summary(final_report, DRY_RUN, CONTROL_PLANE_URL, USERNAME)
 
-    # Count statistics
-    created = sum(1 for item in final_report if item["action"] == "create")
-    updated = sum(1 for item in final_report if item["action"] == "update")
-    unchanged = sum(1 for item in final_report if item["action"] == "N/A")
+    # Show detailed reports only when verbose flag is used
+    if VERBOSE:
+        print("\n")
+        print("#" * 50)
+        print("Account Definition Update Report{}".format(mode_text))
+        print(get_formatted_json(final_report))
 
-    print("\n")
-    print("#" * 50)
-    print("Summary:")
-    print(f"  Total accounts processed: {len(final_report)}")
-    print(f"  Created: {created}")
-    print(f"  Updated: {updated}")
-    print(f"  Unchanged: {unchanged}")
-    print("#" * 50)
-
-    # Exit with error if any account failed to update
-    failed = any(item["status"] not in ["", 200, 201] for item in final_report)
-    sys.exit(1 if failed else 0)
+    # Exit with error if any account failed to update (but not in dry run mode)
+    if not DRY_RUN:
+        failed = any(item["status"] not in ["", 200, 201, "No changes detected"] for item in final_report)
+        sys.exit(1 if failed else 0)
+    else:
+        # In dry run mode, always exit successfully
+        sys.exit(0)
