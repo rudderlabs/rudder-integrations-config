@@ -1,3 +1,5 @@
+# .github/workflows/create-hotfix-branch.yml
+
 name: Create New Hotfix Branch
 
 on:
@@ -12,10 +14,44 @@ jobs:
     name: Create New Branch
     runs-on: ubuntu-latest
 
-    # Only allow release stakeholders to initiate releases
-    if: github.ref == 'refs/heads/main' && (github.actor == 'ItsSudip' || github.actor == 'krishna2020' || github.actor == 'lvrach' || github.actor == 'cisse21' || github.actor == 'debanjan97' || github.actor == 'saikumarrs' || github.actor == 'sandeepdsvs' || github.actor == 'utsabc' || github.actor == 'yashasvibajpai' || github.actor == 'maheshkutty' || github.actor == 'manish339k') && (github.triggering_actor == 'ItsSudip' || github.triggering_actor == 'krishna2020' || github.triggering_actor == 'lvrach' || github.triggering_actor == 'cisse21' || github.triggering_actor == 'debanjan97' || github.triggering_actor == 'saikumarrs' || github.triggering_actor == 'sandeepdsvs' || github.triggering_actor == 'utsabc' || github.triggering_actor == 'yashasvibajpai' || github.triggering_actor == 'maheshkutty' || github.triggering_actor == 'manish339k')
     steps:
+      - name: Check team membership or allowlist
+        id: check_access
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const allowedActors = [
+              "ItsSudip", "krishna2020", "lvrach", "cisse21", "debanjan97",
+              "saikumarrs", "sandeepdsvs", "utsabc", "yashasvibajpai",
+              "maheshkutty", "manish339k"
+            ];
+            const org = context.repo.owner;
+            const team_slug = "integrations";
+            const actor = context.actor || context.triggering_actor;
+
+            // Try team membership check
+            let isTeamMember = false;
+            try {
+              const res = await github.rest.teams.getMembershipForUserInOrg({
+                org,
+                team_slug,
+                username: actor
+              });
+              isTeamMember = res.data.state === "active";
+            } catch (e) {
+              // Not a member or team not found
+              isTeamMember = false;
+            }
+
+            // Fallback: static allowlist
+            if (!isTeamMember && !allowedActors.includes(actor)) {
+              throw new Error(`${actor} is not allowed to run this workflow`);
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create Branch
+        if: success()
         uses: peterjgrainger/action-create-branch@08259812c8ebdbf1973747f9297e332fa078d3c1 # v2.4.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
