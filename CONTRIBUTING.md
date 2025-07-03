@@ -5,13 +5,96 @@ Thanks for taking the time and for your help in improving this project!
 ## Table of contents
 
 - [**RudderStack Contributor Agreement**](#rudderstack-contributor-agreement)
+- [**UI Configuration Development Requirements**](#ui-configuration-development-requirements)
 - [**How you can contribute to RudderStack**](#how-you-can-contribute-to-rudderstack)
 - [**Committing**](#committing)
 - [**Getting help**](#getting-help)
 
 ## RudderStack Contributor Agreement
 
-To contribute to this project, we need you to sign the [**Contributor License Agreement (“CLA”)**][CLA] for the first commit you make. By agreeing to the [**CLA**][CLA], we can add you to list of approved contributors and review the changes proposed by you.
+To contribute to this project, we need you to sign the [**Contributor License Agreement ("CLA")**][CLA] for the first commit you make. By agreeing to the [**CLA**][CLA], we can add you to list of approved contributors and review the changes proposed by you.
+
+## UI Configuration Development Requirements
+
+### **UI Configuration Structure**
+
+**Important**: All new `ui-config.json` files must follow the required structure.
+
+#### **What Each Element Means**
+
+- **`baseTemplate`**: The main configuration sections that users will see and interact with
+- **`sections`**: Groups of related settings (like connection settings, configuration settings)
+- **`groups`**: Visual containers that organize fields within a section
+- **`fields`**: Individual form inputs that users fill out
+- **`sdkTemplate`**: Settings specific to web SDK integration (hidden from UI)
+- **`consentSettingsTemplate`**: Consent management configuration (hidden from UI)
+
+#### **Required Structure**
+
+```json
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "icon": "settings",
+                "fields": [
+                  // Your form fields here
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": []
+    }
+  }
+}
+```
+
+#### **Field Properties Explained**
+
+- **`type`**: Determines the input field type (textInput, checkbox, singleSelect, etc.)
+- **`label`**: The text displayed above the field
+- **`configKey`**: The key used to store the field value in the database
+- **`required`**: Whether the field must be filled out
+- **`secret`**: Whether the field value should be hidden (like passwords)
+- **`placeholder`**: Hint text shown inside the field
+- **`regex`**: Validation pattern for the field value
+- **`options`**: Available choices for select fields
+
+#### **Field Type Examples**
+
+```json
+{
+  "type": "textInput",
+  "label": "API Key",
+  "configKey": "apiKey",
+  "required": true,
+  "secret": true
+}
+```
+
+#### **Examples**
+
+See `src/configurations/destinations/http/ui-config.json` for a complete example.
+
+**Reference**: For a comprehensive example, see `src/configurations/destinations/fullstory/ui-config.json`.
 
 ## How you can contribute a destination to this project
 
