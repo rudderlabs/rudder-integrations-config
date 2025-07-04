@@ -26,7 +26,8 @@
       },
       "namespace": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{1,64})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{1,64})$",
+        "rs-immutable": true
       },
       "skipTracksTable": {
         "type": "boolean",
@@ -43,6 +44,11 @@
       "privateKeyPassphrase": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "enableIceberg": {
+        "type": "boolean",
+        "default": false,
+        "rs-immutable": true
       },
       "oneTrustCookieCategories": {
         "type": "object",
@@ -879,6 +885,23 @@
         }
       }
     },
+    "anyOf": [
+      {
+        "if": {
+          "properties": { "enableIceberg": { "const": true } },
+          "required": ["enableIceberg"]
+        },
+        "then": {
+          "properties": {
+            "externalVolume": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["externalVolume"]
+        }
+      }
+    ],
     "additionalProperties": true
   }
 }
