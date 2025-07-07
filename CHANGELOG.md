@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.118.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.117.0...v1.118.0) (2025-07-07)
+
+
+### Features
+
+* add new mapping for tiktok ads ([#2078](https://github.com/rudderlabs/rudder-config-schema/issues/2078)) ([095b916](https://github.com/rudderlabs/rudder-config-schema/commit/095b916a9b8e9315cf0dfa22beffb78e3c919654))
+* onboard postscript destination ([#2073](https://github.com/rudderlabs/rudder-config-schema/issues/2073)) ([5d0adb8](https://github.com/rudderlabs/rudder-config-schema/commit/5d0adb8db4370d228f16b55bcfb2ea84b1d502a3))
+* support for iceberg tables in snowpipe streaming destination ([#2051](https://github.com/rudderlabs/rudder-config-schema/issues/2051)) ([b77df27](https://github.com/rudderlabs/rudder-config-schema/commit/b77df27b2b304c6ba446bf4e1ddc0002eab9d4a8))
+
+
+### Bug Fixes
+
+* remove unused client side filtering in fb conversions ([#2076](https://github.com/rudderlabs/rudder-config-schema/issues/2076)) ([f2b8ec5](https://github.com/rudderlabs/rudder-config-schema/commit/f2b8ec5009ad64294396a358fc870f5313ef5dc3))
+
 ## [1.117.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.116.1...v1.117.0) (2025-06-23)
 
 
