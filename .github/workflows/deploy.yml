@@ -72,7 +72,7 @@ jobs:
           API_USER: ${{ secrets.API_USERNAME }}
           API_PASSWORD: ${{ secrets.API_PASSWORD }}
         run: |
-          python scripts/deployAccountsToDB.py ${{ inputs.deploy_url }}
+          python scripts/deployAccountsToDB.py --no-dry-run ${{ inputs.deploy_url }}
         continue-on-error: false
 
       - name: Deploy Destination & Source Definitions To DB
@@ -80,7 +80,7 @@ jobs:
           API_USER: ${{ secrets.API_USERNAME }}
           API_PASSWORD: ${{ secrets.API_PASSWORD }}
         run: |
-          python scripts/deployToDB.py ${{ inputs.deploy_url }}
+          python scripts/deployToDB.py --no-dry-run ${{ inputs.deploy_url }}
 
       - name: Notify Slack Channel
         id: slack
