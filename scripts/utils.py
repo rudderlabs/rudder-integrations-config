@@ -3,6 +3,113 @@ from jsondiff import JsonDiffer
 from constants import REQUEST_TIMEOUT, HEADER
 import os
 import json
+import datetime
+
+
+def generate_curl_command(method, url, headers=None, data=None, auth=None):
+    """Generate equivalent curl command for the API request."""
+    curl_parts = ["curl"]
+
+    # Add method
+    if method.upper() != "GET":
+        curl_parts.append(f"-X {method.upper()}")
+
+    # Add headers
+    if headers:
+        for key, value in headers.items():
+            curl_parts.append(f'-H "{key}: {value}"')
+
+    # Add authentication
+    if auth:
+        curl_parts.append(f'--user "{auth[0]}:{auth[1]}"')
+
+    # Add data for POST/PUT requests
+    if data and method.upper() in ["POST", "PUT", "PATCH"]:
+        # Properly escape JSON data for curl
+        if isinstance(data, str):
+            json_data = data
+        else:
+            json_data = json.dumps(data)
+
+        # Use single quotes to avoid escaping issues
+        curl_parts.append(f"--data '{json_data}'")
+
+    # Add URL (last)
+    curl_parts.append(f'"{url}"')
+
+    return " \\\n  ".join(curl_parts)
+
+
+def log_api_request(
+    method, url, headers=None, data=None, auth=None, response=None, to_file=False
+):
+    """Log API request details for debugging purposes."""
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    log_content = []
+    log_content.append(f"\n🔍 API Request Debug [{timestamp}]:")
+    log_content.append(f"   Method: {method}")
+    log_content.append(f"   URL: {url}")
+    if headers:
+        log_content.append(f"   Headers: {json.dumps(headers, indent=4)}")
+    if auth:
+        log_content.append(f"   Auth: {auth[0]}:***")
+    if data:
+        if isinstance(data, str):
+            try:
+                parsed_data = json.loads(data)
+                log_content.append(
+                    f"   Request Body: {json.dumps(parsed_data, indent=4)}"
+                )
+            except json.JSONDecodeError:
+                log_content.append(f"   Request Body: {data}")
+        else:
+            log_content.append(f"   Request Body: {json.dumps(data, indent=4)}")
+
+    # Add curl command
+    curl_command = generate_curl_command(method, url, headers, data, auth)
+    log_content.append(f"\n   🔧 Equivalent curl command:")
+    log_content.append(f"   {curl_command}")
+
+    if response:
+        log_content.append(f"\n   Response Status: {response.status_code}")
+        log_content.append(f"   Response Headers: {dict(response.headers)}")
+        try:
+            if response.text:
+                log_content.append(
+                    f"   Response Body: {json.dumps(response.json(), indent=4)}"
+                )
+        except (json.JSONDecodeError, ValueError):
+            log_content.append(f"   Response Body: {response.text}")
+    log_content.append("-" * 50)
+
+    # Write to debug.log file if requested (skip console output)
+    if to_file:
+        try:
+            with open("debug.log", "a", encoding="utf-8") as f:
+                for line in log_content:
+                    f.write(line + "\n")
+                f.write("\n")  # Extra newline for readability
+        except Exception as e:
+            print(f"Warning: Could not write to debug.log: {e}")
+    else:
+        # Print to console only if not writing to file
+        for line in log_content:
+            print(line)
+
+
+def initialize_debug_log():
+    """Initialize or clear the debug.log file at the start of execution."""
+    try:
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        with open("debug.log", "w", encoding="utf-8") as f:
+            f.write(f"=== DEBUG LOG STARTED [{timestamp}] ===\n")
+            f.write("=" * 60 + "\n\n")
+        print("📝 Debug logging enabled - logs will be written to debug.log")
+        return True
+    except Exception as e:
+        print(f"Warning: Could not initialize debug.log: {e}")
+        return False
 
 
 def get_json_diff(oldJson, newJson):
@@ -63,19 +170,29 @@ def is_old_format(uiConfig):
         return False
     return True
 
+
 def parse_response(resp):
     if resp.status_code >= 200 and resp.status_code <= 300:
         return resp.status_code, resp.json()
     else:
         return resp.status_code, str(resp.content)
 
-def get_config_definition(base_url, selector, name="", auth=None):
+
+def get_config_definition(base_url, selector, name="", auth=None, verbose=False):
     request_url = f"{base_url}/{selector}-definitions/{name}".rstrip("/")
+
+    if verbose:
+        log_api_request("GET", request_url, auth=auth, to_file=True)
+
     response = requests.get(
         request_url,
         timeout=REQUEST_TIMEOUT,
         auth=auth,
     )
+
+    if verbose:
+        log_api_request("GET", request_url, auth=auth, response=response, to_file=True)
+
     return response
 
 
@@ -94,11 +211,43 @@ def get_file_content(directory):
     return file_content
 
 
-def update_config_definition(base_url, selector, name, fileData, method="POST", auth=None, dry_run=False):
+def update_config_definition(
+    base_url,
+    selector,
+    name,
+    fileData,
+    method="POST",
+    auth=None,
+    dry_run=False,
+    verbose=False,
+):
     if dry_run:
-        return "DRY RUN - Would update", {"message": "Dry run mode - no actual update performed"}
+        if verbose:
+            url = f"{base_url}/{selector}-definitions/{name}"
+            log_api_request(
+                method,
+                url,
+                headers=HEADER,
+                data=json.dumps(fileData),
+                auth=auth,
+                to_file=True,
+            )
+        return "DRY RUN - Would update", {
+            "message": "Dry run mode - no actual update performed"
+        }
 
     url = f"{base_url}/{selector}-definitions/{name}"
+
+    if verbose:
+        log_api_request(
+            method,
+            url,
+            headers=HEADER,
+            data=json.dumps(fileData),
+            auth=auth,
+            to_file=True,
+        )
+
     resp = requests.request(
         method=method,
         url=url,
@@ -107,14 +256,51 @@ def update_config_definition(base_url, selector, name, fileData, method="POST", 
         auth=auth,
         timeout=REQUEST_TIMEOUT,
     )
+
+    if verbose:
+        log_api_request(
+            method,
+            url,
+            headers=HEADER,
+            data=json.dumps(fileData),
+            auth=auth,
+            response=resp,
+            to_file=True,
+        )
+
     return parse_response(resp)
 
 
-def create_config_definition(base_url, selector, fileData, auth, dry_run=False):
+def create_config_definition(
+    base_url, selector, fileData, auth, dry_run=False, verbose=False
+):
     if dry_run:
-        return "DRY RUN - Would create", {"message": "Dry run mode - no actual creation performed"}
+        if verbose:
+            url = f"{base_url}/{selector}-definitions/"
+            log_api_request(
+                "POST",
+                url,
+                headers=HEADER,
+                data=json.dumps(fileData),
+                auth=auth,
+                to_file=True,
+            )
+        return "DRY RUN - Would create", {
+            "message": "Dry run mode - no actual creation performed"
+        }
 
     url = f"{base_url}/{selector}-definitions/"
+
+    if verbose:
+        log_api_request(
+            "POST",
+            url,
+            headers=HEADER,
+            data=json.dumps(fileData),
+            auth=auth,
+            to_file=True,
+        )
+
     resp = requests.post(
         url=url,
         headers=HEADER,
@@ -122,4 +308,16 @@ def create_config_definition(base_url, selector, fileData, auth, dry_run=False):
         auth=auth,
         timeout=REQUEST_TIMEOUT,
     )
+
+    if verbose:
+        log_api_request(
+            "POST",
+            url,
+            headers=HEADER,
+            data=json.dumps(fileData),
+            auth=auth,
+            response=resp,
+            to_file=True,
+        )
+
     return parse_response(resp)
