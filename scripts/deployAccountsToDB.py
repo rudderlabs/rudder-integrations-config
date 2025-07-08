@@ -74,7 +74,14 @@ def get_command_line_arguments():
             print(arg)
         sys.exit(1)
 
-    return control_plane_url, username, password, definition_name, args.dry_run, args.verbose
+    return (
+        control_plane_url,
+        username,
+        password,
+        definition_name,
+        args.dry_run,
+        args.verbose,
+    )
 
 
 def log_execution_plan(control_plane_url, username, password, definition_name, dry_run):
@@ -180,7 +187,7 @@ def update_account_db(base_url, auth, definition_name=None, dry_run=False):
     final_report = []
 
     # Get existing account definitions from the control plane
- 
+
     print("🔍 Fetching existing account definitions...")
 
     persisted_data = get_config_definition(base_url, "account", auth=auth)
@@ -254,7 +261,7 @@ def update_account_db(base_url, auth, definition_name=None, dry_run=False):
                         continue
 
                     account_name = updated_data["name"]
-                        # Check if account already exists
+                    # Check if account already exists
                     if account_name in account_map:
                         # Update existing account if there are changes
                         existing_account = account_map[account_name]
@@ -265,24 +272,34 @@ def update_account_db(base_url, auth, definition_name=None, dry_run=False):
 
                         if diff and len(diff.keys()) > 0:
                             status, _ = update_config_definition(
-                                base_url, "account", account_name, updated_data, method="PUT", auth=auth, dry_run=dry_run
+                                base_url,
+                                "account",
+                                account_name,
+                                updated_data,
+                                method="PUT",
+                                auth=auth,
+                                dry_run=dry_run,
                             )
                             final_report.append(
                                 {
                                     "name": account_name,
                                     "action": "update",
                                     "status": status,
-                                    "diff": diff if dry_run else None
+                                    "diff": diff if dry_run else None,
                                 }
                             )
                         else:
                             final_report.append(
-                                {"name": account_name, "action": "N/A", "status": "No changes detected"}
+                                {
+                                    "name": account_name,
+                                    "action": "N/A",
+                                    "status": "No changes detected",
+                                }
                             )
                     else:
                         # Create new account
                         status, _ = create_config_definition(
-                            base_url, "accounts", updated_data, auth, dry_run=dry_run
+                            base_url, "account", updated_data, auth, dry_run=dry_run
                         )
                         final_report.append(
                             {"name": account_name, "action": "create", "status": status}
@@ -303,7 +320,6 @@ if __name__ == "__main__":
 
     # Log execution plan first
     log_execution_plan(CONTROL_PLANE_URL, USERNAME, PASSWORD, DEFINITION_NAME, DRY_RUN)
-
 
     if DRY_RUN:
         print("\n" + "=" * 60)
@@ -331,7 +347,10 @@ if __name__ == "__main__":
 
     # Exit with error if any account failed to update (but not in dry run mode)
     if not DRY_RUN:
-        failed = any(item["status"] not in ["", 200, 201, "No changes detected"] for item in final_report)
+        failed = any(
+            item["status"] not in ["", 200, 201, "No changes detected"]
+            for item in final_report
+        )
         sys.exit(1 if failed else 0)
     else:
         # In dry run mode, always exit successfully
