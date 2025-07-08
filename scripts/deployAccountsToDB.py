@@ -11,6 +11,7 @@ from utils import (
     update_config_definition,
     create_config_definition,
     get_formatted_json,
+    initialize_debug_log,
 )
 
 BLACK_LIST_DESTINATIONS = ["ZOHO_DEV"]
@@ -84,7 +85,9 @@ def get_command_line_arguments():
     )
 
 
-def log_execution_plan(control_plane_url, username, password, definition_name, dry_run):
+def log_execution_plan(
+    control_plane_url, username, password, definition_name, dry_run, verbose
+):
     """Log detailed execution plan showing what would happen in normal mode"""
     print("=" * 70)
     print("EXECUTION PLAN")
@@ -115,6 +118,13 @@ def log_execution_plan(control_plane_url, username, password, definition_name, d
         print("- NO account data will be modified")
         print("- Local configurations will be analyzed and compared")
         print("- Reports will show what WOULD be changed")
+
+    if verbose:
+        print("\nVERBOSE MODE ACTIVE:")
+        print("- All API requests and responses will be logged to debug.log file")
+        print("- Request details include: method, URL, headers, auth, body")
+        print("- Response details include: status, headers, body")
+        print("- Console output will remain clean (debug logs only in file)")
 
     print("=" * 70)
 
@@ -171,7 +181,9 @@ def print_summary(final_report, dry_run=False, control_plane_url="", username=""
     print("#" * 50)
 
 
-def update_account_db(base_url, auth, definition_name=None, dry_run=False):
+def update_account_db(
+    base_url, auth, definition_name=None, dry_run=False, verbose=False
+):
     """
     Update account definitions in the database.
 
@@ -190,7 +202,9 @@ def update_account_db(base_url, auth, definition_name=None, dry_run=False):
 
     print("🔍 Fetching existing account definitions...")
 
-    persisted_data = get_config_definition(base_url, "account", auth=auth)
+    persisted_data = get_config_definition(
+        base_url, "account", auth=auth, verbose=verbose
+    )
     if persisted_data.status_code == 200:
         account_definitions = json.loads(persisted_data.text)
     else:
@@ -279,6 +293,7 @@ def update_account_db(base_url, auth, definition_name=None, dry_run=False):
                                 method="PUT",
                                 auth=auth,
                                 dry_run=dry_run,
+                                verbose=verbose,
                             )
                             final_report.append(
                                 {
@@ -299,7 +314,12 @@ def update_account_db(base_url, auth, definition_name=None, dry_run=False):
                     else:
                         # Create new account
                         status, _ = create_config_definition(
-                            base_url, "account", updated_data, auth, dry_run=dry_run
+                            base_url,
+                            "account",
+                            updated_data,
+                            auth,
+                            dry_run=dry_run,
+                            verbose=verbose,
                         )
                         final_report.append(
                             {"name": account_name, "action": "create", "status": status}
@@ -318,9 +338,14 @@ if __name__ == "__main__":
     )
     AUTH = (USERNAME, PASSWORD)
 
-    # Log execution plan first
-    log_execution_plan(CONTROL_PLANE_URL, USERNAME, PASSWORD, DEFINITION_NAME, DRY_RUN)
+    # Initialize debug logging if verbose mode is enabled
+    if VERBOSE:
+        initialize_debug_log()
 
+    # Log execution plan first
+    log_execution_plan(
+        CONTROL_PLANE_URL, USERNAME, PASSWORD, DEFINITION_NAME, DRY_RUN, VERBOSE
+    )
     if DRY_RUN:
         print("\n" + "=" * 60)
         print("DRY RUN MODE - No changes will be made to the database")
@@ -333,17 +358,28 @@ if __name__ == "__main__":
     print("#" * 50)
 
     # Update account definitions
-    final_report = update_account_db(CONTROL_PLANE_URL, AUTH, DEFINITION_NAME, DRY_RUN)
+    final_report = update_account_db(
+        CONTROL_PLANE_URL, AUTH, DEFINITION_NAME, DRY_RUN, VERBOSE
+    )
 
     # Always show summary first (most important for users)
     print_summary(final_report, DRY_RUN, CONTROL_PLANE_URL, USERNAME)
 
-    # Show detailed reports only when verbose flag is used
+    # Show detailed reports only when verbose flag is used (write to debug.log)
     if VERBOSE:
-        print("\n")
-        print("#" * 50)
-        print("Account Definition Update Report{}".format(mode_text))
-        print(get_formatted_json(final_report))
+        try:
+            with open("debug.log", "a", encoding="utf-8") as f:
+                f.write(f"\n{'='*50}\n")
+                f.write(f"Account Definition Update Report{mode_text}\n")
+                f.write(f"{'='*50}\n")
+                f.write(get_formatted_json(final_report) + "\n\n")
+        except Exception as e:
+            print(f"Warning: Could not write verbose reports to debug.log: {e}")
+
+    # Show debug log location if verbose mode was used
+    if VERBOSE:
+        print(f"\n📝 Debug logs have been written to: debug.log")
+        print(f"💡 Review this file for detailed API request/response information")
 
     # Exit with error if any account failed to update (but not in dry run mode)
     if not DRY_RUN:
