@@ -8,14 +8,20 @@
           {
             "groups": [
               {
-                "title": "Account authentication",
-                "note": "Connect accounts for the event delivery methods you select below.",
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
                 "icon": "settings",
                 "fields": [
                   {
-                    "type": "accountManagementInput",
-                    "label": "Event delivery account",
-                    "configKey": "rudderAccountId"
+                    "type": "textInput",
+                    "label": "API Key",
+                    "note": "Enter your Postscript API Key",
+                    "configKey": "apiKey",
+                    "regex": "(^env[.].+)|^(.{1,200})$",
+                    "regexErrorMessage": "Invalid API Key",
+                    "placeholder": "e.g: ps_api_key_123456789abcdef",
+                    "secret": true,
+                    "required": true
                   }
                 ]
               }
@@ -28,7 +34,7 @@
                 "note": [
                   "Update how you want to route events from your source to destination. ",
                   {
-                    "text": "Get help deciding.",
+                    "text": "Get help deciding",
                     "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
                   }
                 ],
@@ -54,7 +60,7 @@
       }
     ],
     "sdkTemplate": {
-      "title": "Web SDK settings",
+      "title": "SDK settings",
       "note": "not visible in the ui",
       "fields": []
     },
