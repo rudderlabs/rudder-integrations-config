@@ -12,7 +12,7 @@ permissions:
 env:
   BRANCH_NAME: fix/gh-update-destinations-ts
   SRC_FILE: generated/Destinations.ts
-  DEST_PATH: packages/analytics-js-common/src/constants/integrations/Destinations.ts
+  DEST_PATH: packages/analytics-js-integrations/src/constants/Destinations.ts
 
 jobs:
   check_changes_and_raise_pr:
@@ -44,8 +44,8 @@ jobs:
         if: steps.compare_files.outputs.pr_required == 'true'
         run: |
           cd dest-repo
-          cp "../generated/Destinations.ts" "packages/analytics-js-common/src/constants/integrations/Destinations.ts"
-          git add packages/analytics-js-common/src/constants/integrations/Destinations.ts
+          cp "../generated/Destinations.ts" "packages/analytics-js-integrations/src/constants/Destinations.ts"
+          git add packages/analytics-js-integrations/src/constants/Destinations.ts
           git config --global user.name "GitHub Actions"
           git config --global user.email "noreply@github.com"
           git config --global url."https://${{ secrets.PAT }}@github.com/".insteadOf "https://github.com/"
