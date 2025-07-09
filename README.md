@@ -141,6 +141,7 @@ Both `deployToDB.py` and `deployAccountsToDB.py` scripts support a dry run mode 
 #### Dry Run Usage Examples
 
 **Integration Definitions (deployToDB.py):**
+
 ```bash
 # Dry run for all destinations (summary only)
 python3 ./scripts/deployToDB.py https://api.example.com admin password123 destination --dry-run
@@ -159,6 +160,7 @@ python3 ./scripts/deployToDB.py --dry-run --verbose
 ```
 
 **Account Configurations (deployAccountsToDB.py):**
+
 ```bash
 # Dry run for all account configurations (summary only)
 python3 ./scripts/deployAccountsToDB.py https://api.example.com admin password123 --dry-run
@@ -181,6 +183,7 @@ python3 ./scripts/deployAccountsToDB.py --dry-run --verbose
 **✅ Actions Performed in Dry Run Mode:**
 
 **For Integration Definitions (deployToDB.py):**
+
 - Reads configuration files from the local filesystem
 - Shows execution plan with all parameters
 - Calculates what changes would be made (without database access)
@@ -188,6 +191,7 @@ python3 ./scripts/deployAccountsToDB.py --dry-run --verbose
 - Shows detailed JSON reports when `--verbose` flag is used
 
 **For Account Configurations (deployAccountsToDB.py):**
+
 - Reads account configuration files from local directories
 - Shows execution plan with all parameters
 - Analyzes local account configurations without database comparison
@@ -197,12 +201,14 @@ python3 ./scripts/deployAccountsToDB.py --dry-run --verbose
 **❌ Actions NOT Performed in Dry Run Mode:**
 
 **For Integration Definitions (deployToDB.py):**
+
 - No actual HTTP POST/PUT requests to create or update configurations
 - No modifications to the database
 - No database connections for fetching existing data
 - No changes to existing configurations
 
 **For Account Configurations (deployAccountsToDB.py):**
+
 - No actual HTTP POST/PUT requests to create or update accounts
 - No modifications to the database
 - No database connections for fetching existing account data (in dry run mode)
@@ -213,11 +219,13 @@ python3 ./scripts/deployAccountsToDB.py --dry-run --verbose
 The `--verbose` flag controls the level of detail in the output:
 
 **Default Mode (without --verbose):**
+
 - Shows execution plan
 - Shows user-friendly summary with counts and lists
 - Clean, concise output focused on actionable information
 
 **Verbose Mode (with --verbose):**
+
 - Shows execution plan
 - Shows user-friendly summary
 - **Additionally shows detailed JSON reports:**
@@ -229,6 +237,7 @@ The `--verbose` flag controls the level of detail in the output:
 #### Output Examples
 
 **Integration Definitions - Default Mode Output (Clean & Concise):**
+
 ```
 ======================================================================
 EXECUTION PLAN
@@ -258,6 +267,7 @@ Destination Summary - What Would Happen
 ```
 
 **Account Configurations - Default Mode Output (Clean & Concise):**
+
 ```
 ======================================================================
 EXECUTION PLAN
@@ -290,6 +300,7 @@ Account Summary - What Would Happen
 Shows everything above PLUS:
 
 **For Integration Definitions:**
+
 ```
 ##################################################
 Destination Definition Update Report (DRY RUN)
@@ -317,6 +328,7 @@ Stale Destinations Report
 ```
 
 **For Account Configurations:**
+
 ```
 ##################################################
 Account Definition Update Report (DRY RUN)
@@ -338,6 +350,7 @@ Account Definition Update Report (DRY RUN)
 ```
 
 **Normal Mode Output:**
+
 ```json
 {
   "name": "AMPLITUDE",
@@ -347,6 +360,7 @@ Account Definition Update Report (DRY RUN)
 ```
 
 **Dry Run Mode Output:**
+
 ```json
 {
   "name": "AMPLITUDE",
@@ -365,12 +379,14 @@ Account Definition Update Report (DRY RUN)
 #### Use Cases
 
 **Default Mode (Summary Only):**
+
 - **Quick Validation:** Fast overview of what would change
 - **CI/CD Pipelines:** Clean output for automated systems
 - **Daily Operations:** Quick checks before deployment
 - **Team Updates:** Share concise status reports
 
 **Verbose Mode (Detailed Reports):**
+
 - **Debugging:** Inspect full configuration data and API details
 - **Configuration Review:** Deep dive into specific changes
 - **Troubleshooting:** Understand why configurations might not be updating
@@ -378,6 +394,7 @@ Account Definition Update Report (DRY RUN)
 - **Development:** Verify exact JSON structure and API endpoints
 
 **Combined Use Cases:**
+
 - **Pre-deployment Validation:** Verify changes before applying them
 - **Team Collaboration:** Share proposed changes for review
 - **Configuration Management:** Track and audit configuration changes
@@ -386,21 +403,198 @@ Account Definition Update Report (DRY RUN)
 
 **Integration Definitions (deployToDB.py):**
 
-| Command | Output | Use Case |
-|---------|--------|----------|
-| `deployToDB.py` | Full execution with database changes | Production deployment |
-| `deployToDB.py --dry-run` | Summary only, no database changes | Quick validation |
-| `deployToDB.py --dry-run --verbose` | Summary + detailed JSON, no database changes | Debugging & detailed review |
-| `deployToDB.py --verbose` | Full execution + detailed JSON | Production with detailed logging |
+| Command                             | Output                                       | Use Case                         |
+| ----------------------------------- | -------------------------------------------- | -------------------------------- |
+| `deployToDB.py`                     | Full execution with database changes         | Production deployment            |
+| `deployToDB.py --dry-run`           | Summary only, no database changes            | Quick validation                 |
+| `deployToDB.py --dry-run --verbose` | Summary + detailed JSON, no database changes | Debugging & detailed review      |
+| `deployToDB.py --verbose`           | Full execution + detailed JSON               | Production with detailed logging |
 
 **Account Configurations (deployAccountsToDB.py):**
 
-| Command | Output | Use Case |
-|---------|--------|----------|
-| `deployAccountsToDB.py` | Full execution with database changes | Production account deployment |
-| `deployAccountsToDB.py --dry-run` | Summary only, no database changes | Quick account validation |
-| `deployAccountsToDB.py --dry-run --verbose` | Summary + detailed JSON, no database changes | Account debugging & detailed review |
-| `deployAccountsToDB.py --verbose` | Full execution + detailed JSON | Production account deployment with detailed logging |
+| Command                                     | Output                                       | Use Case                                            |
+| ------------------------------------------- | -------------------------------------------- | --------------------------------------------------- |
+| `deployAccountsToDB.py`                     | Full execution with database changes         | Production account deployment                       |
+| `deployAccountsToDB.py --dry-run`           | Summary only, no database changes            | Quick account validation                            |
+| `deployAccountsToDB.py --dry-run --verbose` | Summary + detailed JSON, no database changes | Account debugging & detailed review                 |
+| `deployAccountsToDB.py --verbose`           | Full execution + detailed JSON               | Production account deployment with detailed logging |
+
+## Debug Logging & API Request Monitoring
+
+Both deployment scripts now support comprehensive debug logging when using the `--verbose` flag. Instead of cluttering the console output, all debug information is written to a `debug.log` file for detailed analysis.
+
+### 🔧 Debug Log Features
+
+When `--verbose` flag is used, a `debug.log` file is created containing:
+
+**📝 Complete API Request/Response Logs:**
+
+- HTTP method, URL, headers, and authentication details
+- Request and response bodies (formatted JSON)
+- Response status codes and headers
+- Precise timestamps for each API call
+
+**🔧 Executable Curl Commands:**
+
+- Ready-to-use curl commands that replicate each API request
+- Properly escaped JSON data and headers
+- Authentication credentials included
+- Perfect for manual testing and debugging
+
+**📊 Detailed Configuration Reports:**
+
+- Complete JSON reports of all configuration changes
+- Stale data analysis (items in database but not in files)
+- File paths and configuration sizes
+
+### 🚀 Usage Examples
+
+```bash
+# Enable debug logging for integration definitions
+python3 ./scripts/deployToDB.py https://api.example.com admin password123 destination --verbose
+
+# Enable debug logging for account configurations
+python3 ./scripts/deployAccountsToDB.py https://api.example.com admin password123 --verbose
+
+# Dry run with debug logging (no database changes)
+python3 ./scripts/deployToDB.py https://api.example.com admin password123 --dry-run --verbose
+```
+
+### 📄 Sample Debug Log Output
+
+```
+=== DEBUG LOG STARTED [2024-01-15 14:30:25] ===
+============================================================
+
+🔍 API Request Debug [2024-01-15 14:30:26]:
+   Method: GET
+   URL: https://api.example.com/destination-definitions/
+   Headers: {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+}
+   Auth: admin:***
+
+   🔧 Equivalent curl command:
+   curl \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  --user "admin:password123" \
+  "https://api.example.com/destination-definitions/"
+
+   Response Status: 200
+   Response Headers: {'content-type': 'application/json', 'content-length': '1234'}
+   Response Body: {
+    "data": [...]
+}
+--------------------------------------------------
+
+🔍 API Request Debug [2024-01-15 14:30:27]:
+   Method: POST
+   URL: https://api.example.com/destination-definitions/
+   Headers: {
+    "Content-Type": "application/json"
+}
+   Auth: admin:***
+   Request Body: {
+    "name": "AMPLITUDE",
+    "displayName": "Amplitude",
+    "config": {...}
+}
+
+   🔧 Equivalent curl command:
+   curl \
+  -X POST \
+  -H "Content-Type: application/json" \
+  --user "admin:password123" \
+  --data "{\"name\": \"AMPLITUDE\", \"displayName\": \"Amplitude\", ...}" \
+  "https://api.example.com/destination-definitions/"
+
+   Response Status: 201
+   Response Body: {
+    "message": "Created successfully"
+}
+--------------------------------------------------
+
+==================================================
+Destination Definition Update Report
+==================================================
+[
+  {
+    "name": "AMPLITUDE",
+    "action": "create",
+    "status": 201
+  }
+]
+```
+
+### ✅ Benefits & Use Cases
+
+**🐛 Debugging Failed Deployments:**
+
+- Copy curl commands from debug.log to reproduce API calls manually
+- Inspect exact request/response data to identify issues
+- Verify authentication and endpoint accessibility
+
+**🔍 API Development & Testing:**
+
+- Test API endpoints with different credentials or environments
+- Validate request/response formats before deployment
+- Generate API documentation from actual usage
+
+**🔄 Integration & CI/CD:**
+
+- Use curl commands in automated testing pipelines
+- Monitor API response times and error rates
+- Generate deployment reports with complete audit trails
+
+**📊 Configuration Management:**
+
+- Track all configuration changes with timestamps
+- Audit API access and modifications
+- Generate compliance reports for security reviews
+
+### 🧹 Clean Console Output
+
+With verbose mode enabled, the console remains clean and shows only essential information:
+
+```
+📝 Debug logging enabled - logs will be written to debug.log
+======================================================================
+EXECUTION PLAN
+======================================================================
+🔍 Fetching existing account definitions...
+📊 Total configurations processed: 5
+🆕 CREATED: 2 new records
+🔄 UPDATED: 1 existing records
+📝 Debug logs have been written to: debug.log
+💡 Review this file for detailed API request/response information
+```
+
+All detailed debug information (API requests, responses, curl commands, JSON reports) is written to `debug.log` for later analysis.
+
+### 🔒 Security Considerations
+
+- **Password Masking:** Authentication passwords are masked as `***` in console output
+- **Full Credentials in debug.log:** Curl commands include actual passwords for functional testing
+- **Git Ignored:** `debug.log` is automatically excluded from version control via `.gitignore`
+- **Local Only:** Debug logs are created locally and never transmitted
+
+### 💡 Pro Tips
+
+```bash
+# Extract curl commands for manual testing
+grep -A 10 "🔧 Equivalent curl command" debug.log
+
+# Monitor API response codes
+grep "Response Status:" debug.log
+
+# Review all configuration changes
+grep -A 5 "Definition Update Report" debug.log
+
+# Check for any API errors
+grep -B 2 -A 2 "status.*[45][0-9][0-9]" debug.log
+```
 
 ## Contribute
 
