@@ -72,7 +72,7 @@ jobs:
           API_USER: ${{ secrets.API_USERNAME }}
           API_PASSWORD: ${{ secrets.API_PASSWORD }}
         run: |
-          python scripts/deployAccountsToDB.py --no-dry-run ${{ inputs.deploy_url }}
+          python scripts/deployAccountsToDB.py --no-dry-run --verbose ${{ inputs.deploy_url }}
         continue-on-error: false
 
       - name: Deploy Destination & Source Definitions To DB
@@ -80,7 +80,7 @@ jobs:
           API_USER: ${{ secrets.API_USERNAME }}
           API_PASSWORD: ${{ secrets.API_PASSWORD }}
         run: |
-          python scripts/deployToDB.py --no-dry-run ${{ inputs.deploy_url }}
+          python scripts/deployToDB.py --no-dry-run --verbose ${{ inputs.deploy_url }}
 
       - name: Notify Slack Channel
         id: slack
@@ -116,3 +116,11 @@ jobs:
                 }
               ]
             }
+
+      - name: Upload debug.log artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-debug-log
+          path: deploy-debug.log
+        # Note: deploy-debug.log will have sensitive data masked in CI as per the README

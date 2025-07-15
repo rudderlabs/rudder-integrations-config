@@ -6,6 +6,12 @@ import json
 import datetime
 
 
+def is_ci():
+    """Detect if running in a CI environment (GitHub Actions sets CI=true, and GITHUB_ACTION is always set)."""
+    # See: https://docs.github.com/en/actions/reference/variables-reference#default-environment-variables
+    return os.environ.get("CI") == "true" or "GITHUB_ACTION" in os.environ
+
+
 def generate_curl_command(method, url, headers=None, data=None, auth=None):
     """Generate equivalent curl command for the API request."""
     curl_parts = ["curl"]
@@ -21,7 +27,11 @@ def generate_curl_command(method, url, headers=None, data=None, auth=None):
 
     # Add authentication
     if auth:
-        curl_parts.append(f'--user "{auth[0]}:{auth[1]}"')
+        if is_ci():
+            # Mask both username and password in CI
+            curl_parts.append(f'--user "***:***"')
+        else:
+            curl_parts.append(f'--user "{auth[0]}:{auth[1]}"')
 
     # Add data for POST/PUT requests
     if data and method.upper() in ["POST", "PUT", "PATCH"]:
@@ -30,7 +40,6 @@ def generate_curl_command(method, url, headers=None, data=None, auth=None):
             json_data = data
         else:
             json_data = json.dumps(data)
-
         # Use single quotes to avoid escaping issues
         curl_parts.append(f"--data '{json_data}'")
 
@@ -45,6 +54,7 @@ def log_api_request(
 ):
     """Log API request details for debugging purposes."""
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    ci_mode = is_ci()
 
     log_content = []
     log_content.append(f"\n🔍 API Request Debug [{timestamp}]:")
@@ -53,7 +63,10 @@ def log_api_request(
     if headers:
         log_content.append(f"   Headers: {json.dumps(headers, indent=4)}")
     if auth:
-        log_content.append(f"   Auth: {auth[0]}:***")
+        if ci_mode:
+            log_content.append(f"   Auth: ***:*** (masked in CI)")
+        else:
+            log_content.append(f"   Auth: {auth[0]}:***")
     if data:
         if isinstance(data, str):
             try:
@@ -83,15 +96,15 @@ def log_api_request(
             log_content.append(f"   Response Body: {response.text}")
     log_content.append("-" * 50)
 
-    # Write to debug.log file if requested (skip console output)
+    # Write to deploy-debug.log file if requested (skip console output)
     if to_file:
         try:
-            with open("debug.log", "a", encoding="utf-8") as f:
+            with open("deploy-debug.log", "a", encoding="utf-8") as f:
                 for line in log_content:
                     f.write(line + "\n")
                 f.write("\n")  # Extra newline for readability
         except Exception as e:
-            print(f"Warning: Could not write to debug.log: {e}")
+            print(f"Warning: Could not write to deploy-debug.log: {e}")
     else:
         # Print to console only if not writing to file
         for line in log_content:
@@ -99,16 +112,16 @@ def log_api_request(
 
 
 def initialize_debug_log():
-    """Initialize or clear the debug.log file at the start of execution."""
+    """Initialize or clear the deploy-debug.log file at the start of execution."""
     try:
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        with open("debug.log", "w", encoding="utf-8") as f:
+        with open("deploy-debug.log", "w", encoding="utf-8") as f:
             f.write(f"=== DEBUG LOG STARTED [{timestamp}] ===\n")
             f.write("=" * 60 + "\n\n")
-        print("📝 Debug logging enabled - logs will be written to debug.log")
+        print("📝 Debug logging enabled - logs will be written to deploy-debug.log")
         return True
     except Exception as e:
-        print(f"Warning: Could not initialize debug.log: {e}")
+        print(f"Warning: Could not initialize deploy-debug.log: {e}")
         return False
 
 

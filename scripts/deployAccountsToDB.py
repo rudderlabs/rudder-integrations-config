@@ -365,16 +365,21 @@ if __name__ == "__main__":
     # Always show summary first (most important for users)
     print_summary(final_report, DRY_RUN, CONTROL_PLANE_URL, USERNAME)
 
-    # Show detailed reports only when verbose flag is used (write to debug.log)
+    # Show detailed reports only when verbose flag is used (write to deploy-debug.log)
     if VERBOSE:
+        changed_items = [
+            item
+            for item in final_report
+            if item["action"] != "N/A" and item.get("status") != "No changes detected"
+        ]
         try:
-            with open("debug.log", "a", encoding="utf-8") as f:
+            with open("deploy-debug.log", "a", encoding="utf-8") as f:
                 f.write(f"\n{'='*50}\n")
                 f.write(f"Account Definition Update Report{mode_text}\n")
                 f.write(f"{'='*50}\n")
-                f.write(get_formatted_json(final_report) + "\n\n")
+                f.write(get_formatted_json(changed_items) + "\n\n")
         except Exception as e:
-            print(f"Warning: Could not write verbose reports to debug.log: {e}")
+            print(f"Warning: Could not write verbose reports to deploy-debug.log: {e}")
 
     # Show debug log location if verbose mode was used
     if VERBOSE:

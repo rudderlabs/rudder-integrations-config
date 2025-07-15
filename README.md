@@ -571,13 +571,14 @@ EXECUTION PLAN
 💡 Review this file for detailed API request/response information
 ```
 
-All detailed debug information (API requests, responses, curl commands, JSON reports) is written to `debug.log` for later analysis.
+All detailed debug information (API requests, responses, curl commands, JSON reports) is written to `deploy-debug.log` for later analysis.
 
 ### 🔒 Security Considerations
 
 - **Password Masking:** Authentication passwords are masked as `***` in console output
-- **Full Credentials in debug.log:** Curl commands include actual passwords for functional testing
-- **Git Ignored:** `debug.log` is automatically excluded from version control via `.gitignore`
+- **Full Credentials in deploy-debug.log:** Curl commands include actual passwords for functional testing (local only)
+- **CI Masking:** When running in CI (detected via the `CI` environment variable, see [GitHub Actions: Default environment variables](https://docs.github.com/en/actions/reference/variables-reference#default-environment-variables)), all sensitive data (such as passwords and tokens) are masked in `deploy-debug.log` and generated curl commands. This ensures no secrets are exposed in CI logs or artifacts.
+- **Git Ignored:** `deploy-debug.log` is automatically excluded from version control via `.gitignore`
 - **Local Only:** Debug logs are created locally and never transmitted
 
 ### 💡 Pro Tips
@@ -595,6 +596,22 @@ grep -A 5 "Definition Update Report" debug.log
 # Check for any API errors
 grep -B 2 -A 2 "status.*[45][0-9][0-9]" debug.log
 ```
+
+### CI/CD Usage Example
+
+In CI/CD (e.g., GitHub Actions), always use the `--verbose` flag to ensure `deploy-debug.log` is generated and uploaded as an artifact:
+
+```yaml
+- name: Deploy Accounts To DB
+  run: |
+    python scripts/deployAccountsToDB.py --no-dry-run --verbose ${{ inputs.deploy_url }}
+
+- name: Deploy Destination & Source Definitions To DB
+  run: |
+    python scripts/deployToDB.py --no-dry-run --verbose ${{ inputs.deploy_url }}
+```
+
+This ensures that detailed debug logs are available for troubleshooting and are always masked for sensitive data in CI.
 
 ## Contribute
 
