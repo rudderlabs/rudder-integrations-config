@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.119.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.118.1...v1.119.0) (2025-07-14)
+
+
+### Features
+
+* add dry run capabilities to deployAccountsToDB.py and enhance documentation ([9e16d37](https://github.com/rudderlabs/rudder-config-schema/commit/9e16d372344045977385a3e7052884e557493a2c))
+* **salesforce_oauth:** add account definitions ([#2079](https://github.com/rudderlabs/rudder-config-schema/issues/2079)) ([7256c0b](https://github.com/rudderlabs/rudder-config-schema/commit/7256c0b02a3dd690573d0814653e3b13e7d9cf58))
+* **salesforce_oauth:** move to the new form builder ([#2080](https://github.com/rudderlabs/rudder-config-schema/issues/2080)) ([6a5b752](https://github.com/rudderlabs/rudder-config-schema/commit/6a5b7529680af12417605f738784c4292b39383f))
+
+
+### Bug Fixes
+
+* code rabbit comments ([d17b749](https://github.com/rudderlabs/rudder-config-schema/commit/d17b7490f242a2e873cc8abbb3733a53fa147aa9))
+* correct API endpoint from 'accounts' to 'account' in deployAccountsToDB.py ([e46b603](https://github.com/rudderlabs/rudder-config-schema/commit/e46b603d0e55c49a683a37457137a71d9e403394))
+* resolve pr comments and conflicts ([4b79be8](https://github.com/rudderlabs/rudder-config-schema/commit/4b79be8bf886e9736ae862941feaeaf1efe54f81))
+
 ### [1.118.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.118.0...v1.118.1) (2025-07-11)
 
 
