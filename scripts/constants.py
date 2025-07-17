@@ -10,6 +10,6 @@ TEST_INTEGRATION_NAME_PREFIX = "test_"
 
 TEST_INTEGRATION_NAME_SUFFIX = "_ignore"
 
-REQUEST_TIMEOUT = 30
+REQUEST_TIMEOUT = 10
 
 HEADER = {"Content-Type": "application/json"}
