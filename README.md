@@ -20,17 +20,13 @@
 
 [![codecov](https://codecov.io/gh/rudderlabs/rudder-integrations-config/branch/develop/graph/badge.svg?token=K75QABOWUT)](https://codecov.io/gh/rudderlabs/rudder-integrations-config)
 
-# \*\*rudder-config-schema\*\*
+# **rudder-integrations-config**
 
-\*\*Repo description\*\*
+The central configuration repository for [RudderStack](https://github.com/rudderlabs/rudder-server) containing integration configurations and schemas.
 
 ## Overview
 
-\*\*Describe what the software does.\*\*
-
-## Features
-
-\*\*Describe the key features, if necessary.\*\*
+This repository contains configuration files that define how integrations work with RudderStack, including destination settings, UI configurations, and validation schemas.
 
 ## Getting started
 
