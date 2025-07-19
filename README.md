@@ -28,6 +28,13 @@ The central configuration repository for [RudderStack](https://github.com/rudder
 
 This repository contains configuration files that define how integrations work with RudderStack, including destination settings, UI configurations, and validation schemas.
 
+## Key components
+
+* **Schema files**: Located in `/src/configurations/destinations/` directory, these define the structure and validation rules for each integration⁠
+⁠​* **UI configuration**: Contains `ui-config.json` files that specify how integration settings appear in the RudderStack dashboard⁠
+⁠​* **Database configuration**: Includes `db-config.json` files that define integration metadata and settings⁠
+⁠​* **Validation schemas**: JSON schema files for form validation using AJV
+
 ## Getting started
 
 You need to install Python3.
