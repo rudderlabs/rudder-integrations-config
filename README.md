@@ -20,17 +20,20 @@
 
 [![codecov](https://codecov.io/gh/rudderlabs/rudder-integrations-config/branch/develop/graph/badge.svg?token=K75QABOWUT)](https://codecov.io/gh/rudderlabs/rudder-integrations-config)
 
-# \*\*rudder-config-schema\*\*
+# rudder-integrations-config
 
-\*\*Repo description\*\*
+The central configuration repository for [RudderStack](https://github.com/rudderlabs/rudder-server) containing integration configurations and schemas.
 
 ## Overview
 
-\*\*Describe what the software does.\*\*
+This repository stores the configuration files that power RudderStack’s **source and destination** integrations—​covering integration settings, UI configurations, and validation schemas.
 
-## Features
+## Key components
 
-\*\*Describe the key features, if necessary.\*\*
+* **Schema files**: Located in `/src/configurations/destinations/` directory, these define the structure and validation rules for each integration⁠
+⁠​* **UI configuration**: Contains `ui-config.json` files that specify how integration settings appear in the RudderStack dashboard⁠
+⁠​* **Database configuration**: Includes `db-config.json` files that define integration metadata and settings⁠
+⁠​* **Validation schemas**: JSON schema files for form validation using AJV
 
 ## Getting started
 
