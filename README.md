@@ -10,7 +10,7 @@
   <b>
     <a href="https://rudderstack.com">Website</a>
     ·
-    <a href="">Documentation</a>
+    <a href="https://www.rudderstack.com/docs/">Documentation</a>
     ·
     <a href="https://rudderstack.com/join-rudderstack-slack-community">Community Slack</a>
   </b>
@@ -30,10 +30,10 @@ This repository stores the configuration files that power RudderStack’s **sour
 
 ## Key components
 
-* **Schema files**: Located in `/src/configurations/destinations/` directory, these define the structure and validation rules for each integration⁠
-⁠​* **UI configuration**: Contains `ui-config.json` files that specify how integration settings appear in the RudderStack dashboard⁠
-⁠​* **Database configuration**: Includes `db-config.json` files that define integration metadata and settings⁠
-⁠​* **Validation schemas**: JSON schema files for form validation using AJV
+* **Schema files** – `src/configurations/destinations/`, define structure and validation rules for every integration.
+* **UI configuration** – `ui-config.json` files specifying how settings appear in the RudderStack dashboard.
+* **Database configuration** – `db-config.json` files containing integration metadata and settings.
+* **Validation schemas** – JSON Schema files (consumed by AJV) used for form validation.
 
 ## Getting started
 
