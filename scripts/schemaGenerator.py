@@ -19,8 +19,17 @@ from utils import (
     apply_json_diff,
     get_formatted_json,
     is_old_format,
+    should_add_dynamic_config_pattern,
+    should_add_env_pattern,
+    is_generic_fallback,
+    has_explicit_dynamic_config_pattern,
+    has_explicit_env_pattern,
 )
 from constants import CONFIG_DIR
+import re
+import sys
+import json
+from pathlib import Path
 
 EXCLUDED_DEST = ["postgres", "bq", "azure_synapse", "clickhouse", "deltalake", "kafka"]
 
@@ -71,17 +80,51 @@ def generalize_regex_pattern(field):
     Returns:
         string: generated pattern for the field.
     """
+    def extract_generic_fallback(regex):
+        # Split on |, return the part that matches ^(.{N,M})$ for any N, M
+        parts = [p.strip() for p in regex.split('|')]
+        for part in parts:
+            if re.match(r'^\^\(\.\{\d+,\d+\}\)\$$', part):
+                return part
+        # fallback to default if not found
+        return "^(.{0,100})$"
+
     if "regex" in field and field["regex"] and field["regex"].strip():
-        # Use the explicit regex as-is, don't add any prefixes
-        # The field author knows what validation is needed
-        return field["regex"]
-    
+        existing_pattern = field["regex"].strip()
+        generic_fallback = extract_generic_fallback(existing_pattern)
+        # Check if the pattern already contains redundant parts
+        # If it has both dynamic config/env patterns AND a generic fallback, it's redundant
+        has_dynamic_config = has_explicit_dynamic_config_pattern(existing_pattern)
+        has_env = has_explicit_env_pattern(existing_pattern)
+        has_generic_fallback = is_generic_fallback(existing_pattern)
+        # return just the generic fallback since it captures everything
+        if (has_dynamic_config or has_env) and has_generic_fallback:
+            return generic_fallback
+        # If the existing pattern is already a generic fallback that captures everything,
+        # return it as-is to avoid redundancy
+        if is_generic_fallback(existing_pattern):
+            return existing_pattern
+        # Build the pattern based on what's needed
+        pattern_parts = []
+        # Add dynamic config pattern if needed
+        if should_add_dynamic_config_pattern(existing_pattern):
+            pattern_parts.append("(^\\{\\{.*\\|\\|(.*)\\}\\}$)")
+        # Add environment variable pattern if needed
+        if should_add_env_pattern(existing_pattern):
+            pattern_parts.append("(^env[.].+)")
+        # Add the existing pattern if it's not empty and not a generic fallback
+        if existing_pattern and not is_generic_fallback(existing_pattern):
+            pattern_parts.append(existing_pattern)
+        # If no parts were added, use generic fallback
+        if not pattern_parts:
+            return generic_fallback
+        # Join patterns with alternation
+        return "|".join(pattern_parts)
     # Special case for purpose fields
     if ("value" in field and field["value"] == "purpose") or (
         "configKey" in field and field["configKey"] == "purpose"
     ):
         return "^(.{0,100})$"
-    
     # Default fallback pattern - this already captures dynamic config and env vars
     return "^(.{0,100})$"
 
@@ -97,16 +140,17 @@ def is_dest_field_dependent_on_source(field, dbConfig, schema_field_name):
         schema_field_name (string): Specifies which key has the field's name in schema.
             For old schema types, it is 'value' else 'configKey'.
 
-
     Returns:
         boolean: True if the field is source dependent else, False.
     """
     if not dbConfig:
         return False
+    # Use the correct key for the field
+    key = field.get(schema_field_name, field.get('configKey', field.get('value')))
     for sourceType in dbConfig["supportedSourceTypes"]:
         if (
             sourceType in dbConfig["destConfig"]
-            and field[schema_field_name] in dbConfig["destConfig"][sourceType]
+            and key in dbConfig["destConfig"][sourceType]
         ):
             return True
     return False
@@ -146,10 +190,11 @@ def is_field_present_in_default_config(field, dbConfig, schema_field_name):
     """
     if not dbConfig:
         return False
+    key = field.get(schema_field_name, field.get('configKey', field.get('value')))
     if (
         "destConfig" in dbConfig
         and "defaultConfig" in dbConfig["destConfig"]
-        and field[schema_field_name] in dbConfig["destConfig"]["defaultConfig"]
+        and key in dbConfig["destConfig"]["defaultConfig"]
     ):
         return True
     return False
@@ -466,9 +511,16 @@ def generate_schema_for_dynamic_custom_form_allOf(
             if compare_pre_requisite_fields(
                 field["preRequisites"]["fields"], preRequisites, True
             ):
-                thenObj["properties"][field[schema_field_name]] = uiTypetoSchemaFn.get(
-                    field["type"]
-                )(field, dbConfig, schema_field_name)
+                fn = uiTypetoSchemaFn.get(field["type"])
+                if fn is not None:
+                    thenObj["properties"][field[schema_field_name]] = fn(
+                        field, dbConfig, schema_field_name
+                    )
+                else:
+                    warnings.warn(
+                        f'Unknown field type: {field["type"]} in generate_schema_for_allOf, skipping.',
+                        UserWarning,
+                    )
                 if "required" in field and field["required"] == True:
                     thenObj["required"].append(field[schema_field_name])
         allOfItemObj["then"] = thenObj
@@ -772,11 +824,16 @@ def generate_schema_for_allOf(uiConfig, dbConfig, schema_field_name):
                 if compare_pre_requisite_fields(
                     field["preRequisiteField"], preRequisiteField
                 ):
-                    thenObj["properties"][field[schema_field_name]] = (
-                        uiTypetoSchemaFn.get(field["type"])(
+                    fn = uiTypetoSchemaFn.get(field["type"])
+                    if fn is not None:
+                        thenObj["properties"][field[schema_field_name]] = fn(
                             field, dbConfig, schema_field_name
                         )
-                    )
+                    else:
+                        warnings.warn(
+                            f'Unknown field type: {field["type"]} in generate_schema_for_allOf, skipping.',
+                            UserWarning,
+                        )
                     if "required" in field and field["required"] == True:
                         thenObj["required"].append(field[schema_field_name])
         allOfItemObj["then"] = thenObj
@@ -999,13 +1056,14 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, sel
                 generateFunction = uiTypetoSchemaFn.get(field["type"], None)
                 if generateFunction:
                     # Generate schema for the field if it is defined in the destination config
-                    if is_key_present_in_dest_config(dbConfig, field["value"]):
-                        properties[field["value"]] = generateFunction(
+                    key = field.get("configKey", field.get("value"))
+                    if key and is_key_present_in_dest_config(dbConfig, key):
+                        properties[key] = generateFunction(
                             field, dbConfig, "value"
                         )
                     else:
                         warnings.warn(
-                            f'The field {field["value"]} is defined in ui-config.json but not in db-config.json\n',
+                            f'The field {key} is defined in ui-config.json but not in db-config.json\n',
                             UserWarning,
                         )
                 if field.get(
@@ -1013,7 +1071,9 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, sel
                 ) == True and is_field_present_in_default_config(
                     field, dbConfig, "value"
                 ):
-                    schemaObject["required"].append(field["value"])
+                    key = field.get("configKey", field.get("value"))
+                    if key:
+                        schemaObject["required"].append(key)
     else:
         if selector == "destination":
             baseTemplate = uiConfig.get("baseTemplate", [])
@@ -1025,16 +1085,17 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, sel
                         for field in group.get("fields", []):
                             generateFunction = uiTypetoSchemaFn.get(field["type"], None)
                             if generateFunction:
+                                key = field.get("configKey", field.get("value"))
                                 # Generate schema for the field if it is defined in the destination config
-                                if is_key_present_in_dest_config(
-                                    dbConfig, field["configKey"]
+                                if key and is_key_present_in_dest_config(
+                                    dbConfig, key
                                 ):
-                                    properties[field["configKey"]] = generateFunction(
+                                    properties[key] = generateFunction(
                                         field, dbConfig, "configKey"
                                     )
                                 else:
                                     warnings.warn(
-                                        f'The field {field["configKey"]} is defined in ui-config.json but not in db-config.json\n',
+                                        f'The field {key} is defined in ui-config.json but not in db-config.json\n',
                                         UserWarning,
                                     )
                             if (
@@ -1044,19 +1105,22 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, sel
                                 )
                                 and "preRequisites" not in field
                             ):
-                                schemaObject["required"].append(field["configKey"])
+                                key = field.get("configKey", field.get("value"))
+                                if key:
+                                    schemaObject["required"].append(key)
 
             for field in sdkTemplate.get("fields", []):
                 generateFunction = uiTypetoSchemaFn.get(field["type"], None)
                 if generateFunction:
+                    key = field.get("configKey", field.get("value"))
                     # Generate schema for the field if it is defined in the destination config
-                    if is_key_present_in_dest_config(dbConfig, field["configKey"]):
-                        properties[field["configKey"]] = generateFunction(
+                    if key and is_key_present_in_dest_config(dbConfig, key):
+                        properties[key] = generateFunction(
                             field, dbConfig, "configKey"
                         )
                     else:
                         warnings.warn(
-                            f'The field {field["configKey"]} is defined in ui-config.json but not in db-config.json\n',
+                            f'The field {key} is defined in ui-config.json but not in db-config.json\n',
                             UserWarning,
                         )
 
@@ -1065,12 +1129,15 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, sel
                 ) == True and is_field_present_in_default_config(
                     field, dbConfig, "configKey"
                 ):
-                    schemaObject["required"].append(field["configKey"])
+                    key = field.get("configKey", field.get("value"))
+                    if key:
+                        schemaObject["required"].append(key)
 
             for field in consentSettingsTemplate.get("fields", []):
                 generateFunction = uiTypetoSchemaFn.get(field["type"], None)
                 if generateFunction:
-                    properties[field["configKey"]] = generateFunction(
+                    key = field.get("configKey", field.get("value"))
+                    properties[key] = generateFunction(
                         field, dbConfig, "configKey"
                     )
                 if field.get(
@@ -1078,7 +1145,9 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, sel
                 ) == True and is_field_present_in_default_config(
                     field, dbConfig, "configKey"
                 ):
-                    schemaObject["required"].append(field["configKey"])
+                    key = field.get("configKey", field.get("value"))
+                    if key:
+                        schemaObject["required"].append(key)
 
             # default properties in new ui-config based schemas.
             if is_key_present_in_dest_config(dbConfig, "useNativeSDK"):
@@ -1098,7 +1167,8 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, sel
                     for field in fields:
                         generateFunction = uiTypetoSchemaFn.get(field["type"], None)
                         if generateFunction:
-                            properties[field["value"]] = generateFunction(
+                            key = field.get("configKey", field.get("value"))
+                            properties[key] = generateFunction(
                                 field, dbConfig, "value"
                             )
 
@@ -1168,12 +1238,13 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                 if "preRequisiteField" in field:
                     continue
                 if field["type"] == curUiType:
-                    if field["value"] not in schema["properties"]:
+                    key = field.get("configKey", field.get("value"))
+                    if key not in schema["properties"]:
                         warnings.warn(
-                            f'{field["value"]} field is not in schema \n', UserWarning
+                            f'{key} field is not in schema \n', UserWarning
                         )
                     else:
-                        curSchemaField = schema["properties"][field["value"]]
+                        curSchemaField = schema["properties"][key]
                         newSchemaField = uiTypetoSchemaFn.get(curUiType)(
                             field, dbConfig, "value"
                         )
@@ -1182,7 +1253,7 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                             warnings.warn(
                                 "For type:{} field:{} Difference is : \n\n {} \n".format(
                                     curUiType,
-                                    field["value"],
+                                    key,
                                     get_formatted_json(schemaDiff),
                                 ),
                                 UserWarning,
@@ -1191,14 +1262,14 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                         curUiType == "textInput"
                         and (
                             schema.get("required", False) == True
-                            and field["value"] in schema["required"]
+                            and key in schema["required"]
                         )
                         and "regex" not in field
                     ):
                         warnings.warn(
                             "For type:{} field:{} regex in ui-config and pattern in schema are mandatory for a required textInput \n".format(
                                 curUiType,
-                                field["value"],
+                                key,
                             ),
                             UserWarning,
                         )
@@ -1216,15 +1287,14 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                             continue
                         generateFunction = uiTypetoSchemaFn.get(field["type"], None)
                         if generateFunction and field["type"] == curUiType:
-                            if field["configKey"] not in schema["properties"]:
+                            key = field.get("configKey", field.get("value"))
+                            if key not in schema["properties"]:
                                 warnings.warn(
-                                    f'{field["configKey"]} field is not in schema \n',
+                                    f'{key} field is not in schema \n',
                                     UserWarning,
                                 )
                             else:
-                                curSchemaField = schema["properties"][
-                                    field["configKey"]
-                                ]
+                                curSchemaField = schema["properties"][key]
                                 newSchemaField = uiTypetoSchemaFn.get(curUiType)(
                                     field, dbConfig, "configKey"
                                 )
@@ -1235,7 +1305,7 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                                     warnings.warn(
                                         "For type:{} field:{} Difference is : \n\n {} \n".format(
                                             curUiType,
-                                            field["configKey"],
+                                            key,
                                             get_formatted_json(schemaDiff),
                                         ),
                                         UserWarning,
@@ -1244,14 +1314,14 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                                 curUiType == "textInput"
                                 and (
                                     schema.get("required", False) == True
-                                    and field["configKey"] in schema["required"]
+                                    and key in schema["required"]
                                 )
                                 and "regex" not in field
                             ):
                                 warnings.warn(
                                     "For type:{} field:{} regex in ui-config and pattern in schema are mandatory for a required textInput \n".format(
                                         curUiType,
-                                        field["configKey"],
+                                        key,
                                     ),
                                     UserWarning,
                                 )
@@ -1262,13 +1332,14 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
             generateFunction = uiTypetoSchemaFn.get(field["type"], None)
             if generateFunction:
                 if generateFunction and field["type"] == curUiType:
-                    if field["configKey"] not in schema["properties"]:
+                    key = field.get("configKey", field.get("value"))
+                    if key not in schema["properties"]:
                         warnings.warn(
-                            f'{field["configKey"]} field is not in schema \n',
+                            f'{key} field is not in schema \n',
                             UserWarning,
                         )
                     else:
-                        curSchemaField = schema["properties"][field["configKey"]]
+                        curSchemaField = schema["properties"][key]
                         newSchemaField = uiTypetoSchemaFn.get(curUiType)(
                             field, dbConfig, "configKey"
                         )
@@ -1277,7 +1348,7 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                             warnings.warn(
                                 "For type:{} field:{} Difference is : \n\n {} \n".format(
                                     curUiType,
-                                    field["configKey"],
+                                    key,
                                     get_formatted_json(schemaDiff),
                                 ),
                                 UserWarning,
@@ -1289,13 +1360,14 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
             generateFunction = uiTypetoSchemaFn.get(field["type"], None)
             if generateFunction:
                 if generateFunction and field["type"] == curUiType:
-                    if field["configKey"] not in schema["properties"]:
+                    key = field.get("configKey", field.get("value"))
+                    if key not in schema["properties"]:
                         warnings.warn(
-                            f'{field["configKey"]} field is not in schema \n',
+                            f'{key} field is not in schema \n',
                             UserWarning,
                         )
                     else:
-                        curSchemaField = schema["properties"][field["configKey"]]
+                        curSchemaField = schema["properties"][key]
                         newSchemaField = uiTypetoSchemaFn.get(curUiType)(
                             field, dbConfig, "configKey"
                         )
@@ -1303,7 +1375,7 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                         if schemaDiff:
                             warnings.warn(
                                 "For type:{} field:{} Difference is : \n\n {} \n".format(
-                                    curUiType, field["configKey"], schemaDiff
+                                    curUiType, key, schemaDiff
                                 ),
                                 UserWarning,
                             )
@@ -1314,13 +1386,14 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
             generateFunction = uiTypetoSchemaFn.get(field["type"], None)
             if generateFunction:
                 if generateFunction and field["type"] == curUiType:
-                    if field["configKey"] not in schema["properties"]:
+                    key = field.get("configKey", field.get("value"))
+                    if key not in schema["properties"]:
                         warnings.warn(
-                            f'{field["configKey"]} field is not in schema \n',
+                            f'{key} field is not in schema \n',
                             UserWarning,
                         )
                     else:
-                        curSchemaField = schema["properties"][field["configKey"]]
+                        curSchemaField = schema["properties"][key]
                         newSchemaField = uiTypetoSchemaFn.get(curUiType)(
                             field, dbConfig, "configKey"
                         )
@@ -1328,7 +1401,7 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                         if schemaDiff:
                             warnings.warn(
                                 "For type:{} field:{} Difference is : \n\n {} \n".format(
-                                    curUiType, field["configKey"], schemaDiff
+                                    curUiType, key, schemaDiff
                                 ),
                                 UserWarning,
                             )
@@ -1388,6 +1461,8 @@ def validate_config_consistency(
     generatedSchema = generate_schema(uiConfig, dbConfig, name, selector)
 
     if schema:
+        print("-" * 50)
+        print(f"Analyzing schema for {name} in {selector}s")
         schemaDiff = get_json_diff(schema, generatedSchema["configSchema"])
         if shouldUpdateSchema:
             finalSchema = {}
@@ -1484,7 +1559,113 @@ def get_schema_diff(name, selector, shouldUpdateSchema=False):
         )
 
 
+def fix_regexes_for_config(name, typ='destination'):
+    """
+    Fix regexes in schema.json and ui-config.json for the given destination/source using generalize_regex_pattern.
+    """
+    DEST_PATH = Path('src/configurations/destinations')
+    SRC_PATH = Path('src/configurations/sources')
+    base_dir = DEST_PATH / name if typ == 'destination' else SRC_PATH / name
+    schema_path = base_dir / 'schema.json'
+    ui_config_path = base_dir / 'ui-config.json'
+
+    def fix_schema_patterns(obj):
+        if isinstance(obj, dict):
+            for k, v in obj.items():
+                if k == 'pattern' and isinstance(v, str):
+                    # Synthesize a fake field dict for generalize_regex_pattern
+                    field = {'regex': v, 'type': 'textInput'}
+                    new_pattern = generalize_regex_pattern(field)
+                    if new_pattern != v:
+                        obj[k] = new_pattern
+                else:
+                    fix_schema_patterns(v)
+        elif isinstance(obj, list):
+            for item in obj:
+                fix_schema_patterns(item)
+
+    def fix_ui_config_regexes(ui_config):
+        """
+        Recursively clean regex patterns in all textInput fields in ui-config.json, including nested customFields.
+        """
+        def process_fields(fields):
+            if not isinstance(fields, list):
+                return
+            for field in fields:
+                if not isinstance(field, dict):
+                    continue
+                if field.get("type") == "textInput":
+                    regex = field.get("regex")
+                    if regex:
+                        new_regex = generalize_regex_pattern(field)
+                        if new_regex != regex:
+                            field["regex"] = new_regex
+                # Recursively process nested fields
+                if "fields" in field:
+                    process_fields(field["fields"])
+                if "customFields" in field:
+                    process_fields(field["customFields"])
+                if "groups" in field:
+                    process_fields(field["groups"])
+
+        # Handle both old and new uiConfig structures
+        if isinstance(ui_config, list):
+            for section in ui_config:
+                if "fields" in section:
+                    process_fields(section["fields"])
+        elif isinstance(ui_config, dict):
+            base_template = ui_config.get("baseTemplate", [])
+            if base_template and isinstance(base_template, list):
+                for section in base_template[0].get("sections", []):
+                    for group in section.get("groups", []):
+                        process_fields(group.get("fields", []))
+
+    # Fix schema.json
+    if schema_path.exists():
+        with open(schema_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        before = json.dumps(data, indent=2)
+        if 'configSchema' in data:
+            fix_schema_patterns(data['configSchema'])
+        after = json.dumps(data, indent=2)
+        if before != after:
+            with open(schema_path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=2, ensure_ascii=False)
+            print(f'Updated regex patterns in {schema_path}')
+        else:
+            print(f'No regex changes needed in {schema_path}')
+    else:
+        print(f'File not found: {schema_path}')
+
+    # Fix ui-config.json
+    if ui_config_path.exists():
+        with open(ui_config_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        before = json.dumps(data, indent=2)
+        if 'uiConfig' in data:
+            fix_ui_config_regexes(data['uiConfig'])
+        after = json.dumps(data, indent=2)
+        if before != after:
+            with open(ui_config_path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=2, ensure_ascii=False)
+            print(f'Updated regex patterns in {ui_config_path}')
+        else:
+            print(f'No regex changes needed in {ui_config_path}')
+    else:
+        print(f'File not found: {ui_config_path}')
+
+
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "--fix-regex":
+        if len(sys.argv) < 3:
+            print("Usage: python3 scripts/schemaGenerator.py --fix-regex <destination_or_source_name> [--type destination|source]")
+            sys.exit(1)
+        name = sys.argv[2]
+        typ = 'destination'
+        if len(sys.argv) > 4 and sys.argv[3] == '--type':
+            typ = sys.argv[4]
+        fix_regexes_for_config(name, typ)
+        sys.exit(0)
     parser = argparse.ArgumentParser(
         description="Generates schema.json from ui-config.json and db-config.json and validates against actual scheme.json"
     )

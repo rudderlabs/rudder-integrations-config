@@ -4,6 +4,34 @@ from constants import REQUEST_TIMEOUT, HEADER
 import os
 import json
 import datetime
+import re
+
+# Example sets for dynamic config and env (from find_redundant_regex.py)
+DYNAMIC_CONFIG_EXAMPLES = [
+    '{{ user.name || "Guest" }}',
+    '{{ user.age || 25 }}',
+    '{{ user.isActive || true }}',
+    '{{ config.timeout || 10000 }}',
+    '{{ settings.theme || "light" }}',
+    '{{ data.items[0].price || 0 }}',
+    '{{ response.status || 200 }}',
+    '{{ user.address.city || "Unknown" }}',
+    '{{ system.env.NODE_ENV || "production" }}',
+    '{{ cart.totalAmount || 0.0 }}',
+    '{{ profile.photoUrl || "https://example.com/default.png" }}',
+    '{{ flags.featureEnabled || false }}',
+    '{{ metadata.version || "1.0.0" }}',
+    '{{ product.stock || 0 }}',
+    '{{ user.email || "no-reply@example.com" }}',
+]
+
+ENV_EXAMPLES = [
+    'env.PATH',
+    'env.NODE_ENV',
+    'env.DB_HOST',
+    'env.user_defined_config',
+    'env.x.y',
+]
 
 
 def is_ci():
@@ -123,6 +151,45 @@ def initialize_debug_log():
     except Exception as e:
         print(f"Warning: Could not initialize deploy-debug.log: {e}")
         return False
+
+
+def matches_all_examples(pattern, examples):
+    """Check if a regex pattern matches all examples in the given list."""
+    try:
+        regex = re.compile(pattern)
+    except Exception:
+        return False
+    return all(regex.fullmatch(e) for e in examples)
+
+
+def is_generic_fallback(pattern):
+    """Check if a pattern is a generic fallback that captures dynamic config and env."""
+    return (matches_all_examples(pattern, DYNAMIC_CONFIG_EXAMPLES) and 
+            matches_all_examples(pattern, ENV_EXAMPLES))
+
+
+def has_explicit_dynamic_config_pattern(pattern):
+    """Check if pattern already has explicit dynamic config pattern."""
+    return re.search(r'\\{\\{.*\\|\\|.*\\}\\}', pattern) is not None
+
+
+def has_explicit_env_pattern(pattern):
+    """Check if pattern already has explicit environment variable pattern."""
+    return re.search(r'env\[?\.', pattern) is not None
+
+
+def should_add_dynamic_config_pattern(pattern):
+    """Determine if dynamic config pattern should be added to existing pattern."""
+    if not pattern or pattern.strip() == "":
+        return True
+    return not (has_explicit_dynamic_config_pattern(pattern) or is_generic_fallback(pattern))
+
+
+def should_add_env_pattern(pattern):
+    """Determine if environment variable pattern should be added to existing pattern."""
+    if not pattern or pattern.strip() == "":
+        return True
+    return not (has_explicit_env_pattern(pattern) or is_generic_fallback(pattern))
 
 
 def get_json_diff(oldJson, newJson):
