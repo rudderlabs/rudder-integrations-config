@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.120.0 (2025-07-21)
+
+
+### Bug Fixes
+* update fb markeing image to v8.3.19 ([#2108](https://github.com/rudderlabs/rudder-config-schema/issues/2108)) ([474a5e5](https://github.com/rudderlabs/rudder-config-schema/commit/474a5e5669580bd19610a7a8240f9e7f624f67c0))
+
+
+
 ## [1.119.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.118.1...v1.119.0) (2025-07-14)
 
 
