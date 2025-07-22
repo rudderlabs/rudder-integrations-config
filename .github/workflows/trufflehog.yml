@@ -1,0 +1,29 @@
+name: Secret Scan with TruffleHog
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+
+jobs:
+  trufflehog-scan:
+    name: TruffleHog Secret Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install TruffleHog
+        run: pip install trufflehog
+
+      - name: Run TruffleHog filesystem scan
+        run: |
+          echo "🔍 Scanning repository with TruffleHog..."
+          trufflehog filesystem --directory . --fail
