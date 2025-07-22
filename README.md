@@ -22,7 +22,7 @@
 
 # rudder-integrations-config
 
-The central configuration repository for [RudderStack](https://github.com/rudderlabs/rudder-server) containing integration configurations and schemas.
+The central configuration repository for [RudderStack](https://github.com/rudderlabs/rudder-integrations-config) containing integration configurations and schemas.
 
 ## Overview
 
@@ -30,10 +30,10 @@ This repository stores the configuration files that power RudderStack’s **sour
 
 ## Key components
 
-* **Schema files** – `src/configurations/destinations/`, define structure and validation rules for every integration.
-* **UI configuration** – `ui-config.json` files specifying how settings appear in the RudderStack dashboard.
-* **Database configuration** – `db-config.json` files containing integration metadata and settings.
-* **Validation schemas** – JSON Schema files (consumed by AJV) used for form validation.
+* **Definition files** – `src/configurations/destinations/`, define structure and validation rules for every integration.
+* **UI configuration** – `ui-config.json` files specifying how settings appear in the RudderStack dashboard and also for fields validation.
+* **Definition configuration** – `db-config.json` files containing integration fields, supported source types, message types, connection modes and metadata.
+* **Validation schemas** – JSON Schema `schema.json` files (consumed by AJV) used for fields validation in the backend.
 
 ## Getting started
 
