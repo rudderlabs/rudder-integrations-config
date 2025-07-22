@@ -1,0 +1,42 @@
+name: Manual Deploy Configurations
+
+permissions:
+  contents: read
+  
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_url:
+        description: 'Deploy URL'
+        required: true
+        type: string
+      notify:
+        description: 'Send Slack notification'
+        required: false
+        type: boolean
+        default: true
+      version:
+        description: 'Version to deploy'
+        required: true
+        type: string
+      ref:
+        description: 'Git ref to deploy (branch/tag/commit)'
+        required: true
+        type: string
+        default: 'main'
+      verbose:
+        description: 'Enable verbose logging'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/deploy.yml
+    with:
+      deploy_url: ${{ inputs.deploy_url }}
+      notify: ${{ inputs.notify }}
+      version: ${{ inputs.version }}
+      ref: ${{ inputs.ref }}
+      verbose: ${{ inputs.verbose }}
+    secrets: inherit 
