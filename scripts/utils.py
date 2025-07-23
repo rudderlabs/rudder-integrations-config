@@ -6,6 +6,26 @@ import json
 import datetime
 import re
 
+# Regex pattern constants for better readability and maintainability
+# Pattern to match dynamic config variables like {{ user.name || "Guest" }}
+DYNAMIC_CONFIG_PATTERN = r'\{\{.*\|\|.*\}\}'
+
+# Pattern to match generic fallback patterns like ^(.{N,M})$ for any N, M
+GENERIC_FALLBACK_PATTERN = r'^\^\(\.\{\d+,\d+\}\)\$$'
+
+# Default generic fallback pattern for text inputs
+DEFAULT_GENERIC_FALLBACK = r'^(.{0,100})$'
+
+# Pattern for dynamic config in regex strings (escaped for regex)
+DYNAMIC_CONFIG_REGEX_PATTERN = r'\\{\\{.*\\|\\|.*\\}\\}'
+
+# Pattern for environment variables in regex strings (escaped for regex)
+ENV_VAR_REGEX_PATTERN = r'env\[?\.'
+
+# Complete regex patterns for schema generation
+DYNAMIC_CONFIG_SCHEMA_PATTERN = r'(^\\{\\{.*\\|\\|(.*)\\}\\}$)'
+ENV_VAR_SCHEMA_PATTERN = r'(^env[.].+)'
+
 # Example sets for dynamic config and env (from find_redundant_regex.py)
 DYNAMIC_CONFIG_EXAMPLES = [
     '{{ user.name || "Guest" }}',
@@ -170,12 +190,12 @@ def is_generic_fallback(pattern):
 
 def has_explicit_dynamic_config_pattern(pattern):
     """Check if pattern already has explicit dynamic config pattern."""
-    return re.search(r'\\{\\{.*\\|\\|.*\\}\\}', pattern) is not None
+    return re.search(DYNAMIC_CONFIG_REGEX_PATTERN, pattern) is not None
 
 
 def has_explicit_env_pattern(pattern):
     """Check if pattern already has explicit environment variable pattern."""
-    return re.search(r'env\[?\.', pattern) is not None
+    return re.search(ENV_VAR_REGEX_PATTERN, pattern) is not None
 
 
 def should_add_dynamic_config_pattern(pattern):

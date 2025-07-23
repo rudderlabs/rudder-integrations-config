@@ -24,6 +24,12 @@ from utils import (
     is_generic_fallback,
     has_explicit_dynamic_config_pattern,
     has_explicit_env_pattern,
+    DEFAULT_GENERIC_FALLBACK,
+    GENERIC_FALLBACK_PATTERN,
+    DYNAMIC_CONFIG_REGEX_PATTERN,
+    ENV_VAR_REGEX_PATTERN,
+    DYNAMIC_CONFIG_SCHEMA_PATTERN,
+    ENV_VAR_SCHEMA_PATTERN,
 )
 from constants import CONFIG_DIR
 import re
@@ -84,10 +90,10 @@ def generalize_regex_pattern(field):
         # Split on |, return the part that matches ^(.{N,M})$ for any N, M
         parts = [p.strip() for p in regex.split('|')]
         for part in parts:
-            if re.match(r'^\^\(\.\{\d+,\d+\}\)\$$', part):
+            if re.match(GENERIC_FALLBACK_PATTERN, part):
                 return part
         # fallback to default if not found
-        return "^(.{0,100})$"
+        return DEFAULT_GENERIC_FALLBACK
 
     if "regex" in field and field["regex"] and field["regex"].strip():
         existing_pattern = field["regex"].strip()
@@ -108,10 +114,10 @@ def generalize_regex_pattern(field):
         pattern_parts = []
         # Add dynamic config pattern if needed
         if should_add_dynamic_config_pattern(existing_pattern):
-            pattern_parts.append("(^\\{\\{.*\\|\\|(.*)\\}\\}$)")
+            pattern_parts.append(DYNAMIC_CONFIG_SCHEMA_PATTERN)
         # Add environment variable pattern if needed
         if should_add_env_pattern(existing_pattern):
-            pattern_parts.append("(^env[.].+)")
+            pattern_parts.append(ENV_VAR_SCHEMA_PATTERN)
         # Add the existing pattern if it's not empty and not a generic fallback
         if existing_pattern and not is_generic_fallback(existing_pattern):
             pattern_parts.append(existing_pattern)
@@ -124,9 +130,9 @@ def generalize_regex_pattern(field):
     if ("value" in field and field["value"] == "purpose") or (
         "configKey" in field and field["configKey"] == "purpose"
     ):
-        return "^(.{0,100})$"
+        return DEFAULT_GENERIC_FALLBACK
     # Default fallback pattern - this already captures dynamic config and env vars
-    return "^(.{0,100})$"
+    return DEFAULT_GENERIC_FALLBACK
 
 
 def is_dest_field_dependent_on_source(field, dbConfig, schema_field_name):
