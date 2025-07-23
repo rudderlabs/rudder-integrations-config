@@ -526,6 +526,7 @@ def generate_schema_for_dynamic_custom_form_allOf(
                     warnings.warn(
                         f'Unknown field type: {field["type"]} in generate_schema_for_allOf, skipping.',
                         UserWarning,
+                        stacklevel=2,
                     )
                 if "required" in field and field["required"] == True:
                     thenObj["required"].append(field[schema_field_name])
@@ -839,6 +840,7 @@ def generate_schema_for_allOf(uiConfig, dbConfig, schema_field_name):
                         warnings.warn(
                             f'Unknown field type: {field["type"]} in generate_schema_for_allOf, skipping.',
                             UserWarning,
+                            stacklevel=2,
                         )
                     if "required" in field and field["required"] == True:
                         thenObj["required"].append(field[schema_field_name])
@@ -1071,6 +1073,7 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, sel
                         warnings.warn(
                             f'The field {key} is defined in ui-config.json but not in db-config.json\n',
                             UserWarning,
+                            stacklevel=2,
                         )
                 if field.get(
                     "required", False
@@ -1103,6 +1106,7 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, sel
                                     warnings.warn(
                                         f'The field {key} is defined in ui-config.json but not in db-config.json\n',
                                         UserWarning,
+                                        stacklevel=2,
                                     )
                             if (
                                 template.get("title", "") == "Initial setup"
@@ -1128,6 +1132,7 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, sel
                         warnings.warn(
                             f'The field {key} is defined in ui-config.json but not in db-config.json\n',
                             UserWarning,
+                            stacklevel=2,
                         )
 
                 if field.get(
