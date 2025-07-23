@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.121.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.120.0...v1.121.0) (2025-07-21)
+
+
+### Features
+
+* add new toggle button enableNewIdentifyFlow for attentive ([#2102](https://github.com/rudderlabs/rudder-config-schema/issues/2102)) ([a8e4679](https://github.com/rudderlabs/rudder-config-schema/commit/a8e46798158728807221a7be8930ca7110f2b328))
+
 ## 1.120.0 (2025-07-21)
 
 
