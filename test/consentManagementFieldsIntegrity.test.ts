@@ -45,32 +45,13 @@ describe('Consent Management Fields Integrity tests', () => {
     const dbConfig = getJSONDataFromFile(dbConfigFilePath);
     const { destConfig, supportedSourceTypes, includeKeys } = dbConfig.config;
 
-    it(`should have oneTrustCookieCategories and ketchConsentPurposes fields defined per source type instead of the defaultConfig for ${destName}`, () => {
+    it(`should not have oneTrustCookieCategories and ketchConsentPurposes fields defined in defaultConfig for ${destName}`, () => {
       const { defaultConfig } = destConfig;
 
       expect(
         defaultConfig.includes('oneTrustCookieCategories') ||
           defaultConfig.includes('ketchConsentPurposes'),
       ).toBe(false);
-
-      let fail = false;
-      supportedSourceTypes.forEach((srcType: string) => {
-        if (
-          !(
-            destConfig[srcType].includes('oneTrustCookieCategories') &&
-            destConfig[srcType].includes('ketchConsentPurposes')
-          )
-        ) {
-          fail = true;
-        }
-      });
-
-      expect(fail).toBe(false);
-
-      // Remove defaultConfig from the list of source types
-      const destConfigSrcTypes = Object.keys(destConfig);
-      destConfigSrcTypes.splice(destConfigSrcTypes.indexOf('defaultConfig'), 1);
-      expect(destConfigSrcTypes.sort()).toEqual(supportedSourceTypes.sort());
     });
 
     it(`should have consentManagement field defined per source type for ${destName}`, () => {
@@ -93,10 +74,36 @@ describe('Consent Management Fields Integrity tests', () => {
       expect(destConfigSrcTypes.sort()).toEqual(supportedSourceTypes.sort());
     });
 
-    it(`should have oneTrustCookieCategories and ketchConsentPurposes fields defined in includeKeys for ${destName}`, () => {
+    it(`should have oneTrustCookieCategories and ketchConsentPurposes fields optionally defined in includeKeys for ${destName}`, () => {
+      let oneTrustCookieCategoriesDefined = false;
+      let ketchConsentPurposesDefined = false;
+
+      supportedSourceTypes.forEach((srcType: string) => {
+        if (
+          !oneTrustCookieCategoriesDefined &&
+          destConfig[srcType].includes('oneTrustCookieCategories')
+        ) {
+          oneTrustCookieCategoriesDefined = true;
+        }
+        if (!ketchConsentPurposesDefined && destConfig[srcType].includes('ketchConsentPurposes')) {
+          ketchConsentPurposesDefined = true;
+        }
+      });
+
+      // The legacy config keys should be present in includeKeys if they are defined in source type config
+      // Otherwise, they should not be present in includeKeys
       if (includeKeys) {
-        expect(includeKeys.includes('oneTrustCookieCategories')).toBe(true);
-        expect(includeKeys.includes('ketchConsentPurposes')).toBe(true);
+        if (oneTrustCookieCategoriesDefined) {
+          expect(includeKeys.includes('oneTrustCookieCategories')).toBe(true);
+        } else {
+          expect(includeKeys.includes('oneTrustCookieCategories')).toBe(false);
+        }
+
+        if (ketchConsentPurposesDefined) {
+          expect(includeKeys.includes('ketchConsentPurposes')).toBe(true);
+        } else {
+          expect(includeKeys.includes('ketchConsentPurposes')).toBe(false);
+        }
       }
     });
 
@@ -110,22 +117,45 @@ describe('Consent Management Fields Integrity tests', () => {
     const schemaFilePath = path.resolve(`${destDir}/${destName}/schema.json`);
     const schema = getJSONDataFromFile(schemaFilePath);
 
-    it(`should have oneTrustCookieCategories and ketchConsentPurposes fields properly defined in schema.json for ${destName}`, () => {
-      expect(schema.configSchema.properties.oneTrustCookieCategories).toBeDefined();
-      expect(schema.configSchema.properties.ketchConsentPurposes).toBeDefined();
+    it(`should have oneTrustCookieCategories and ketchConsentPurposes fields optionally defined in schema.json for ${destName}`, () => {
+      let oneTrustCookieCategoriesDefined = false;
+      let ketchConsentPurposesDefined = false;
 
-      expect(schema.configSchema.properties.oneTrustCookieCategories.type).toBe('object');
-      expect(schema.configSchema.properties.ketchConsentPurposes.type).toBe('object');
+      supportedSourceTypes.forEach((srcType: string) => {
+        if (
+          !oneTrustCookieCategoriesDefined &&
+          destConfig[srcType].includes('oneTrustCookieCategories')
+        ) {
+          oneTrustCookieCategoriesDefined = true;
+        }
+        if (!ketchConsentPurposesDefined && destConfig[srcType].includes('ketchConsentPurposes')) {
+          ketchConsentPurposesDefined = true;
+        }
+      });
 
-      expect(schema.configSchema.properties.oneTrustCookieCategories.properties).toBeDefined();
-      expect(schema.configSchema.properties.ketchConsentPurposes.properties).toBeDefined();
+      // The legacy config keys should be present in schema.json if they are defined in source type config
+      // Otherwise, they should not be present in schema.json
+      if (oneTrustCookieCategoriesDefined) {
+        expect(schema.configSchema.properties.oneTrustCookieCategories).toBeDefined();
+        expect(schema.configSchema.properties.oneTrustCookieCategories.type).toBe('object');
+        expect(schema.configSchema.properties.oneTrustCookieCategories.properties).toBeDefined();
+        expect(
+          Object.keys(schema.configSchema.properties.oneTrustCookieCategories.properties).sort(),
+        ).toEqual(supportedSourceTypes.sort());
+      } else {
+        expect(schema.configSchema.properties.oneTrustCookieCategories).toBeUndefined();
+      }
 
-      expect(
-        Object.keys(schema.configSchema.properties.oneTrustCookieCategories.properties).sort(),
-      ).toEqual(supportedSourceTypes.sort());
-      expect(
-        Object.keys(schema.configSchema.properties.ketchConsentPurposes.properties).sort(),
-      ).toEqual(supportedSourceTypes.sort());
+      if (ketchConsentPurposesDefined) {
+        expect(schema.configSchema.properties.ketchConsentPurposes).toBeDefined();
+        expect(schema.configSchema.properties.ketchConsentPurposes.type).toBe('object');
+        expect(schema.configSchema.properties.ketchConsentPurposes.properties).toBeDefined();
+        expect(
+          Object.keys(schema.configSchema.properties.ketchConsentPurposes.properties).sort(),
+        ).toEqual(supportedSourceTypes.sort());
+      } else {
+        expect(schema.configSchema.properties.ketchConsentPurposes).toBeUndefined();
+      }
     });
 
     it(`should have consentManagement field properly defined in schema.json for ${destName}`, () => {
