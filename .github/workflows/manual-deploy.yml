@@ -1,0 +1,61 @@
+name: Manual Deploy Configurations
+
+permissions:
+  contents: read
+  
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_url:
+        description: 'Deploy URL'
+        required: true
+        type: string
+      notify:
+        description: 'Send Slack notification'
+        required: false
+        type: boolean
+        default: true
+      version:
+        description: 'Version to deploy'
+        required: true
+        type: string
+      ref:
+        description: 'Git ref to deploy (branch/tag/commit)'
+        required: true
+        type: string
+        default: 'main'
+      verbose:
+        description: 'Enable verbose logging'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  validate:
+    name: Validate Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate Production Deployment
+        run: |
+          if [[ "${{ inputs.deploy_url }}" == "https://api.rudderstack.com" ]]; then
+            if [[ "${{ inputs.ref }}" != "main" ]]; then
+              echo "❌ Error: Production deployments can only be made from the 'main' branch"
+              echo "Current branch: ${{ inputs.ref }}"
+              echo "Production URL: ${{ inputs.deploy_url }}"
+              exit 1
+            fi
+            echo "✅ Production deployment validation passed - deploying from main branch"
+          else
+            echo "ℹ️  Non-production deployment - branch validation skipped"
+          fi
+
+  deploy:
+    needs: validate
+    uses: ./.github/workflows/deploy.yml
+    with:
+      deploy_url: ${{ inputs.deploy_url }}
+      notify: ${{ inputs.notify }}
+      version: ${{ inputs.version }}
+      ref: ${{ inputs.ref }}
+      verbose: ${{ inputs.verbose }}
+    secrets: inherit 
