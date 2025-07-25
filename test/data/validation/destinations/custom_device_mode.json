@@ -5,6 +5,9 @@
       "whitelistedEvents": [{ "eventName": "Signup" }, { "eventName": "Purchase" }],
       "blacklistedEvents": [],
       "eventFilteringOption": "whitelistedEvents",
+      "connectionMode": {
+        "web": "device"
+      },
       "consentManagement": {
         "web": [
           {
@@ -22,6 +25,9 @@
       "whitelistedEvents": [],
       "blacklistedEvents": [{ "eventName": "TestEvent" }],
       "eventFilteringOption": "blacklistedEvents",
+      "connectionMode": {
+        "web": "device"
+      },
       "consentManagement": {
         "web": [
           {
@@ -40,6 +46,9 @@
       "whitelistedEvents": [],
       "blacklistedEvents": [],
       "eventFilteringOption": "disable",
+      "connectionMode": {
+        "web": "device"
+      },
       "consentManagement": {
         "web": [
           {
@@ -55,6 +64,9 @@
     "testTitle": "Invalid config with custom provider missing resolutionStrategy",
     "config": {
       "eventFilteringOption": "disable",
+      "connectionMode": {
+        "web": "device"
+      },
       "consentManagement": {
         "web": [
           {
@@ -79,6 +91,9 @@
       ],
       "blacklistedEvents": [],
       "eventFilteringOption": "whitelistedEvents",
+      "connectionMode": {
+        "web": "device"
+      },
       "consentManagement": {
         "web": [
           {
@@ -94,6 +109,9 @@
     "testTitle": "Invalid config with invalid eventFilteringOption value",
     "config": {
       "eventFilteringOption": "invalid_option",
+      "connectionMode": {
+        "web": "device"
+      },
       "consentManagement": {
         "web": [
           {
@@ -110,6 +128,9 @@
     "testTitle": "Invalid config with invalid consent provider",
     "config": {
       "eventFilteringOption": "disable",
+      "connectionMode": {
+        "web": "device"
+      },
       "consentManagement": {
         "web": [
           {
@@ -128,6 +149,9 @@
       "whitelistedEvents": [],
       "blacklistedEvents": [],
       "eventFilteringOption": "disable",
+      "connectionMode": {
+        "web": "device"
+      },
       "consentManagement": {
         "web": [
           {
@@ -138,5 +162,44 @@
       }
     },
     "result": true
+  },
+  {
+    "testTitle": "Invalid config with missing connectionMode field",
+    "config": {
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "eventFilteringOption": "disable",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'connectionMode'"]
+  },
+  {
+    "testTitle": "Invalid config with connectionMode.web set to cloud",
+    "config": {
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "eventFilteringOption": "disable",
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["connectionMode.web must be equal to one of the allowed values"]
   }
 ]
