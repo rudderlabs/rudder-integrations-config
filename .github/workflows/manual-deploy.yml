@@ -31,7 +31,26 @@ on:
         default: false
 
 jobs:
+  validate:
+    name: Validate Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate Production Deployment
+        run: |
+          if [[ "${{ inputs.deploy_url }}" == "https://api.rudderstack.com" ]]; then
+            if [[ "${{ inputs.ref }}" != "main" ]]; then
+              echo "❌ Error: Production deployments can only be made from the 'main' branch"
+              echo "Current branch: ${{ inputs.ref }}"
+              echo "Production URL: ${{ inputs.deploy_url }}"
+              exit 1
+            fi
+            echo "✅ Production deployment validation passed - deploying from main branch"
+          else
+            echo "ℹ️  Non-production deployment - branch validation skipped"
+          fi
+
   deploy:
+    needs: validate
     uses: ./.github/workflows/deploy.yml
     with:
       deploy_url: ${{ inputs.deploy_url }}
