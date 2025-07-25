@@ -18,6 +18,7 @@
       },
       "namespace": {
         "type": "string",
+        "rs-immutable": true,
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{0,64})$"
       },
       "roleBasedAuth": {
@@ -938,17 +939,17 @@
           "properties": {
             "accessKeyID": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,})$"
             },
             "accessKey": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,})$"
             },
             "roleBasedAuth": {
               "const": false
             }
           },
-          "required": []
+          "required": ["accessKeyID", "accessKey"]
         }
       }
     ]
