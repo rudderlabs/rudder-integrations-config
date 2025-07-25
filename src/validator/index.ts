@@ -114,7 +114,42 @@ export async function validateSourceDefinitions(srcDefConfig: any): Promise<bool
   return true;
 }
 
+export async function validateAccountDefinitions(accDefConfig: any): Promise<boolean> {
+  const ddAjv = new Ajv({
+    allErrors: true,
+    useDefaults: true,
+    strict: true,
+    strictSchema: true,
+    strictRequired: true,
+    strictNumbers: true,
+    strictTypes: true,
+    strictTuples: true,
+  });
+
+  const validator = ddAjv.compile(
+    await importJsonFromFile(path.join(__dirname, '../schemas/account/account-db-config-schema.json')),
+  );
+
+  if (validator && !validator(accDefConfig) && validator.errors) {
+    const errorMessages: string[] = validator.errors.map((e) => {
+      const propertyName = e.instancePath.slice(1).replace(/\//g, '.');
+      return `${propertyName} ${e.message}`;
+    });
+
+    throw new Error(JSON.stringify(errorMessages));
+  }
+  return true;
+}
+
 export async function init() {
   validators = {};
   await initAjvValidators();
 }
+
+export default {
+  validateConfig,
+  validateSourceDefinitions,
+  validateDestinationDefinitions,
+  validateAccountDefinitions,
+  init,
+};
