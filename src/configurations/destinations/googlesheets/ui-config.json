@@ -1,102 +1,147 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "textareaInput",
-          "label": "Credentials",
-          "labelNote": "Google Cloud Service Account credentials JSON for RudderStack to use in publishing data into Google Sheets",
-          "value": "credentials",
-          "regex": ".*",
-          "required": true,
-          "footerNote": "The credentials JSON is used by the client library to access the Google Sheets API",
-          "secret": true
-        },
-        {
-          "type": "textInput",
-          "label": "Sheet Id",
-          "value": "sheetId",
-          "regex": ".*",
-          "required": true,
-          "placeholder": "e.g. 13N0gXX9Be_2gR2afax2G4j6hXXXCOgmDcCRgopTc905",
-          "footerNote": "Your Google Sheet Id"
-        },
-        {
-          "type": "textInput",
-          "label": "Sheet Name",
-          "value": "sheetName",
-          "regex": ".*",
-          "required": true,
-          "placeholder": "e.g. Sheet1",
-          "footerNote": "The spread-sheet to which you want to send data"
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Map Event to Google-Sheets",
-          "footerNote": "Add Event Properties to map to Google-Sheets Column",
-          "labelLeft": "Event Properties",
-          "labelRight": "Column Name",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g: addedToCart",
-          "placeholderRight": "e.g: Added To Cart",
-          "value": "eventKeyMap",
-          "disableInputLeft": true,
-          "disableInputRight": false,
-          "disableDelete": true,
-          "required": true
-        }
-      ]
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection Settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textareaInput",
+                    "label": "Credentials",
+                    "labelNote": "Google Cloud Service Account credentials JSON for RudderStack to use in publishing data into Google Sheets",
+                    "configKey": "credentials",
+                    "regex": ".*",
+                    "required": true,
+                    "footerNote": "The credentials JSON is used by the client library to access the Google Sheets API",
+                    "secret": true
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Sheet Id",
+                    "configKey": "sheetId",
+                    "regex": ".*",
+                    "required": true,
+                    "placeholder": "e.g. 13N0gXX9Be_2gR2afax2G4j6hXXXCOgmDcCRgopTc905",
+                    "footerNote": "Your Google Sheet Id"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Sheet Name",
+                    "configKey": "sheetName",
+                    "regex": ".*",
+                    "required": true,
+                    "placeholder": "e.g. Sheet1",
+                    "footerNote": "The spread-sheet to which you want to send data"
+                  },
+                  {
+                    "type": "dynamicForm",
+                    "label": "Map Event to Google-Sheets",
+                    "footerNote": "Add Event Properties to map to Google-Sheets Column",
+                    "labelLeft": "Event Properties",
+                    "labelRight": "Column Name",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g: addedToCart",
+                    "placeholderRight": "e.g: Added To Cart",
+                    "configKey": "eventKeyMap",
+                    "disableInputLeft": true,
+                    "disableInputRight": false,
+                    "disableDelete": true,
+                    "required": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     },
-    {
-      "title": "Consent Settings",
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
       "fields": [
         {
           "type": "dynamicCustomForm",
-          "value": "consentManagement",
-          "label": "Consent management settings",
-          "footerNote": "We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
             {
               "type": "singleSelect",
               "label": "Consent management provider",
-              "value": "provider",
+              "configKey": "provider",
               "options": [
                 {
-                  "name": "Custom",
+                  "label": "Custom",
                   "value": "custom"
                 },
                 {
-                  "name": "iubenda",
+                  "label": "iubenda",
                   "value": "iubenda"
                 },
                 {
-                  "name": "Ketch",
+                  "label": "Ketch",
                   "value": "ketch"
                 },
                 {
-                  "name": "OneTrust",
+                  "label": "OneTrust",
                   "value": "oneTrust"
                 }
               ],
-              "defaultOption": {
-                "name": "OneTrust",
-                "value": "oneTrust"
-              },
+              "default": "oneTrust",
               "required": true
             },
             {
               "type": "singleSelect",
               "label": "the required consent logic",
-              "value": "resolutionStrategy",
+              "configKey": "resolutionStrategy",
               "options": [
                 {
-                  "name": "AND",
+                  "label": "AND",
                   "value": "and"
                 },
                 {
-                  "name": "OR",
+                  "label": "OR",
                   "value": "or"
                 }
               ],
@@ -112,16 +157,15 @@
               }
             },
             {
-              "type": "dynamicCustomForm",
-              "value": "consents",
+              "type": "tagInput",
               "label": "Enter consent category IDs",
-              "customFields": [
+              "note": "Input your consent category IDs by pressing 'Enter' after each entry. We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
                 {
-                  "type": "textInput",
-                  "placeholder": "Marketing",
-                  "value": "consent",
-                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "required": false
+                  "consent": ""
                 }
               ]
             }
@@ -129,5 +173,5 @@
         }
       ]
     }
-  ]
+  }
 }
