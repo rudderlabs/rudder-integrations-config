@@ -1,0 +1,48 @@
+name: Secret Scan with TruffleHog
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+
+jobs:
+  trufflehog-scan:
+    name: TruffleHog Secret Scan
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Secret Scanning
+        uses: trufflesecurity/trufflehog@d7987d71ce8768a3821760edc2c932229ac9e9a3
+        with:
+          extra_args: >
+            --results=verified,unknown
+            --exclude-paths .trufflehogignore
+
+      #------------ Alternatively we can use trufflehog directly------------------------------
+      # - name: Install TruffleHog
+      #   run: |
+      #     curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sh -s -- -b /usr/local/bin
+
+      # - name: Create TruffleHog exclude patterns file
+      #   run: |
+      #     cat > .trufflehog-exclude << 'EOF'
+      #     # Exclude common false positive files
+      #     test/data/validation/destinations/googlepubsub.json
+      #     EOF
+
+      # - name: Run TruffleHog filesystem scan
+      #   run: |
+      #     echo "🔍 Scanning repository with TruffleHog..."
+      #     trufflehog filesystem . --exclude-paths=.trufflehog-exclude --results=verified,unknown --fail

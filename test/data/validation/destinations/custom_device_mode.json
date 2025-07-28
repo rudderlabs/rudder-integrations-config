@@ -1,0 +1,205 @@
+[
+  {
+    "testTitle": "Valid config with whitelisted events and consent management enabled",
+    "config": {
+      "whitelistedEvents": [{ "eventName": "Signup" }, { "eventName": "Purchase" }],
+      "blacklistedEvents": [],
+      "eventFilteringOption": "whitelistedEvents",
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust",
+            "consents": [{ "consent": "Marketing" }, { "consent": "Analytics" }]
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid config with blacklisted events and custom consent provider",
+    "config": {
+      "whitelistedEvents": [],
+      "blacklistedEvents": [{ "eventName": "TestEvent" }],
+      "eventFilteringOption": "blacklistedEvents",
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "and",
+            "consents": [{ "consent": "Marketing" }]
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid config with disabled event filtering",
+    "config": {
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "eventFilteringOption": "disable",
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "ketch",
+            "consents": [{ "consent": "Analytics" }]
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Invalid config with custom provider missing resolutionStrategy",
+    "config": {
+      "eventFilteringOption": "disable",
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [{ "consent": "Marketing" }]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0 must have required property 'resolutionStrategy'",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "Valid config with dynamic values in event names",
+    "config": {
+      "whitelistedEvents": [
+        { "eventName": "{{event.name||default}}" },
+        { "eventName": "env.CUSTOM_EVENT" }
+      ],
+      "blacklistedEvents": [],
+      "eventFilteringOption": "whitelistedEvents",
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "iubenda",
+            "consents": [{ "consent": "{{consent.id||default}}" }]
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Invalid config with invalid eventFilteringOption value",
+    "config": {
+      "eventFilteringOption": "invalid_option",
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["eventFilteringOption must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "Invalid config with invalid consent provider",
+    "config": {
+      "eventFilteringOption": "disable",
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "invalid_provider",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.web.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "Valid config with empty arrays and minimal consent",
+    "config": {
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "eventFilteringOption": "disable",
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Invalid config with missing connectionMode field",
+    "config": {
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "eventFilteringOption": "disable",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'connectionMode'"]
+  },
+  {
+    "testTitle": "Invalid config with connectionMode.web set to cloud",
+    "config": {
+      "whitelistedEvents": [],
+      "blacklistedEvents": [],
+      "eventFilteringOption": "disable",
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust",
+            "consents": []
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["connectionMode.web must be equal to one of the allowed values"]
+  }
+]
