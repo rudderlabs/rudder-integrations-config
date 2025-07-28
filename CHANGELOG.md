@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.122.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.121.0...v1.122.0) (2025-07-28)
+
+
+### Features
+
+* add manual deploy workflow with verbose option ([240565e](https://github.com/rudderlabs/rudder-config-schema/commit/240565e4492d8c94fc00e3c1ed1016f7cc96141c))
+* add production deployment validation to manual-deploy workflow ([99c5370](https://github.com/rudderlabs/rudder-config-schema/commit/99c537051b7a80a5ab961fcecc21edd7e15be549))
+* **comscore:** add js device mode config  ([#2104](https://github.com/rudderlabs/rudder-config-schema/issues/2104)) ([d59beb0](https://github.com/rudderlabs/rudder-config-schema/commit/d59beb0309c431256b6443340df594959cc5eec9))
+* onboarding new custom device mode destination ([#2118](https://github.com/rudderlabs/rudder-config-schema/issues/2118)) ([f11a454](https://github.com/rudderlabs/rudder-config-schema/commit/f11a454b323f91b5bd23ee637347d64a4747e1c9))
+
+
+### Bug Fixes
+
+* improve Slack destination UI config clarity and placeholders ([#2101](https://github.com/rudderlabs/rudder-config-schema/issues/2101)) ([68ab668](https://github.com/rudderlabs/rudder-config-schema/commit/68ab66896df980d0b0a6db2317f6e1e800c03af9))
+
 ## [1.121.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.120.0...v1.121.0) (2025-07-21)
 
 
