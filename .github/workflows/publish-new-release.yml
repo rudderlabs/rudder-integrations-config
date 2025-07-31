@@ -100,9 +100,9 @@ jobs:
           RELEASES_URL: 'https://github.com/rudderlabs/rudder-integrations-config/releases/tag/'
         with:
           method: chat.postMessage
-          channel-id: ${{ secrets.SLACK_RELEASE_CHANNEL_ID }}
           payload: |
             {
+              "channel": "${{ secrets.SLACK_RELEASE_CHANNEL_ID }}",
               "text": "*<${{env.RELEASES_URL}}v${{ steps.extract-version.outputs.release_version }}|v${{ steps.extract-version.outputs.release_version }}>*\nCC: <!subteam^S02AEQL26CT>",
               "blocks": [
                 {
