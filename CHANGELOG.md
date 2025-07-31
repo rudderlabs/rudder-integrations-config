@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.123.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.122.0...v1.123.0) (2025-07-30)
+
+
+### Features
+
+* **monenage:** add id resolution toggle ([#2119](https://github.com/rudderlabs/rudder-config-schema/issues/2119)) ([cf64901](https://github.com/rudderlabs/rudder-config-schema/commit/cf64901654769ad8bb447f04d2e40146a234c2b6))
+
+
+### Bug Fixes
+
+* s3 datalake destination allowing empty access keys if roleBasedAuth is false ([#2113](https://github.com/rudderlabs/rudder-config-schema/issues/2113)) ([917b599](https://github.com/rudderlabs/rudder-config-schema/commit/917b599769f37d41ed6fd34cb9b834a1c9d11754))
+
 ## [1.122.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.121.0...v1.122.0) (2025-07-28)
 
 
