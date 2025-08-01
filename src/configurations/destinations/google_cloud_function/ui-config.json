@@ -1,113 +1,166 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "URL",
-          "value": "googleCloudFunctionUrl",
-          "required": true,
-          "placeholder": "http://www.abcd.com",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
-          "footerNote": "The Url given under Trigger section when you create Google Cloud Function"
-        },
-        {
-          "type": "checkbox",
-          "label": "Enable it if your function requires authentication",
-          "value": "requireAuthentication",
-          "default": true
-        },
-        {
-          "type": "textareaInput",
-          "preRequisiteField": [
-            {
-              "name": "requireAuthentication",
-              "selectedValue": true
-            }
-          ],
-          "label": "Credentials",
-          "labelNote": "GCP Service Account credentials JSON for RudderStack to use in authenticating your Google Cloud Function",
-          "value": "credentials",
-          "regex": ".*",
-          "required": true,
-          "footerNote": "The credentials JSON is used by the client library to access the Google Cloud Function API"
-        }
-      ]
-    },
-    {
-      "title": "Optional Settings",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Enable Batch Input",
-          "value": "enableBatchInput",
-          "default": false,
-          "footerNote": "While this is checked, Events are sent in Batch."
-        },
-        {
-          "type": "textInput",
-          "preRequisiteField": {
-            "name": "enableBatchInput",
-            "selectedValue": true
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection Settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "URL",
+                    "configKey": "googleCloudFunctionUrl",
+                    "required": true,
+                    "placeholder": "http://www.abcd.com",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+                    "footerNote": "The Url given under Trigger section when you create Google Cloud Function"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Enable it if your function requires authentication",
+                    "configKey": "requireAuthentication",
+                    "default": true
+                  },
+                  {
+                    "type": "textareaInput",
+                    "preRequisiteField": [
+                      {
+                        "name": "requireAuthentication",
+                        "selectedValue": true
+                      }
+                    ],
+                    "label": "Credentials",
+                    "labelNote": "GCP Service Account credentials JSON for RudderStack to use in authenticating your Google Cloud Function",
+                    "configKey": "credentials",
+                    "regex": ".*",
+                    "required": true,
+                    "footerNote": "The credentials JSON is used by the client library to access the Google Cloud Function API"
+                  }
+                ]
+              }
+            ]
           },
-          "label": "Max Batch Size",
-          "value": "maxBatchSize",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[1-9]\\d*$",
-          "regexErrorMessage": "Invalid batch size",
-          "placeholder": "e.g: 100",
-          "required": false
-        }
-      ]
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Optional Settings",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Enable Batch Input",
+                    "configKey": "enableBatchInput",
+                    "default": false,
+                    "footerNote": "While this is checked, Events are sent in Batch."
+                  },
+                  {
+                    "type": "textInput",
+                    "preRequisiteField": {
+                      "name": "enableBatchInput",
+                      "selectedValue": true
+                    },
+                    "label": "Max Batch Size",
+                    "configKey": "maxBatchSize",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^[1-9]\\d*$",
+                    "regexErrorMessage": "Invalid batch size",
+                    "placeholder": "e.g: 100",
+                    "required": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     },
-    {
-      "title": "Consent Settings",
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
       "fields": [
         {
           "type": "dynamicCustomForm",
-          "value": "consentManagement",
-          "label": "Consent management settings",
-          "footerNote": "We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
             {
               "type": "singleSelect",
               "label": "Consent management provider",
-              "value": "provider",
+              "configKey": "provider",
               "options": [
                 {
-                  "name": "Custom",
+                  "label": "Custom",
                   "value": "custom"
                 },
                 {
-                  "name": "iubenda",
+                  "label": "iubenda",
                   "value": "iubenda"
                 },
                 {
-                  "name": "Ketch",
+                  "label": "Ketch",
                   "value": "ketch"
                 },
                 {
-                  "name": "OneTrust",
+                  "label": "OneTrust",
                   "value": "oneTrust"
                 }
               ],
-              "defaultOption": {
-                "name": "OneTrust",
-                "value": "oneTrust"
-              },
+              "default": "oneTrust",
               "required": true
             },
             {
               "type": "singleSelect",
               "label": "the required consent logic",
-              "value": "resolutionStrategy",
+              "configKey": "resolutionStrategy",
               "options": [
                 {
-                  "name": "AND",
+                  "label": "AND",
                   "value": "and"
                 },
                 {
-                  "name": "OR",
+                  "label": "OR",
                   "value": "or"
                 }
               ],
@@ -123,16 +176,15 @@
               }
             },
             {
-              "type": "dynamicCustomForm",
-              "value": "consents",
+              "type": "tagInput",
               "label": "Enter consent category IDs",
-              "customFields": [
+              "note": "Input your consent category IDs by pressing 'Enter' after each entry. We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
                 {
-                  "type": "textInput",
-                  "placeholder": "Marketing",
-                  "value": "consent",
-                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "required": false
+                  "consent": ""
                 }
               ]
             }
@@ -140,5 +192,5 @@
         }
       ]
     }
-  ]
+  }
 }

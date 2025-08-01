@@ -1,101 +1,160 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Project ID",
-          "value": "projectId",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "regexErrorMessage": "Invalid Project ID",
-          "required": true,
-          "placeholder": ""
-        },
-        {
-          "type": "textareaInput",
-          "label": "Credentials",
-          "labelNote": "GCP Service Account credentials JSON for RudderStack to use in publishing data into your Google Pub/Sub",
-          "value": "credentials",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.+",
-          "required": true,
-          "footerNote": "The credentials JSON is used by the client library to access the Pub/Sub API",
-          "secret": true
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Send RudderStack events to Google pub/sub topics",
-          "footerNote": "Use asterics (*) to send all events to the particular topic.",
-          "labelLeft": "Event",
-          "labelRight": "Topic ID",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g: page",
-          "placeholderRight": "e.g: topic_id",
-          "value": "eventToTopicMap"
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Map message properties to Google pub/sub message Attribute Key",
-          "footerNote": "Use asterics (*) to map for all events.",
-          "labelLeft": "Event",
-          "labelRight": "Field",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g: event",
-          "placeholderRight": "e.g: key",
-          "value": "eventToAttributesMap"
-        }
-      ]
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection Settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Project ID",
+                    "configKey": "projectId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Project ID",
+                    "required": true,
+                    "placeholder": ""
+                  },
+                  {
+                    "type": "textareaInput",
+                    "label": "Credentials",
+                    "labelNote": "GCP Service Account credentials JSON for RudderStack to use in publishing data into your Google Pub/Sub",
+                    "configKey": "credentials",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.+",
+                    "required": true,
+                    "footerNote": "The credentials JSON is used by the client library to access the Pub/Sub API",
+                    "secret": true
+                  }
+                  
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Google Cloud Pub/Sub Configuration",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "dynamicForm",
+                    "label": "Send RudderStack events to Google pub/sub topics",
+                    "footerNote": "Use asterics (*) to send all events to the particular topic.",
+                    "labelLeft": "Event",
+                    "labelRight": "Topic ID",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g: page",
+                    "placeholderRight": "e.g: topic_id",
+                    "configKey": "eventToTopicMap"
+                  },
+                  {
+                    "type": "dynamicForm",
+                    "label": "Map message properties to Google pub/sub message Attribute Key",
+                    "footerNote": "Use asterics (*) to map for all events.",
+                    "labelLeft": "Event",
+                    "labelRight": "Field",
+                    "keyLeft": "from",
+                    "keyRight": "to",
+                    "placeholderLeft": "e.g: event",
+                    "placeholderRight": "e.g: key",
+                    "configKey": "eventToAttributesMap"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     },
-    {
-      "title": "Consent Settings",
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
       "fields": [
         {
           "type": "dynamicCustomForm",
-          "value": "consentManagement",
-          "label": "Consent management settings",
-          "footerNote": "We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
             {
               "type": "singleSelect",
               "label": "Consent management provider",
-              "value": "provider",
+              "configKey": "provider",
               "options": [
                 {
-                  "name": "Custom",
+                  "label": "Custom",
                   "value": "custom"
                 },
                 {
-                  "name": "iubenda",
+                  "label": "iubenda",
                   "value": "iubenda"
                 },
                 {
-                  "name": "Ketch",
+                  "label": "Ketch",
                   "value": "ketch"
                 },
                 {
-                  "name": "OneTrust",
+                  "label": "OneTrust",
                   "value": "oneTrust"
                 }
               ],
-              "defaultOption": {
-                "name": "OneTrust",
-                "value": "oneTrust"
-              },
+              "default": "oneTrust",
               "required": true
             },
             {
               "type": "singleSelect",
               "label": "the required consent logic",
-              "value": "resolutionStrategy",
+              "configKey": "resolutionStrategy",
               "options": [
                 {
-                  "name": "AND",
+                  "label": "AND",
                   "value": "and"
                 },
                 {
-                  "name": "OR",
+                  "label": "OR",
                   "value": "or"
                 }
               ],
@@ -111,16 +170,15 @@
               }
             },
             {
-              "type": "dynamicCustomForm",
-              "value": "consents",
+              "type": "tagInput",
               "label": "Enter consent category IDs",
-              "customFields": [
+              "note": "Input your consent category IDs by pressing 'Enter' after each entry. We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
                 {
-                  "type": "textInput",
-                  "placeholder": "Marketing",
-                  "value": "consent",
-                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "required": false
+                  "consent": ""
                 }
               ]
             }
@@ -128,5 +186,5 @@
         }
       ]
     }
-  ]
+  }
 }
