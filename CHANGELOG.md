@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.124.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.123.0...v1.124.0) (2025-08-19)
+
+
+### Features
+
+* onboard account definitions for google destinations ([#2127](https://github.com/rudderlabs/rudder-config-schema/issues/2127)) ([26764b1](https://github.com/rudderlabs/rudder-config-schema/commit/26764b1e275e699a0802fb193226eeb07887f30a))
+
 ## [1.123.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.122.0...v1.123.0) (2025-07-30)
 
 
