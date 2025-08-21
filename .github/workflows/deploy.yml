@@ -92,11 +92,11 @@ jobs:
         continue-on-error: true
         if: inputs.notify == true
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           PROJECT_NAME: 'Rudder Integrations Config'
           RELEASES_URL: 'https://github.com/rudderlabs/rudder-integrations-config/releases/tag/'
         with:
           method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             {
               "channel": "${{ secrets.SLACK_RELEASE_CHANNEL_ID }}",
