@@ -887,5 +887,71 @@
       "ketchConsentPurposes.web must be array",
       "ketchConsentPurposes.unity.0 must be object"
     ]
+  },
+  {
+    "testTitle": "With manualSync field set to true",
+    "config": {
+      "account": "test-account",
+      "database": "test-database",
+      "warehouse": "test-warehouse",
+      "user": "test-user",
+      "password": "test-password",
+      "cloudProvider": "AWS",
+      "syncFrequency": "30",
+      "enableSSE": false,
+      "useRudderStorage": false,
+      "roleBasedAuth": false,
+      "prefix": "test-prefix",
+      "useSTSTokens": false,
+      "bucketName": "test-bucket",
+      "accessKeyID": "test-access-key-id",
+      "accessKey": "test-access-key",
+      "manualSync": true
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Without manualSync field (should default to false)",
+    "config": {
+      "account": "test-account",
+      "database": "test-database",
+      "warehouse": "test-warehouse",
+      "user": "test-user",
+      "password": "test-password",
+      "cloudProvider": "AWS",
+      "syncFrequency": "30",
+      "enableSSE": false,
+      "useRudderStorage": false,
+      "roleBasedAuth": false,
+      "prefix": "test-prefix",
+      "useSTSTokens": false,
+      "bucketName": "test-bucket",
+      "accessKeyID": "test-access-key-id",
+      "accessKey": "test-access-key"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With manualSync field as invalid type (string)",
+    "config": {
+      "account": "test-account",
+      "database": "test-database",
+      "warehouse": "test-warehouse",
+      "user": "test-user",
+      "password": "test-password",
+      "cloudProvider": "AWS",
+      "syncFrequency": "30",
+      "enableSSE": false,
+      "useRudderStorage": false,
+      "roleBasedAuth": false,
+      "prefix": "test-prefix",
+      "useSTSTokens": false,
+      "bucketName": "test-bucket",
+      "accessKeyID": "test-access-key-id",
+      "accessKey": "test-access-key",
+      "manualSync": "true"
+    },
+    "result": false,
+    "err": ["manualSync must be boolean"]
   }
 ]
