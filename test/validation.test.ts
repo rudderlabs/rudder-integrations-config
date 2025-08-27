@@ -95,8 +95,14 @@ async function getSourceDefinitionConfig(srcName: string) {
   return import(configPath);
 }
 
-async function getAccountDefinitionConfig(integrationName: string, accountName: string, type: string) {
-  const dirPath = path.resolve(`src/configurations/${type}/${integrationName}/accounts/${accountName}`);
+async function getAccountDefinitionConfig(
+  integrationName: string,
+  accountName: string,
+  type: string,
+) {
+  const dirPath = path.resolve(
+    `src/configurations/${type}/${integrationName}/accounts/${accountName}`,
+  );
   if (fs.existsSync(dirPath) && fs.statSync(dirPath).isDirectory()) {
     const accountConfig = await import(path.join(dirPath, 'db-config.json'));
     return accountConfig.default;
@@ -357,7 +363,11 @@ describe('Account Definition validation tests', () => {
   destinationAccounts.forEach((account) => {
     const [integration, accountName] = account.split('/');
     it(`${integration}/${accountName} - account definition test`, async () => {
-      const accDefConfig = await getAccountDefinitionConfig(integration, accountName, 'destinations');
+      const accDefConfig = await getAccountDefinitionConfig(
+        integration,
+        accountName,
+        'destinations',
+      );
       await expect(validateAccountDefinitions(accDefConfig)).resolves.toEqual(true);
     });
   });
@@ -376,10 +386,11 @@ describe('Account Definition validation tests', () => {
       description: 'missing required properties',
       input: {
         config: {
-          optionFields: ['region']
-        }
+          optionFields: ['region'],
+        },
       },
-      expected: '[" must have required property \'name\'"," must have required property \'type\'"," must have required property \'category\'"," must have required property \'authenticationType\'"]'
+      expected:
+        '[" must have required property \'name\'"," must have required property \'type\'"," must have required property \'category\'"," must have required property \'authenticationType\'"]',
     },
     {
       description: 'invalid category',
@@ -390,10 +401,10 @@ describe('Account Definition validation tests', () => {
         authenticationType: 'oauth',
         config: {
           optionFields: ['region'],
-          refreshOAuthToken: true
-        }
+          refreshOAuthToken: true,
+        },
       },
-      expected: '["category must be equal to one of the allowed values"]'
+      expected: '["category must be equal to one of the allowed values"]',
     },
     {
       description: 'invalid authentication type',
@@ -404,10 +415,10 @@ describe('Account Definition validation tests', () => {
         authenticationType: 123,
         config: {
           optionFields: ['region'],
-          refreshOAuthToken: true
-        }
+          refreshOAuthToken: true,
+        },
       },
-      expected: '["authenticationType must be string"]'
+      expected: '["authenticationType must be string"]',
     },
     {
       description: 'invalid name format',
@@ -418,10 +429,10 @@ describe('Account Definition validation tests', () => {
         authenticationType: 'oauth',
         config: {
           optionFields: ['region'],
-          refreshOAuthToken: true
-        }
+          refreshOAuthToken: true,
+        },
       },
-      expected: '["name must match pattern \\\"^[A-Z_]+$\\\"\"]'
+      expected: '["name must match pattern \\"^[A-Z_]+$\\""]',
     },
     {
       description: 'invalid optionFields',
@@ -432,16 +443,16 @@ describe('Account Definition validation tests', () => {
         authenticationType: 'oauth',
         config: {
           optionFields: [123],
-          refreshOAuthToken: true
-        }
+          refreshOAuthToken: true,
+        },
       },
-      expected: '["config.optionFields.0 must be string"]'
-    }
+      expected: '["config.optionFields.0 must be string"]',
+    },
   ];
 
   it.each(malformedAccountDefConfigs)('$description', async (testCase) => {
     await expect(validateAccountDefinitions(testCase.input)).rejects.toThrow(
-      new Error(testCase.expected)
+      new Error(testCase.expected),
     );
   });
 });

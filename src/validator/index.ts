@@ -127,7 +127,9 @@ export async function validateAccountDefinitions(accDefConfig: any): Promise<boo
   });
 
   const validator = ddAjv.compile(
-    await importJsonFromFile(path.join(__dirname, '../schemas/account/account-db-config-schema.json')),
+    await importJsonFromFile(
+      path.join(__dirname, '../schemas/account/account-db-config-schema.json'),
+    ),
   );
 
   if (validator && !validator(accDefConfig) && validator.errors) {
