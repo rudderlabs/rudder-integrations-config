@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.125.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.124.0...v1.125.0) (2025-09-02)
+
+
+### Features
+
+* add manualSync field for snowflake in backend ([#2146](https://github.com/rudderlabs/rudder-config-schema/issues/2146)) ([5e78b98](https://github.com/rudderlabs/rudder-config-schema/commit/5e78b987e1e805ab55b1b938bd26b5033bdcea19))
+* add track event support for ms clarity ([#2153](https://github.com/rudderlabs/rudder-config-schema/issues/2153)) ([7e51bd5](https://github.com/rudderlabs/rudder-config-schema/commit/7e51bd54b7658caf7eb5608b583c576ff716db68))
+
+
+### Bug Fixes
+
+* linting of account validation test ([#2149](https://github.com/rudderlabs/rudder-config-schema/issues/2149)) ([6d8bf95](https://github.com/rudderlabs/rudder-config-schema/commit/6d8bf955ad1e6ba580e0b70a21925b5a28e98c50))
+* linting of py and json files ([#2145](https://github.com/rudderlabs/rudder-config-schema/issues/2145)) ([127f1ca](https://github.com/rudderlabs/rudder-config-schema/commit/127f1ca3a007dde5ae63cecb37769ae2fb42164f))
+
 ## [1.124.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.123.0...v1.124.0) (2025-08-19)
 
 
