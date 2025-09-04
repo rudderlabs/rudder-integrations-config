@@ -43,7 +43,9 @@ def validate_destination_accounts(destination_name):
 
     # Check if destination exists
     if not dest_dir.exists():
-        print(f"Error: Destination '{destination_name}' not found. Skipping validation.")
+        print(
+            f"Error: Destination '{destination_name}' not found. Skipping validation."
+        )
         return True
 
     # Load main destination config

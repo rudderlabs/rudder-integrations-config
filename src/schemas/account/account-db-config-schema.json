@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["name", "type", "category", "authenticationType", "config"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[A-Z_]+$"
+    },
+    "type": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["destination", "source"]
+    },
+    "authenticationType": {
+      "type": "string"
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "optionFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "refreshOAuthToken": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

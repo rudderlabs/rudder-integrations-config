@@ -8,6 +8,7 @@ import {
   validateConfig,
   validateSourceDefinitions,
   validateDestinationDefinitions,
+  validateAccountDefinitions,
 } from '../src';
 
 const command = new Commander.Command();
@@ -22,6 +23,24 @@ const cmdOpts = command.opts();
 function getIntegrationNames(type: string) {
   const dirPath = path.resolve(`src/configurations/${type}`);
   return fs.readdirSync(dirPath).filter((file) => fs.statSync(`${dirPath}/${file}`).isDirectory());
+}
+
+function getAccountNames(type: string) {
+  const dirPath = path.resolve(`src/configurations/${type}`);
+  const integrations = getIntegrationNames(type);
+  const accounts: string[] = [];
+
+  integrations.forEach((integration) => {
+    const accountsPath = path.join(dirPath, integration, 'accounts');
+    if (fs.existsSync(accountsPath) && fs.statSync(accountsPath).isDirectory()) {
+      const accountNames = fs.readdirSync(accountsPath);
+      accountNames.forEach((account) => {
+        accounts.push(`${integration}/${account}`);
+      });
+    }
+  });
+
+  return accounts;
 }
 
 function getIntegrationData(name: string, type: string): Record<string, unknown>[] {
@@ -74,6 +93,22 @@ async function getSourceDefinitionConfig(srcName: string) {
   const dirPath = path.resolve(`src/configurations/sources/${srcName}`);
   const configPath = `${dirPath}/db-config.json`;
   return import(configPath);
+}
+
+async function getAccountDefinitionConfig(
+  integrationName: string,
+  accountName: string,
+  type: string,
+) {
+  const dirPath = path.resolve(
+    `src/configurations/${type}/${integrationName}/accounts/${accountName}`,
+  );
+  if (fs.existsSync(dirPath) && fs.statSync(dirPath).isDirectory()) {
+    const accountConfig = await import(path.join(dirPath, 'db-config.json'));
+    return accountConfig.default;
+  }
+
+  throw new Error(`Account configuration not found for ${integrationName}/${accountName}`);
 }
 
 async function getDestinationDefinitionConfig(destName: string) {
@@ -318,6 +353,105 @@ describe('Source Definition validation tests', () => {
 
   it.each(malformedSrcDefConfigs)('$description', async (testCase) => {
     await expect(validateSourceDefinitions(testCase.input)).rejects.toThrow(
+      new Error(testCase.expected),
+    );
+  });
+});
+
+describe('Account Definition validation tests', () => {
+  const destinationAccounts = getAccountNames('destinations');
+  destinationAccounts.forEach((account) => {
+    const [integration, accountName] = account.split('/');
+    it(`${integration}/${accountName} - account definition test`, async () => {
+      const accDefConfig = await getAccountDefinitionConfig(
+        integration,
+        accountName,
+        'destinations',
+      );
+      await expect(validateAccountDefinitions(accDefConfig)).resolves.toEqual(true);
+    });
+  });
+
+  const sourceAccounts = getAccountNames('sources');
+  sourceAccounts.forEach((account) => {
+    const [integration, accountName] = account.split('/');
+    it(`${integration}/${accountName} - account definition test`, async () => {
+      const accDefConfig = await getAccountDefinitionConfig(integration, accountName, 'sources');
+      await expect(validateAccountDefinitions(accDefConfig)).resolves.toEqual(true);
+    });
+  });
+
+  const malformedAccountDefConfigs = [
+    {
+      description: 'missing required properties',
+      input: {
+        config: {
+          optionFields: ['region'],
+        },
+      },
+      expected:
+        '[" must have required property \'name\'"," must have required property \'type\'"," must have required property \'category\'"," must have required property \'authenticationType\'"]',
+    },
+    {
+      description: 'invalid category',
+      input: {
+        name: 'INVALID_ACCOUNT',
+        type: 'test',
+        category: 'invalid_category',
+        authenticationType: 'oauth',
+        config: {
+          optionFields: ['region'],
+          refreshOAuthToken: true,
+        },
+      },
+      expected: '["category must be equal to one of the allowed values"]',
+    },
+    {
+      description: 'invalid authentication type',
+      input: {
+        name: 'INVALID_ACCOUNT',
+        type: 'test',
+        category: 'destination',
+        authenticationType: 123,
+        config: {
+          optionFields: ['region'],
+          refreshOAuthToken: true,
+        },
+      },
+      expected: '["authenticationType must be string"]',
+    },
+    {
+      description: 'invalid name format',
+      input: {
+        name: 'invalid-name',
+        type: 'test',
+        category: 'destination',
+        authenticationType: 'oauth',
+        config: {
+          optionFields: ['region'],
+          refreshOAuthToken: true,
+        },
+      },
+      expected: '["name must match pattern \\"^[A-Z_]+$\\""]',
+    },
+    {
+      description: 'invalid optionFields',
+      input: {
+        name: 'INVALID_ACCOUNT',
+        type: 'test',
+        category: 'destination',
+        authenticationType: 'oauth',
+        config: {
+          optionFields: [123],
+          refreshOAuthToken: true,
+        },
+      },
+      expected: '["config.optionFields.0 must be string"]',
+    },
+  ];
+
+  it.each(malformedAccountDefConfigs)('$description', async (testCase) => {
+    await expect(validateAccountDefinitions(testCase.input)).rejects.toThrow(
       new Error(testCase.expected),
     );
   });
