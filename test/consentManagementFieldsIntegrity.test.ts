@@ -118,41 +118,38 @@ describe('Consent Management Fields Integrity tests', () => {
     const schema = getJSONDataFromFile(schemaFilePath);
 
     it(`should have oneTrustCookieCategories and ketchConsentPurposes fields optionally defined in schema.json for ${destName}`, () => {
-      let oneTrustCookieCategoriesDefined = false;
-      let ketchConsentPurposesDefined = false;
+      const oneTrustCookieCategoriesDefinedSourceType: string[] = [];
+      const ketchConsentPurposesDefinedSourceType: string[] = [];
 
       supportedSourceTypes.forEach((srcType: string) => {
-        if (
-          !oneTrustCookieCategoriesDefined &&
-          destConfig[srcType].includes('oneTrustCookieCategories')
-        ) {
-          oneTrustCookieCategoriesDefined = true;
+        if (destConfig[srcType].includes('oneTrustCookieCategories')) {
+          oneTrustCookieCategoriesDefinedSourceType.push(srcType);
         }
-        if (!ketchConsentPurposesDefined && destConfig[srcType].includes('ketchConsentPurposes')) {
-          ketchConsentPurposesDefined = true;
+        if (destConfig[srcType].includes('ketchConsentPurposes')) {
+          ketchConsentPurposesDefinedSourceType.push(srcType);
         }
       });
 
       // The legacy config keys should be present in schema.json if they are defined in source type config
       // Otherwise, they should not be present in schema.json
-      if (oneTrustCookieCategoriesDefined) {
+      if (oneTrustCookieCategoriesDefinedSourceType.length > 0) {
         expect(schema.configSchema.properties.oneTrustCookieCategories).toBeDefined();
         expect(schema.configSchema.properties.oneTrustCookieCategories.type).toBe('object');
         expect(schema.configSchema.properties.oneTrustCookieCategories.properties).toBeDefined();
         expect(
           Object.keys(schema.configSchema.properties.oneTrustCookieCategories.properties).sort(),
-        ).toEqual(supportedSourceTypes.sort());
+        ).toEqual(oneTrustCookieCategoriesDefinedSourceType.sort());
       } else {
         expect(schema.configSchema.properties.oneTrustCookieCategories).toBeUndefined();
       }
 
-      if (ketchConsentPurposesDefined) {
+      if (ketchConsentPurposesDefinedSourceType.length > 0) {
         expect(schema.configSchema.properties.ketchConsentPurposes).toBeDefined();
         expect(schema.configSchema.properties.ketchConsentPurposes.type).toBe('object');
         expect(schema.configSchema.properties.ketchConsentPurposes.properties).toBeDefined();
         expect(
           Object.keys(schema.configSchema.properties.ketchConsentPurposes.properties).sort(),
-        ).toEqual(supportedSourceTypes.sort());
+        ).toEqual(ketchConsentPurposesDefinedSourceType.sort());
       } else {
         expect(schema.configSchema.properties.ketchConsentPurposes).toBeUndefined();
       }
