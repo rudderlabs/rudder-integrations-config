@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.126.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.125.0...v1.126.0) (2025-09-11)
+
+
+### Features
+
+* **postscript:** enable WH source ([#2160](https://github.com/rudderlabs/rudder-config-schema/issues/2160)) ([1a6e76a](https://github.com/rudderlabs/rudder-config-schema/commit/1a6e76a2a0799b0fa4972cb34b7f76ff2b11297f))
+
 ## [1.125.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.124.0...v1.125.0) (2025-09-02)
 
 
