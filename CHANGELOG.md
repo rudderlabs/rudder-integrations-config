@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.127.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.126.0...v1.127.0) (2025-09-13)
+
+
+### Features
+
+* **sftp:** add sortColumnNames boolean field for CSV format ([85aec3a](https://github.com/rudderlabs/rudder-config-schema/commit/85aec3aa7639f3570b53736af0998ea06b6f2bca))
+
 ## [1.126.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.125.0...v1.126.0) (2025-09-11)
 
 
