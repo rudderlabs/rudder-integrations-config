@@ -54,6 +54,10 @@ extern NSString * const CUSTOMERIO_NAME;
 
 extern NSString * const CUSTOMERIO_DISPLAY_NAME;
 
+extern NSString * const DUB_NAME;
+
+extern NSString * const DUB_DISPLAY_NAME;
+
 extern NSString * const FB_NAME;
 
 extern NSString * const FB_DISPLAY_NAME;
@@ -153,6 +157,10 @@ NSString * const COMSCORE_DISPLAY_NAME = @"Comscore";
 NSString * const CUSTOMERIO_NAME = @"CUSTOMERIO";
 
 NSString * const CUSTOMERIO_DISPLAY_NAME = @"Customer IO";
+
+NSString * const DUB_NAME = @"DUB";
+
+NSString * const DUB_DISPLAY_NAME = @"Dub";
 
 NSString * const FB_NAME = @"FB";
 

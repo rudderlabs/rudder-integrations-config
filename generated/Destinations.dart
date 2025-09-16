@@ -28,6 +28,10 @@ class Destinations {
 
   static const String BRAZE_DISPLAY_NAME = 'Braze';
 
+  static const String DUB_NAME = 'DUB';
+
+  static const String DUB_DISPLAY_NAME = 'Dub';
+
   static const String FIREBASE_NAME = 'FIREBASE';
 
   static const String FIREBASE_DISPLAY_NAME = 'Firebase';
