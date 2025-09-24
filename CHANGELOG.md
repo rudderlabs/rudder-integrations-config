@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.128.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.127.0...v1.128.0) (2025-09-24)
+
+
+### Features
+
+* add flutter support for install attribution tracking in schema and db config ([95a64d2](https://github.com/rudderlabs/rudder-config-schema/commit/95a64d291a07fc9cc68d80ae03f5a16be0c23617))
+* add install attribution toggle for adjust ([35a7965](https://github.com/rudderlabs/rudder-config-schema/commit/35a7965037ceb2e75ed72f41d75aa01aba9c2c78))
+* enforce appToken requirement and update JSON schema for install attribution ([893b66d](https://github.com/rudderlabs/rudder-config-schema/commit/893b66d4037943b55feebba8595037e9c5fdb3c2))
+* remove flutter support from schema and db config of adjust ([bb272de](https://github.com/rudderlabs/rudder-config-schema/commit/bb272defe359b6c7d70086d2e5d804986915fbcb))
+* reposition install attribution toggle in UI configuration ([84bf931](https://github.com/rudderlabs/rudder-config-schema/commit/84bf9318108d3c399c21565b382d97f7b7dbcf36))
+
 ## [1.127.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.126.0...v1.127.0) (2025-09-13)
 
 
