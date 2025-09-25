@@ -52,10 +52,6 @@ object Destinations {
 
   const val CUSTOMERIO_DISPLAY_NAME = "Customer IO"
 
-  const val DUB_NAME = "DUB"
-
-  const val DUB_DISPLAY_NAME = "Dub"
-
   const val FB_NAME = "FB"
 
   const val FB_DISPLAY_NAME = "Facebook App Events"
