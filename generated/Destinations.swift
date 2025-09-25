@@ -52,10 +52,6 @@ struct Destinations {
 
   static let CUSTOMERIO_DISPLAY_NAME = "Customer IO"
 
-  static let DUB_NAME = "DUB"
-
-  static let DUB_DISPLAY_NAME = "Dub"
-
   static let FB_NAME = "FB"
 
   static let FB_DISPLAY_NAME = "Facebook App Events"

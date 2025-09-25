@@ -52,10 +52,6 @@ public class Destinations {
 
   public static final String CUSTOMERIO_DISPLAY_NAME = "Customer IO";
 
-  public static final String DUB_NAME = "DUB";
-
-  public static final String DUB_DISPLAY_NAME = "Dub";
-
   public static final String FB_NAME = "FB";
 
   public static final String FB_DISPLAY_NAME = "Facebook App Events";
