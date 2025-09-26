@@ -54,19 +54,6 @@
         ]
       },
       {
-        "title": "Configuration settings",
-        "note": "Manage the settings for your destination",
-        "sections": [
-          {
-            "id": "consentSettings",
-            "title": "Consent settings",
-            "note": "Configure consent settings for each provider here",
-            "icon": "settings",
-            "groups": []
-          }
-        ]
-      },
-      {
         "title": "Mappings",
         "note": "Set your mapping for destination",
         "hideEditIcon": true,
@@ -86,6 +73,19 @@
             ]
           }
         ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          }
+        ]
       }
     ],
     "redirectGroups": {
@@ -94,12 +94,15 @@
           {
             "type": "mapping",
             "label": "Mapping of Rudderstack events to Dub events",
+            "note": "Important: Only events with a clickId and configured in this mapping will be successfully delivered to Dub. Events without a clickId or not mapped here will fail, potentially creating noise in your events tab.",
             "configKey": "eventMapping",
             "default": [],
             "columns": [
               {
                 "type": "textInput",
+                "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                 "configKey": "from",
+                "regexErrorMessage": "Invalid Event Name",
                 "label": "Event Name",
                 "placeholder": "e.g: Custom Purchase Event"
               },
