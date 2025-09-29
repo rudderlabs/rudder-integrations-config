@@ -1,0 +1,311 @@
+[
+  {
+    "testTitle": "Valid configuration with all required fields",
+    "config": {
+      "apiKey": "dub_test_key_123"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid configuration with event mapping",
+    "config": {
+      "apiKey": "dub_test_key_123",
+      "eventMapping": [
+        {
+          "from": "Purchase",
+          "to": "LEAD_CONVERSION"
+        },
+        {
+          "from": "Order Completed",
+          "to": "SALES_CONVERSION"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid configuration with valid consent management",
+    "config": {
+      "apiKey": "dub_test_key_123",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid configuration with custom consent provider and resolution strategy",
+    "config": {
+      "apiKey": "dub_test_key_123",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "and",
+            "consents": [
+              {
+                "consent": "marketing"
+              },
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid configuration with Ketch consent provider",
+    "config": {
+      "apiKey": "dub_test_key_123",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid configuration with iubenda consent provider",
+    "config": {
+      "apiKey": "dub_test_key_123",
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "iubenda",
+            "consents": [
+              {
+                "consent": "performance"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid configuration with multiple platforms consent management",
+    "config": {
+      "apiKey": "dub_test_key_123",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          }
+        ],
+        "android": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Missing required API key",
+    "config": {},
+    "result": false,
+    "err": [" must have required property 'apiKey'"]
+  },
+  {
+    "testTitle": "Empty API key",
+    "config": {
+      "apiKey": ""
+    },
+    "result": false,
+    "err": ["apiKey must match pattern \"^dub_[a-zA-Z0-9_]{8,100}$\""]
+  },
+  {
+    "testTitle": "Api key should not have should have dynamic expression or env variable",
+    "config": {
+      "apiKey": "{{dub.apiKey || env.DUB_DEFAULT_KEY}}"
+    },
+    "result": false,
+    "err": ["apiKey must match pattern \"^dub_[a-zA-Z0-9_]{8,100}$\""]
+  },
+  {
+    "testTitle": "Invalid event mapping 'to' value",
+    "config": {
+      "apiKey": "dub_test_key_123",
+      "eventMapping": [
+        {
+          "from": "Purchase",
+          "to": "INVALID_CONVERSION"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["eventMapping.0.to must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "Invalid consent management provider",
+    "config": {
+      "apiKey": "dub_test_key_123",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "invalid_provider",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.web.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "Custom consent provider missing resolution strategy",
+    "config": {
+      "apiKey": "dub_test_key_123",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0 must have required property 'resolutionStrategy'",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "Invalid resolution strategy for custom provider",
+    "config": {
+      "apiKey": "dub_test_key_123",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "invalid",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "Valid configuration with comprehensive event mapping and consent",
+    "config": {
+      "apiKey": "dub_test_key_123",
+      "eventMapping": [
+        {
+          "from": "Purchase",
+          "to": "LEAD_CONVERSION"
+        },
+        {
+          "from": "Order Completed",
+          "to": "SALES_CONVERSION"
+        }
+      ],
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "or",
+            "consents": [
+              {
+                "consent": "{{consent.marketing || marketing}}"
+              },
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ],
+        "ios": [
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "performance"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Invalid event mapping config",
+    "config": {
+      "apiKey": "dub_test_key_123",
+      "eventMapping": [
+        {
+          "from": "{{event.name || Purchase}}",
+          "to": "LEAD_CONVERSION"
+        },
+        {
+          "from": "Order Completed",
+          "to": "SALES_CONVERSION"
+        }
+      ],
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "iubenda",
+            "consents": [
+              {
+                "consent": "performance"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["eventMapping.0.from must match pattern \"^[^{}]{1,100}$\""]
+  }
+]
