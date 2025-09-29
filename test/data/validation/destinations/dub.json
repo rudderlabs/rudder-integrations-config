@@ -144,7 +144,15 @@
       "apiKey": ""
     },
     "result": false,
-    "err": ["apiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,200})$\""]
+    "err": ["apiKey must match pattern \"^dub_[a-zA-Z0-9_]{8,100}$\""]
+  },
+  {
+    "testTitle": "Api key should not have should have dynamic expression or env variable",
+    "config": {
+      "apiKey": "{{dub.apiKey || env.DUB_DEFAULT_KEY}}"
+    },
+    "result": false,
+    "err": ["apiKey must match pattern \"^dub_[a-zA-Z0-9_]{8,100}$\""]
   },
   {
     "testTitle": "Invalid event mapping 'to' value",
@@ -230,10 +238,10 @@
   {
     "testTitle": "Valid configuration with comprehensive event mapping and consent",
     "config": {
-      "apiKey": "{{dub.apiKey || env.DUB_DEFAULT_KEY}}",
+      "apiKey": "dub_test_key_123",
       "eventMapping": [
         {
-          "from": "{{event.name || Purchase}}",
+          "from": "Purchase",
           "to": "LEAD_CONVERSION"
         },
         {
@@ -269,5 +277,35 @@
       }
     },
     "result": true
+  },
+  {
+    "testTitle": "Invalid event mapping config",
+    "config": {
+      "apiKey": "dub_test_key_123",
+      "eventMapping": [
+        {
+          "from": "{{event.name || Purchase}}",
+          "to": "LEAD_CONVERSION"
+        },
+        {
+          "from": "Order Completed",
+          "to": "SALES_CONVERSION"
+        }
+      ],
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "iubenda",
+            "consents": [
+              {
+                "consent": "performance"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["eventMapping.0.from must match pattern \"^[^{}]{1,100}$\""]
   }
 ]
