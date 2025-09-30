@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 
-function readFile(filePath): string | undefined {
+function readFile(filePath: string): string | undefined {
   let file;
   if (!fs.existsSync(filePath)) {
     return file;
@@ -17,7 +17,7 @@ function readFile(filePath): string | undefined {
   return file;
 }
 
-function readSchemaFile(filePath): string | undefined {
+function readSchemaFile(filePath: string): string | undefined {
   let schema;
   if (!fs.existsSync(filePath)) {
     return schema;
@@ -32,7 +32,7 @@ function readSchemaFile(filePath): string | undefined {
   return schema;
 }
 
-function writeFile(filePath, data) {
+function writeFile(filePath: string, data: string | NodeJS.ArrayBufferView) {
   fs.writeFileSync(filePath, data);
 }
 

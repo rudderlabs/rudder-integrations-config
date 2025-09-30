@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.129.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.128.0...v1.129.0) (2025-09-29)
+
+
+### Features
+
+* onboard dub ([#2184](https://github.com/rudderlabs/rudder-config-schema/issues/2184)) ([9e29cce](https://github.com/rudderlabs/rudder-config-schema/commit/9e29cce847a795bd6214a18a2a5781230c897ca7))
+
 ## [1.128.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.127.0...v1.128.0) (2025-09-24)
 
 

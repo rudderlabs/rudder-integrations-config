@@ -80,22 +80,7 @@ def generalize_regex_pattern(field):
     pattern = ""
     if "regex" in field:
         pattern = field["regex"]
-        if defaultSubPattern not in pattern and (
-            ("value" not in field or field["value"] != "purpose")
-            and ("configKey" not in field or field["configKey"] != "purpose")
-        ):
-            pattern = "|".join([defaultSubPattern, pattern])
-        if defaultEnvPattern not in pattern and (
-            ("value" not in field or field["value"] != "purpose")
-            and ("configKey" not in field or field["configKey"] != "purpose")
-        ):
-            indexToPlace = pattern.find(defaultSubPattern) + len(defaultSubPattern)
-            pattern = (
-                pattern[:indexToPlace]
-                + "|"
-                + defaultEnvPattern
-                + pattern[indexToPlace:]
-            )
+        return pattern
     # TODO: we should not use a case here for the individual properties. Just pass the desired pattern as regex property
     #  in ketch purpose fields and delete next case
     elif ("value" in field and field["value"] == "purpose") or (
