@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.129.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.129.0...v1.129.1) (2025-10-01)
+
+
+### Bug Fixes
+
+* gcp credentials for snowflake destination is not secret ([#2194](https://github.com/rudderlabs/rudder-config-schema/issues/2194)) ([d98f3dc](https://github.com/rudderlabs/rudder-config-schema/commit/d98f3dc693ea56cbc88662894b0db56c479407cc))
+
 ## [1.129.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.128.0...v1.129.0) (2025-09-29)
 
 
