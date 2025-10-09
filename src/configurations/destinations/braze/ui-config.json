@@ -147,8 +147,14 @@
                   "Update how you want to route events from your source to destination. ",
                   {
                     "text": "Get help deciding",
-                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
-                  }
+                    "link": "https://www.rudderstack.com/docs/destinations/streaming-destinations/braze/hybrid-mode/"
+                  },
+                  "Note: Hybrid mode can lead to split profiles (multiple profiles for the same user) in some edge cases.",
+                  {
+                    "text": "Learn more to decide on connection mode",
+                    "link": "https://www.rudderstack.com/docs/destinations/streaming-destinations/braze/hybrid-mode/#when-to-use-hybrid-mode"
+                  },
+                  "Example case: [ No identify calls + High braze SDK load time + Race condition of initial cloud vs device alias event ] can lead to split profiles affecting MUVs."
                 ],
                 "icon": "sliders",
                 "fields": []
@@ -349,13 +355,6 @@
                         }
                       ]
                     }
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "Track events for anonymous users",
-                    "configKey": "trackAnonymousUser",
-                    "default": false,
-                    "note": "Turn on if you want to track anonymous users"
                   }
                 ]
               },
@@ -514,6 +513,13 @@
           "configKey": "allowUserSuppliedJavascript",
           "default": false,
           "note": "Turn on if you want to enable HTML in-app messages"
+        },
+        {
+          "type": "checkbox",
+          "label": "Track events for anonymous users",
+          "configKey": "trackAnonymousUser",
+          "default": false,
+          "note": "Turn on if you want to track anonymous users"
         }
       ]
     },
