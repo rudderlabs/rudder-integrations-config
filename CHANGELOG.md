@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.129.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.129.0...v1.129.2) (2025-10-07)
+
+
+### Bug Fixes
+
+* **braze:** allow track anonymous user for web device only ([#2200](https://github.com/rudderlabs/rudder-config-schema/issues/2200)) ([ba38652](https://github.com/rudderlabs/rudder-config-schema/commit/ba386529e031821bf8d15543c5a27d3f3297451e))
+* gcp credentials for snowflake destination is not secret ([#2194](https://github.com/rudderlabs/rudder-config-schema/issues/2194)) ([28f4831](https://github.com/rudderlabs/rudder-config-schema/commit/28f483177d1471dc58b6f69a469941f4b1f0da80))
+
 ### [1.129.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.129.0...v1.129.1) (2025-10-01)
 
 
