@@ -420,12 +420,58 @@
                 }
               ]
             }
+          },
+          "androidKotlin": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
+                  "default": "oneTrust"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            }
           }
         }
       },
       "appToken": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "pattern": "^(.{0,100})$"
       },
       "environment": {
         "type": "boolean",
@@ -438,6 +484,9 @@
             "type": "boolean"
           },
           "ios": {
+            "type": "boolean"
+          },
+          "androidKotlin": {
             "type": "boolean"
           }
         }
@@ -455,6 +504,9 @@
             "type": "boolean"
           },
           "flutter": {
+            "type": "boolean"
+          },
+          "androidKotlin": {
             "type": "boolean"
           }
         }
@@ -522,7 +574,7 @@
       },
       "delay": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "pattern": "^(.{0,100})$"
       },
       "oneTrustCookieCategories": {
         "type": "object",
