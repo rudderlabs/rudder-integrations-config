@@ -4,6 +4,7 @@ const languageMap = {
   ios: ['m', 'swift'],
   android: ['kt', 'java'],
   androidKotlin: ['kt', 'java'],
+  iosSwift: ['swift'],
 };
 
 // Function to check if the template should be generated for a specific language
