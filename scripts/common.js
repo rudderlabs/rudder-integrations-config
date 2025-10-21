@@ -3,6 +3,7 @@ const languageMap = {
   flutter: ['dart'],
   ios: ['m', 'swift'],
   android: ['kt', 'java'],
+  androidKotlin: ['kt', 'java'],
 };
 
 // Function to check if the template should be generated for a specific language
