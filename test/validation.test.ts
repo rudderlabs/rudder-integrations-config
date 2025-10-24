@@ -35,7 +35,10 @@ function getAccountNames(type: string) {
     if (fs.existsSync(accountsPath) && fs.statSync(accountsPath).isDirectory()) {
       const accountNames = fs.readdirSync(accountsPath);
       accountNames.forEach((account) => {
-        accounts.push(`${integration}/${account}`);
+        const accountDbConfigPath = path.join(accountsPath, account, 'db-config.json');
+        if (fs.existsSync(accountDbConfigPath)) {
+          accounts.push(`${integration}/${account}`);
+        }
       });
     }
   });
