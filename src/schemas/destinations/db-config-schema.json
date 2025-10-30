@@ -132,7 +132,9 @@
             "type": "string",
             "enum": [
               "android",
+              "androidKotlin",
               "ios",
+              "iosSwift",
               "web",
               "unity",
               "amp",
@@ -181,7 +183,7 @@
                       "type": "object",
                       "description": "An object with source types as keys.",
                       "patternProperties": {
-                        "^(android|ios|web|unity|amp|cloud|warehouse|reactnative|flutter|cordova|shopify|cloudSource)$": {
+                        "^(android|androidKotlin|ios|iosSwift|web|unity|amp|cloud|warehouse|reactnative|flutter|cordova|shopify|cloudSource)$": {
                           "type": "array",
                           "description": "An array of event types.",
                           "items": {
@@ -216,7 +218,7 @@
             {
               "type": "object",
               "patternProperties": {
-                "^(android|ios|web|unity|amp|cloud|warehouse|reactnative|flutter|cordova|shopify|cloudSource)$": {
+                "^(android|androidKotlin|ios|iosSwift|web|unity|amp|cloud|warehouse|reactnative|flutter|cordova|shopify|cloudSource)$": {
                   "type": "array",
                   "title": "Connection Modes",
                   "description": "The connection modes supported by the destination for the source type.",
@@ -240,7 +242,7 @@
           "$comment": "This is used to filter out cloud events in hybrid mode. This is used only for destinations that support hybrid mode.",
           "required": [],
           "patternProperties": {
-            "^(android|ios|web|unity|amp|cloud|warehouse|reactnative|flutter|cordova|shopify|cloudSource)$": {
+            "^(android|androidKotlin|ios|iosSwift|web|unity|amp|cloud|warehouse|reactnative|flutter|cordova|shopify|cloudSource)$": {
               "type": "object",
               "title": "Source Type Filter Map",
               "description": "The event types supported by the destination for the source type.",
@@ -281,7 +283,7 @@
           "description": "The parameters for the destination that the user can configure.",
           "$comment": "This is used to display default and source type specific destination configuration in the UI.",
           "patternProperties": {
-            "^(android|ios|web|unity|amp|cloud|warehouse|reactnative|flutter|cordova|shopify|cloudSource|defaultConfig)$": {
+            "^(android|androidKotlin|ios|iosSwift|web|unity|amp|cloud|warehouse|reactnative|flutter|cordova|shopify|cloudSource|defaultConfig)$": {
               "type": "array",
               "items": {
                 "type": "string"
@@ -438,6 +440,17 @@
                   },
                   {
                     "properties": {
+                      "androidKotlin": {
+                        "type": "array",
+                        "contains": {
+                          "const": "hybrid"
+                        }
+                      }
+                    },
+                    "required": ["androidKotlin"]
+                  },
+                  {
+                    "properties": {
                       "ios": {
                         "type": "array",
                         "contains": {
@@ -446,6 +459,17 @@
                       }
                     },
                     "required": ["ios"]
+                  },
+                  {
+                    "properties": {
+                      "iosSwift": {
+                        "type": "array",
+                        "contains": {
+                          "const": "hybrid"
+                        }
+                      }
+                    },
+                    "required": ["iosSwift"]
                   },
                   {
                     "properties": {
@@ -708,7 +732,9 @@
       "type": "string",
       "enum": [
         "android",
+        "androidKotlin",
         "ios",
+        "iosSwift",
         "web",
         "unity",
         "amp",

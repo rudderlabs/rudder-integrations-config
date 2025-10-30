@@ -468,7 +468,7 @@ describe('Validator Utils', () => {
           },
           type: {
             type: 'string',
-            enum: ['cloud', 'web', 'android', 'ios'],
+            enum: ['cloud', 'web', 'android', 'androidKotlin', 'ios', 'iosSwift'],
           },
         },
       };
