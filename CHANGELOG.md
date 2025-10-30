@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.130.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.129.2...v1.130.0) (2025-10-30)
+
+
+### Features
+
+* **destinations:** add iosSwift source type support to multiple destinations ([#2213](https://github.com/rudderlabs/rudder-config-schema/issues/2213)) ([1bdc03b](https://github.com/rudderlabs/rudder-config-schema/commit/1bdc03b4b127cff73b866e644c316ac3c778df5f))
+* **destinations:** add kotlinAndroid source type support to multiple destinations ([#2207](https://github.com/rudderlabs/rudder-config-schema/issues/2207)) ([14989ac](https://github.com/rudderlabs/rudder-config-schema/commit/14989ac06c44199d381e36114b695df575276ab5))
+* **sources:** add iOS Swift source configuration ([#2212](https://github.com/rudderlabs/rudder-config-schema/issues/2212)) ([84f8409](https://github.com/rudderlabs/rudder-config-schema/commit/84f840945c41f1c9d1d92aa87bf08415c2ffc12f))
+* **sources:** add Kotlin Android source type with feature flag support ([#2206](https://github.com/rudderlabs/rudder-config-schema/issues/2206)) ([a32a37b](https://github.com/rudderlabs/rudder-config-schema/commit/a32a37b31af312cc5557abd84cc00955a8f2588a))
+* **sources:** add Kotlin server source type with feature flag support ([#2222](https://github.com/rudderlabs/rudder-config-schema/issues/2222)) ([d8d05ab](https://github.com/rudderlabs/rudder-config-schema/commit/d8d05ab0fb9fcd4cf8a27cc39776c1f0045c38d2))
+
 ### [1.129.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.129.2...v1.129.3) (2025-10-23)
 
 ### [1.129.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.129.0...v1.129.2) (2025-10-07)

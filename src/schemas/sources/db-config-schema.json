@@ -36,10 +36,12 @@
         "cloudSource",
         "amp",
         "android",
+        "androidKotlin",
         "warehouse",
         "cordova",
         "flutter",
         "ios",
+        "iosSwift",
         "web",
         "reactnative",
         "shopify",
@@ -60,11 +62,35 @@
           "default": false
         },
         "hidden": {
-          "type": "boolean",
-          "title": "Hidden",
-          "description": "Whether the source is hidden.",
-          "$comment": "This is used to hide the source from the UI.",
-          "default": false
+          "anyOf": [
+            {
+              "type": "boolean",
+              "title": "Hidden",
+              "description": "Whether the source is hidden.",
+              "$comment": "This is used to hide the source from the UI.",
+              "default": false
+            },
+            {
+              "type": "object",
+              "title": "Hidden",
+              "description": "Whether the source is hidden.",
+              "$comment": "This is used to hide the source from the UI.",
+              "properties": {
+                "featureFlagName": {
+                  "type": "string",
+                  "title": "Feature Flag Name",
+                  "description": "The feature flag name to control the visibility of the source.",
+                  "$comment": "This is used to control the visibility of the source from the UI based on the feature flag."
+                },
+                "featureFlagValue": {
+                  "type": "boolean",
+                  "title": "Feature Flag Value",
+                  "description": "The default value of the feature flag.",
+                  "$comment": "This is used to toggle the visibility of the source from the UI based on the feature flag value. false indicates it is always hidden and feature flag should be enabled to show and vice-versa for true value."
+                }
+              }
+            }
+          ]
         },
         "syncBehaviours": {
           "type": "array",
