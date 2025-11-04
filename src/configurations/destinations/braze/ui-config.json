@@ -13,57 +13,297 @@
                 "icon": "settings",
                 "fields": [
                   {
+                    "type": "checkbox",
+                    "label": "Enable Platform-Specific App Keys",
+                    "configKey": "usePlatformSpecificApiKeys",
+                    "default": true,
+                    "note": "When Platform-Specific App Keys are enabled, you can configure separate Android and iOS keys for proper data attribution in Braze. The Default App Key will be used as a fallback if a platform specific app key is not defined.",
+                    "preRequisites": {
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-braze-dest-multi-app-key-support",
+                          "value": false
+                        }
+                      ],
+                      "fieldGroups": [
+                        {
+                          "fields": [
+                            {
+                              "configKey": "connectionMode.android",
+                              "value": "device"
+                            },
+                            {
+                              "configKey": "connectionMode.android",
+                              "value": "hybrid"
+                            },
+                            {
+                              "configKey": "connectionMode.ios",
+                              "value": "device"
+                            },
+                            {
+                              "configKey": "connectionMode.ios",
+                              "value": "hybrid"
+                            },
+                            {
+                              "configKey": "connectionMode.androidKotlin",
+                              "value": "device"
+                            },
+                            {
+                              "configKey": "connectionMode.androidKotlin",
+                              "value": "hybrid"
+                            },
+                            {
+                              "configKey": "connectionMode.web",
+                              "value": "device"
+                            },
+                            {
+                              "configKey": "connectionMode.web",
+                              "value": "hybrid"
+                            },
+                            {
+                              "configKey": "connectionMode.reactnative",
+                              "value": "device"
+                            },
+                            {
+                              "configKey": "connectionMode.flutter",
+                              "value": "device"
+                            }
+                          ],
+                          "condition": "or"
+                        }
+                      ]
+                    }
+                  },
+                  {
                     "type": "textInput",
-                    "label": "App Key",
+                    "label": "Default App Key",
                     "configKey": "appKey",
                     "regex": "^(.{1,100})$",
                     "regexErrorMessage": "Invalid App Key",
                     "placeholder": "e.g: f2c7c97a-XXXX-XXXX-XXXX-faffc22c7c7f",
                     "secret": true,
                     "preRequisites": {
-                      "fields": [
+                      "fieldGroups": [
                         {
-                          "configKey": "connectionMode.android",
-                          "value": "device"
+                          "fields": [
+                            {
+                              "configKey": "usePlatformSpecificApiKeys",
+                              "value": false
+                            }
+                          ],
+                          "condition": "and"
                         },
                         {
-                          "configKey": "connectionMode.androidKotlin",
-                          "value": "device"
-                        },
-                        {
-                          "configKey": "connectionMode.ios",
-                          "value": "device"
-                        },
-                        {
-                          "configKey": "connectionMode.flutter",
-                          "value": "device"
-                        },
-                        {
-                          "configKey": "connectionMode.reactnative",
-                          "value": "device"
-                        },
-                        {
-                          "configKey": "connectionMode.web",
-                          "value": "device"
-                        },
-                        {
-                          "configKey": "connectionMode.android",
-                          "value": "hybrid"
-                        },
-                        {
-                          "configKey": "connectionMode.androidKotlin",
-                          "value": "hybrid"
-                        },
-                        {
-                          "configKey": "connectionMode.ios",
-                          "value": "hybrid"
-                        },
-                        {
-                          "configKey": "connectionMode.web",
-                          "value": "hybrid"
+                          "fields": [
+                            {
+                              "configKey": "connectionMode.android",
+                              "value": "device"
+                            },
+                            {
+                              "configKey": "connectionMode.androidKotlin",
+                              "value": "device"
+                            },
+                            {
+                              "configKey": "connectionMode.ios",
+                              "value": "device"
+                            },
+                            {
+                              "configKey": "connectionMode.flutter",
+                              "value": "device"
+                            },
+                            {
+                              "configKey": "connectionMode.reactnative",
+                              "value": "device"
+                            },
+                            {
+                              "configKey": "connectionMode.web",
+                              "value": "hybrid"
+                            },
+                            {
+                              "configKey": "connectionMode.android",
+                              "value": "hybrid"
+                            },
+                            {
+                              "configKey": "connectionMode.androidKotlin",
+                              "value": "hybrid"
+                            },
+                            {
+                              "configKey": "connectionMode.ios",
+                              "value": "hybrid"
+                            },
+                            {
+                              "configKey": "connectionMode.web",
+                              "value": "device"
+                            }
+                          ],
+                          "condition": "or"
                         }
                       ],
-                      "condition": "or"
+                      "prerequisitesCondition": "and"
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Android App Key",
+                    "note": "This key will be used for Android data attribution in Braze. The Default App Key serves as a fallback.",
+                    "configKey": "androidAppKey",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Android App Key",
+                    "placeholder": "e.g: f2c7c97a-XXXX-XXXX-XXXX-faffc22c7c7f",
+                    "secret": true,
+                    "required": true,
+                    "preRequisites": {
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-braze-dest-multi-app-key-support",
+                          "value": false
+                        }
+                      ],
+                      "fieldGroups": [
+                        {
+                          "fields": [
+                            {
+                              "configKey": "usePlatformSpecificApiKeys",
+                              "value": true
+                            }
+                          ],
+                          "condition": "and"
+                        },
+                        {
+                          "fields": [
+                            {
+                              "configKey": "connectionMode.android",
+                              "value": "device"
+                            },
+                            {
+                              "configKey": "connectionMode.android",
+                              "value": "hybrid"
+                            },
+                            {
+                              "configKey": "connectionMode.androidKotlin",
+                              "value": "device"
+                            },
+                            {
+                              "configKey": "connectionMode.androidKotlin",
+                              "value": "hybrid"
+                            },
+                            {
+                              "configKey": "connectionMode.reactnative",
+                              "value": "device"
+                            },
+                            {
+                              "configKey": "connectionMode.flutter",
+                              "value": "device"
+                            }
+                          ],
+                          "condition": "or"
+                        }
+                      ],
+                      "prerequisitesCondition": "and"
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "iOS App Key",
+                    "note": "This key will be used for iOS data attribution in Braze. The Default App Key serves as a fallback.",
+                    "configKey": "iOSAppKey",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid iOS App Key",
+                    "placeholder": "e.g: f2c7c97a-XXXX-XXXX-XXXX-faffc22c7c7f",
+                    "secret": true,
+                    "required": true,
+                    "preRequisites": {
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-braze-dest-multi-app-key-support",
+                          "value": false
+                        }
+                      ],
+                      "fieldGroups": [
+                        {
+                          "fields": [
+                            {
+                              "configKey": "usePlatformSpecificApiKeys",
+                              "value": true
+                            }
+                          ],
+                          "condition": "and"
+                        },
+                        {
+                          "fields": [
+                            {
+                              "configKey": "connectionMode.ios",
+                              "value": "device"
+                            },
+                            {
+                              "configKey": "connectionMode.ios",
+                              "value": "hybrid"
+                            },
+                            {
+                              "configKey": "connectionMode.reactnative",
+                              "value": "device"
+                            },
+                            {
+                              "configKey": "connectionMode.flutter",
+                              "value": "device"
+                            }
+                          ],
+                          "condition": "or"
+                        }
+                      ],
+                      "prerequisitesCondition": "and"
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Web App Key",
+                    "note": "This key will be used for Web data attribution in Braze. The Default App Key serves as a fallback.",
+                    "configKey": "webAppKey",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Web App Key",
+                    "placeholder": "e.g: f2c7c97a-XXXX-XXXX-XXXX-faffc22c7c7f",
+                    "secret": true,
+                    "required": true,
+                    "preRequisites": {
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-braze-dest-multi-app-key-support",
+                          "value": false
+                        }
+                      ],
+                      "fieldGroups": [
+                        {
+                          "fields": [
+                            {
+                              "configKey": "usePlatformSpecificApiKeys",
+                              "value": true
+                            }
+                          ],
+                          "condition": "and"
+                        },
+                        {
+                          "fields": [
+                            {
+                              "configKey": "connectionMode.web",
+                              "value": "device"
+                            },
+                            {
+                              "configKey": "connectionMode.web",
+                              "value": "hybrid"
+                            },
+                            {
+                              "configKey": "connectionMode.reactnative",
+                              "value": "device"
+                            },
+                            {
+                              "configKey": "connectionMode.flutter",
+                              "value": "device"
+                            }
+                          ],
+                          "condition": "or"
+                        }
+                      ],
+                      "prerequisitesCondition": "and"
                     }
                   },
                   {
