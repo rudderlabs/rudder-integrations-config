@@ -352,6 +352,33 @@ describe('Source Definition validation tests', () => {
       expected:
         '[" must have required property \'name\'"," must have required property \'displayName\'"]',
     },
+    {
+      description: 'internalSecretKeys with non-string items',
+      input: {
+        name: 'test_source',
+        displayName: 'Test Source',
+        type: 'cloud',
+        category: 'webhook',
+        options: {
+          internalSecretKeys: [123, 'validString'],
+        },
+      },
+      expected: '["options.internalSecretKeys.0 must be string"]',
+    },
+    {
+      description: 'internalSecretKeys with duplicate items',
+      input: {
+        name: 'test_source',
+        displayName: 'Test Source',
+        type: 'cloud',
+        category: 'webhook',
+        options: {
+          internalSecretKeys: ['apiKey', 'apiKey'],
+        },
+      },
+      expected:
+        '["options.internalSecretKeys must NOT have duplicate items (items ## 1 and 0 are identical)"]',
+    },
   ];
 
   it.each(malformedSrcDefConfigs)('$description', async (testCase) => {
