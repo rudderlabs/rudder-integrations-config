@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.130.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.130.0...v1.130.1) (2025-11-06)
+
+
+### Bug Fixes
+
+* **braze:** sendPurchaseEventWithExtraProperties field not showing up in UI ([de9d84d](https://github.com/rudderlabs/rudder-config-schema/commit/de9d84d01cc8ca5edd4c9fd59a19169603a701eb))
+
 ## [1.130.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.129.2...v1.130.0) (2025-10-30)
 
 
