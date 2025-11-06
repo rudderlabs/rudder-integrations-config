@@ -18,6 +18,11 @@ jobs:
   check_changes_and_raise_pr:
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
       - name: Checkout Source Repo
         uses: actions/checkout@v5
         with:
