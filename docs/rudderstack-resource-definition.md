@@ -1,3 +1,9 @@
+## Metadata
+
+- **Title:** Resource Definition Spec
+- **Date:** November 2025
+- **Author:** Aris Plakias
+
 # RudderStack Resource Definition
 
 A **RudderStack Resource Definition** is a standardized three-file pattern for defining integration resources (Sources, Destinations, and Accounts).
