@@ -6,91 +6,98 @@ This validation system prevents changes to `displayName` values in existing dest
 
 ## How It Works
 
-### 1. Baseline File
+### Git Diff-Based Validation
 
-- A baseline file (`test/data/displayName-baseline.json`) contains all current destination `displayName` values
-- This file serves as the source of truth for what displayNames should be
-- The baseline is generated from all existing destination `db-config.json` files
+The validation uses **git diff** to detect displayName changes, making it:
 
-### 2. Pre-commit Auto-update
+- ✅ **No baseline file needed** - Works directly with git history
+- ✅ **Accurate** - Only catches actual modifications, not additions
+- ✅ **Fast** - No file parsing or comparisons needed
+- ✅ **Works everywhere** - Same script for pre-commit and CI/CD
 
-- **NEW**: The baseline is automatically updated during pre-commit hooks
-- Only **new destinations** are added to the baseline - existing displayNames are never modified
-- This ensures the baseline stays current with new destinations without breaking existing ones
+### 1. Pre-commit Hook
 
-### 3. Validation Test
+- Automatically runs when you commit changes
+- Checks **staged changes** for displayName modifications
+- Blocks the commit if displayName changes are detected
+- Located in `.husky/pre-commit`
 
-- The test suite (`test/displayNameValidation.test.ts`) compares current displayNames against the baseline
-- If any displayName has changed, the test fails with a clear error message
-- The test runs as part of the CI/CD pipeline to prevent merging PRs with displayName changes
+### 2. GitHub Workflow
 
-### 4. CI/CD Integration
+- Runs on every Pull Request
+- Checks the **PR diff** against the base branch
+- Fails the PR check if displayName changes are detected
+- Located in `.github/workflows/validate-displayname.yml`
 
-- The validation runs automatically during the test phase
-- PRs with displayName changes will fail the build
-- This ensures no accidental displayName changes reach production
+### 3. How It Detects Changes
+
+The script:
+
+1. Gets git diff for `src/configurations/destinations/*/db-config.json` files
+2. Parses the diff to find lines with `"displayName":`
+3. Compares removed vs. added displayName values
+4. Ignores new destinations (only `+` lines, no `-` lines)
+5. Reports an error if existing displayNames were modified
 
 ## Usage
 
-### Running the Validation
+### Running Validation Manually
 
 ```bash
-# Run only the displayName validation test
-npm test -- test/displayNameValidation.test.ts
+# Check all uncommitted changes
+npm run validate:displayname
 
-# Run all tests (includes displayName validation)
-npm test
-```
-
-### Updating the Baseline
-
-The baseline is **automatically updated** during pre-commit hooks, so you typically don't need to run this manually. However, if needed:
-
-```bash
-# Safely add new destinations only (default behavior)
-npm run update:displayname-baseline
-
-# Override entire baseline (use with caution!)
-npm run update:displayname-baseline:override
+# Check staged changes (for pre-commit)
+npm run validate:displayname:staged
 
 # Or run the script directly
-node scripts/updateDisplayNameBaseline.js           # Safe mode
-node scripts/updateDisplayNameBaseline.js --override # Override mode
-```
+node scripts/validateDisplayNameChanges.js
 
-**Note**: The pre-commit hook runs the safe mode automatically, so new destinations are always included in commits.
+# Check staged changes
+node scripts/validateDisplayNameChanges.js --staged
+
+# Compare against a specific branch
+node scripts/validateDisplayNameChanges.js --compare origin/main
+```
 
 ### When DisplayName Changes Are Detected
 
 If the validation fails, you'll see an error like:
 
 ```
-❌ DisplayName changes detected! DisplayNames cannot be changed as they are used by other features.
-The following destinations have changed displayNames:
+❌ DisplayName changes detected!
+═══════════════════════════════════════════════════════════════
 
-  • DESTINATION_NAME (directory_name/):
-    Baseline: "Original Display Name"
-    Current:  "Changed Display Name"
+DisplayNames cannot be changed as they are used by other features
+and changing them will break existing connections.
 
-If you need to change a displayName:
-1. Ensure all dependent systems can handle the change
-2. Update the baseline by running: node scripts/updateDisplayNameBaseline.js
-3. Coordinate with teams that depend on these displayNames
+The following displayName changes were found:
+
+1. google_adwords_enhanced_conversions (src/configurations/destinations/google_adwords_enhanced_conversions/db-config.json)
+   Old: "Google Ads Enhanced Conversions"
+   New: "Google Ads Enhanced Conversions TEST"
+
+═══════════════════════════════════════════════════════════════
+
+What to do:
+  1. Revert the displayName changes in the files listed above
+  2. If you must change a displayName:
+     - Coordinate with all dependent teams
+     - Update all systems that use these displayNames
+     - Document the change thoroughly
+     - Get approval from tech leads
 ```
 
 ## Files
 
 ### Scripts
 
-- `scripts/updateDisplayNameBaseline.js` - Updates the baseline file from current destination configs
+- `scripts/validateDisplayNameChanges.js` - Git diff-based validation script
 
-### Tests
+### CI/CD
 
-- `test/displayNameValidation.test.ts` - Main validation test suite
-
-### Data
-
-- `test/data/displayName-baseline.json` - Baseline file containing all current displayNames
+- `.github/workflows/validate-displayname.yml` - GitHub workflow for PR validation
+- `.husky/pre-commit` - Pre-commit hook configuration
 
 ## Process for Changing DisplayNames
 
@@ -100,39 +107,77 @@ If you absolutely need to change a displayName:
 
 1. **Coordinate with dependent teams** - Ensure all systems that use displayNames can handle the change
 2. **Update documentation** - Update any documentation that references the old displayName
-3. **Update the baseline** - Run `npm run update:displayname-baseline` to update the baseline
-4. **Test thoroughly** - Ensure the change doesn't break existing integrations
+3. **Test thoroughly** - Ensure the change doesn't break existing integrations
+4. **Get approval** - Obtain approval from tech leads and stakeholders
 5. **Communicate the change** - Notify all stakeholders about the displayName change
+6. **Make the change** - Update the displayName in the db-config.json file
+7. **The validation will fail** - This is expected and intentional
+8. **Override the check** - Work with maintainers to merge the PR with proper approvals
 
 ## Adding New Destinations
 
 When adding new destinations:
 
 1. Create the destination with the appropriate `displayName`
-2. **That's it!** The pre-commit hook will automatically add the new destination to the baseline
-3. The updated baseline file will be included in your commit automatically
-4. No manual intervention required
+2. The validation will **NOT** block new destinations
+3. Only modifications to existing displayNames are blocked
+4. Commit and push as normal
+
+## How to Bypass (Emergency Only)
+
+If you need to bypass the validation in an emergency (with proper approvals):
+
+### Local Pre-commit
+
+```bash
+# Skip pre-commit hooks
+git commit --no-verify -m "Emergency displayName change"
+```
+
+### GitHub PR
+
+- The workflow must be manually overridden by repository administrators
+- Requires proper approvals and documentation
+- Should be treated as an exceptional case
 
 ## Troubleshooting
 
-### Test Fails for New Destination
+### Validation Fails But I Didn't Change displayName
 
-If you've added a new destination and the test is failing:
+- Check the git diff: `git diff HEAD -- src/configurations/destinations/*/db-config.json`
+- Look for accidental whitespace or formatting changes to the displayName line
+- Ensure your JSON formatting matches the original
 
-- Run `npm run update:displayname-baseline` to include the new destination in the baseline
-- Commit the updated baseline file
+### Validation Doesn't Detect My Change
 
-### Baseline File Missing
+- Make sure the change is in a `db-config.json` file under `src/configurations/destinations/`
+- Verify the file is tracked by git
+- Check that the diff shows both `-` and `+` lines for displayName
 
-If the baseline file is missing:
+### Pre-commit Hook Not Running
 
-- Run `npm run update:displayname-baseline` to generate it
-- The script will create the file with all current displayNames
+- Ensure husky is installed: `npm install`
+- Check that `.husky/pre-commit` exists and is executable
+- Verify you're committing in the repository root
 
-### False Positives
+## Technical Details
 
-If the test is failing but you haven't changed any displayNames:
+### Script Capabilities
 
-- Check if someone else has added/removed destinations
-- Regenerate the baseline with `npm run update:displayname-baseline`
-- The baseline should be kept up to date in the repository
+- Parses git diff output for destination config files
+- Extracts displayName values from removed and added lines
+- Filters out new destinations (no removed displayName)
+- Provides clear error messages with file paths and changed values
+- Supports multiple modes: staged, compare, and default
+
+### Exit Codes
+
+- `0` - No displayName changes detected (success)
+- `1` - DisplayName changes detected (blocking)
+- `2` - Script error (should not happen)
+
+### Performance
+
+- Very fast: Only processes git diff, not entire files
+- Scales well: Performance independent of repository size
+- No external dependencies: Uses only Node.js built-ins
