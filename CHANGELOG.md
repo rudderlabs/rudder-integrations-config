@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.130.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.130.1...v1.130.2) (2025-11-11)
+
+
+### Bug Fixes
+
+* kafka ca cert should be multiline text ([006caf6](https://github.com/rudderlabs/rudder-config-schema/commit/006caf663bfc5168108cea7addc2b2f551c51dea))
+
 ### [1.130.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.130.0...v1.130.1) (2025-11-06)
 
 
