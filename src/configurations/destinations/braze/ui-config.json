@@ -15,63 +15,76 @@
                   {
                     "type": "checkbox",
                     "label": "Enable Platform-Specific App Keys",
-                    "configKey": "usePlatformSpecificApiKeys",
+                    "configKey": "usePlatformSpecificAppKeys",
                     "default": true,
                     "note": "When Platform-Specific App Keys are enabled, you can configure separate Android and iOS keys for proper data attribution in Braze. The Default App Key will be used as a fallback if a platform specific app key is not defined.",
-                    "preRequisites": {
-                      "featureFlags": [
-                        {
-                          "configKey": "AMP_enable-braze-dest-multi-app-key-support",
-                          "value": false
-                        }
-                      ],
-                      "fieldGroups": [
-                        {
-                          "fields": [
-                            {
-                              "configKey": "connectionMode.android",
-                              "value": "device"
-                            },
-                            {
-                              "configKey": "connectionMode.android",
-                              "value": "hybrid"
-                            },
-                            {
-                              "configKey": "connectionMode.ios",
-                              "value": "device"
-                            },
-                            {
-                              "configKey": "connectionMode.ios",
-                              "value": "hybrid"
-                            },
-                            {
-                              "configKey": "connectionMode.androidKotlin",
-                              "value": "device"
-                            },
-                            {
-                              "configKey": "connectionMode.androidKotlin",
-                              "value": "hybrid"
-                            },
-                            {
-                              "configKey": "connectionMode.web",
-                              "value": "device"
-                            },
-                            {
-                              "configKey": "connectionMode.web",
-                              "value": "hybrid"
-                            },
-                            {
-                              "configKey": "connectionMode.reactnative",
-                              "value": "device"
-                            },
-                            {
-                              "configKey": "connectionMode.flutter",
-                              "value": "device"
-                            }
-                          ],
-                          "condition": "or"
-                        }
-                      ]
+                    "conditions": {
+                      "expression": {
+                        "operator": "and",
+                        "operands": [
+                          {
+                            "type": "featureFlag",
+                            "key": "AMP_enable-braze-dest-multi-app-key-support",
+                            "value": false
+                          },
+                          {
+                            "operator": "or",
+                            "operands": [
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.android",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.android",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.ios",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.ios",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.androidKotlin",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.androidKotlin",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.web",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.web",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.reactnative",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.flutter",
+                                "value": "device"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "actionMode": "hide"
                     }
                   },
                   {
@@ -82,64 +95,73 @@
                     "regexErrorMessage": "Invalid App Key",
                     "placeholder": "e.g: f2c7c97a-XXXX-XXXX-XXXX-faffc22c7c7f",
                     "secret": true,
-                    "preRequisites": {
-                      "fieldGroups": [
-                        {
-                          "fields": [
-                            {
-                              "configKey": "usePlatformSpecificApiKeys",
-                              "value": false
-                            }
-                          ],
-                          "condition": "and"
-                        },
-                        {
-                          "fields": [
-                            {
-                              "configKey": "connectionMode.android",
-                              "value": "device"
-                            },
-                            {
-                              "configKey": "connectionMode.androidKotlin",
-                              "value": "device"
-                            },
-                            {
-                              "configKey": "connectionMode.ios",
-                              "value": "device"
-                            },
-                            {
-                              "configKey": "connectionMode.flutter",
-                              "value": "device"
-                            },
-                            {
-                              "configKey": "connectionMode.reactnative",
-                              "value": "device"
-                            },
-                            {
-                              "configKey": "connectionMode.web",
-                              "value": "hybrid"
-                            },
-                            {
-                              "configKey": "connectionMode.android",
-                              "value": "hybrid"
-                            },
-                            {
-                              "configKey": "connectionMode.androidKotlin",
-                              "value": "hybrid"
-                            },
-                            {
-                              "configKey": "connectionMode.ios",
-                              "value": "hybrid"
-                            },
-                            {
-                              "configKey": "connectionMode.web",
-                              "value": "device"
-                            }
-                          ],
-                          "condition": "or"
-                        }
-                      ],
-                      "prerequisitesCondition": "and"
+                    "conditions": {
+                      "expression": {
+                        "operator": "and",
+                        "operands": [
+                          {
+                            "type": "configuration",
+                            "key": "usePlatformSpecificAppKeys",
+                            "value": false
+                          },
+                          {
+                            "operator": "or",
+                            "operands": [
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.android",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.androidKotlin",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.ios",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.flutter",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.reactnative",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.web",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.android",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.androidKotlin",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.ios",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.web",
+                                "value": "device"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "actionMode": "hide"
                     }
                   },
                   {
@@ -152,54 +174,58 @@
                     "placeholder": "e.g: f2c7c97a-XXXX-XXXX-XXXX-faffc22c7c7f",
                     "secret": true,
                     "required": true,
-                    "preRequisites": {
-                      "featureFlags": [
-                        {
-                          "configKey": "AMP_enable-braze-dest-multi-app-key-support",
-                          "value": false
-                        }
-                      ],
-                      "fieldGroups": [
-                        {
-                          "fields": [
-                            {
-                              "configKey": "usePlatformSpecificApiKeys",
-                              "value": true
-                            }
-                          ],
-                          "condition": "and"
-                        },
-                        {
-                          "fields": [
-                            {
-                              "configKey": "connectionMode.android",
-                              "value": "device"
-                            },
-                            {
-                              "configKey": "connectionMode.android",
-                              "value": "hybrid"
-                            },
-                            {
-                              "configKey": "connectionMode.androidKotlin",
-                              "value": "device"
-                            },
-                            {
-                              "configKey": "connectionMode.androidKotlin",
-                              "value": "hybrid"
-                            },
-                            {
-                              "configKey": "connectionMode.reactnative",
-                              "value": "device"
-                            },
-                            {
-                              "configKey": "connectionMode.flutter",
-                              "value": "device"
-                            }
-                          ],
-                          "condition": "or"
-                        }
-                      ],
-                      "prerequisitesCondition": "and"
+                    "conditions": {
+                      "expression": {
+                        "operator": "and",
+                        "operands": [
+                          {
+                            "type": "featureFlag",
+                            "key": "AMP_enable-braze-dest-multi-app-key-support",
+                            "value": false
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "usePlatformSpecificAppKeys",
+                            "value": true
+                          },
+                          {
+                            "operator": "or",
+                            "operands": [
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.android",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.android",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.androidKotlin",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.androidKotlin",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.reactnative",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.flutter",
+                                "value": "device"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "actionMode": "hide"
                     }
                   },
                   {
@@ -212,46 +238,48 @@
                     "placeholder": "e.g: f2c7c97a-XXXX-XXXX-XXXX-faffc22c7c7f",
                     "secret": true,
                     "required": true,
-                    "preRequisites": {
-                      "featureFlags": [
-                        {
-                          "configKey": "AMP_enable-braze-dest-multi-app-key-support",
-                          "value": false
-                        }
-                      ],
-                      "fieldGroups": [
-                        {
-                          "fields": [
-                            {
-                              "configKey": "usePlatformSpecificApiKeys",
-                              "value": true
-                            }
-                          ],
-                          "condition": "and"
-                        },
-                        {
-                          "fields": [
-                            {
-                              "configKey": "connectionMode.ios",
-                              "value": "device"
-                            },
-                            {
-                              "configKey": "connectionMode.ios",
-                              "value": "hybrid"
-                            },
-                            {
-                              "configKey": "connectionMode.reactnative",
-                              "value": "device"
-                            },
-                            {
-                              "configKey": "connectionMode.flutter",
-                              "value": "device"
-                            }
-                          ],
-                          "condition": "or"
-                        }
-                      ],
-                      "prerequisitesCondition": "and"
+                    "conditions": {
+                      "expression": {
+                        "operator": "and",
+                        "operands": [
+                          {
+                            "type": "featureFlag",
+                            "key": "AMP_enable-braze-dest-multi-app-key-support",
+                            "value": false
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "usePlatformSpecificAppKeys",
+                            "value": true
+                          },
+                          {
+                            "operator": "or",
+                            "operands": [
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.ios",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.ios",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.reactnative",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.flutter",
+                                "value": "device"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "actionMode": "hide"
                     }
                   },
                   {
@@ -264,46 +292,38 @@
                     "placeholder": "e.g: f2c7c97a-XXXX-XXXX-XXXX-faffc22c7c7f",
                     "secret": true,
                     "required": true,
-                    "preRequisites": {
-                      "featureFlags": [
-                        {
-                          "configKey": "AMP_enable-braze-dest-multi-app-key-support",
-                          "value": false
-                        }
-                      ],
-                      "fieldGroups": [
-                        {
-                          "fields": [
-                            {
-                              "configKey": "usePlatformSpecificApiKeys",
-                              "value": true
-                            }
-                          ],
-                          "condition": "and"
-                        },
-                        {
-                          "fields": [
-                            {
-                              "configKey": "connectionMode.web",
-                              "value": "device"
-                            },
-                            {
-                              "configKey": "connectionMode.web",
-                              "value": "hybrid"
-                            },
-                            {
-                              "configKey": "connectionMode.reactnative",
-                              "value": "device"
-                            },
-                            {
-                              "configKey": "connectionMode.flutter",
-                              "value": "device"
-                            }
-                          ],
-                          "condition": "or"
-                        }
-                      ],
-                      "prerequisitesCondition": "and"
+                    "conditions": {
+                      "expression": {
+                        "operator": "and",
+                        "operands": [
+                          {
+                            "type": "featureFlag",
+                            "key": "AMP_enable-braze-dest-multi-app-key-support",
+                            "value": false
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "usePlatformSpecificAppKeys",
+                            "value": true
+                          },
+                          {
+                            "operator": "or",
+                            "operands": [
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.web",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.web",
+                                "value": "hybrid"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "actionMode": "hide"
                     }
                   },
                   {
