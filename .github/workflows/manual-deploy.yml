@@ -35,6 +35,11 @@ jobs:
     name: Validate Deployment
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2 # v2.13.2
+        with:
+          egress-policy: audit
+
       - name: Validate Production Deployment
         run: |
           if [[ "${{ inputs.deploy_url }}" == "https://api.rudderstack.com" ]]; then

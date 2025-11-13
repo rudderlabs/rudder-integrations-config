@@ -59,7 +59,9 @@ export function validateConfig(
   }
 }
 
-export async function validateDestinationDefinitions(destDefConfig: any): Promise<boolean> {
+export async function validateDestinationDefinitions(
+  destDefConfig: Record<string, unknown>,
+): Promise<boolean> {
   const ddAjv = new Ajv({
     allErrors: true,
     useDefaults: true,
@@ -87,7 +89,9 @@ export async function validateDestinationDefinitions(destDefConfig: any): Promis
   return true;
 }
 
-export async function validateSourceDefinitions(srcDefConfig: any): Promise<boolean> {
+export async function validateSourceDefinitions(
+  srcDefConfig: Record<string, unknown>,
+): Promise<boolean> {
   const ddAjv = new Ajv({
     allErrors: true,
     useDefaults: true,
@@ -114,7 +118,9 @@ export async function validateSourceDefinitions(srcDefConfig: any): Promise<bool
   return true;
 }
 
-export async function validateAccountDefinitions(accDefConfig: any): Promise<boolean> {
+export async function validateAccountDefinitions(
+  accDefConfig: Record<string, unknown>,
+): Promise<boolean> {
   const ddAjv = new Ajv({
     allErrors: true,
     useDefaults: true,
