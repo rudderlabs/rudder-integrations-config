@@ -1288,6 +1288,29 @@
           },
           "required": ["restApiKey", "appKey"]
         }
+      },
+      {
+        "if": {
+          "properties": {
+            "usePlatformSpecificApiKeys": {
+              "const": true
+            }
+          },
+          "required": ["usePlatformSpecificApiKeys"]
+        },
+        "then": {
+          "anyOf": [
+            {
+              "required": ["androidApiKey"]
+            },
+            {
+              "required": ["iOSApiKey"]
+            },
+            {
+              "required": ["webApiKey"]
+            }
+          ]
+        }
       }
     ]
   }
