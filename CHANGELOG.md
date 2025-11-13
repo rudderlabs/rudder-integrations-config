@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.131.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.130.2...v1.131.0) (2025-11-12)
+
+
+### Features
+
+* **docs:** introduce rudderstack definition ([#2221](https://github.com/rudderlabs/rudder-config-schema/issues/2221)) ([f7b5c72](https://github.com/rudderlabs/rudder-config-schema/commit/f7b5c721cb4d03f8efcd442af675dec2f96d8dc0))
+* **fbla:** add ui-config option ([#2220](https://github.com/rudderlabs/rudder-config-schema/issues/2220)) ([9051acd](https://github.com/rudderlabs/rudder-config-schema/commit/9051acdcef8cab1cc788f91cdbcb24f981d8b0ed))
+* **fbla:** introduce processor hydration option ([#2219](https://github.com/rudderlabs/rudder-config-schema/issues/2219)) ([30c9598](https://github.com/rudderlabs/rudder-config-schema/commit/30c95989d481ba33d77e0cc482ad81bb60103dff))
+* onboard fbla configs ([#2215](https://github.com/rudderlabs/rudder-config-schema/issues/2215)) ([18e6d96](https://github.com/rudderlabs/rudder-config-schema/commit/18e6d9653438d20765167d44d2519ea0fee61e8c))
+* **sources:** update Android and iOS source display names ([#2226](https://github.com/rudderlabs/rudder-config-schema/issues/2226)) ([c9e028f](https://github.com/rudderlabs/rudder-config-schema/commit/c9e028f171b3839442bac1fe46935e1009d934a9))
+
+
+### Bug Fixes
+
+* **sprig:** add supportedMessageTypes to Sprig's db-config.json ([#2232](https://github.com/rudderlabs/rudder-config-schema/issues/2232)) ([a21221b](https://github.com/rudderlabs/rudder-config-schema/commit/a21221b2a90abdc600f8d8688ed5677693a4b29d))
+
 ### [1.130.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.130.1...v1.130.2) (2025-11-11)
 
 
