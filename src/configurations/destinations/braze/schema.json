@@ -1055,26 +1055,6 @@
             }
           }
         }
-      },
-      "appKey": {
-        "type": "string",
-        "pattern": "^(.{1,100})$"
-      },
-      "androidApiKey": {
-        "type": "string",
-        "pattern": "^(.{1,100})$"
-      },
-      "iOSApiKey": {
-        "type": "string",
-        "pattern": "^(.{1,100})$"
-      },
-      "webApiKey": {
-        "type": "string",
-        "pattern": "^(.{1,100})$"
-      },
-      "usePlatformSpecificApiKeys": {
-        "type": "boolean",
-        "default": true
       }
     },
     "additonalProperties": false,
@@ -1175,6 +1155,9 @@
       {
         "if": {
           "properties": {
+            "usePlatformSpecificApiKeys": {
+              "const": false
+            },
             "connectionMode": {
               "type": "object",
               "anyOf": [
@@ -1198,6 +1181,14 @@
                   "required": ["android"],
                   "properties": {
                     "android": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["androidKotlin"],
+                  "properties": {
+                    "androidKotlin": {
                       "const": "device"
                     }
                   }
@@ -1221,7 +1212,7 @@
               ]
             }
           },
-          "required": ["connectionMode"]
+          "required": ["usePlatformSpecificApiKeys", "connectionMode"]
         },
         "then": {
           "properties": {
@@ -1236,13 +1227,24 @@
       {
         "if": {
           "properties": {
+            "usePlatformSpecificApiKeys": {
+              "const": false
+            },
             "connectionMode": {
               "type": "object",
               "anyOf": [
                 {
-                  "required": ["web"],
+                  "required": ["android"],
                   "properties": {
-                    "web": {
+                    "android": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["androidKotlin"],
+                  "properties": {
+                    "androidKotlin": {
                       "const": "hybrid"
                     }
                   }
@@ -1256,9 +1258,9 @@
                   }
                 },
                 {
-                  "required": ["android"],
+                  "required": ["web"],
                   "properties": {
-                    "android": {
+                    "web": {
                       "const": "hybrid"
                     }
                   }
@@ -1266,20 +1268,20 @@
               ]
             }
           },
-          "required": ["connectionMode"]
+          "required": ["usePlatformSpecificApiKeys", "connectionMode"]
         },
         "then": {
           "properties": {
-            "restApiKey": {
+            "appKey": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
             },
-            "appKey": {
+            "restApiKey": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
             }
           },
-          "required": ["restApiKey", "appKey"]
+          "required": ["appKey", "restApiKey"]
         }
       },
       {
@@ -1287,22 +1289,263 @@
           "properties": {
             "usePlatformSpecificApiKeys": {
               "const": true
+            },
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["android"],
+                  "properties": {
+                    "android": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["androidKotlin"],
+                  "properties": {
+                    "androidKotlin": {
+                      "const": "device"
+                    }
+                  }
+                }
+              ]
             }
           },
-          "required": ["usePlatformSpecificApiKeys"]
+          "required": ["usePlatformSpecificApiKeys", "connectionMode"]
         },
         "then": {
-          "anyOf": [
-            {
-              "required": ["androidApiKey"]
-            },
-            {
-              "required": ["iOSApiKey"]
-            },
-            {
-              "required": ["webApiKey"]
+          "properties": {
+            "androidApiKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
             }
-          ]
+          },
+          "required": ["androidApiKey"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "usePlatformSpecificApiKeys": {
+              "const": true
+            },
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["ios"],
+                  "properties": {
+                    "ios": {
+                      "const": "device"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["usePlatformSpecificApiKeys", "connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "iOSApiKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["iOSApiKey"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "usePlatformSpecificApiKeys": {
+              "const": true
+            },
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["web"],
+                  "properties": {
+                    "web": {
+                      "const": "device"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["usePlatformSpecificApiKeys", "connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "webApiKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["webApiKey"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "usePlatformSpecificApiKeys": {
+              "const": true
+            },
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["reactnative"],
+                  "properties": {
+                    "reactnative": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["flutter"],
+                  "properties": {
+                    "flutter": {
+                      "const": "device"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["usePlatformSpecificApiKeys", "connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "androidApiKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            },
+            "iOSApiKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["androidApiKey", "iOSApiKey"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "usePlatformSpecificApiKeys": {
+              "const": true
+            },
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["ios"],
+                  "properties": {
+                    "ios": {
+                      "const": "hybrid"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["usePlatformSpecificApiKeys", "connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "iOSApiKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            },
+            "restApiKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["iOSApiKey", "restApiKey"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "usePlatformSpecificApiKeys": {
+              "const": true
+            },
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["android"],
+                  "properties": {
+                    "android": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["androidKotlin"],
+                  "properties": {
+                    "androidKotlin": {
+                      "const": "hybrid"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["usePlatformSpecificApiKeys", "connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "androidApiKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            },
+            "restApiKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["androidApiKey", "restApiKey"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "usePlatformSpecificApiKeys": {
+              "const": true
+            },
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["web"],
+                  "properties": {
+                    "web": {
+                      "const": "hybrid"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["usePlatformSpecificApiKeys", "connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "webApiKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            },
+            "restApiKey": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+            }
+          },
+          "required": ["webApiKey", "restApiKey"]
         }
       }
     ]
