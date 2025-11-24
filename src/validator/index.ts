@@ -97,6 +97,25 @@ const destinationDefinitionRules: ValidationRule[] = [
       return { isValid: true };
     },
   },
+  {
+    name: 'includeKeys-must-be-defined-when-device-hybrid-mode-is-supported',
+    description: 'includeKeys must be defined when device/hybrid mode is supported',
+    validate: (destDefConfig) => {
+      const supportedConnectionModes = destDefConfig?.config?.supportedConnectionModes;
+      const includeKeys = destDefConfig?.config?.includeKeys;
+
+      const isDeviceModeSupported = Object.values(supportedConnectionModes).some((modes: any) => modes.includes('device') || modes.includes('hybrid'));
+
+      if (isDeviceModeSupported && !includeKeys) {
+        return {
+          isValid: false,
+          errorMessage: 'config.includeKeys must be defined when device/hybrid mode is supported',
+        };
+      }
+
+      return { isValid: true };
+    },
+  },
 ];
 
 function applyAdditionalRulesValidation(destDefConfig: Record<string, unknown>): void {
