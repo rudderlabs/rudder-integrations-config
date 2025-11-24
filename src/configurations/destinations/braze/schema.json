@@ -1136,6 +1136,38 @@
                       "const": "cloud"
                     }
                   }
+                },
+                {
+                  "required": ["web"],
+                  "properties": {
+                    "web": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["ios"],
+                  "properties": {
+                    "ios": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["android"],
+                  "properties": {
+                    "android": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["androidKotlin"],
+                  "properties": {
+                    "androidKotlin": {
+                      "const": "hybrid"
+                    }
+                  }
                 }
               ]
             }
@@ -1150,6 +1182,105 @@
             }
           },
           "required": ["restApiKey"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["web"],
+                  "properties": {
+                    "web": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["ios"],
+                  "properties": {
+                    "ios": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["android"],
+                  "properties": {
+                    "android": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["androidKotlin"],
+                  "properties": {
+                    "androidKotlin": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["reactnative"],
+                  "properties": {
+                    "reactnative": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["flutter"],
+                  "properties": {
+                    "flutter": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["web"],
+                  "properties": {
+                    "web": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["ios"],
+                  "properties": {
+                    "ios": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["android"],
+                  "properties": {
+                    "android": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["androidKotlin"],
+                  "properties": {
+                    "androidKotlin": {
+                      "const": "hybrid"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "usePlatformSpecificApiKeys": {
+              "type": "boolean"
+            }
+          }
         }
       },
       {
@@ -1208,31 +1339,23 @@
                       "const": "device"
                     }
                   }
-                }
-              ]
-            }
-          },
-          "required": ["usePlatformSpecificApiKeys", "connectionMode"]
-        },
-        "then": {
-          "properties": {
-            "appKey": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            }
-          },
-          "required": ["appKey"]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "usePlatformSpecificApiKeys": {
-              "const": false
-            },
-            "connectionMode": {
-              "type": "object",
-              "anyOf": [
+                },
+                {
+                  "required": ["web"],
+                  "properties": {
+                    "web": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["ios"],
+                  "properties": {
+                    "ios": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
                 {
                   "required": ["android"],
                   "properties": {
@@ -1248,22 +1371,6 @@
                       "const": "hybrid"
                     }
                   }
-                },
-                {
-                  "required": ["ios"],
-                  "properties": {
-                    "ios": {
-                      "const": "hybrid"
-                    }
-                  }
-                },
-                {
-                  "required": ["web"],
-                  "properties": {
-                    "web": {
-                      "const": "hybrid"
-                    }
-                  }
                 }
               ]
             }
@@ -1275,13 +1382,9 @@
             "appKey": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            },
-            "restApiKey": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
             }
           },
-          "required": ["appKey", "restApiKey"]
+          "required": ["appKey"]
         }
       },
       {
@@ -1306,6 +1409,22 @@
                   "properties": {
                     "androidKotlin": {
                       "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["android"],
+                  "properties": {
+                    "android": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["androidKotlin"],
+                  "properties": {
+                    "androidKotlin": {
+                      "const": "hybrid"
                     }
                   }
                 }
@@ -1340,6 +1459,14 @@
                       "const": "device"
                     }
                   }
+                },
+                {
+                  "required": ["ios"],
+                  "properties": {
+                    "ios": {
+                      "const": "hybrid"
+                    }
+                  }
                 }
               ]
             }
@@ -1370,6 +1497,14 @@
                   "properties": {
                     "web": {
                       "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["web"],
+                  "properties": {
+                    "web": {
+                      "const": "hybrid"
                     }
                   }
                 }
@@ -1430,122 +1565,6 @@
             }
           },
           "required": ["androidApiKey", "iOSApiKey"]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "usePlatformSpecificApiKeys": {
-              "const": true
-            },
-            "connectionMode": {
-              "type": "object",
-              "anyOf": [
-                {
-                  "required": ["ios"],
-                  "properties": {
-                    "ios": {
-                      "const": "hybrid"
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          "required": ["usePlatformSpecificApiKeys", "connectionMode"]
-        },
-        "then": {
-          "properties": {
-            "iOSApiKey": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            },
-            "restApiKey": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            }
-          },
-          "required": ["iOSApiKey", "restApiKey"]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "usePlatformSpecificApiKeys": {
-              "const": true
-            },
-            "connectionMode": {
-              "type": "object",
-              "anyOf": [
-                {
-                  "required": ["android"],
-                  "properties": {
-                    "android": {
-                      "const": "hybrid"
-                    }
-                  }
-                },
-                {
-                  "required": ["androidKotlin"],
-                  "properties": {
-                    "androidKotlin": {
-                      "const": "hybrid"
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          "required": ["usePlatformSpecificApiKeys", "connectionMode"]
-        },
-        "then": {
-          "properties": {
-            "androidApiKey": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            },
-            "restApiKey": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            }
-          },
-          "required": ["androidApiKey", "restApiKey"]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "usePlatformSpecificApiKeys": {
-              "const": true
-            },
-            "connectionMode": {
-              "type": "object",
-              "anyOf": [
-                {
-                  "required": ["web"],
-                  "properties": {
-                    "web": {
-                      "const": "hybrid"
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          "required": ["usePlatformSpecificApiKeys", "connectionMode"]
-        },
-        "then": {
-          "properties": {
-            "webApiKey": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            },
-            "restApiKey": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            }
-          },
-          "required": ["webApiKey", "restApiKey"]
         }
       }
     ]
