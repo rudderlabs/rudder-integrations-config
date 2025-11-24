@@ -20,7 +20,7 @@ let validators: Record<string, ValidateFunction> = {};
 interface ValidationRule {
   name: string;
   description: string;
-  validate: (destDefConfig: Record<string, any>) => { isValid: boolean; errorMessage?: string };
+  validate: (destDefConfig: Record<string, unknown>) => { isValid: boolean; errorMessage?: string };
 }
 
 // Destination definition validation rules
@@ -29,8 +29,7 @@ const destinationDefinitionRules: ValidationRule[] = [
     name: 'includeKeys-excludeKeys-mutual-exclusion',
     description: 'includeKeys and excludeKeys cannot be defined at the same time',
     validate: (destDefConfig) => {
-      const includeKeys = destDefConfig?.config?.includeKeys;
-      const excludeKeys = destDefConfig?.config?.excludeKeys;
+      const { includeKeys, excludeKeys } = destDefConfig.config as Record<string, unknown>;
 
       if (
         Array.isArray(includeKeys) &&
@@ -40,7 +39,8 @@ const destinationDefinitionRules: ValidationRule[] = [
       ) {
         return {
           isValid: false,
-          errorMessage: 'config.includeKeys and config.excludeKeys cannot be defined at the same time',
+          errorMessage:
+            'config.includeKeys and config.excludeKeys cannot be defined at the same time',
         };
       }
 
@@ -51,8 +51,7 @@ const destinationDefinitionRules: ValidationRule[] = [
     name: 'secretKeys-not-in-includeKeys',
     description: 'Secret keys must not be in includeKeys to prevent client-side exposure',
     validate: (destDefConfig) => {
-      const secretKeys = destDefConfig?.config?.secretKeys;
-      const includeKeys = destDefConfig?.config?.includeKeys;
+      const { secretKeys, includeKeys } = destDefConfig.config as Record<string, unknown>;
 
       if (
         Array.isArray(includeKeys) &&
@@ -64,7 +63,9 @@ const destinationDefinitionRules: ValidationRule[] = [
         if (secretsInIncludeKeys.length > 0) {
           return {
             isValid: false,
-            errorMessage: `All fields in config.secretKeys must NOT be in config.includeKeys. Found: ${secretsInIncludeKeys.join(', ')}`,
+            errorMessage: `All fields in config.secretKeys must NOT be in config.includeKeys. Found: ${secretsInIncludeKeys.join(
+              ', ',
+            )}`,
           };
         }
       }
@@ -76,8 +77,7 @@ const destinationDefinitionRules: ValidationRule[] = [
     name: 'secretKeys-must-be-in-excludeKeys',
     description: 'When excludeKeys is defined, all secrets must be in excludeKeys',
     validate: (destDefConfig) => {
-      const secretKeys = destDefConfig?.config?.secretKeys;
-      const excludeKeys = destDefConfig?.config?.excludeKeys;
+      const { secretKeys, excludeKeys } = destDefConfig.config as Record<string, unknown>;
 
       if (
         Array.isArray(excludeKeys) &&
@@ -85,11 +85,15 @@ const destinationDefinitionRules: ValidationRule[] = [
         excludeKeys.length > 0 &&
         secretKeys.length > 0
       ) {
-        const secretsNotInExcludeKeys = secretKeys.filter((key: string) => !excludeKeys.includes(key));
+        const secretsNotInExcludeKeys = secretKeys.filter(
+          (key: string) => !excludeKeys.includes(key),
+        );
         if (secretsNotInExcludeKeys.length > 0) {
           return {
             isValid: false,
-            errorMessage: `All fields in config.secretKeys must be in config.excludeKeys. Missing: ${secretsNotInExcludeKeys.join(', ')}`,
+            errorMessage: `All fields in config.secretKeys must be in config.excludeKeys. Missing: ${secretsNotInExcludeKeys.join(
+              ', ',
+            )}`,
           };
         }
       }
@@ -101,10 +105,16 @@ const destinationDefinitionRules: ValidationRule[] = [
     name: 'includeKeys-must-be-defined-when-device-hybrid-mode-is-supported',
     description: 'includeKeys must be defined when device/hybrid mode is supported',
     validate: (destDefConfig) => {
-      const supportedConnectionModes = destDefConfig?.config?.supportedConnectionModes;
-      const includeKeys = destDefConfig?.config?.includeKeys;
+      const { supportedConnectionModes, includeKeys } = destDefConfig.config as Record<
+        string,
+        unknown
+      >;
 
-      const isDeviceModeSupported = supportedConnectionModes && Object.values(supportedConnectionModes).some((modes: any) => modes.includes('device') || modes.includes('hybrid'));
+      const isDeviceModeSupported =
+        supportedConnectionModes &&
+        Object.values(supportedConnectionModes).some(
+          (modes: string[]) => modes.includes('device') || modes.includes('hybrid'),
+        );
 
       if (isDeviceModeSupported && !includeKeys) {
         return {
@@ -121,12 +131,12 @@ const destinationDefinitionRules: ValidationRule[] = [
 function applyAdditionalRulesValidation(destDefConfig: Record<string, unknown>): void {
   const errors: string[] = [];
 
-  for (const rule of destinationDefinitionRules) {
+  destinationDefinitionRules.forEach((rule) => {
     const result = rule.validate(destDefConfig);
     if (!result.isValid && result.errorMessage) {
       errors.push(result.errorMessage);
     }
-  }
+  });
 
   if (errors.length > 0) {
     throw new Error(JSON.stringify(errors));
@@ -177,7 +187,7 @@ export function validateConfig(
 }
 
 export async function validateDestinationDefinitions(
-  destDefConfig: Record<string, any>,
+  destDefConfig: Record<string, unknown>,
 ): Promise<boolean> {
   const ddAjv = new Ajv({
     allErrors: true,
