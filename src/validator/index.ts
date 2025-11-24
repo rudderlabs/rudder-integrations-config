@@ -104,7 +104,7 @@ const destinationDefinitionRules: ValidationRule[] = [
       const supportedConnectionModes = destDefConfig?.config?.supportedConnectionModes;
       const includeKeys = destDefConfig?.config?.includeKeys;
 
-      const isDeviceModeSupported = Object.values(supportedConnectionModes).some((modes: any) => modes.includes('device') || modes.includes('hybrid'));
+      const isDeviceModeSupported = supportedConnectionModes && Object.values(supportedConnectionModes).some((modes: any) => modes.includes('device') || modes.includes('hybrid'));
 
       if (isDeviceModeSupported && !includeKeys) {
         return {
