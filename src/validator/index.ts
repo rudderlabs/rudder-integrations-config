@@ -16,6 +16,104 @@ const ajv = new Ajv({
 
 let validators: Record<string, ValidateFunction> = {};
 
+// Custom validation rule interface
+interface ValidationRule {
+  name: string;
+  description: string;
+  validate: (destDefConfig: Record<string, any>) => { isValid: boolean; errorMessage?: string };
+}
+
+// Destination definition validation rules
+const destinationDefinitionRules: ValidationRule[] = [
+  {
+    name: 'includeKeys-excludeKeys-mutual-exclusion',
+    description: 'includeKeys and excludeKeys cannot be defined at the same time',
+    validate: (destDefConfig) => {
+      const includeKeys = destDefConfig?.config?.includeKeys;
+      const excludeKeys = destDefConfig?.config?.excludeKeys;
+
+      if (
+        Array.isArray(includeKeys) &&
+        Array.isArray(excludeKeys) &&
+        includeKeys.length > 0 &&
+        excludeKeys.length > 0
+      ) {
+        return {
+          isValid: false,
+          errorMessage: 'config.includeKeys and config.excludeKeys cannot be defined at the same time',
+        };
+      }
+
+      return { isValid: true };
+    },
+  },
+  {
+    name: 'secretKeys-not-in-includeKeys',
+    description: 'Secret keys must not be in includeKeys to prevent client-side exposure',
+    validate: (destDefConfig) => {
+      const secretKeys = destDefConfig?.config?.secretKeys;
+      const includeKeys = destDefConfig?.config?.includeKeys;
+
+      if (
+        Array.isArray(includeKeys) &&
+        Array.isArray(secretKeys) &&
+        includeKeys.length > 0 &&
+        secretKeys.length > 0
+      ) {
+        const secretsInIncludeKeys = secretKeys.filter((key: string) => includeKeys.includes(key));
+        if (secretsInIncludeKeys.length > 0) {
+          return {
+            isValid: false,
+            errorMessage: `All fields in config.secretKeys must NOT be in config.includeKeys. Found: ${secretsInIncludeKeys.join(', ')}`,
+          };
+        }
+      }
+
+      return { isValid: true };
+    },
+  },
+  {
+    name: 'secretKeys-must-be-in-excludeKeys',
+    description: 'When excludeKeys is defined, all secrets must be in excludeKeys',
+    validate: (destDefConfig) => {
+      const secretKeys = destDefConfig?.config?.secretKeys;
+      const excludeKeys = destDefConfig?.config?.excludeKeys;
+
+      if (
+        Array.isArray(excludeKeys) &&
+        Array.isArray(secretKeys) &&
+        excludeKeys.length > 0 &&
+        secretKeys.length > 0
+      ) {
+        const secretsNotInExcludeKeys = secretKeys.filter((key: string) => !excludeKeys.includes(key));
+        if (secretsNotInExcludeKeys.length > 0) {
+          return {
+            isValid: false,
+            errorMessage: `All fields in config.secretKeys must be in config.excludeKeys. Missing: ${secretsNotInExcludeKeys.join(', ')}`,
+          };
+        }
+      }
+
+      return { isValid: true };
+    },
+  },
+];
+
+function applyAdditionalRulesValidation(destDefConfig: Record<string, unknown>): void {
+  const errors: string[] = [];
+
+  for (const rule of destinationDefinitionRules) {
+    const result = rule.validate(destDefConfig);
+    if (!result.isValid && result.errorMessage) {
+      errors.push(result.errorMessage);
+    }
+  }
+
+  if (errors.length > 0) {
+    throw new Error(JSON.stringify(errors));
+  }
+}
+
 async function importJsonFromFile(file: string) {
   const content = await fs.promises.readFile(file, { encoding: 'utf-8' });
   return JSON.parse(content);
@@ -60,7 +158,7 @@ export function validateConfig(
 }
 
 export async function validateDestinationDefinitions(
-  destDefConfig: Record<string, unknown>,
+  destDefConfig: Record<string, any>,
 ): Promise<boolean> {
   const ddAjv = new Ajv({
     allErrors: true,
@@ -85,6 +183,9 @@ export async function validateDestinationDefinitions(
 
     throw new Error(JSON.stringify(errorMessages));
   }
+
+  // Apply custom validation rules
+  applyAdditionalRulesValidation(destDefConfig);
 
   return true;
 }
