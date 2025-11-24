@@ -872,4 +872,468 @@ describe('Validator Utils', () => {
       }).toThrow();
     });
   });
+
+  describe('Custom Validation Rules for Destination Definitions', () => {
+    beforeEach(() => {
+      mockedPath.join.mockReturnValue('/path/to/schemas/destinations/db-config-schema.json');
+
+      const minimalDestinationSchema = {
+        type: 'object',
+        required: ['name', 'displayName', 'config'],
+        properties: {
+          name: { type: 'string' },
+          displayName: { type: 'string' },
+          config: { type: 'object' },
+        },
+      };
+
+      mockedFs.promises = {
+        readFile: jest.fn().mockResolvedValue(JSON.stringify(minimalDestinationSchema)),
+      } as any;
+    });
+
+    describe('Rule: includeKeys-excludeKeys-mutual-exclusion', () => {
+      it('should pass when only includeKeys is defined', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            includeKeys: ['apiKey', 'enabled'],
+            secretKeys: [],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should pass when only excludeKeys is defined', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            excludeKeys: ['password', 'secret'],
+            secretKeys: [],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should pass when neither includeKeys nor excludeKeys is defined', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            secretKeys: [],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should pass when both are empty arrays', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            includeKeys: [],
+            excludeKeys: [],
+            secretKeys: [],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should fail when both includeKeys and excludeKeys are defined with values', async () => {
+        const invalidDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            includeKeys: ['apiKey'],
+            excludeKeys: ['password'],
+            secretKeys: [],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow(
+          /includeKeys and config.excludeKeys cannot be defined at the same time/,
+        );
+      });
+
+      it('should pass when includeKeys has values but excludeKeys is empty', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            includeKeys: ['apiKey'],
+            excludeKeys: [],
+            secretKeys: [],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should pass when excludeKeys has values but includeKeys is empty', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            includeKeys: [],
+            excludeKeys: ['password'],
+            secretKeys: [],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+    });
+
+    describe('Rule: secretKeys-not-in-includeKeys', () => {
+      it('should pass when no secrets are in includeKeys', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            secretKeys: ['password', 'apiSecret'],
+            includeKeys: ['apiKey', 'enabled'],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should fail when a secret is in includeKeys', async () => {
+        const invalidDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            secretKeys: ['apiKey', 'password'],
+            includeKeys: ['apiKey', 'enabled'],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow(
+          /must NOT be in config.includeKeys.*Found: apiKey/,
+        );
+      });
+
+      it('should fail when multiple secrets are in includeKeys', async () => {
+        const invalidDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            secretKeys: ['apiKey', 'password', 'token'],
+            includeKeys: ['apiKey', 'password', 'enabled'],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow(
+          /must NOT be in config.includeKeys/,
+        );
+      });
+
+      it('should pass when includeKeys is empty', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            secretKeys: ['apiKey', 'password'],
+            includeKeys: [],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should pass when includeKeys is undefined', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            secretKeys: ['apiKey', 'password'],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should pass when secretKeys is empty', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            secretKeys: [],
+            includeKeys: ['apiKey', 'enabled'],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should pass when secretKeys is undefined', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            includeKeys: ['apiKey', 'enabled'],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+    });
+
+    describe('Rule: secretKeys-must-be-in-excludeKeys', () => {
+      it('should pass when all secrets are in excludeKeys', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            secretKeys: ['password', 'apiSecret'],
+            excludeKeys: ['password', 'apiSecret', 'internal'],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should fail when a secret is not in excludeKeys', async () => {
+        const invalidDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            secretKeys: ['password', 'apiSecret'],
+            excludeKeys: ['password'],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow(
+          /must be in config.excludeKeys.*Missing: apiSecret/,
+        );
+      });
+
+      it('should fail when multiple secrets are not in excludeKeys', async () => {
+        const invalidDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            secretKeys: ['password', 'apiSecret', 'token'],
+            excludeKeys: ['password'],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow(
+          /must be in config.excludeKeys/,
+        );
+      });
+
+      it('should pass when excludeKeys is empty', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            secretKeys: ['password', 'apiSecret'],
+            excludeKeys: [],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should pass when excludeKeys is undefined', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            secretKeys: ['password', 'apiSecret'],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should pass when secretKeys is empty', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            secretKeys: [],
+            excludeKeys: ['password'],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should pass when secretKeys is undefined', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            excludeKeys: ['password'],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+    });
+
+    describe('Rule: includeKeys-must-be-defined-when-device-hybrid-mode-is-supported', () => {
+      it('should pass when includeKeys is defined and device mode is supported', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            includeKeys: ['apiKey'],
+            supportedConnectionModes: {
+              web: ['device'],
+            },
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should pass when includeKeys is defined and hybrid mode is supported', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            includeKeys: ['apiKey'],
+            supportedConnectionModes: {
+              web: ['hybrid'],
+            },
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should fail when includeKeys is not defined but device mode is supported', async () => {
+        const invalidDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            supportedConnectionModes: {
+              web: ['device'],
+            },
+          },
+        };
+
+        await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow(
+          /includeKeys must be defined when device\/hybrid mode is supported/,
+        );
+      });
+
+      it('should fail when includeKeys is not defined but hybrid mode is supported', async () => {
+        const invalidDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            supportedConnectionModes: {
+              web: ['hybrid'],
+              android: ['cloud'],
+            },
+          },
+        };
+
+        await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow(
+          /includeKeys must be defined when device\/hybrid mode is supported/,
+        );
+      });
+
+      it('should pass when only cloud mode is supported without includeKeys', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            supportedConnectionModes: {
+              web: ['cloud'],
+            },
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should pass when supportedConnectionModes is not defined', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {},
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should pass when multiple sources support device mode and includeKeys is defined', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            includeKeys: ['apiKey'],
+            supportedConnectionModes: {
+              web: ['device', 'cloud'],
+              android: ['device'],
+              ios: ['hybrid'],
+            },
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+    });
+
+    describe('Multiple rule violations', () => {
+      it('should collect all validation errors', async () => {
+        const invalidDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            includeKeys: ['apiKey', 'password'],
+            excludeKeys: ['internal'],
+            secretKeys: ['password', 'token'],
+          },
+        };
+
+        try {
+          await validateDestinationDefinitions(invalidDestDef);
+          fail('Expected validation to throw');
+        } catch (error) {
+          const errorMessage = error.message;
+          // Should have multiple errors
+          expect(errorMessage).toContain('includeKeys and config.excludeKeys cannot be defined');
+          expect(errorMessage).toContain('password');
+        }
+      });
+    });
+
+    describe('Edge cases with no config', () => {
+      it('should handle destination definition with undefined config', async () => {
+        const destDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: undefined,
+        };
+
+        await expect(validateDestinationDefinitions(destDef)).rejects.toThrow();
+      });
+
+      it('should handle destination definition with null config properties', async () => {
+        const destDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            includeKeys: null,
+            excludeKeys: null,
+            secretKeys: null,
+          },
+        };
+
+        await expect(validateDestinationDefinitions(destDef)).resolves.toBe(true);
+      });
+    });
+  });
 });
