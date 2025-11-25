@@ -892,7 +892,6 @@ describe('Validator Utils', () => {
       } as any;
     });
 
-
     describe('Rule: secretKeys-not-in-includeKeys', () => {
       it('should pass when no secrets are in includeKeys', async () => {
         const validDestDef = {
@@ -1001,7 +1000,6 @@ describe('Validator Utils', () => {
         await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
       });
     });
-
 
     describe('Rule: includeKeys-must-be-defined-when-device-hybrid-mode-is-supported', () => {
       it('should pass when includeKeys is defined and device mode is supported', async () => {
