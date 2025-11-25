@@ -892,103 +892,6 @@ describe('Validator Utils', () => {
       } as any;
     });
 
-    describe('Rule: includeKeys-excludeKeys-mutual-exclusion', () => {
-      it('should pass when only includeKeys is defined', async () => {
-        const validDestDef = {
-          name: 'TEST',
-          displayName: 'Test',
-          config: {
-            includeKeys: ['apiKey', 'enabled'],
-            secretKeys: [],
-          },
-        };
-
-        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
-      });
-
-      it('should pass when only excludeKeys is defined', async () => {
-        const validDestDef = {
-          name: 'TEST',
-          displayName: 'Test',
-          config: {
-            excludeKeys: ['password', 'secret'],
-            secretKeys: [],
-          },
-        };
-
-        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
-      });
-
-      it('should pass when neither includeKeys nor excludeKeys is defined', async () => {
-        const validDestDef = {
-          name: 'TEST',
-          displayName: 'Test',
-          config: {
-            secretKeys: [],
-          },
-        };
-
-        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
-      });
-
-      it('should pass when both are empty arrays', async () => {
-        const validDestDef = {
-          name: 'TEST',
-          displayName: 'Test',
-          config: {
-            includeKeys: [],
-            excludeKeys: [],
-            secretKeys: [],
-          },
-        };
-
-        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
-      });
-
-      it('should fail when both includeKeys and excludeKeys are defined with values', async () => {
-        const invalidDestDef = {
-          name: 'TEST',
-          displayName: 'Test',
-          config: {
-            includeKeys: ['apiKey'],
-            excludeKeys: ['password'],
-            secretKeys: [],
-          },
-        };
-
-        await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow(
-          /includeKeys and config.excludeKeys cannot be defined at the same time/,
-        );
-      });
-
-      it('should pass when includeKeys has values but excludeKeys is empty', async () => {
-        const validDestDef = {
-          name: 'TEST',
-          displayName: 'Test',
-          config: {
-            includeKeys: ['apiKey'],
-            excludeKeys: [],
-            secretKeys: [],
-          },
-        };
-
-        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
-      });
-
-      it('should pass when excludeKeys has values but includeKeys is empty', async () => {
-        const validDestDef = {
-          name: 'TEST',
-          displayName: 'Test',
-          config: {
-            includeKeys: [],
-            excludeKeys: ['password'],
-            secretKeys: [],
-          },
-        };
-
-        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
-      });
-    });
 
     describe('Rule: secretKeys-not-in-includeKeys', () => {
       it('should pass when no secrets are in includeKeys', async () => {
@@ -1004,7 +907,7 @@ describe('Validator Utils', () => {
         await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
       });
 
-      it('should fail when a secret is in includeKeys', async () => {
+      it('should fail when a secret is in includeKeys but not in excludeKeys', async () => {
         const invalidDestDef = {
           name: 'TEST',
           displayName: 'Test',
@@ -1015,11 +918,25 @@ describe('Validator Utils', () => {
         };
 
         await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow(
-          /must NOT be in config.includeKeys.*Found: apiKey/,
+          /Secret keys must not be exposed to client-side.*apiKey/,
         );
       });
 
-      it('should fail when multiple secrets are in includeKeys', async () => {
+      it('should pass when secret is in both includeKeys and excludeKeys (excludeKeys wins)', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            secretKeys: ['apiKey', 'password'],
+            includeKeys: ['apiKey', 'enabled'],
+            excludeKeys: ['apiKey', 'password'],
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should fail when multiple secrets are in includeKeys but not in excludeKeys', async () => {
         const invalidDestDef = {
           name: 'TEST',
           displayName: 'Test',
@@ -1030,7 +947,7 @@ describe('Validator Utils', () => {
         };
 
         await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow(
-          /must NOT be in config.includeKeys/,
+          /Secret keys must not be exposed to client-side/,
         );
       });
 
@@ -1085,100 +1002,6 @@ describe('Validator Utils', () => {
       });
     });
 
-    describe('Rule: secretKeys-must-be-in-excludeKeys', () => {
-      it('should pass when all secrets are in excludeKeys', async () => {
-        const validDestDef = {
-          name: 'TEST',
-          displayName: 'Test',
-          config: {
-            secretKeys: ['password', 'apiSecret'],
-            excludeKeys: ['password', 'apiSecret', 'internal'],
-          },
-        };
-
-        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
-      });
-
-      it('should fail when a secret is not in excludeKeys', async () => {
-        const invalidDestDef = {
-          name: 'TEST',
-          displayName: 'Test',
-          config: {
-            secretKeys: ['password', 'apiSecret'],
-            excludeKeys: ['password'],
-          },
-        };
-
-        await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow(
-          /must be in config.excludeKeys.*Missing: apiSecret/,
-        );
-      });
-
-      it('should fail when multiple secrets are not in excludeKeys', async () => {
-        const invalidDestDef = {
-          name: 'TEST',
-          displayName: 'Test',
-          config: {
-            secretKeys: ['password', 'apiSecret', 'token'],
-            excludeKeys: ['password'],
-          },
-        };
-
-        await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow(
-          /must be in config.excludeKeys/,
-        );
-      });
-
-      it('should pass when excludeKeys is empty', async () => {
-        const validDestDef = {
-          name: 'TEST',
-          displayName: 'Test',
-          config: {
-            secretKeys: ['password', 'apiSecret'],
-            excludeKeys: [],
-          },
-        };
-
-        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
-      });
-
-      it('should pass when excludeKeys is undefined', async () => {
-        const validDestDef = {
-          name: 'TEST',
-          displayName: 'Test',
-          config: {
-            secretKeys: ['password', 'apiSecret'],
-          },
-        };
-
-        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
-      });
-
-      it('should pass when secretKeys is empty', async () => {
-        const validDestDef = {
-          name: 'TEST',
-          displayName: 'Test',
-          config: {
-            secretKeys: [],
-            excludeKeys: ['password'],
-          },
-        };
-
-        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
-      });
-
-      it('should pass when secretKeys is undefined', async () => {
-        const validDestDef = {
-          name: 'TEST',
-          displayName: 'Test',
-          config: {
-            excludeKeys: ['password'],
-          },
-        };
-
-        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
-      });
-    });
 
     describe('Rule: includeKeys-must-be-defined-when-device-hybrid-mode-is-supported', () => {
       it('should pass when includeKeys is defined and device mode is supported', async () => {
@@ -1223,15 +1046,16 @@ describe('Validator Utils', () => {
         };
 
         await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow(
-          /includeKeys must be defined when device\/hybrid mode is supported/,
+          /includeKeys must be defined and non-empty when at least one source type supports device\/hybrid mode/,
         );
       });
 
-      it('should fail when includeKeys is not defined but hybrid mode is supported', async () => {
+      it('should fail when includeKeys is empty but hybrid mode is supported', async () => {
         const invalidDestDef = {
           name: 'TEST',
           displayName: 'Test',
           config: {
+            includeKeys: [],
             supportedConnectionModes: {
               web: ['hybrid'],
               android: ['cloud'],
@@ -1240,7 +1064,7 @@ describe('Validator Utils', () => {
         };
 
         await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow(
-          /includeKeys must be defined when device\/hybrid mode is supported/,
+          /includeKeys must be defined and non-empty when at least one source type supports device\/hybrid mode/,
         );
       });
 
@@ -1293,7 +1117,6 @@ describe('Validator Utils', () => {
           displayName: 'Test',
           config: {
             includeKeys: ['apiKey', 'password'],
-            excludeKeys: ['internal'],
             secretKeys: ['password', 'token'],
           },
         };
@@ -1303,8 +1126,8 @@ describe('Validator Utils', () => {
           fail('Expected validation to throw');
         } catch (error) {
           const errorMessage = error.message;
-          // Should have multiple errors
-          expect(errorMessage).toContain('includeKeys and config.excludeKeys cannot be defined');
+          // Should fail because password is in includeKeys but not in excludeKeys
+          expect(errorMessage).toContain('Secret keys must not be exposed to client-side');
           expect(errorMessage).toContain('password');
         }
       });
