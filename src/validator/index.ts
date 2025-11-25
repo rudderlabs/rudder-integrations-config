@@ -99,15 +99,13 @@ const destinationDefinitionRules: ValidationRule[] = [
       if (
         supportedConnectionModes &&
         Object.values(supportedConnectionModes).every((modes: string[]) => modes.includes('cloud'))
-      ) {
-        if (Array.isArray(includeKeys) && includeKeys.length > 0) {
+       && Array.isArray(includeKeys) && includeKeys.length > 0) {
           return {
             isValid: false,
             errorMessage:
               'config.includeKeys must not be defined when the destination only supports cloud mode',
           };
         }
-      }
 
       return { isValid: true };
     },
@@ -126,18 +124,16 @@ const destinationDefinitionRules: ValidationRule[] = [
       if (
         supportedConnectionModes &&
         Object.values(supportedConnectionModes).every((modes: string[]) => modes.includes('cloud'))
-      ) {
-        if (
+       && (
           (Array.isArray(includeKeys) && includeKeys.length > 0) ||
           (Array.isArray(excludeKeys) && excludeKeys.length > 0)
-        ) {
+        )) {
           return {
             isValid: false,
             errorMessage:
               'config.includeKeys and config.excludeKeys must not be defined when the destination only supports cloud mode',
           };
         }
-      }
 
       return { isValid: true };
     },
