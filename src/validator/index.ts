@@ -43,8 +43,7 @@ const destinationDefinitionRules: ValidationRule[] = [
         // (excludeKeys wins when a key is in both)
         const secretsInIncludeKeys = secretKeys.filter(
           (key: string) =>
-            includeKeys.includes(key) &&
-            !(Array.isArray(excludeKeys) && excludeKeys.includes(key)),
+            includeKeys.includes(key) && !(Array.isArray(excludeKeys) && excludeKeys.includes(key)),
         );
 
         if (secretsInIncludeKeys.length > 0) {
@@ -96,12 +95,16 @@ const destinationDefinitionRules: ValidationRule[] = [
         string,
         unknown
       >;
-      
-      if (supportedConnectionModes && Object.values(supportedConnectionModes).every((modes: string[]) => modes.includes('cloud'))) {
+
+      if (
+        supportedConnectionModes &&
+        Object.values(supportedConnectionModes).every((modes: string[]) => modes.includes('cloud'))
+      ) {
         if (Array.isArray(includeKeys) && includeKeys.length > 0) {
           return {
             isValid: false,
-            errorMessage: 'config.includeKeys must not be defined when the destination only supports cloud mode',
+            errorMessage:
+              'config.includeKeys must not be defined when the destination only supports cloud mode',
           };
         }
       }
@@ -110,7 +113,8 @@ const destinationDefinitionRules: ValidationRule[] = [
     },
   },
   {
-    description: 'includeKeys and excludeKeys must not be defined when the destination only supports cloud mode',
+    description:
+      'includeKeys and excludeKeys must not be defined when the destination only supports cloud mode',
     // TODO: Remove the ignore flag once we have cleaned up all the destination definitions
     ignore: true,
     validate: (destDefConfig) => {
@@ -118,19 +122,26 @@ const destinationDefinitionRules: ValidationRule[] = [
         string,
         unknown
       >;
-      
-      if (supportedConnectionModes && Object.values(supportedConnectionModes).every((modes: string[]) => modes.includes('cloud'))) {
-        if (Array.isArray(includeKeys) && includeKeys.length > 0 || Array.isArray(excludeKeys) && excludeKeys.length > 0) {
+
+      if (
+        supportedConnectionModes &&
+        Object.values(supportedConnectionModes).every((modes: string[]) => modes.includes('cloud'))
+      ) {
+        if (
+          (Array.isArray(includeKeys) && includeKeys.length > 0) ||
+          (Array.isArray(excludeKeys) && excludeKeys.length > 0)
+        ) {
           return {
             isValid: false,
-            errorMessage: 'config.includeKeys and config.excludeKeys must not be defined when the destination only supports cloud mode',
+            errorMessage:
+              'config.includeKeys and config.excludeKeys must not be defined when the destination only supports cloud mode',
           };
         }
       }
 
       return { isValid: true };
     },
-  }
+  },
 ];
 
 function applyAdditionalRulesValidation(destDefConfig: Record<string, unknown>): void {
