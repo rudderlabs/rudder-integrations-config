@@ -18,7 +18,6 @@ let validators: Record<string, ValidateFunction> = {};
 
 // Custom validation rule interface
 interface ValidationRule {
-  name: string;
   description: string;
   ignore?: boolean;
   validate: (destDefConfig: Record<string, unknown>) => { isValid: boolean; errorMessage?: string };
@@ -27,7 +26,6 @@ interface ValidationRule {
 // Destination definition validation rules
 const destinationDefinitionRules: ValidationRule[] = [
   {
-    name: 'secretKeys-not-in-includeKeys',
     description: 'Secret keys must not be in includeKeys unless also in excludeKeys',
     validate: (destDefConfig) => {
       const { secretKeys, includeKeys, excludeKeys } = destDefConfig.config as Record<
@@ -63,7 +61,6 @@ const destinationDefinitionRules: ValidationRule[] = [
     },
   },
   {
-    name: 'includeKeys-must-be-defined-when-device-hybrid-mode-is-supported',
     description:
       'includeKeys must be defined when at least one source type supports device/hybrid mode',
     validate: (destDefConfig) => {
@@ -91,10 +88,31 @@ const destinationDefinitionRules: ValidationRule[] = [
     },
   },
   {
-    name: 'includeKeys-excludeKeys-must-not-be-defined-when-destination-only-supports-cloud-mode',
+    description: 'includeKeys must not be defined when the destination only supports cloud mode',
     // TODO: Remove the ignore flag once we have cleaned up all the destination definitions
     ignore: true,
+    validate: (destDefConfig) => {
+      const { supportedConnectionModes, includeKeys } = destDefConfig.config as Record<
+        string,
+        unknown
+      >;
+      
+      if (supportedConnectionModes && Object.values(supportedConnectionModes).every((modes: string[]) => modes.includes('cloud'))) {
+        if (Array.isArray(includeKeys) && includeKeys.length > 0) {
+          return {
+            isValid: false,
+            errorMessage: 'config.includeKeys must not be defined when the destination only supports cloud mode',
+          };
+        }
+      }
+
+      return { isValid: true };
+    },
+  },
+  {
     description: 'includeKeys and excludeKeys must not be defined when the destination only supports cloud mode',
+    // TODO: Remove the ignore flag once we have cleaned up all the destination definitions
+    ignore: true,
     validate: (destDefConfig) => {
       const { supportedConnectionModes, includeKeys, excludeKeys } = destDefConfig.config as Record<
         string,
