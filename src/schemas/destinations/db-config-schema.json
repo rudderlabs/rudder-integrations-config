@@ -298,8 +298,8 @@
         "includeKeys": {
           "type": "array",
           "title": "Include Keys",
-          "description": "The only keys that are to be included in the destination configuration sent to the SDKs.",
-          "$comment": "For destinations that support device mode, this should be mandatorily defined. No fields will be included in the source configuration response if this field is not defined or empty.",
+          "description": "The list of properties that are to be included in the destination configuration sent to the client SDKs via source configuration response.",
+          "$comment": "For destinations that support device/hybrid mode, this should be mandatorily defined. Otherwise, it should not be defined at all. No fields will be included in the destination configuration if this field is not defined or empty.",
           "items": {
             "type": "string"
           },
@@ -309,8 +309,8 @@
         "excludeKeys": {
           "type": "array",
           "title": "Exclude Keys",
-          "description": "The keys to be excluded in the destination configuration sent to the SDKs.",
-          "$comment": "This field needs to be mandatorily defined if the destination supports device mode. The filter is applied after the 'includeKeys' filtering logic. So, if a key is included in both lists, it'll be eventually dropped.",
+          "description": "The list of properties to be excluded in the destination configuration sent to the client SDKs via source configuration response.",
+          "$comment": "This field needs to be defined only if the destination supports device/hybrid mode. Otherwise, it should not be defined at all. The filter is applied after the 'includeKeys' filtering logic. So, if a property is included in both lists, it'll be eventually dropped.",
           "items": {
             "type": "string"
           },

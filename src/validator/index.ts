@@ -20,38 +20,20 @@ let validators: Record<string, ValidateFunction> = {};
 interface ValidationRule {
   name: string;
   description: string;
+  ignore?: boolean;
   validate: (destDefConfig: Record<string, unknown>) => { isValid: boolean; errorMessage?: string };
 }
 
 // Destination definition validation rules
 const destinationDefinitionRules: ValidationRule[] = [
   {
-    name: 'includeKeys-excludeKeys-mutual-exclusion',
-    description: 'includeKeys and excludeKeys cannot be defined at the same time',
-    validate: (destDefConfig) => {
-      const { includeKeys, excludeKeys } = destDefConfig.config as Record<string, unknown>;
-
-      if (
-        Array.isArray(includeKeys) &&
-        Array.isArray(excludeKeys) &&
-        includeKeys.length > 0 &&
-        excludeKeys.length > 0
-      ) {
-        return {
-          isValid: false,
-          errorMessage:
-            'config.includeKeys and config.excludeKeys cannot be defined at the same time',
-        };
-      }
-
-      return { isValid: true };
-    },
-  },
-  {
     name: 'secretKeys-not-in-includeKeys',
-    description: 'Secret keys must not be in includeKeys to prevent client-side exposure',
+    description: 'Secret keys must not be in includeKeys unless also in excludeKeys',
     validate: (destDefConfig) => {
-      const { secretKeys, includeKeys } = destDefConfig.config as Record<string, unknown>;
+      const { secretKeys, includeKeys, excludeKeys } = destDefConfig.config as Record<
+        string,
+        unknown
+      >;
 
       if (
         Array.isArray(includeKeys) &&
@@ -59,41 +41,20 @@ const destinationDefinitionRules: ValidationRule[] = [
         includeKeys.length > 0 &&
         secretKeys.length > 0
       ) {
-        const secretsInIncludeKeys = secretKeys.filter((key: string) => includeKeys.includes(key));
+        // Find secrets in includeKeys that are NOT in excludeKeys
+        // (excludeKeys wins when a key is in both)
+        const secretsInIncludeKeys = secretKeys.filter(
+          (key: string) =>
+            includeKeys.includes(key) &&
+            !(Array.isArray(excludeKeys) && excludeKeys.includes(key)),
+        );
+
         if (secretsInIncludeKeys.length > 0) {
           return {
             isValid: false,
-            errorMessage: `All fields in config.secretKeys must NOT be in config.includeKeys. Found: ${secretsInIncludeKeys.join(
+            errorMessage: `Secret keys must not be exposed to client-side. Found in config.includeKeys but not in config.excludeKeys: ${secretsInIncludeKeys.join(
               ', ',
-            )}`,
-          };
-        }
-      }
-
-      return { isValid: true };
-    },
-  },
-  {
-    name: 'secretKeys-must-be-in-excludeKeys',
-    description: 'When excludeKeys is defined, all secrets must be in excludeKeys',
-    validate: (destDefConfig) => {
-      const { secretKeys, excludeKeys } = destDefConfig.config as Record<string, unknown>;
-
-      if (
-        Array.isArray(excludeKeys) &&
-        Array.isArray(secretKeys) &&
-        excludeKeys.length > 0 &&
-        secretKeys.length > 0
-      ) {
-        const secretsNotInExcludeKeys = secretKeys.filter(
-          (key: string) => !excludeKeys.includes(key),
-        );
-        if (secretsNotInExcludeKeys.length > 0) {
-          return {
-            isValid: false,
-            errorMessage: `All fields in config.secretKeys must be in config.excludeKeys. Missing: ${secretsNotInExcludeKeys.join(
-              ', ',
-            )}`,
+            )}. Add these to config.excludeKeys to prevent exposure.`,
           };
         }
       }
@@ -103,7 +64,8 @@ const destinationDefinitionRules: ValidationRule[] = [
   },
   {
     name: 'includeKeys-must-be-defined-when-device-hybrid-mode-is-supported',
-    description: 'includeKeys must be defined when device/hybrid mode is supported',
+    description:
+      'includeKeys must be defined when at least one source type supports device/hybrid mode',
     validate: (destDefConfig) => {
       const { supportedConnectionModes, includeKeys } = destDefConfig.config as Record<
         string,
@@ -113,25 +75,53 @@ const destinationDefinitionRules: ValidationRule[] = [
       const isDeviceModeSupported =
         supportedConnectionModes &&
         Object.values(supportedConnectionModes).some(
-          (modes: string[]) => modes.includes('device') || modes.includes('hybrid'),
+          (modes: unknown) =>
+            Array.isArray(modes) && (modes.includes('device') || modes.includes('hybrid')),
         );
 
-      if (isDeviceModeSupported && !includeKeys) {
+      if (isDeviceModeSupported && (!Array.isArray(includeKeys) || includeKeys.length === 0)) {
         return {
           isValid: false,
-          errorMessage: 'config.includeKeys must be defined when device/hybrid mode is supported',
+          errorMessage:
+            'config.includeKeys must be defined and non-empty when at least one source type supports device/hybrid mode',
         };
       }
 
       return { isValid: true };
     },
   },
+  {
+    name: 'includeKeys-excludeKeys-must-not-be-defined-when-destination-only-supports-cloud-mode',
+    // TODO: Remove the ignore flag once we have cleaned up all the destination definitions
+    ignore: true,
+    description: 'includeKeys and excludeKeys must not be defined when the destination only supports cloud mode',
+    validate: (destDefConfig) => {
+      const { supportedConnectionModes, includeKeys, excludeKeys } = destDefConfig.config as Record<
+        string,
+        unknown
+      >;
+      
+      if (supportedConnectionModes && Object.values(supportedConnectionModes).every((modes: string[]) => modes.includes('cloud'))) {
+        if (Array.isArray(includeKeys) && includeKeys.length > 0 || Array.isArray(excludeKeys) && excludeKeys.length > 0) {
+          return {
+            isValid: false,
+            errorMessage: 'config.includeKeys and config.excludeKeys must not be defined when the destination only supports cloud mode',
+          };
+        }
+      }
+
+      return { isValid: true };
+    },
+  }
 ];
 
 function applyAdditionalRulesValidation(destDefConfig: Record<string, unknown>): void {
   const errors: string[] = [];
 
   destinationDefinitionRules.forEach((rule) => {
+    if (rule.ignore) {
+      return;
+    }
     const result = rule.validate(destDefConfig);
     if (!result.isValid && result.errorMessage) {
       errors.push(result.errorMessage);
