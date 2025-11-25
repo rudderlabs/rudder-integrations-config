@@ -19,7 +19,6 @@ let validators: Record<string, ValidateFunction> = {};
 // Custom validation rule interface
 interface ValidationRule {
   description: string;
-  ignore?: boolean;
   validate: (destDefConfig: Record<string, unknown>) => { isValid: boolean; errorMessage?: string };
 }
 
@@ -86,67 +85,62 @@ const destinationDefinitionRules: ValidationRule[] = [
       return { isValid: true };
     },
   },
-  {
-    description: 'includeKeys must not be defined when the destination only supports cloud mode',
-    // TODO: Remove the ignore flag once we have cleaned up all the destination definitions
-    ignore: true,
-    validate: (destDefConfig) => {
-      const { supportedConnectionModes, includeKeys } = destDefConfig.config as Record<
-        string,
-        unknown
-      >;
+  // TODO: Uncomment once we have cleaned up all the destination definitions
+  // {
+  //   description: 'includeKeys must not be defined when the destination only supports cloud mode',
+  //   validate: (destDefConfig) => {
+  //     const { supportedConnectionModes, includeKeys } = destDefConfig.config as Record<
+  //       string,
+  //       unknown
+  //     >;
 
-      if (
-        supportedConnectionModes &&
-        Object.values(supportedConnectionModes).every((modes: string[]) => modes.includes('cloud'))
-       && Array.isArray(includeKeys) && includeKeys.length > 0) {
-          return {
-            isValid: false,
-            errorMessage:
-              'config.includeKeys must not be defined when the destination only supports cloud mode',
-          };
-        }
+  //     if (
+  //       supportedConnectionModes &&
+  //       Object.values(supportedConnectionModes).every((modes: string[]) => modes.includes('cloud'))
+  //      && Array.isArray(includeKeys) && includeKeys.length > 0) {
+  //         return {
+  //           isValid: false,
+  //           errorMessage:
+  //             'config.includeKeys must not be defined when the destination only supports cloud mode',
+  //         };
+  //       }
 
-      return { isValid: true };
-    },
-  },
-  {
-    description:
-      'includeKeys and excludeKeys must not be defined when the destination only supports cloud mode',
-    // TODO: Remove the ignore flag once we have cleaned up all the destination definitions
-    ignore: true,
-    validate: (destDefConfig) => {
-      const { supportedConnectionModes, includeKeys, excludeKeys } = destDefConfig.config as Record<
-        string,
-        unknown
-      >;
+  //     return { isValid: true };
+  //   },
+  // },
+  // TODO: Uncomment once we have cleaned up all the destination definitions
+  // {
+  //   description:
+  //     'includeKeys and excludeKeys must not be defined when the destination only supports cloud mode',
+  //   validate: (destDefConfig) => {
+  //     const { supportedConnectionModes, includeKeys, excludeKeys } = destDefConfig.config as Record<
+  //       string,
+  //       unknown
+  //     >;
 
-      if (
-        supportedConnectionModes &&
-        Object.values(supportedConnectionModes).every((modes: string[]) => modes.includes('cloud'))
-       && (
-          (Array.isArray(includeKeys) && includeKeys.length > 0) ||
-          (Array.isArray(excludeKeys) && excludeKeys.length > 0)
-        )) {
-          return {
-            isValid: false,
-            errorMessage:
-              'config.includeKeys and config.excludeKeys must not be defined when the destination only supports cloud mode',
-          };
-        }
+  //     if (
+  //       supportedConnectionModes &&
+  //       Object.values(supportedConnectionModes).every((modes: string[]) => modes.includes('cloud'))
+  //      && (
+  //         (Array.isArray(includeKeys) && includeKeys.length > 0) ||
+  //         (Array.isArray(excludeKeys) && excludeKeys.length > 0)
+  //       )) {
+  //         return {
+  //           isValid: false,
+  //           errorMessage:
+  //             'config.includeKeys and config.excludeKeys must not be defined when the destination only supports cloud mode',
+  //         };
+  //       }
 
-      return { isValid: true };
-    },
-  },
+  //     return { isValid: true };
+  //   },
+  // },
 ];
 
 function applyAdditionalRulesValidation(destDefConfig: Record<string, unknown>): void {
   const errors: string[] = [];
 
   destinationDefinitionRules.forEach((rule) => {
-    if (rule.ignore) {
-      return;
-    }
     const result = rule.validate(destDefConfig);
     if (!result.isValid && result.errorMessage) {
       errors.push(result.errorMessage);
