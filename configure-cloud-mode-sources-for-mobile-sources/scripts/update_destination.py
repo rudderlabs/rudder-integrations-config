@@ -686,38 +686,33 @@ class DestinationUpdater:
         return is_valid, errors, warnings, passed
 
     def run_npm_tests(self) -> tuple[bool, str]:
-        """Run npm validation tests for this destination.
+        """Run validation tests for this specific destination only.
+
+        Uses a custom Node.js script to validate only the destination being updated,
+        avoiding false failures from other destinations' issues.
 
         Returns: (success, output_message)
         """
         try:
-            # Note: We run validation tests without coverage checks because:
-            # 1. Jest doesn't support the -d flag properly when run through npm test
-            # 2. Coverage thresholds (100%) cause false failures even when all tests pass
-            # 3. We only care about validation passing, not code coverage here
-            cmd = [
-                "npx",
-                "jest",
-                "test/validation.test.ts",
-                "--coverage=false",
-                "--silent",
-            ]
+            # Run validation for only this destination using custom script
+            validator_script = Path(__file__).parent / "validate-single-destination.js"
+            cmd = ["node", str(validator_script), self.destination]
 
             self.log(f"Running: {' '.join(cmd)}")
             result = subprocess.run(
-                cmd, cwd=REPO_ROOT, capture_output=True, text=True, timeout=120
+                cmd, cwd=REPO_ROOT, capture_output=True, text=True, timeout=10
             )
 
             if result.returncode == 0:
-                return True, "npm validation tests passed"
+                return True, f"Validation passed for {self.destination}"
             else:
                 return (
                     False,
-                    f"npm validation tests failed:\n{result.stdout}\n{result.stderr}",
+                    f"Validation failed for {self.destination}:\n{result.stdout}\n{result.stderr}",
                 )
 
         except subprocess.TimeoutExpired:
-            return False, "npm tests timed out (increased to 120s)"
+            return False, f"Validation timed out for {self.destination} (10s limit)"
         except Exception as e:
             return False, f"Error running tests: {e}"
 
