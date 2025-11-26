@@ -14,7 +14,7 @@ Legend:
 | ✅     | active_campaign  | ✓              | ✓           | ✓              |           |
 | ✅     | adobe_analytics  | ✓              | ✓           | ✓              |           |
 | ✅     | airship          | ✓              | ✓           | ✓              |           |
-| ⬜     | algolia          |                |             |                |           |
+| ✅     | algolia          | ✓              | ✓           | ✓              |           |
 | ⬜     | am               |                |             |                | Amplitude |
 | ⬜     | appcenter        |                |             |                |           |
 | ⬜     | appcues          |                |             |                |           |
