@@ -17,7 +17,7 @@ Legend:
 | ✅     | algolia          | ✓              | ✓           | ✓              |           |
 | ✅     | am               | ✓              | ✓           | ✓              | Amplitude |
 | ✅     | appcenter        | ✓              | ✓           | ✓              |           |
-| ⬜     | appcues          |                |             |                |           |
+| ✅     | appcues          | ✓              | ✓           | ✓              |           |
 | ⬜     | attentive_tag    |                |             |                |           |
 | ⬜     | attribution      |                |             |                |           |
 
