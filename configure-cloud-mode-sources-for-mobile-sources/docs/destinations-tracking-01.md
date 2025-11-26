@@ -18,7 +18,7 @@ Legend:
 | ✅     | am               | ✓              | ✓           | ✓              | Amplitude |
 | ✅     | appcenter        | ✓              | ✓           | ✓              |           |
 | ✅     | appcues          | ✓              | ✓           | ✓              |           |
-| ⬜     | attentive_tag    |                |             |                |           |
+| ✅     | attentive_tag    | ✓              | ✓           | ✓              |           |
 | ⬜     | attribution      |                |             |                |           |
 
 ## How to Update This File
