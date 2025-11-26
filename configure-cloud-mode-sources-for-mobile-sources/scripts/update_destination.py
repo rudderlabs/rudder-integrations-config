@@ -2,6 +2,11 @@
 """
 Interactive script to add androidKotlin and iosSwift cloud mode support to destinations.
 
+State is tracked in markdown files (docs/destinations-tracking-*.md) using status emojis:
+- ⬜ Not Started
+- 🟨 In Progress
+- ✅ Completed
+
 Usage:
     python3 update_destination.py --destination am --dry-run
     python3 update_destination.py --next --update
@@ -20,7 +25,6 @@ import shutil
 # Configuration
 REPO_ROOT = Path(__file__).parent.parent.parent
 DESTINATIONS_DIR = REPO_ROOT / "src" / "configurations" / "destinations"
-STATE_FILE = Path(__file__).parent / ".migration-state.json"
 TRACKING_DIR = Path(__file__).parent.parent / "docs"
 SCHEMA_GENERATOR_V2 = Path(__file__).parent / "schemaGeneratorV2.py"
 
@@ -32,17 +36,14 @@ ALL_DESTINATIONS = []
 
 
 class MigrationState:
-    """Manages migration state for resume capability."""
+    """Manages migration state by parsing markdown tracking files."""
 
     def __init__(self):
         self.state = self._load_state()
 
     def _load_state(self) -> Dict:
-        """Load state from file."""
-        if STATE_FILE.exists():
-            with open(STATE_FILE, "r") as f:
-                return json.load(f)
-        return {
+        """Load state from markdown tracking files."""
+        state = {
             "last_processed": None,
             "completed": [],
             "skipped": [],
@@ -50,10 +51,62 @@ class MigrationState:
             "count": 0,
         }
 
+        if not TRACKING_DIR.exists():
+            return state
+
+        tracking_files = sorted(TRACKING_DIR.glob("destinations-tracking-*.md"))
+        if not tracking_files:
+            return state
+
+        last_in_progress = None
+
+        for tracking_file in tracking_files:
+            try:
+                with open(tracking_file, "r") as f:
+                    for line in f:
+                        line = line.strip()
+
+                        # Parse table rows
+                        if line.startswith("|"):
+                            parts = [p.strip() for p in line.split("|")]
+                            if len(parts) >= 3:
+                                status = parts[1]
+                                dest_name = parts[2]
+
+                                # Skip header and separator rows
+                                if dest_name in ["Status", "Destination", "-----", ""]:
+                                    continue
+
+                                # Skip destinations that should be excluded
+                                if dest_name in SKIP_DESTINATIONS:
+                                    continue
+
+                                # Parse status emoji
+                                if "✅" in status:
+                                    state["completed"].append(dest_name)
+                                    state["last_processed"] = dest_name
+                                elif "🟨" in status:
+                                    # Track the last in-progress item
+                                    last_in_progress = dest_name
+                                elif "⬜" in status and "⏭" in (
+                                    parts[6] if len(parts) > 6 else ""
+                                ):
+                                    # Destinations marked as skipped in notes
+                                    state["skipped"].append(dest_name)
+            except Exception as e:
+                print(f"Warning: Could not parse {tracking_file}: {e}")
+                continue
+
+        # If we have an in-progress item, use it as last_processed
+        if last_in_progress:
+            state["last_processed"] = last_in_progress
+
+        state["count"] = len(state["completed"])
+        return state
+
     def save(self):
-        """Save state to file."""
-        with open(STATE_FILE, "w") as f:
-            json.dump(self.state, f, indent=2)
+        """State is persisted in markdown files, no separate save needed."""
+        pass
 
     def mark_completed(self, destination: str):
         """Mark destination as completed."""
@@ -61,8 +114,7 @@ class MigrationState:
             self.state["completed"].append(destination)
         self.state["last_processed"] = destination
         self.state["count"] = len(self.state["completed"])
-        self.save()
-        # Update tracking document
+        # Update tracking document (markdown is the source of truth)
         self._update_tracking_doc(destination, "completed")
 
     def mark_skipped(self, destination: str):
@@ -70,17 +122,16 @@ class MigrationState:
         if destination not in self.state["skipped"]:
             self.state["skipped"].append(destination)
         self.state["last_processed"] = destination
-        self.save()
-        # Update tracking document
+        # Update tracking document (markdown is the source of truth)
         self._update_tracking_doc(destination, "skipped")
 
     def mark_failed(self, destination: str, error: str):
         """Mark destination as failed."""
         self.state["failed"].append({"destination": destination, "error": error})
         self.state["last_processed"] = destination
-        self.save()
         # Update tracking document (keep as in_progress or not started)
         # Failed items should be manually reviewed
+        print(f"  ⚠️  Marked as failed: {error}")
 
     def get_next_destination(self) -> Optional[str]:
         """Get next destination to process."""
