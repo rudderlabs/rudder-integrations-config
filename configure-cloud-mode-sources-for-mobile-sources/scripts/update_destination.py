@@ -842,9 +842,16 @@ def interactive_prompt(state: MigrationState, updater: "DestinationUpdater") -> 
         print(f"🎉 Batch of 20 completed! ({state.state['count']} total)")
         print(f"{'='*60}")
         print("Consider creating a commit for this batch.")
-        response = input("\nContinue to next destination? (y/n): ").lower().strip()
-        if response != "y":
+        response = input("\nContinue to next destination? (Y/n): ").lower().strip()
+        # Default to yes if empty response
+        if response == "" or response in ["y", "yes"]:
+            # Continue processing
+            pass
+        elif response in ["n", "no"]:
             return "quit"
+        else:
+            print("Invalid response. Continuing by default...")
+            # Default to continue
 
     # Ask if user wants to run validation
     print("\n" + "─" * 60)
@@ -879,14 +886,15 @@ def interactive_prompt(state: MigrationState, updater: "DestinationUpdater") -> 
 
     # Final decision
     print("\nOptions:")
-    print("  y - Mark complete and continue to next")
+    print("  Y - Mark complete and continue to next (default)")
     print("  n - Revert changes and continue to next")
     print("  s - Skip this destination")
     print("  q - Save state and quit")
 
-    response = input("\nYour choice: ").lower().strip()
+    response = input("\nYour choice (Y/n/s/q): ").lower().strip()
 
-    if response in ["y", "yes"]:
+    # Default to "yes" (mark complete) if empty response
+    if response == "" or response in ["y", "yes"]:
         return "complete"
     elif response in ["n", "no"]:
         return "revert"
@@ -895,8 +903,75 @@ def interactive_prompt(state: MigrationState, updater: "DestinationUpdater") -> 
     elif response in ["q", "quit"]:
         return "quit"
     else:
-        print("Invalid choice. Please try again.")
-        return interactive_prompt(state, updater)
+        print("Invalid choice. Defaulting to 'Mark complete'...")
+        return "complete"
+
+
+def create_commit(destination: str) -> tuple[bool, str]:
+    """Create a git commit for the destination update.
+
+    Args:
+        destination: The destination name
+
+    Returns:
+        (success, message)
+    """
+    try:
+        # Stage the modified files for this destination
+        dest_dir = DESTINATIONS_DIR / destination
+
+        # Stage destination config files (check if they exist first)
+        files_to_add = []
+
+        db_config = dest_dir / "db-config.json"
+        if db_config.exists():
+            files_to_add.append(str(db_config))
+
+        schema = dest_dir / "schema.json"
+        if schema.exists():
+            files_to_add.append(str(schema))
+
+        ui_config = dest_dir / "ui-config.json"
+        if ui_config.exists():
+            files_to_add.append(str(ui_config))
+
+        if files_to_add:
+            cmd_add = ["git", "add"] + files_to_add
+            result = subprocess.run(
+                cmd_add, cwd=REPO_ROOT, capture_output=True, text=True
+            )
+
+            if result.returncode != 0:
+                return False, f"Failed to stage files: {result.stderr}"
+
+        # Stage tracking documents
+        tracking_docs = TRACKING_DIR.glob("destinations-tracking-*.md")
+        for doc in tracking_docs:
+            subprocess.run(["git", "add", str(doc)], cwd=REPO_ROOT, capture_output=True)
+
+        # Create commit message
+        commit_msg = f"feat: add cloud mode support for androidKotlin and iosSwift to {destination}"
+
+        # Create commit
+        cmd_commit = ["git", "commit", "-m", commit_msg]
+
+        result = subprocess.run(
+            cmd_commit, cwd=REPO_ROOT, capture_output=True, text=True
+        )
+
+        if result.returncode != 0:
+            # Check if it's because there's nothing to commit
+            if (
+                "nothing to commit" in result.stdout
+                or "nothing to commit" in result.stderr
+            ):
+                return True, "No changes to commit (already committed?)"
+            return False, f"Failed to commit: {result.stderr}"
+
+        return True, f"Committed: {commit_msg}"
+
+    except Exception as e:
+        return False, f"Error creating commit: {e}"
 
 
 def main():
@@ -991,6 +1066,16 @@ def main():
                 state.mark_completed(destination)
                 print(f"✅ Marked {destination} as completed")
                 print(f"   Updated tracking document: destinations-tracking.md")
+
+                # Auto-commit the changes
+                print(f"\n📝 Creating git commit...")
+                commit_success, commit_msg = create_commit(destination)
+
+                if commit_success:
+                    print(f"✅ {commit_msg}")
+                else:
+                    print(f"⚠️  {commit_msg}")
+                    print(f"   You may need to commit manually")
             elif response == "revert":
                 updater.revert_changes()
                 state.mark_skipped(destination)
