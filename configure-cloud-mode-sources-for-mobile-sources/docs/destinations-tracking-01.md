@@ -19,7 +19,7 @@ Legend:
 | ✅     | appcenter        | ✓              | ✓           | ✓              |           |
 | ✅     | appcues          | ✓              | ✓           | ✓              |           |
 | ✅     | attentive_tag    | ✓              | ✓           | ✓              |           |
-| ⬜     | attribution      |                |             |                |           |
+| ✅     | attribution      | ✓              | ✓           | ✓              |           |
 
 ## How to Update This File
 
