@@ -12,7 +12,7 @@ Legend:
 | ------ | ---------------- | -------------- | ----------- | -------------- | --------- |
 | ✅     | accoil_analytics | ✓              | ✓           | ✓              |           |
 | ✅     | active_campaign  | ✓              | ✓           | ✓              |           |
-| ⬜     | adobe_analytics  |                |             |                |           |
+| ✅     | adobe_analytics  | ✓              | ✓           | ✓              |           |
 | ⬜     | airship          |                |             |                |           |
 | ⬜     | algolia          |                |             |                |           |
 | ⬜     | am               |                |             |                | Amplitude |
