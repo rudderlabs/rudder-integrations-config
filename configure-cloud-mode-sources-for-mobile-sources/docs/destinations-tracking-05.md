@@ -1,6 +1,6 @@
-# Destinations Tracking - Part 5/9
+# Destinations Tracking - Part 5/17
 
-**Destinations 81-100** (of 171 total)
+**Destinations 41-50** (of 162 total)
 
 Legend:
 
@@ -8,28 +8,18 @@ Legend:
 - 🟨 In Progress
 - ✅ Completed
 
-| Status | Destination         | db-config.json | schema.json | ui-config.json | Notes |
-| ------ | ------------------- | -------------- | ----------- | -------------- | ----- |
-| ⬜     | kinesis             |                |             |                |       |
-| ⬜     | kissmetrics         |                |             |                |       |
-| ⬜     | klaviyo             |                |             |                |       |
-| ⬜     | koala               |                |             |                |       |
-| ⬜     | kochava             |                |             |                |       |
-| ⬜     | koddi               |                |             |                |       |
-| ⬜     | kustomer            |                |             |                |       |
-| ⬜     | lambda              |                |             |                |       |
-| ⬜     | leanplum            |                |             |                |       |
-| ⬜     | lemnisk             |                |             |                |       |
-| ⬜     | linkedIn_ads        |                |             |                |       |
-| ⬜     | loops               |                |             |                |       |
-| ⬜     | lotame_mobile       |                |             |                |       |
-| ⬜     | lytics              |                |             |                |       |
-| ⬜     | mailchimp           |                |             |                |       |
-| ⬜     | mailjet             |                |             |                |       |
-| ⬜     | mailmodo            |                |             |                |       |
-| ⬜     | marketo             |                |             |                |       |
-| ⬜     | marketo_bulk_upload |                |             |                |       |
-| ⬜     | mautic              |                |             |                |       |
+| Status | Destination                  | db-config.json | schema.json | ui-config.json | Notes |
+| ------ | ---------------------------- | -------------- | ----------- | -------------- | ----- |
+| ⬜     | discord                      |                |             |                |       |
+| ⬜     | drip                         |                |             |                |       |
+| ⬜     | dub                          |                |             |                |       |
+| ⬜     | dynamic_yield                |                |             |                |       |
+| ⬜     | emarsys                      |                |             |                |       |
+| ⬜     | engage                       |                |             |                |       |
+| ⬜     | eventbridge                  |                |             |                |       |
+| ⬜     | facebook_conversions         |                |             |                |       |
+| ⬜     | facebook_offline_conversions |                |             |                |       |
+| ⬜     | factorsai                    |                |             |                |       |
 
 ## How to Update This File
 

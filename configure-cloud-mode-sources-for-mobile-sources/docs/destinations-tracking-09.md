@@ -1,6 +1,6 @@
-# Destinations Tracking - Part 9/9
+# Destinations Tracking - Part 9/17
 
-**Destinations 161-171** (of 171 total)
+**Destinations 81-90** (of 162 total)
 
 Legend:
 
@@ -8,19 +8,18 @@ Legend:
 - 🟨 In Progress
 - ✅ Completed
 
-| Status | Destination | db-config.json | schema.json | ui-config.json | Notes |
-| ------ | ----------- | -------------- | ----------- | -------------- | ----- |
-| ⬜     | user        |                |             |                |       |
-| ⬜     | userlist    |                |             |                |       |
-| ⬜     | variance    |                |             |                |       |
-| ⬜     | vero        |                |             |                |       |
-| ⬜     | vitally     |                |             |                |       |
-| ⬜     | webengage   |                |             |                |       |
-| ⬜     | woopra      |                |             |                |       |
-| ⬜     | wootric     |                |             |                |       |
-| ⬜     | wunderkind  |                |             |                |       |
-| ⬜     | zapier      |                |             |                |       |
-| ⬜     | zendesk     |                |             |                |       |
+| Status | Destination   | db-config.json | schema.json | ui-config.json | Notes |
+| ------ | ------------- | -------------- | ----------- | -------------- | ----- |
+| ⬜     | kustomer      |                |             |                |       |
+| ⬜     | lambda        |                |             |                |       |
+| ⬜     | leanplum      |                |             |                |       |
+| ⬜     | lemnisk       |                |             |                |       |
+| ⬜     | linkedIn_ads  |                |             |                |       |
+| ⬜     | loops         |                |             |                |       |
+| ⬜     | lotame_mobile |                |             |                |       |
+| ⬜     | lytics        |                |             |                |       |
+| ⬜     | mailchimp     |                |             |                |       |
+| ⬜     | mailjet       |                |             |                |       |
 
 ## How to Update This File
 

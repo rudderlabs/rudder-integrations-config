@@ -1,6 +1,6 @@
-# Destinations Tracking - Part 6/9
+# Destinations Tracking - Part 6/17
 
-**Destinations 101-120** (of 171 total)
+**Destinations 51-60** (of 162 total)
 
 Legend:
 
@@ -8,28 +8,18 @@ Legend:
 - 🟨 In Progress
 - ✅ Completed
 
-| Status | Destination          | db-config.json | schema.json | ui-config.json | Notes    |
-| ------ | -------------------- | -------------- | ----------- | -------------- | -------- |
-| ⬜     | minio                |                |             |                |          |
-| ⬜     | moengage             |                |             |                |          |
-| ⬜     | monday               |                |             |                |          |
-| ⬜     | monetate             |                |             |                |          |
-| ⬜     | movable_ink          |                |             |                |          |
-| ⬜     | mp                   |                |             |                | Mixpanel |
-| ⬜     | mssql                |                |             |                |          |
-| ⬜     | new_relic            |                |             |                |          |
-| ⬜     | ninetailed           |                |             |                |          |
-| ⬜     | ometria              |                |             |                |          |
-| ⬜     | one_signal           |                |             |                |          |
-| ⬜     | optimizely_fullstack |                |             |                |          |
-| ⬜     | ortto                |                |             |                |          |
-| ⬜     | pagerduty            |                |             |                |          |
-| ⬜     | pardot               |                |             |                |          |
-| ⬜     | persistiq            |                |             |                |          |
-| ⬜     | personalize          |                |             |                |          |
-| ⬜     | pinterest_tag        |                |             |                |          |
-| ⬜     | pipedream            |                |             |                |          |
-| ⬜     | pipedrive            |                |             |                |          |
+| Status | Destination   | db-config.json | schema.json | ui-config.json | Notes                |
+| ------ | ------------- | -------------- | ----------- | -------------- | -------------------- |
+| ⬜     | firehose      |                |             |                |                      |
+| ⬜     | freshmarketer |                |             |                |                      |
+| ⬜     | freshsales    |                |             |                |                      |
+| ⬜     | ga            |                |             |                | Google Analytics     |
+| ⬜     | ga360         |                |             |                |                      |
+| ⬜     | gainsight     |                |             |                |                      |
+| ⬜     | gainsight_px  |                |             |                |                      |
+| ⬜     | gcs           |                |             |                | Google Cloud Storage |
+| ⬜     | gcs_datalake  |                |             |                |                      |
+| ⬜     | gladly        |                |             |                |                      |
 
 ## How to Update This File
 

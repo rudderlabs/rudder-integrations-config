@@ -1,6 +1,6 @@
-# Destinations Tracking - Part 3/9
+# Destinations Tracking - Part 3/17
 
-**Destinations 41-60** (of 171 total)
+**Destinations 21-30** (of 162 total)
 
 Legend:
 
@@ -8,28 +8,18 @@ Legend:
 - 🟨 In Progress
 - ✅ Completed
 
-| Status | Destination                  | db-config.json | schema.json | ui-config.json | Notes            |
-| ------ | ---------------------------- | -------------- | ----------- | -------------- | ---------------- |
-| ⬜     | discord                      |                |             |                |                  |
-| ⬜     | drip                         |                |             |                |                  |
-| ⬜     | dub                          |                |             |                |                  |
-| ⬜     | dynamic_yield                |                |             |                |                  |
-| ⬜     | emarsys                      |                |             |                |                  |
-| ⬜     | engage                       |                |             |                |                  |
-| ⬜     | eventbridge                  |                |             |                |                  |
-| ⬜     | facebook_conversions         |                |             |                |                  |
-| ⬜     | facebook_offline_conversions |                |             |                |                  |
-| ⬜     | facebook_pixel               |                |             |                |                  |
-| ⬜     | factorsai                    |                |             |                |                  |
-| ⬜     | firehose                     |                |             |                |                  |
-| ⬜     | freshmarketer                |                |             |                |                  |
-| ⬜     | freshsales                   |                |             |                |                  |
-| ⬜     | fullstory                    |                |             |                |                  |
-| ⬜     | ga                           |                |             |                | Google Analytics |
-| ⬜     | ga360                        |                |             |                |                  |
-| ⬜     | ga4                          |                |             |                |                  |
-| ⬜     | ga4_v2                       |                |             |                |                  |
-| ⬜     | gainsight                    |                |             |                |                  |
+| Status | Destination      | db-config.json | schema.json | ui-config.json | Notes |
+| ------ | ---------------- | -------------- | ----------- | -------------- | ----- |
+| ⬜     | bqstream         |                |             |                |       |
+| ⬜     | branch           |                |             |                |       |
+| ⬜     | bugsnag          |                |             |                |       |
+| ⬜     | campaign_manager |                |             |                |       |
+| ⬜     | candu            |                |             |                |       |
+| ⬜     | canny            |                |             |                |       |
+| ⬜     | clevertap        |                |             |                |       |
+| ⬜     | clickhouse       |                |             |                |       |
+| ⬜     | clicksend        |                |             |                |       |
+| ⬜     | clickup          |                |             |                |       |
 
 ## How to Update This File
 

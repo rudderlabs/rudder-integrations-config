@@ -1,6 +1,6 @@
-# Destinations Tracking - Part 8/9
+# Destinations Tracking - Part 8/17
 
-**Destinations 141-160** (of 171 total)
+**Destinations 71-80** (of 162 total)
 
 Legend:
 
@@ -8,28 +8,18 @@ Legend:
 - 🟨 In Progress
 - ✅ Completed
 
-| Status | Destination                          | db-config.json | schema.json | ui-config.json | Notes                      |
-| ------ | ------------------------------------ | -------------- | ----------- | -------------- | -------------------------- |
-| ⬜     | sfmc                                 |                |             |                | Salesforce Marketing Cloud |
-| ⬜     | shynet                               |                |             |                |                            |
-| ⬜     | signl4                               |                |             |                |                            |
-| ⬜     | singular                             |                |             |                |                            |
-| ⬜     | slack                                |                |             |                |                            |
-| ⬜     | smartly                              |                |             |                |                            |
-| ⬜     | snapchat_conversion                  |                |             |                |                            |
-| ⬜     | snowflake                            |                |             |                |                            |
-| ⬜     | snowpipe_streaming                   |                |             |                |                            |
-| ⬜     | splitio                              |                |             |                |                            |
-| ⬜     | sprig                                |                |             |                |                            |
-| ⬜     | statsig                              |                |             |                |                            |
-| ⬜     | stormly                              |                |             |                |                            |
-| ⬜     | the_trade_desk_real_time_conversions |                |             |                |                            |
-| ⬜     | tiktok_ads                           |                |             |                |                            |
-| ⬜     | tiktok_ads_offline_events            |                |             |                |                            |
-| ⬜     | topsort                              |                |             |                |                            |
-| ⬜     | trengo                               |                |             |                |                            |
-| ⬜     | tune                                 |                |             |                |                            |
-| ⬜     | twitter_ads                          |                |             |                |                            |
+| Status | Destination | db-config.json | schema.json | ui-config.json | Notes |
+| ------ | ----------- | -------------- | ----------- | -------------- | ----- |
+| ⬜     | intercom    |                |             |                |       |
+| ⬜     | june        |                |             |                |       |
+| ⬜     | kafka       |                |             |                |       |
+| ⬜     | keen        |                |             |                |       |
+| ⬜     | kinesis     |                |             |                |       |
+| ⬜     | kissmetrics |                |             |                |       |
+| ⬜     | klaviyo     |                |             |                |       |
+| ⬜     | koala       |                |             |                |       |
+| ⬜     | kochava     |                |             |                |       |
+| ⬜     | koddi       |                |             |                |       |
 
 ## How to Update This File
 

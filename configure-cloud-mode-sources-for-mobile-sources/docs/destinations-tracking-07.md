@@ -1,6 +1,6 @@
-# Destinations Tracking - Part 7/9
+# Destinations Tracking - Part 7/17
 
-**Destinations 121-140** (of 171 total)
+**Destinations 61-70** (of 162 total)
 
 Legend:
 
@@ -8,28 +8,18 @@ Legend:
 - 🟨 In Progress
 - ✅ Completed
 
-| Status | Destination      | db-config.json | schema.json | ui-config.json | Notes       |
-| ------ | ---------------- | -------------- | ----------- | -------------- | ----------- |
-| ⬜     | postgres         |                |             |                |             |
-| ⬜     | posthog          |                |             |                |             |
-| ⬜     | postscript       |                |             |                |             |
-| ⬜     | profitwell       |                |             |                |             |
-| ⬜     | qualtrics        |                |             |                |             |
-| ⬜     | rakuten          |                |             |                |             |
-| ⬜     | reddit           |                |             |                |             |
-| ⬜     | redis            |                |             |                |             |
-| ⬜     | refiner          |                |             |                |             |
-| ⬜     | revenue_cat      |                |             |                |             |
-| ⬜     | rockerbox        |                |             |                |             |
-| ⬜     | rs               |                |             |                | RudderStack |
-| ⬜     | s3               |                |             |                |             |
-| ⬜     | s3_datalake      |                |             |                |             |
-| ⬜     | salesforce       |                |             |                |             |
-| ⬜     | salesforce_oauth |                |             |                |             |
-| ⬜     | segment          |                |             |                |             |
-| ⬜     | sendgrid         |                |             |                |             |
-| ⬜     | sendinblue       |                |             |                |             |
-| ⬜     | serenytics       |                |             |                |             |
+| Status | Destination                         | db-config.json | schema.json | ui-config.json | Notes   |
+| ------ | ----------------------------------- | -------------- | ----------- | -------------- | ------- |
+| ⬜     | google_adwords_enhanced_conversions |                |             |                |         |
+| ⬜     | google_adwords_offline_conversions  |                |             |                |         |
+| ⬜     | google_cloud_function               |                |             |                |         |
+| ⬜     | googlepubsub                        |                |             |                |         |
+| ⬜     | googlesheets                        |                |             |                |         |
+| ⬜     | heap                                |                |             |                |         |
+| ⬜     | hs                                  |                |             |                | HubSpot |
+| ⬜     | http                                |                |             |                |         |
+| ⬜     | impact                              |                |             |                |         |
+| ⬜     | indicative                          |                |             |                |         |
 
 ## How to Update This File
 

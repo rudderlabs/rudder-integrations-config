@@ -1,6 +1,6 @@
-# Destinations Tracking - Part 2/9
+# Destinations Tracking - Part 2/17
 
-**Destinations 21-40** (of 171 total)
+**Destinations 11-20** (of 162 total)
 
 Legend:
 
@@ -8,28 +8,18 @@ Legend:
 - 🟨 In Progress
 - ✅ Completed
 
-| Status | Destination          | db-config.json | schema.json | ui-config.json | Notes |
-| ------ | -------------------- | -------------- | ----------- | -------------- | ----- |
-| ⬜     | bqstream             |                |             |                |       |
-| ⬜     | branch               |                |             |                |       |
-| ⬜     | bugsnag              |                |             |                |       |
-| ⬜     | campaign_manager     |                |             |                |       |
-| ⬜     | candu                |                |             |                |       |
-| ⬜     | canny                |                |             |                |       |
-| ⬜     | clevertap            |                |             |                |       |
-| ⬜     | clickhouse           |                |             |                |       |
-| ⬜     | clicksend            |                |             |                |       |
-| ⬜     | clickup              |                |             |                |       |
-| ⬜     | comscore             |                |             |                |       |
-| ⬜     | confluent_cloud      |                |             |                |       |
-| ⬜     | cordial              |                |             |                |       |
-| ⬜     | courier              |                |             |                |       |
-| ⬜     | custify              |                |             |                |       |
-| ⬜     | customerio           |                |             |                |       |
-| ⬜     | dcm_floodlight       |                |             |                |       |
-| ⬜     | delighted            |                |             |                |       |
-| ⬜     | deltalake            |                |             |                |       |
-| ⬜     | digital_ocean_spaces |                |             |                |       |
+| Status | Destination     | db-config.json | schema.json | ui-config.json | Notes    |
+| ------ | --------------- | -------------- | ----------- | -------------- | -------- |
+| ⬜     | autopilot       |                |             |                |          |
+| ⬜     | awin            |                |             |                |          |
+| ⬜     | azure_blob      |                |             |                |          |
+| ⬜     | azure_datalake  |                |             |                |          |
+| ⬜     | azure_event_hub |                |             |                |          |
+| ⬜     | azure_synapse   |                |             |                |          |
+| ⬜     | bloomreach      |                |             |                |          |
+| ⬜     | bluecore        |                |             |                |          |
+| ⬜     | blueshift       |                |             |                |          |
+| ⬜     | bq              |                |             |                | BigQuery |
 
 ## How to Update This File
 

@@ -1,6 +1,6 @@
-# Destinations Tracking - Part 4/9
+# Destinations Tracking - Part 4/17
 
-**Destinations 61-80** (of 171 total)
+**Destinations 31-40** (of 162 total)
 
 Legend:
 
@@ -8,28 +8,18 @@ Legend:
 - 🟨 In Progress
 - ✅ Completed
 
-| Status | Destination                         | db-config.json | schema.json | ui-config.json | Notes                |
-| ------ | ----------------------------------- | -------------- | ----------- | -------------- | -------------------- |
-| ⬜     | gainsight_px                        |                |             |                |                      |
-| ⬜     | gcs                                 |                |             |                | Google Cloud Storage |
-| ⬜     | gcs_datalake                        |                |             |                |                      |
-| ⬜     | gladly                              |                |             |                |                      |
-| ⬜     | google_adwords_enhanced_conversions |                |             |                |                      |
-| ⬜     | google_adwords_offline_conversions  |                |             |                |                      |
-| ⬜     | google_cloud_function               |                |             |                |                      |
-| ⬜     | googlepubsub                        |                |             |                |                      |
-| ⬜     | googlesheets                        |                |             |                |                      |
-| ⬜     | heap                                |                |             |                |                      |
-| ⬜     | hs                                  |                |             |                | HubSpot              |
-| ⬜     | http                                |                |             |                |                      |
-| ⬜     | impact                              |                |             |                |                      |
-| ⬜     | indicative                          |                |             |                |                      |
-| ⬜     | intercom                            |                |             |                |                      |
-| ⬜     | intercom_v2                         |                |             |                |                      |
-| ⬜     | iterable                            |                |             |                |                      |
-| ⬜     | june                                |                |             |                |                      |
-| ⬜     | kafka                               |                |             |                |                      |
-| ⬜     | keen                                |                |             |                |                      |
+| Status | Destination          | db-config.json | schema.json | ui-config.json | Notes |
+| ------ | -------------------- | -------------- | ----------- | -------------- | ----- |
+| ⬜     | comscore             |                |             |                |       |
+| ⬜     | confluent_cloud      |                |             |                |       |
+| ⬜     | cordial              |                |             |                |       |
+| ⬜     | courier              |                |             |                |       |
+| ⬜     | custify              |                |             |                |       |
+| ⬜     | customerio           |                |             |                |       |
+| ⬜     | dcm_floodlight       |                |             |                |       |
+| ⬜     | delighted            |                |             |                |       |
+| ⬜     | deltalake            |                |             |                |       |
+| ⬜     | digital_ocean_spaces |                |             |                |       |
 
 ## How to Update This File
 

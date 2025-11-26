@@ -1,6 +1,6 @@
-# Destinations Tracking - Part 1/9
+# Destinations Tracking - Part 1/17
 
-**Destinations 1-20** (of 171 total)
+**Destinations 1-10** (of 162 total)
 
 Legend:
 
@@ -20,16 +20,6 @@ Legend:
 | ⬜     | appcues          |                |             |                |           |
 | ⬜     | attentive_tag    |                |             |                |           |
 | ⬜     | attribution      |                |             |                |           |
-| ⬜     | autopilot        |                |             |                |           |
-| ⬜     | awin             |                |             |                |           |
-| ⬜     | azure_blob       |                |             |                |           |
-| ⬜     | azure_datalake   |                |             |                |           |
-| ⬜     | azure_event_hub  |                |             |                |           |
-| ⬜     | azure_synapse    |                |             |                |           |
-| ⬜     | bloomreach       |                |             |                |           |
-| ⬜     | bluecore         |                |             |                |           |
-| ⬜     | blueshift        |                |             |                |           |
-| ⬜     | bq               |                |             |                | BigQuery  |
 
 ## How to Update This File
 
