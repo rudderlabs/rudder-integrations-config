@@ -10,7 +10,7 @@ Legend:
 
 | Status | Destination      | db-config.json | schema.json | ui-config.json | Notes     |
 | ------ | ---------------- | -------------- | ----------- | -------------- | --------- |
-| ⬜     | accoil_analytics |                |             |                |           |
+| ✅     | accoil_analytics | ✓              | ✓           | ✓              |           |
 | ⬜     | active_campaign  |                |             |                |           |
 | ⬜     | adobe_analytics  |                |             |                |           |
 | ⬜     | airship          |                |             |                |           |
