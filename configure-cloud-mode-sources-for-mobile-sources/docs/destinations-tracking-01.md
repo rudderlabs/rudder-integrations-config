@@ -13,7 +13,7 @@ Legend:
 | ✅     | accoil_analytics | ✓              | ✓           | ✓              |           |
 | ✅     | active_campaign  | ✓              | ✓           | ✓              |           |
 | ✅     | adobe_analytics  | ✓              | ✓           | ✓              |           |
-| ⬜     | airship          |                |             |                |           |
+| ✅     | airship          | ✓              | ✓           | ✓              |           |
 | ⬜     | algolia          |                |             |                |           |
 | ⬜     | am               |                |             |                | Amplitude |
 | ⬜     | appcenter        |                |             |                |           |
