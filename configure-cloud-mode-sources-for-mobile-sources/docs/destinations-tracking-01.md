@@ -15,7 +15,7 @@ Legend:
 | ✅     | adobe_analytics  | ✓              | ✓           | ✓              |           |
 | ✅     | airship          | ✓              | ✓           | ✓              |           |
 | ✅     | algolia          | ✓              | ✓           | ✓              |           |
-| ⬜     | am               |                |             |                | Amplitude |
+| ✅     | am               | ✓              | ✓           | ✓              | Amplitude |
 | ⬜     | appcenter        |                |             |                |           |
 | ⬜     | appcues          |                |             |                |           |
 | ⬜     | attentive_tag    |                |             |                |           |
