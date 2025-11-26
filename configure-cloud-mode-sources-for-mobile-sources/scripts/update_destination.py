@@ -34,6 +34,184 @@ SKIP_DESTINATIONS = {"adj", "af", "braze", "fb", "firebase", "webhook"}
 # All 171 destinations that need updating (read from tracking file)
 ALL_DESTINATIONS = []
 
+# Schema configuration templates for androidKotlin and iosSwift
+# Extracted from webhook destination (reference configuration)
+CONSENT_MANAGEMENT_ANDROID_KOTLIN = {
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "provider": {
+                "type": "string",
+                "enum": ["custom", "iubenda", "ketch", "oneTrust"],
+                "default": "oneTrust",
+            },
+            "consents": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "consent": {
+                            "type": "string",
+                            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                        }
+                    },
+                },
+            },
+        },
+        "allOf": [
+            {
+                "if": {
+                    "properties": {"provider": {"const": "custom"}},
+                    "required": ["provider"],
+                },
+                "then": {
+                    "properties": {
+                        "resolutionStrategy": {"type": "string", "enum": ["and", "or"]}
+                    },
+                    "required": ["resolutionStrategy"],
+                },
+            }
+        ],
+    },
+}
+
+CONSENT_MANAGEMENT_IOS_SWIFT = {
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "provider": {
+                "type": "string",
+                "enum": ["custom", "iubenda", "ketch", "oneTrust"],
+                "default": "oneTrust",
+            },
+            "consents": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "consent": {
+                            "type": "string",
+                            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                        }
+                    },
+                },
+            },
+        },
+        "allOf": [
+            {
+                "if": {
+                    "properties": {"provider": {"const": "custom"}},
+                    "required": ["provider"],
+                },
+                "then": {
+                    "properties": {
+                        "resolutionStrategy": {"type": "string", "enum": ["and", "or"]}
+                    },
+                    "required": ["resolutionStrategy"],
+                },
+            }
+        ],
+    },
+}
+
+CONNECTION_MODE_ANDROID_KOTLIN = {"type": "string", "enum": ["cloud"]}
+
+CONNECTION_MODE_IOS_SWIFT = {"type": "string", "enum": ["cloud"]}
+
+
+def should_format_array_inline(arr, key: str = "") -> bool:
+    """
+    Determine if an array should be formatted inline.
+
+    Criteria (from schemaGeneratorV2.py):
+    - Small arrays (< 5 items)
+    - Simple string values
+    - Commonly used for enums and required arrays
+    """
+    if not isinstance(arr, list):
+        return False
+
+    # Don't inline if more than 4 items
+    if len(arr) > 4:
+        return False
+
+    # Don't inline if items are complex (dicts or lists)
+    for item in arr:
+        if isinstance(item, (dict, list)):
+            return False
+
+    # Don't inline if total length would be very long
+    str_repr = json.dumps(arr)
+    if len(str_repr) > 80:
+        return False
+
+    return True
+
+
+def format_json_custom(obj: Any, indent_level: int = 0, indent_str: str = "  ") -> str:
+    """
+    Custom JSON formatter that preserves single-line arrays for enums and short lists.
+    Based on schemaGeneratorV2.py formatting logic.
+    """
+    if isinstance(obj, dict):
+        if not obj:
+            return "{}"
+
+        lines = ["{"]
+        items = list(obj.items())
+        for i, (key, value) in enumerate(items):
+            is_last = i == len(items) - 1
+            comma = "" if is_last else ","
+
+            # Handle arrays that should be inline
+            if isinstance(value, list) and should_format_array_inline(value, key):
+                formatted_value = json.dumps(value, ensure_ascii=False)
+                lines.append(
+                    f'{indent_str * (indent_level + 1)}"{key}": {formatted_value}{comma}'
+                )
+            else:
+                formatted_value = format_json_custom(
+                    value, indent_level + 1, indent_str
+                )
+                lines.append(
+                    f'{indent_str * (indent_level + 1)}"{key}": {formatted_value}{comma}'
+                )
+
+        lines.append(indent_str * indent_level + "}")
+        return "\n".join(lines)
+
+    elif isinstance(obj, list):
+        if not obj:
+            return "[]"
+
+        # For arrays that should be inline
+        if should_format_array_inline(obj):
+            return json.dumps(obj, ensure_ascii=False)
+
+        # For complex arrays, format across multiple lines
+        lines = ["["]
+        for i, item in enumerate(obj):
+            is_last = i == len(obj) - 1
+            comma = "" if is_last else ","
+            formatted_item = format_json_custom(item, indent_level + 1, indent_str)
+            lines.append(f"{indent_str * (indent_level + 1)}{formatted_item}{comma}")
+        lines.append(indent_str * indent_level + "]")
+        return "\n".join(lines)
+
+    elif isinstance(obj, str):
+        return json.dumps(obj, ensure_ascii=False)
+
+    elif isinstance(obj, bool):
+        return "true" if obj else "false"
+
+    elif obj is None:
+        return "null"
+
+    else:
+        return json.dumps(obj, ensure_ascii=False)
+
 
 class MigrationState:
     """Manages migration state by parsing markdown tracking files."""
@@ -525,6 +703,246 @@ class DestinationUpdater:
             self.log("✓ ui-config.json has no cloud mode prerequisites", force=True)
             return False
 
+    def update_schema_properties(self) -> bool:
+        """Update schema.json to add androidKotlin and iosSwift to consentManagement and connectionMode.
+
+        This method directly modifies the schema.json file rather than regenerating it.
+        Preserves original formatting using text-based insertion similar to update_db_config().
+        """
+        schema_path = self.dest_dir / "schema.json"
+
+        if not schema_path.exists():
+            self.log("❌ schema.json not found", force=True)
+            return False
+
+        # Read original content for text-based manipulation
+        with open(schema_path, "r") as f:
+            original_content = f.read()
+
+        content = original_content
+        changes = []
+
+        # Parse JSON to check structure
+        try:
+            schema = json.loads(content)
+        except json.JSONDecodeError as e:
+            self.log(f"❌ schema.json is invalid JSON: {e}", force=True)
+            return False
+
+        properties = schema.get("configSchema", {}).get("properties", {})
+
+        # Update consentManagement property
+        if "consentManagement" in properties:
+            consent_mgmt = properties["consentManagement"]
+            consent_props = consent_mgmt.get("properties", {})
+
+            # Check and add androidKotlin
+            if "androidKotlin" not in consent_props:
+                content = self._insert_consent_management_config(
+                    content, "androidKotlin", CONSENT_MANAGEMENT_ANDROID_KOTLIN
+                )
+                if content != original_content:
+                    changes.append("Added androidKotlin to consentManagement")
+                    original_content = content
+
+            # Check and add iosSwift
+            if "iosSwift" not in consent_props:
+                content = self._insert_consent_management_config(
+                    content, "iosSwift", CONSENT_MANAGEMENT_IOS_SWIFT
+                )
+                if content != original_content:
+                    changes.append("Added iosSwift to consentManagement")
+                    original_content = content
+
+        # Update connectionMode property
+        if "connectionMode" in properties:
+            conn_mode = properties["connectionMode"]
+            conn_props = conn_mode.get("properties", {})
+
+            # Check and add androidKotlin (after "android" property)
+            if "androidKotlin" not in conn_props:
+                content = self._insert_connection_mode_config(
+                    content,
+                    "androidKotlin",
+                    CONNECTION_MODE_ANDROID_KOTLIN,
+                    after_property="android",
+                )
+                if content != original_content:
+                    changes.append("Added androidKotlin to connectionMode")
+                    original_content = content
+
+            # Check and add iosSwift (after "ios" property)
+            if "iosSwift" not in conn_props:
+                content = self._insert_connection_mode_config(
+                    content, "iosSwift", CONNECTION_MODE_IOS_SWIFT, after_property="ios"
+                )
+                if content != original_content:
+                    changes.append("Added iosSwift to connectionMode")
+                    original_content = content
+
+        if changes:
+            self.changes_made.extend(changes)
+
+            if not self.dry_run:
+                # Backup original file
+                backup_path = schema_path.with_suffix(".json.backup")
+                shutil.copy2(schema_path, backup_path)
+                self.backup_files.append(backup_path)
+
+                # Write updated content
+                with open(schema_path, "w") as f:
+                    f.write(content)
+
+                self.log("✓ Updated schema.json", force=True)
+            else:
+                self.log("✓ Would update schema.json (dry-run)", force=True)
+
+            return True
+        else:
+            self.log("✓ schema.json already has androidKotlin/iosSwift", force=True)
+            return False
+
+    def _insert_consent_management_config(
+        self, content: str, source_type: str, config: Dict
+    ) -> str:
+        """Insert source type config into consentManagement section after the last existing property."""
+        import re
+
+        # First, parse JSON to find which properties already exist
+        try:
+            schema = json.loads(content)
+            consent_props = (
+                schema.get("configSchema", {})
+                .get("properties", {})
+                .get("consentManagement", {})
+                .get("properties", {})
+            )
+            if not consent_props:
+                return content
+
+            # Get list of properties in order (shopify should be last, or androidKotlin/iosSwift if already added)
+            prop_names = list(consent_props.keys())
+            if not prop_names:
+                return content
+
+            # Find the last property to insert after
+            last_prop = prop_names[-1]
+
+        except (json.JSONDecodeError, KeyError):
+            return content
+
+        # Find the consentManagement section
+        consent_start = content.find('"consentManagement": {')
+        if consent_start == -1:
+            return content
+
+        # Search for the last property in the consent management section
+        section = content[consent_start:]
+
+        # Pattern to match the last property and its complete nested structure
+        pattern = rf'^([ \t]*)"{re.escape(last_prop)}":\s*\{{.*?\n\1\}}(,?)[ \t]*$'
+        match = re.search(pattern, section, re.MULTILINE | re.DOTALL)
+
+        if match:
+            indent = match.group(1)
+            has_comma = match.group(2)
+
+            # Serialize the config to JSON using custom formatter
+            config_json = format_json_custom(config, indent_level=0, indent_str="  ")
+            # Adjust indentation for all lines except the first
+            config_lines = config_json.split("\n")
+            indented_lines = [config_lines[0]] + [
+                indent + line for line in config_lines[1:]
+            ]
+            indented_config = "\n".join(indented_lines)
+
+            # Find the position right after the closing brace
+            prop_end = consent_start + match.start() + len(match.group(0).rstrip())
+
+            # Insert after the last property
+            insert_pos = consent_start + match.end()
+
+            if has_comma:
+                # Last property already has comma, insert after it
+                new_content = (
+                    content[:insert_pos]
+                    + f'\n{indent}"{source_type}": {indented_config}'
+                    + content[insert_pos:]
+                )
+            else:
+                # Add comma after last property, then insert new one
+                new_content = (
+                    content[:prop_end]
+                    + ","
+                    + content[prop_end:insert_pos]
+                    + f'\n{indent}"{source_type}": {indented_config}'
+                    + content[insert_pos:]
+                )
+            return new_content
+
+        return content
+
+    def _insert_connection_mode_config(
+        self,
+        content: str,
+        source_type: str,
+        config: Dict,
+        after_property: str = "cloud",
+    ) -> str:
+        """Insert source type config into connectionMode section after specified property."""
+        import re
+
+        # Find the connectionMode section
+        conn_start = content.find('"connectionMode": {')
+        if conn_start == -1:
+            return content
+
+        # Search within connectionMode for the target property to insert after
+        section = content[conn_start:]
+
+        # Pattern to match target property (simpler structure)
+        pattern = rf'^([ \t]*)"{after_property}":\s*\{{[^\}}]*\}}(,?)[ \t]*$'
+        match = re.search(pattern, section, re.MULTILINE)
+
+        if match:
+            indent = match.group(1)
+            has_comma = match.group(2)
+
+            # Serialize the config to JSON using custom formatter
+            config_json = format_json_custom(config, indent_level=0, indent_str="  ")
+            # Adjust indentation for all lines except the first
+            config_lines = config_json.split("\n")
+            indented_lines = [config_lines[0]] + [
+                indent + line for line in config_lines[1:]
+            ]
+            indented_config = "\n".join(indented_lines)
+
+            # Find the position right after the closing brace
+            prop_end = conn_start + match.start() + len(match.group(0).rstrip())
+
+            # If target property has a comma, insert AFTER the comma
+            # If it doesn't, add a comma first
+            # NOTE: We always add a trailing comma to the new property for the next insertion
+            if has_comma:
+                insert_pos = conn_start + match.end()
+                new_content = (
+                    content[:insert_pos]
+                    + f'\n{indent}"{source_type}": {indented_config},'
+                    + content[insert_pos:]
+                )
+            else:
+                insert_pos = conn_start + match.end()
+                new_content = (
+                    content[:prop_end]
+                    + ","
+                    + content[prop_end:insert_pos]
+                    + f'\n{indent}"{source_type}": {indented_config},'
+                    + content[insert_pos:]
+                )
+            return new_content
+
+        return content
+
     def regenerate_schema(self) -> bool:
         """Regenerate schema.json using V2 schema generator."""
         if self.dry_run:
@@ -734,11 +1152,11 @@ class DestinationUpdater:
         # Update ui-config.json (if needed)
         ui_updated = self.update_ui_config()
 
-        # Regenerate schema.json
+        # Update schema.json directly (add androidKotlin/iosSwift)
         if db_updated or ui_updated:
-            schema_ok = self.regenerate_schema()
-            if not schema_ok and not self.dry_run:
-                print("\n❌ Schema regeneration failed!")
+            schema_ok = self.update_schema_properties()
+            if schema_ok is False and not self.dry_run:
+                print("\n❌ Schema update failed!")
                 return False
 
         # Show summary
