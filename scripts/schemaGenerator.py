@@ -1,6 +1,6 @@
 """
 Usage: schemaGenerator.py [-h] [-name name | -all] [-update] selector
-    1. selector - “source” or “destination”
+    1. selector - "source" or "destination"
     2. all - runs the validator for all the selector.
     3. name - any particular source or destination name such as `google_analytics`
     3. update - updates existing schema with detected changes
@@ -13,6 +13,7 @@ import os
 import warnings
 from enum import Enum
 import argparse
+import subprocess
 from utils import (
     get_json_from_file,
     get_json_diff,
@@ -1376,6 +1377,17 @@ def save_schema_to_file(selector, name, schema):
     # Write the new content
     with open(file_path, "w") as file:
         file.write(get_formatted_json(schema))
+
+    # Run prettier on the generated file to match project formatting standards
+    try:
+        subprocess.run(
+            ["npx", "prettier", "--write", file_path],
+            cwd=directory,
+            check=True,
+            capture_output=True,
+        )
+    except subprocess.CalledProcessError as e:
+        warnings.warn(f"Failed to format {file_path} with prettier: {e}", UserWarning)
 
 
 def validate_config_consistency(
