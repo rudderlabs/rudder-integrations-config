@@ -24,6 +24,14 @@ from constants import CONFIG_DIR
 
 EXCLUDED_DEST = ["postgres", "bq", "azure_synapse", "clickhouse", "deltalake", "kafka"]
 
+# These are the fields to be excluded from the schema diff so that when the new schema is generated
+# the diff is not affected by the changes in the oneTrustCookieCategories and ketchConsentPurposes fields.
+# Currently, we're ignoring the legacy consent management fields.
+DIFF_EXCLUDE_PATHS = [
+    "properties.oneTrustCookieCategories",
+    "properties.ketchConsentPurposes",
+]
+
 
 class FieldTypeEnum(Enum):
     STRING = "string"
@@ -1394,7 +1402,14 @@ def validate_config_consistency(
     generatedSchema = generate_schema(uiConfig, dbConfig, name, selector)
 
     if schema:
-        schemaDiff = get_json_diff(schema, generatedSchema["configSchema"])
+        schemaDiff = get_json_diff(
+            schema,
+            generatedSchema["configSchema"],
+            exclude_paths=[
+                "properties.oneTrustCookieCategories",
+                "properties.ketchConsentPurposes",
+            ],
+        )
         if shouldUpdateSchema:
             finalSchema = {}
             finalSchema["configSchema"] = apply_json_diff(schema, schemaDiff)
