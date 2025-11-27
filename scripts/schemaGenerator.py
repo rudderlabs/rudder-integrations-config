@@ -31,6 +31,7 @@ EXCLUDED_DEST = ["postgres", "bq", "azure_synapse", "clickhouse", "deltalake", "
 DIFF_EXCLUDE_PATHS = [
     "properties.oneTrustCookieCategories",
     "properties.ketchConsentPurposes",
+    "additionalProperties",
 ]
 
 
@@ -1417,10 +1418,7 @@ def validate_config_consistency(
         schemaDiff = get_json_diff(
             schema,
             generatedSchema["configSchema"],
-            exclude_paths=[
-                "properties.oneTrustCookieCategories",
-                "properties.ketchConsentPurposes",
-            ],
+            exclude_paths=DIFF_EXCLUDE_PATHS,
         )
         if shouldUpdateSchema:
             finalSchema = {}
