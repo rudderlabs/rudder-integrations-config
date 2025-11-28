@@ -1625,7 +1625,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-skip-deletions",
         action="store_true",
-        help="Skip deletion operations when applying diff to existingschema",
+        help="Skip deletion operations when applying diff to existing schema",
     )
     group.add_argument(
         "-name", metavar="name", type=str, help="Enter the folder name under selector"
