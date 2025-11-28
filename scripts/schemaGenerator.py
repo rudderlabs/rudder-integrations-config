@@ -1,12 +1,14 @@
 """
-Usage: schemaGenerator.py [-h] [-name name | -all] [-update] selector
+Usage: schemaGenerator.py [-h] [-name name | -all] [-update] [-skip-deletions] selector
     1. selector - "source" or "destination"
     2. all - runs the validator for all the selector.
     3. name - any particular source or destination name such as `google_analytics`
-    3. update - updates existing schema with detected changes
+    4. update - updates existing schema with detected changes
+    5. skip-deletions - when used with -update, skips deletion operations from the diff to existing schema
 Example:
     1. python3 scripts/schemaGenerator.py -name="adobe_analytics" destination
     2. python3 scripts/schemaGenerator.py -all source
+    3. python3 scripts/schemaGenerator.py -update -skip-deletions -name="webhook" destination
 """
 
 import os
@@ -788,11 +790,15 @@ def generate_schema_for_allOf(uiConfig, dbConfig, schema_field_name):
                 if compare_pre_requisite_fields(
                     field["preRequisiteField"], preRequisiteField
                 ):
-                    thenObj["properties"][field[schema_field_name]] = (
-                        uiTypetoSchemaFn.get(field["type"])(
-                            field, dbConfig, schema_field_name
+                    schema_generator_fn = uiTypetoSchemaFn.get(field["type"])
+                    if schema_generator_fn:
+                        thenObj["properties"][field[schema_field_name]] = (
+                            schema_generator_fn(field, dbConfig, schema_field_name)
                         )
-                    )
+                    else:
+                        print(
+                            f"No schema generatorfunction found for field: {field['type']}"
+                        )
                     if "required" in field and field["required"] == True:
                         thenObj["required"].append(field[schema_field_name])
         allOfItemObj["then"] = thenObj
@@ -996,7 +1002,9 @@ def generate_connection_mode(dbConfig):
     return connectionObj
 
 
-def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, selector):
+def generate_schema_properties(
+    uiConfig, dbConfig, schemaObject, properties, selector, currentSchema
+):
     """Generates corresponding schema properties by iterating over each of the ui-config fields.
 
     Args:
@@ -1024,12 +1032,28 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, sel
                             f'The field {field["value"]} is defined in ui-config.json but not in db-config.json\n',
                             UserWarning,
                         )
+                else:
+                    print(
+                        f"No schema generator function found for field: {field['type']}"
+                    )
+
                 if field.get(
                     "required", False
                 ) == True and is_field_present_in_default_config(
                     field, dbConfig, "value"
                 ):
                     schemaObject["required"].append(field["value"])
+
+        # Generate connectionMode for old format destinations, if it is already present
+        # in the current schema.
+        if (
+            selector == "destination"
+            and currentSchema
+            and "connectionMode" in currentSchema["properties"]
+        ):
+            schemaObject["properties"]["connectionMode"] = generate_connection_mode(
+                dbConfig
+            )
     else:
         if selector == "destination":
             baseTemplate = uiConfig.get("baseTemplate", [])
@@ -1042,17 +1066,29 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, sel
                             generateFunction = uiTypetoSchemaFn.get(field["type"], None)
                             if generateFunction:
                                 # Generate schema for the field if it is defined in the destination config
-                                if is_key_present_in_dest_config(
-                                    dbConfig, field["configKey"]
-                                ):
-                                    properties[field["configKey"]] = generateFunction(
-                                        field, dbConfig, "configKey"
-                                    )
+                                if "configKey" in field:
+                                    if is_key_present_in_dest_config(
+                                        dbConfig, field["configKey"]
+                                    ):
+                                        properties[field["configKey"]] = (
+                                            generateFunction(
+                                                field, dbConfig, "configKey"
+                                            )
+                                        )
+                                    else:
+                                        warnings.warn(
+                                            f'The field {field["configKey"]} is defined in ui-config.json but not in db-config.json\n',
+                                            UserWarning,
+                                        )
                                 else:
-                                    warnings.warn(
-                                        f'The field {field["configKey"]} is defined in ui-config.json but not in db-config.json\n',
-                                        UserWarning,
+                                    print(
+                                        f"No configKey found for field: {field['type']}"
                                     )
+                            else:
+                                print(
+                                    f"No schema generator function found for field: {field['type']}"
+                                )
+
                             if (
                                 template.get("title", "") == "Initial setup"
                                 and is_field_present_in_default_config(
@@ -1129,7 +1165,7 @@ def generate_schema_properties(uiConfig, dbConfig, schemaObject, properties, sel
             generate_config_props(config)
 
 
-def generate_schema(uiConfig, dbConfig, name, selector):
+def generate_schema(uiConfig, dbConfig, name, selector, currentSchema):
     """Returns the schema generated from given uiConfig and dbConfig.
 
     Args:
@@ -1162,7 +1198,12 @@ def generate_schema(uiConfig, dbConfig, name, selector):
             schemaObject["allOf"] = allOfSchemaObj
 
     generate_schema_properties(
-        uiConfig, dbConfig, schemaObject, schemaObject["properties"], selector
+        uiConfig,
+        dbConfig,
+        schemaObject,
+        schemaObject["properties"],
+        selector,
+        currentSchema,
     )
     newSchema["configSchema"] = schemaObject
 
@@ -1232,45 +1273,48 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                             continue
                         generateFunction = uiTypetoSchemaFn.get(field["type"], None)
                         if generateFunction and field["type"] == curUiType:
-                            if field["configKey"] not in schema["properties"]:
-                                warnings.warn(
-                                    f'{field["configKey"]} field is not in schema \n',
-                                    UserWarning,
-                                )
-                            else:
-                                curSchemaField = schema["properties"][
-                                    field["configKey"]
-                                ]
-                                newSchemaField = uiTypetoSchemaFn.get(curUiType)(
-                                    field, dbConfig, "configKey"
-                                )
-                                schemaDiff = get_json_diff(
-                                    curSchemaField, newSchemaField
-                                )
-                                if schemaDiff:
+                            if "configKey" in field:
+                                if field["configKey"] not in schema["properties"]:
                                     warnings.warn(
-                                        "For type:{} field:{} Difference is : \n\n {} \n".format(
+                                        f'{field["configKey"]} field is not in schema \n',
+                                        UserWarning,
+                                    )
+                                else:
+                                    curSchemaField = schema["properties"][
+                                        field["configKey"]
+                                    ]
+                                    newSchemaField = uiTypetoSchemaFn.get(curUiType)(
+                                        field, dbConfig, "configKey"
+                                    )
+                                    schemaDiff = get_json_diff(
+                                        curSchemaField, newSchemaField
+                                    )
+                                    if schemaDiff:
+                                        warnings.warn(
+                                            "For type:{} field:{} Difference is : \n\n {} \n".format(
+                                                curUiType,
+                                                field["configKey"],
+                                                get_formatted_json(schemaDiff),
+                                            ),
+                                            UserWarning,
+                                        )
+                                if (
+                                    curUiType == "textInput"
+                                    and (
+                                        schema.get("required", False) == True
+                                        and field["configKey"] in schema["required"]
+                                    )
+                                    and "regex" not in field
+                                ):
+                                    warnings.warn(
+                                        "For type:{} field:{} regex in ui-config and pattern in schema are mandatory for a required textInput \n".format(
                                             curUiType,
                                             field["configKey"],
-                                            get_formatted_json(schemaDiff),
                                         ),
                                         UserWarning,
                                     )
-                            if (
-                                curUiType == "textInput"
-                                and (
-                                    schema.get("required", False) == True
-                                    and field["configKey"] in schema["required"]
-                                )
-                                and "regex" not in field
-                            ):
-                                warnings.warn(
-                                    "For type:{} field:{} regex in ui-config and pattern in schema are mandatory for a required textInput \n".format(
-                                        curUiType,
-                                        field["configKey"],
-                                    ),
-                                    UserWarning,
-                                )
+                            else:
+                                print(f"No configKey found for field: {field['type']}")
 
         for field in sdkTemplate.get("fields", []):
             if "preRequisites" in field:
@@ -1366,6 +1410,34 @@ uiTypetoSchemaFn = {
 }
 
 
+def remove_deletions_from_diff(diff):
+    """Removes all deletion operations from a diff object recursively.
+
+    Args:
+        diff (object): difference object from jsondiff.
+
+    Returns:
+        object: diff object without deletion operations.
+    """
+    if not isinstance(diff, dict):
+        return diff
+
+    filtered_diff = {}
+    for key, value in diff.items():
+        # Skip $delete keys entirely
+        if key == "$delete":
+            continue
+        # Recursively filter nested diffs
+        if isinstance(value, dict):
+            filtered_value = remove_deletions_from_diff(value)
+            if filtered_value:  # Only add if not empty after filtering
+                filtered_diff[key] = filtered_value
+        else:
+            filtered_diff[key] = value
+
+    return filtered_diff
+
+
 def save_schema_to_file(selector, name, schema):
     # Get the parent directory (one level up)
     script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -1392,7 +1464,7 @@ def save_schema_to_file(selector, name, schema):
 
 
 def validate_config_consistency(
-    name, selector, uiConfig, dbConfig, schema, shouldUpdateSchema
+    name, selector, uiConfig, dbConfig, schema, shouldUpdateSchema, skipDeletions=False
 ):
     """Generates a schema and compares it with an existing one.
     If schemaDiff is present, it calls for individual warnings by iterating over each ui-type.
@@ -1404,6 +1476,7 @@ def validate_config_consistency(
         dbConfig (object): Configurations of db-config.json.
         schema (object): Existing schema in schema.json.
         shouldUpdateSchema (boolean): if it should update the existing schema with generated one
+        skipDeletions (boolean): if True, skip deletion operations from the diff
     """
     if schema == None and uiConfig == None:
         return
@@ -1412,7 +1485,9 @@ def validate_config_consistency(
         warnings.warn(f"Ui-Config is null for {name} in {selector} \n", UserWarning)
         print("-" * 50)
         return
-    generatedSchema = generate_schema(uiConfig, dbConfig, name, selector)
+    generatedSchema = generate_schema(
+        uiConfig, dbConfig, name, selector, currentSchema=schema
+    )
 
     if schema:
         schemaDiff = get_json_diff(
@@ -1421,8 +1496,17 @@ def validate_config_consistency(
             exclude_paths=DIFF_EXCLUDE_PATHS,
         )
         if shouldUpdateSchema:
+            # Filter out deletions if requested
+            diffToApply = schemaDiff
+            if skipDeletions:
+                diffToApply = remove_deletions_from_diff(schemaDiff)
+                if diffToApply != schemaDiff:
+                    print(
+                        f"\nSkipping deletion operations from schema update for {name}"
+                    )
+
             finalSchema = {}
-            finalSchema["configSchema"] = apply_json_diff(schema, schemaDiff)
+            finalSchema["configSchema"] = apply_json_diff(schema, diffToApply)
             save_schema_to_file(selector, name, finalSchema)
 
         if schemaDiff:
@@ -1487,13 +1571,14 @@ def validate_config_consistency(
         print("-" * 50)
 
 
-def get_schema_diff(name, selector, shouldUpdateSchema=False):
+def get_schema_diff(name, selector, shouldUpdateSchema=False, skipDeletions=False):
     """Validates the schema for the given name and selector.
 
     Args:
         name (string): name of the source or destination.
         selector (string): either 'source' or 'destination'.
         shouldUpdateSchema (boolean): if it should update the existing schema with generated one
+        skipDeletions (boolean): if True, skip deletion operations from the diff
     """
     file_selectors = ["db-config.json", "ui-config.json", "schema.json"]
     directory = f"./{CONFIG_DIR}/{selector}s/{name}"
@@ -1511,7 +1596,13 @@ def get_schema_diff(name, selector, shouldUpdateSchema=False):
         dbConfig = file_content.get("config")
 
         validate_config_consistency(
-            name, selector, uiConfig, dbConfig, schema, shouldUpdateSchema
+            name,
+            selector,
+            uiConfig,
+            dbConfig,
+            schema,
+            shouldUpdateSchema,
+            skipDeletions,
         )
 
 
@@ -1531,6 +1622,11 @@ if __name__ == "__main__":
         action="store_true",
         help="Will update existing schema with any changes",
     )
+    parser.add_argument(
+        "-skip-deletions",
+        action="store_true",
+        help="Skip deletion operations when applying diff to existingschema",
+    )
     group.add_argument(
         "-name", metavar="name", type=str, help="Enter the folder name under selector"
     )
@@ -1543,6 +1639,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     selector = args.selector
     shouldUpdateSchema = args.update
+    skipDeletions = args.skip_deletions
 
     dir_path = f"./{CONFIG_DIR}/{selector}s"
     if args.all:
@@ -1552,7 +1649,7 @@ if __name__ == "__main__":
 
         current_items = os.listdir(dir_path)
         for name in current_items:
-            get_schema_diff(name, selector, shouldUpdateSchema)
+            get_schema_diff(name, selector, shouldUpdateSchema, skipDeletions)
     else:
         name = args.name
-        get_schema_diff(name, selector, shouldUpdateSchema)
+        get_schema_diff(name, selector, shouldUpdateSchema, skipDeletions)
