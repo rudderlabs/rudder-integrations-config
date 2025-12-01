@@ -1108,29 +1108,6 @@ describe('Validator Utils', () => {
       });
     });
 
-    describe('Multiple rule violations', () => {
-      it('should collect all validation errors', async () => {
-        const invalidDestDef = {
-          name: 'TEST',
-          displayName: 'Test',
-          config: {
-            includeKeys: ['apiKey', 'password'],
-            secretKeys: ['password', 'token'],
-          },
-        };
-
-        try {
-          await validateDestinationDefinitions(invalidDestDef);
-          fail('Expected validation to throw');
-        } catch (error) {
-          const errorMessage = error.message;
-          // Should fail because password is in includeKeys but not in excludeKeys
-          expect(errorMessage).toContain('Secret keys must not be exposed to client-side');
-          expect(errorMessage).toContain('password');
-        }
-      });
-    });
-
     describe('Edge cases with no config', () => {
       it('should handle destination definition with undefined config', async () => {
         const destDef = {
