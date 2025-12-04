@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.132.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.131.0...v1.132.0) (2025-12-02)
+
+
+### Features
+
+* add 4 destinations for swift source ([c4eae8e](https://github.com/rudderlabs/rudder-config-schema/commit/c4eae8eb800ca54348f043040a67838f19662a53))
+* add iosSwift source for useNativeSDK in adjust schema json ([ad84805](https://github.com/rudderlabs/rudder-config-schema/commit/ad8480573db3276f0c30f90362a39916882c3dd5))
+* **fbla:** add cacheEnabled to options for fbla source ([#2255](https://github.com/rudderlabs/rudder-config-schema/issues/2255)) ([6c2ffc3](https://github.com/rudderlabs/rudder-config-schema/commit/6c2ffc3dbd6d5a7e8c4a0749c78892db5c0ee513))
+* **snowpipe_streaming:** remove beta flag ([#2262](https://github.com/rudderlabs/rudder-config-schema/issues/2262)) ([cce2de8](https://github.com/rudderlabs/rudder-config-schema/commit/cce2de8fe8dc01259576fd37b19d8d9b34a64e46))
+
 ## [1.131.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.130.2...v1.131.0) (2025-11-12)
 
 
