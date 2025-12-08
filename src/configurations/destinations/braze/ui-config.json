@@ -13,73 +13,352 @@
                 "icon": "settings",
                 "fields": [
                   {
-                    "type": "textInput",
-                    "label": "App Key",
-                    "configKey": "appKey",
-                    "regex": "^(.{1,100})$",
-                    "regexErrorMessage": "Invalid App Key",
-                    "placeholder": "e.g: f2c7c97a-XXXX-XXXX-XXXX-faffc22c7c7f",
-                    "secret": true,
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "connectionMode.android",
-                          "value": "device"
-                        },
-                        {
-                          "configKey": "connectionMode.androidKotlin",
-                          "value": "device"
-                        },
-                        {
-                          "configKey": "connectionMode.ios",
-                          "value": "device"
-                        },
-                        {
-                          "configKey": "connectionMode.iosSwift",
-                          "value": "device"
-                        },
-                        {
-                          "configKey": "connectionMode.flutter",
-                          "value": "device"
-                        },
-                        {
-                          "configKey": "connectionMode.reactnative",
-                          "value": "device"
-                        },
-                        {
-                          "configKey": "connectionMode.web",
-                          "value": "device"
-                        },
-                        {
-                          "configKey": "connectionMode.android",
-                          "value": "hybrid"
-                        },
-                        {
-                          "configKey": "connectionMode.androidKotlin",
-                          "value": "hybrid"
-                        },
-                        {
-                          "configKey": "connectionMode.ios",
-                          "value": "hybrid"
-                        },
-                        {
-                          "configKey": "connectionMode.iosSwift",
-                          "value": "hybrid"
-                        },
-                        {
-                          "configKey": "connectionMode.web",
-                          "value": "hybrid"
-                        }
-                      ],
-                      "condition": "or"
+                    "type": "checkbox",
+                    "label": "Enable Platform-Specific API Keys",
+                    "configKey": "usePlatformSpecificApiKeys",
+                    "default": false,
+                    "note": "When Platform-Specific API Keys are enabled, you can configure separate Android, iOS, and Web keys for proper data attribution in Braze. The Default API Key will be used as a fallback if a platform-specific API key is not defined.",
+                    "conditions": {
+                      "expression": {
+                        "operator": "AND",
+                        "operands": [
+                          {
+                            "type": "featureFlag",
+                            "key": "AMP_enable-braze-dest-multi-app-key-support",
+                            "value": true
+                          },
+                          {
+                            "operator": "OR",
+                            "operands": [
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.android",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.android",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.ios",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.ios",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.androidKotlin",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.androidKotlin",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.iosSwift",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.iosSwift",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.web",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.web",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.reactnative",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.flutter",
+                                "value": "device"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "action": "hide"
                     }
                   },
                   {
                     "type": "textInput",
-                    "label": "Rest Api Key",
+                    "label": "Default API Key",
+                    "configKey": "appKey",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid API Key",
+                    "placeholder": "e.g: f2c7c97a-XXXX-XXXX-XXXX-faffc22c7c7f",
+                    "secret": true,
+                    "conditions": {
+                      "expression": {
+                        "operator": "AND",
+                        "operands": [
+                          {
+                            "type": "configuration",
+                            "key": "usePlatformSpecificApiKeys",
+                            "value": false
+                          },
+                          {
+                            "operator": "OR",
+                            "operands": [
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.android",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.androidKotlin",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.ios",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.iosSwift",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.flutter",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.reactnative",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.web",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.android",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.androidKotlin",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.ios",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.iosSwift",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.web",
+                                "value": "device"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "action": "hide"
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Android API Key",
+                    "note": "This key will be used for Android data attribution in Braze. The Default API Key serves as a fallback.",
+                    "configKey": "androidApiKey",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Android API Key",
+                    "placeholder": "e.g: f2c7c97a-XXXX-XXXX-XXXX-faffc22c7c7f",
+                    "required": true,
+                    "conditions": {
+                      "expression": {
+                        "operator": "AND",
+                        "operands": [
+                          {
+                            "type": "featureFlag",
+                            "key": "AMP_enable-braze-dest-multi-app-key-support",
+                            "value": true
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "usePlatformSpecificApiKeys",
+                            "value": true
+                          },
+                          {
+                            "operator": "OR",
+                            "operands": [
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.android",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.android",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.androidKotlin",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.androidKotlin",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.reactnative",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.flutter",
+                                "value": "device"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "action": "hide"
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "iOS API Key",
+                    "note": "This key will be used for iOS data attribution in Braze. The Default API Key serves as a fallback.",
+                    "configKey": "iOSApiKey",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid iOS API Key",
+                    "placeholder": "e.g: f2c7c97a-XXXX-XXXX-XXXX-faffc22c7c7f",
+                    "required": true,
+                    "conditions": {
+                      "expression": {
+                        "operator": "AND",
+                        "operands": [
+                          {
+                            "type": "featureFlag",
+                            "key": "AMP_enable-braze-dest-multi-app-key-support",
+                            "value": true
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "usePlatformSpecificApiKeys",
+                            "value": true
+                          },
+                          {
+                            "operator": "OR",
+                            "operands": [
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.ios",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.ios",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.iosSwift",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.iosSwift",
+                                "value": "hybrid"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.reactnative",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.flutter",
+                                "value": "device"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "action": "hide"
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Web API Key",
+                    "note": "This key will be used for Web data attribution in Braze. The Default API Key serves as a fallback.",
+                    "configKey": "webApiKey",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Web API Key",
+                    "placeholder": "e.g: f2c7c97a-XXXX-XXXX-XXXX-faffc22c7c7f",
+                    "required": true,
+                    "conditions": {
+                      "expression": {
+                        "operator": "AND",
+                        "operands": [
+                          {
+                            "type": "featureFlag",
+                            "key": "AMP_enable-braze-dest-multi-app-key-support",
+                            "value": true
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "usePlatformSpecificApiKeys",
+                            "value": true
+                          },
+                          {
+                            "operator": "OR",
+                            "operands": [
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.web",
+                                "value": "device"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.web",
+                                "value": "hybrid"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "action": "hide"
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Rest API Key",
                     "configKey": "restApiKey",
                     "regex": "^(.{1,100})$",
-                    "regexErrorMessage": "Invalid Rest Api Key",
+                    "regexErrorMessage": "Invalid Rest API Key",
                     "placeholder": "e.g: 06c19c59-XXXX-XXXX-XXXX-faffc22c7c7f",
                     "secret": true,
                     "preRequisites": {
@@ -253,6 +532,14 @@
                           "value": "hybrid"
                         },
                         {
+                          "configKey": "connectionMode.iosSwift",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.iosSwift",
+                          "value": "hybrid"
+                        },
+                        {
                           "configKey": "connectionMode.flutter",
                           "value": "cloud"
                         },
@@ -324,6 +611,14 @@
                         },
                         {
                           "configKey": "connectionMode.ios",
+                          "value": "hybrid"
+                        },
+                        {
+                          "configKey": "connectionMode.iosSwift",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.iosSwift",
                           "value": "hybrid"
                         },
                         {
@@ -399,6 +694,14 @@
                         },
                         {
                           "configKey": "connectionMode.ios",
+                          "value": "hybrid"
+                        },
+                        {
+                          "configKey": "connectionMode.iosSwift",
+                          "value": "cloud"
+                        },
+                        {
+                          "configKey": "connectionMode.iosSwift",
                           "value": "hybrid"
                         },
                         {
@@ -481,6 +784,10 @@
                     },
                     {
                       "configKey": "connectionMode.ios",
+                      "value": "device"
+                    },
+                    {
+                      "configKey": "connectionMode.iosSwift",
                       "value": "device"
                     },
                     {
