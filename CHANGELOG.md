@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.133.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.131.0...v1.133.0) (2025-12-08)
+
+
+### Features
+
+* **braze:** add platform-specific api keys support ([#2261](https://github.com/rudderlabs/rudder-config-schema/issues/2261)) ([13d4792](https://github.com/rudderlabs/rudder-config-schema/commit/13d47925b12078c2939260889dff8bf56fd1fcd8))
+
 ## [1.132.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.131.0...v1.132.0) (2025-12-02)
 
 
