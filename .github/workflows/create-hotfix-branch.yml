@@ -10,49 +10,23 @@ on:
         required: true
 
 jobs:
+  validate-actor:
+    uses: ./.github/workflows/validate-actor.yml
+    with:
+      team_names: 'integrations'
+    secrets:
+      PAT: ${{ secrets.GITHUB_TOKEN }}
+
   create-branch:
     name: Create New Branch
     runs-on: ubuntu-latest
+    needs: validate-actor
 
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2 # v2.13.2
         with:
           egress-policy: audit
-
-      - name: Check team membership or allowlist
-        id: check_access
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
-        with:
-          script: |
-            const allowedActors = [
-              "ItsSudip", "krishna2020", "lvrach", "cisse21", "debanjan97",
-              "saikumarrs", "utsabc", "maheshkutty", "vinayteki95", "abhimanyubabbar", "shekhar-rudder", "achettyiitr"
-            ];
-            const org = context.repo.owner;
-            const team_slug = "integrations";
-            const actor = context.actor || context.triggering_actor;
-
-            // Try team membership check
-            let isTeamMember = false;
-            try {
-              const res = await github.rest.teams.getMembershipForUserInOrg({
-                org,
-                team_slug,
-                username: actor
-              });
-              isTeamMember = res.data.state === "active";
-            } catch (e) {
-              // Not a member or team not found
-              isTeamMember = false;
-            }
-
-            // Fallback: static allowlist
-            if (!isTeamMember && !allowedActors.includes(actor)) {
-              throw new Error(`${actor} is not allowed to run this workflow`);
-            }
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Branch
         if: success()
