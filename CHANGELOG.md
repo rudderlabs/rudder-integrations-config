@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.134.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.133.0...v1.134.0) (2025-12-09)
+
+
+### Features
+
+* add cloud mode support for androidKotlin and iosSwift to all the integrations ([#2283](https://github.com/rudderlabs/rudder-config-schema/issues/2283)) ([9d1556f](https://github.com/rudderlabs/rudder-config-schema/commit/9d1556fc0bfaa7b1b7017622d51df609b3d6ac51))
+
 ## [1.133.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.131.0...v1.133.0) (2025-12-08)
 
 
