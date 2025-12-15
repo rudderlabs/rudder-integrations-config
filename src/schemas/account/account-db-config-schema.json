@@ -29,10 +29,29 @@
         "refreshOAuthToken": {
           "type": "boolean"
         },
-        "singleAccountEnabled": {
-          "type": "boolean",
-          "default": false,
-          "description": "If true, only one RudderStack account can be created from a single integration account identity. For example, for facebook_lead_ads_native account, we want to have a single RudderStack account from a Facebook user in a workspace."
+        "singleAccountConstraint": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "If true, only one RudderStack account can be created from a single integration account identity. For example, for facebook_lead_ads_native account, we want to have a single RudderStack account from a Facebook user in a workspace."
+            },
+            "identityField": {
+              "type": "string",
+              "description": "The field name from auth metadata response to identify unique accounts (e.g., 'userId', 'email', 'id'). If enabled, this field is required."
+            }
+          },
+          "if": {
+            "properties": {
+              "enabled": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "required": ["identityField"]
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false
