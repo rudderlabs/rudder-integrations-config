@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.135.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.134.0...v1.135.0) (2025-12-16)
+
+
+### Features
+
+* add 4 destinations for swift source ([c4eae8e](https://github.com/rudderlabs/rudder-config-schema/commit/c4eae8eb800ca54348f043040a67838f19662a53))
+* add iosSwift source for useNativeSDK in adjust schema json ([ad84805](https://github.com/rudderlabs/rudder-config-schema/commit/ad8480573db3276f0c30f90362a39916882c3dd5))
+* enable router transform for Amplitude ([#2273](https://github.com/rudderlabs/rudder-config-schema/issues/2273)) ([233b936](https://github.com/rudderlabs/rudder-config-schema/commit/233b93607c8d0419dde5f17b6676b2b568d0ca7f))
+* **fbla:** add cacheEnabled to options for fbla source ([#2255](https://github.com/rudderlabs/rudder-config-schema/issues/2255)) ([6c2ffc3](https://github.com/rudderlabs/rudder-config-schema/commit/6c2ffc3dbd6d5a7e8c4a0749c78892db5c0ee513))
+* **snowpipe_streaming:** remove beta flag ([#2262](https://github.com/rudderlabs/rudder-config-schema/issues/2262)) ([cce2de8](https://github.com/rudderlabs/rudder-config-schema/commit/cce2de8fe8dc01259576fd37b19d8d9b34a64e46))
+
+
+### Bug Fixes
+
+* allow forward slash for http destination in path parameter ([#2285](https://github.com/rudderlabs/rudder-config-schema/issues/2285)) ([302ceb5](https://github.com/rudderlabs/rudder-config-schema/commit/302ceb513d74c7687ef99a14234d9cab07fd00bd))
+
 ## [1.134.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.133.0...v1.134.0) (2025-12-09)
 
 
