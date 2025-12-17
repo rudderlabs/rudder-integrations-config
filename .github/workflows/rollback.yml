@@ -3,11 +3,19 @@ name: Rollback Production
 on: workflow_dispatch
 
 jobs:
+  validate-actor:
+    uses: ./.github/workflows/validate-actor.yml
+    with:
+      team_names: 'integrations,data-management'
+    secrets:
+      PAT: ${{ secrets.PAT }}
+
   deploy-tag:
+    needs: validate-actor
     name: Rollback Production To a Tag
     uses: ./.github/workflows/deploy-to-prod.yml
     secrets: inherit
 
     # Only allow to be deployed from tags and main
     # Only allow specific actors to trigger
-    if: (startsWith(github.ref, 'refs/tags/') || startsWith(github.ref, 'refs/heads/main')) && (github.actor == 'ItsSudip' || github.actor == 'krishna2020' || github.actor == 'lvrach' || github.actor == 'cisse21' ||  github.actor == 'saikumarrs' || github.actor == 'achettyiitr') && (github.triggering_actor == 'ItsSudip' || github.triggering_actor == 'krishna2020' || github.triggering_actor == 'lvrach' || github.triggering_actor == 'cisse21' || github.triggering_actor == 'saikumarrs' || github.triggering_actor == 'achettyiitr')
+    if: (startsWith(github.ref, 'refs/tags/') || startsWith(github.ref, 'refs/heads/main'))
