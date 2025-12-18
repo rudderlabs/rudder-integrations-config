@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.136.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.135.0...v1.136.0) (2025-12-18)
+
+
+### Features
+
+* **fbla:** add single account constraint to accounts ([22f458a](https://github.com/rudderlabs/rudder-config-schema/commit/22f458aa1bcc007f63a04e713ee8b43067a729de))
+* **sources:** remove feature flags for Android Kotlin and iOS Swift sources ([2ac682d](https://github.com/rudderlabs/rudder-config-schema/commit/2ac682df95d918d40ba8e7af061c2ee97e74c235)), closes [#2296](https://github.com/rudderlabs/rudder-config-schema/issues/2296)
+
 ## [1.135.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.134.0...v1.135.0) (2025-12-16)
 
 
