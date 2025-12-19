@@ -131,6 +131,7 @@ def get_json_diff(oldJson, newJson, exclude_paths=None):
     Args:
         oldJson (object): old json.
         newJson (object): new json.
+        exclude_paths (list): list of paths to exclude from the diff.
 
     Returns:
         object: difference between oldJson and newJson.

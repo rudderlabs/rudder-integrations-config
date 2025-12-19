@@ -1013,6 +1013,10 @@ def generate_schema_properties(
         schemaObject (object): schema being generated
         properties (object): properties of schema
         selector (string): either 'source' or 'destination'
+        currentSchema (object): current schema
+
+    Returns:
+        object: schema properties
     """
     if is_old_format(uiConfig):
         for group in uiConfig:
@@ -1173,6 +1177,7 @@ def generate_schema(uiConfig, dbConfig, name, selector, currentSchema):
         dbConfig (object): Configurations of db-config.json.
         name (string): name of the source or destination.
         selector (string): either 'source' or 'destination'
+        currentSchema (object): current schema
 
     Returns:
         object: schema
