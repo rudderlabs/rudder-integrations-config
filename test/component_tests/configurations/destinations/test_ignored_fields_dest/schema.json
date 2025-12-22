@@ -1,0 +1,55 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["apiKey"],
+    "type": "object",
+    "properties": {
+      "apiKey": {
+        "type": "string",
+        "pattern": "^(.{1,100})$"
+      },
+      "oneTrustCookieCategories": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "oneTrustCookieCategory": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "ketchConsentPurposes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "purpose": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "android": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "ios": {
+            "type": "string",
+            "enum": ["cloud"]
+          }
+        }
+      }
+    },
+    "additionalProperties": false
+  }
+}
