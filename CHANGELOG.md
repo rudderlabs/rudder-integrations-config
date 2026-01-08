@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.137.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.136.0...v1.137.0) (2026-01-06)
+
+
+### Features
+
+* **fbla:** add single account constraint to accounts ([#2288](https://github.com/rudderlabs/rudder-config-schema/issues/2288)) ([f396b61](https://github.com/rudderlabs/rudder-config-schema/commit/f396b6124c7ded7a823c59bd91c9850580114c57))
+
+
+### Bug Fixes
+
+* **braze:** rename API Key labels to App Identifier Key in UI config ([#2301](https://github.com/rudderlabs/rudder-config-schema/issues/2301)) ([a75d4ba](https://github.com/rudderlabs/rudder-config-schema/commit/a75d4ba9228b6c9b5f1d948ee4dedca42ba6def8))
+
 ## [1.136.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.135.0...v1.136.0) (2025-12-18)
 
 
