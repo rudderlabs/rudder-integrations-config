@@ -744,6 +744,32 @@
                       },
                       "to fetch existing user attributes. This api has varying rate limits based on your braze account creation date. Upon hitting these rate limits, Rudderstack will ignore the failure and proceeds to send all user attributes without deduping them."
                     ]
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Deduplication Mode",
+                    "configKey": "dedupMode",
+                    "note": "Choose how to handle deduplication when Braze API rate limits are reached",
+                    "options": [
+                      {
+                        "label": "Optimized for Speed",
+                        "value": "speed"
+                      },
+                      {
+                        "label": "Strict Deduplication",
+                        "value": "strict"
+                      }
+                    ],
+                    "default": "speed",
+                    "required": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "supportDedup",
+                          "value": true
+                        }
+                      ]
+                    }
                   }
                 ]
               }
