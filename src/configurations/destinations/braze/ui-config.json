@@ -748,7 +748,7 @@
                   {
                     "type": "singleSelect",
                     "label": "Deduplication Mode",
-                    "configKey": "dedupMode",
+                    "configKey": "dedupeStrategy",
                     "note": "Choose how to handle deduplication when Braze API rate limits are reached",
                     "options": [
                       {
@@ -762,13 +762,73 @@
                     ],
                     "default": "speed",
                     "required": true,
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "supportDedup",
-                          "value": true
-                        }
-                      ]
+                    "conditions": {
+                      "expression": {
+                        "operator": "AND",
+                        "operands": [
+                          {
+                            "type": "configuration",
+                            "key": "supportDedup",
+                            "value": true
+                          },
+                          {
+                            "operator": "OR",
+                            "operands": [
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.web",
+                                "value": "cloud"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.android",
+                                "value": "cloud"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.androidKotlin",
+                                "value": "cloud"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.iosSwift",
+                                "value": "cloud"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.ios",
+                                "value": "cloud"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.flutter",
+                                "value": "cloud"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.reactnative",
+                                "value": "cloud"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.warehouse",
+                                "value": "cloud"
+                              },
+                              {
+                                "type": "configuration",
+                                "key": "connectionMode.shopify",
+                                "value": "cloud"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "featureFlag",
+                            "key": "AMP_enable-braze-dest-dedupe-mode-support",
+                            "value": true
+                          }
+                        ]
+                      },
+                      "action": "hide"
                     }
                   }
                 ]
