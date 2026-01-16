@@ -15,7 +15,7 @@ from utils import (
 )
 
 ALL_SELECTORS = ["destination", "source"]
-BLACK_LIST_DESTINATIONS = ["ZOHO_DEV", "RUDDER_TEST"]
+BLACK_LIST_DESTINATIONS = ["RUDDER_TEST"]
 
 
 def get_command_line_arguments():
