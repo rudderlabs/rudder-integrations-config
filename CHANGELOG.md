@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.137.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.137.0...v1.137.1) (2026-01-16)
+
+
+### Bug Fixes
+
+* additionalProperties error when updating AM destination ([#2314](https://github.com/rudderlabs/rudder-config-schema/issues/2314)) ([1806910](https://github.com/rudderlabs/rudder-config-schema/commit/1806910653ad6090a0d1e361d2c44d93da9c0a83))
+
 ## [1.137.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.136.0...v1.137.0) (2026-01-06)
 
 
