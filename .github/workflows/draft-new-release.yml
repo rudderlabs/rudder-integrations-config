@@ -3,7 +3,6 @@ name: Draft New Release
 on: workflow_dispatch
 
 permissions:
-  id-token: write
   contents: read
 
 jobs:
@@ -11,9 +10,6 @@ jobs:
     uses: ./.github/workflows/validate-actor.yml
     with:
       team_names: 'integrations,data-management'
-    secrets:
-      GITHUB_APP_ID: ${{ vars.RELEASE_APP_ID }}
-      GITHUB_APP_PRIVATE_KEY: ${{ secrets.RELEASE_PRIVATE_KEY }}
 
   draft-new-release:
     permissions:
