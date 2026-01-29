@@ -5,10 +5,6 @@ on:
     branches:
       - develop
 
-permissions:
-  contents: write
-  pull-requests: write
-
 env:
   BRANCH_NAME: fix/gh-update-destinations-ts
   SRC_FILE: generated/Destinations.ts
@@ -17,16 +13,14 @@ env:
 jobs:
   check_changes_and_raise_pr:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
         with:
           egress-policy: audit
-
-      - name: Checkout Source Repo
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-        with:
-          ref: develop
 
       - name: Generate GitHub App Token
         id: generate-token
@@ -37,6 +31,12 @@ jobs:
           permission-contents: write # to push commits to cross-repo branch
           permission-pull-requests: write # to create PRs in cross-repo
           repositories: rudder-sdk-js
+
+      - name: Checkout Source Repo
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          ref: develop
+          token: ${{ steps.generate-token.outputs.token }}
 
       - name: Checkout Destination Repo
         run: |

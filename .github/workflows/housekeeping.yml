@@ -10,6 +10,10 @@ jobs:
   prs:
     name: Clean Up Stale PRs and Issues
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
 
     steps:
       - name: Harden the runner (Audit all outbound calls)
@@ -42,6 +46,9 @@ jobs:
   branches:
     name: Cleanup Stale Branches
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
@@ -59,6 +66,8 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
 
       - name: Delete Old Branches
         uses: beatlabs/delete-old-branches-action@6e94df089372a619c01ae2c2f666bf474f890911 # v0.0.10
