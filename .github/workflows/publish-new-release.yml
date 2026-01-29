@@ -12,8 +12,7 @@ jobs:
     name: Publish New GitHub Release
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
 
     if: (startsWith(github.event.pull_request.head.ref, 'release/') || startsWith(github.event.pull_request.head.ref, 'hotfix-release/')) && github.event.pull_request.merged == true # only merged pull requests must trigger this job
 
@@ -38,6 +37,8 @@ jobs:
         with:
           app-id: ${{ vars.RELEASE_APP_ID }}
           private-key: ${{ secrets.RELEASE_PRIVATE_KEY }}
+          permission-contents: write # to create commits, tags, and releases
+          permission-pull-requests: write # to create and update PRs
 
       - name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
@@ -65,16 +66,23 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "noreply@github.com"
 
-      - name: Tag & Create GitHub Release
+      - name: Create and Push Tag via API
+        uses: ryancyq/github-signed-commit@e9f3b28c80da7be66d24b8f501a5abe82a6b855f # v1.2.0
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+        with:
+          branch-name: main
+          commit-message: 'chore: release v${{ steps.extract-version.outputs.release_version }}'
+          files: ''
+          tag: 'v${{ steps.extract-version.outputs.release_version }}'
+
+      - name: Create GitHub Release
         id: create_release
         env:
           HUSKY: 0
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
           CONVENTIONAL_GITHUB_RELEASER_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
-          git fetch --tags origin
-          git tag -a v${{ steps.extract-version.outputs.release_version }} -m "chore: release v${{ steps.extract-version.outputs.release_version }}"
-          git push origin refs/tags/v${{ steps.extract-version.outputs.release_version }}
           npm run release:github
           echo "DATE=$(date)" >> $GITHUB_ENV
 

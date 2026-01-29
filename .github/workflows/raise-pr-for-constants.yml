@@ -14,8 +14,7 @@ jobs:
   check_changes_and_raise_pr:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
@@ -57,16 +56,38 @@ jobs:
             echo "pr_required=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Commit and Push Changes
+      - name: Copy file and commit to cross-repo via signed commit API
         if: steps.compare_files.outputs.pr_required == 'true'
         run: |
           cd dest-repo
-          cp "../generated/Destinations.ts" "packages/analytics-js-integrations/src/constants/Destinations.ts"
-          git add packages/analytics-js-integrations/src/constants/Destinations.ts
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "noreply@github.com"
-          git commit -m "fix: update destinations.ts"
-          git push origin ${{ env.BRANCH_NAME }}
+
+          # Get current file SHA
+          FILE_PATH="${{ env.DEST_PATH }}"
+          CURRENT_SHA=$(gh api repos/rudderlabs/rudder-sdk-js/contents/"$FILE_PATH" \
+            --jq .sha \
+            -H "Accept: application/vnd.github.v3+json" \
+            -F ref="${{ env.BRANCH_NAME }}" || echo "")
+
+          # Read file content and encode to base64
+          CONTENT=$(base64 -i "../${{ env.SRC_FILE }}")
+
+          # Create or update file via GitHub API (this creates a verified commit)
+          if [ -n "$CURRENT_SHA" ]; then
+            gh api repos/rudderlabs/rudder-sdk-js/contents/"$FILE_PATH" \
+              --method PUT \
+              -H "Accept: application/vnd.github.v3+json" \
+              -f message="fix: update destinations.ts" \
+              -f content="$CONTENT" \
+              -f branch="${{ env.BRANCH_NAME }}" \
+              -f sha="$CURRENT_SHA"
+          else
+            gh api repos/rudderlabs/rudder-sdk-js/contents/"$FILE_PATH" \
+              --method PUT \
+              -H "Accept: application/vnd.github.v3+json" \
+              -f message="fix: update destinations.ts" \
+              -f content="$CONTENT" \
+              -f branch="${{ env.BRANCH_NAME }}"
+          fi
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
 
