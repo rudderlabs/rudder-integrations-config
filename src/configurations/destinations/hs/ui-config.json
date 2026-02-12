@@ -82,12 +82,18 @@
                   },
                   {
                     "type": "textInput",
-                    "label": "Hubspot property name to be used as lookup field",
+                    "label": "HubSpot property name to be used for upsert",
                     "configKey": "lookupField",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid Property Name",
-                    "placeholder": "e.g: lookupField",
-                    "note": "Provide unique Hubspot property field, which could be used for contact lookup. The provided lookup field key will be retrieved from traits. eg: traits: { lookupField: 'alex@example.com' }",
+                    "placeholder": "e.g: email",
+                    "note": [
+                      "Choose a HubSpot property that is defined as unique; its value will be taken from traits and used to create or update the record (for example, if traits contains { email: 'alex@example.com' }, choose email). Learn more about the ",
+                      {
+                        "text": "upsert endpoint.",
+                        "link": "https://developers.hubspot.com/docs/api-reference/crm-contacts-v3/batch/post-crm-v3-objects-contacts-batch-upsert"
+                      }
+                    ],
                     "preRequisites": {
                       "fields": [
                         {
@@ -242,7 +248,7 @@
       },
       {
         "title": "Event mapping",
-        "note": "Map RudderStack to Hubspot events (available only when New API(v3) is selected)",
+        "note": "Map RudderStack to HubSpot events (available only when New API(v3) is selected)",
         "hideEditIcon": true,
         "sections": [
           {
