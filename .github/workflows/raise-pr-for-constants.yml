@@ -35,7 +35,6 @@ jobs:
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           ref: develop
-          token: ${{ steps.generate-token.outputs.token }}
 
       - name: Checkout Destination Repo
         run: |
@@ -60,6 +59,15 @@ jobs:
         if: steps.compare_files.outputs.pr_required == 'true'
         run: |
           cd dest-repo
+
+          # Ensure the remote branch exists (create from develop HEAD if missing)
+          if ! gh api "repos/rudderlabs/rudder-sdk-js/git/ref/heads/${BRANCH_NAME}" --silent 2>/dev/null; then
+            DEFAULT_SHA=$(gh api repos/rudderlabs/rudder-sdk-js/git/ref/heads/develop --jq '.object.sha')
+            gh api repos/rudderlabs/rudder-sdk-js/git/refs \
+              --method POST \
+              -f ref="refs/heads/${BRANCH_NAME}" \
+              -f sha="$DEFAULT_SHA"
+          fi
 
           # Get current file SHA
           FILE_PATH="${{ env.DEST_PATH }}"

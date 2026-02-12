@@ -7,6 +7,7 @@ jobs:
     uses: ./.github/workflows/validate-actor.yml
     with:
       team_names: 'integrations,data-management'
+    secrets: inherit
 
   draft-new-release:
     permissions:
@@ -86,11 +87,13 @@ jobs:
       - name: Create release branch via GitHub API
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          BRANCH: ${{ steps.create-release.outputs.branch_name }}
+          REPO: ${{ github.repository }}
         run: |
           BASE_SHA=$(git rev-parse HEAD)
-          gh api repos/${{ github.repository }}/git/refs \
+          gh api "repos/${REPO}/git/refs" \
             --method POST \
-            -f ref="refs/heads/${{ steps.create-release.outputs.branch_name }}" \
+            -f ref="refs/heads/${BRANCH}" \
             -f sha="$BASE_SHA"
 
       - name: Update Changelog & Bump Version

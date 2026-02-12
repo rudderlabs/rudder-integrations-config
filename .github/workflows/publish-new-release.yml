@@ -59,23 +59,35 @@ jobs:
         run: |
           npm ci
 
-      - name: Create and Push Tag via API
-        uses: ryancyq/github-signed-commit@e9f3b28c80da7be66d24b8f501a5abe82a6b855f # v1.2.0
-        env:
-          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
-        with:
-          branch-name: main
-          commit-message: 'chore: release v${{ steps.extract-version.outputs.release_version }}'
-          files: ''
-          tag: 'v${{ steps.extract-version.outputs.release_version }}'
-
-      - name: Create GitHub Release
+      - name: Create Tag and GitHub Release
         id: create_release
         env:
           HUSKY: 0
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
           CONVENTIONAL_GITHUB_RELEASER_TOKEN: ${{ steps.generate-token.outputs.token }}
+          RELEASE_VERSION: ${{ steps.extract-version.outputs.release_version }}
+          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+          REPO: ${{ github.repository }}
         run: |
+          # Create annotated tag object via GitHub API (matching original git tag -a behavior)
+          TAG_SHA=$(gh api "repos/${REPO}/git/tags" \
+            --method POST \
+            -f tag="v${RELEASE_VERSION}" \
+            -f message="chore: release v${RELEASE_VERSION}" \
+            -f object="${MERGE_SHA}" \
+            -f type="commit" \
+            --jq '.sha')
+
+          # Create tag ref pointing to the annotated tag object
+          gh api "repos/${REPO}/git/refs" \
+            --method POST \
+            -f ref="refs/tags/v${RELEASE_VERSION}" \
+            -f sha="$TAG_SHA"
+
+          # Fetch the new tag locally for conventional-github-releaser
+          git fetch --tags origin
+
           npm run release:github
           echo "DATE=$(date)" >> $GITHUB_ENV
 
