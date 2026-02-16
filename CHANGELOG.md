@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.138.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.138.1...v1.138.2) (2026-02-16)
+
+
+### Bug Fixes
+
+* allow underscoreDivideNumbers and allowUsersContextTraits ([#2339](https://github.com/rudderlabs/rudder-config-schema/issues/2339)) ([7327a1c](https://github.com/rudderlabs/rudder-config-schema/commit/7327a1cf1cc4a2b09ee42a85d2c951a251c3058b))
+
 ### [1.138.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.138.0...v1.138.1) (2026-01-28)
 
 ## [1.138.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.137.1...v1.138.0) (2026-01-20)
