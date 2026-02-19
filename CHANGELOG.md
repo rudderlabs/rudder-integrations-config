@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.139.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.138.3...v1.139.0) (2026-02-19)
+
+
+### Features
+
+* add support of region on CustomerIo Audience ([#2346](https://github.com/rudderlabs/rudder-config-schema/issues/2346)) ([1c40f09](https://github.com/rudderlabs/rudder-config-schema/commit/1c40f09b0a2150ccab14d16a2e098b17bd01e309))
+
 ### [1.138.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.138.2...v1.138.3) (2026-02-17)
 
 ### [1.138.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.138.1...v1.138.2) (2026-02-17)
