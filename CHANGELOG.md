@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.139.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.138.3...v1.139.0) (2026-02-19)
+
+
+### Features
+
+* add support of region on CustomerIo Audience ([#2346](https://github.com/rudderlabs/rudder-config-schema/issues/2346)) ([1c40f09](https://github.com/rudderlabs/rudder-config-schema/commit/1c40f09b0a2150ccab14d16a2e098b17bd01e309))
+
+### [1.138.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.138.2...v1.138.3) (2026-02-17)
+
+### [1.138.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.138.1...v1.138.2) (2026-02-17)
+
+
+### Bug Fixes
+
+* allow underscoreDivideNumbers and allowUsersContextTraits ([#2339](https://github.com/rudderlabs/rudder-config-schema/issues/2339)) ([7327a1c](https://github.com/rudderlabs/rudder-config-schema/commit/7327a1cf1cc4a2b09ee42a85d2c951a251c3058b))
+* update regex to support empty spaces in query params ([#2347](https://github.com/rudderlabs/rudder-config-schema/issues/2347)) ([911e9e4](https://github.com/rudderlabs/rudder-config-schema/commit/911e9e4c87dccb7799a977b21ac8935aedce2597))
+
 ### [1.138.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.138.0...v1.138.1) (2026-01-28)
 
 ## [1.138.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.137.1...v1.138.0) (2026-01-20)
