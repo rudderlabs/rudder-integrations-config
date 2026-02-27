@@ -16,6 +16,142 @@ const ajv = new Ajv({
 
 let validators: Record<string, ValidateFunction> = {};
 
+// Custom validation rule interface
+interface ValidationRule {
+  description: string;
+  validate: (destDefConfig: Record<string, unknown>) => { isValid: boolean; errorMessage?: string };
+}
+
+// Destination definition validation rules
+const destinationDefinitionRules: ValidationRule[] = [
+  {
+    description: 'Secret keys must not be in includeKeys unless also in excludeKeys',
+    validate: (destDefConfig) => {
+      const { secretKeys, includeKeys, excludeKeys } = destDefConfig.config as Record<
+        string,
+        unknown
+      >;
+
+      if (
+        Array.isArray(includeKeys) &&
+        Array.isArray(secretKeys) &&
+        includeKeys.length > 0 &&
+        secretKeys.length > 0
+      ) {
+        // Find secrets in includeKeys that are NOT in excludeKeys
+        // (excludeKeys wins when a key is in both)
+        const secretsInIncludeKeys = secretKeys.filter(
+          (key: string) =>
+            includeKeys.includes(key) && !(Array.isArray(excludeKeys) && excludeKeys.includes(key)),
+        );
+
+        if (secretsInIncludeKeys.length > 0) {
+          return {
+            isValid: false,
+            errorMessage: `Secret keys must not be exposed to client-side. Found in config.includeKeys but not in config.excludeKeys: ${secretsInIncludeKeys.join(
+              ', ',
+            )}. Add these to config.excludeKeys to prevent exposure.`,
+          };
+        }
+      }
+
+      return { isValid: true };
+    },
+  },
+  {
+    description:
+      'includeKeys must be defined when at least one source type supports device/hybrid mode',
+    validate: (destDefConfig) => {
+      const { supportedConnectionModes, includeKeys } = destDefConfig.config as Record<
+        string,
+        unknown
+      >;
+
+      const isDeviceModeSupported =
+        supportedConnectionModes &&
+        Object.values(supportedConnectionModes).some(
+          (modes: unknown) =>
+            Array.isArray(modes) && (modes.includes('device') || modes.includes('hybrid')),
+        );
+
+      if (isDeviceModeSupported && (!Array.isArray(includeKeys) || includeKeys.length === 0)) {
+        return {
+          isValid: false,
+          errorMessage:
+            'config.includeKeys must be defined and non-empty when at least one source type supports device/hybrid mode',
+        };
+      }
+
+      return { isValid: true };
+    },
+  },
+  // TODO: Uncomment once we have cleaned up all the destination definitions
+  // {
+  //   description: 'includeKeys must not be defined when the destination only supports cloud mode',
+  //   validate: (destDefConfig) => {
+  //     const { supportedConnectionModes, includeKeys } = destDefConfig.config as Record<
+  //       string,
+  //       unknown
+  //     >;
+
+  //     if (
+  //       supportedConnectionModes &&
+  //       Object.values(supportedConnectionModes).every((modes: string[]) => modes.includes('cloud'))
+  //      && Array.isArray(includeKeys) && includeKeys.length > 0) {
+  //         return {
+  //           isValid: false,
+  //           errorMessage:
+  //             'config.includeKeys must not be defined when the destination only supports cloud mode',
+  //         };
+  //       }
+
+  //     return { isValid: true };
+  //   },
+  // },
+  // TODO: Uncomment once we have cleaned up all the destination definitions
+  // {
+  //   description:
+  //     'includeKeys and excludeKeys must not be defined when the destination only supports cloud mode',
+  //   validate: (destDefConfig) => {
+  //     const { supportedConnectionModes, includeKeys, excludeKeys } = destDefConfig.config as Record<
+  //       string,
+  //       unknown
+  //     >;
+
+  //     if (
+  //       supportedConnectionModes &&
+  //       Object.values(supportedConnectionModes).every((modes: string[]) => modes.includes('cloud'))
+  //      && (
+  //         (Array.isArray(includeKeys) && includeKeys.length > 0) ||
+  //         (Array.isArray(excludeKeys) && excludeKeys.length > 0)
+  //       )) {
+  //         return {
+  //           isValid: false,
+  //           errorMessage:
+  //             'config.includeKeys and config.excludeKeys must not be defined when the destination only supports cloud mode',
+  //         };
+  //       }
+
+  //     return { isValid: true };
+  //   },
+  // },
+];
+
+function applyAdditionalRulesValidation(destDefConfig: Record<string, unknown>): void {
+  const errors: string[] = [];
+
+  destinationDefinitionRules.forEach((rule) => {
+    const result = rule.validate(destDefConfig);
+    if (!result.isValid && result.errorMessage) {
+      errors.push(result.errorMessage);
+    }
+  });
+
+  if (errors.length > 0) {
+    throw new Error(JSON.stringify(errors));
+  }
+}
+
 async function importJsonFromFile(file: string) {
   const content = await fs.promises.readFile(file, { encoding: 'utf-8' });
   return JSON.parse(content);
@@ -85,6 +221,9 @@ export async function validateDestinationDefinitions(
 
     throw new Error(JSON.stringify(errorMessages));
   }
+
+  // Apply custom validation rules
+  applyAdditionalRulesValidation(destDefConfig);
 
   return true;
 }
