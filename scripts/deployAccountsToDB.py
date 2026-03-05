@@ -14,7 +14,7 @@ from utils import (
     initialize_debug_log,
 )
 
-BLACK_LIST_DESTINATIONS = ["ZOHO_DEV"]
+BLACK_LIST_DESTINATIONS = []
 
 
 def get_command_line_arguments():

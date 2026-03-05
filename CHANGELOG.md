@@ -2,6 +2,111 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.139.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.139.0...v1.139.1) (2026-02-25)
+
+
+### Bug Fixes
+
+* enable audience support for Mailchimp destination ([#2359](https://github.com/rudderlabs/rudder-config-schema/issues/2359)) ([472aa3b](https://github.com/rudderlabs/rudder-config-schema/commit/472aa3b983f2622fa9814eb595a2c0a8bbd0113b))
+
+## [1.139.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.138.3...v1.139.0) (2026-02-19)
+
+
+### Features
+
+* add support of region on CustomerIo Audience ([#2346](https://github.com/rudderlabs/rudder-config-schema/issues/2346)) ([1c40f09](https://github.com/rudderlabs/rudder-config-schema/commit/1c40f09b0a2150ccab14d16a2e098b17bd01e309))
+
+### [1.138.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.138.2...v1.138.3) (2026-02-17)
+
+### [1.138.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.138.1...v1.138.2) (2026-02-17)
+
+
+### Bug Fixes
+
+* allow underscoreDivideNumbers and allowUsersContextTraits ([#2339](https://github.com/rudderlabs/rudder-config-schema/issues/2339)) ([7327a1c](https://github.com/rudderlabs/rudder-config-schema/commit/7327a1cf1cc4a2b09ee42a85d2c951a251c3058b))
+* update regex to support empty spaces in query params ([#2347](https://github.com/rudderlabs/rudder-config-schema/issues/2347)) ([911e9e4](https://github.com/rudderlabs/rudder-config-schema/commit/911e9e4c87dccb7799a977b21ac8935aedce2597))
+
+### [1.138.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.138.0...v1.138.1) (2026-01-28)
+
+## [1.138.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.137.1...v1.138.0) (2026-01-20)
+
+
+### Features
+
+* add deprecation and new flags to source configurations ([#2305](https://github.com/rudderlabs/rudder-config-schema/issues/2305)) ([477c59e](https://github.com/rudderlabs/rudder-config-schema/commit/477c59e981392f78baa9ce6f7695696287afe10c))
+
+
+### Bug Fixes
+
+* additionalProperties error when updating AM destination ([#2314](https://github.com/rudderlabs/rudder-config-schema/issues/2314)) ([0ccfe36](https://github.com/rudderlabs/rudder-config-schema/commit/0ccfe36b6d0a4a4766b739e6c78def161d2253be))
+
+### [1.137.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.137.0...v1.137.1) (2026-01-16)
+
+
+### Bug Fixes
+
+* additionalProperties error when updating AM destination ([#2314](https://github.com/rudderlabs/rudder-config-schema/issues/2314)) ([1806910](https://github.com/rudderlabs/rudder-config-schema/commit/1806910653ad6090a0d1e361d2c44d93da9c0a83))
+
+## [1.137.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.136.0...v1.137.0) (2026-01-06)
+
+
+### Features
+
+* **fbla:** add single account constraint to accounts ([#2288](https://github.com/rudderlabs/rudder-config-schema/issues/2288)) ([f396b61](https://github.com/rudderlabs/rudder-config-schema/commit/f396b6124c7ded7a823c59bd91c9850580114c57))
+
+
+### Bug Fixes
+
+* **braze:** rename API Key labels to App Identifier Key in UI config ([#2301](https://github.com/rudderlabs/rudder-config-schema/issues/2301)) ([a75d4ba](https://github.com/rudderlabs/rudder-config-schema/commit/a75d4ba9228b6c9b5f1d948ee4dedca42ba6def8))
+
+## [1.136.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.135.0...v1.136.0) (2025-12-18)
+
+
+### Features
+
+* **fbla:** add single account constraint to accounts ([#2288](https://github.com/rudderlabs/rudder-config-schema/issues/2288)) ([ca0b6fb](https://github.com/rudderlabs/rudder-config-schema/commit/ca0b6fbfd71419e68dbd184b94f6302ef81ebdf1))
+* **sources:** remove feature flags for Android Kotlin and iOS Swift sources ([2ac682d](https://github.com/rudderlabs/rudder-config-schema/commit/2ac682df95d918d40ba8e7af061c2ee97e74c235)), closes [#2296](https://github.com/rudderlabs/rudder-config-schema/issues/2296)
+
+## [1.135.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.134.0...v1.135.0) (2025-12-16)
+
+
+### Features
+
+* add 4 destinations for swift source ([c4eae8e](https://github.com/rudderlabs/rudder-config-schema/commit/c4eae8eb800ca54348f043040a67838f19662a53))
+* add iosSwift source for useNativeSDK in adjust schema json ([ad84805](https://github.com/rudderlabs/rudder-config-schema/commit/ad8480573db3276f0c30f90362a39916882c3dd5))
+* enable router transform for Amplitude ([#2273](https://github.com/rudderlabs/rudder-config-schema/issues/2273)) ([233b936](https://github.com/rudderlabs/rudder-config-schema/commit/233b93607c8d0419dde5f17b6676b2b568d0ca7f))
+* **fbla:** add cacheEnabled to options for fbla source ([#2255](https://github.com/rudderlabs/rudder-config-schema/issues/2255)) ([6c2ffc3](https://github.com/rudderlabs/rudder-config-schema/commit/6c2ffc3dbd6d5a7e8c4a0749c78892db5c0ee513))
+* **snowpipe_streaming:** remove beta flag ([#2262](https://github.com/rudderlabs/rudder-config-schema/issues/2262)) ([cce2de8](https://github.com/rudderlabs/rudder-config-schema/commit/cce2de8fe8dc01259576fd37b19d8d9b34a64e46))
+
+
+### Bug Fixes
+
+* allow forward slash for http destination in path parameter ([#2285](https://github.com/rudderlabs/rudder-config-schema/issues/2285)) ([302ceb5](https://github.com/rudderlabs/rudder-config-schema/commit/302ceb513d74c7687ef99a14234d9cab07fd00bd))
+
+## [1.134.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.133.0...v1.134.0) (2025-12-09)
+
+
+### Features
+
+* add cloud mode support for androidKotlin and iosSwift to all the integrations ([#2283](https://github.com/rudderlabs/rudder-config-schema/issues/2283)) ([9d1556f](https://github.com/rudderlabs/rudder-config-schema/commit/9d1556fc0bfaa7b1b7017622d51df609b3d6ac51))
+
+## [1.133.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.131.0...v1.133.0) (2025-12-08)
+
+
+### Features
+
+* **braze:** add platform-specific api keys support ([#2261](https://github.com/rudderlabs/rudder-config-schema/issues/2261)) ([13d4792](https://github.com/rudderlabs/rudder-config-schema/commit/13d47925b12078c2939260889dff8bf56fd1fcd8))
+
+## [1.132.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.131.0...v1.132.0) (2025-12-02)
+
+
+### Features
+
+* add 4 destinations for swift source ([c4eae8e](https://github.com/rudderlabs/rudder-config-schema/commit/c4eae8eb800ca54348f043040a67838f19662a53))
+* add iosSwift source for useNativeSDK in adjust schema json ([ad84805](https://github.com/rudderlabs/rudder-config-schema/commit/ad8480573db3276f0c30f90362a39916882c3dd5))
+* **fbla:** add cacheEnabled to options for fbla source ([#2255](https://github.com/rudderlabs/rudder-config-schema/issues/2255)) ([6c2ffc3](https://github.com/rudderlabs/rudder-config-schema/commit/6c2ffc3dbd6d5a7e8c4a0749c78892db5c0ee513))
+* **snowpipe_streaming:** remove beta flag ([#2262](https://github.com/rudderlabs/rudder-config-schema/issues/2262)) ([cce2de8](https://github.com/rudderlabs/rudder-config-schema/commit/cce2de8fe8dc01259576fd37b19d8d9b34a64e46))
+
 ## [1.131.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.130.2...v1.131.0) (2025-11-12)
 
 

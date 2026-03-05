@@ -125,18 +125,19 @@ def initialize_debug_log():
         return False
 
 
-def get_json_diff(oldJson, newJson):
+def get_json_diff(oldJson, newJson, exclude_paths=None):
     """Returns the difference between two JSONs.
 
     Args:
         oldJson (object): old json.
         newJson (object): new json.
+        exclude_paths (list): list of paths to exclude from the diff.
 
     Returns:
         object: difference between oldJson and newJson.
     """
     differ = JsonDiffer(marshal=True)
-    return differ.diff(oldJson, newJson)
+    return differ.diff(oldJson, newJson, exclude_paths=exclude_paths)
 
 
 def apply_json_diff(oldJson, diff):

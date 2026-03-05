@@ -30,7 +30,7 @@ def validate_destination_accounts(destination_name):
     have corresponding account configuration files.
 
     Args:
-        destination_name: Name of the destination (e.g., 'zoho_dev')
+        destination_name: Name of the destination (e.g., 'zoho')
 
     Returns:
         bool: True if validation passes, False otherwise

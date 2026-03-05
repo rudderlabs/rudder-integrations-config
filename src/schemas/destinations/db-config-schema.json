@@ -620,6 +620,13 @@
           "$comment": "This is used to display a deprecation label in the UI when options.deprecated is 'true'.",
           "default": "Deprecated"
         },
+        "allowCreationWhenDeprecated": {
+          "type": "boolean",
+          "title": "Allow Destination Creation When Deprecated",
+          "description": "Whether new instances of the 'deprecated' destination are still allowed to be created in the UI.",
+          "$comment": "This is applicable only if 'options.deprecated' is 'true'. By default, users are not allowed to create new instances of 'deprecated' destinations.",
+          "default": false
+        },
         "destinationFeatures": {
           "type": "object",
           "title": "Destination Features",
@@ -664,59 +671,6 @@
           "default": false
         }
       }
-    },
-    "responseRules": {
-      "type": "object",
-      "title": "Response Rules",
-      "description": "Some destinations send 2xx as status code even when the request has some errors. Hence, we have to parse the response body to determine the actual status.",
-      "$comment": "This method of parsing the response is DEPRECATED now in lieu of transformer proxy.",
-      "additionalProperties": false,
-      "required": ["responseType", "rules"],
-      "properties": {
-        "responseType": {
-          "type": "string",
-          "title": "Response Type",
-          "description": "The response type from the destination.",
-          "$comment": "This indicates the type of response returned by the destination.",
-          "enum": ["JSON", "TXT"]
-        },
-        "rules": {
-          "type": "object",
-          "title": "Rules",
-          "description": "The parsing rules to be applied on the response from the destination.",
-          "properties": {
-            "abortable": {
-              "type": "array",
-              "title": "Abortable",
-              "description": "The rules to declare the request as aborted.",
-              "items": {
-                "$ref": "#/definitions/responseRule"
-              },
-              "minItems": 1
-            },
-            "retryable": {
-              "type": "array",
-              "title": "Retryable",
-              "description": "The rules to declare the request as retryable.",
-              "items": {
-                "$ref": "#/definitions/responseRule"
-              },
-              "minItems": 1
-            },
-            "throttled": {
-              "type": "array",
-              "title": "Throttled",
-              "description": "The rules to declare the request as throttled.",
-              "items": {
-                "$ref": "#/definitions/responseRule"
-              },
-              "minItems": 1
-            }
-          },
-          "additionalProperties": false,
-          "minProperties": 1
-        }
-      }
     }
   },
   "definitions": {
@@ -746,26 +700,6 @@
         "shopify",
         "cloudSource"
       ]
-    },
-    "responseRule": {
-      "type": "object",
-      "title": "Response Rule",
-      "description": "The rule to be applied on the response from the destination.",
-      "patternProperties": {
-        "^errors\\.[a-zA-Z0-9_]+$": {
-          "type": "integer",
-          "exclusiveMinimum": 0
-        }
-      },
-      "properties": {
-        "success": {
-          "type": "string",
-          "title": "Success",
-          "enum": ["true", "false"]
-        }
-      },
-      "minProperties": 1,
-      "maxProperties": 2
     }
   }
 }
