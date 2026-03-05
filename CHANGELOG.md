@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.140.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.139.1...v1.140.0) (2026-03-05)
+
+
+### Features
+
+* cleanup includeKeys in destination definitions ([#2369](https://github.com/rudderlabs/rudder-config-schema/issues/2369)) ([3ee5838](https://github.com/rudderlabs/rudder-config-schema/commit/3ee583879634cd8f796b218f5bbd65b6bfd63ef0))
+
 ### [1.139.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.139.0...v1.139.1) (2026-02-25)
 
 
