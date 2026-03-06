@@ -10,9 +10,9 @@ jobs:
   prs:
     name: Clean Up Stale PRs and Issues
     runs-on: ubuntu-latest
-
     permissions:
       pull-requests: write
+      issues: write
 
     steps:
       - name: Harden the runner (Audit all outbound calls)
@@ -20,9 +20,18 @@ jobs:
         with:
           egress-policy: audit
 
+      - name: Generate GitHub App Token
+        id: generate-token
+        uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
+        with:
+          app-id: ${{ vars.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_PRIVATE_KEY }}
+          permission-issues: write
+          permission-pull-requests: write
+
       - uses: actions/stale@997185467fa4f803885201cee163a9f38240193d # v10.1.1
         with:
-          repo-token: ${{ secrets.PAT }}
+          repo-token: ${{ steps.generate-token.outputs.token }}
           operations-per-run: 200
           stale-pr-message: 'This PR is considered to be stale. It has been open for 20 days with no further activity thus it is going to be closed in 7 days. To avoid such a case please consider removing the stale label manually or add a comment to the PR.'
           stale-issue-message: 'This issue is considered to be stale. It has been open for 30 days with no further activity thus it is going to be closed in 7 days. To avoid such a case please consider removing the stale label manually or add a comment to the issue.'
@@ -36,19 +45,33 @@ jobs:
   branches:
     name: Cleanup Stale Branches
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
         with:
           egress-policy: audit
 
+      - name: Generate GitHub App Token
+        id: generate-token
+        uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
+        with:
+          app-id: ${{ vars.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: read
+
       - name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
 
       - name: Delete Old Branches
         uses: beatlabs/delete-old-branches-action@6e94df089372a619c01ae2c2f666bf474f890911 # v0.0.10
         with:
-          repo_token: ${{ secrets.PAT }}
+          repo_token: ${{ steps.generate-token.outputs.token }}
           date: '3 months ago'
           dry_run: false
           delete_tags: false

@@ -5,10 +5,6 @@ on:
     branches:
       - develop
 
-permissions:
-  contents: write
-  pull-requests: write
-
 env:
   BRANCH_NAME: fix/gh-update-destinations-ts
   SRC_FILE: generated/Destinations.ts
@@ -17,11 +13,23 @@ env:
 jobs:
   check_changes_and_raise_pr:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
         with:
           egress-policy: audit
+
+      - name: Generate GitHub App Token
+        id: generate-token
+        uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
+        with:
+          app-id: ${{ vars.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_PRIVATE_KEY }}
+          permission-contents: write # to push commits to cross-repo branch
+          permission-pull-requests: write # to create PRs in cross-repo
+          repositories: rudder-sdk-js
 
       - name: Checkout Source Repo
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
@@ -30,9 +38,11 @@ jobs:
 
       - name: Checkout Destination Repo
         run: |
-          git clone https://github.com/rudderlabs/rudder-sdk-js.git dest-repo || exit 1
+          gh repo clone rudderlabs/rudder-sdk-js dest-repo || exit 1
           cd dest-repo
           git checkout ${{ env.BRANCH_NAME }} || git checkout -b ${{ env.BRANCH_NAME }}
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - name: Compare Destinations.ts
         id: compare_files
@@ -45,22 +55,54 @@ jobs:
             echo "pr_required=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Commit and Push Changes
+      - name: Copy file and commit to cross-repo via signed commit API
         if: steps.compare_files.outputs.pr_required == 'true'
         run: |
           cd dest-repo
-          cp "../generated/Destinations.ts" "packages/analytics-js-integrations/src/constants/Destinations.ts"
-          git add packages/analytics-js-integrations/src/constants/Destinations.ts
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "noreply@github.com"
-          git config --global url."https://${{ secrets.PAT }}@github.com/".insteadOf "https://github.com/"
-          git commit -m "fix: update destinations.ts"
-          git push origin ${{ env.BRANCH_NAME }}
+
+          # Ensure the remote branch exists (create from develop HEAD if missing)
+          if ! gh api "repos/rudderlabs/rudder-sdk-js/git/ref/heads/${BRANCH_NAME}" --silent 2>/dev/null; then
+            DEFAULT_SHA=$(gh api repos/rudderlabs/rudder-sdk-js/git/ref/heads/develop --jq '.object.sha')
+            gh api repos/rudderlabs/rudder-sdk-js/git/refs \
+              --method POST \
+              -f ref="refs/heads/${BRANCH_NAME}" \
+              -f sha="$DEFAULT_SHA"
+          fi
+
+          # Get current file SHA
+          FILE_PATH="${{ env.DEST_PATH }}"
+          CURRENT_SHA=$(gh api repos/rudderlabs/rudder-sdk-js/contents/"$FILE_PATH" \
+            --jq .sha \
+            -H "Accept: application/vnd.github.v3+json" \
+            -F ref="${{ env.BRANCH_NAME }}" || echo "")
+
+          # Read file content and encode to base64
+          CONTENT=$(base64 -i "../${{ env.SRC_FILE }}")
+
+          # Create or update file via GitHub API (this creates a verified commit)
+          if [ -n "$CURRENT_SHA" ]; then
+            gh api repos/rudderlabs/rudder-sdk-js/contents/"$FILE_PATH" \
+              --method PUT \
+              -H "Accept: application/vnd.github.v3+json" \
+              -f message="fix: update destinations.ts" \
+              -f content="$CONTENT" \
+              -f branch="${{ env.BRANCH_NAME }}" \
+              -f sha="$CURRENT_SHA"
+          else
+            gh api repos/rudderlabs/rudder-sdk-js/contents/"$FILE_PATH" \
+              --method PUT \
+              -H "Accept: application/vnd.github.v3+json" \
+              -f message="fix: update destinations.ts" \
+              -f content="$CONTENT" \
+              -f branch="${{ env.BRANCH_NAME }}"
+          fi
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - name: Create or Update PR
         if: steps.compare_files.outputs.pr_required == 'true'
         env:
-          GH_TOKEN: ${{ secrets.PAT }}
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
           cd dest-repo
           EXISTING_PR=$(gh pr list --head "$BRANCH_NAME" --json number --jq ".[0].number")
