@@ -7,21 +7,16 @@
       "rudderAccountId": {
         "type": "string"
       },
+      "isHashRequired": {
+        "type": "boolean",
+        "default": true
+      },
+      "advertiserId": {
+        "type": "string"
+      },
       "oneTrustCookieCategories": {
         "type": "object",
         "properties": {
-          "cloud": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
           "warehouse": {
             "type": "array",
             "items": {
@@ -39,18 +34,6 @@
       "ketchConsentPurposes": {
         "type": "object",
         "properties": {
-          "cloud": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
           "warehouse": {
             "type": "array",
             "items": {
@@ -68,52 +51,6 @@
       "consentManagement": {
         "type": "object",
         "properties": {
-          "cloud": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "string",
-                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
-                  "default": "oneTrust"
-                },
-                "consents": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "consent": {
-                        "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                      }
-                    }
-                  }
-                }
-              },
-              "allOf": [
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
-                    "required": ["provider"]
-                  },
-                  "then": {
-                    "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
-                    },
-                    "required": ["resolutionStrategy"]
-                  }
-                }
-              ]
-            }
-          },
           "warehouse": {
             "type": "array",
             "items": {
