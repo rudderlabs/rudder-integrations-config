@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.143.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.142.0...v1.143.0) (2026-03-09)
+
+
+### Features
+
+* cleanup secretKeys in batch-2 destinations (16-100 instances) ([#2371](https://github.com/rudderlabs/rudder-config-schema/issues/2371)) ([028d770](https://github.com/rudderlabs/rudder-config-schema/commit/028d7702cdb8fdb94260b8bcb333428e8bd50ea9))
+
 ## [1.142.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.141.0...v1.142.0) (2026-03-09)
 
 
