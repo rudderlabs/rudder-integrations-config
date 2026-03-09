@@ -19,18 +19,24 @@
                   },
                   {
                     "configKey": "advertiserId",
-                    "type": "nestedSelect",
+                    "type": "dynamicDataSelect",
                     "label": "Advertiser Id",
                     "apiName": "listAdvertisers",
-                    "apiDependencies": [
-                      "rudderAccountId"
-                    ],
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Advertiser Id",
+                    "apiDependencies": ["rudderAccountId"],
                     "placeholder": "Select advertiser",
                     "preRequisites": {
                       "fields": [
                         {
                           "configKey": "rudderAccountId",
                           "exists": true
+                        }
+                      ],
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_vdm-next",
+                          "value": true
                         }
                       ]
                     }
@@ -42,11 +48,11 @@
                     "default": true,
                     "preRequisites": {
                       "featureFlags": [
-                          {
-                            "configKey": "AMP_vdm-next",
-                            "value": false
-                          }
-                        ]
+                        {
+                          "configKey": "AMP_vdm-next",
+                          "value": false
+                        }
+                      ]
                     }
                   }
                 ]
