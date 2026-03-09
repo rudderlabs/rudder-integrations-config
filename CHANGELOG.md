@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.141.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.140.0...v1.141.0) (2026-03-09)
+
+
+### Features
+
+* add adjustmentType for GAEC ([#2380](https://github.com/rudderlabs/rudder-config-schema/issues/2380)) ([0814165](https://github.com/rudderlabs/rudder-config-schema/commit/0814165ab94e2b45d3dee24680bad279172790e6))
+
 ## [1.140.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.139.1...v1.140.0) (2026-03-05)
 
 
