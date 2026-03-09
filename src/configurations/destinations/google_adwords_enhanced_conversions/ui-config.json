@@ -101,6 +101,35 @@
                     "configKey": "requireHash",
                     "default": true,
                     "footerNote": "If this option is set to on we will encrypt mail, phoneNumber, firstName, lastName and streetAddress"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Adjustment Type",
+                    "note": "Choose the adjustment type for your conversions",
+                    "configKey": "adjustmentType",
+                    "options": [
+                      {
+                        "label": "ENHANCEMENT",
+                        "value": "ENHANCEMENT"
+                      },
+                      {
+                        "label": "RESTATEMENT",
+                        "value": "RESTATEMENT"
+                      }
+                    ],
+                    "default": "ENHANCEMENT",
+                    "conditions": {
+                      "expression": {
+                        "operator": "AND",
+                        "operands": [
+                          {
+                            "type": "featureFlag",
+                            "key": "AMP_enable-gaec-adjustment-type",
+                            "value": true
+                          }
+                        ]
+                      }
+                    }
                   }
                 ]
               }
