@@ -28,20 +28,26 @@
                     "secret": true
                   },
                   {
-                    "type": "textInput",
+                    "type": "dynamicDataSelect",
                     "label": "Ad Account id",
                     "note": "Enter the Ad Account id of your business application set up",
                     "configKey": "adAccountId",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-                    "regexErrorMessage": "Invalid Ad Account id",
                     "placeholder": "e.g: 2309XXX5483",
+                    "apiName": "adAccounts",
+                    "apiDependencies": ["rudderAccountId"],
                     "preRequisites": {
                       "fields": [
                         {
                           "configKey": "connectionMode.warehouse",
                           "value": "cloud"
+                        },
+                        {
+                          "configKey": "rudderAccountId",
+                          "exists": true
                         }
-                      ]
+                      ],
+                      "condition": "and"
                     }
                   },
                   {

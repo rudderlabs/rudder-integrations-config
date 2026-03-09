@@ -1107,34 +1107,6 @@ def generate_schema_properties(
                                 print(
                                     f"No schema generator function found for field: {field['type']}"
                                 )
-
-                            # Determine whether this field should be added to schema "required".
-                            # A field is required if it is in the "Initial setup" template and
-                            # either has no preRequisites, or all its preRequisites use
-                            # `exists: true` and every one of those prerequisite fields is
-                            # itself already required.
-                            #
-                            # The `exists: true` distinction matters: a prereq with `value`
-                            # means the field is only shown when another field equals a specific
-                            # value (e.g. a sub-account toggle), so it is conditionally required
-                            # and must not be added to the top-level required array. A prereq
-                            # with `exists: true` means the field is shown whenever the prereq
-                            # field is present at all — so if that prereq is itself required,
-                            # this field is effectively always shown and therefore also required.
-                            #
-                            # Example: `customerId` has preRequisites on `rudderAccountId` with
-                            # `exists: true`. Since `rudderAccountId` is required, `customerId`
-                            # is always rendered and should be required too.
-                            # Contrast with `loginCustomerId`, whose prereq is
-                            # `{configKey: "subAccount", value: true}` — it is only shown when
-                            # the sub-account checkbox is checked, so it stays out of required.
-                            pre_reqs = field.get("preRequisites", {})
-                            pre_req_fields = pre_reqs.get("fields", []) if isinstance(pre_reqs, dict) else []
-                            exists_pre_req_fields = [pf for pf in pre_req_fields if pf.get("exists") is True]
-                            pre_reqs_all_required = bool(exists_pre_req_fields) and all(
-                                pf.get("configKey") in schemaObject["required"]
-                                for pf in exists_pre_req_fields
-                            )
                             if (
                                 template.get("title", "") == "Initial setup"
                                 and is_field_present_in_default_config(
@@ -1142,7 +1114,7 @@ def generate_schema_properties(
                                 )
                                 and (
                                     "preRequisites" not in field
-                                    or pre_reqs_all_required
+                                    or field.get("required", False)
                                 )
                             ):
                                 schemaObject["required"].append(field["configKey"])
