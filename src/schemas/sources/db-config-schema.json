@@ -92,12 +92,32 @@
           "$comment": "This is used to display a 'New' badge in the UI.",
           "default": false
         },
-        "allowCreationWhenDeprecated": {
-          "type": "boolean",
-          "title": "Allow Source Creation When Deprecated",
-          "description": "Whether new instances of the 'deprecated' source are still allowed to be created in the UI.",
-          "$comment": "This is applicable only if 'options.deprecated' is 'true'. By default, users are not allowed to create new instances of 'deprecated' sources.",
-          "default": false
+        "legacy": {
+          "type": "object",
+          "title": "Legacy",
+          "description": "Presence of this field indicates that the source is legacy.",
+          "properties": {
+            "notice": {
+              "type": "string",
+              "title": "Notice",
+              "description": "The notice for the source. This is typically used to inform the user about the existing source instances.",
+              "$comment": "This is used to display a notice in the UI when the source is legacy."
+            },
+            "selectionNotice": {
+              "type": "string",
+              "title": "Selection Notice",
+              "description": "The selection notice for the source. This is typically used to inform the user while creating a new source instance.",
+              "$comment": "This is used to display a selection notice in the UI while creating a new source instance."
+            },
+            "migrationGuide": {
+              "type": "string",
+              "title": "Migration Guide",
+              "description": "The migration guide URL for the source.",
+              "$comment": "This is used to display a migration guide URL in the UI when the source is legacy."
+            }
+          },
+          "additionalProperties": false,
+          "minProperties": 1
         },
         "hidden": {
           "anyOf": [

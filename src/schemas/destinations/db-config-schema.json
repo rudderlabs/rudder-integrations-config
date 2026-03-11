@@ -620,12 +620,32 @@
           "$comment": "This is used to display a deprecation label in the UI when options.deprecated is 'true'.",
           "default": "Deprecated"
         },
-        "allowCreationWhenDeprecated": {
-          "type": "boolean",
-          "title": "Allow Destination Creation When Deprecated",
-          "description": "Whether new instances of the 'deprecated' destination are still allowed to be created in the UI.",
-          "$comment": "This is applicable only if 'options.deprecated' is 'true'. By default, users are not allowed to create new instances of 'deprecated' destinations.",
-          "default": false
+        "legacy": {
+          "type": "object",
+          "title": "Legacy",
+          "description": "Presence of this field indicates that the destination is legacy.",
+          "properties": {
+            "notice": {
+              "type": "string",
+              "title": "Notice",
+              "description": "The notice for the destination. This is typically used to inform the user about the existing destination instances.",
+              "$comment": "This is used to display a notice in the UI when the destination is legacy."
+            },
+            "selectionNotice": {
+              "type": "string",
+              "title": "Selection Notice",
+              "description": "The selection notice for the destination. This is typically used to inform the user while creating a new destination instance.",
+              "$comment": "This is used to display a selection notice in the UI while creating a new destination instance."
+            },
+            "migrationGuide": {
+              "type": "string",
+              "title": "Migration Guide",
+              "description": "The migration guide URL for the destination.",
+              "$comment": "This is used to display a migration guide URL in the UI when the destination is legacy."
+            }
+          },
+          "additionalProperties": false,
+          "minProperties": 1
         },
         "destinationFeatures": {
           "type": "object",
