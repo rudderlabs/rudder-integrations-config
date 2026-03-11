@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.147.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.146.0...v1.147.0) (2026-03-11)
+
+
+### Features
+
+* replace deprecated status with legacy for Android and iOS sources ([#2400](https://github.com/rudderlabs/rudder-config-schema/issues/2400)) ([e3d082a](https://github.com/rudderlabs/rudder-config-schema/commit/e3d082a990a8e3db4ffda9cfd7094547f98d8b51))
+
 ## [1.146.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.145.0...v1.146.0) (2026-03-10)
 
 
