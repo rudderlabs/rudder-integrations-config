@@ -693,5 +693,45 @@
       "oneTrustCookieCategories.cloud.0 must be object",
       "ketchConsentPurposes.cloud.0 must be object"
     ]
+  },
+  {
+    "testTitle": "Valid config with only rudderAccountId (no accessToken)",
+    "config": {
+      "rudderAccountId": "acc123",
+      "userSchema": ["EMAIL"],
+      "isHashRequired": false,
+      "audienceId": "aud1"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Invalid config with both accessToken and rudderAccountId present",
+    "config": {
+      "accessToken": "ABC",
+      "rudderAccountId": "acc123",
+      "userSchema": ["EMAIL"],
+      "isHashRequired": false,
+      "audienceId": "aud1"
+    },
+    "result": false,
+    "err": [
+      " must NOT be valid",
+      " must NOT be valid",
+      " must match exactly one schema in oneOf"
+    ]
+  },
+  {
+    "testTitle": "Invalid config with neither accessToken nor rudderAccountId",
+    "config": {
+      "userSchema": ["EMAIL"],
+      "isHashRequired": false,
+      "audienceId": "aud1"
+    },
+    "result": false,
+    "err": [
+      " must have required property 'accessToken'",
+      " must have required property 'rudderAccountId'",
+      " must match exactly one schema in oneOf"
+    ]
   }
 ]
