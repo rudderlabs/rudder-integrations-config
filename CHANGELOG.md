@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.146.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.145.0...v1.146.0) (2026-03-10)
+
+
+### Features
+
+* tiktok audience accounts v2 ([#2334](https://github.com/rudderlabs/rudder-config-schema/issues/2334)) ([2f88f37](https://github.com/rudderlabs/rudder-config-schema/commit/2f88f370c6f1ef758067917747b312ce501fd9c5))
+
 ## [1.145.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.144.0...v1.145.0) (2026-03-09)
 
 
