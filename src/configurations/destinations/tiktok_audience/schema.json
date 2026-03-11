@@ -7,14 +7,6 @@
       "rudderAccountId": {
         "type": "string"
       },
-      "audienceId": {
-        "type": "object",
-        "properties": {
-          "cloud": {
-            "type": "string"
-          }
-        }
-      },
       "isHashRequired": {
         "type": "boolean",
         "default": true
@@ -174,6 +166,57 @@
           }
         }
       }
-    }
+    },
+    "anyOf": [
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "properties": {
+                "warehouse": {
+                  "const": "cloud"
+                }
+              }
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "audienceId": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "properties": {
+                "cloud": {
+                  "const": "cloud"
+                }
+              }
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "audienceId": {
+              "type": "object",
+              "properties": {
+                "cloud": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
   }
 }
