@@ -99,6 +99,30 @@
           }
         }
       }
-    }
+    },
+    "anyOf": [
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "properties": {
+                "warehouse": {
+                  "const": "cloud"
+                }
+              }
+            }
+          },
+          "required": ["connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "audienceId": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ]
   }
 }
