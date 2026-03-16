@@ -284,6 +284,21 @@ def generate_schema_for_textinput(field, dbConfig, schema_field_name):
     return textInputSchemaObj
 
 
+def generate_schema_for_dynamic_data_select(field, dbConfig, schema_field_name):
+    """Creates a schema object of dynamicDataSelect.
+
+    Args:
+        field (object): Individual field in ui-config.
+        dbConfig (object): Configurations of db-config.json.
+        schema_field_name (string): Specifies which key has the field's name in schema.
+            For old schema types, it is 'value' else 'configKey'.
+
+    Returns:
+        object
+    """
+    return {"type": FieldTypeEnum.STRING.value}
+
+
 def generate_schema_for_textarea_input(field, dbConfig, schema_field_name):
     """Creates a schema object of textareaInput.
 
@@ -1409,6 +1424,7 @@ uiTypetoSchemaFn = {
     "dynamicForm": generate_schema_for_dynamic_form,
     "mapping": generate_schema_for_mapping,
     "dynamicSelectForm": generate_schema_for_dynamic_select_form,
+    "dynamicDataSelect": generate_schema_for_dynamic_data_select,
     "tagInput": generate_schema_for_tag_input,
     "timeRangePicker": generate_schema_for_time_range_picker,
     "timePicker": generate_schema_for_time_picker,
