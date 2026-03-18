@@ -74,10 +74,10 @@ jobs:
           CURRENT_SHA=$(gh api repos/rudderlabs/rudder-sdk-js/contents/"$FILE_PATH" \
             --jq .sha \
             -H "Accept: application/vnd.github.v3+json" \
-            -F ref="${{ env.BRANCH_NAME }}" || echo "")
+            -f ref="${{ env.BRANCH_NAME }}" || echo "")
 
           # Read file content and encode to base64
-          CONTENT=$(base64 -i "../${{ env.SRC_FILE }}")
+          CONTENT=$(base64 -w 0 "../${{ env.SRC_FILE }}")
 
           # Create or update file via GitHub API (this creates a verified commit)
           if [ -n "$CURRENT_SHA" ]; then
