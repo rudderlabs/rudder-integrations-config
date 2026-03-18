@@ -1,108 +1,90 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "accountManagementInput",
-          "label": "Event delivery account",
-          "value": "rudderAccountId",
-          "required": true
-        },
-        {
-          "type": "textInput",
-          "label": "Audience Id",
-          "value": "audienceId",
-          "required": true,
-          "placeholder": "238476XXXX5910030"
-        },
-        {
-          "type": "checkbox",
-          "label": "Enable Hashing",
-          "value": "isHashRequired",
-          "default": true
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
-      "fields": [
-        {
-          "type": "dynamicCustomForm",
-          "value": "consentManagement",
-          "label": "Consent management settings",
-          "footerNote": "We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
-            {
-              "type": "singleSelect",
-              "label": "Consent management provider",
-              "value": "provider",
-              "options": [
-                {
-                  "name": "Custom",
-                  "value": "custom"
-                },
-                {
-                  "name": "iubenda",
-                  "value": "iubenda"
-                },
-                {
-                  "name": "Ketch",
-                  "value": "ketch"
-                },
-                {
-                  "name": "OneTrust",
-                  "value": "oneTrust"
-                }
-              ],
-              "defaultOption": {
-                "name": "OneTrust",
-                "value": "oneTrust"
-              },
-              "required": true
-            },
-            {
-              "type": "singleSelect",
-              "label": "the required consent logic",
-              "value": "resolutionStrategy",
-              "options": [
-                {
-                  "name": "AND",
-                  "value": "and"
-                },
-                {
-                  "name": "OR",
-                  "value": "or"
-                }
-              ],
-              "required": true,
-              "variant": "badge",
-              "preRequisites": {
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
                 "fields": [
                   {
-                    "configKey": "provider",
-                    "value": "custom"
+                    "type": "accountManagementInput",
+                    "label": "Event delivery account",
+                    "configKey": "rudderAccountId"
+                  },
+                  {
+                    "configKey": "advertiserId",
+                    "type": "dynamicDataSelect",
+                    "label": "Advertiser Id",
+                    "apiName": "listAdvertisers",
+                    "apiDependencies": ["rudderAccountId"],
+                    "placeholder": "Select advertiser",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "rudderAccountId",
+                          "exists": true
+                        }
+                      ],
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_vdm-next",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Enable Hashing",
+                    "configKey": "isHashRequired",
+                    "default": true,
+                    "preRequisites": {
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_vdm-next",
+                          "value": false
+                        }
+                      ]
+                    }
                   }
                 ]
               }
-            },
-            {
-              "type": "dynamicCustomForm",
-              "value": "consents",
-              "label": "Enter consent category IDs",
-              "customFields": [
-                {
-                  "type": "textInput",
-                  "placeholder": "Marketing",
-                  "value": "consent",
-                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "required": false
-                }
-              ]
-            }
-          ]
-        }
-      ]
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": []
     }
-  ]
+  }
 }

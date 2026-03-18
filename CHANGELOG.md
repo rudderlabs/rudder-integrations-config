@@ -2,6 +2,94 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.147.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.147.0...v1.147.1) (2026-03-13)
+
+
+### Bug Fixes
+
+* tiktok schema audienceid ([#2403](https://github.com/rudderlabs/rudder-config-schema/issues/2403)) ([ed68a12](https://github.com/rudderlabs/rudder-config-schema/commit/ed68a121dcd4eb852c524bc44e6c13a4e681b3ee))
+
+## [1.147.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.146.0...v1.147.0) (2026-03-11)
+
+
+### Features
+
+* replace deprecated status with legacy for Android and iOS sources ([#2400](https://github.com/rudderlabs/rudder-config-schema/issues/2400)) ([e3d082a](https://github.com/rudderlabs/rudder-config-schema/commit/e3d082a990a8e3db4ffda9cfd7094547f98d8b51))
+
+## [1.146.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.145.0...v1.146.0) (2026-03-10)
+
+
+### Features
+
+* tiktok audience accounts v2 ([#2334](https://github.com/rudderlabs/rudder-config-schema/issues/2334)) ([2f88f37](https://github.com/rudderlabs/rudder-config-schema/commit/2f88f370c6f1ef758067917747b312ce501fd9c5))
+
+## [1.145.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.144.0...v1.145.0) (2026-03-09)
+
+
+### Features
+
+* cleanup secretKeys in batch-4 destinations (1000+ instances) and add validator rules ([#2373](https://github.com/rudderlabs/rudder-config-schema/issues/2373)) ([d03cd7b](https://github.com/rudderlabs/rudder-config-schema/commit/d03cd7bd5346bdc9bdaf174e45424a6cfe6fb44a))
+
+## [1.144.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.143.0...v1.144.0) (2026-03-09)
+
+
+### Features
+
+* cleanup secretKeys in batch-3 destinations ([a701704](https://github.com/rudderlabs/rudder-config-schema/commit/a701704711da02eba07224b3e7bf590c042903bc))
+* cleanup secretKeys in batch-3 destinations (100-700 instances) ([#2372](https://github.com/rudderlabs/rudder-config-schema/issues/2372)) ([d211db9](https://github.com/rudderlabs/rudder-config-schema/commit/d211db9b278472a8fa8b646e4832f5fde70f38df))
+
+## [1.143.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.142.0...v1.143.0) (2026-03-09)
+
+
+### Features
+
+* cleanup secretKeys in batch-2 destinations (16-100 instances) ([#2371](https://github.com/rudderlabs/rudder-config-schema/issues/2371)) ([028d770](https://github.com/rudderlabs/rudder-config-schema/commit/028d7702cdb8fdb94260b8bcb333428e8bd50ea9))
+
+## [1.142.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.141.0...v1.142.0) (2026-03-09)
+
+
+### Features
+
+* cleanup secretKeys in batch-1 destinations (≤15 instances) ([#2370](https://github.com/rudderlabs/rudder-config-schema/issues/2370)) ([c79a0e6](https://github.com/rudderlabs/rudder-config-schema/commit/c79a0e66848d48350a4934ebb0e00d10c29cfb61))
+
+## [1.141.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.140.0...v1.141.0) (2026-03-09)
+
+
+### Features
+
+* add adjustmentType for GAEC ([#2380](https://github.com/rudderlabs/rudder-config-schema/issues/2380)) ([0814165](https://github.com/rudderlabs/rudder-config-schema/commit/0814165ab94e2b45d3dee24680bad279172790e6))
+
+## [1.140.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.139.1...v1.140.0) (2026-03-05)
+
+
+### Features
+
+* cleanup includeKeys in destination definitions ([#2369](https://github.com/rudderlabs/rudder-config-schema/issues/2369)) ([3ee5838](https://github.com/rudderlabs/rudder-config-schema/commit/3ee583879634cd8f796b218f5bbd65b6bfd63ef0))
+
+### [1.139.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.139.0...v1.139.1) (2026-02-25)
+
+
+### Bug Fixes
+
+* enable audience support for Mailchimp destination ([#2359](https://github.com/rudderlabs/rudder-config-schema/issues/2359)) ([472aa3b](https://github.com/rudderlabs/rudder-config-schema/commit/472aa3b983f2622fa9814eb595a2c0a8bbd0113b))
+
+## [1.139.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.138.3...v1.139.0) (2026-02-19)
+
+
+### Features
+
+* add support of region on CustomerIo Audience ([#2346](https://github.com/rudderlabs/rudder-config-schema/issues/2346)) ([1c40f09](https://github.com/rudderlabs/rudder-config-schema/commit/1c40f09b0a2150ccab14d16a2e098b17bd01e309))
+
+### [1.138.3](https://github.com/rudderlabs/rudder-config-schema/compare/v1.138.2...v1.138.3) (2026-02-17)
+
+### [1.138.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.138.1...v1.138.2) (2026-02-17)
+
+
+### Bug Fixes
+
+* allow underscoreDivideNumbers and allowUsersContextTraits ([#2339](https://github.com/rudderlabs/rudder-config-schema/issues/2339)) ([7327a1c](https://github.com/rudderlabs/rudder-config-schema/commit/7327a1cf1cc4a2b09ee42a85d2c951a251c3058b))
+* update regex to support empty spaces in query params ([#2347](https://github.com/rudderlabs/rudder-config-schema/issues/2347)) ([911e9e4](https://github.com/rudderlabs/rudder-config-schema/commit/911e9e4c87dccb7799a977b21ac8935aedce2597))
+
 ### [1.138.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.138.0...v1.138.1) (2026-01-28)
 
 ## [1.138.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.137.1...v1.138.0) (2026-01-20)
