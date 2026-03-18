@@ -18,13 +18,22 @@
                     "configKey": "rudderAccountId"
                   },
                   {
-                    "type": "textInput",
+                    "type": "dynamicDataSelect",
                     "label": "Customer ID",
-                    "note": "Enter the Customer ID of you Google remarketing list",
+                    "note": "Select the Customer ID of your Google remarketing list",
                     "configKey": "customerId",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-                    "regexErrorMessage": "Invalid Customer ID",
-                    "placeholder": "e.g: 9693X29833"
+                    "apiName": "customerAccounts",
+                    "apiDependencies": ["rudderAccountId"],
+                    "placeholder": "Select customer account",
+                    "required": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "rudderAccountId",
+                          "exists": true
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "textInput",
