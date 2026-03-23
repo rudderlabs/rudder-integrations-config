@@ -1573,7 +1573,8 @@ def validate_config_consistency(
                 )
             # schema diff for "required"
             if "required" not in schema:
-                warnings.warn("required field is not in schema \n", UserWarning)
+                if generatedSchema["configSchema"]["required"]:
+                    warnings.warn("required field is not in schema \n", UserWarning)
             else:
                 curRequiredField = schema["required"]
                 newRequiredField = generatedSchema["configSchema"]["required"]
