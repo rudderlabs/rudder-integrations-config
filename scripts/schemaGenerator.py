@@ -1573,8 +1573,18 @@ def validate_config_consistency(
                 )
             # schema diff for "required"
             if "required" not in schema:
-                if generatedSchema["configSchema"]["required"]:
-                    warnings.warn("required field is not in schema \n", UserWarning)
+                generated_required = generatedSchema["configSchema"]["required"]
+                if generated_required:
+                    # During account migration, both the legacy field (e.g. accessToken) and
+                    # the new account field (e.g. rudderAccountId) may coexist in the ui-config.
+                    # In this case the schema uses a oneOf to express mutual exclusivity instead
+                    # of a top-level required. Skip the warning if all generated required fields
+                    # are already covered by oneOf entries in the existing schema.
+                    one_of_required_fields = set()
+                    for one_of_entry in schema.get("oneOf", []):
+                        one_of_required_fields.update(one_of_entry.get("required", []))
+                    if not all(f in one_of_required_fields for f in generated_required):
+                        warnings.warn("required field is not in schema \n", UserWarning)
             else:
                 curRequiredField = schema["required"]
                 newRequiredField = generatedSchema["configSchema"]["required"]
