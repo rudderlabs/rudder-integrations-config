@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.148.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.147.1...v1.148.0) (2026-03-24)
+
+
+### Features
+
+* **fb_custom_audience:** add accounts framework support ([#2363](https://github.com/rudderlabs/rudder-config-schema/issues/2363)) ([ce85088](https://github.com/rudderlabs/rudder-config-schema/commit/ce8508896cd3a3a3ed904e140f69e2c5d8cab2e2))
+* **fb_custom_audience:** migrate appSecret to accounts framework ([#2399](https://github.com/rudderlabs/rudder-config-schema/issues/2399)) ([4a66988](https://github.com/rudderlabs/rudder-config-schema/commit/4a66988ec0fdab8470d41943c3337f3ffe13cc12))
+* **google_adwords_remarketing_lists:** replace customerId textInput with dynamic dropdown ([#2408](https://github.com/rudderlabs/rudder-config-schema/issues/2408)) ([32cb021](https://github.com/rudderlabs/rudder-config-schema/commit/32cb021a7677f115a84dcc8a35986a8706f64757))
+* linkedin audience accounts and consent management ([#2414](https://github.com/rudderlabs/rudder-config-schema/issues/2414)) ([7e714ac](https://github.com/rudderlabs/rudder-config-schema/commit/7e714aca99571aa898fc30bcb712d73e55715a20))
+* remove beta status and feature flag for custom device mode destination ([#2409](https://github.com/rudderlabs/rudder-config-schema/issues/2409)) ([8f19849](https://github.com/rudderlabs/rudder-config-schema/commit/8f1984982a38f680d7fdc3fd4c4a6a534d160727))
+* replace deprecated status with legacy for Android and iOS SDK sources ([#2396](https://github.com/rudderlabs/rudder-config-schema/issues/2396)) ([7371538](https://github.com/rudderlabs/rudder-config-schema/commit/7371538d42f045a7d39cf77535d0686c0d448349))
+
+
+### Bug Fixes
+
+* **fb_custom_audience:** remove unused maxUserCount field ([#2415](https://github.com/rudderlabs/rudder-config-schema/issues/2415)) ([e8537b6](https://github.com/rudderlabs/rudder-config-schema/commit/e8537b6d7aeb422b02f77940eaa3ed1f62fe6a0f))
+* **google_adwords_remarketing_lists:** customer ID field is optional in webapp ([#2410](https://github.com/rudderlabs/rudder-config-schema/issues/2410)) ([b545441](https://github.com/rudderlabs/rudder-config-schema/commit/b545441903faeda42daf981310c3c9530cd7e659))
+
 ### [1.147.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.147.0...v1.147.1) (2026-03-13)
 
 
