@@ -26,7 +26,9 @@ jobs:
           fetch-depth: 0 # Fetch all history for diff comparison
 
       - name: Fetch base branch
-        run: git fetch origin ${{ github.base_ref }}
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: git fetch origin "${BASE_REF}"
 
       - name: Setup Node
         uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
@@ -42,8 +44,10 @@ jobs:
 
       - name: Get changed files
         id: changed_files
+        env:
+          BASE_REF: ${{ github.base_ref }}
         run: |
-          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }})
+          CHANGED_FILES=$(git diff --name-only "origin/${BASE_REF}")
           echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
           echo "$CHANGED_FILES" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
