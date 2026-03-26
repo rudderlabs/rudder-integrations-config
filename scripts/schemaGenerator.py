@@ -284,6 +284,21 @@ def generate_schema_for_textinput(field, dbConfig, schema_field_name):
     return textInputSchemaObj
 
 
+def generate_schema_for_dynamic_data_select(field, dbConfig, schema_field_name):
+    """Creates a schema object of dynamicDataSelect.
+
+    Args:
+        field (object): Individual field in ui-config.
+        dbConfig (object): Configurations of db-config.json.
+        schema_field_name (string): Specifies which key has the field's name in schema.
+            For old schema types, it is 'value' else 'configKey'.
+
+    Returns:
+        object
+    """
+    return {"type": FieldTypeEnum.STRING.value}
+
+
 def generate_schema_for_textarea_input(field, dbConfig, schema_field_name):
     """Creates a schema object of textareaInput.
 
@@ -1093,12 +1108,42 @@ def generate_schema_properties(
                                     f"No schema generator function found for field: {field['type']}"
                                 )
 
+                            # Determine whether this field should be added to schema "required".
+                            # A field is required if it is in the "Initial setup" template and
+                            # either has no preRequisites, or all its preRequisites use
+                            # `exists: true` and every one of those prerequisite fields is
+                            # itself already required.
+                            #
+                            # The `exists: true` distinction matters: a prereq with `value`
+                            # means the field is only shown when another field equals a specific
+                            # value (e.g. a sub-account toggle), so it is conditionally required
+                            # and must not be added to the top-level required array. A prereq
+                            # with `exists: true` means the field is shown whenever the prereq
+                            # field is present at all — so if that prereq is itself required,
+                            # this field is effectively always shown and therefore also required.
+                            #
+                            # Example: `customerId` has preRequisites on `rudderAccountId` with
+                            # `exists: true`. Since `rudderAccountId` is required, `customerId`
+                            # is always rendered and should be required too.
+                            # Contrast with `loginCustomerId`, whose prereq is
+                            # `{configKey: "subAccount", value: true}` — it is only shown when
+                            # the sub-account checkbox is checked, so it stays out of required.
+                            pre_reqs = field.get("preRequisites", {})
+                            pre_req_fields = pre_reqs.get("fields", []) if isinstance(pre_reqs, dict) else []
+                            exists_pre_req_fields = [pf for pf in pre_req_fields if pf.get("exists") is True]
+                            pre_reqs_all_required = bool(exists_pre_req_fields) and all(
+                                pf.get("configKey") in schemaObject["required"]
+                                for pf in exists_pre_req_fields
+                            )
                             if (
                                 template.get("title", "") == "Initial setup"
                                 and is_field_present_in_default_config(
                                     field, dbConfig, "configKey"
                                 )
-                                and "preRequisites" not in field
+                                and (
+                                    "preRequisites" not in field
+                                    or pre_reqs_all_required
+                                )
                             ):
                                 schemaObject["required"].append(field["configKey"])
 
@@ -1409,6 +1454,7 @@ uiTypetoSchemaFn = {
     "dynamicForm": generate_schema_for_dynamic_form,
     "mapping": generate_schema_for_mapping,
     "dynamicSelectForm": generate_schema_for_dynamic_select_form,
+    "dynamicDataSelect": generate_schema_for_dynamic_data_select,
     "tagInput": generate_schema_for_tag_input,
     "timeRangePicker": generate_schema_for_time_range_picker,
     "timePicker": generate_schema_for_time_picker,
@@ -1527,7 +1573,18 @@ def validate_config_consistency(
                 )
             # schema diff for "required"
             if "required" not in schema:
-                warnings.warn("required field is not in schema \n", UserWarning)
+                generated_required = generatedSchema["configSchema"]["required"]
+                if generated_required:
+                    # During account migration, both the legacy field (e.g. accessToken) and
+                    # the new account field (e.g. rudderAccountId) may coexist in the ui-config.
+                    # In this case the schema uses a oneOf to express mutual exclusivity instead
+                    # of a top-level required. Skip the warning if all generated required fields
+                    # are already covered by oneOf entries in the existing schema.
+                    one_of_required_fields = set()
+                    for one_of_entry in schema.get("oneOf", []):
+                        one_of_required_fields.update(one_of_entry.get("required", []))
+                    if not all(f in one_of_required_fields for f in generated_required):
+                        warnings.warn("required field is not in schema \n", UserWarning)
             else:
                 curRequiredField = schema["required"]
                 newRequiredField = generatedSchema["configSchema"]["required"]
