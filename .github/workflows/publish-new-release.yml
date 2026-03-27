@@ -24,8 +24,10 @@ jobs:
 
       - name: Extract Version
         id: extract-version
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
-          branch_name="${{ github.event.pull_request.head.ref }}"
+          branch_name="${HEAD_REF}"
           version=${branch_name#hotfix-}
           version=${version#release/v}
 
@@ -96,10 +98,11 @@ jobs:
           gh pr create \
             --base develop \
             --head main \
-            --title "chore(release): pull main into develop post release v${{ steps.extract-version.outputs.release_version }}" \
+            --title "chore(release): pull main into develop post release v${RELEASE_VERSION}" \
             --body ":crown: *An automated PR*"
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          RELEASE_VERSION: ${{ steps.extract-version.outputs.release_version }}
 
       - name: Delete Release Branch
         uses: koj-co/delete-merged-action@63a03c35810a8a7d4840d18793c0f68ff8b59450 # master
