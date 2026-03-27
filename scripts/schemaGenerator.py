@@ -1114,7 +1114,7 @@ def generate_schema_properties(
                                 )
                                 and (
                                     "preRequisites" not in field
-                                    or field.get("required", False)
+                                    or field.get("required")
                                 )
                             ):
                                 schemaObject["required"].append(field["configKey"])
