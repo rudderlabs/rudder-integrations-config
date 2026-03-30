@@ -744,5 +744,72 @@
       ]
     },
     "result": true
+  },
+  {
+    "testTitle": "propertiesMapping to field with bracket notation containing special characters",
+    "config": {
+      "apiUrl": "http://sample.com/api",
+      "auth": "noAuth",
+      "method": "POST",
+      "format": "JSON",
+      "isDefaultMapping": false,
+      "propertiesMapping": [
+        {
+          "from": "$.properties.key1",
+          "to": "$['@types']"
+        },
+        {
+          "from": "$.properties.key2",
+          "to": "$[\"@context\"]"
+        },
+        {
+          "from": "$.properties.key3",
+          "to": "$['some-key']"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "propertiesMapping to field with invalid path",
+    "config": {
+      "apiUrl": "http://sample.com/api",
+      "auth": "noAuth",
+      "method": "POST",
+      "format": "JSON",
+      "isDefaultMapping": false,
+      "propertiesMapping": [
+        {
+          "from": "$.properties.key1",
+          "to": "invalid@path"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "propertiesMapping.0.to must match pattern \"^(?:$|\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('[^\\s']+'|\"[^\\s\"]+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$)\"",
+      " must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "propertiesMapping to field with space in bracket notation key",
+    "config": {
+      "apiUrl": "http://sample.com/api",
+      "auth": "noAuth",
+      "method": "POST",
+      "format": "JSON",
+      "isDefaultMapping": false,
+      "propertiesMapping": [
+        {
+          "from": "$.properties.key1",
+          "to": "$['key with space']"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "propertiesMapping.0.to must match pattern \"^(?:$|\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('[^\\s']+'|\"[^\\s\"]+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$)\"",
+      " must match \"then\" schema"
+    ]
   }
 ]
