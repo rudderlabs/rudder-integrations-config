@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.148.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.148.0...v1.148.1) (2026-04-01)
+
+
+### Bug Fixes
+
+* remove unsupported cloud mode from device-only destinations ([#2427](https://github.com/rudderlabs/rudder-config-schema/issues/2427)) ([265b81c](https://github.com/rudderlabs/rudder-config-schema/commit/265b81cd0c788f10ef9be4fa693e3c48605db057))
+* **sources:** merge duplicate ReactNative source directories ([#2426](https://github.com/rudderlabs/rudder-config-schema/issues/2426)) ([fcbc157](https://github.com/rudderlabs/rudder-config-schema/commit/fcbc15758774eb058730790f2b19e4e057d96952))
+
 ## [1.148.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.147.1...v1.148.0) (2026-03-24)
 
 
