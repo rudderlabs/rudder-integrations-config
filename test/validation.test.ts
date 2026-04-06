@@ -462,7 +462,7 @@ describe('Account Definition validation tests', () => {
           refreshOAuthToken: true,
         },
       },
-      expected: '["name must match pattern \\"^[A-Z_]+$\\""]',
+      expected: '["name must match pattern \\"^[A-Z0-9_]+$\\""]',
     },
     {
       description: 'invalid optionFields',
