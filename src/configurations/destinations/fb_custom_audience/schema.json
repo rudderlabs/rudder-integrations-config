@@ -2,18 +2,11 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
+    "required": ["rudderAccountId"],
     "properties": {
       "rudderAccountId": {
         "type": "string",
         "pattern": "^.{1,100}$"
-      },
-      "accessToken": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,500})$"
-      },
-      "appSecret": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$"
       },
       "userSchema": {
         "type": "array",
@@ -366,20 +359,6 @@
         }
       }
     },
-    "oneOf": [
-      {
-        "required": ["accessToken"],
-        "not": {
-          "required": ["rudderAccountId"]
-        }
-      },
-      {
-        "required": ["rudderAccountId"],
-        "not": {
-          "required": ["accessToken"]
-        }
-      }
-    ],
     "allOf": [
       {
         "if": {
