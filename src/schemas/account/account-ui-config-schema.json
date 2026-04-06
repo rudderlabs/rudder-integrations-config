@@ -25,7 +25,7 @@
           "description": "Whether this account type is the recommended option when multiple types exist."
         },
         "isOAuth": {
-          "type": "boolean",
+          "const": true,
           "description": "Must be true for OAuth account types. Omit entirely for non-OAuth types."
         },
         "form": {
@@ -62,7 +62,11 @@
                       { "type": "string", "const": "name" },
                       {
                         "type": "array",
-                        "items": { "type": "string" },
+                        "items": [
+                          { "const": "options" },
+                          { "type": "string", "minLength": 1 }
+                        ],
+                        "additionalItems": false,
                         "minItems": 2,
                         "maxItems": 2
                       }
@@ -95,7 +99,18 @@
                   "default": {
                     "description": "Default value for selectField components."
                   }
-                }
+                },
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": { "component": { "const": "selectField" } },
+                      "required": ["component"]
+                    },
+                    "then": {
+                      "required": ["options"]
+                    }
+                  }
+                ]
               }
             }
           },

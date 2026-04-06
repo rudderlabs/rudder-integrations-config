@@ -88,19 +88,21 @@ Add `accountManagementInput` as the **first** field in the group containing the 
 }
 ```
 
-**b)** Replace the top-level `"required": ["<authField>"]` with a `oneOf` mutual-exclusivity constraint (place before `allOf` if present):
+**b)** Keep existing non-auth required fields unchanged. Remove only the migrated auth fields from the top-level `required` array, then add a `oneOf` mutual-exclusivity constraint (place before `allOf` if present). If multiple auth fields are being migrated as a group, include all of them together in each branch:
 ```json
 "oneOf": [
   {
-    "required": ["<authField>"],
+    "required": ["<authField1>", "<authField2>"],
     "not": { "required": ["rudderAccountId"] }
   },
   {
     "required": ["rudderAccountId"],
-    "not": { "required": ["<authField>"] }
+    "not": { "required": ["<authField1>", "<authField2>"] }
   }
 ]
 ```
+
+For a single auth field, use `["<authField>"]` instead of the array above.
 
 ---
 
