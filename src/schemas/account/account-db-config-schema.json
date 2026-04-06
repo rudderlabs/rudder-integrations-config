@@ -5,17 +5,20 @@
   "properties": {
     "name": {
       "type": "string",
-      "pattern": "^[A-Z_]+$"
+      "pattern": "^[A-Z_]+$",
+      "description": "Unique identifier for the account definition in UPPER_SNAKE_CASE, e.g. DESTINATION_AMPLITUDE_API_KEY or DESTINATION_SALESFORCE_BULK_UPLOAD_OAUTH."
     },
     "type": {
-      "type": "string"
+      "type": "string",
+      "description": "The destination key in lowercase, e.g. amplitude or salesforce_bulk_upload."
     },
     "category": {
       "type": "string",
       "enum": ["destination", "source"]
     },
     "authenticationType": {
-      "type": "string"
+      "type": "string",
+      "description": "'oauth' is the only recognized special type — it enables platform-level OAuth flow and token refresh behavior. All other values are free-form labels that describe the credential type for the integration (e.g. 'api_key', 'access_token', 'bearer_token'). Choose a label that reflects what the user provides."
     },
     "config": {
       "type": "object",
@@ -24,21 +27,24 @@
           "type": "array",
           "items": {
             "type": "string"
-          }
-        },
-        "refreshOAuthToken": {
-          "type": "boolean"
-        },
-        "singleAccountConstraintEnabled": {
-          "type": "boolean",
-          "default": false,
-          "description": "If true, only one RudderStack account can be created from a single integration account identity. For example, for facebook_lead_ads_native account, we want to have a single RudderStack account from a Facebook user in a workspace."
+          },
+          "description": "Names of non-secret fields configurable at the account level (e.g. 'environment', 'region'). Note: 'option' means non-secret, not non-required — a field can be in optionFields and still be required. These are validated by optionsSchema."
         },
         "secretFields": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "Names of secret credential fields that are stored encrypted (e.g. 'accessToken', 'apiKey'). These are validated by secretSchema."
+        },
+        "refreshOAuthToken": {
+          "type": "boolean",
+          "description": "Set to true to enable automatic OAuth token refresh. Used when authenticationType is 'oauth'."
+        },
+        "singleAccountConstraintEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, only one RudderStack account can be created from a single integration account identity. For example, for facebook_lead_ads_native we want a single RudderStack account per Facebook user in a workspace."
         }
       },
       "additionalProperties": false

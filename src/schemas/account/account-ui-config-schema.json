@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "description": "Validates the ui-config.json file for an account definition.",
+  "required": ["uiConfig"],
+  "properties": {
+    "uiConfig": {
+      "type": "object",
+      "required": ["name", "icon", "description", "recommended", "form"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Human-readable auth type label shown in the UI, e.g. 'OAuth', 'API Key', 'Access Token'."
+        },
+        "icon": {
+          "type": "string",
+          "description": "Icon identifier. Use 'key' for all account types."
+        },
+        "description": {
+          "type": "string",
+          "description": "Short description of the auth method shown in the UI."
+        },
+        "recommended": {
+          "type": "boolean",
+          "description": "Whether this account type is the recommended option when multiple types exist."
+        },
+        "isOAuth": {
+          "type": "boolean",
+          "description": "Must be true for OAuth account types. Omit entirely for non-OAuth types."
+        },
+        "form": {
+          "type": "object",
+          "required": ["title", "fields"],
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Heading shown above the account creation form."
+            },
+            "fields": {
+              "type": "array",
+              "description": "Form fields. First field must always be the 'Account name' textField with key 'name'. For OAuth, only include account name and option fields — secret credential fields are handled by the OAuth flow. For non-OAuth, include account name followed by secret credential fields and any option fields.",
+              "items": {
+                "type": "object",
+                "required": ["component", "label", "key"],
+                "properties": {
+                  "component": {
+                    "type": "string",
+                    "enum": ["textField", "selectField"],
+                    "description": "Use 'textField' for free-text inputs (credentials, account name). Use 'selectField' for enumerated option fields (e.g. environment, region)."
+                  },
+                  "label": {
+                    "type": "string",
+                    "description": "Display label for the field."
+                  },
+                  "placeholder": {
+                    "type": "string",
+                    "description": "Example value shown as placeholder text."
+                  },
+                  "key": {
+                    "description": "Storage path. Use string 'name' for the account name field. Use array ['options', '<fieldKey>'] for all other fields.",
+                    "oneOf": [
+                      { "type": "string", "const": "name" },
+                      {
+                        "type": "array",
+                        "items": { "type": "string" },
+                        "minItems": 2,
+                        "maxItems": 2
+                      }
+                    ]
+                  },
+                  "secret": {
+                    "type": "boolean",
+                    "description": "Set to true for secret credential fields. Omit for non-secret fields."
+                  },
+                  "optional": {
+                    "type": "boolean",
+                    "description": "Set to true for non-required fields."
+                  },
+                  "note": {
+                    "type": "string",
+                    "description": "Help text shown below the field."
+                  },
+                  "options": {
+                    "type": "array",
+                    "description": "Required for selectField. Each entry has label and value.",
+                    "items": {
+                      "type": "object",
+                      "required": ["label", "value"],
+                      "properties": {
+                        "label": { "type": "string" },
+                        "value": { "type": "string" }
+                      }
+                    }
+                  },
+                  "default": {
+                    "description": "Default value for selectField components."
+                  }
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

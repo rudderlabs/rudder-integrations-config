@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "description": "Validates the schema.json file for an account definition. Use secretSchema for secret credential fields, optionsSchema for non-secret option fields. Both can coexist if needed.",
+  "properties": {
+    "secretSchema": {
+      "type": "object",
+      "description": "Validates secret credential fields stored encrypted (e.g. accessToken, apiKey). Note: 'optionsSchema' means non-secret, not non-required — required/non-required is independent of secret/non-secret.",
+      "required": ["$schema", "type", "properties"],
+      "properties": {
+        "$schema": {
+          "type": "string",
+          "const": "http://json-schema.org/draft-07/schema#"
+        },
+        "required": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Fields that must be present."
+        },
+        "type": {
+          "type": "string",
+          "const": "object"
+        },
+        "properties": {
+          "type": "object",
+          "description": "Each key is a secret field name. Pattern for required fields: '(^\\{\\{.*\\|\\|(.*)\\}\\}$)|^(.{1,500})$' (min length 1). Pattern for non-required fields: '(^\\{\\{.*\\|\\|(.*)\\}\\}$)|^(.{0,200})$' (min length 0).",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["type", "pattern"],
+            "properties": {
+              "type": { "type": "string", "const": "string" },
+              "pattern": { "type": "string" }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "optionsSchema": {
+      "type": "object",
+      "description": "Validates non-secret option fields (e.g. environment, region). Always present for OAuth accounts, even if properties is empty. Can also be present alongside secretSchema for non-OAuth accounts that have non-secret option fields.",
+      "required": ["$schema", "type", "properties"],
+      "properties": {
+        "$schema": {
+          "type": "string",
+          "const": "http://json-schema.org/draft-07/schema#"
+        },
+        "required": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Fields that must be present."
+        },
+        "type": {
+          "type": "string",
+          "const": "object"
+        },
+        "properties": {
+          "type": "object",
+          "description": "Each key is an option field name. Can be empty {} for OAuth accounts with no option fields.",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string" },
+              "enum": { "type": "array" },
+              "default": {}
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
