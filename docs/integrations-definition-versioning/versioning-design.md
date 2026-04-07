@@ -191,7 +191,7 @@ src/configurations/destinations/braze/
 ├── schema.json           # Always latest version
 ├── CHANGELOG.md          # Documents what changed in each version
 ├── migrations/
-│   └── 1-to-2.js        # Forward migration logic (code)
+│   └── 1-to-2.json      # Migration declaration (metadata only; code lives in config backend)
 └── versions/
     └── 1/
         ├── db-config.json   # v1's own metadata (status, deprecation dates) + config
@@ -357,9 +357,9 @@ The deployment script (`scripts/deployToDB.py`) merges all three files into a si
 **How consumers read it:**
 
 - **Version-unaware consumers** (existing) — read top-level fields as before. Nothing changes.
-- **Config backend** (version-aware) — at startup, compiles AJV schemas for each version: top-level `configSchema` for the current version, `versions.{major}.configSchema` for older versions. When validating a config, it selects the compiled schema matching `configVersion`.
+- **Config backend** (version-aware) — at startup, compiles AJV schemas for each version: top-level `configSchema` for the current version, `versions.{major}.configSchema` for older versions. When processing a request, it selects the version-matched schema **and** the version-matched `config` metadata (`secretKeys`, `includeKeys`, `destConfig`, etc.) — not just the schema. This is critical because these lists change between versions (e.g., v1's `secretKeys: ["restApiKey"]` vs v2's `secretKeys: ["apiKey"]`).
 - **Web app** (version-aware) — reads `versions.{major}.uiConfig` when rendering forms for an older version's config. Shows migration banner.
-- **Data plane** — does not read the definition record. It receives the config instance (already version-tagged with `configVersion`) from the config backend. The data plane dispatches to the appropriate version-tagged handler based on `configVersion`.
+- **Data plane** — does not read the definition record. It receives the config instance from the config backend, which includes `configVersion` in the destination config payload. The data plane dispatches to the appropriate version-tagged handler based on `configVersion`.
 
 For integrations that haven't been versioned yet, `configVersion` and `versions` are absent — they implicitly operate as `1.0`.
 
@@ -553,19 +553,47 @@ The key invariant: **existing stored configs with `null` version are always trea
 
 ## Migration Service
 
-Migration runs as part of the existing config backend service — no new microservice needed. The migration code (JS files) lives in this repo alongside the definition it migrates.
+Migration runs as part of the existing config backend service — no new microservice needed. Migration is split across two repos:
 
-### Migration File Format
+- **Declarations** (metadata) live in this repo alongside the definition
+- **Implementations** (code) live in the config backend where they execute
 
-The migration file only contains the transformation logic. It does not declare required inputs or preview output — those are computed by the config backend.
+### Migration Declaration (this repo)
 
-```javascript
-// migrations/1-to-2.js
-module.exports = {
+Each breaking change includes a JSON declaration that describes the migration without containing the transformation code:
+
+```json
+// migrations/1-to-2.json
+{
+  "from": 1,
+  "to": 2,
+  "description": "Added account support, consolidated API key fields"
+}
+```
+
+This declaration serves CI validation — the break detection guardrail checks that every breaking change has a corresponding declaration. The actual migration logic is not here.
+
+### Migration Implementation (config backend)
+
+The transformation code lives in the config backend repo, following a mirrored directory structure:
+
+```
+rudder-config-backend/
+└── src/migrations/destinations/
+    ├── braze/
+    │   ├── 1-to-2.ts          # Migration implementation
+    │   └── 1-to-2.test.ts     # Tests with sample configs
+    ├── am/
+    │   └── 1-to-2.ts
+    └── registry.ts             # Auto-discovers and registers migrations
+```
+
+```typescript
+// src/migrations/destinations/braze/1-to-2.ts
+export const migration = {
   version: { from: 1, to: 2 },
-  description: 'Added account support, consolidated API key fields',
 
-  migrate(config) {
+  migrate(config: Record<string, unknown>) {
     const migrated = { ...config };
 
     // Rename
@@ -582,6 +610,25 @@ module.exports = {
   },
 };
 ```
+
+**Deployment ordering:** Config backend (with migration code) deploys first, then definitions deploy to the database. This mirrors the existing pattern — transformer deploys version-tagged handlers before definitions land.
+
+**Coordination:** A breaking change requires PRs in both repos on the same ticket. CI in this repo validates migration declarations exist; CI in config backend validates implementations exist and pass smoke tests against sample configs.
+
+### Why Migration Code Lives in Config Backend (not this repo)
+
+Migration functions are imperative code that executes in the config backend. Keeping them where they run gives us:
+
+- **Standard TypeScript** — type-safe, debuggable, testable with the config backend's existing test framework
+- **No stored code execution** — no `vm` module, no `eval`, no sandboxing
+- **Access to utilities** — lodash, shared helpers, etc.
+- **This repo stays declarative** — schemas, metadata, and UI config are all data, not code
+
+**Rejected alternatives:**
+
+- **Store migration JS in the definition record** — deploy script serializes code as a string, config backend executes via Node.js `vm` module. Rejected: stored code execution is a security surface; debugging serialized strings is painful; no TypeScript support; can't use utility libraries.
+- **Config backend depends on this repo as npm package** — import migration functions directly. Rejected: tight deployment coupling; config backend must redeploy for every new migration, partially defeating the decoupling this design provides.
+- **Migration files deployed to shared storage (S3)** — deploy script uploads JS to S3, config backend loads at runtime. Rejected: extra infrastructure; cache invalidation complexity; another failure point.
 
 ### How Migration Works
 
@@ -730,7 +777,7 @@ Non-breaking fixes (bug fixes that don't change the contract) can still go to ol
 
 1. Copy current root files (`db-config.json`, `ui-config.json`, `schema.json`) to `versions/1/`
 2. Add `configVersion` to `versions/1/db-config.json`: `{ "version": "1.0", "status": "supported" }`
-3. Create migration file: `migrations/1-to-2.js`
+3. Create migration declaration: `migrations/1-to-2.json` (and corresponding implementation in config backend)
 4. Update root `db-config.json` with `configVersion`: `{ "version": "2.0", "status": "current" }`
 5. Make breaking changes to root `db-config.json`, `ui-config.json` (and regenerate `schema.json`)
 6. Deploy definitions — the deploy script merges `versions/1/` into the definition record under `versions.1`
@@ -752,7 +799,7 @@ Non-breaking fixes (bug fixes that don't change the contract) can still go to ol
 1. After deprecation period → update `versions/1/db-config.json`'s `configVersion.status` to `"deprecated"` (warnings on every operation)
 2. After retirement date → update status to `"retired"` (requests rejected, forced migration required)
 3. Data plane drops `1.0` handling
-4. Optionally clean up `versions/1/` and `migrations/1-to-2.js`
+4. Optionally clean up `versions/1/`, `migrations/1-to-2.json`, and the migration implementation in config backend
 
 ### How Validation Works Per Version
 
@@ -782,9 +829,9 @@ Client sends: { config: { apiKey: "xxx", accountId: "abc" } }  (no version, new 
 
 The CI pipeline enforces versioning discipline automatically:
 
-1. **Break detection** — Diffs schema.json + db-config.json against the previous version. If a breaking change is detected, the PR must include a migration file and a `versions/{major}/` directory for the old version. Otherwise it fails.
+1. **Break detection** — Diffs schema.json + db-config.json against the previous version. If a breaking change is detected, the PR must include a migration declaration (`migrations/X-to-Y.json`) and a `versions/{major}/` directory for the old version. Otherwise it fails.
 2. **Version directory integrity** — Changes to `versions/` directories must be accompanied by a minor version bump in that version's `db-config.json`.
-3. **Migration smoke tests** — Runs each migration file against a set of sample configs, then validates the output against the target version's schema. Ensures `migrate()` produces configs that pass AJV validation (with the exception of fields that require user input).
+3. **Migration declaration validation** — Checks that every breaking change has a corresponding migration declaration in this repo. The actual migration **smoke tests** (running `migrate()` against sample configs and validating output) run in the config backend's CI, where the implementation lives.
 4. **Version bookkeeping** — Checks that every `versions/{major}/` directory has a valid `configVersion` in its `db-config.json`, and that no version directory exists without being referenced.
 5. **Changelog required** — A PR that bumps a major version must include a `CHANGELOG.md` entry.
 6. **Version ceiling** — Rejects PRs that would create more than 2 simultaneously supported major versions.
@@ -826,7 +873,7 @@ The CI pipeline enforces versioning discipline automatically:
 2. **Multi-version storage** — configs stored as-is in their original version, tagged with version
 3. **User-triggered migration** — users explicitly migrate when ready; not batch-forced
 4. **Migration via normal update API** — no implicit migration during updates. Config backend only validates and persists. All clients can use the read-only migrate endpoint to get the migrated config first, then submit a normal update with the complete v2 config.
-5. **Migration as code** — JS migration files contain only `migrate()` transform; used by the migrate endpoint to convert stored configs to target version shape
+5. **Migration split: declarations here, code in config backend** — migration metadata (JSON declarations) live in this repo for CI validation; migration implementations (TypeScript) live in the config backend where they execute. No stored code execution.
 6. **Data plane handles multiple versions** — version-tagged handlers; router dispatches by configVersion
 7. **Forward-only, chainable migrations** — v1→v2→v3; no downgrade
 8. **Integration-level versioning** — not workspace-level; each integration instance carries its own version
@@ -860,6 +907,8 @@ The CI pipeline enforces versioning discipline automatically:
 3. **Deprecation: multi-channel communication** — API headers (RFC 8594) + dashboard banners + email + changelog
 4. **Definition storage: single record with nested versions** — `versions.{major}` nested in the definition record; config backend projects the right version at read time
 5. **Instance storage: `configVersion` column on `destinations` table** — nullable string; `null` = implicit major version `1`
+6. **Version-specific config processing** — config backend uses version-matched `config` metadata (`secretKeys`, `includeKeys`, `destConfig`) when processing requests — not just the version-matched schema
+7. **Data plane `configVersion` delivery** — config backend includes `configVersion` in the destination config payload sent to the data plane, enabling version-tagged handler dispatch
 
 ### Future
 

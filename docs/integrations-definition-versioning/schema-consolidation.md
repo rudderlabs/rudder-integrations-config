@@ -212,7 +212,7 @@ definition.json
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
     "required": ["dataCenter"],
-    "additionalProperties": false,
+    "additionalProperties": true,
     "properties": {
       "restApiKey": {
         "type": "string",
@@ -360,15 +360,7 @@ definition.json
 
       "useNativeSDK": {
         "type": "object",
-        "properties": {
-          "android": { "type": "boolean" },
-          "androidKotlin": { "type": "boolean" },
-          "ios": { "type": "boolean" },
-          "iosSwift": { "type": "boolean" },
-          "web": { "type": "boolean" },
-          "reactnative": { "type": "boolean" },
-          "flutter": { "type": "boolean" }
-        },
+        "additionalProperties": { "type": "boolean" },
         "x-sourceTypeKeyed": true,
         "x-sdkVisible": true
       },
@@ -396,61 +388,25 @@ definition.json
 
       "consentManagement": {
         "type": "object",
-        "properties": {
-          "cloud": { "$ref": "#/$defs/consentArray" },
-          "warehouse": { "$ref": "#/$defs/consentArray" },
-          "android": { "$ref": "#/$defs/consentArray" },
-          "androidKotlin": { "$ref": "#/$defs/consentArray" },
-          "ios": { "$ref": "#/$defs/consentArray" },
-          "iosSwift": { "$ref": "#/$defs/consentArray" },
-          "web": { "$ref": "#/$defs/consentArray" },
-          "unity": { "$ref": "#/$defs/consentArray" },
-          "amp": { "$ref": "#/$defs/consentArray" },
-          "reactnative": { "$ref": "#/$defs/consentArray" },
-          "flutter": { "$ref": "#/$defs/consentArray" },
-          "cordova": { "$ref": "#/$defs/consentArray" },
-          "shopify": { "$ref": "#/$defs/consentArray" }
-        },
+        "additionalProperties": { "$ref": "#/$defs/consentArray" },
         "x-sourceTypeKeyed": true,
         "x-sdkVisible": true
       },
 
       "oneTrustCookieCategories": {
         "type": "object",
-        "properties": {
-          "android": { "$ref": "#/$defs/oneTrustArray" },
-          "ios": { "$ref": "#/$defs/oneTrustArray" },
-          "web": { "$ref": "#/$defs/oneTrustArray" },
-          "unity": { "$ref": "#/$defs/oneTrustArray" },
-          "amp": { "$ref": "#/$defs/oneTrustArray" },
-          "cloud": { "$ref": "#/$defs/oneTrustArray" },
-          "warehouse": { "$ref": "#/$defs/oneTrustArray" },
-          "reactnative": { "$ref": "#/$defs/oneTrustArray" },
-          "flutter": { "$ref": "#/$defs/oneTrustArray" },
-          "cordova": { "$ref": "#/$defs/oneTrustArray" },
-          "shopify": { "$ref": "#/$defs/oneTrustArray" }
-        },
+        "additionalProperties": { "$ref": "#/$defs/oneTrustArray" },
         "x-sourceTypeKeyed": true,
-        "x-sdkVisible": true
+        "x-sdkVisible": true,
+        "x-deprecated": "Use consentManagement instead. Will be removed in a future major version."
       },
 
       "ketchConsentPurposes": {
         "type": "object",
-        "properties": {
-          "android": { "$ref": "#/$defs/ketchArray" },
-          "ios": { "$ref": "#/$defs/ketchArray" },
-          "web": { "$ref": "#/$defs/ketchArray" },
-          "unity": { "$ref": "#/$defs/ketchArray" },
-          "amp": { "$ref": "#/$defs/ketchArray" },
-          "cloud": { "$ref": "#/$defs/ketchArray" },
-          "warehouse": { "$ref": "#/$defs/ketchArray" },
-          "reactnative": { "$ref": "#/$defs/ketchArray" },
-          "flutter": { "$ref": "#/$defs/ketchArray" },
-          "cordova": { "$ref": "#/$defs/ketchArray" },
-          "shopify": { "$ref": "#/$defs/ketchArray" }
-        },
+        "additionalProperties": { "$ref": "#/$defs/ketchArray" },
         "x-sourceTypeKeyed": true,
-        "x-sdkVisible": true
+        "x-sdkVisible": true,
+        "x-deprecated": "Use consentManagement instead. Will be removed in a future major version."
       }
     },
 
@@ -621,7 +577,7 @@ For contrast, here's a cloud-only destination with no source-type-keyed fields:
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
     "required": ["webhookUrl"],
-    "additionalProperties": false,
+    "additionalProperties": true,
     "properties": {
       "webhookUrl": {
         "type": "string",
@@ -697,6 +653,7 @@ JSON Schema Draft-07 allows unknown keywords — AJV ignores them by default. We
 | `x-sdkVisible`      | `boolean` | `includeKeys` / `excludeKeys` arrays | Whether field is sent to SDK in device mode              |
 | `x-immutable`       | `boolean` | `rs-immutable` in schema             | Field cannot be changed after creation                   |
 | `x-sourceTypeKeyed` | `boolean` | `destConfig` per-source-type arrays  | Value is a source-type-keyed object (see next section)   |
+| `x-deprecated`      | `string`  | (new)                                | Deprecation message; field is scheduled for removal      |
 
 ### How consumers derive legacy arrays from annotations
 
@@ -977,3 +934,248 @@ The `config` DB column can be simplified — `destConfig`, `includeKeys`, `exclu
 3. `**connectionConfigSchema` and `connectionUIConfig`\*\* — These are newer DB columns for connection-level config (separate from destination config). They follow the same pattern and should get the same `x-` annotation treatment in a follow-up.
 4. `**$defs` and `$ref` support\*\* — Current schema.json files don't use `$ref`. The consolidated definition.json uses `$ref` to eliminate the 600+ lines of duplicated consent schema. Need to verify AJV supports this with our configuration (it does with Draft-07, but need to confirm with `useDefaults: true`).
 5. **Pre-computing vs. on-demand** — Should the config backend pre-compute `destConfig`-equivalent field lists at definition load time (once) and cache them, or compute per request? Recommendation: pre-compute at load time — it's a simple scan of properties, and definitions change rarely.
+
+---
+
+## Known Flaws in Current Implementation
+
+Issues discovered during codebase research that the consolidation should fix or explicitly acknowledge.
+
+### 1. `additionalProperties` typo — silent validation gap
+
+Two destinations (Braze, Ninetailed) have `"additonalProperties": false` (note the typo: "additonal" not "additional"). AJV ignores unknown keywords, so this has **no effect** — additional properties are silently allowed despite the apparent intent to reject them.
+
+**Zero** schema.json files across all 239 destinations correctly use `"additionalProperties": false`. This means every destination currently allows arbitrary extra properties in config data.
+
+**Impact on consolidation:** The proposal examples must use `"additionalProperties": true` (which matches current behavior) to avoid unintentionally breaking existing configs that may have extra properties. Tightening to `false` should be treated as a **separate, versioned change** per destination — not bundled into the consolidation.
+
+### 2. Consent schema duplicated 237 times
+
+`consentManagement` appears in **237** of 239 destination schemas. Each instance repeats the same sub-schema (provider, consents, resolutionStrategy, allOf conditional) once per source type — typically 13 copies. For Braze alone, the consent schema is ~600 lines of duplicated JSON.
+
+Similarly, `oneTrustCookieCategories` appears in **233** schemas, `ketchConsentPurposes` in a similar count.
+
+**No schema.json file uses `$ref` or `$defs`** — zero occurrences across the entire repo. The consolidation introduces `$defs`/`$ref` to eliminate this duplication within each file, but cross-destination shared definitions are a larger opportunity (see Future-Proofing section).
+
+### 3. `rs-immutable` is an undocumented custom keyword
+
+Only 4 destinations use `"rs-immutable": true` (BigQuery, S3 Datalake, Snowflake, Snowpipe Streaming) — all warehouse types. This is a custom JSON Schema extension without the `x-` prefix, making it inconsistent with the proposed annotation convention.
+
+**Consolidation fix:** Migrate `"rs-immutable": true` to `"x-immutable": true` for consistency. The config backend's immutability check reads this from the schema and should be updated to look for the new key.
+
+### 4. `destConfig.defaultConfig` is misleadingly named
+
+`defaultConfig` doesn't mean "default configuration values." It means "fields that apply to all source types." Every developer encountering this for the first time misreads it. The consolidation eliminates this naming issue entirely — fields without `x-sourceTypeKeyed` are implicitly global.
+
+### 5. `hidden` feature flags have inconsistent shapes
+
+48 destinations use the `hidden` option. Three different shapes exist:
+
+- `"hidden": true` (28 destinations) — always hidden
+- `"hidden": false` (11 destinations) — explicitly visible
+- `"hidden": { "featureFlagName": "AMP_ga4_v2", "featureFlagValue": false }` (9 destinations) — conditionally hidden behind a feature flag
+
+This polymorphic shape is error-prone. The consolidation should normalize this to a consistent structure in `options`.
+
+### 6. `connectionMode` enum values can diverge from `connectionModes`
+
+The top-level `connectionModes` (formerly `supportedConnectionModes`) and the `connectionMode` field in the schema declare the same enum values independently. For example:
+
+- `connectionModes.web: ["cloud", "device", "hybrid"]` (metadata)
+- `connectionMode.properties.web.enum: ["cloud", "device", "hybrid"]` (schema)
+
+If someone edits one but not the other, they diverge silently. **CI must validate** that `connectionMode.properties[sourceType].enum` matches `connectionModes[sourceType]` for every source type.
+
+---
+
+## Future-Proofing Recommendations
+
+Design decisions aimed at keeping the proposal viable for 10+ years.
+
+### 1. Source-type-keyed fields must scale with new source types
+
+**Problem:** Adding a new source type (e.g., `roku`, `visionOS`) currently requires updating the schema of every destination that has source-type-keyed fields. With `connectionMode` in 174 destinations, `consentManagement` in 237, and `oneTrustCookieCategories` in 233, that's an O(239) change for each new source type.
+
+**Solution: Use `additionalProperties` for uniform source-type-keyed fields.**
+
+Fields where every source type has the **same inner schema** (e.g., `useNativeSDK` where every source type is just `{ type: "boolean" }`) should use `additionalProperties` instead of listing each source type:
+
+```json
+"useNativeSDK": {
+  "type": "object",
+  "additionalProperties": { "type": "boolean" },
+  "x-sourceTypeKeyed": true,
+  "x-sdkVisible": true
+}
+```
+
+This validates any source type key without needing to enumerate them. Adding `roku` or `visionOS` requires zero schema changes.
+
+Fields where source types have **different inner schemas** (e.g., `connectionMode` where `web` allows `["cloud", "device", "hybrid"]` but `unity` only allows `["cloud"]`) must still use explicit `properties`. But these are the minority — most source-type-keyed fields are uniform.
+
+**Classification of current source-type-keyed fields:**
+
+| Pattern               | Fields                                                                                                              | Can use `additionalProperties`? |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| Uniform boolean       | `useNativeSDK`, `enableBrazeLogging`, `trackAnonymousUser`, `enablePushNotification`, `allowUserSuppliedJavascript` | Yes                             |
+| Uniform consent array | `consentManagement`, `oneTrustCookieCategories`, `ketchConsentPurposes`                                             | Yes                             |
+| Per-source-type enum  | `connectionMode` (different enums per source type)                                                                  | No — must list explicitly       |
+
+With this approach, adding a new source type only requires updating `connectionMode`-like fields (where enums differ per source type) and the top-level `sourceTypes`/`connectionModes` arrays. The consent and boolean fields work automatically.
+
+### 2. Shared definitions library for cross-destination reuse
+
+**Problem:** Common sub-schemas (consent management, oneTrust, ketch, event filtering) are defined independently in every destination. A bug fix or structural change must be applied 237+ times.
+
+**Solution: A `$defs` library at `src/configurations/shared/` that definitions reference via `$ref`.**
+
+```
+src/configurations/
+├── shared/
+│   └── defs/
+│       ├── consent-management.json    ← consent provider + resolution strategy
+│       ├── onetrust-categories.json   ← OneTrust cookie categories
+│       ├── ketch-purposes.json        ← Ketch consent purposes
+│       └── event-filtering.json       ← eventFilteringOption + white/blacklisted events
+├── destinations/
+│   ├── braze/
+│   │   ├── definition.json            ← references shared/$defs via $ref
+│   │   └── ui-config.json
+```
+
+Each definition.json uses `$ref` to reference shared schemas:
+
+```json
+"consentManagement": {
+  "type": "object",
+  "additionalProperties": { "$ref": "../../../shared/defs/consent-management.json" },
+  "x-sourceTypeKeyed": true
+}
+```
+
+**Trade-off:** External `$ref` requires AJV to resolve file paths. The deploy script can inline `$ref` targets before writing to the DB, keeping runtime behavior unchanged. Alternatively, we bundle shared defs at build time.
+
+### 3. `additionalProperties` policy
+
+The consolidation must establish a clear policy:
+
+| Setting             | When to use                                                      | Risk                                                                                                 |
+| ------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `true` (or omitted) | Most destinations                                                | Existing configs with extra properties continue to work. No protection against typos in field names. |
+| `false`             | Only when explicitly intended and versioned as a breaking change | Rejects unknown properties. Catches typos. But breaks any config with extra fields.                  |
+
+**Recommendation:** Default to `"additionalProperties": true` for all consolidated definitions. Tightening to `false` is a per-destination opt-in that constitutes a breaking change requiring a major version bump.
+
+### 4. Field-level deprecation
+
+Over 10 years, fields will be deprecated. Adding `x-deprecated` enables a graceful lifecycle:
+
+```json
+"oneTrustCookieCategories": {
+  "type": "object",
+  "additionalProperties": { "$ref": "#/$defs/oneTrustArray" },
+  "x-sourceTypeKeyed": true,
+  "x-sdkVisible": true,
+  "x-deprecated": "Use consentManagement instead. Will be removed in v3."
+}
+```
+
+Consumers can:
+
+- **Web app:** Show a deprecation warning in the UI next to the field
+- **CI:** Warn on PRs that add references to deprecated fields
+- **Config backend:** Log a deprecation notice when validating configs that use the field
+- **Terraform/CLI:** Show deprecation warnings in plan output
+
+The field remains in the schema (so existing configs validate), but the annotation signals intent to remove in a future major version.
+
+### 5. Connection-level config integration
+
+The config backend already has `connectionConfigSchema` and `connectionUIConfig` DB columns (added in migration `1720173455052`). Connection-level config is structurally identical to destination-level config but scoped per source-to-destination link rather than per destination.
+
+**Recommendation:** definition.json should include an optional `connectionConfig` block alongside `config`:
+
+```json
+{
+  "config": { ... },
+  "connectionConfig": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": { ... }
+  }
+}
+```
+
+This keeps connection-level schema co-located with destination-level schema in the same file. The deploy script maps `connectionConfig` to the `connectionConfigSchema` DB column, just as `config` maps to `configSchema`.
+
+Currently zero destinations use `connectionConfig` in their definitions (the DB columns exist but aren't populated from integrations-config). This is the right time to define the convention before adoption grows.
+
+### 6. Dynamic and runtime-derived configuration
+
+A small number of destinations (e.g., GA4 V2) use `configData` — a field whose value is derived from OAuth flows or external APIs at runtime, not user input. The `dynamicConfigSupported` field is defined in the config backend entity but currently unused in any destination definition.
+
+**Recommendation:** Reserve the `x-dynamic` annotation for fields whose values are runtime-derived:
+
+```json
+"configData": {
+  "type": "string",
+  "x-dynamic": true,
+  "x-sdkVisible": true
+}
+```
+
+This tells the web app not to render an input field (the value comes from OAuth), and tells the config backend to expect the value from the accounts service rather than user input. This is forward-looking — as more OAuth integrations are added, the convention is ready.
+
+### 7. Feature flag gating normalization
+
+48 destinations use `options.hidden` with inconsistent shapes. The consolidation should normalize:
+
+```json
+"options": {
+  "hidden": false,
+  "featureFlag": {
+    "name": "AMP_ga4_v2",
+    "valueWhenHidden": false
+  },
+  "isBeta": true
+}
+```
+
+Separating `hidden` (boolean) from `featureFlag` (structured object) eliminates the polymorphic type.
+
+### 8. `x-` annotation governance
+
+To prevent annotation sprawl over 10 years, the meta-schema for definition.json should define the **complete list of allowed `x-` annotations** with their types. Any undefined `x-` annotation in a definition.json fails CI validation.
+
+Current allowed set:
+
+- `x-secret` (boolean)
+- `x-sdkVisible` (boolean)
+- `x-immutable` (boolean)
+- `x-sourceTypeKeyed` (boolean)
+- `x-deprecated` (string)
+- `x-dynamic` (boolean)
+
+Adding a new `x-` annotation requires updating the meta-schema — a deliberate, reviewed change.
+
+### 9. Redundancy between `connectionModes` and `connectionMode` schema
+
+The top-level `connectionModes` declares available modes per source type. The `connectionMode` schema property declares the same enum values per source type. This is intentional (metadata vs. validation) but creates a sync risk.
+
+**Two options:**
+
+**Option A: CI validation (recommended).** Keep both, add a CI check that `connectionMode.properties[sourceType].enum === connectionModes[sourceType]` for all source types. Simple, no tooling changes.
+
+**Option B: Generate `connectionMode` schema from `connectionModes`.** The deploy script or build step auto-generates the `connectionMode` property from the top-level `connectionModes` declaration. Eliminates the redundancy but adds a generation step — which is what we're trying to remove.
+
+Recommendation: Option A. The duplication is small, the CI check is trivial, and it avoids re-introducing code generation.
+
+### 10. Schema evolution tooling
+
+Over 10 years of schema changes, teams need:
+
+1. **Schema diff tool** — Given two definition.json versions, produce a human-readable diff of what changed (new fields, removed fields, changed enums, changed defaults, changed validation rules)
+2. **Migration scaffold generator** — Given a schema diff, generate a skeleton `migrate()` function (from the versioning design) that handles the structural changes
+3. **Compatibility checker** — Given old and new schemas, automatically classify the change as safe/breaking/conditional (using the taxonomy from change-scenarios.md)
+
+These tools don't need to exist at consolidation time, but the definition.json structure should be designed to make them easy to build. Using standard JSON Schema (with well-known `x-` extensions) ensures we can leverage the JSON Schema ecosystem for diffing and validation.
