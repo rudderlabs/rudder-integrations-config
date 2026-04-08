@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.149.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.148.2...v1.149.0) (2026-04-07)
+
+
+### Features
+
+* **braze:** remove feature flag for platform-specific API keys ([#2297](https://github.com/rudderlabs/rudder-config-schema/issues/2297)) ([4559743](https://github.com/rudderlabs/rudder-config-schema/commit/45597439e30339d1d092c424dfa135e07719e352))
+* **fb_custom_audience:** replace adAccountId text input with dynamic dropdown ([#2381](https://github.com/rudderlabs/rudder-config-schema/issues/2381)) ([7327653](https://github.com/rudderlabs/rudder-config-schema/commit/7327653b5d48ac551b02a3dd0e704cdfe1d7d6e8))
+
+
+### Bug Fixes
+
+* **http:** propertiesMapping.to rejects valid JSONPath with special chars in bracket notation ([#2421](https://github.com/rudderlabs/rudder-config-schema/issues/2421)) ([09d9fc0](https://github.com/rudderlabs/rudder-config-schema/commit/09d9fc0ae94d5020d4cf077d8583f3b5bea47454))
+* sync behaviour for linkedin audience ([#2417](https://github.com/rudderlabs/rudder-config-schema/issues/2417)) ([eb09148](https://github.com/rudderlabs/rudder-config-schema/commit/eb09148d66824eda461bd33082347cf7fed5e635))
+* update supported connection modes for LinkedIn Insight Tag destination ([#2412](https://github.com/rudderlabs/rudder-config-schema/issues/2412)) ([b3f3573](https://github.com/rudderlabs/rudder-config-schema/commit/b3f3573fc6cac945c61d5d17db3516e4aa3913b0))
+* **vuln:** remediate GHA script injection ([#2419](https://github.com/rudderlabs/rudder-config-schema/issues/2419)) ([7a1ee2e](https://github.com/rudderlabs/rudder-config-schema/commit/7a1ee2e082dbbe574508ef659b3379e6ddc822c1))
+
 ### [1.148.2](https://github.com/rudderlabs/rudder-config-schema/compare/v1.148.1...v1.148.2) (2026-04-06)
 
 
