@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-import requests
 import json
 import os
 import sys
 import jsondiff
 import argparse
-from constants import CONFIG_DIR, REQUEST_TIMEOUT
+from constants import CONFIG_DIR
 from utils import (
-    get_config_definition,
+    get_all_config_definitions,
     get_file_content,
     update_config_definition,
     create_config_definition,
@@ -115,12 +114,7 @@ AUTH = (USERNAME, PASSWORD)
 # UTIL METHODS
 
 
-def get_persisted_store(base_url, selector, verbose=False):
-    response = get_config_definition(base_url, selector, auth=AUTH, verbose=verbose)
-    return json.loads(response.text)
-
-
-def update_diff_db(selector, item_name=None, dry_run=False, verbose=False):
+def update_diff_db(selector, persisted_by_name, item_name=None, dry_run=False, verbose=False):
     final_report = []
 
     ## data sets
@@ -147,13 +141,11 @@ def update_diff_db(selector, item_name=None, dry_run=False, verbose=False):
         directory = f"./{CONFIG_DIR}/{selector}s/{item}"
         updated_data = get_file_content(directory)
 
-        persisted_data = get_config_definition(
-            CONTROL_PLANE_URL, selector, updated_data["name"], AUTH, verbose=verbose
-        )
+        persisted_data = persisted_by_name.get(updated_data["name"])
 
-        if persisted_data.status_code == 200:
+        if persisted_data is not None:
             diff = jsondiff.diff(
-                json.loads(persisted_data.text), updated_data, marshal=True
+                persisted_data, updated_data, marshal=True
             )
             # ignore the $delete - values present in DB but missing in files. Anyways this doesn't get reflected in DB as keys are missing in files itself.
             # Best practice is to make sure all keys are maintained in the config files irrespective of them being null.
@@ -213,12 +205,9 @@ def get_formatted_json(data):
     return json.dumps(data, indent=2)
 
 
-def get_stale_data(selector, report, dry_run=False, verbose=False):
+def get_stale_data(persisted_store, report):
     stale_config_report = []
-    persisted_data_set = get_persisted_store(
-        CONTROL_PLANE_URL, selector, verbose=verbose
-    )
-    persisted_items = [item["name"] for item in persisted_data_set]
+    persisted_items = [item["name"] for item in persisted_store]
     file_items = [item["name"] for item in report]
 
     for item in persisted_items:
@@ -271,6 +260,14 @@ def log_execution_plan():
     print("=" * 70)
 
 
+def is_failed(item):
+    """Check if a report item represents a failed API call."""
+    status = item.get("status")
+    if isinstance(status, int):
+        return status < 200 or status > 300
+    return False
+
+
 def print_summary(selector, final_report, dry_run=False):
     print("\n")
     print("#" * 50)
@@ -280,8 +277,10 @@ def print_summary(selector, final_report, dry_run=False):
         print(f"{selector.capitalize()} Summary - What Happened")
     print("#" * 50)
 
-    creates = [item for item in final_report if "create" in item["action"]]
-    updates = [item for item in final_report if "update" in item["action"]]
+    failures = [item for item in final_report if is_failed(item)]
+    failed_names = {item["name"] for item in failures}
+    creates = [item for item in final_report if "create" in item["action"] and item["name"] not in failed_names]
+    updates = [item for item in final_report if "update" in item["action"] and item["name"] not in failed_names]
     no_changes = [item for item in final_report if item["action"] == "N/A"]
 
     print(f"📊 Total configurations processed: {len(final_report)}")
@@ -293,6 +292,13 @@ def print_summary(selector, final_report, dry_run=False):
         print(f"🆕 CREATED: {len(creates)} new records")
         print(f"🔄 UPDATED: {len(updates)} existing records")
         print(f"✅ No changes needed: {len(no_changes)} records")
+        if failures:
+            print(f"❌ FAILED: {len(failures)} records")
+
+    if failures:
+        print(f"\n❌ Records that FAILED:")
+        for item in failures:
+            print(f"   - {item['name']} (action={item['action']}, status={item['status']})")
 
     if creates:
         if dry_run:
@@ -317,7 +323,10 @@ def print_summary(selector, final_report, dry_run=False):
         print(f"👤 User: {USERNAME}")
         print(f"🔍 To run this script in normal mode, use the --no-dry-run flag")
     else:
-        print(f"\n✅ All changes have been applied to the database!")
+        if failures:
+            print(f"\n❌ Some changes failed! Review the errors above.")
+        else:
+            print(f"\n✅ All changes have been applied to the database!")
         print(f"🌐 Database: {CONTROL_PLANE_URL}")
         print(f"👤 User: {USERNAME}")
     print("#" * 50)
@@ -343,7 +352,14 @@ if __name__ == "__main__":
         print(
             "Running {} Definitions Updates{}".format(selector.capitalize(), mode_text)
         )
-        final_report = update_diff_db(selector, ITEM_NAME, DRY_RUN, VERBOSE)
+
+        # Single batch API call to fetch all definitions for this selector
+        persisted_store = get_all_config_definitions(
+            CONTROL_PLANE_URL, selector, auth=AUTH, verbose=VERBOSE
+        )
+        persisted_by_name = {item["name"]: item for item in persisted_store}
+
+        final_report = update_diff_db(selector, persisted_by_name, ITEM_NAME, DRY_RUN, VERBOSE)
 
         # Always show summary first (most important for users)
         print_summary(selector, final_report, DRY_RUN)
@@ -370,7 +386,7 @@ if __name__ == "__main__":
                     f.write(f"{'='*50}\n")
                     f.write(
                         get_formatted_json(
-                            get_stale_data(selector, final_report, DRY_RUN)
+                            get_stale_data(persisted_store, final_report)
                         )
                         + "\n\n"
                     )
