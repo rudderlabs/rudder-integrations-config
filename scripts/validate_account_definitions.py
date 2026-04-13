@@ -167,9 +167,7 @@ def validate_account_field_coverage(dest_dir):
     dest_config = load_json_file(dest_dir / "db-config.json")
     cfg = dest_config.get("config", {})
     dest_secret_keys = set(cfg.get("secretKeys", []))
-    dest_config_fields = set()
-    for fields in cfg.get("destConfig", {}).values():
-        dest_config_fields.update(fields)
+    dest_config_fields = set(cfg.get("destConfig", {}).get("defaultConfig", []))
 
     success = True
 
