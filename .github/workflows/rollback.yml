@@ -7,13 +7,19 @@ jobs:
     uses: ./.github/workflows/validate-actor.yml
     with:
       team_names: 'integrations,data-management,sdk_team'
-    secrets: inherit
+    secrets:
+      RELEASE_PRIVATE_KEY: ${{ secrets.RELEASE_PRIVATE_KEY }}
 
   deploy-tag:
     needs: validate-actor
     name: Rollback Production To a Tag
     uses: ./.github/workflows/deploy-to-prod.yml
-    secrets: inherit
+    secrets:
+      PROD_USERNAME: ${{ secrets.PROD_USERNAME }}
+      PROD_PASSWORD: ${{ secrets.PROD_PASSWORD }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_RELEASE_CHANNEL_ID: ${{ secrets.SLACK_RELEASE_CHANNEL_ID }}
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
     # Only allow to be deployed from tags and main
     # Only allow specific actors to trigger
