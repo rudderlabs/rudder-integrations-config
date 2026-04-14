@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# Pre-commit hook to validate account definitions
-# This script checks that all rudderAccountId values in destination configs
-# have corresponding account configuration files.
+# Validates account definitions for any destination whose files changed.
+# See scripts/validate_account_definitions.py for the full list of checks performed.
 
 # Get the list of changed files
 changed_files=$(git diff --name-only origin/develop)
@@ -47,8 +46,7 @@ for dest in "${destinations[@]}"; do
 done
 
 if [ $exit_code -ne 0 ]; then
-  echo "❌ Validation failed. Please fix the issues before committing."
-  echo "   Make sure all rudderAccountId values in destination configs have corresponding account configurations."
+  echo "❌ Account validation failed. Please fix the issues above."
 else
   echo "✅ Account validation passed."
 fi
