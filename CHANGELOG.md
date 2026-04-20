@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.150.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.149.1...v1.150.0) (2026-04-20)
+
+
+### Features
+
+* add new region and datacenters to Moengage ([#2455](https://github.com/rudderlabs/rudder-config-schema/issues/2455)) ([54296be](https://github.com/rudderlabs/rudder-config-schema/commit/54296be222481d9bd026eadd6cd2ea69de5135c2))
+
 ### [1.149.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.149.0...v1.149.1) (2026-04-10)
 
 
