@@ -2,6 +2,17 @@ name: Deploy Configurations To Production DB
 
 on:
   workflow_call:
+    secrets:
+      PROD_USERNAME:
+        required: true
+      PROD_PASSWORD:
+        required: true
+      SLACK_BOT_TOKEN:
+        required: true
+      SLACK_RELEASE_CHANNEL_ID:
+        required: true
+      CODECOV_TOKEN:
+        required: false # report-code-coverage only runs on 'push' events, never on workflow_call
   push:
     branches:
       - main
@@ -16,7 +27,8 @@ jobs:
     name: Report Code Coverage
     if: github.event_name == 'push'
     uses: ./.github/workflows/report-code-coverage.yml
-    secrets: inherit
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   extract-version:
     name: Extract Deployment Version

@@ -59,9 +59,6 @@ def validate_destination_accounts(destination_name):
             "supportedAccountDefinitions", {}
         )
         if not account_definitions:
-            print(
-                f"Warning: No supportedAccountDefinitions found in {main_config_path}"
-            )
             return True  # No accounts to validate
 
         required_account_ids = []
@@ -143,31 +140,103 @@ def validate_destination_accounts(destination_name):
     return True
 
 
-def validate_all_destinations():
-    """Validate all destinations in the repository."""
-    base_dir = Path("src/configurations/destinations")
+def validate_account_field_coverage(dest_dir):
+    """
+    Validate that for each non-oauth account definition:
+      1. All fields (secretFields + optionFields) are present in the destination's destConfig.
+      2. All secretFields are present in the destination's secretKeys.
+
+    The workspace config API (v1) filters its response based on the fields declared
+    in the destination definition's destConfig. If an account field is missing from
+    destConfig, it will be silently dropped from the API response.
+
+    OAuth accounts are excluded because their secrets are managed by the OAuth flow,
+    not through destConfig.
+
+    Args:
+        dest_dir: Path to the destination directory.
+
+    Returns:
+        bool: True if validation passes, False otherwise
+    """
+    accounts_dir = dest_dir / "accounts"
+
+    if not accounts_dir.exists():
+        return True  # No accounts to validate
+
+    dest_config = load_json_file(dest_dir / "db-config.json")
+    cfg = dest_config.get("config", {})
+    dest_secret_keys = set(cfg.get("secretKeys", []))
+    dest_config_fields = set(cfg.get("destConfig", {}).get("defaultConfig", []))
+
     success = True
 
-    for dest_dir in base_dir.glob("*"):
-        if dest_dir.is_dir() and (dest_dir / "db-config.json").exists():
-            dest_name = dest_dir.name
-            if not validate_destination_accounts(dest_name):
-                success = False
+    for account_dir in accounts_dir.glob("*"):
+        if not account_dir.is_dir():
+            continue
 
+        account_config = load_json_file(account_dir / "db-config.json")
+
+        if account_config.get("authenticationType") == "oauth":
+            continue
+
+        account_name = account_config["name"]
+        account_cfg = account_config.get("config", {})
+        secret_fields = account_cfg.get("secretFields", [])
+        option_fields = account_cfg.get("optionFields", [])
+        all_fields = secret_fields + option_fields
+
+        missing_from_dest_config = [f for f in all_fields if f not in dest_config_fields]
+        if missing_from_dest_config:
+            print(
+                f"\nERROR: Account '{account_name}' has fields missing from destination "
+                f"'{dest_dir.name}' destConfig:"
+            )
+            for field in missing_from_dest_config:
+                print(f"  - {field}")
+            print(
+                f"\n  The workspace config API filters its response based on destConfig. "
+                f"Add the missing field(s) to '{dest_dir.name}' destConfig to prevent "
+                f"them from being silently dropped from the API response."
+            )
+            success = False
+
+        missing_from_secret_keys = [f for f in secret_fields if f not in dest_secret_keys]
+        if missing_from_secret_keys:
+            print(
+                f"\nERROR: Account '{account_name}' has secretFields missing from destination "
+                f"'{dest_dir.name}' secretKeys:"
+            )
+            for field in missing_from_secret_keys:
+                print(f"  - {field}")
+            print(
+                f"\n  Add the missing field(s) to '{dest_dir.name}' secretKeys."
+            )
+            success = False
+
+    return success
+
+
+def validate_destinations(dest_dirs):
+    """Run all validations for the given destination directories."""
+    success = True
+    for dest_dir in dest_dirs:
+        if not validate_destination_accounts(dest_dir.name):
+            success = False
+        if not validate_account_field_coverage(dest_dir):
+            success = False
     return success
 
 
 def main():
     """Main entry point."""
+    base_dir = Path("src/configurations/destinations")
     if len(sys.argv) > 1:
-        # Validate specific destination
-        destination_name = sys.argv[1]
-        success = validate_destination_accounts(destination_name)
+        dest_dirs = [base_dir / sys.argv[1]]
     else:
-        # Validate all destinations
-        success = validate_all_destinations()
+        dest_dirs = [d for d in base_dir.glob("*") if d.is_dir() and (d / "db-config.json").exists()]
 
-    sys.exit(0 if success else 1)
+    sys.exit(0 if validate_destinations(dest_dirs) else 1)
 
 
 if __name__ == "__main__":
