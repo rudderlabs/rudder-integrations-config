@@ -15,7 +15,8 @@ jobs:
     name: Report Code Coverage
     if: github.event_name == 'push'
     uses: ./.github/workflows/report-code-coverage.yml
-    secrets: inherit
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   deploy-to-dev:
     name: Deployment To Development DB
