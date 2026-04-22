@@ -236,7 +236,13 @@ def get_all_config_definitions(base_url, selector, auth=None, verbose=False):
     if verbose:
         log_api_request("GET", request_url, auth=auth, response=response, to_file=True)
 
-    return response.json()
+    response.raise_for_status()
+    payload = response.json()
+    if not isinstance(payload, list):
+        raise ValueError(
+            f"Expected a list from {request_url}, got {type(payload).__name__}"
+        )
+    return payload
 
 
 def get_file_content(directory):

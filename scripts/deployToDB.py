@@ -245,9 +245,8 @@ def log_execution_plan():
 
     if DRY_RUN:
         print("\nDRY RUN MODE ACTIVE:")
-        print("- NO database connections will be made")
-        print("- NO data will be modified")
-        print("- Only local configurations will be analyzed")
+        print("- Read-only API calls will be made to compute the diff")
+        print("- NO write operations will be performed")
         print("- Reports will show what WOULD be changed")
 
     if VERBOSE:
