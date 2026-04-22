@@ -31,14 +31,19 @@ jobs:
     permissions: {}
     steps:
       - name: Trigger Post Deployment Tests
-        uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0 # v3.0.0
-        with:
-          token: ${{ secrets.PAT }}
-          repository: rudderlabs/rudder-client-side-test
-          event-type: post-deployment-integration-tests
-          client-payload: |-
-            {
-              "environment": "staging",
-              "ref": "${{ github.event.pull_request.head.ref }}",
-              "tags": "@integrations-config and @staging"
-            }
+        env:
+          GH_TOKEN: ${{ secrets.PAT }}
+        run: |
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            https://api.github.com/repos/rudderlabs/rudder-api-test/actions/workflows/manual.yaml/dispatches \
+            -d '{
+              "ref":"main",
+              "inputs":{
+                "environment":"staging",
+                "tag":"@custom",
+                "custom_tag":"@retl and @enterprise"
+              }
+            }'
