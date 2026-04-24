@@ -147,23 +147,17 @@ def update_diff_db(selector, persisted_by_name, item_name=None, dry_run=False, v
             diff = jsondiff.diff(
                 persisted_data, updated_data, marshal=True
             )
-            # `$delete` = keys present in DB but missing from the local file. Normally we can
-            # ignore it because the full local file is POSTed (not the diff), so missing keys
-            # fall out naturally on the server. EXCEPTION: when `$delete` is the ONLY diff key,
-            # len(diff) == 0 gates the update call off entirely — and the DB keeps the stale
-            # value forever.
-            #
-            # We care about this for `options` (typically `{isBeta: true}`): when a file
-            # intentionally removes `options`, we want that to propagate to the DB. Keep
-            # `$delete: ['options']` so the change-detection gate opens; drop other `$delete`
-            # entries as noise.
+            # If the local file has dropped `options` but the DB still has a meaningful value
+            # (typically `{isBeta: true}`), explicitly null it in the payload. Without this,
+            # jsondiff reports the removal only under `$delete` — and when `$delete` is the
+            # only diff key, the `len(diff) > 0` gate skips the update call entirely, leaving
+            # the DB with the stale value forever. Writing `options: null` produces a real
+            # diff entry, opens the gate, and the server explicitly clears the field.
             delete_fields = diff.get("$delete", None)
-            if delete_fields:
-                options_value = persisted_data.get('options')
-                if 'options' in delete_fields and options_value:
-                    diff["$delete"] = ['options']
-                else:
-                    diff.pop("$delete", None)
+            if delete_fields and 'options' in delete_fields and persisted_data.get('options'):
+                diff["options"] = None
+                updated_data["options"] = None
+            diff.pop("$delete", None)
 
             if len(diff.keys()) > 0:  # changes exist
                 status, _ = update_config_definition(
