@@ -210,6 +210,41 @@ def get_config_definition(base_url, selector, name="", auth=None, verbose=False)
     return response
 
 
+def get_all_config_definitions(base_url, selector, auth=None, verbose=False):
+    """Fetch all definitions for a selector in a single batch API call.
+
+    Args:
+        base_url (str): control plane URL.
+        selector (str): 'destination' or 'source'.
+        auth (tuple): (username, password).
+        verbose (bool): enable debug logging.
+
+    Returns:
+        list: list of definition dicts from the API.
+    """
+    request_url = f"{base_url}/{selector}-definitions"
+
+    if verbose:
+        log_api_request("GET", request_url, auth=auth, to_file=True)
+
+    response = requests.get(
+        request_url,
+        timeout=REQUEST_TIMEOUT,
+        auth=auth,
+    )
+
+    if verbose:
+        log_api_request("GET", request_url, auth=auth, response=response, to_file=True)
+
+    response.raise_for_status()
+    payload = response.json()
+    if not isinstance(payload, list):
+        raise ValueError(
+            f"Expected a list from {request_url}, got {type(payload).__name__}"
+        )
+    return payload
+
+
 def get_file_content(directory):
     file_selectors = ["db-config.json", "ui-config.json", "schema.json"]
 
