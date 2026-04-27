@@ -41,12 +41,15 @@ jobs:
           egress-policy: audit
 
       - name: Validate Production Deployment
+        env:
+          DEPLOY_URL: ${{ inputs.deploy_url }}
+          REF: ${{ inputs.ref }}
         run: |
-          if [[ "${{ inputs.deploy_url }}" == "https://api.rudderstack.com" ]]; then
-            if [[ "${{ inputs.ref }}" != "main" ]]; then
+          if [[ "$DEPLOY_URL" == "https://api.rudderstack.com" ]]; then
+            if [[ "$REF" != "main" ]]; then
               echo "❌ Error: Production deployments can only be made from the 'main' branch"
-              echo "Current branch: ${{ inputs.ref }}"
-              echo "Production URL: ${{ inputs.deploy_url }}"
+              echo "Current branch: $REF"
+              echo "Production URL: $DEPLOY_URL"
               exit 1
             fi
             echo "✅ Production deployment validation passed - deploying from main branch"
