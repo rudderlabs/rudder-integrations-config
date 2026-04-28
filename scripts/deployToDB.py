@@ -15,10 +15,27 @@ from utils import (
 
 ALL_SELECTORS = ["destination", "source"]
 BLACK_LIST_DESTINATIONS = ["RUDDER_TEST"]
-# Top-level fields that map to nullable DB columns. Keep in sync with the DDL
-# for `destination_definitions` / `source_definitions`. See
-# `normalize_nullable_column_deletions` for why this list matters.
+# Top-level fields that map to nullable DB columns and ARE actively maintained
+# in local config files. When removed from a local file, we explicitly null them
+# in the payload so the server clears the column. See
+# `apply_nullable_column_deletions` for the mechanism.
 NULLABLE_COLUMN_FIELDS = ("options", "uiConfig", "configSchema")
+# Fields ignored during change detection. Includes server-managed metadata
+# (`id`, `createdAt`, `updatedAt`) that always appears in the diff because it's
+# present in API responses but absent from local files; AND nullable columns
+# we don't currently maintain in version control (`category`, `responseRules`,
+# `connectionUIConfig`, `connectionConfigSchema`). If any of those columns
+# starts being managed locally, move it to NULLABLE_COLUMN_FIELDS instead —
+# otherwise its deletion will silently never propagate to the DB.
+METADATA_FIELDS = (
+    "id",
+    "createdAt",
+    "updatedAt",
+    "category",
+    "responseRules",
+    "connectionUIConfig",
+    "connectionConfigSchema",
+)
 
 
 def get_command_line_arguments():
@@ -118,26 +135,46 @@ AUTH = (USERNAME, PASSWORD)
 # UTIL METHODS
 
 
-def normalize_nullable_column_deletions(diff, persisted_data, updated_data):
-    """Convert top-level deletions of nullable DB-column fields into explicit nulls.
+def apply_nullable_column_deletions(diff, persisted_data, updated_data):
+    """For nullable column fields listed in `$delete` whose persisted value is
+    non-null/non-empty, set them to None in the payload so the server clears
+    the column explicitly when posting the full local file. 
+    Skips fields whose persisted value is already null/empty: posting the
+    file without those keys would be a no-op against the DB, so there's
+    nothing to propagate.
 
-    jsondiff reports keys removed from the local file under `$delete`. When that's
-    the only diff key, the `len(diff) > 0` gate in update_diff_db skips the API
-    call and the DB retains the stale value forever. For fields that map to
-    nullable DB columns (NULLABLE_COLUMN_FIELDS), set the field to None on both
-    the diff and the payload — producing a real diff entry, opening the gate, and
-    making the server clear the column explicitly. `$delete` is always popped
-    afterwards; other entries are ignored by design (the full local file is
-    posted, so missing keys fall out naturally on the server).
-
-    Mutates `diff` and `updated_data` in place.
+    Mutates `updated_data` in place.
     """
     delete_fields = diff.get("$delete") or []
     for field in NULLABLE_COLUMN_FIELDS:
         if field in delete_fields and persisted_data.get(field):
-            diff[field] = None
             updated_data[field] = None
-    diff.pop("$delete", None)
+
+
+def has_meaningful_changes(diff, persisted_data):
+    """Return True if `diff` contains changes that need to be posted to the DB.
+
+    Two filters applied to `$delete` entries and top-level keys:
+    - `METADATA_FIELDS`: not-maintained-through-file columns; their
+      presence in the diff is structural noise, not a real change.
+    - `NULLABLE_COLUMN_FIELDS` whose persisted value is already null/empty:
+      posting the file without these keys wouldn't change DB state, so
+      treating them as meaningful would trigger an unnecessary API call on
+      every deploy after a field is nulled out.
+    """
+    if not diff:
+        return False
+    for key, val in diff.items():
+        if key == "$delete":
+            for field in val:
+                if field in METADATA_FIELDS:
+                    continue
+                if field in NULLABLE_COLUMN_FIELDS and not persisted_data.get(field):
+                    continue
+                return True
+        elif key not in METADATA_FIELDS:
+            return True
+    return False
 
 
 def update_diff_db(selector, persisted_by_name, item_name=None, dry_run=False, verbose=False):
@@ -173,9 +210,9 @@ def update_diff_db(selector, persisted_by_name, item_name=None, dry_run=False, v
             diff = jsondiff.diff(
                 persisted_data, updated_data, marshal=True
             )
-            normalize_nullable_column_deletions(diff, persisted_data, updated_data)
+            apply_nullable_column_deletions(diff, persisted_data, updated_data)
 
-            if len(diff.keys()) > 0:  # changes exist
+            if has_meaningful_changes(diff, persisted_data):
                 status, _ = update_config_definition(
                     CONTROL_PLANE_URL,
                     selector,
