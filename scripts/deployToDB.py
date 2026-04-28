@@ -128,7 +128,7 @@ def normalize_nullable_column_deletions(diff, persisted_data, updated_data):
     the diff and the payload — producing a real diff entry, opening the gate, and
     making the server clear the column explicitly. `$delete` is always popped
     afterwards; other entries are ignored by design (the full local file is
-    POSTed, so missing keys fall out naturally on the server).
+    posted, so missing keys fall out naturally on the server).
 
     Mutates `diff` and `updated_data` in place.
     """
