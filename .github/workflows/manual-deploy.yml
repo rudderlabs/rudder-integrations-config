@@ -6,12 +6,21 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
-      deploy_url:
-        description: 'Deploy URL'
+      environment:
+        description: 'Target environment'
         required: true
-        type: string
+        type: choice
+        options:
+          - dev
+          - staging
+          - production
+      dry_run:
+        description: 'Dry run (preview only, no changes applied)'
+        required: false
+        type: boolean
+        default: true
       notify:
-        description: 'Send Slack notification'
+        description: 'Send Slack notification (ignored when dry run is enabled)'
         required: false
         type: boolean
         default: true
@@ -42,32 +51,42 @@ jobs:
 
       - name: Validate Production Deployment
         env:
-          DEPLOY_URL: ${{ inputs.deploy_url }}
+          ENVIRONMENT: ${{ inputs.environment }}
+          DRY_RUN: ${{ inputs.dry_run }}
           REF: ${{ inputs.ref }}
         run: |
-          if [[ "$DEPLOY_URL" == "https://api.rudderstack.com" ]]; then
+          if [[ "$ENVIRONMENT" == "production" && "$DRY_RUN" == "false" ]]; then
             if [[ "$REF" != "main" ]]; then
               echo "❌ Error: Production deployments can only be made from the 'main' branch"
               echo "Current branch: $REF"
-              echo "Production URL: $DEPLOY_URL"
               exit 1
             fi
             echo "✅ Production deployment validation passed - deploying from main branch"
           else
-            echo "ℹ️  Non-production deployment - branch validation skipped"
+            echo "ℹ️  Branch validation skipped (environment=$ENVIRONMENT, dry_run=$DRY_RUN)"
           fi
 
   deploy:
     needs: validate
     uses: ./.github/workflows/deploy.yml
     with:
-      deploy_url: ${{ inputs.deploy_url }}
+      deploy_url: >-
+        ${{ inputs.environment == 'production' && 'https://api.rudderstack.com'
+         || inputs.environment == 'staging' && 'https://api.staging.rudderlabs.com'
+         || 'https://api.dev.rudderlabs.com' }}
       notify: ${{ inputs.notify }}
       version: ${{ inputs.version }}
       ref: ${{ inputs.ref }}
       verbose: ${{ inputs.verbose }}
+      dry_run: ${{ inputs.dry_run }}
     secrets:
-      API_USERNAME: ${{ secrets.API_USERNAME }}
-      API_PASSWORD: ${{ secrets.API_PASSWORD }}
+      API_USERNAME: >-
+        ${{ inputs.environment == 'production' && secrets.PROD_USERNAME
+         || inputs.environment == 'staging' && secrets.STAGING_USERNAME
+         || secrets.DEV_USERNAME }}
+      API_PASSWORD: >-
+        ${{ inputs.environment == 'production' && secrets.PROD_PASSWORD
+         || inputs.environment == 'staging' && secrets.STAGING_PASSWORD
+         || secrets.DEV_PASSWORD }}
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       SLACK_RELEASE_CHANNEL_ID: ${{ secrets.SLACK_RELEASE_CHANNEL_ID }}

@@ -16,6 +16,9 @@ on:
       verbose:
         type: boolean
         default: false
+      dry_run:
+        type: boolean
+        default: false
     secrets:
       API_USERNAME:
         required: true
@@ -83,8 +86,9 @@ jobs:
           API_USER: ${{ secrets.API_USERNAME }}
           API_PASSWORD: ${{ secrets.API_PASSWORD }}
           DEPLOY_URL: ${{ inputs.deploy_url }}
+          DRY_RUN_FLAG: ${{ inputs.dry_run && '--dry-run' || '--no-dry-run' }}
         run: |
-          python scripts/deployAccountsToDB.py --no-dry-run "$DEPLOY_URL"
+          python scripts/deployAccountsToDB.py "$DRY_RUN_FLAG" "$DEPLOY_URL"
         continue-on-error: false
 
       - name: Deploy Destination & Source Definitions To DB
@@ -92,15 +96,16 @@ jobs:
           API_USER: ${{ secrets.API_USERNAME }}
           API_PASSWORD: ${{ secrets.API_PASSWORD }}
           DEPLOY_URL: ${{ inputs.deploy_url }}
+          DRY_RUN_FLAG: ${{ inputs.dry_run && '--dry-run' || '--no-dry-run' }}
         run: |
-          python scripts/deployToDB.py --no-dry-run "$DEPLOY_URL"
+          python scripts/deployToDB.py "$DRY_RUN_FLAG" "$DEPLOY_URL"
 
       - name: Notify Slack Channel
         id: slack
         # Pinned to v2.1.1 → commit 91efab103c0de0a537f72a35f6b8cda0ee76bf0a
         uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a
         continue-on-error: true
-        if: inputs.notify == true
+        if: inputs.notify == true && inputs.dry_run == false
         env:
           PROJECT_NAME: 'Rudder Integrations Config'
           RELEASES_URL: 'https://github.com/rudderlabs/rudder-integrations-config/releases/tag/'
