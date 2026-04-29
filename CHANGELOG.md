@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.151.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.150.1...v1.151.0) (2026-04-29)
+
+
+### Features
+
+* **lotame_mobile:** deprecate lotame mobile destination ([#2444](https://github.com/rudderlabs/rudder-config-schema/issues/2444)) ([e268a87](https://github.com/rudderlabs/rudder-config-schema/commit/e268a87d73a6fdda0da6c59d552734c078d35943))
+
+
+### Bug Fixes
+
+* update deployToDB script to consider options deletion as an update ([#2464](https://github.com/rudderlabs/rudder-config-schema/issues/2464)) ([b21d276](https://github.com/rudderlabs/rudder-config-schema/commit/b21d27660614859bedca72ce6227f9cbb48cf3f5))
+
 ### [1.150.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.150.0...v1.150.1) (2026-04-24)
 
 ## [1.150.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.149.1...v1.150.0) (2026-04-20)
