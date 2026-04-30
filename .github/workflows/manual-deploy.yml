@@ -6,12 +6,21 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
-      deploy_url:
-        description: 'Deploy URL'
+      environment:
+        description: 'Target environment'
         required: true
-        type: string
+        type: choice
+        options:
+          - dev
+          - staging
+          - production
+      dry_run:
+        description: 'Dry run (preview only, no changes applied)'
+        required: false
+        type: boolean
+        default: true
       notify:
-        description: 'Send Slack notification'
+        description: 'Send Slack notification (ignored when dry run is enabled)'
         required: false
         type: boolean
         default: true
@@ -40,31 +49,62 @@ jobs:
         with:
           egress-policy: audit
 
-      - name: Validate Production Deployment
+      - name: Validate Deployment
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          REF: ${{ inputs.ref }}
+          DEV_USERNAME: ${{ secrets.DEV_USERNAME }}
+          DEV_PASSWORD: ${{ secrets.DEV_PASSWORD }}
+          STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
+          STAGING_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
+          PROD_USERNAME: ${{ secrets.PROD_USERNAME }}
+          PROD_PASSWORD: ${{ secrets.PROD_PASSWORD }}
         run: |
-          if [[ "${{ inputs.deploy_url }}" == "https://api.rudderstack.com" ]]; then
-            if [[ "${{ inputs.ref }}" != "main" ]]; then
+          case "$ENVIRONMENT" in
+            dev)        USER_VAR=DEV_USERNAME;     PASS_VAR=DEV_PASSWORD ;;
+            staging)    USER_VAR=STAGING_USERNAME; PASS_VAR=STAGING_PASSWORD ;;
+            production) USER_VAR=PROD_USERNAME;    PASS_VAR=PROD_PASSWORD ;;
+            *)          echo "❌ Unsupported environment '$ENVIRONMENT'"; exit 1 ;;
+          esac
+          if [[ -z "${!USER_VAR}" || -z "${!PASS_VAR}" ]]; then
+            echo "❌ Missing credentials for environment '$ENVIRONMENT' (expected repo secrets $USER_VAR and $PASS_VAR)"
+            exit 1
+          fi
+          echo "✅ Credentials present for environment '$ENVIRONMENT'"
+
+          if [[ "$ENVIRONMENT" == "production" && "$DRY_RUN" == "false" ]]; then
+            if [[ "$REF" != "main" ]]; then
               echo "❌ Error: Production deployments can only be made from the 'main' branch"
-              echo "Current branch: ${{ inputs.ref }}"
-              echo "Production URL: ${{ inputs.deploy_url }}"
+              echo "Current branch: $REF"
               exit 1
             fi
             echo "✅ Production deployment validation passed - deploying from main branch"
           else
-            echo "ℹ️  Non-production deployment - branch validation skipped"
+            echo "ℹ️  Branch validation skipped (environment=$ENVIRONMENT, dry_run=$DRY_RUN)"
           fi
 
   deploy:
     needs: validate
     uses: ./.github/workflows/deploy.yml
     with:
-      deploy_url: ${{ inputs.deploy_url }}
+      deploy_url: >-
+        ${{ inputs.environment == 'production' && 'https://api.rudderstack.com'
+         || inputs.environment == 'staging' && 'https://api.staging.rudderlabs.com'
+         || 'https://api.dev.rudderlabs.com' }}
       notify: ${{ inputs.notify }}
       version: ${{ inputs.version }}
       ref: ${{ inputs.ref }}
       verbose: ${{ inputs.verbose }}
+      dry_run: ${{ inputs.dry_run }}
     secrets:
-      API_USERNAME: ${{ secrets.API_USERNAME }}
-      API_PASSWORD: ${{ secrets.API_PASSWORD }}
+      API_USERNAME: >-
+        ${{ inputs.environment == 'production' && secrets.PROD_USERNAME
+         || inputs.environment == 'staging' && secrets.STAGING_USERNAME
+         || secrets.DEV_USERNAME }}
+      API_PASSWORD: >-
+        ${{ inputs.environment == 'production' && secrets.PROD_PASSWORD
+         || inputs.environment == 'staging' && secrets.STAGING_PASSWORD
+         || secrets.DEV_PASSWORD }}
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       SLACK_RELEASE_CHANNEL_ID: ${{ secrets.SLACK_RELEASE_CHANNEL_ID }}

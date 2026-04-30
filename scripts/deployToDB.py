@@ -15,6 +15,10 @@ from utils import (
 
 ALL_SELECTORS = ["destination", "source"]
 BLACK_LIST_DESTINATIONS = ["RUDDER_TEST"]
+# Top-level fields that map to nullable DB columns. Keep in sync with the DDL
+# for `destination_definitions` / `source_definitions`. See
+# `normalize_nullable_column_deletions` for why this list matters.
+NULLABLE_COLUMN_FIELDS = ("options", "uiConfig", "configSchema")
 
 
 def get_command_line_arguments():
@@ -114,6 +118,28 @@ AUTH = (USERNAME, PASSWORD)
 # UTIL METHODS
 
 
+def normalize_nullable_column_deletions(diff, persisted_data, updated_data):
+    """Convert top-level deletions of nullable DB-column fields into explicit nulls.
+
+    jsondiff reports keys removed from the local file under `$delete`. When that's
+    the only diff key, the `len(diff) > 0` gate in update_diff_db skips the API
+    call and the DB retains the stale value forever. For fields that map to
+    nullable DB columns (NULLABLE_COLUMN_FIELDS), set the field to None on both
+    the diff and the payload — producing a real diff entry, opening the gate, and
+    making the server clear the column explicitly. `$delete` is always popped
+    afterwards; other entries are ignored by design (the full local file is
+    posted, so missing keys fall out naturally on the server).
+
+    Mutates `diff` and `updated_data` in place.
+    """
+    delete_fields = diff.get("$delete") or []
+    for field in NULLABLE_COLUMN_FIELDS:
+        if field in delete_fields and persisted_data.get(field):
+            diff[field] = None
+            updated_data[field] = None
+    diff.pop("$delete", None)
+
+
 def update_diff_db(selector, persisted_by_name, item_name=None, dry_run=False, verbose=False):
     final_report = []
 
@@ -147,9 +173,7 @@ def update_diff_db(selector, persisted_by_name, item_name=None, dry_run=False, v
             diff = jsondiff.diff(
                 persisted_data, updated_data, marshal=True
             )
-            # ignore the $delete - values present in DB but missing in files. Anyways this doesn't get reflected in DB as keys are missing in files itself.
-            # Best practice is to make sure all keys are maintained in the config files irrespective of them being null.
-            diff.pop("$delete", None)
+            normalize_nullable_column_deletions(diff, persisted_data, updated_data)
 
             if len(diff.keys()) > 0:  # changes exist
                 status, _ = update_config_definition(
