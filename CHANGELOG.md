@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.152.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.151.0...v1.152.0) (2026-04-30)
+
+
+### Features
+
+* **sprig:** add device mode support for androidKotlin and iosSwift ([#2466](https://github.com/rudderlabs/rudder-config-schema/issues/2466)) ([a3353c7](https://github.com/rudderlabs/rudder-config-schema/commit/a3353c79a0795ac41327a3894ed9d4417f35ea93))
+
 ## [1.151.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.150.1...v1.151.0) (2026-04-29)
 
 
