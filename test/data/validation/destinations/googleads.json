@@ -90,6 +90,7 @@
   {
     "config": {
       "conversionID": "AW-114432",
+      "sdkBaseUrl": "https://analytics.example.com",
       "useNativeSDK": {
         "web": true
       },
@@ -98,6 +99,21 @@
       }
     },
     "result": true
+  },
+  {
+    "testTitle": "With invalid custom domain URL",
+    "config": {
+      "conversionID": "AW-114432",
+      "sdkBaseUrl": "invalid-url",
+      "useNativeSDK": {
+        "web": true
+      },
+      "dynamicRemarketing": {
+        "web": true
+      }
+    },
+    "result": false,
+    "err": ["sdkBaseUrl must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]*|^$\""]
   },
   {
     "config": {
