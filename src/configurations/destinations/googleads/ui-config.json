@@ -285,6 +285,25 @@
       "title": "Additional Settings",
       "fields": [
         {
+          "type": "textInput",
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "connectionMode.web",
+                "value": "device"
+              }
+            ]
+          },
+          "label": "Custom Domain URL",
+          "value": "sdkBaseUrl",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|(?!.*\\.ngrok\\.io)^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]*|^$",
+          "regexErrorMessage": "Please input a valid URL.",
+          "note": "Enter your Google Ads Custom Domain URL, https://{Custom Domain URL}/gtag/js. By default, it is https://www.googletagmanager.com.",
+          "placeholder": "e.g: https://www.example.com",
+          "default": "https://www.googletagmanager.com",
+          "secret": false
+        },
+        {
           "type": "checkbox",
           "label": "Send Page View",
           "value": "sendPageView",
