@@ -264,6 +264,24 @@
     "err": ["actions.INSERT.batchSize must be <= 5000"]
   },
   {
+    "testTitle": "action batchSize must be an integer",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationType": "noAuth",
+      "method": "POST",
+      "actions": {
+        "INSERT": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/x",
+          "batchSize": 100.5
+        }
+      }
+    },
+    "result": false,
+    "err": ["actions.INSERT.batchSize must be integer"]
+  },
+  {
     "testTitle": "action field with invalid hashType",
     "config": {
       "baseUrl": "https://api.example.com",
