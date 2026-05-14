@@ -1,0 +1,287 @@
+[
+  {
+    "testTitle": "minimal valid config with noAuth",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationType": "noAuth",
+      "method": "POST",
+      "actions": {
+        "INSERT": {
+          "requestBody": "{\"users\": [{{users}}]}",
+          "method": "POST",
+          "endpoint": "/v1/audiences/{{audienceId}}/users",
+          "batchSize": 1000
+        }
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid config with basicAuth",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationType": "basicAuth",
+      "basicAuthUserName": "user",
+      "basicAuthPassword": "pass",
+      "method": "POST",
+      "headers": [{ "key": "X-Custom", "value": "foo" }],
+      "actions": {
+        "INSERT": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/insert",
+          "batchSize": 500
+        },
+        "DELETE": {
+          "requestBody": "{}",
+          "method": "DELETE",
+          "endpoint": "/delete",
+          "batchSize": 500
+        }
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid config with bearerToken and action fields",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationType": "bearerToken",
+      "bearerToken": "token123",
+      "method": "POST",
+      "actions": {
+        "INSERT": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/insert",
+          "batchSize": 1000,
+          "fields": [
+            { "name": "email", "isRequired": true, "hashType": "SHA256", "isCustom": false },
+            { "name": "first_name", "isRequired": false, "hashType": "NONE" }
+          ]
+        }
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid config with apiKey",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationType": "apiKey",
+      "apiKeyName": "X-API-Key",
+      "apiKeyValue": "abc123",
+      "method": "POST",
+      "actions": {
+        "UPDATE": {
+          "requestBody": "{}",
+          "method": "PUT",
+          "endpoint": "/update",
+          "batchSize": 2000
+        }
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "empty config — missing required top-level properties",
+    "config": {},
+    "result": false,
+    "err": [
+      " must have required property 'baseUrl'",
+      " must have required property 'authenticationType'",
+      " must have required property 'method'",
+      " must have required property 'actions'"
+    ]
+  },
+  {
+    "testTitle": "invalid baseUrl scheme",
+    "config": {
+      "baseUrl": "ftp://example.com",
+      "authenticationType": "noAuth",
+      "method": "POST",
+      "actions": {
+        "INSERT": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/x",
+          "batchSize": 1
+        }
+      }
+    },
+    "result": false,
+    "err": ["baseUrl must match pattern \"^https?://\""]
+  },
+  {
+    "testTitle": "invalid authenticationType enum value",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationType": "oauth",
+      "method": "POST",
+      "actions": {
+        "INSERT": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/x",
+          "batchSize": 1
+        }
+      }
+    },
+    "result": false,
+    "err": ["authenticationType must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "basicAuth missing required credentials",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationType": "basicAuth",
+      "method": "POST",
+      "actions": {
+        "INSERT": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/x",
+          "batchSize": 1
+        }
+      }
+    },
+    "result": false,
+    "err": [
+      " must have required property 'basicAuthUserName'",
+      " must have required property 'basicAuthPassword'",
+      " must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "bearerToken auth missing token",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationType": "bearerToken",
+      "method": "POST",
+      "actions": {
+        "INSERT": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/x",
+          "batchSize": 1
+        }
+      }
+    },
+    "result": false,
+    "err": [
+      " must have required property 'bearerToken'",
+      " must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "apiKey auth missing key name and value",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationType": "apiKey",
+      "method": "POST",
+      "actions": {
+        "INSERT": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/x",
+          "batchSize": 1
+        }
+      }
+    },
+    "result": false,
+    "err": [
+      " must have required property 'apiKeyName'",
+      " must have required property 'apiKeyValue'",
+      " must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "actions empty object — must have at least one action",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationType": "noAuth",
+      "method": "POST",
+      "actions": {}
+    },
+    "result": false,
+    "err": ["actions must NOT have fewer than 1 properties"]
+  },
+  {
+    "testTitle": "actions key not in allowed enum",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationType": "noAuth",
+      "method": "POST",
+      "actions": {
+        "UPSERT": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/x",
+          "batchSize": 1
+        }
+      }
+    },
+    "result": false,
+    "err": [
+      "actions must be equal to one of the allowed values",
+      "actions property name must be valid"
+    ]
+  },
+  {
+    "testTitle": "action missing required keys",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationType": "noAuth",
+      "method": "POST",
+      "actions": {
+        "INSERT": {}
+      }
+    },
+    "result": false,
+    "err": [
+      "actions.INSERT must have required property 'requestBody'",
+      "actions.INSERT must have required property 'method'",
+      "actions.INSERT must have required property 'endpoint'",
+      "actions.INSERT must have required property 'batchSize'"
+    ]
+  },
+  {
+    "testTitle": "action batchSize out of range",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationType": "noAuth",
+      "method": "POST",
+      "actions": {
+        "INSERT": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/x",
+          "batchSize": 10000
+        }
+      }
+    },
+    "result": false,
+    "err": ["actions.INSERT.batchSize must be <= 5000"]
+  },
+  {
+    "testTitle": "action field with invalid hashType",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationType": "noAuth",
+      "method": "POST",
+      "actions": {
+        "INSERT": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/x",
+          "batchSize": 1,
+          "fields": [{ "name": "email", "hashType": "BLAKE3" }]
+        }
+      }
+    },
+    "result": false,
+    "err": [
+      "actions.INSERT.fields.0.hashType must be equal to one of the allowed values"
+    ]
+  }
+]

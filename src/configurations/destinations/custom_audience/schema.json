@@ -1,0 +1,109 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["baseUrl", "authenticationType", "method", "actions"],
+    "properties": {
+      "baseUrl": {
+        "type": "string",
+        "pattern": "^https?://"
+      },
+      "authenticationType": {
+        "type": "string",
+        "enum": ["noAuth", "basicAuth", "bearerToken", "apiKey"]
+      },
+      "method": {
+        "type": "string",
+        "enum": ["POST", "PUT", "PATCH", "GET", "DELETE"]
+      },
+      "headers": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["key", "value"],
+          "properties": {
+            "key": { "type": "string", "minLength": 1 },
+            "value": { "type": "string" }
+          }
+        }
+      },
+      "actions": {
+        "type": "object",
+        "minProperties": 1,
+        "propertyNames": { "enum": ["INSERT", "UPDATE", "DELETE"] },
+        "additionalProperties": {
+          "type": "object",
+          "required": ["requestBody", "method", "endpoint", "batchSize"],
+          "properties": {
+            "requestBody": { "type": "string", "minLength": 1 },
+            "batchSize": { "type": "number", "minimum": 1, "maximum": 5000 },
+            "method": {
+              "type": "string",
+              "enum": ["POST", "PUT", "PATCH", "GET", "DELETE"]
+            },
+            "endpoint": { "type": "string", "minLength": 1 },
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                  "name": { "type": "string", "minLength": 1 },
+                  "isRequired": { "type": "boolean" },
+                  "hashType": {
+                    "type": "string",
+                    "enum": ["NONE", "SHA256", "SHA512", "MD5"]
+                  },
+                  "isCustom": { "type": "boolean" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "basicAuthUserName": { "type": "string" },
+      "basicAuthPassword": { "type": "string" },
+      "bearerToken": { "type": "string" },
+      "apiKeyName": { "type": "string" },
+      "apiKeyValue": { "type": "string" },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "warehouse": {
+            "type": "string",
+            "enum": ["cloud"]
+          }
+        }
+      }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": { "authenticationType": { "const": "basicAuth" } },
+          "required": ["authenticationType"]
+        },
+        "then": {
+          "required": ["basicAuthUserName", "basicAuthPassword"]
+        }
+      },
+      {
+        "if": {
+          "properties": { "authenticationType": { "const": "bearerToken" } },
+          "required": ["authenticationType"]
+        },
+        "then": {
+          "required": ["bearerToken"]
+        }
+      },
+      {
+        "if": {
+          "properties": { "authenticationType": { "const": "apiKey" } },
+          "required": ["authenticationType"]
+        },
+        "then": {
+          "required": ["apiKeyName", "apiKeyValue"]
+        }
+      }
+    ]
+  }
+}
