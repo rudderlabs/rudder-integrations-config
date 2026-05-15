@@ -1,0 +1,131 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "required": ["host", "project", "accessKeyID", "accessKey", "syncFrequency", "useRudderStorage"],
+    "properties": {
+      "host": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(https?:\\/\\/.{1,200})$"
+      },
+      "project": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,100})$"
+      },
+      "accessKeyID": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,200})$"
+      },
+      "accessKey": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,200})$"
+      },
+      "stsToken": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(.{0,4000})$"
+      },
+      "tunnelEndpoint": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^(|https?:\\/\\/.{1,200})$"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "(^env[.].*)|^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+        "rs-immutable": true
+      },
+      "syncFrequency": {
+        "type": "string",
+        "pattern": "^(5|15|30|60|180|360|720|1440)$",
+        "default": "180"
+      },
+      "syncStartAt": {
+        "type": "string"
+      },
+      "skipTracksTable": {
+        "type": "boolean",
+        "default": false
+      },
+      "skipUsersTable": {
+        "type": "boolean",
+        "default": true
+      },
+      "excludeWindow": {
+        "type": "object",
+        "required": ["excludeWindowStartTime", "excludeWindowEndTime"],
+        "properties": {
+          "excludeWindowStartTime": {
+            "type": "string"
+          },
+          "excludeWindowEndTime": {
+            "type": "string"
+          }
+        }
+      },
+      "useRudderStorage": {
+        "type": "boolean",
+        "default": true
+      },
+      "cleanupObjectStorageFiles": {
+        "type": "boolean",
+        "default": false
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "androidKotlin": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "ios": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "iosSwift": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "web": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "unity": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "amp": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cloud": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "reactnative": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cloudSource": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "flutter": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cordova": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "shopify": {
+            "type": "string",
+            "enum": ["cloud"]
+          }
+        }
+      }
+    }
+  }
+}
