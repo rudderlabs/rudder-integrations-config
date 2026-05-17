@@ -2,19 +2,15 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "required": ["baseUrl", "authenticationType", "method", "actions"],
+    "required": ["baseUrl", "authenticationType", "actions"],
     "properties": {
       "baseUrl": {
         "type": "string",
-        "pattern": "^https?://"
+        "pattern": "^https?://.+"
       },
       "authenticationType": {
         "type": "string",
         "enum": ["noAuth", "basicAuth", "bearerToken", "apiKey"]
-      },
-      "method": {
-        "type": "string",
-        "enum": ["POST", "PUT", "PATCH", "GET", "DELETE"]
       },
       "headers": {
         "type": "array",
@@ -23,7 +19,7 @@
           "required": ["key", "value"],
           "properties": {
             "key": { "type": "string", "minLength": 1 },
-            "value": { "type": "string" }
+            "value": { "type": "string", "minLength": 1 }
           }
         }
       },
@@ -46,7 +42,7 @@
               "type": "array",
               "items": {
                 "type": "object",
-                "required": ["name"],
+                "required": ["name", "isRequired", "hashType", "isCustom"],
                 "properties": {
                   "name": { "type": "string", "minLength": 1 },
                   "isRequired": { "type": "boolean" },
@@ -61,20 +57,11 @@
           }
         }
       },
-      "basicAuthUserName": { "type": "string" },
-      "basicAuthPassword": { "type": "string" },
-      "bearerToken": { "type": "string" },
-      "apiKeyName": { "type": "string" },
-      "apiKeyValue": { "type": "string" },
-      "connectionMode": {
-        "type": "object",
-        "properties": {
-          "warehouse": {
-            "type": "string",
-            "enum": ["cloud"]
-          }
-        }
-      }
+      "basicAuthUserName": { "type": "string", "minLength": 1 },
+      "basicAuthPassword": { "type": "string", "minLength": 1 },
+      "bearerToken": { "type": "string", "minLength": 1 },
+      "apiKeyName": { "type": "string", "minLength": 1 },
+      "apiKeyValue": { "type": "string", "minLength": 1 }
     },
     "allOf": [
       {
