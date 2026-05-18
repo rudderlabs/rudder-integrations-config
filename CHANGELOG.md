@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.153.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.152.0...v1.153.0) (2026-05-18)
+
+
+### Features
+
+* add clickhouse partition type destination setting ([#2471](https://github.com/rudderlabs/rudder-config-schema/issues/2471)) ([e5d251c](https://github.com/rudderlabs/rudder-config-schema/commit/e5d251cab7ee55f3caa216b3e219f463e62b6475))
+
+
+### Bug Fixes
+
+* mark token as non secret for mixpanel ([#2474](https://github.com/rudderlabs/rudder-config-schema/issues/2474)) ([6fc14f6](https://github.com/rudderlabs/rudder-config-schema/commit/6fc14f6ea6d8e471c74aba93a038070da54c8015))
+
 ## [1.152.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.151.0...v1.152.0) (2026-04-30)
 
 
