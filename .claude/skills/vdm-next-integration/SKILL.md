@@ -2,7 +2,6 @@
 name: vdm-next-integration
 description: Create the configuration definition for a new VDM Next (Visual Data Mapper) destination. Registers the destination, defines capabilities, and sets up authentication.
 argument-hint: <destination-name> <auth-type:oauth|apikey>
-disable-model-invocation: true
 ---
 
 # VDM Next — Configuration Definition
@@ -30,6 +29,7 @@ src/configurations/destinations/<dest_name>/
     ├── ui-config.json
     └── schema.json
 ```
+Refer src/schemas/destinations/, src/schemas/account for adding any additional needed fields in the definition. 
 
 ## Reference
 
