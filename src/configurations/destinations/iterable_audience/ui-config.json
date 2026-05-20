@@ -1,0 +1,97 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "API Key",
+                    "configKey": "apiKey",
+                    "regex": "(^env[.].+)|^(.{1,200})$",
+                    "regexErrorMessage": "Invalid API key",
+                    "placeholder": "Server-side API key from Iterable",
+                    "secret": true
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Project Type",
+                    "configKey": "projectType",
+                    "note": "Find this under Settings > Project Settings > Unique Identifier in Iterable",
+                    "options": [
+                      {
+                        "label": "Email-based (legacy)",
+                        "value": "email"
+                      },
+                      {
+                        "label": "Hybrid",
+                        "value": "hybrid"
+                      },
+                      {
+                        "label": "UserID-based",
+                        "value": "userId"
+                      }
+                    ],
+                    "default": "email",
+                    "required": true
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Data Center",
+                    "configKey": "dataCenter",
+                    "options": [
+                      {
+                        "label": "US (api.iterable.com)",
+                        "value": "USDC"
+                      },
+                      {
+                        "label": "EU (api.eu.iterable.com)",
+                        "value": "EUDC"
+                      }
+                    ],
+                    "default": "USDC",
+                    "required": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": []
+    }
+  }
+}

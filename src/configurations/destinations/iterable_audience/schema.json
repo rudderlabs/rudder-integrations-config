@@ -1,0 +1,40 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["apiKey", "projectType", "dataCenter"],
+    "type": "object",
+    "properties": {
+      "apiKey": {
+        "type": "string",
+        "pattern": "(^env[.].+)|^(.{1,200})$"
+      },
+      "projectType": {
+        "type": "string",
+        "enum": ["email", "hybrid", "userId"]
+      },
+      "dataCenter": {
+        "type": "string",
+        "enum": ["USDC", "EUDC"],
+        "default": "USDC"
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "warehouse": {
+            "type": "string",
+            "enum": ["cloud"]
+          }
+        }
+      },
+      "oneTrustCookieCategories": {
+        "type": "object"
+      },
+      "consentManagement": {
+        "type": "object"
+      },
+      "ketchConsentPurposes": {
+        "type": "object"
+      }
+    }
+  }
+}
