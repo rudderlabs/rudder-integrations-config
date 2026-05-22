@@ -1,0 +1,252 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "accountManagementInput",
+                    "label": "Iterable account",
+                    "configKey": "rudderAccountId"
+                  },
+                  {
+                    "type": "dynamicDataSelect",
+                    "label": "List",
+                    "note": "Select an existing Iterable list or create a new one",
+                    "configKey": "listId",
+                    "placeholder": "Select or create a list",
+                    "apiName": "iterableLists",
+                    "apiDependencies": ["rudderAccountId"],
+                    "allowCreateNew": true,
+                    "createNewLabel": "Create new list",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "rudderAccountId",
+                          "exists": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "New list name",
+                    "note": "Name for the new Iterable list to create",
+                    "configKey": "listName",
+                    "placeholder": "e.g: My Audience",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "listId",
+                          "value": "new"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Email column",
+                    "note": "Warehouse column containing email addresses (mapped to Iterable's email identifier)",
+                    "configKey": "identifierMappings.0.warehouseColumn",
+                    "placeholder": "e.g: email_address",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "rudderAccountId",
+                          "exists": true
+                        },
+                        {
+                          "configKey": "accountOptions.projectType",
+                          "value": "email-based"
+                        }
+                      ],
+                      "condition": "and"
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "User ID column",
+                    "note": "Warehouse column containing user IDs (mapped to Iterable's userId identifier)",
+                    "configKey": "identifierMappings.0.warehouseColumn",
+                    "placeholder": "e.g: user_id",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "rudderAccountId",
+                          "exists": true
+                        },
+                        {
+                          "configKey": "accountOptions.projectType",
+                          "value": "userId-based"
+                        }
+                      ],
+                      "condition": "and"
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Email column",
+                    "note": "Warehouse column containing email addresses",
+                    "configKey": "identifierMappings.0.warehouseColumn",
+                    "placeholder": "e.g: email_address",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "rudderAccountId",
+                          "exists": true
+                        },
+                        {
+                          "configKey": "accountOptions.projectType",
+                          "value": "hybrid"
+                        }
+                      ],
+                      "condition": "and"
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "User ID column",
+                    "note": "Per Iterable's API, each row is sent with either `email` or `userId` — never both. When both columns have a value on a row, RudderStack sends `userId` since it is Iterable's primary matching key for hybrid projects.",
+                    "configKey": "identifierMappings.1.warehouseColumn",
+                    "placeholder": "e.g: user_id",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "rudderAccountId",
+                          "exists": true
+                        },
+                        {
+                          "configKey": "accountOptions.projectType",
+                          "value": "hybrid"
+                        }
+                      ],
+                      "condition": "and"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "iubenda",
+                  "value": "iubenda"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "default": "oneTrust",
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category IDs",
+              "note": "Input your consent category IDs by pressing 'Enter' after each entry. We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
