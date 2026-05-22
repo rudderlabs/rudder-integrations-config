@@ -1,0 +1,128 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["rudderAccountId", "listId", "identifierMappings"],
+    "properties": {
+      "rudderAccountId": {
+        "type": "string",
+        "pattern": "^.{1,100}$"
+      },
+      "listId": {
+        "type": "number"
+      },
+      "listName": {
+        "type": "string"
+      },
+      "identifierMappings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "iterableField": {
+              "type": "string",
+              "enum": ["email", "userId"]
+            },
+            "warehouseColumn": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "oneTrustCookieCategories": {
+        "type": "object",
+        "properties": {
+          "warehouse": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneTrustCookieCategory": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
+        }
+      },
+      "consentManagement": {
+        "type": "object",
+        "properties": {
+          "warehouse": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
+                  "default": "oneTrust"
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "warehouse": {
+            "type": "string",
+            "enum": ["cloud"]
+          }
+        }
+      },
+      "ketchConsentPurposes": {
+        "type": "object",
+        "properties": {
+          "warehouse": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
