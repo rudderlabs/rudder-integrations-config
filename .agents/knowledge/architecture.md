@@ -1,0 +1,35 @@
+# Architecture
+
+> Component layout, internal relationships, data flow.
+> Append-only. Agent-authored sections may optionally carry an HTML-comment tag
+> (e.g., `<!-- pr:<id> -->`) identifying the writer/PR/run; human-authored
+> sections are conventionally left untouched by automated runs.
+
+## Config Data Model
+<!-- RUD-2776 -->
+
+- Integration definitions are filesystem-first: each integration lives under `src/configurations/{destinations|sources}/<name>/` with a `db-config.json`, `ui-config.json`, and `schema.json` triplet used by tooling and validation (e.g., `src/configurations/destinations/ga4_v2/`).
+- Public validator exports are re-exported via `src/index.ts`, keeping consumer imports stable while implementation stays in `src/validator/index.ts` (`src/index.ts`, `src/validator/index.ts::validateConfig`).
+- Runtime validation is split by concern: generic config schema checks via `validateConfig`, definition-level schema checks via `validateDestinationDefinitions` / `validateSourceDefinitions`, and account-definition checks via `validateAccountDefinitions` (`src/validator/index.ts:173`, `src/validator/index.ts:198`, `src/validator/index.ts:231`, `src/validator/index.ts:260`).
+
+## Validation Flow
+<!-- RUD-2776 -->
+
+- Validator initialization compiles all integration `schema.json` files into an in-memory map keyed as `<type>___<name>` (`src/validator/index.ts::initAjvValidators`).
+- Destination definitions have an extra policy layer beyond JSON Schema through `destinationDefinitionRules` and `applyAdditionalRulesValidation`, including secret/include key safety and connection-mode consistency (`src/validator/index.ts:26`, `src/validator/index.ts:140`).
+- Test architecture mirrors the split: `test/validation.test.ts` verifies real repository integration configs while `test/validator/validator.test.ts` unit-tests validator behavior and rule edge cases (`test/validation.test.ts:200`, `test/validator/validator.test.ts:895`).
+
+## Generation and Deployment Boundaries
+<!-- RUD-2776 -->
+
+- Generation scripts mutate repo artifacts from source configs: `scripts/preProcess.js` materializes `ui-config.json` from `.jt` templates and defaults, while `scripts/generateConstants.js` emits multi-language destination constants into `generated/` (`scripts/preProcess.js::main`, `scripts/generateConstants.js::generateFiles`).
+- Schema maintenance is separated into a Python pipeline (`scripts/schemaGenerator.py`) with selectable update/check behavior, rather than being embedded in validator runtime (`scripts/schemaGenerator.py`, `package.json:37`).
+- Control-plane mutation is isolated to deploy scripts with explicit dry-run/no-dry-run modes, reducing accidental writes during local workflows (`scripts/deployToDB.py::get_command_line_arguments`, `scripts/deployAccountsToDB.py::get_command_line_arguments`).
+
+## Cross-cutting
+<!-- RUD-2776 -->
+
+- The repository enforces a config-as-data contract: filesystem definition triplets (`db-config.json`/`ui-config.json`/`schema.json`) feed both runtime validator compilation and deployment diff tooling, so shape drift impacts validation and control-plane updates together (`src/validator/index.ts::initAjvValidators`, `scripts/deployToDB.py::update_diff_db`, `src/configurations/destinations/ga4_v2/`).
+- Security posture is layered rather than centralized: validator-level secret/include-key checks prevent client exposure, while deploy tooling relies on dry-run defaults and explicit no-dry-run opt-in to avoid accidental remote writes (`src/validator/index.ts:26`, `scripts/deployToDB.py::get_command_line_arguments`, `scripts/deployAccountsToDB.py::get_command_line_arguments`).
+- Generation pipelines (`pre-process`, `generate:constants`) and strict CI test thresholds tie repo hygiene to script execution order; skipped generation can desync committed artifacts from source configs and break validation/test expectations (`package.json:30`, `package.json:43`, `package.json:44`, `jest.config.js:43`).
+- Known technical debt is explicit in commented-out/ TODO validation rules, and the same risk is reflected in targeted rule tests; this signals deliberate temporary gaps rather than unobserved behavior (`src/validator/index.ts` TODO blocks, `test/validator/validator.test.ts:895`).
