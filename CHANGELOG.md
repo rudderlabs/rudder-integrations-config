@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.155.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.154.0...v1.155.0) (2026-05-22)
+
+
+### Features
+
+* **audienceActivation:** add audienceActivation metadata for FB Cust… ([#2493](https://github.com/rudderlabs/rudder-config-schema/issues/2493)) ([0c905ea](https://github.com/rudderlabs/rudder-config-schema/commit/0c905eaa0c32e9a699a2a2caf4e12637ddc071f6))
+
 ## [1.154.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.153.0...v1.154.0) (2026-05-19)
 
 
