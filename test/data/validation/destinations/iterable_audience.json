@@ -1,9 +1,8 @@
 [
   {
-    "testTitle": "Valid config with rudderAccountId, numeric listId, and non-empty identifierMappings",
+    "testTitle": "Valid config with rudderAccountId and non-empty identifierMappings",
     "config": {
       "rudderAccountId": "acc123",
-      "listId": 1234567,
       "identifierMappings": [
         {
           "iterableField": "email",
@@ -14,11 +13,9 @@
     "result": true
   },
   {
-    "testTitle": "Valid config with listName and hybrid identifierMappings",
+    "testTitle": "Valid config with hybrid identifierMappings",
     "config": {
       "rudderAccountId": "acc123",
-      "listId": 9876543,
-      "listName": "My Audience",
       "identifierMappings": [
         {
           "iterableField": "email",
@@ -36,7 +33,6 @@
     "testTitle": "Valid config with userId-based identifierMapping",
     "config": {
       "rudderAccountId": "acc123",
-      "listId": 1111111,
       "identifierMappings": [
         {
           "iterableField": "userId",
@@ -49,7 +45,6 @@
   {
     "testTitle": "Invalid config — missing rudderAccountId",
     "config": {
-      "listId": 1234567,
       "identifierMappings": [
         {
           "iterableField": "email",
@@ -61,24 +56,9 @@
     "err": [" must have required property 'rudderAccountId'"]
   },
   {
-    "testTitle": "Invalid config — missing listId",
-    "config": {
-      "rudderAccountId": "acc123",
-      "identifierMappings": [
-        {
-          "iterableField": "email",
-          "warehouseColumn": "email_address"
-        }
-      ]
-    },
-    "result": false,
-    "err": [" must have required property 'listId'"]
-  },
-  {
     "testTitle": "Invalid config — missing identifierMappings",
     "config": {
-      "rudderAccountId": "acc123",
-      "listId": 1234567
+      "rudderAccountId": "acc123"
     },
     "result": false,
     "err": [" must have required property 'identifierMappings'"]
@@ -87,7 +67,6 @@
     "testTitle": "Invalid config — invalid iterableField value",
     "config": {
       "rudderAccountId": "acc123",
-      "listId": 1234567,
       "identifierMappings": [
         {
           "iterableField": "phone",
