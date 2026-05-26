@@ -104,7 +104,7 @@
       }
     },
     "result": false,
-    "err": ["baseUrl must match pattern \"^https?://.+\""]
+    "err": ["baseUrl must match pattern \"^https?://(?!localhost(?:[:/]|$)).+\""]
   },
   {
     "testTitle": "baseUrl with scheme but no host",
@@ -121,7 +121,57 @@
       }
     },
     "result": false,
-    "err": ["baseUrl must match pattern \"^https?://.+\""]
+    "err": ["baseUrl must match pattern \"^https?://(?!localhost(?:[:/]|$)).+\""]
+  },
+  {
+    "testTitle": "baseUrl pointing at localhost is rejected",
+    "config": {
+      "baseUrl": "http://localhost",
+      "authenticationType": "noAuth",
+      "actions": {
+        "insert": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/x",
+          "batchSize": 1
+        }
+      }
+    },
+    "result": false,
+    "err": ["baseUrl must match pattern \"^https?://(?!localhost(?:[:/]|$)).+\""]
+  },
+  {
+    "testTitle": "baseUrl pointing at localhost with port is rejected",
+    "config": {
+      "baseUrl": "http://localhost:3000/path",
+      "authenticationType": "noAuth",
+      "actions": {
+        "insert": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/x",
+          "batchSize": 1
+        }
+      }
+    },
+    "result": false,
+    "err": ["baseUrl must match pattern \"^https?://(?!localhost(?:[:/]|$)).+\""]
+  },
+  {
+    "testTitle": "baseUrl host containing localhost as a subdomain is allowed",
+    "config": {
+      "baseUrl": "https://localhost.example.com",
+      "authenticationType": "noAuth",
+      "actions": {
+        "insert": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/x",
+          "batchSize": 1
+        }
+      }
+    },
+    "result": true
   },
   {
     "testTitle": "invalid authenticationType enum value",
