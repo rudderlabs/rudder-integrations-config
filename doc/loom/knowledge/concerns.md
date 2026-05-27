@@ -18,3 +18,13 @@ The LLD §4.1 suppression callout (described in `doc/plans/iterable-audience-m1-
 ## schemaGenerator.py advisories on identifierMappings
 
 `scripts/schemaGenerator.py` reports a path quirk for `identifierMappings.N.warehouseColumn` because the UI uses dot-notation configKeys (`identifierMappings.0.warehouseColumn`) while the AJV schema uses array syntax. This is a known limitation of conditional UI rendering and is not blocking. If the schemaGenerator is updated to handle dot-notation paths, this advisory will disappear.
+
+## LLD §4.1 vs actual iterable_audience implementation (resolved)
+
+The LLD §4.1 destConfig template was simplified during implementation. Two fields from the LLD spec were removed:
+- `listId` and `listName` removed from `defaultConfig` — list selection is VDM-v2-form-side, not stored in the transformer-visible destConfig
+- Consent management fields (`consentManagement`, `oneTrustCookieCategories`, `ketchConsentPurposes`) removed from `warehouse` config — deferred to post-M1
+
+Additionally, the LLD did NOT include account option fields in `destConfig.defaultConfig` or `secretKeys`, but the actual implementation adds both. This is the correct pattern for account-bound destinations that need option values at delivery time.
+
+The LLD doc remains useful for architecture and data flow but its `db-config.json` snippet is not the canonical reference — use `src/configurations/destinations/iterable_audience/db-config.json` directly.

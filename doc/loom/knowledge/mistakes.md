@@ -40,3 +40,27 @@
 **Prevention:** Always read `src/schemas/account/account-db-config-schema.json` before setting `authenticationType`. The schema is the authoritative source; skill suggestions may be stale.
 
 **Fix:** Use `"authenticationType": "api_key"` — it is a valid literal value confirmed by the account schema.
+
+## LLD destConfig fields diverge from actual implementation
+
+**What happened:** The LLD §4.1 specified `destConfig.defaultConfig` as `["rudderAccountId", "listId", "listName", "identifierMappings"]` and `warehouse` as `["connectionMode", "consentManagement", "oneTrustCookieCategories", "ketchConsentPurposes"]`. Both were simplified in the actual implementation.
+
+**Why:** Two post-implementation simplification commits:
+- `listId` and `listName` removed (`02099d9d`) — the VDM v2 form resolves list selection before persisting the connection config, so these fields don't need to be in `destConfig`. The connection config stored in the DB only needs `rudderAccountId` and `identifierMappings`.
+- Consent management fields removed from `warehouse` (`827f2415`) — M1 scope does not include consent management for this destination.
+
+**Prevention:** Don't blindly copy `destConfig.warehouse` consent fields for a new audience destination in M1. Consent fields are optional and can be added in later milestones. Check the LLD explicitly for M1 scope.
+
+**Fix:** Keep `destConfig.warehouse` minimal (`["connectionMode"]`) for M1 audience destinations. Add consent fields only when scope explicitly includes consent management.
+
+---
+
+## Account option fields must appear in destination destConfig.defaultConfig
+
+**What happened:** The actual `iterable_audience` db-config.json includes account-level fields (`apiKey`, `dataCenter`, `projectType`) in `destConfig.defaultConfig` and has `secretKeys: ["apiKey"]`. This was NOT in the LLD template but IS in the actual implementation.
+
+**Why:** The transformer needs `dataCenter` and `projectType` (account options) and `apiKey` (account secret) at delivery time. The `destConfig.defaultConfig` list is how the platform knows which fields to pass to the transformer as connection metadata. The `secretKeys` list signals the platform to include the secret in the delivery payload.
+
+**Prevention:** When creating a warehouse-to-audience destination that reads account options at transform time, include those option field names AND secret field names in `destConfig.defaultConfig`. Also add secret field names to `secretKeys`.
+
+**Fix:** Add account option fields to `destConfig.defaultConfig`. Add secret field names to `secretKeys`. See `iterable_audience/db-config.json` as the canonical reference.

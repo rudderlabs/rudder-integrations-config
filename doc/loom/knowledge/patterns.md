@@ -109,3 +109,113 @@ When the UI conditionally shows different identifier fields based on a `projectT
 - Per-row constraints (e.g., "email-based projects must have exactly one email mapping") are enforced at the transformer's Zod layer
 - `identifierMappings` items use `iterableField: enum ["email", "userId"]` + `warehouseColumn: string`
 - UI reads `accountOptions.projectType` via `preRequisites.fields[].configKey` to show/hide the right picker
+
+## Iterable Audience actual config (post-simplification, 2026-05-27)
+
+The `iterable_audience` destination was simplified after initial implementation via two commits:
+- `02099d9d` removed `listId` and `listName` from `destConfig.defaultConfig`
+- `827f2415` removed consent management fields (`consentManagement`, `oneTrustCookieCategories`, `ketchConsentPurposes`) from the `warehouse` destConfig key
+
+**Actual current `db-config.json`:**
+
+```json
+{
+  "name": "ITERABLE_AUDIENCE",
+  "displayName": "Iterable Audience",
+  "config": {
+    "supportedAccountDefinitions": {
+      "rudderAccountId": ["DESTINATION_ITERABLE_AUDIENCE_API_KEY"]
+    },
+    "supportsBlankAudienceCreation": true,
+    "disableJsonMapper": true,
+    "supportsVisualMapper": true,
+    "syncBehaviours": ["mirror"],
+    "transformAtV1": "router",
+    "saveDestinationResponse": true,
+    "supportedSourceTypes": ["warehouse"],
+    "supportedMessageTypes": { "cloud": ["record"] },
+    "isAudienceSupported": true,
+    "supportedConnectionModes": { "warehouse": ["cloud"] },
+    "destConfig": {
+      "defaultConfig": ["rudderAccountId", "apiKey", "dataCenter", "projectType", "identifierMappings"],
+      "warehouse": ["connectionMode"]
+    },
+    "secretKeys": ["apiKey"]
+  },
+  "options": { "isBeta": true }
+}
+```
+
+**Key divergences from the general audience triad template (documented above):**
+
+- `listId` and `listName` NOT in `defaultConfig` — list selection is handled by the VDM v2 form before the connection config is persisted
+- Account fields (`apiKey`, `dataCenter`, `projectType`) ARE in `defaultConfig` — this is how the transformer receives account options and secrets as metadata. The `secretKeys: ["apiKey"]` entry ensures the platform passes the secret to the transformer.
+- `warehouse` destConfig only has `["connectionMode"]` — no consent management fields for M1 (deferred to later)
+
+**Actual current `schema.json`:**
+
+```json
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["rudderAccountId", "identifierMappings"],
+    "properties": {
+      "rudderAccountId": { "type": "string", "pattern": "^.{1,100}$" },
+      "identifierMappings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "iterableField": { "type": "string", "enum": ["email", "userId"] },
+            "warehouseColumn": { "type": "string" }
+          }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": { "warehouse": { "type": "string", "enum": ["cloud"] } }
+      }
+    }
+  }
+}
+```
+
+Required: `rudderAccountId` + `identifierMappings` only. No `listId` (removed).
+
+## Identifier mapping ui-config pattern (dot-notation configKeys)
+
+The `iterable_audience` ui-config uses dot-notation paths as `configKey` to target array items directly:
+
+```json
+{
+  "type": "textInput",
+  "configKey": "identifierMappings.0.warehouseColumn",
+  "preRequisites": {
+    "fields": [
+      { "configKey": "rudderAccountId", "exists": true },
+      { "configKey": "accountOptions.projectType", "value": "email-based" }
+    ],
+    "condition": "and"
+  }
+},
+{
+  "type": "textInput",
+  "configKey": "identifierMappings.1.warehouseColumn",
+  "preRequisites": {
+    "fields": [
+      { "configKey": "rudderAccountId", "exists": true },
+      { "configKey": "accountOptions.projectType", "value": "hybrid" }
+    ],
+    "condition": "and"
+  }
+}
+```
+
+**Key rules:**
+- `accountOptions.projectType` in preRequisites reads from the linked account's option fields — NOT from the destination config
+- `identifierMappings.N.warehouseColumn` as configKey writes directly to the Nth array item's `warehouseColumn` property
+- The `iterableField` value for each index is NOT written by the UI — it must be pre-populated via the static form structure or inferred by position
+- `schemaGenerator.py` will warn about path mismatches for these dot-notation configKeys — this is a known advisory (not a bug)
+
+**Hybrid project pattern:** Two separate textInput fields both visible when `accountOptions.projectType === "hybrid"`. Index 0 → email column, index 1 → userId column. The ordering is load-bearing — transformer reads `identifierMappings[0]` and `identifierMappings[1]` by position.

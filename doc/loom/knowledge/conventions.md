@@ -65,3 +65,32 @@ When running `python3 scripts/schemaGenerator.py`, two advisory messages are exp
 
 1. **additionalProperties recommendation** — the script recommends adding `additionalProperties: false`; this is a style suggestion, not a schema error
 2. **identifierMappings.N.warehouseColumn ui-vs-schema path quirk** — the UI uses dot-notation paths like `identifierMappings.0.warehouseColumn` as configKeys; the script flags a path mismatch with the AJV schema array syntax. This is an artifact of conditional UI rendering and is not a bug.
+
+## testTitle convention in validation fixtures
+
+All test cases in `iterable_audience.json` include a `testTitle` field — this is the recommended practice:
+
+```json
+{
+  "testTitle": "Valid config with rudderAccountId and non-empty identifierMappings",
+  "config": { ... },
+  "result": true
+}
+```
+
+The `testTitle` field is optional but strongly encouraged. It appears in Jest failure output and makes debugging dramatically faster. The test runner passes it through as-is — use it for all test cases in new fixtures.
+
+## account secretKeys in destination db-config
+
+When an audience destination's transformer needs the account's secret (e.g., `apiKey`) at delivery time, the secret field name must appear in the destination's `destConfig.defaultConfig` AND in `secretKeys`:
+
+```json
+"destConfig": {
+  "defaultConfig": ["rudderAccountId", "apiKey", "dataCenter", "projectType", "identifierMappings"]
+},
+"secretKeys": ["apiKey"]
+```
+
+This is how the platform includes the decrypted secret in the delivery metadata. Without `secretKeys`, the transformer receives an empty `metadata.secret`. Without the field in `defaultConfig`, the field is not passed at all.
+
+See `iterable_audience/db-config.json` for the reference implementation.
