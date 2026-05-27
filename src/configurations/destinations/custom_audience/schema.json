@@ -19,6 +19,21 @@
             "isCustom": { "type": "boolean" }
           }
         }
+      },
+      "baseActionConfig": {
+        "type": "object",
+        "required": ["requestBody", "method", "endpoint", "batchSize"],
+        "additionalProperties": false,
+        "properties": {
+          "requestBody": { "type": "string", "minLength": 1 },
+          "batchSize": { "type": "integer", "minimum": 1, "maximum": 5000 },
+          "method": {
+            "type": "string",
+            "enum": ["POST", "PUT", "PATCH", "GET", "DELETE"]
+          },
+          "endpoint": { "type": "string", "minLength": 1 },
+          "fields": { "$ref": "#/definitions/fieldsArray" }
+        }
       }
     },
     "properties": {
@@ -46,21 +61,7 @@
         "minProperties": 1,
         "additionalProperties": false,
         "properties": {
-          "insert": {
-            "type": "object",
-            "required": ["requestBody", "method", "endpoint", "batchSize"],
-            "additionalProperties": false,
-            "properties": {
-              "requestBody": { "type": "string", "minLength": 1 },
-              "batchSize": { "type": "integer", "minimum": 1, "maximum": 5000 },
-              "method": {
-                "type": "string",
-                "enum": ["POST", "PUT", "PATCH", "GET", "DELETE"]
-              },
-              "endpoint": { "type": "string", "minLength": 1 },
-              "fields": { "$ref": "#/definitions/fieldsArray" }
-            }
-          },
+          "insert": { "$ref": "#/definitions/baseActionConfig" },
           "update": {
             "type": "object",
             "additionalProperties": false,
@@ -84,21 +85,7 @@
               "required": ["requestBody", "method", "endpoint", "batchSize"]
             }
           },
-          "delete": {
-            "type": "object",
-            "required": ["requestBody", "method", "endpoint", "batchSize"],
-            "additionalProperties": false,
-            "properties": {
-              "requestBody": { "type": "string", "minLength": 1 },
-              "batchSize": { "type": "integer", "minimum": 1, "maximum": 5000 },
-              "method": {
-                "type": "string",
-                "enum": ["POST", "PUT", "PATCH", "GET", "DELETE"]
-              },
-              "endpoint": { "type": "string", "minLength": 1 },
-              "fields": { "$ref": "#/definitions/fieldsArray" }
-            }
-          }
+          "delete": { "$ref": "#/definitions/baseActionConfig" }
         }
       },
       "basicAuthUserName": { "type": "string", "minLength": 1 },
