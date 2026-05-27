@@ -3,6 +3,40 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
     "required": ["baseUrl", "authenticationType", "actions"],
+    "definitions": {
+      "fieldsArray": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["name", "isRequired", "hashType", "isCustom"],
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "isRequired": { "type": "boolean" },
+            "hashType": {
+              "type": "string",
+              "enum": ["NONE", "SHA256", "SHA512", "MD5"]
+            },
+            "isCustom": { "type": "boolean" }
+          }
+        }
+      },
+      "baseActionConfig": {
+        "type": "object",
+        "required": ["requestBody", "method", "endpoint", "batchSize"],
+        "additionalProperties": false,
+        "properties": {
+          "requestBody": { "type": "string", "minLength": 1 },
+          "batchSize": { "type": "integer", "minimum": 1, "maximum": 5000 },
+          "method": {
+            "type": "string",
+            "enum": ["POST", "PUT", "PATCH", "GET", "DELETE"]
+          },
+          "endpoint": { "type": "string", "minLength": 1 },
+          "fields": { "$ref": "#/definitions/fieldsArray" }
+        }
+      }
+    },
     "properties": {
       "baseUrl": {
         "type": "string",
@@ -25,36 +59,34 @@
       },
       "actions": {
         "type": "object",
-        "minProperties": 1,
-        "propertyNames": { "enum": ["insert", "update", "delete"] },
-        "additionalProperties": {
-          "type": "object",
-          "required": ["requestBody", "method", "endpoint", "batchSize"],
-          "properties": {
-            "requestBody": { "type": "string", "minLength": 1 },
-            "batchSize": { "type": "integer", "minimum": 1, "maximum": 5000 },
-            "method": {
-              "type": "string",
-              "enum": ["POST", "PUT", "PATCH", "GET", "DELETE"]
+        "required": ["insert", "update", "delete"],
+        "additionalProperties": false,
+        "properties": {
+          "insert": { "$ref": "#/definitions/baseActionConfig" },
+          "update": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "useInsertConfig": { "type": "boolean" },
+              "requestBody": { "type": "string", "minLength": 1 },
+              "batchSize": { "type": "integer", "minimum": 1, "maximum": 5000 },
+              "method": {
+                "type": "string",
+                "enum": ["POST", "PUT", "PATCH", "GET", "DELETE"]
+              },
+              "endpoint": { "type": "string", "minLength": 1 },
+              "fields": { "$ref": "#/definitions/fieldsArray" }
             },
-            "endpoint": { "type": "string", "minLength": 1 },
-            "fields": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "required": ["name", "isRequired", "hashType", "isCustom"],
-                "properties": {
-                  "name": { "type": "string", "minLength": 1 },
-                  "isRequired": { "type": "boolean" },
-                  "hashType": {
-                    "type": "string",
-                    "enum": ["NONE", "SHA256", "SHA512", "MD5"]
-                  },
-                  "isCustom": { "type": "boolean" }
-                }
-              }
+            "if": {
+              "properties": { "useInsertConfig": { "const": true } },
+              "required": ["useInsertConfig"]
+            },
+            "then": {},
+            "else": {
+              "required": ["requestBody", "method", "endpoint", "batchSize"]
             }
-          }
+          },
+          "delete": { "$ref": "#/definitions/baseActionConfig" }
         }
       },
       "basicAuthUserName": { "type": "string", "minLength": 1 },
