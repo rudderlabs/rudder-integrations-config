@@ -28,3 +28,23 @@ The LLD §4.1 destConfig template was simplified during implementation. Two fiel
 Additionally, the LLD did NOT include account option fields in `destConfig.defaultConfig` or `secretKeys`, but the actual implementation adds both. This is the correct pattern for account-bound destinations that need option values at delivery time.
 
 The LLD doc remains useful for architecture and data flow but its `db-config.json` snippet is not the canonical reference — use `src/configurations/destinations/iterable_audience/db-config.json` directly.
+
+## M2 AJV schema hardening (iterable_audience) — security review findings
+
+Two items flagged by integration-verify code review as M2 follow-up candidates (not M1 blockers, by-design for M1):
+
+1. **`identifierMappings` items lack `additionalProperties: false`** — the schema allows extra fields alongside `iterableField` and `warehouseColumn`. Adding `additionalProperties: false` would reject unknown keys at the AJV layer. Not enforced in M1 because the Zod layer in the transformer handles per-row constraints.
+
+2. **`iterableField` is not required in `identifierMappings` items** — a row with only `warehouseColumn` (missing `iterableField`) passes AJV validation. Again intentional for M1 (Zod enforces at transformer). Consider making `iterableField` required in M2 to catch misconfiguration earlier.
+
+## M2 warehouseColumn format constraint
+
+`warehouseColumn` is currently an unbounded `string` type in the AJV schema. A future defense-in-depth improvement would add a regex pattern such as `^[A-Za-z_][A-Za-z0-9_]{0,127}$` to reject invalid column names at config time rather than at delivery time.
+
+## M2 UI cosmetic polish (iterable_audience)
+
+Three minor cosmetic asymmetries identified during integration-verify UI review — not user-visible blockers but worth addressing in M2:
+
+1. **Project-type dropdown option order** — currently "email-based" appears after "hybrid" in the dropdown; conventional practice puts the most common type first
+2. **Note depth asymmetry** — the inline note for hybrid email fields is nested one level deeper than the email-based equivalent, making the form layout slightly inconsistent
+3. **"API" capitalization** — appears as lowercase "api" in one label vs. uppercase "API" in adjacent labels
