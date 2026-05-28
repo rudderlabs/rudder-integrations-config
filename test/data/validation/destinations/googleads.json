@@ -90,6 +90,38 @@
   {
     "config": {
       "conversionID": "AW-114432",
+      "sdkBaseUrl": "https://analytics.example.com",
+      "useNativeSDK": {
+        "web": true
+      },
+      "dynamicRemarketing": {
+        "web": true
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With invalid custom domain URL",
+    "config": {
+      "conversionID": "AW-114432",
+      "sdkBaseUrl": "invalid-url",
+      "useNativeSDK": {
+        "web": true
+      },
+      "dynamicRemarketing": {
+        "web": true
+      }
+    },
+    "result": false,
+    "err": [
+      "sdkBaseUrl must match pattern \"^(?=[\\s\\S]{0,500}$)(?:(\\{\\{.*\\|\\|(.*)\\}\\})|(env[.].+)|(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]*|)$\""
+    ]
+  },
+  {
+    "testTitle": "With ngrok custom domain URL",
+    "config": {
+      "conversionID": "AW-114432",
+      "sdkBaseUrl": "https://abc.ngrok.io",
       "useNativeSDK": {
         "web": true
       },

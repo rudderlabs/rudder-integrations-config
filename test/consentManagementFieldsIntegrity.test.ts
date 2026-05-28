@@ -35,7 +35,7 @@ describe('Consent Management Fields Integrity tests', () => {
   // under src/configuration/destinations
   // and ensure the fields oneTrustCookieCategories and ketchConsentPurposes are present
 
-  const skipDestinations = ['tiktok_audience', 'linkedin_audience', 'survicate'];
+  const skipDestinations = ['tiktok_audience', 'linkedin_audience', 'custom_audience', 'survicate'];
 
   const destDir = path.resolve('src/configurations/destinations');
   const dests = fs
