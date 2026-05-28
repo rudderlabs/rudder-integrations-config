@@ -1,0 +1,129 @@
+{
+  "uiConfig": [
+    {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Project Id",
+          "value": "projectId",
+          "required": true,
+          "placeholder": "my-project-id"
+        },
+        {
+          "type": "textInput",
+          "label": "Dataset Id",
+          "value": "datasetId",
+          "required": true,
+          "placeholder": "my-dataset-id"
+        },
+        {
+          "type": "textInput",
+          "label": "Table Id",
+          "value": "tableId",
+          "required": true,
+          "placeholder": "my-table-id"
+        },
+        {
+          "type": "textInput",
+          "label": "Insert Id",
+          "labelNote": "Map a column from your payload to enable best effort de-duplication by Google",
+          "value": "insertId",
+          "required": false,
+          "placeholder": "mapped-column-name"
+        },
+        {
+          "type": "textareaInput",
+          "subType": "JSON",
+          "label": "Credentials",
+          "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your BigQuery database",
+          "value": "credentials",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
+          "required": true,
+          "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'BigQuery Data Editor'",
+          "secret": true
+        }
+      ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "consentManagement",
+          "label": "Consent management settings",
+          "footerNote": "We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "customFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "value": "provider",
+              "options": [
+                {
+                  "name": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "name": "iubenda",
+                  "value": "iubenda"
+                },
+                {
+                  "name": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "name": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "defaultOption": {
+                "name": "OneTrust",
+                "value": "oneTrust"
+              },
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "value": "resolutionStrategy",
+              "options": [
+                {
+                  "name": "AND",
+                  "value": "and"
+                },
+                {
+                  "name": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "dynamicCustomForm",
+              "value": "consents",
+              "label": "Enter consent category IDs",
+              "customFields": [
+                {
+                  "type": "textInput",
+                  "placeholder": "Marketing",
+                  "value": "consent",
+                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "required": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
