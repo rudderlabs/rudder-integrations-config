@@ -1,36 +1,39 @@
 {
   "uiConfig": [
     {
-      "title": "Connection Settings",
+      "title": "Connection Credentials",
       "fields": [
         {
           "type": "textInput",
-          "label": "Project Id",
-          "value": "projectId",
-          "required": true,
-          "placeholder": "my-project-id"
+          "label": "Project",
+          "labelNote": "GCP Project ID where your BigQuery database is located",
+          "value": "project",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Project",
+          "placeholder": "my-sample-project-19XX23",
+          "required": true
         },
         {
           "type": "textInput",
-          "label": "Dataset Id",
-          "value": "datasetId",
-          "required": true,
-          "placeholder": "my-dataset-id"
-        },
-        {
-          "type": "textInput",
-          "label": "Table Id",
-          "value": "tableId",
-          "required": true,
-          "placeholder": "my-table-id"
-        },
-        {
-          "type": "textInput",
-          "label": "Insert Id",
-          "labelNote": "Map a column from your payload to enable best effort de-duplication by Google",
-          "value": "insertId",
+          "label": "Location",
+          "labelNote": "GCP region for your BigQuery datasets",
+          "value": "location",
+          "regex": "^(.{0,100})$",
+          "regexErrorMessage": "Invalid Location",
+          "placeholder": "US, EU, asia-southeast1",
           "required": false,
-          "placeholder": "mapped-column-name"
+          "footerNote": "Examples: US, EU, asia-south1"
+        },
+        {
+          "type": "textInput",
+          "label": "Namespace",
+          "labelNote": "Schema name for the warehouse where the tables are created",
+          "value": "namespace",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{1,64})$",
+          "regexErrorMessage": "Invalid Namespace",
+          "required": true,
+          "placeholder": "e.g: RUDDER_NAMESPACE",
+          "immutable": true
         },
         {
           "type": "textareaInput",
@@ -38,10 +41,74 @@
           "label": "Credentials",
           "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your BigQuery database",
           "value": "credentials",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*",
+          "regex": ".+",
           "required": true,
-          "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'BigQuery Data Editor'",
+          "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'BigQuery User'",
           "secret": true
+        },
+        {
+          "type": "singleSelect",
+          "immutable": true,
+          "label": "Partition Column",
+          "value": "partitionColumn",
+          "options": [
+            { "name": "Ingestion Time", "value": "_PARTITIONTIME" },
+            { "name": "Loaded At", "value": "loaded_at" },
+            { "name": "Received At", "value": "received_at" },
+            { "name": "Timestamp", "value": "timestamp" },
+            { "name": "Sent At", "value": "sent_at" },
+            { "name": "Original Timestamp", "value": "original_timestamp" }
+          ],
+          "defaultOption": { "name": "Ingestion Time", "value": "_PARTITIONTIME" },
+          "required": false
+        },
+        {
+          "type": "singleSelect",
+          "immutable": true,
+          "label": "Partition Type",
+          "value": "partitionType",
+          "options": [
+            { "name": "Hour", "value": "hour" },
+            { "name": "Day", "value": "day" }
+          ],
+          "defaultOption": { "name": "Day", "value": "day" },
+          "required": false
+        }
+      ]
+    },
+    {
+      "title": "Advanced Settings",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Skip Tracks Table",
+          "value": "skipTracksTable",
+          "footerNote": "Enable this toggle to skip sending the event data to the tracks table",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "label": "Skip Views Creation",
+          "value": "skipViews",
+          "default": false,
+          "immutable": true,
+          "footerURL": {
+            "link": "https://www.rudderstack.com/docs/destinations/warehouse-destinations/bigquery/#partitioned-tables-and-views",
+            "text": "Enable this toggle to skip creation of views in BigQuery. Learn more about views"
+          }
+        },
+        {
+          "type": "textInput",
+          "label": "JSON columns (Optional)",
+          "labelNote": "Specify required JSON properties in dot notation separated by commas",
+          "value": "jsonPaths",
+          "regex": "^(.*)$",
+          "placeholder": "e.g: testMap.nestedMap, testArray",
+          "required": false,
+          "footerURL": {
+            "link": "https://www.rudderstack.com/docs/destinations/warehouse-destinations/bigquery/#configuring-google-bigquery-destination-in-rudderstack",
+            "text": "Instructions for setting up the JSON columns"
+          }
         }
       ]
     },
@@ -76,10 +143,6 @@
                   "value": "oneTrust"
                 }
               ],
-              "defaultOption": {
-                "name": "OneTrust",
-                "value": "oneTrust"
-              },
               "required": true
             },
             {
@@ -121,7 +184,8 @@
                 }
               ]
             }
-          ]
+          ],
+          "uniqueRowFields": ["provider"]
         }
       ]
     }

@@ -1,14 +1,10 @@
 {
   "name": "BQ_STREAMING",
-  "displayName": "BigQuery Streaming",
+  "displayName": "BigQuery Stream V2",
   "config": {
     "transformAtV1": "processor",
     "saveDestinationResponse": true,
-    "includeKeys": ["oneTrustCookieCategories", "ketchConsentPurposes", "consentManagement"],
     "excludeKeys": [],
-    "supportedMessageTypes": {
-      "cloud": ["track"]
-    },
     "supportedSourceTypes": [
       "android",
       "androidKotlin",
@@ -19,9 +15,9 @@
       "amp",
       "cloud",
       "reactnative",
+      "cloudSource",
       "flutter",
       "cordova",
-      "cloudSource",
       "shopify"
     ],
     "supportedConnectionModes": {
@@ -40,7 +36,19 @@
       "cloudSource": ["cloud"]
     },
     "destConfig": {
-      "defaultConfig": ["datasetId", "tableId", "projectId", "credentials", "insertId"],
+      "defaultConfig": [
+        "project",
+        "location",
+        "namespace",
+        "credentials",
+        "partitionColumn",
+        "partitionType",
+        "skipTracksTable",
+        "skipViews",
+        "jsonPaths",
+        "underscoreDivideNumbers",
+        "allowUsersContextTraits"
+      ],
       "android": [
         "connectionMode",
         "consentManagement",
@@ -114,8 +122,9 @@
   },
   "options": {
     "disableLiveEvents": true,
+    "isBeta": true,
     "hidden": {
-      "featureFlagName": "AMP_bq_streaming",
+      "featureFlagName": "AMP_enable_bq_streaming",
       "featureFlagValue": false
     }
   }

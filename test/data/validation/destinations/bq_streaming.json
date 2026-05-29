@@ -1,11 +1,135 @@
 [
   {
+    "testTitle": "With full valid config",
+    "config": {
+      "project": "my-sample-project-19XX23",
+      "location": "US",
+      "namespace": "RUDDER_NAMESPACE",
+      "credentials": "{\"type\":\"service_account\"}",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "jsonPaths": "testMap.nestedMap, testArray"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With minimal required config",
+    "config": {
+      "project": "my-sample-project-19XX23",
+      "namespace": "RUDDER_NAMESPACE",
+      "credentials": "{\"type\":\"service_account\"}"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With namespace as env variable",
+    "config": {
+      "project": "my-sample-project-19XX23",
+      "namespace": "env.RUDDER_NAMESPACE",
+      "credentials": "{\"type\":\"service_account\"}"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With empty project",
+    "config": {
+      "project": "",
+      "namespace": "RUDDER_NAMESPACE",
+      "credentials": "{\"type\":\"service_account\"}"
+    },
+    "result": false,
+    "err": ["project must match pattern \"^(.{1,100})$\""]
+  },
+  {
+    "testTitle": "With empty credentials",
+    "config": {
+      "project": "my-sample-project-19XX23",
+      "namespace": "RUDDER_NAMESPACE",
+      "credentials": ""
+    },
+    "result": false,
+    "err": ["credentials must match pattern \".+\""]
+  },
+  {
+    "testTitle": "Without project",
+    "config": {
+      "namespace": "RUDDER_NAMESPACE",
+      "credentials": "{\"type\":\"service_account\"}"
+    },
+    "result": false,
+    "err": [" must have required property 'project'"]
+  },
+  {
+    "testTitle": "Without namespace",
+    "config": {
+      "project": "my-sample-project-19XX23",
+      "credentials": "{\"type\":\"service_account\"}"
+    },
+    "result": false,
+    "err": [" must have required property 'namespace'"]
+  },
+  {
+    "testTitle": "Without credentials",
+    "config": {
+      "project": "my-sample-project-19XX23",
+      "namespace": "RUDDER_NAMESPACE"
+    },
+    "result": false,
+    "err": [" must have required property 'credentials'"]
+  },
+  {
+    "testTitle": "With invalid namespace (reserved pg_ prefix)",
+    "config": {
+      "project": "my-sample-project-19XX23",
+      "namespace": "pg_invalid",
+      "credentials": "{\"type\":\"service_account\"}"
+    },
+    "result": false,
+    "err": [
+      "namespace must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{1,64})$\""
+    ]
+  },
+  {
+    "testTitle": "With invalid partitionColumn value",
+    "config": {
+      "project": "my-sample-project-19XX23",
+      "namespace": "RUDDER_NAMESPACE",
+      "credentials": "{\"type\":\"service_account\"}",
+      "partitionColumn": "invalid_column"
+    },
+    "result": false,
+    "err": ["partitionColumn must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With invalid partitionType value",
+    "config": {
+      "project": "my-sample-project-19XX23",
+      "namespace": "RUDDER_NAMESPACE",
+      "credentials": "{\"type\":\"service_account\"}",
+      "partitionType": "week"
+    },
+    "result": false,
+    "err": ["partitionType must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With non-boolean skipTracksTable",
+    "config": {
+      "project": "my-sample-project-19XX23",
+      "namespace": "RUDDER_NAMESPACE",
+      "credentials": "{\"type\":\"service_account\"}",
+      "skipTracksTable": "yes"
+    },
+    "result": false,
+    "err": ["skipTracksTable must be boolean"]
+  },
+  {
     "testTitle": "With valid multiple consent management providers config",
     "config": {
-      "projectId": "1",
-      "tableId": "1",
-      "credentials": "",
-      "datasetId": "test-bucket",
+      "project": "my-sample-project-19XX23",
+      "namespace": "RUDDER_NAMESPACE",
+      "credentials": "{\"type\":\"service_account\"}",
       "consentManagement": {
         "web": [
           {
@@ -48,10 +172,9 @@
   {
     "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
     "config": {
-      "projectId": "2",
-      "tableId": "2",
-      "credentials": "",
-      "datasetId": "test-bucket",
+      "project": "my-sample-project-19XX23",
+      "namespace": "RUDDER_NAMESPACE",
+      "credentials": "{\"type\":\"service_account\"}",
       "consentManagement": {
         "android": [
           {
@@ -70,10 +193,9 @@
   {
     "testTitle": "With consent management custom provider config and no resolutionStrategy value",
     "config": {
-      "projectId": "3",
-      "tableId": "3",
-      "credentials": "",
-      "datasetId": "test-bucket",
+      "project": "my-sample-project-19XX23",
+      "namespace": "RUDDER_NAMESPACE",
+      "credentials": "{\"type\":\"service_account\"}",
       "consentManagement": {
         "android": [
           {
@@ -91,10 +213,9 @@
   {
     "testTitle": "With consent management OneTrust provider config and no resolutionStrategy value",
     "config": {
-      "projectId": "4",
-      "tableId": "4",
-      "credentials": "",
-      "datasetId": "test-bucket",
+      "project": "my-sample-project-19XX23",
+      "namespace": "RUDDER_NAMESPACE",
+      "credentials": "{\"type\":\"service_account\"}",
       "consentManagement": {
         "android": [
           {
@@ -108,10 +229,9 @@
   {
     "testTitle": "With consent management custom provider config invalid provider value",
     "config": {
-      "projectId": "5",
-      "tableId": "5",
-      "credentials": "",
-      "datasetId": "test-bucket",
+      "project": "my-sample-project-19XX23",
+      "namespace": "RUDDER_NAMESPACE",
+      "credentials": "dummyCredentials",
       "consentManagement": {
         "android": [
           {
@@ -124,408 +244,23 @@
     "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
   },
   {
-    "testTitle": "With all IDs, credentials",
+    "testTitle": "With oneTrustCookieCategories and ketchConsentPurposes as arrays instead of objects",
     "config": {
-      "projectId": "sustained-opus-345008",
-      "datasetId": "sustained-opus-345008.http_source",
-      "tableId": "sustained-opus-345008.http_source.demo_track",
-      "insertId": "id",
-      "credentials": "",
-      "connectionMode": {
-        "web": "cloud"
-      },
-      "consentManagement": {}
-    },
-    "result": true
-  },
-  {
-    "testTitle": "Without insertId (optional field)",
-    "config": {
-      "projectId": "sustained-opus-345009",
-      "datasetId": "sustained-opus-345009.http_source",
-      "tableId": "sustained-opus-345009.http_source.demo_track",
-      "insertId": "",
-      "credentials": "dummyCredentials",
-      "connectionMode": {
-        "web": "cloud"
-      },
-      "consentManagement": {}
-    },
-    "result": true
-  },
-  {
-    "testTitle": "Without projectId",
-    "config": {
-      "datasetId": "sustained-opus-345010.http_source",
-      "tableId": "sustained-opus-345010.http_source.demo_track",
-      "insertId": "",
-      "credentials": "dummyCredentials",
-      "connectionMode": {
-        "web": "cloud"
-      },
-      "consentManagement": {}
-    },
-    "result": false,
-    "err": [" must have required property 'projectId'"]
-  },
-  {
-    "testTitle": "Without credentials",
-    "config": {
-      "projectId": "sustained-opus-345011",
-      "datasetId": "sustained-opus-345011.http_source",
-      "tableId": "sustained-opus-345011.http_source.demo_track",
-      "insertId": "",
-      "connectionMode": {
-        "web": "cloud"
-      },
-      "consentManagement": {}
-    },
-    "result": false,
-    "err": [" must have required property 'credentials'"]
-  },
-  {
-    "testTitle": "With valid multiple consent management providers config",
-    "config": {
-      "projectId": "1",
-      "tableId": "1",
-      "credentials": "",
-      "datasetId": "test-bucket",
-      "consentManagement": {
-        "web": [
-          {
-            "provider": "custom",
-            "consents": [
-              {
-                "consent": "Marketing"
-              }
-            ],
-            "resolutionStrategy": "or"
-          },
-          {
-            "provider": "oneTrust",
-            "consents": [
-              {
-                "consent": "Marketing"
-              }
-            ]
-          },
-          {
-            "provider": "ketch",
-            "consents": []
-          },
-          {
-            "provider": "iubenda",
-            "consents": [
-              {
-                "consent": "1"
-              },
-              {
-                "consent": "4"
-              }
-            ]
-          }
-        ]
-      },
-      "oneTrustCookieCategories": {
-        "android": [
-          {
-            "oneTrustCookieCategory": "C0001"
-          },
-          {
-            "oneTrustCookieCategory": "C0002"
-          }
-        ],
-        "ios": [
-          {
-            "oneTrustCookieCategory": "C0003"
-          },
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ],
-        "web": [
-          {
-            "oneTrustCookieCategory": ""
-          }
-        ],
-        "unity": [],
-        "amp": [
-          {
-            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
-          }
-        ],
-        "cloud": [
-          {
-            "oneTrustCookieCategory": "{{ event.properties.prop1 || 'val' }}"
-          }
-        ],
-        "reactnative": [
-          {
-            "oneTrustCookieCategory": "C0001"
-          },
-          {
-            "oneTrustCookieCategory": "C0002"
-          }
-        ],
-        "flutter": [
-          {
-            "oneTrustCookieCategory": "C0003"
-          },
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ],
-        "cordova": [
-          {
-            "oneTrustCookieCategory": ""
-          }
-        ],
-        "cloudSource": [],
-        "shopify": [
-          {
-            "oneTrustCookieCategory": "env.ENVIRONMENT_VARIABLE"
-          }
-        ]
-      },
-      "ketchConsentPurposes": {
-        "android": [
-          {
-            "purpose": "P1"
-          },
-          {
-            "purpose": "P2"
-          }
-        ],
-        "ios": [
-          {
-            "purpose": "P3"
-          },
-          {
-            "purpose": "P4"
-          }
-        ],
-        "web": [
-          {
-            "purpose": ""
-          }
-        ],
-        "unity": [],
-        "amp": [
-          {
-            "purpose": "env.ENVIRONMENT_VARIABLE"
-          }
-        ],
-        "cloud": [
-          {
-            "purpose": "{{ event.properties.prop1 || 'val' }}"
-          }
-        ],
-        "reactnative": [
-          {
-            "purpose": "P1"
-          },
-          {
-            "purpose": "P2"
-          }
-        ],
-        "flutter": [
-          {
-            "purpose": "P3"
-          },
-          {
-            "purpose": "P4"
-          }
-        ],
-        "cordova": [
-          {
-            "purpose": ""
-          }
-        ],
-        "cloudSource": [],
-        "shopify": [
-          {
-            "purpose": "env.ENVIRONMENT_VARIABLE"
-          }
-        ]
-      }
-    },
-    "result": true
-  },
-  {
-    "testTitle": "With valid multiple consent management providers config",
-    "config": {
-      "projectId": "1",
-      "tableId": "1",
-      "credentials": "",
-      "datasetId": "test-bucket",
-      "consentManagement": {
-        "web": [
-          {
-            "provider": "custom",
-            "consents": [
-              {
-                "consent": "Marketing"
-              }
-            ],
-            "resolutionStrategy": "or"
-          },
-          {
-            "provider": "oneTrust",
-            "consents": [
-              {
-                "consent": "Marketing"
-              }
-            ]
-          },
-          {
-            "provider": "ketch",
-            "consents": []
-          },
-          {
-            "provider": "iubenda",
-            "consents": [
-              {
-                "consent": "1"
-              },
-              {
-                "consent": "4"
-              }
-            ]
-          }
-        ]
-      },
+      "project": "my-sample-project-19XX23",
+      "namespace": "RUDDER_NAMESPACE",
+      "credentials": "{\"type\":\"service_account\"}",
       "oneTrustCookieCategories": [
         {
           "oneTrustCookieCategory": "C0001"
-        },
-        {
-          "oneTrustCookieCategory": "C0002"
         }
       ],
       "ketchConsentPurposes": [
         {
           "purpose": "P1"
-        },
-        {
-          "purpose": "P2"
         }
       ]
     },
     "result": false,
     "err": ["oneTrustCookieCategories must be object", "ketchConsentPurposes must be object"]
-  },
-  {
-    "testTitle": "With valid multiple consent management providers config",
-    "config": {
-      "projectId": "1",
-      "tableId": "1",
-      "credentials": "",
-      "datasetId": "test-bucket",
-      "consentManagement": {
-        "web": [
-          {
-            "provider": "custom",
-            "consents": [
-              {
-                "consent": "Marketing"
-              }
-            ],
-            "resolutionStrategy": "or"
-          },
-          {
-            "provider": "oneTrust",
-            "consents": [
-              {
-                "consent": "Marketing"
-              }
-            ]
-          },
-          {
-            "provider": "ketch",
-            "consents": []
-          },
-          {
-            "provider": "iubenda",
-            "consents": [
-              {
-                "consent": "1"
-              },
-              {
-                "consent": "4"
-              }
-            ]
-          }
-        ]
-      },
-      "oneTrustCookieCategories": {
-        "android": [
-          {
-            "oneTrustCookieCategory": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-          },
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ],
-        "ios": [
-          {
-            "oneTrustCookieCategory": {
-              "not": "a string"
-            }
-          },
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ],
-        "web": {
-          "not": "an array"
-        },
-        "unity": [
-          "not an object",
-          {
-            "oneTrustCookieCategory": "C0004"
-          }
-        ]
-      },
-      "ketchConsentPurposes": {
-        "android": [
-          {
-            "purpose": "more than 100 characters string - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-          },
-          {
-            "purpose": "P4"
-          }
-        ],
-        "ios": [
-          {
-            "purpose": {
-              "not": "a string"
-            }
-          },
-          {
-            "purpose": "P4"
-          }
-        ],
-        "web": {
-          "not": "an array"
-        },
-        "unity": [
-          "not an object",
-          {
-            "purpose": "P4"
-          }
-        ]
-      }
-    },
-    "result": false,
-    "err": [
-      "oneTrustCookieCategories.android.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
-      "oneTrustCookieCategories.ios.0.oneTrustCookieCategory must be string",
-      "oneTrustCookieCategories.web must be array",
-      "oneTrustCookieCategories.unity.0 must be object",
-      "ketchConsentPurposes.android.0.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
-      "ketchConsentPurposes.ios.0.purpose must be string",
-      "ketchConsentPurposes.web must be array",
-      "ketchConsentPurposes.unity.0 must be object"
-    ]
   }
 ]
