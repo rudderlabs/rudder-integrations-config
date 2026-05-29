@@ -1,0 +1,100 @@
+[
+  {
+    "testTitle": "With required fields",
+    "config": {
+      "project": "test-gcp-project",
+      "namespace": "rudder_namespace",
+      "credentials": "{}"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With all supported optional fields",
+    "config": {
+      "project": "test-gcp-project",
+      "location": "US",
+      "namespace": "rudder_namespace",
+      "credentials": "{}",
+      "partitionColumn": "received_at",
+      "partitionType": "hour",
+      "skipTracksTable": true,
+      "skipViews": true,
+      "jsonPaths": "properties.context,testMap.nestedMap"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Without project",
+    "config": {
+      "namespace": "rudder_namespace",
+      "credentials": "{}"
+    },
+    "result": false,
+    "err": [" must have required property 'project'"]
+  },
+  {
+    "testTitle": "Without namespace",
+    "config": {
+      "project": "test-gcp-project",
+      "credentials": "{}"
+    },
+    "result": false,
+    "err": [" must have required property 'namespace'"]
+  },
+  {
+    "testTitle": "Without credentials",
+    "config": {
+      "project": "test-gcp-project",
+      "namespace": "rudder_namespace"
+    },
+    "result": false,
+    "err": [" must have required property 'credentials'"]
+  },
+  {
+    "testTitle": "Invalid partitionColumn",
+    "config": {
+      "project": "test-gcp-project",
+      "namespace": "rudder_namespace",
+      "credentials": "{}",
+      "partitionColumn": "invalid_partition"
+    },
+    "result": false,
+    "err": [
+      "partitionColumn must match pattern \"^(_PARTITIONTIME|loaded_at|received_at|timestamp|sent_at|original_timestamp)$\""
+    ]
+  },
+  {
+    "testTitle": "Invalid partitionType",
+    "config": {
+      "project": "test-gcp-project",
+      "namespace": "rudder_namespace",
+      "credentials": "{}",
+      "partitionType": "month"
+    },
+    "result": false,
+    "err": ["partitionType must match pattern \"^(hour|day)$\""]
+  },
+  {
+    "testTitle": "Namespace cannot use pg_ prefix",
+    "config": {
+      "project": "test-gcp-project",
+      "namespace": "pg_internal",
+      "credentials": "{}"
+    },
+    "result": false,
+    "err": [
+      "namespace must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^((?!pg_|PG_|pG_|Pg_).{1,64})$\""
+    ]
+  },
+  {
+    "testTitle": "Legacy fields are tolerated by schema for backward compatibility",
+    "config": {
+      "project": "test-gcp-project",
+      "namespace": "rudder_namespace",
+      "credentials": "{}",
+      "prefix": "legacy_prefix",
+      "skipUsersTable": true
+    },
+    "result": true
+  }
+]
