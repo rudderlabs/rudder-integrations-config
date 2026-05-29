@@ -352,6 +352,37 @@
     "result": true
   },
   {
+    "testTitle": "With duplicate consent management providers config",
+    "config": {
+      "trackingID": "UA-000000000-4",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      },
+      "rudderAccountId": "test-host"
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web Only one consent management block can be configured per provider."
+    ]
+  },
+  {
     "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
     "config": {
       "trackingID": "UA-000000000-4",

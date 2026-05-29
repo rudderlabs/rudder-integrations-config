@@ -1,7 +1,9 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["writeKey"],
+    "required": [
+      "writeKey"
+    ],
     "type": "object",
     "properties": {
       "writeKey": {
@@ -26,7 +28,11 @@
       },
       "eventFilteringOption": {
         "type": "string",
-        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "enum": [
+          "disable",
+          "whitelistedEvents",
+          "blacklistedEvents"
+        ],
         "default": "disable"
       },
       "whitelistedEvents": {
@@ -80,7 +86,12 @@
               "properties": {
                 "provider": {
                   "type": "string",
-                  "enum": ["custom", "iubenda", "ketch", "oneTrust"],
+                  "enum": [
+                    "custom",
+                    "iubenda",
+                    "ketch",
+                    "oneTrust"
+                  ],
                   "default": "oneTrust"
                 },
                 "consents": {
@@ -104,19 +115,32 @@
                         "const": "custom"
                       }
                     },
-                    "required": ["provider"]
+                    "required": [
+                      "provider"
+                    ]
                   },
                   "then": {
                     "properties": {
                       "resolutionStrategy": {
                         "type": "string",
-                        "enum": ["and", "or"]
+                        "enum": [
+                          "and",
+                          "or"
+                        ]
                       }
                     },
-                    "required": ["resolutionStrategy"]
+                    "required": [
+                      "resolutionStrategy"
+                    ]
                   }
                 }
               ]
+            },
+            "uniqueItemProperties": [
+              "provider"
+            ],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
             }
           }
         }
@@ -126,7 +150,9 @@
         "properties": {
           "web": {
             "type": "string",
-            "enum": ["device"]
+            "enum": [
+              "device"
+            ]
           }
         }
       },
@@ -156,7 +182,9 @@
               "const": true
             }
           },
-          "required": ["recordSatismeterEvents"]
+          "required": [
+            "recordSatismeterEvents"
+          ]
         },
         "then": {
           "properties": {
@@ -164,9 +192,16 @@
               "type": "array",
               "items": {
                 "type": "string",
-                "enum": ["display", "dismiss", "progress", "complete"]
+                "enum": [
+                  "display",
+                  "dismiss",
+                  "progress",
+                  "complete"
+                ]
               },
-              "default": ["display"]
+              "default": [
+                "display"
+              ]
             }
           },
           "required": []
@@ -179,7 +214,9 @@
               "const": true
             }
           },
-          "required": ["recordSatismeterEvents"]
+          "required": [
+            "recordSatismeterEvents"
+          ]
         },
         "then": {
           "properties": {
@@ -201,7 +238,10 @@
               "const": true
             }
           },
-          "required": ["recordSatismeterEvents", "updateEventNames"]
+          "required": [
+            "recordSatismeterEvents",
+            "updateEventNames"
+          ]
         },
         "then": {
           "properties": {
@@ -216,7 +256,13 @@
                   },
                   "to": {
                     "type": "string",
-                    "enum": ["display", "dismiss", "progress", "complete", ""]
+                    "enum": [
+                      "display",
+                      "dismiss",
+                      "progress",
+                      "complete",
+                      ""
+                    ]
                   }
                 }
               }

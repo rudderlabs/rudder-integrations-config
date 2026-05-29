@@ -381,6 +381,9 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     Returns:
         object
     """
+    uniqueItemPropertiesErrorMessage = (
+        "Only one consent management block can be configured per provider."
+    )
     dynamicCustomFormObj = {}
     dynamicCustomFormObj["type"] = FieldTypeEnum.ARRAY.value
     dynamicCustomFormItemObj = {}
@@ -436,6 +439,11 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
         dynamicCustomFormItemObj["allOf"] = allOfSchemaObj
 
     dynamicCustomFormObj["items"] = dynamicCustomFormItemObj
+    if "uniqueRowFields" in field and isinstance(field["uniqueRowFields"], list):
+        dynamicCustomFormObj["uniqueItemProperties"] = field["uniqueRowFields"]
+        dynamicCustomFormObj["errorMessage"] = {
+            "uniqueItemProperties": uniqueItemPropertiesErrorMessage
+        }
     isSourceDependent = is_dest_field_dependent_on_source(
         field, dbConfig, schema_field_name
     )
