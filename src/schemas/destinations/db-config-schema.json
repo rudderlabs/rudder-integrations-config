@@ -691,6 +691,73 @@
           "$comment": "This is used to display the 'Custom Mappings' tab in the UI.",
           "default": false
         },
+        "audienceActivation": {
+          "type": "object",
+          "title": "Audience Activation",
+          "description": "Per-destination metadata consumed by the MCP server's audience-activation tools. Lives under `options` (alongside isBeta/hidden/etc.) because it describes how downstream tooling should treat this destination — not the destination's own config form. Two concerns: `discovery` (how to probe the downstream destination — what integrationsInfo operations exist and what config to pass) and `vdm` (how to assemble a valid VDM v2 connection — the defaults that go into the connection's destination/source config). `mappingGuidance` is shared LLM-facing prose.",
+          "additionalProperties": false,
+          "required": ["discovery", "vdm", "mappingGuidance"],
+          "properties": {
+            "discovery": {
+              "type": "object",
+              "title": "Discovery",
+              "description": "How to probe the downstream destination: which integrationsInfo operations it exposes and which destination.config fields to pass when calling them.",
+              "additionalProperties": false,
+              "required": ["operations"],
+              "properties": {
+                "operations": {
+                  "type": "object",
+                  "title": "Operations",
+                  "description": "Logical-to-physical map of integrationsInfo operations the destination supports. Keys are the LOGICAL op names the MCP refers to; values are the PHYSICAL URL suffix appended to /integrationsInfo/v1/<destName>/. Single-kind destinations use identity mappings (e.g. {listFields: 'listFields'}); destinations whose physical endpoints differ from the logical names remap accordingly.",
+                  "additionalProperties": false,
+                  "minProperties": 1,
+                  "properties": {
+                    "listFields": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "listAudiences": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "setup": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "contextFields": {
+                  "type": "array",
+                  "title": "Context Fields",
+                  "description": "Field names lifted from destination.config and passed in the integrationsInfo proxy body's `config` (e.g. adAccountId for Facebook, advertiserId for TikTok).",
+                  "items": {
+                    "type": "string"
+                  },
+                  "uniqueItems": true
+                }
+              }
+            },
+            "vdm": {
+              "type": "object",
+              "title": "VDM (v2) Creation",
+              "description": "How to assemble a valid VDM v2 connection. `configDefaults` is the per-destination form-state baseline merged into the vdmConfig sent to /setup. The connection's config.source (schedule, syncSettings) is NOT here — it is a RudderStack connection-level concern identical across destinations, owned by the MCP server as a constant.",
+              "additionalProperties": false,
+              "required": ["configDefaults"],
+              "properties": {
+                "configDefaults": {
+                  "type": "object",
+                  "title": "VDM Config Defaults",
+                  "description": "Per-destination form-state defaults merged into the vdmConfig sent to /setup. Sourced from the destination's webapp form (rudder-webapp vdmFormRegistry). MCP-internal — never surfaced to the LLM. Keys vary per destination: FB needs type/subtype; TikTok omits them."
+                }
+              }
+            },
+            "mappingGuidance": {
+              "type": "string",
+              "title": "Mapping Guidance",
+              "description": "Markdown prose surfaced via get_audience_destination_schema. Codifies the 'useful mapping' rules that the field schema alone can't express: which fields are strong vs. bundle-only, match-quality direction (OR vs. pick-best), per-destination skips. Serves both concerns; the LLM reads it as one blob."
+            }
+          }
+        },
         "createFlow": {
           "type": "object",
           "title": "Create Flow",
