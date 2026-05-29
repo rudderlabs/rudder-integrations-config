@@ -468,7 +468,7 @@ describe('Validator Utils', () => {
           },
           type: {
             type: 'string',
-            enum: ['cloud', 'web', 'android', 'androidKotlin', 'ios', 'iosSwift'],
+            enum: ['cloud', 'web', 'android', 'androidKotlin', 'ios', 'iosSwift', 'ocaml'],
           },
         },
       };
@@ -483,6 +483,16 @@ describe('Validator Utils', () => {
         name: 'shopify',
         displayName: 'Shopify',
         type: 'cloud',
+      };
+
+      await expect(validateSourceDefinitions(validSourceDef)).resolves.toBe(true);
+    });
+
+    it('should validate source definition with ocaml type', async () => {
+      const validSourceDef = {
+        name: 'ocaml_source',
+        displayName: 'OCaml Source',
+        type: 'ocaml',
       };
 
       await expect(validateSourceDefinitions(validSourceDef)).resolves.toBe(true);
