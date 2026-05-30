@@ -15,7 +15,7 @@ const ajv = new Ajv({
   strictTypes: true,
   strictTuples: true,
 });
-addKeywords(ajv);
+addKeywords(ajv, ['uniqueItemProperties']);
 ajvErrors(ajv);
 
 let validators: Record<string, ValidateFunction> = {};
@@ -212,7 +212,7 @@ export async function validateDestinationDefinitions(
     strictTypes: true,
     strictTuples: true,
   });
-  addKeywords(ddAjv);
+  addKeywords(ddAjv, ['uniqueItemProperties']);
   ajvErrors(ddAjv);
 
   const validator = ddAjv.compile(
@@ -247,7 +247,7 @@ export async function validateSourceDefinitions(
     strictTypes: true,
     strictTuples: true,
   });
-  addKeywords(ddAjv);
+  addKeywords(ddAjv, ['uniqueItemProperties']);
   ajvErrors(ddAjv);
 
   const validator = ddAjv.compile(
@@ -278,7 +278,7 @@ export async function validateAccountDefinitions(
     strictTypes: true,
     strictTuples: true,
   });
-  addKeywords(ddAjv);
+  addKeywords(ddAjv, ['uniqueItemProperties']);
   ajvErrors(ddAjv);
 
   const validator = ddAjv.compile(
