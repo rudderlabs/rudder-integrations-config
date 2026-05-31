@@ -390,6 +390,7 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     dynamicCustomFormItemObj["type"] = FieldTypeEnum.OBJECT.value
     dynamicCustomFormItemObj["properties"] = {}
     allOfSchemaObj = {}
+    requiredFields = []
 
     # For old schema types customFields contains the children, for v2 its is rowFields
     customFieldsKey = "customFields"
@@ -410,6 +411,9 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
 
         if "preRequisites" in customField:
             continue
+
+        if customField.get("required") == True:
+            requiredFields.append(customField[schema_field_name])
 
         if (
             "pattern" not in customFieldSchemaObj
@@ -437,6 +441,9 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
 
     if allOfSchemaObj:
         dynamicCustomFormItemObj["allOf"] = allOfSchemaObj
+
+    if requiredFields:
+        dynamicCustomFormItemObj["required"] = requiredFields
 
     dynamicCustomFormObj["items"] = dynamicCustomFormItemObj
     if "uniqueRowFields" in field and isinstance(field["uniqueRowFields"], list):
