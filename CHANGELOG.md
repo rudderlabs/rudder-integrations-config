@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.156.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.155.0...v1.156.0) (2026-06-01)
+
+
+### Features
+
+* add sdkBaseUrl to googleads destination config ([#2476](https://github.com/rudderlabs/rudder-config-schema/issues/2476)) ([92bed2c](https://github.com/rudderlabs/rudder-config-schema/commit/92bed2c71b423902d4ab20a67f8e530fcd010fa6))
+* **custom_audience:** add useInsertConfig toggle and require all actions ([#2501](https://github.com/rudderlabs/rudder-config-schema/issues/2501)) ([0a3cfe0](https://github.com/rudderlabs/rudder-config-schema/commit/0a3cfe01a83de850bdc32218b2e66039d98adc79))
+* onboard custom audience destination ([#2478](https://github.com/rudderlabs/rudder-config-schema/issues/2478)) ([379721f](https://github.com/rudderlabs/rudder-config-schema/commit/379721fff92521a53f9d2d62760e31be7daeb80d))
+
+
+### Bug Fixes
+
+* lowercase custom audience action keys ([#2498](https://github.com/rudderlabs/rudder-config-schema/issues/2498)) ([6ca954d](https://github.com/rudderlabs/rudder-config-schema/commit/6ca954d3a2c18ea014aacffb3393c2ba55d7ac69))
+* restrict localhost in place of baseURL ([#2500](https://github.com/rudderlabs/rudder-config-schema/issues/2500)) ([2965c46](https://github.com/rudderlabs/rudder-config-schema/commit/2965c462177703796a1e3e818ddc45f95742b765))
+
 ## [1.155.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.154.0...v1.155.0) (2026-05-22)
 
 
