@@ -2,7 +2,14 @@
   {
     "testTitle": "Valid config with whitelisted events and consent management enabled",
     "config": {
-      "whitelistedEvents": [{ "eventName": "Signup" }, { "eventName": "Purchase" }],
+      "whitelistedEvents": [
+        {
+          "eventName": "Signup"
+        },
+        {
+          "eventName": "Purchase"
+        }
+      ],
       "blacklistedEvents": [],
       "eventFilteringOption": "whitelistedEvents",
       "connectionMode": {
@@ -12,7 +19,14 @@
         "web": [
           {
             "provider": "oneTrust",
-            "consents": [{ "consent": "Marketing" }, { "consent": "Analytics" }]
+            "consents": [
+              {
+                "consent": "Marketing"
+              },
+              {
+                "consent": "Analytics"
+              }
+            ]
           }
         ]
       }
@@ -23,7 +37,11 @@
     "testTitle": "Valid config with blacklisted events and custom consent provider",
     "config": {
       "whitelistedEvents": [],
-      "blacklistedEvents": [{ "eventName": "TestEvent" }],
+      "blacklistedEvents": [
+        {
+          "eventName": "TestEvent"
+        }
+      ],
       "eventFilteringOption": "blacklistedEvents",
       "connectionMode": {
         "web": "device"
@@ -33,7 +51,11 @@
           {
             "provider": "custom",
             "resolutionStrategy": "and",
-            "consents": [{ "consent": "Marketing" }]
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
           }
         ]
       }
@@ -53,7 +75,11 @@
         "web": [
           {
             "provider": "ketch",
-            "consents": [{ "consent": "Analytics" }]
+            "consents": [
+              {
+                "consent": "Analytics"
+              }
+            ]
           }
         ]
       }
@@ -71,7 +97,11 @@
         "web": [
           {
             "provider": "custom",
-            "consents": [{ "consent": "Marketing" }]
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
           }
         ]
       }
@@ -86,8 +116,12 @@
     "testTitle": "Valid config with dynamic values in event names",
     "config": {
       "whitelistedEvents": [
-        { "eventName": "{{event.name||default}}" },
-        { "eventName": "env.CUSTOM_EVENT" }
+        {
+          "eventName": "{{event.name||default}}"
+        },
+        {
+          "eventName": "env.CUSTOM_EVENT"
+        }
       ],
       "blacklistedEvents": [],
       "eventFilteringOption": "whitelistedEvents",
@@ -98,7 +132,11 @@
         "web": [
           {
             "provider": "iubenda",
-            "consents": [{ "consent": "{{consent.id||default}}" }]
+            "consents": [
+              {
+                "consent": "{{consent.id||default}}"
+              }
+            ]
           }
         ]
       }
@@ -201,5 +239,95 @@
     },
     "result": false,
     "err": ["connectionMode.web must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With duplicate consent management providers config - web",
+    "config": {
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web Only one consent management block can be configured per provider."
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.web.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "connectionMode": {
+        "web": "device"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web.0 must have required property 'resolutionStrategy'",
+      "consentManagement.web.0 must match \"then\" schema"
+    ]
   }
 ]
