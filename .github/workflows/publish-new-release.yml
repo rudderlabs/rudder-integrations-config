@@ -93,7 +93,7 @@ jobs:
           gh release create "v${RELEASE_VERSION}" \
             --repo "${REPO}" \
             --title "v${RELEASE_VERSION}" \
-            --notes "$(awk -v v="${RELEASE_VERSION}" '$0 ~ "^## \\["v"\\]"{f=1;next} /^## \[/{if(f)exit} f' CHANGELOG.md)"
+            --notes "$(awk -v v="${RELEASE_VERSION}" '$0 ~ "^#+ \\["v"\\]"{f=1;next} /^#+ \[/{if(f)exit} f' CHANGELOG.md)"
           echo "DATE=$(date)" >> $GITHUB_ENV
 
       - name: Pull Changes Into develop Branch
