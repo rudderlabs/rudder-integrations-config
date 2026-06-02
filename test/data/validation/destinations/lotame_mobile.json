@@ -195,5 +195,112 @@
       "ketchConsentPurposes.ios.0 must be object"
     ],
     "result": false
+  },
+  {
+    "testTitle": "With duplicate consent management providers config - android",
+    "config": {
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android Only one consent management block can be configured per provider."
+    ]
+  },
+  {
+    "testTitle": "With duplicate consent management providers config - ios",
+    "config": {
+      "consentManagement": {
+        "ios": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.ios Only one consent management block can be configured per provider."
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.android.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "consentManagement": {
+        "android": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.android.0 must have required property 'resolutionStrategy'",
+      "consentManagement.android.0 must match \"then\" schema"
+    ]
   }
 ]

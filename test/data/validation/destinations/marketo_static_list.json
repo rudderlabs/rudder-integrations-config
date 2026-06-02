@@ -360,5 +360,104 @@
       "oneTrustCookieCategories.cloud.0 must be object",
       "ketchConsentPurposes.cloud.0 must be object"
     ]
+  },
+  {
+    "testTitle": "With duplicate consent management providers config - cloud",
+    "config": {
+      "accountId": "dummy-test-value",
+      "clientId": "893yXXXf823yf0",
+      "clientSecret": "dummy-test-value",
+      "staticListId": "9031",
+      "consentManagement": {
+        "cloud": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.cloud Only one consent management block can be configured per provider."
+    ]
+  },
+  {
+    "testTitle": "With duplicate consent management providers config - warehouse",
+    "config": {
+      "accountId": "dummy-test-value",
+      "clientId": "893yXXXf823yf0",
+      "clientSecret": "dummy-test-value",
+      "staticListId": "9031",
+      "consentManagement": {
+        "warehouse": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.warehouse Only one consent management block can be configured per provider."
+    ]
+  },
+  {
+    "testTitle": "With duplicate consent management providers config - shopify",
+    "config": {
+      "accountId": "dummy-test-value",
+      "clientId": "893yXXXf823yf0",
+      "clientSecret": "dummy-test-value",
+      "staticListId": "9031",
+      "consentManagement": {
+        "shopify": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.shopify Only one consent management block can be configured per provider."
+    ]
   }
 ]
