@@ -1527,5 +1527,60 @@
     "err": [
       "consentManagement.iosSwift Only one consent management block can be configured per provider."
     ]
+  },
+  {
+    "testTitle": "useRecommendedEcommerceEvents enabled (cloud mode)",
+    "config": {
+      "dataCenter": "US-01",
+      "restApiKey": "dummyKey",
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "useRecommendedEcommerceEvents": true
+    },
+    "result": true
+  },
+  {
+    "testTitle": "useRecommendedEcommerceEvents disabled (androidKotlin device mode)",
+    "config": {
+      "dataCenter": "EU-01",
+      "usePlatformSpecificApiKeys": false,
+      "appKey": "dummyKey",
+      "connectionMode": {
+        "androidKotlin": "device"
+      },
+      "useRecommendedEcommerceEvents": false
+    },
+    "result": true
+  },
+  {
+    "testTitle": "useRecommendedEcommerceEvents enabled (iosSwift hybrid mode)",
+    "config": {
+      "dataCenter": "US-02",
+      "usePlatformSpecificApiKeys": false,
+      "restApiKey": "dummyKey",
+      "appKey": "dummyKey",
+      "connectionMode": {
+        "iosSwift": "hybrid"
+      },
+      "useRecommendedEcommerceEvents": true
+    },
+    "result": true
+  },
+  {
+    "testTitle": "useRecommendedEcommerceEvents omitted (existing destination, treated as off)",
+    "config": {
+      "dataCenter": "US-01"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "useRecommendedEcommerceEvents must be a boolean",
+    "config": {
+      "dataCenter": "US-01",
+      "useRecommendedEcommerceEvents": "true"
+    },
+    "result": false,
+    "err": ["useRecommendedEcommerceEvents must be boolean"]
   }
 ]
