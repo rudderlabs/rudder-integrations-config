@@ -459,5 +459,113 @@
       "oneTrustCookieCategories.cloud.0 must be object",
       "ketchConsentPurposes.cloud.0 must be object"
     ]
+  },
+  {
+    "testTitle": "With duplicate consent management providers config - cloud",
+    "config": {
+      "clientId": "dummy-test-value",
+      "clientSecret": "dummy-test-value",
+      "audienceId": "000000",
+      "accountId": "00000",
+      "audienceType": "DEVICE_ID",
+      "seedListType": "GPADVID",
+      "hashRequired": false,
+      "consentManagement": {
+        "cloud": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.cloud Only one consent management block can be configured per provider."
+    ]
+  },
+  {
+    "testTitle": "With duplicate consent management providers config - warehouse",
+    "config": {
+      "clientId": "dummy-test-value",
+      "clientSecret": "dummy-test-value",
+      "audienceId": "000000",
+      "accountId": "00000",
+      "audienceType": "DEVICE_ID",
+      "seedListType": "GPADVID",
+      "hashRequired": false,
+      "consentManagement": {
+        "warehouse": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.warehouse Only one consent management block can be configured per provider."
+    ]
+  },
+  {
+    "testTitle": "With duplicate consent management providers config - shopify",
+    "config": {
+      "clientId": "dummy-test-value",
+      "clientSecret": "dummy-test-value",
+      "audienceId": "000000",
+      "accountId": "00000",
+      "audienceType": "DEVICE_ID",
+      "seedListType": "GPADVID",
+      "hashRequired": false,
+      "consentManagement": {
+        "shopify": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.shopify Only one consent management block can be configured per provider."
+    ]
   }
 ]

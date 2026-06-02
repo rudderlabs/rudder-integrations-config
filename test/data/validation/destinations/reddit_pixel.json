@@ -72,28 +72,6 @@
                 "consent": "4"
               }
             ]
-          },
-          {
-            "provider": "iubenda",
-            "consents": [
-              {
-                "consent": "1"
-              },
-              {
-                "consent": "4"
-              }
-            ]
-          },
-          {
-            "provider": "iubenda",
-            "consents": [
-              {
-                "consent": "1"
-              },
-              {
-                "consent": "4"
-              }
-            ]
           }
         ]
       }
@@ -907,6 +885,36 @@
     "err": [
       "oneTrustCookieCategories.web.0 must be object",
       "ketchConsentPurposes.web.0 must be object"
+    ]
+  },
+  {
+    "testTitle": "With duplicate consent management providers config - web",
+    "config": {
+      "advertiserId": "1234",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web Only one consent management block can be configured per provider."
     ]
   }
 ]

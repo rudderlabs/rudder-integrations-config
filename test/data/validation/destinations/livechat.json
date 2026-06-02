@@ -520,5 +520,35 @@
       "oneTrustCookieCategories.web.0 must be object",
       "ketchConsentPurposes.web.0 must be object"
     ]
+  },
+  {
+    "testTitle": "With duplicate consent management providers config - web",
+    "config": {
+      "licenseId": "11XX4",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web Only one consent management block can be configured per provider."
+    ]
   }
 ]
