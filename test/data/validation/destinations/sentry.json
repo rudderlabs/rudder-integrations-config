@@ -953,5 +953,35 @@
       "oneTrustCookieCategories.web.0 must be object",
       "ketchConsentPurposes.web.0 must be object"
     ]
+  },
+  {
+    "testTitle": "With duplicate consent management providers config - web",
+    "config": {
+      "dsn": "https://42152b1ac22XXX378fdXXXfbdb442798@o1142740.ingest.sentry.io/6201791",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web Only one consent management block can be configured per provider."
+    ]
   }
 ]

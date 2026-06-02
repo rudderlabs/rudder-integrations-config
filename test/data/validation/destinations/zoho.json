@@ -429,5 +429,87 @@
       "oneTrustCookieCategories.warehouse.0 must be object",
       "ketchConsentPurposes.warehouse.0 must be object"
     ]
+  },
+  {
+    "testTitle": "With duplicate consent management providers config - warehouse",
+    "config": {
+      "rudderAccountId": "test-host",
+      "consentManagement": {
+        "warehouse": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.warehouse Only one consent management block can be configured per provider."
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "rudderAccountId": "test-host",
+      "consentManagement": {
+        "warehouse": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.warehouse.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "rudderAccountId": "test-host",
+      "consentManagement": {
+        "warehouse": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.warehouse.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.warehouse.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "rudderAccountId": "test-host",
+      "consentManagement": {
+        "warehouse": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.warehouse.0 must have required property 'resolutionStrategy'",
+      "consentManagement.warehouse.0 must match \"then\" schema"
+    ]
   }
 ]
