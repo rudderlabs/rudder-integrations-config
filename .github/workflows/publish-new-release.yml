@@ -67,7 +67,6 @@ jobs:
           HUSKY: 0
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
-          CONVENTIONAL_GITHUB_RELEASER_TOKEN: ${{ steps.generate-token.outputs.token }}
           RELEASE_VERSION: ${{ steps.extract-version.outputs.release_version }}
           MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
           REPO: ${{ github.repository }}
@@ -87,10 +86,14 @@ jobs:
             -f ref="refs/tags/v${RELEASE_VERSION}" \
             -f sha="$TAG_SHA"
 
-          # Fetch the new tag locally for conventional-github-releaser
-          git fetch --tags origin
-
-          npm run release:github
+          # Create the GitHub release with notes sliced from CHANGELOG.md.
+          # Use explicit tag + repo so the release always matches the tag we
+          # just created and lands on this repo (avoids conventional-github-releaser
+          # inferring a stale version from tag history or the wrong repo from package.json).
+          gh release create "v${RELEASE_VERSION}" \
+            --repo "${REPO}" \
+            --title "v${RELEASE_VERSION}" \
+            --notes "$(awk -v v="${RELEASE_VERSION}" '$0 ~ "^## \\["v"\\]"{f=1;next} /^## \[/{if(f)exit} f' CHANGELOG.md)"
           echo "DATE=$(date)" >> $GITHUB_ENV
 
       - name: Pull Changes Into develop Branch
