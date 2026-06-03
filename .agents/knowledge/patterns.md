@@ -29,5 +29,5 @@
 
 ## RUD-2776 — Documentation-Only Validation Scope
 
-- Documentation-only bootstrap changes can be validated with knowledge-artifact integrity checks (expected file count, required section headers, required cross-cutting section presence, and template-only `mistakes.md`) instead of full unit/integration suite execution.
-- This scoped validation pattern is used to preserve signal for docs artifacts while avoiding unnecessary runtime-test overhead when code paths are unchanged.
+- No repo-local CI optimization currently skips tests for documentation-only changes; pull requests still run the standard `Tests` and `Code quality checks` workflows (`.github/workflows/test.yml`, `.github/workflows/verify.yml`).
+- If a docs-only validation workflow is introduced later, document the criteria and workflow path here.
