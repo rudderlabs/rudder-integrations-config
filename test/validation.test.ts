@@ -411,6 +411,73 @@ describe('Account Definition validation tests', () => {
     });
   });
 
+  const baseAccountDefConfig = {
+    name: 'VALID_ACCOUNT',
+    type: 'test',
+    category: 'destination',
+    authenticationType: 'oauth',
+    config: {
+      optionFields: ['region'],
+      refreshOAuthToken: true,
+    },
+  };
+
+  const validAccountDefConfigs = [
+    {
+      description: 'options with isBeta true',
+      input: {
+        ...baseAccountDefConfig,
+        options: {
+          isBeta: true,
+        },
+      },
+    },
+    {
+      description: 'options with hidden true',
+      input: {
+        ...baseAccountDefConfig,
+        options: {
+          hidden: true,
+        },
+      },
+    },
+    {
+      description: 'options with feature-flag hidden object',
+      input: {
+        ...baseAccountDefConfig,
+        options: {
+          hidden: {
+            featureFlagName: 'accounts.feature.x',
+            featureFlagValue: true,
+          },
+        },
+      },
+    },
+    {
+      description: 'options with deprecated and deprecationLabel',
+      input: {
+        ...baseAccountDefConfig,
+        options: {
+          deprecated: true,
+          deprecationLabel: 'Old',
+        },
+      },
+    },
+    {
+      description: 'options allow unknown keys',
+      input: {
+        ...baseAccountDefConfig,
+        options: {
+          arbitraryFlag: 'allowed',
+        },
+      },
+    },
+  ];
+
+  it.each(validAccountDefConfigs)('$description', async (testCase) => {
+    await expect(validateAccountDefinitions(testCase.input)).resolves.toEqual(true);
+  });
+
   const malformedAccountDefConfigs = [
     {
       description: 'missing required properties',
@@ -477,6 +544,14 @@ describe('Account Definition validation tests', () => {
         },
       },
       expected: '["config.optionFields.0 must be string"]',
+    },
+    {
+      description: 'invalid options type',
+      input: {
+        ...baseAccountDefConfig,
+        options: 42,
+      },
+      expected: '["options must be object"]',
     },
   ];
 

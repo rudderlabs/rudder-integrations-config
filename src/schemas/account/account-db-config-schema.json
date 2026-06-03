@@ -48,6 +48,49 @@
         }
       },
       "additionalProperties": false
+    },
+    "options": {
+      "type": "object",
+      "title": "Options",
+      "description": "Optional account-definition metadata.",
+      "properties": {
+        "isBeta": {
+          "type": "boolean",
+          "description": "Whether the account definition is in beta."
+        },
+        "hidden": {
+          "anyOf": [
+            {
+              "type": "boolean",
+              "description": "Whether the account definition is hidden."
+            },
+            {
+              "type": "object",
+              "description": "Whether the account definition is hidden.",
+              "properties": {
+                "featureFlagName": {
+                  "type": "string",
+                  "description": "The feature flag name used to hide the account definition."
+                },
+                "featureFlagValue": {
+                  "type": "boolean",
+                  "description": "The feature flag value used to hide the account definition."
+                }
+              },
+              "required": ["featureFlagName", "featureFlagValue"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "deprecated": {
+          "type": "boolean",
+          "description": "Whether the account definition is deprecated."
+        },
+        "deprecationLabel": {
+          "type": "string",
+          "description": "The label shown when the account definition is deprecated."
+        }
+      }
     }
   },
   "additionalProperties": false
