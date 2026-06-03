@@ -10,7 +10,7 @@
 
 - Integration definitions are filesystem-first: each integration lives under `src/configurations/{destinations|sources}/<name>/` with a `db-config.json`, `ui-config.json`, and `schema.json` triplet used by tooling and validation (e.g., `src/configurations/destinations/ga4_v2/`).
 - Public validator exports are re-exported via `src/index.ts`, keeping consumer imports stable while implementation stays in `src/validator/index.ts` (`src/index.ts`, `src/validator/index.ts::validateConfig`).
-- Runtime validation is split by concern: generic config schema checks via `validateConfig`, definition-level schema checks via `validateDestinationDefinitions` / `validateSourceDefinitions`, and account-definition checks via `validateAccountDefinitions` (`src/validator/index.ts:173`, `src/validator/index.ts:198`, `src/validator/index.ts:231`, `src/validator/index.ts:260`).
+- Runtime validation is split by concern: generic config schema checks via `validateConfig`, definition-level schema checks via `validateDestinationDefinitions` / `validateSourceDefinitions`, and account-definition checks via `validateAccountDefinitions` (`src/validator/index.ts:177`, `src/validator/index.ts:202`, `src/validator/index.ts:237`, `src/validator/index.ts:268`).
 
 ## Validation Flow
 <!-- RUD-2776 -->
