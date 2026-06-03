@@ -1,80 +1,25 @@
 [
   {
-    "testTitle": "Valid config with rudderAccountId and non-empty identifierMappings",
+    "testTitle": "Valid config with rudderAccountId",
     "config": {
-      "rudderAccountId": "acc123",
-      "identifierMappings": [
-        {
-          "iterableField": "email",
-          "warehouseColumn": "email_address"
-        }
-      ]
+      "rudderAccountId": "acc123"
     },
     "result": true
   },
   {
-    "testTitle": "Valid config with hybrid identifierMappings",
+    "testTitle": "Valid config with rudderAccountId and connectionMode",
     "config": {
       "rudderAccountId": "acc123",
-      "identifierMappings": [
-        {
-          "iterableField": "email",
-          "warehouseColumn": "email_col"
-        },
-        {
-          "iterableField": "userId",
-          "warehouseColumn": "user_id_col"
-        }
-      ]
-    },
-    "result": true
-  },
-  {
-    "testTitle": "Valid config with userId-based identifierMapping",
-    "config": {
-      "rudderAccountId": "acc123",
-      "identifierMappings": [
-        {
-          "iterableField": "userId",
-          "warehouseColumn": "user_id"
-        }
-      ]
+      "connectionMode": {
+        "warehouse": "cloud"
+      }
     },
     "result": true
   },
   {
     "testTitle": "Invalid config — missing rudderAccountId",
-    "config": {
-      "identifierMappings": [
-        {
-          "iterableField": "email",
-          "warehouseColumn": "email_address"
-        }
-      ]
-    },
+    "config": {},
     "result": false,
     "err": [" must have required property 'rudderAccountId'"]
-  },
-  {
-    "testTitle": "Invalid config — missing identifierMappings",
-    "config": {
-      "rudderAccountId": "acc123"
-    },
-    "result": false,
-    "err": [" must have required property 'identifierMappings'"]
-  },
-  {
-    "testTitle": "Invalid config — invalid iterableField value",
-    "config": {
-      "rudderAccountId": "acc123",
-      "identifierMappings": [
-        {
-          "iterableField": "phone",
-          "warehouseColumn": "phone_col"
-        }
-      ]
-    },
-    "result": false,
-    "err": ["identifierMappings.0.iterableField must be equal to one of the allowed values"]
   }
 ]
