@@ -11,7 +11,7 @@
 <!-- RUD-2776 -->
 
 - Validation failures are normalized into JSON-stringified error arrays so callers/tests can assert deterministic messages (`src/validator/index.ts::validateConfig`, `src/validator/index.ts::validateDestinationDefinitions`).
-- Generic config validation and definition-policy validation are layered: schema-first via AJV, then custom rule pass for destination safety constraints (`src/validator/index.ts:198`, `src/validator/index.ts:140`).
+- Generic config validation and definition-policy validation are layered: schema-first via AJV, then custom rule pass for destination safety constraints (`src/validator/index.ts:198`, `src/validator/index.ts:232`).
 - Missing validator behavior is configurable through `throwErrorOnMissingValidations`, letting strict consumers fail fast while permissive flows continue (`src/validator/index.ts:177`).
 
 ## Script Orchestration Pattern
