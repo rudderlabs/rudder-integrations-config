@@ -23,6 +23,7 @@
 <!-- RUD-2776 -->
 
 - Pre-commit flow expects preprocessing and tests before staged-linting (`package.json:30`).
+- Commit messages must follow Conventional Commits (`commitlint.config.js` extends `@commitlint/config-conventional`); the `commitlint` CI check lints the latest commit (`commitDepth: 1`), so any auto-generated commit (e.g. Copilot Autofix `Potential fix for pull request finding`) must be reworded to `type: subject` before push. See `mistakes.md`.
 - Schema lifecycle is CLI-driven with separate check/update scripts for sources and destinations (`package.json:33`, `package.json:37`, `scripts/schemaGenerator.py`).
 - Display-name integrity is guarded by dedicated scripts, including staged-only mode (`package.json:45`, `package.json:46`).
 
