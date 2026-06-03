@@ -30,6 +30,36 @@ const deepSearch = (obj: any, value: string, count = 0) => {
   return count;
 };
 
+const findConsentManagementDynamicCustomForm = (obj: any): Record<string, unknown> | null => {
+  if (Array.isArray(obj)) {
+    for (const item of obj) {
+      const result = findConsentManagementDynamicCustomForm(item);
+      if (result) {
+        return result;
+      }
+    }
+    return null;
+  }
+
+  if (obj && typeof obj === 'object') {
+    if (
+      obj.type === 'dynamicCustomForm' &&
+      (obj.configKey === 'consentManagement' || obj.value === 'consentManagement')
+    ) {
+      return obj;
+    }
+
+    for (const value of Object.values(obj)) {
+      const result = findConsentManagementDynamicCustomForm(value);
+      if (result) {
+        return result;
+      }
+    }
+  }
+
+  return null;
+};
+
 describe('Consent Management Fields Integrity tests', () => {
   // Read db-config.json, ui-config.json, and schema.json files in each of the directories
   // under src/configuration/destinations
@@ -177,6 +207,16 @@ describe('Consent Management Fields Integrity tests', () => {
       expect(
         Object.keys(schema.configSchema.properties.consentManagement.properties).sort(),
       ).toEqual(supportedSourceTypes.sort());
+
+      Object.entries(schema.configSchema.properties.consentManagement.properties).forEach(
+        ([sourceType, sourceTypeConfig]: [string, any]) => {
+          expect(sourceTypeConfig.type).toBe('array');
+          expect(sourceTypeConfig.uniqueItemProperties).toEqual(['provider']);
+          expect(sourceTypeConfig.errorMessage?.uniqueItemProperties).toBe(
+            'Only one consent management block can be configured per provider.',
+          );
+        },
+      );
     });
 
     it(`should have iubenda in consentManagement options in enum field properly defined in schema.json for ${destName}`, () => {
@@ -200,6 +240,10 @@ describe('Consent Management Fields Integrity tests', () => {
     it(`should have consentManagement field properly defined in ui-config.json for ${destName}`, () => {
       const consentManagementUIElementCount = deepSearch(uiConfig, 'consentManagement');
       expect(consentManagementUIElementCount).toEqual(1);
+
+      const consentManagementForm = findConsentManagementDynamicCustomForm(uiConfig);
+      expect(consentManagementForm).toBeDefined();
+      expect((consentManagementForm as any).uniqueRowFields).toEqual(['provider']);
     });
 
     it(`should have iubenda in customFields field properly defined in ui-config.json for ${destName}`, () => {

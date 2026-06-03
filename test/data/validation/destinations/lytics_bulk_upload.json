@@ -273,5 +273,153 @@
       "oneTrustCookieCategories.warehouse.0 must be object",
       "ketchConsentPurposes.warehouse.0 must be object"
     ]
+  },
+  {
+    "testTitle": "With duplicate consent management providers config - cloud",
+    "config": {
+      "lyticsAccountId": "434342324",
+      "lyticsApiKey": "dummy-test-value",
+      "consentManagement": {
+        "cloud": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.cloud Only one consent management block can be configured per provider."
+    ]
+  },
+  {
+    "testTitle": "With duplicate consent management providers config - warehouse",
+    "config": {
+      "lyticsAccountId": "434342324",
+      "lyticsApiKey": "dummy-test-value",
+      "consentManagement": {
+        "warehouse": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.warehouse Only one consent management block can be configured per provider."
+    ]
+  },
+  {
+    "testTitle": "With duplicate consent management providers config - web",
+    "config": {
+      "lyticsAccountId": "434342324",
+      "lyticsApiKey": "dummy-test-value",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web Only one consent management block can be configured per provider."
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config invalid provider value",
+    "config": {
+      "lyticsAccountId": "434342324",
+      "lyticsApiKey": "dummy-test-value",
+      "consentManagement": {
+        "cloud": [
+          {
+            "provider": "dummyProvider"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.cloud.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",
+    "config": {
+      "lyticsAccountId": "434342324",
+      "lyticsApiKey": "dummy-test-value",
+      "consentManagement": {
+        "cloud": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "nor"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.cloud.0.resolutionStrategy must be equal to one of the allowed values",
+      "consentManagement.cloud.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "With consent management custom provider config and no resolutionStrategy value",
+    "config": {
+      "lyticsAccountId": "434342324",
+      "lyticsApiKey": "dummy-test-value",
+      "consentManagement": {
+        "cloud": [
+          {
+            "provider": "custom"
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.cloud.0 must have required property 'resolutionStrategy'",
+      "consentManagement.cloud.0 must match \"then\" schema"
+    ]
   }
 ]
