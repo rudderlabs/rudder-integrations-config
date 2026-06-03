@@ -16,7 +16,7 @@
 
 <!-- RUD-2776 -->
 
-- Validation/runtime deps: `ajv@^8.18.0`, `ajv-errors@3.0.0`, `ajv-keywords@5.1.0`, and `glob@^9.3.2`; the validator registers `ajv-keywords` and `ajv-errors` on its AJV instance (`package.json` dependencies, `src/validator/index.ts:5`, `src/validator/index.ts:6`).
+- Validation/runtime deps: `ajv@^8.18.0`, `ajv-errors@3.0.0`, `ajv-keywords@5.1.0`, and `glob@^9.3.2`; the validator registers `ajv-keywords` and `ajv-errors` on its AJV instance (`package.json` dependencies, `src/validator/index.ts:18`, `src/validator/index.ts:19`).
 - Template processing for UI-config generation: `@rudderstack/json-template-engine@^0.13.3` (`package.json` devDependencies, `scripts/preProcess.js`).
 - Test/build toolchain: `jest@^29.5.0`, `@swc/jest@^0.2.24`, `typescript@^5.0.2`, `eslint@^8.37.0`, `prettier@^2.8.7` (`package.json`).
 
