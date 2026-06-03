@@ -8,7 +8,7 @@
 ## Directory and Naming Shape
 <!-- RUD-2776 -->
 
-- Integration folder naming is snake_case under `src/configurations/{destinations|sources}/`, with each folder carrying canonical config filenames (`db-config.json`, `ui-config.json`, `schema.json`) (e.g., `src/configurations/destinations/ga4_v2/`).
+- Integration folder naming is typically snake_case under `src/configurations/{destinations|sources}/`, with some legacy exceptions (e.g., `src/configurations/destinations/ga4_v2/`, `src/configurations/destinations/spotifyPixel/`); each folder carries canonical config filenames (`db-config.json`, `ui-config.json`, `schema.json`).
 - Generated SDK constants are language-suffixed files under `generated/` and must align with templates under `templates/*.template` (`scripts/generateConstants.js:9`, `templates/`).
 - Repo-local automation skills live under `.claude/skills/` and are discovery artifacts, not normal edit targets for integration changes (`.claude/skills/migrate-to-accounts-framework/SKILL.md`).
 
