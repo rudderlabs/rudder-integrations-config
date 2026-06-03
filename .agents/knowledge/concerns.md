@@ -19,7 +19,7 @@
 <!-- RUD-2776 -->
 
 - Deploy scripts can mutate remote control-plane data; safety depends on honoring dry-run defaults and avoiding `--no-dry-run` unless intended (`scripts/deployToDB.py::get_command_line_arguments`, `scripts/deployAccountsToDB.py::get_command_line_arguments`).
-- When verbose deploy logging is enabled, `log_api_request` writes the full request body and an equivalent curl command (`--data '...'`) verbatim to `deploy-debug.log`; only the basic-auth credential is masked (partial locally, full in CI), so any secrets carried in request payloads are persisted to that file in cleartext (`scripts/utils.py::log_api_request`, `scripts/utils.py::generate_curl_command`).
+- When verbose deploy logging is enabled, `log_api_request` writes the full request body and an equivalent curl command verbatim to `deploy-debug.log`; in local runs `generate_curl_command` also emits the basic-auth credential in full (`--user "user:password"`) and only the `Auth:` line masks the password, while CI mode masks the credential entirely. So locally both request-payload secrets and the auth credential are persisted to that file in cleartext (`scripts/utils.py::log_api_request`, `scripts/utils.py::generate_curl_command`).
 - Dynamic template evaluation in `generateConstants.js` uses `new Function`, which is acceptable for trusted local templates but is a code-execution boundary if template inputs become untrusted (`scripts/generateConstants.js::processTemplate`).
 
 ## Architectural Smells
