@@ -16,7 +16,7 @@
 
 <!-- RUD-2776 -->
 
-- Validation/runtime deps: `ajv@^8.18.0` and `glob@^9.3.2` (`package.json` dependencies).
+- Validation/runtime deps: `ajv@^8.18.0`, `ajv-errors@3.0.0`, `ajv-keywords@5.1.0`, and `glob@^9.3.2`; the validator registers `ajv-keywords` and `ajv-errors` on its AJV instance (`package.json` dependencies, `src/validator/index.ts:5`, `src/validator/index.ts:6`).
 - Template processing for UI-config generation: `@rudderstack/json-template-engine@^0.13.3` (`package.json` devDependencies, `scripts/preProcess.js`).
 - Test/build toolchain: `jest@^29.5.0`, `@swc/jest@^0.2.24`, `typescript@^5.0.2`, `eslint@^8.37.0`, `prettier@^2.8.7` (`package.json`).
 
@@ -25,7 +25,7 @@
 <!-- RUD-2776 -->
 
 - Jest runs with 100% global coverage thresholds and SWC transform for TS/JS tests (`jest.config.js:43`, `jest.config.js:172`).
-- The Husky `pre-commit` hook runs `npm run pre-commit`, whose final `npx lint-staged` step formats staged files with Prettier and Python Black; the hook fires only when Husky is installed (`.husky/pre-commit`, `package.json:30`, `package.json` `lint-staged`).
+- The Husky `pre-commit` hook runs several steps in order: `npm run generate:constants` (which also runs `git add generated`, so regenerated constants get staged into the commit), `scripts/validateDisplayNameChanges.js --staged`, `npm run pre-commit` (pre-process, the Jest suite, then `npx lint-staged` formatting staged files with Prettier and Python Black), and `scripts/validate_diff_accounts.sh`; the hook fires only when Husky is installed (`.husky/pre-commit`, `package.json:30`, `package.json:44`, `package.json` `lint-staged`).
 - Schema/definition lifecycle tooling is script-heavy (`scripts/schemaGenerator.py`, `scripts/validate_account_definitions.py`, `scripts/run-schema-validation.sh`).
 
 ## Generated Assets
