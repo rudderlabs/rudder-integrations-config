@@ -16,7 +16,7 @@
 <!-- RUD-2776 -->
 
 - Validator initialization compiles all integration `schema.json` files into an in-memory map keyed as `<type>___<name>` (`src/validator/index.ts::initAjvValidators`).
-- Destination definitions have an extra policy layer beyond JSON Schema through `destinationDefinitionRules` and `applyAdditionalRulesValidation`, including secret/include key safety and connection-mode consistency (`src/validator/index.ts:26`, `src/validator/index.ts:140`).
+- Destination definitions have an extra policy layer beyond JSON Schema through `destinationDefinitionRules` and `applyAdditionalRulesValidation`, including secret/include key safety and connection-mode consistency (`src/validator/index.ts:30`, `src/validator/index.ts:144`, `src/validator/index.ts:232`).
 - Test architecture mirrors the split: `test/validation.test.ts` verifies real repository integration configs while `test/validator/validator.test.ts` unit-tests validator behavior and rule edge cases (`test/validation.test.ts:200`, `test/validator/validator.test.ts:895`).
 
 ## Generation and Deployment Boundaries
