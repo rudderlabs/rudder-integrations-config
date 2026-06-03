@@ -44,6 +44,23 @@
                       }
                     ],
                     "default": "standard"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "API Version",
+                    "configKey": "apiVersion",
+                    "note": "Choose v1 to preserve existing behavior. Opt into v2 for the updated Amplitude API behavior.",
+                    "options": [
+                      {
+                        "label": "v1",
+                        "value": "v1"
+                      },
+                      {
+                        "label": "v2",
+                        "value": "v2"
+                      }
+                    ],
+                    "default": "v1"
                   }
                 ]
               }
@@ -421,6 +438,23 @@
             "icon": "settings",
             "groups": [
               {
+                "title": "Amplitude API version notice",
+                "note": "Review the behavior changes before opting into v2",
+                "callout": {
+                  "message": "Amplitude v2 ties campaign tracking to attribution and changes session reset behavior. Review the impact before switching existing destinations.",
+                  "type": "warning"
+                },
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "apiVersion",
+                      "value": "v2"
+                    }
+                  ]
+                },
+                "fields": []
+              },
+              {
                 "title": "Amplitude IT",
                 "note": "Configure a few advanced Amplitude settings here",
                 "fields": [
@@ -679,14 +713,30 @@
           "label": "Disable Attribution",
           "note": "Disable the attribution tracking",
           "configKey": "attribution",
-          "default": false
+          "default": false,
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "apiVersion",
+                "value": "v1"
+              }
+            ]
+          }
         },
         {
           "type": "checkbox",
           "label": "Save Referrer, URL Params, GCLID only once per session",
           "note": "Track GCLID, referrer, and UTM parameters only once per session, ignoring any new values which may enter a user's session",
           "configKey": "trackNewCampaigns",
-          "default": true
+          "default": true,
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "apiVersion",
+                "value": "v1"
+              }
+            ]
+          }
         },
         {
           "type": "textInput",
