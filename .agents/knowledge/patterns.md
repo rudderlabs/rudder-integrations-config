@@ -5,7 +5,7 @@
 > Append-only. Agent-authored sections may optionally carry an HTML-comment tag
 > (e.g., `<!-- pr:<id> -->`) identifying the writer/PR/run; human-authored
 > sections are conventionally left untouched by automated runs.
-> Every observed idiom includes a `file:line` reference.
+> Where possible, include a `file:line` reference (or `file::symbol`) for each observed idiom.
 
 ## Validation and Error Surfacing
 <!-- RUD-2776 -->
