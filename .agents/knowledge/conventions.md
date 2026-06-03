@@ -6,6 +6,7 @@
 > sections are conventionally left untouched by automated runs.
 
 ## Directory and Naming Shape
+
 <!-- RUD-2776 -->
 
 - Integration folder naming is typically snake_case under `src/configurations/{destinations|sources}/`, with some legacy exceptions (e.g., `src/configurations/destinations/ga4_v2/`, `src/configurations/destinations/spotifyPixel/`); each folder carries canonical config filenames (`db-config.json`, `ui-config.json`, `schema.json`).
@@ -13,13 +14,15 @@
 - Repo-local automation skills live under `.claude/skills/` and are discovery artifacts, not normal edit targets for integration changes (`.claude/skills/migrate-to-accounts-framework/SKILL.md`).
 
 ## Validation Contract Conventions
+
 <!-- RUD-2776 -->
 
 - Destination/source/account definition validations are expected to resolve `true` on valid configs and throw on invalid configs; tests use this contract consistently (`test/validation.test.ts:200`, `test/validation.test.ts:341`, `test/validation.test.ts:401`).
 - Secret handling convention is explicit: if a key appears in `includeKeys`, it must also appear in `excludeKeys` when the key is secret (`src/validator/index.ts:30`, `test/validator/validator.test.ts:895`).
-- Device/hybrid support implies `includeKeys` presence in destination definition config (`src/validator/index.ts:60`).
+- Device/hybrid support implies `includeKeys` presence in destination definition config (`src/validator/index.ts:65`).
 
 ## Change Workflow Norms
+
 <!-- RUD-2776 -->
 
 - Pre-commit flow expects preprocessing and tests before staged-linting (`package.json:30`).

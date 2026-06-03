@@ -8,6 +8,7 @@
 > Where possible, include a `file:line` reference (or `file::symbol`) for each observed idiom.
 
 ## Validation and Error Surfacing
+
 <!-- RUD-2776 -->
 
 - Validation failures are normalized into JSON-stringified error arrays so callers/tests can assert deterministic messages (`src/validator/index.ts::validateConfig`, `src/validator/index.ts::validateDestinationDefinitions`).
@@ -15,6 +16,7 @@
 - Missing validator behavior is configurable through `throwErrorOnMissingValidations`, letting strict consumers fail fast while permissive flows continue (`src/validator/index.ts:177`).
 
 ## Script Orchestration Pattern
+
 <!-- RUD-2776 -->
 
 - Node scripts favor directory scans + per-item processing for mass integration operations (`scripts/preProcess.js::getDestinationNames`, `scripts/generateConstants.js::prepareDestinations`).
@@ -22,9 +24,10 @@
 - Schema generation intentionally excludes noisy diff paths to keep reviewable schema updates focused (`scripts/schemaGenerator.py::DIFF_EXCLUDE_PATHS`).
 
 ## State Management
+
 <!-- RUD-2776 -->
 
-- Validator state is cached in-process as a module-level `validators` map populated once by `init`, then reused for per-config validation calls (`src/validator/index.ts:24`, `src/validator/index.ts::initAjvValidators`).
+- Validator state is cached in-process as a module-level `validators` map populated once by `init`, then reused for per-config validation calls (`src/validator/index.ts:21`, `src/validator/index.ts::initAjvValidators`).
 - Deploy/update scripts compute in-memory diff reports (`jsondiff`) before deciding whether to call remote update/create APIs (`scripts/deployToDB.py::update_diff_db`, `scripts/deployAccountsToDB.py::update_account_db`).
 
 ## RUD-2776 — Documentation-Only Validation Scope
