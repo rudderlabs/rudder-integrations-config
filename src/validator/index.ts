@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import glob from 'glob';
 import Ajv, { ValidateFunction } from 'ajv';
+import addKeywords from 'ajv-keywords';
+import ajvErrors from 'ajv-errors';
 
 const ajv = new Ajv({
   allErrors: true,
@@ -13,6 +15,8 @@ const ajv = new Ajv({
   strictTypes: true,
   strictTuples: true,
 });
+addKeywords(ajv, ['uniqueItemProperties']);
+ajvErrors(ajv);
 
 let validators: Record<string, ValidateFunction> = {};
 
@@ -208,6 +212,8 @@ export async function validateDestinationDefinitions(
     strictTypes: true,
     strictTuples: true,
   });
+  addKeywords(ddAjv, ['uniqueItemProperties']);
+  ajvErrors(ddAjv);
 
   const validator = ddAjv.compile(
     await importJsonFromFile(path.join(__dirname, '../schemas/destinations/db-config-schema.json')),
@@ -241,6 +247,8 @@ export async function validateSourceDefinitions(
     strictTypes: true,
     strictTuples: true,
   });
+  addKeywords(ddAjv, ['uniqueItemProperties']);
+  ajvErrors(ddAjv);
 
   const validator = ddAjv.compile(
     await importJsonFromFile(path.join(__dirname, '../schemas/sources/db-config-schema.json')),
@@ -270,6 +278,8 @@ export async function validateAccountDefinitions(
     strictTypes: true,
     strictTuples: true,
   });
+  addKeywords(ddAjv, ['uniqueItemProperties']);
+  ajvErrors(ddAjv);
 
   const validator = ddAjv.compile(
     await importJsonFromFile(

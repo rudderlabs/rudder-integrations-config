@@ -29,7 +29,8 @@ src/configurations/destinations/<dest_name>/
     ├── ui-config.json
     └── schema.json
 ```
-Refer src/schemas/destinations/, src/schemas/account for adding any additional needed fields in the definition. 
+
+Refer src/schemas/destinations/, src/schemas/account for adding any additional needed fields in the definition.
 
 ## Reference
 

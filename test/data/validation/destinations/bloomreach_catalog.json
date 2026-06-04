@@ -447,5 +447,39 @@
       "oneTrustCookieCategories.warehouse.0 must be object",
       "ketchConsentPurposes.warehouse.0 must be object"
     ]
+  },
+  {
+    "testTitle": "With duplicate consent management providers config - warehouse",
+    "config": {
+      "apiBaseUrl": "https://api.test.com/",
+      "apiKey": "dummy-test-value",
+      "apiSecret": "dummy-test-value",
+      "projectToken": "dummy-test-value",
+      "catalogID": "test-catalogID",
+      "consentManagement": {
+        "warehouse": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.warehouse Only one consent management block can be configured per provider."
+    ]
   }
 ]
