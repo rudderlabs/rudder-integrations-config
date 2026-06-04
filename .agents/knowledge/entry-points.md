@@ -27,3 +27,8 @@
 
 - `test/validation.test.ts`: broad integration validation across destinations/sources/accounts.
 - `test/validator/validator.test.ts`: unit-level behavior and edge-case tests for validator internals.
+
+## INT-5974 — Klaviyo Metadata and Validation Fixtures
+
+- Klaviyo destination metadata entry paths are `src/configurations/destinations/klaviyo` and `src/configurations/destinations/klaviyo_bulk_upload`.
+- Validation fixtures for those destinations are located at `test/data/validation/destinations/klaviyo.json` and `test/data/validation/destinations/klaviyo_bulk_upload.json`.

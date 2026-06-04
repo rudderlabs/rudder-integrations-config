@@ -39,3 +39,9 @@
 
 - For destinations using custom mappings, `ui-config.json` is a generated artifact derived from `ui-config.jt` and `ui-default.json` through pre-process flow.
 - To avoid regeneration drift, behavior changes should be made in the template/default inputs when applicable, not only in generated `ui-config.json`.
+
+## INT-5974 — Version Sunset Messaging Without Schema Breakage
+
+- For destination API-version transitions, keep the schema enum/backward-compatibility contract stable for legacy values while updating UI copy to clearly mark legacy vs recommended options.
+- Prefer explicit revision-based labels (for example, a concrete revision date) over hard removal promises in UI text, so metadata does not drift into stale sunset claims.
+- Maintain default selection on the recommended version while preserving acceptance of legacy versions for existing customer setups, and back this with validation coverage.

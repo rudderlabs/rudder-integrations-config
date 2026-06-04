@@ -37,3 +37,8 @@
 - Security posture is layered rather than centralized: validator-level secret/include-key checks prevent client exposure, while deploy tooling relies on dry-run defaults and explicit no-dry-run opt-in to avoid accidental remote writes (`src/validator/index.ts:30`, `scripts/deployToDB.py::get_command_line_arguments`, `scripts/deployAccountsToDB.py::get_command_line_arguments`).
 - Generation pipelines (`pre-process`, `generate:constants`) and strict CI test thresholds tie repo hygiene to script execution order; skipped generation can desync committed artifacts from source configs and break validation/test expectations (`package.json:30`, `package.json:43`, `package.json:44`, `jest.config.js:43`).
 - Known technical debt is explicit in commented-out/ TODO validation rules, and the same risk is reflected in targeted rule tests; this signals deliberate temporary gaps rather than unobserved behavior (`src/validator/index.ts` TODO blocks, `test/validator/validator.test.ts:895`).
+
+## INT-5974 — Klaviyo Config Boundary vs Transformer Logic
+
+- `rudder-integrations-config` governs customer-facing destination metadata (schema/UI/db config) for Klaviyo API-version selection, but does not carry transformer runtime behaviors such as revision headers, endpoint path switching, or transformer-side feature flags.
+- Version-audit or migration work for Klaviyo should be treated as cross-repo by default (`rudder-integrations-config` + transformer repo), even when the visible selector lives only in this repository.
