@@ -342,6 +342,7 @@ describe('Validator Utils', () => {
           },
           fallbackVersion: {
             type: 'integer',
+            minimum: 1,
           },
           config: {
             type: 'object',
