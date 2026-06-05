@@ -233,62 +233,78 @@ def update_diff_db(
             continue
 
         directory = f"./{CONFIG_DIR}/{selector}s/{item}"
-        updated_data = get_file_content(directory)
-        if selector == "destination":
-            updated_data["versions"] = build_versions_archive(directory)
+        # Track the current operation so a failure can name exactly what broke.
+        # Start with the directory name; switch to the definition name once known.
+        item_name = item
+        operation = "loading config files"
+        try:
+            updated_data = get_file_content(directory)
+            if selector == "destination":
+                operation = "building versions archive"
+                updated_data["versions"] = build_versions_archive(directory)
 
-        persisted_data = persisted_by_name.get(updated_data["name"])
+            item_name = updated_data["name"]
+            persisted_data = persisted_by_name.get(item_name)
 
-        if persisted_data is not None:
-            diff = jsondiff.diff(persisted_data, updated_data, marshal=True)
-            normalize_nullable_column_deletions(
-                diff, persisted_data, updated_data, NULLABLE_COLUMN_FIELDS
-            )
+            if persisted_data is not None:
+                diff = jsondiff.diff(persisted_data, updated_data, marshal=True)
+                normalize_nullable_column_deletions(
+                    diff, persisted_data, updated_data, NULLABLE_COLUMN_FIELDS
+                )
 
-            if len(diff.keys()) > 0:  # changes exist
-                status, _ = update_config_definition(
+                if len(diff.keys()) > 0:  # changes exist
+                    operation = "updating definition"
+                    status, _ = update_config_definition(
+                        CONTROL_PLANE_URL,
+                        selector,
+                        item_name,
+                        updated_data,
+                        auth=AUTH,
+                        dry_run=dry_run,
+                        verbose=verbose,
+                    )
+                    final_report.append(
+                        {
+                            "name": item_name,
+                            "action": "update",
+                            "status": status,
+                            "diff": diff if dry_run else None,
+                        }
+                    )
+                else:
+                    final_report.append(
+                        {
+                            "name": item_name,
+                            "action": "N/A",
+                            "status": "No changes detected",
+                        }
+                    )
+
+            else:
+                operation = "creating definition"
+                status, _ = create_config_definition(
                     CONTROL_PLANE_URL,
                     selector,
-                    updated_data["name"],
                     updated_data,
-                    auth=AUTH,
+                    AUTH,
                     dry_run=dry_run,
                     verbose=verbose,
                 )
-                action = "update"
                 final_report.append(
                     {
-                        "name": updated_data["name"],
-                        "action": action,
+                        "name": item_name,
+                        "action": "create",
                         "status": status,
-                        "diff": diff if dry_run else None,
+                        "data": updated_data if dry_run else None,
                     }
                 )
-            else:
-                final_report.append(
-                    {
-                        "name": updated_data["name"],
-                        "action": "N/A",
-                        "status": "No changes detected",
-                    }
-                )
-
-        else:
-            status, _ = create_config_definition(
-                CONTROL_PLANE_URL,
-                selector,
-                updated_data,
-                AUTH,
-                dry_run=dry_run,
-                verbose=verbose,
-            )
-            action = "create"
+        except Exception as error:
+            print(f"❌ {item_name}: failed while {operation} — {error}")
             final_report.append(
                 {
-                    "name": updated_data["name"],
-                    "action": action,
-                    "status": status,
-                    "data": updated_data if dry_run else None,
+                    "name": item_name,
+                    "action": "failed",
+                    "status": f"Failed while {operation}: {error}",
                 }
             )
 
@@ -354,7 +370,9 @@ def log_execution_plan():
 
 
 def is_failed(item):
-    """Check if a report item represents a failed API call."""
+    """Check if a report item represents a failed operation."""
+    if item.get("action") == "failed":
+        return True
     status = item.get("status")
     if isinstance(status, int):
         return status < 200 or status > 300
@@ -459,9 +477,20 @@ if __name__ == "__main__":
         )
 
         # Single batch API call to fetch all definitions for this selector
-        persisted_store = get_all_config_definitions(
-            CONTROL_PLANE_URL, selector, auth=AUTH, verbose=VERBOSE
-        )
+        try:
+            persisted_store = get_all_config_definitions(
+                CONTROL_PLANE_URL, selector, AUTH, VERBOSE
+            )
+        except Exception as error:
+            print(
+                f"\n❌ Failed to fetch existing {selector} definitions from "
+                f"{CONTROL_PLANE_URL} — {error}"
+            )
+            print(
+                "   Check that the control plane URL is reachable and the "
+                "credentials are valid, then retry."
+            )
+            sys.exit(1)
         persisted_by_name = {item["name"]: item for item in persisted_store}
 
         final_report = update_diff_db(
