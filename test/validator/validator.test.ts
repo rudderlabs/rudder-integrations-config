@@ -336,6 +336,49 @@ describe('Validator Utils', () => {
             type: 'string',
             pattern: '^[a-zA-Z0-9_ .\\-\\(\\)/]+$',
           },
+          version: {
+            type: 'string',
+            pattern: '^\\d+\\.\\d+$',
+          },
+          fallbackVersion: {
+            type: 'integer',
+          },
+          versions: {
+            type: 'object',
+            patternProperties: {
+              '^\\d+$': {
+                type: 'object',
+                required: ['number', 'status', 'config', 'configSchema', 'uiConfig'],
+                properties: {
+                  number: {
+                    type: 'string',
+                    pattern: '^\\d+\\.\\d+$',
+                  },
+                  status: {
+                    type: 'string',
+                    enum: ['supported', 'retired'],
+                  },
+                  retirementDate: {
+                    type: 'string',
+                  },
+                  migrationDocsUrl: {
+                    type: 'string',
+                  },
+                  config: {
+                    type: 'object',
+                  },
+                  configSchema: {
+                    type: 'object',
+                  },
+                  uiConfig: {
+                    type: 'object',
+                  },
+                },
+                additionalProperties: false,
+              },
+            },
+            additionalProperties: false,
+          },
           config: {
             type: 'object',
             required: ['supportedSourceTypes', 'destConfig'],
@@ -374,6 +417,47 @@ describe('Validator Utils', () => {
       await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
     });
 
+    it('should validate destination definition with version metadata', async () => {
+      const validDestDef = {
+        name: 'GOOGLE_ANALYTICS',
+        displayName: 'Google Analytics',
+        version: '1.0',
+        fallbackVersion: 1,
+        versions: {
+          1: {
+            number: '1.2',
+            status: 'supported',
+            config: {
+              supportedSourceTypes: ['web'],
+              destConfig: {
+                defaultConfig: ['apiKey'],
+              },
+            },
+            configSchema: {
+              type: 'object',
+              properties: {
+                apiKey: {
+                  type: 'string',
+                },
+              },
+            },
+            uiConfig: {
+              type: 'tabs',
+              tabs: [],
+            },
+          },
+        },
+        config: {
+          supportedSourceTypes: ['web', 'android', 'ios'],
+          destConfig: {
+            defaultConfig: ['apiKey', 'trackingId'],
+          },
+        },
+      };
+
+      await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+    });
+
     it('should throw error for invalid destination definition', async () => {
       const invalidDestDef = {
         name: 'GOOGLE_ANALYTICS',
@@ -387,6 +471,54 @@ describe('Validator Utils', () => {
       const invalidDestDef = {
         name: 'GOOGLE ANALYTICS!', // invalid pattern
         displayName: 'Google Analytics',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['apiKey'],
+          },
+        },
+      };
+
+      await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow();
+    });
+
+    it('should throw error for destination definition with invalid version format', async () => {
+      const invalidDestDef = {
+        name: 'GOOGLE_ANALYTICS',
+        displayName: 'Google Analytics',
+        version: '1',
+        fallbackVersion: 1,
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['apiKey'],
+          },
+        },
+      };
+
+      await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow();
+    });
+
+    it('should throw error for destination definition with invalid versions status', async () => {
+      const invalidDestDef = {
+        name: 'GOOGLE_ANALYTICS',
+        displayName: 'Google Analytics',
+        version: '1.0',
+        fallbackVersion: 1,
+        versions: {
+          1: {
+            number: '1.1',
+            status: 'deprecated',
+            config: {
+              supportedSourceTypes: ['web'],
+              destConfig: {
+                defaultConfig: ['apiKey'],
+              },
+            },
+            configSchema: {},
+            uiConfig: {},
+          },
+        },
         config: {
           supportedSourceTypes: ['web'],
           destConfig: {

@@ -37,3 +37,9 @@
 - Commented-out validation rules in `src/validator/index.ts` indicate intentionally disabled guardrails; track re-enablement to prevent drift.
 - The Babel config (`.babelrc`) actively uses proposal-form plugins (`@babel/plugin-proposal-class-properties` and siblings, `loose: true`), so they are referenced rather than leftover even though tests transform via SWC (`jest.config.js::transform`); the proposal-style names are superseded by the `transform-*` equivalents in modern Babel and could be modernized later (`.babelrc`, `package.json` devDependencies).
 - Repository metadata still references legacy `rudder-config-schema` naming in package fields while repo is `rudder-integrations-config`; mismatch can create confusion in external tooling/docs (`package.json` name/homepage/repository).
+
+## INT-6502 — Versioned Destination Schema and Backend Coupling Risk
+
+- Destination-definition validation is still rooted in `src/schemas/destinations/db-config-schema.json`, and broad tests (`test/validation.test.ts`) validate every root destination `db-config.json`; introducing top-level `version`, `fallbackVersion`, or `versions` fields requires schema and test-alignment to avoid repo-wide validation failures.
+- The broad validation path currently covers root destination definitions, not nested `versions/<major>/` artifacts, so archived-version shape drift can go untested unless dedicated validation is added.
+- New destination archive fields emitted by this repository have a dependency boundary with `rudder-config-backend`; database/model support must exist there before relying on new emitted fields in production flows.

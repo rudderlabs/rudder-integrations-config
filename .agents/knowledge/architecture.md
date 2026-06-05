@@ -37,3 +37,10 @@
 - Security posture is layered rather than centralized: validator-level secret/include-key checks prevent client exposure, while deploy tooling relies on dry-run defaults and explicit no-dry-run opt-in to avoid accidental remote writes (`src/validator/index.ts:30`, `scripts/deployToDB.py::get_command_line_arguments`, `scripts/deployAccountsToDB.py::get_command_line_arguments`).
 - Generation pipelines (`pre-process`, `generate:constants`) and strict CI test thresholds tie repo hygiene to script execution order; skipped generation can desync committed artifacts from source configs and break validation/test expectations (`package.json:30`, `package.json:43`, `package.json:44`, `jest.config.js:43`).
 - Known technical debt is explicit in commented-out/ TODO validation rules, and the same risk is reflected in targeted rule tests; this signals deliberate temporary gaps rather than unobserved behavior (`src/validator/index.ts` TODO blocks, `test/validator/validator.test.ts:895`).
+
+## INT-6502 — Destination Versions Archive Contract
+
+- Destination deploy payload assembly in `scripts/deployToDB.py::update_diff_db` now includes a top-level `versions` object built from `<definition>/versions/<major>/`.
+- `build_versions_archive` merges each archived version's `db-config.json`, `schema.json`, and `ui-config.json` into `versions[major]`, preserving `number` and `status` and optionally carrying `retirementDate` and `migrationDocsUrl`.
+- When no `versions/` directory exists, payload construction sets `versions` to `{}` to allow jsondiff-driven clearing of previously persisted archive state.
+- Current deploy file-loading behavior remains root-first (`db-config.json`/`ui-config.json`/`schema.json` at destination root), so nested version assets affect deployment only through explicit archive-building logic.

@@ -26,6 +26,29 @@
         "Google Cloud Pub/Sub"
       ]
     },
+    "version": {
+      "type": "string",
+      "title": "Version",
+      "description": "Current root destination definition version in major.minor format.",
+      "pattern": "^\\d+\\.\\d+$",
+      "examples": ["1.0", "2.3"]
+    },
+    "fallbackVersion": {
+      "type": "integer",
+      "title": "Fallback Version",
+      "description": "Major version to use as a fallback for this destination definition."
+    },
+    "versions": {
+      "type": "object",
+      "title": "Versions Archive",
+      "description": "Archive of major versions keyed by major version string.",
+      "patternProperties": {
+        "^\\d+$": {
+          "$ref": "#/definitions/versionArchiveEntry"
+        }
+      },
+      "additionalProperties": false
+    },
     "category": {
       "type": "string",
       "title": "Category",
@@ -805,6 +828,36 @@
         "shopify",
         "cloudSource"
       ]
+    },
+    "versionArchiveEntry": {
+      "type": "object",
+      "required": ["number", "status", "config", "configSchema", "uiConfig"],
+      "properties": {
+        "number": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+$"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["supported", "retired"]
+        },
+        "retirementDate": {
+          "type": "string"
+        },
+        "migrationDocsUrl": {
+          "type": "string"
+        },
+        "config": {
+          "type": "object"
+        },
+        "configSchema": {
+          "type": "object"
+        },
+        "uiConfig": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
     }
   }
 }

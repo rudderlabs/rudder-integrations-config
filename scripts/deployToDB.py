@@ -21,6 +21,15 @@ BLACK_LIST_DESTINATIONS = ["RUDDER_TEST"]
 # `normalize_nullable_column_deletions` for why this list matters.
 NULLABLE_COLUMN_FIELDS = ("options", "uiConfig", "configSchema")
 
+CONTROL_PLANE_URL = None
+USERNAME = None
+PASSWORD = None
+SELECTORS = []
+ITEM_NAME = None
+DRY_RUN = True
+VERBOSE = False
+AUTH = (None, None)
+
 
 def get_command_line_arguments():
     parser = argparse.ArgumentParser(
@@ -106,17 +115,87 @@ def get_command_line_arguments():
     )
 
 
-CONTROL_PLANE_URL, USERNAME, PASSWORD, SELECTORS, ITEM_NAME, DRY_RUN, VERBOSE = (
-    get_command_line_arguments()
-)
-
-# CONSTANTS
-AUTH = (USERNAME, PASSWORD)
-#########################
+def initialize_runtime_config():
+    global CONTROL_PLANE_URL, USERNAME, PASSWORD, SELECTORS, ITEM_NAME, DRY_RUN, VERBOSE, AUTH
+    (
+        CONTROL_PLANE_URL,
+        USERNAME,
+        PASSWORD,
+        SELECTORS,
+        ITEM_NAME,
+        DRY_RUN,
+        VERBOSE,
+    ) = get_command_line_arguments()
+    AUTH = (USERNAME, PASSWORD)
 
 
 #########################
 # UTIL METHODS
+
+
+def normalize_nullable_column_deletions(diff, persisted_data, updated_data):
+    """Convert top-level deletions of nullable DB-column fields into explicit nulls.
+
+    jsondiff reports keys removed from the local file under `$delete`. When that's
+    the only diff key, the `len(diff) > 0` gate in update_diff_db skips the API
+    call and the DB retains the stale value forever. For fields that map to
+    nullable DB columns (NULLABLE_COLUMN_FIELDS), set the field to None on both
+    the diff and the payload — producing a real diff entry, opening the gate, and
+    making the server clear the column explicitly. `$delete` is always popped
+    afterwards; other entries are ignored by design (the full local file is
+    posted, so missing keys fall out naturally on the server).
+
+    Mutates `diff` and `updated_data` in place.
+    """
+    delete_fields = diff.get("$delete") or []
+    for field in NULLABLE_COLUMN_FIELDS:
+        if field in delete_fields and persisted_data.get(field):
+            diff[field] = None
+            updated_data[field] = None
+    diff.pop("$delete", None)
+
+
+def build_versions_archive(directory):
+    versions_directory = os.path.join(directory, "versions")
+    if not os.path.isdir(versions_directory):
+        return {}
+
+    versions_archive = {}
+    for major in sorted(os.listdir(versions_directory)):
+        major_directory = os.path.join(versions_directory, major)
+        if not os.path.isdir(major_directory):
+            continue
+
+        versioned_data = get_file_content(major_directory)
+        version_data = versioned_data.get("version")
+        if not isinstance(version_data, dict):
+            raise ValueError(
+                f"Missing or invalid version metadata in {major_directory}/db-config.json"
+            )
+
+        number = version_data.get("number")
+        status = version_data.get("status")
+        if number is None or status is None:
+            raise ValueError(
+                f"Version metadata must include number and status in {major_directory}/db-config.json"
+            )
+
+        versions_archive[major] = {
+            "number": number,
+            "status": status,
+            "config": versioned_data.get("config"),
+            "configSchema": versioned_data.get("configSchema"),
+            "uiConfig": versioned_data.get("uiConfig"),
+        }
+
+        if "retirementDate" in version_data:
+            versions_archive[major]["retirementDate"] = version_data["retirementDate"]
+        if "migrationDocsUrl" in version_data:
+            versions_archive[major]["migrationDocsUrl"] = version_data[
+                "migrationDocsUrl"
+            ]
+
+    return versions_archive
 
 
 def update_diff_db(
@@ -147,6 +226,8 @@ def update_diff_db(
 
         directory = f"./{CONFIG_DIR}/{selector}s/{item}"
         updated_data = get_file_content(directory)
+        if selector == "destination":
+            updated_data["versions"] = build_versions_archive(directory)
 
         persisted_data = persisted_by_name.get(updated_data["name"])
 
@@ -347,6 +428,8 @@ def print_summary(selector, final_report, dry_run=False):
 
 
 if __name__ == "__main__":
+    initialize_runtime_config()
+
     # Initialize debug logging if verbose mode is enabled
     if VERBOSE:
         initialize_debug_log()
