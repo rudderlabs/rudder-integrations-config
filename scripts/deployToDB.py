@@ -188,7 +188,7 @@ def build_versions_archive(directory):
             )
         if number.split(".")[0] != major:
             raise ValueError(
-                f"Archived version `number` ({number}) major does not match directory '{major}' in {major_directory}/db-config.json"
+                f"Archived `version` ({number}) major does not match directory '{major}' in {major_directory}/db-config.json"
             )
 
         status = versioned_data.get("status")
