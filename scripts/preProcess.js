@@ -37,7 +37,7 @@ async function main() {
 
   destinationFolders.forEach(async (destinationName) => {
     if (destinationName === 'ga4_v2') {
-      console.debug('Skipping GA4_v2');
+      // console.debug('Skipping GA4_v2');
       return;
     }
     const uiDefaults = await getUiDefaultData(destinationName);
