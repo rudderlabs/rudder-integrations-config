@@ -218,6 +218,36 @@ describe('Destination Definition validation tests', () => {
         '[" must have required property \'name\'"," must have required property \'displayName\'"]',
     },
     {
+      description: 'missing "version" property',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        fallbackVersion: 1,
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+        },
+      },
+      expected: '[" must have required property \'version\'"]',
+    },
+    {
+      description: 'missing "fallbackVersion" property',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+        },
+      },
+      expected: '[" must have required property \'fallbackVersion\'"]',
+    },
+    {
       description: 'hybridModeCloudEventsFilter is not a valid map',
       input: {
         name: 'test',

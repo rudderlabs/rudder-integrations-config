@@ -383,23 +383,6 @@ describe('Validator Utils', () => {
       await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
     });
 
-    it('should validate destination definition with version and fallbackVersion', async () => {
-      const validDestDef = {
-        name: 'GOOGLE_ANALYTICS',
-        displayName: 'Google Analytics',
-        version: '1.0',
-        fallbackVersion: 1,
-        config: {
-          supportedSourceTypes: ['web', 'android', 'ios'],
-          destConfig: {
-            defaultConfig: ['apiKey', 'trackingId'],
-          },
-        },
-      };
-
-      await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
-    });
-
     it('should throw error for invalid destination definition', async () => {
       const invalidDestDef = {
         name: 'GOOGLE_ANALYTICS',
