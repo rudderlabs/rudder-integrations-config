@@ -35,14 +35,14 @@ async function getDestinationNames() {
 async function main() {
   const destinationFolders = await getDestinationNames();
 
-  destinationFolders.forEach(async (destinationName) => {
+  for (const destinationName of destinationFolders) {
     if (destinationName === 'ga4_v2') {
       // console.debug('Skipping GA4_v2');
-      return;
+      continue;
     }
     const uiDefaults = await getUiDefaultData(destinationName);
     if (!uiDefaults) {
-      return;
+      continue;
     }
 
     const uiConfigTemplate = await getUiConfigTemplate(destinationName);
@@ -52,7 +52,7 @@ async function main() {
       `${srcPath}/configurations/destinations/${destinationName}/ui-config.json`,
       JSON.stringify(result, null, 2),
     );
-  });
+  }
 }
 
 main().catch((error) => {
