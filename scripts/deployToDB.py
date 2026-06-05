@@ -165,7 +165,10 @@ def build_versions_archive(directory):
         return {}
 
     versions_archive = {}
-    for major in sorted(os.listdir(versions_directory)):
+    for major in sorted(
+        os.listdir(versions_directory),
+        key=lambda name: (0, int(name)) if name.isdigit() else (1, name),
+    ):
         major_directory = os.path.join(versions_directory, major)
         if not os.path.isdir(major_directory):
             continue
