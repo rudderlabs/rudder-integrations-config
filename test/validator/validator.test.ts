@@ -326,7 +326,7 @@ describe('Validator Utils', () => {
 
       const validDestinationSchema = {
         type: 'object',
-        required: ['name', 'displayName', 'config'],
+        required: ['name', 'displayName', 'version', 'fallbackVersion', 'config'],
         properties: {
           name: {
             type: 'string',
@@ -370,6 +370,8 @@ describe('Validator Utils', () => {
       const validDestDef = {
         name: 'GOOGLE_ANALYTICS',
         displayName: 'Google Analytics',
+        version: '1.0',
+        fallbackVersion: 1,
         config: {
           supportedSourceTypes: ['web', 'android', 'ios'],
           destConfig: {
@@ -478,6 +480,8 @@ describe('Validator Utils', () => {
       const validDestDef = {
         name: 'GOOGLE_ANALYTICS',
         displayName: 'Google Analytics',
+        version: '1.0',
+        fallbackVersion: 1,
         config: {
           supportedSourceTypes: ['web'],
           destConfig: {
