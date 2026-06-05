@@ -198,13 +198,22 @@ def build_versions_archive(directory):
             )
 
         entry = {"number": number, "status": status}
-        for slice_key in ("config", "configSchema", "uiConfig"):
+        for slice_key in ("config", "configSchema"):
             slice_value = versioned_data.get(slice_key)
             if not isinstance(slice_value, dict):
                 raise ValueError(
                     f"Archived version is missing a valid `{slice_key}` object in {major_directory}"
                 )
             entry[slice_key] = slice_value
+
+        # `uiConfig` may be an object (current `baseTemplate` form) or an array
+        # (legacy form), so accept either rather than forcing a dict.
+        ui_config = versioned_data.get("uiConfig")
+        if not isinstance(ui_config, (dict, list)):
+            raise ValueError(
+                f"Archived version is missing a valid `uiConfig` object or array in {major_directory}"
+            )
+        entry["uiConfig"] = ui_config
 
         for optional_key in ("retirementDate", "migrationDocsUrl"):
             if optional_key in versioned_data:
