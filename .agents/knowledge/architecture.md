@@ -41,6 +41,7 @@
 ## INT-6502 — Destination Versions Archive Contract
 
 - Destination deploy payload assembly in `scripts/deployToDB.py::update_diff_db` now includes a top-level `versions` object built from `<definition>/versions/<major>/`.
-- `build_versions_archive` merges each archived version's `db-config.json`, `schema.json`, and `ui-config.json` into `versions[major]`, preserving `number` and `status` and optionally carrying `retirementDate` and `migrationDocsUrl`.
+- `build_versions_archive` reads each archived major's triplet (`db-config.json`/`schema.json`/`ui-config.json`). On disk an archived major carries a flat `version` (major.minor string) plus sibling `status`/`retirementDate?`/`migrationDocsUrl?`, mirroring the root db-config; the assembled `versions[major]` entry renames `version` to `number` and carries `config`/`configSchema`/`uiConfig`. It raises on a missing/invalid `version`, an out-of-enum `status`, or a missing config/configSchema/uiConfig slice rather than emitting a partial entry.
+- `versions` is a deploy-payload contract only: it is assembled at deploy time and is NOT part of the on-disk `db-config-schema.json`, which validates authored root `db-config.json` files (these carry `version`/`fallbackVersion` but never `versions`).
 - When no `versions/` directory exists, payload construction sets `versions` to `{}` to allow jsondiff-driven clearing of previously persisted archive state.
 - Current deploy file-loading behavior remains root-first (`db-config.json`/`ui-config.json`/`schema.json` at destination root), so nested version assets affect deployment only through explicit archive-building logic.

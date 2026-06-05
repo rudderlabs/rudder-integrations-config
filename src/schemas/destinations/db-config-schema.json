@@ -29,25 +29,16 @@
     "version": {
       "type": "string",
       "title": "Version",
-      "description": "Current root destination definition version in major.minor format.",
+      "description": "The current version of this destination definition, in major.minor format. The current version is always the served default, so its lifecycle status is implicit (only archived majors carry an explicit status).",
+      "$comment": "Bump the minor for backward-compatible changes and the major for breaking changes. This is authored on disk in db-config.json; the archive of non-current majors is assembled by the deploy script (scripts/deployToDB.py) into the upload payload and is not part of this on-disk schema.",
       "pattern": "^\\d+\\.\\d+$",
       "examples": ["1.0", "2.3"]
     },
     "fallbackVersion": {
       "type": "integer",
       "title": "Fallback Version",
-      "description": "Major version to use as a fallback for this destination definition."
-    },
-    "versions": {
-      "type": "object",
-      "title": "Versions Archive",
-      "description": "Archive of major versions keyed by major version string.",
-      "patternProperties": {
-        "^\\d+$": {
-          "$ref": "#/definitions/versionArchiveEntry"
-        }
-      },
-      "additionalProperties": false
+      "description": "The major version assigned to destination instances created without an explicitly requested version. Backfilled to 1 for every definition and advanced manually only when the prior fallback major is retired.",
+      "examples": [1]
     },
     "category": {
       "type": "string",
@@ -828,36 +819,6 @@
         "shopify",
         "cloudSource"
       ]
-    },
-    "versionArchiveEntry": {
-      "type": "object",
-      "required": ["number", "status", "config", "configSchema", "uiConfig"],
-      "properties": {
-        "number": {
-          "type": "string",
-          "pattern": "^\\d+\\.\\d+$"
-        },
-        "status": {
-          "type": "string",
-          "enum": ["supported", "retired"]
-        },
-        "retirementDate": {
-          "type": "string"
-        },
-        "migrationDocsUrl": {
-          "type": "string"
-        },
-        "config": {
-          "type": "object"
-        },
-        "configSchema": {
-          "type": "object"
-        },
-        "uiConfig": {
-          "type": "object"
-        }
-      },
-      "additionalProperties": false
     }
   }
 }

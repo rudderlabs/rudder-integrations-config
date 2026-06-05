@@ -37,5 +37,5 @@
 
 ## INT-6502 — Import-Safe Python CLI Pattern
 
-- For Python deploy tooling, keep argument parsing and runtime config initialization behind a `__main__`-only path so module imports remain side-effect free in unit tests.
-- `scripts/deployToDB.py` follows this by delaying CLI/runtime initialization to `initialize_runtime_config()` at execution time, which preserves command-line behavior while enabling direct tests of helper functions such as archive/diff builders.
+- For Python deploy tooling, keep argument parsing and runtime config initialization behind a `__main__`-only path so module imports remain side-effect free (importable without triggering CLI parsing).
+- `scripts/deployToDB.py` follows this by delaying CLI/runtime initialization to `initialize_runtime_config()` at execution time, which preserves command-line behavior while keeping the module safe to import.

@@ -4,6 +4,7 @@ import os
 import sys
 import jsondiff
 import argparse
+import re
 from constants import CONFIG_DIR
 from utils import (
     get_all_config_definitions,
@@ -20,6 +21,9 @@ BLACK_LIST_DESTINATIONS = ["RUDDER_TEST"]
 # for `destination_definitions` / `source_definitions`. See
 # `normalize_nullable_column_deletions` for why this list matters.
 NULLABLE_COLUMN_FIELDS = ("options", "uiConfig", "configSchema")
+# Allowed lifecycle statuses for archived (non-current) majors in the `versions`
+# archive. The current version is the served default, so its status is implicit.
+VERSION_ARCHIVE_STATUSES = ("supported", "retired")
 
 CONTROL_PLANE_URL = None
 USERNAME = None
@@ -167,33 +171,37 @@ def build_versions_archive(directory):
             continue
 
         versioned_data = get_file_content(major_directory)
-        version_data = versioned_data.get("version")
-        if not isinstance(version_data, dict):
+
+        # On disk, an archived major carries a flat `version` (major.minor string)
+        # plus sibling `status`/`retirementDate?`/`migrationDocsUrl?` — the same
+        # shape as the root db-config.json. The archive entry the backend persists
+        # renames `version` to `number`.
+        number = versioned_data.get("version")
+        if not isinstance(number, str) or not re.fullmatch(r"\d+\.\d+", number):
             raise ValueError(
-                f"Missing or invalid version metadata in {major_directory}/db-config.json"
+                f"Archived version requires a major.minor `version` string in {major_directory}/db-config.json"
             )
 
-        number = version_data.get("number")
-        status = version_data.get("status")
-        if number is None or status is None:
+        status = versioned_data.get("status")
+        if status not in VERSION_ARCHIVE_STATUSES:
             raise ValueError(
-                f"Version metadata must include number and status in {major_directory}/db-config.json"
+                f"Archived version `status` must be one of {list(VERSION_ARCHIVE_STATUSES)} in {major_directory}/db-config.json"
             )
 
-        versions_archive[major] = {
-            "number": number,
-            "status": status,
-            "config": versioned_data.get("config"),
-            "configSchema": versioned_data.get("configSchema"),
-            "uiConfig": versioned_data.get("uiConfig"),
-        }
+        entry = {"number": number, "status": status}
+        for slice_key in ("config", "configSchema", "uiConfig"):
+            slice_value = versioned_data.get(slice_key)
+            if not isinstance(slice_value, dict):
+                raise ValueError(
+                    f"Archived version is missing a valid `{slice_key}` object in {major_directory}"
+                )
+            entry[slice_key] = slice_value
 
-        if "retirementDate" in version_data:
-            versions_archive[major]["retirementDate"] = version_data["retirementDate"]
-        if "migrationDocsUrl" in version_data:
-            versions_archive[major]["migrationDocsUrl"] = version_data[
-                "migrationDocsUrl"
-            ]
+        for optional_key in ("retirementDate", "migrationDocsUrl"):
+            if optional_key in versioned_data:
+                entry[optional_key] = versioned_data[optional_key]
+
+        versions_archive[major] = entry
 
     return versions_archive
 
