@@ -22,7 +22,7 @@ async function getUiDefaultData(destinationName) {
     return JSON.parse(defaults);
   } catch (error) {
     // skip the destination if ui-default.json is not present
-    console.log(`ui-default.json not found for ${destinationName}`);
+    // console.debug(`ui-default.json not found for ${destinationName}`);
     return undefined;
   }
 }
@@ -37,7 +37,7 @@ async function main() {
 
   destinationFolders.forEach(async (destinationName) => {
     if (destinationName === 'ga4_v2') {
-      console.log('Skipping GA4_v2');
+      console.debug('Skipping GA4_v2');
       return;
     }
     const uiDefaults = await getUiDefaultData(destinationName);
