@@ -478,6 +478,51 @@ describe('Account Definition validation tests', () => {
       },
       expected: '["config.optionFields.0 must be string"]',
     },
+    {
+      description: 'displayOptions wrong type',
+      input: {
+        name: 'INVALID_ACCOUNT',
+        type: 'test',
+        category: 'destination',
+        authenticationType: 'oauth',
+        config: {
+          optionFields: ['region'],
+          refreshOAuthToken: true,
+        },
+        displayOptions: 42,
+      },
+      expected: '["displayOptions must be object"]',
+    },
+    {
+      description: 'displayOptions.isBeta wrong type',
+      input: {
+        name: 'INVALID_ACCOUNT',
+        type: 'test',
+        category: 'destination',
+        authenticationType: 'oauth',
+        config: {
+          optionFields: ['region'],
+          refreshOAuthToken: true,
+        },
+        displayOptions: { isBeta: 'yes' },
+      },
+      expected: '["displayOptions.isBeta must be boolean"]',
+    },
+    {
+      description: 'displayOptions.deprecationLabel wrong type',
+      input: {
+        name: 'INVALID_ACCOUNT',
+        type: 'test',
+        category: 'destination',
+        authenticationType: 'oauth',
+        config: {
+          optionFields: ['region'],
+          refreshOAuthToken: true,
+        },
+        displayOptions: { deprecationLabel: 123 },
+      },
+      expected: '["displayOptions.deprecationLabel must be string"]',
+    },
   ];
 
   it.each(malformedAccountDefConfigs)('$description', async (testCase) => {
