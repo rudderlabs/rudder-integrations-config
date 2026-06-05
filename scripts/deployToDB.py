@@ -170,6 +170,11 @@ def build_versions_archive(directory):
         if not os.path.isdir(major_directory):
             continue
 
+        if not re.fullmatch(r"[1-9]\d*", major):
+            raise ValueError(
+                f"Archived version directory name must be a canonical major integer, got '{major}' in {versions_directory}"
+            )
+
         versioned_data = get_file_content(major_directory)
 
         # On disk, an archived major carries a flat `version` (major.minor string)
@@ -180,6 +185,10 @@ def build_versions_archive(directory):
         if not isinstance(number, str) or not re.fullmatch(r"\d+\.\d+", number):
             raise ValueError(
                 f"Archived version requires a major.minor `version` string in {major_directory}/db-config.json"
+            )
+        if number.split(".")[0] != major:
+            raise ValueError(
+                f"Archived version `number` ({number}) major does not match directory '{major}' in {major_directory}/db-config.json"
             )
 
         status = versioned_data.get("status")
