@@ -379,12 +379,42 @@ describe('Source Definition validation tests', () => {
       expected:
         '["options.internalSecretKeys must NOT have duplicate items (items ## 1 and 0 are identical)"]',
     },
+    {
+      description: 'config.supportedAccountDefinitions.rudderAccountId with non-array value',
+      input: {
+        name: 'test_source',
+        displayName: 'Test Source',
+        type: 'cloud',
+        category: 'webhook',
+        config: {
+          supportedAccountDefinitions: {
+            rudderAccountId: 'SOURCE_TEST_OAUTH',
+          },
+        },
+      },
+      expected: '["config.supportedAccountDefinitions.rudderAccountId must be array"]',
+    },
   ];
 
   it.each(malformedSrcDefConfigs)('$description', async (testCase) => {
     await expect(validateSourceDefinitions(testCase.input)).rejects.toThrow(
       new Error(testCase.expected),
     );
+  });
+
+  it('config.supportedAccountDefinitions.rudderAccountId with valid array value is accepted', async () => {
+    const srcDefConfig = {
+      name: 'test_source',
+      displayName: 'Test Source',
+      type: 'cloud',
+      category: 'webhook',
+      config: {
+        supportedAccountDefinitions: {
+          rudderAccountId: ['SOURCE_TEST_OAUTH'],
+        },
+      },
+    };
+    await expect(validateSourceDefinitions(srcDefConfig)).resolves.toEqual(true);
   });
 });
 
