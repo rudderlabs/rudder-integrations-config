@@ -394,6 +394,36 @@ describe('Source Definition validation tests', () => {
       },
       expected: '["config.supportedAccountDefinitions.rudderAccountId must be array"]',
     },
+    {
+      description: 'config.supportedAccountDefinitions.rudderAccountId with empty array',
+      input: {
+        name: 'test_source',
+        displayName: 'Test Source',
+        type: 'cloud',
+        category: 'webhook',
+        config: {
+          supportedAccountDefinitions: {
+            rudderAccountId: [],
+          },
+        },
+      },
+      expected:
+        '["config.supportedAccountDefinitions.rudderAccountId must NOT have fewer than 1 items"]',
+    },
+    {
+      description: 'config.supportedAccountDefinitions with empty object',
+      input: {
+        name: 'test_source',
+        displayName: 'Test Source',
+        type: 'cloud',
+        category: 'webhook',
+        config: {
+          supportedAccountDefinitions: {},
+        },
+      },
+      expected:
+        '["config.supportedAccountDefinitions must NOT have fewer than 1 properties"]',
+    },
   ];
 
   it.each(malformedSrcDefConfigs)('$description', async (testCase) => {

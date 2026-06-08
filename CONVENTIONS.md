@@ -10,7 +10,7 @@ This document captures naming and structural conventions used across this reposi
 
 Every account definition is identified by a unique `name` (the `accountDefinitionName`). It MUST be written in `SCREAMING_SNAKE_CASE` and follow this pattern:
 
-```
+```text
 {CATEGORY}_{TYPE}[_{AUTH_QUALIFIER}]
 ```
 
