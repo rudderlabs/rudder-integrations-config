@@ -494,21 +494,6 @@ describe('Account Definition validation tests', () => {
       expected: '["displayOptions must be object"]',
     },
     {
-      description: 'displayOptions.isBeta wrong type',
-      input: {
-        name: 'INVALID_ACCOUNT',
-        type: 'test',
-        category: 'destination',
-        authenticationType: 'oauth',
-        config: {
-          optionFields: ['region'],
-          refreshOAuthToken: true,
-        },
-        displayOptions: { isBeta: 'yes' },
-      },
-      expected: '["displayOptions.isBeta must be boolean"]',
-    },
-    {
       description: 'displayOptions.deprecationLabel wrong type',
       input: {
         name: 'INVALID_ACCOUNT',

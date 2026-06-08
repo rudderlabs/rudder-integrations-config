@@ -21,7 +21,7 @@ BLACK_LIST_DESTINATIONS = []
 # Keep in sync with the DDL. See `normalize_nullable_column_deletions` for why
 # this matters — removing one of these from a db-config.json must clear the
 # column in the DB rather than leave the stale value behind.
-ACCOUNT_NULLABLE_COLUMN_FIELDS = ("displayOptions",)
+ACCOUNT_NULLABLE_COLUMN_FIELDS = "displayOptions"
 
 
 def get_command_line_arguments():
