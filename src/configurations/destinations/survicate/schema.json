@@ -1,54 +1,35 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": [],
+    "required": ["apiKey"],
     "type": "object",
     "properties": {
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          },
-          "android": {
-            "type": "boolean"
-          },
-          "androidKotlin": {
-            "type": "boolean"
-          },
-          "ios": {
-            "type": "boolean"
-          },
-          "iosSwift": {
-            "type": "boolean"
-          },
-          "reactnative": {
-            "type": "boolean"
-          }
-        }
+      "apiKey": {
+        "type": "string",
+        "pattern": "^(.{1,100})$"
       },
       "connectionMode": {
         "type": "object",
         "properties": {
           "android": {
             "type": "string",
-            "enum": ["device", "cloud"]
+            "enum": ["cloud"]
           },
           "androidKotlin": {
             "type": "string",
-            "enum": ["device", "cloud"]
+            "enum": ["cloud"]
           },
           "ios": {
             "type": "string",
-            "enum": ["device", "cloud"]
+            "enum": ["cloud"]
           },
           "iosSwift": {
             "type": "string",
-            "enum": ["device", "cloud"]
+            "enum": ["cloud"]
           },
           "web": {
             "type": "string",
-            "enum": ["device", "cloud"]
+            "enum": ["cloud"]
           },
           "unity": {
             "type": "string",
@@ -58,9 +39,17 @@
             "type": "string",
             "enum": ["cloud"]
           },
+          "cloud": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "warehouse": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
           "reactnative": {
             "type": "string",
-            "enum": ["device", "cloud"]
+            "enum": ["cloud"]
           },
           "flutter": {
             "type": "string",
@@ -73,43 +62,6 @@
           "shopify": {
             "type": "string",
             "enum": ["cloud"]
-          },
-          "cloud": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "warehouse": {
-            "type": "string",
-            "enum": ["cloud"]
-          }
-        }
-      },
-      "eventFilteringOption": {
-        "type": "string",
-        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
-        "default": "disable"
-      },
-      "whitelistedEvents": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "eventName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "blacklistedEvents": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "eventName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
           }
         }
       },
@@ -145,57 +97,7 @@
                       "provider": {
                         "const": "custom"
                       }
-                    },
-                    "required": ["provider"]
-                  },
-                  "then": {
-                    "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
-                    },
-                    "required": ["resolutionStrategy"]
-                  }
-                }
-              ]
-            },
-            "uniqueItemProperties": ["provider"],
-            "errorMessage": {
-              "uniqueItemProperties": "Only one consent management block can be configured per provider."
-            }
-          },
-          "warehouse": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "string",
-                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
-                },
-                "consents": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "consent": {
-                        "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                      }
                     }
-                  }
-                }
-              },
-              "allOf": [
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
-                    "required": ["provider"]
                   },
                   "then": {
                     "properties": {
@@ -243,8 +145,7 @@
                       "provider": {
                         "const": "custom"
                       }
-                    },
-                    "required": ["provider"]
+                    }
                   },
                   "then": {
                     "properties": {
@@ -292,8 +193,7 @@
                       "provider": {
                         "const": "custom"
                       }
-                    },
-                    "required": ["provider"]
+                    }
                   },
                   "then": {
                     "properties": {
@@ -341,8 +241,7 @@
                       "provider": {
                         "const": "custom"
                       }
-                    },
-                    "required": ["provider"]
+                    }
                   },
                   "then": {
                     "properties": {
@@ -390,8 +289,7 @@
                       "provider": {
                         "const": "custom"
                       }
-                    },
-                    "required": ["provider"]
+                    }
                   },
                   "then": {
                     "properties": {
@@ -439,8 +337,7 @@
                       "provider": {
                         "const": "custom"
                       }
-                    },
-                    "required": ["provider"]
+                    }
                   },
                   "then": {
                     "properties": {
@@ -488,8 +385,7 @@
                       "provider": {
                         "const": "custom"
                       }
-                    },
-                    "required": ["provider"]
+                    }
                   },
                   "then": {
                     "properties": {
@@ -537,8 +433,7 @@
                       "provider": {
                         "const": "custom"
                       }
-                    },
-                    "required": ["provider"]
+                    }
                   },
                   "then": {
                     "properties": {
@@ -586,8 +481,7 @@
                       "provider": {
                         "const": "custom"
                       }
-                    },
-                    "required": ["provider"]
+                    }
                   },
                   "then": {
                     "properties": {
@@ -635,8 +529,7 @@
                       "provider": {
                         "const": "custom"
                       }
-                    },
-                    "required": ["provider"]
+                    }
                   },
                   "then": {
                     "properties": {
@@ -684,8 +577,7 @@
                       "provider": {
                         "const": "custom"
                       }
-                    },
-                    "required": ["provider"]
+                    }
                   },
                   "then": {
                     "properties": {
@@ -733,8 +625,55 @@
                       "provider": {
                         "const": "custom"
                       }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
                     },
-                    "required": ["provider"]
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            },
+            "uniqueItemProperties": ["provider"],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
+            }
+          },
+          "warehouse": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    }
                   },
                   "then": {
                     "properties": {
@@ -754,363 +693,7 @@
             }
           }
         }
-      },
-      "oneTrustCookieCategories": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "ios": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "web": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "unity": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "amp": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "cloud": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "warehouse": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "reactnative": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "flutter": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "cordova": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "shopify": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          }
-        }
-      },
-      "ketchConsentPurposes": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "ios": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "web": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "unity": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "amp": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "cloud": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "warehouse": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "reactnative": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "flutter": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "cordova": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "shopify": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          }
-        }
       }
-    },
-    "allOf": [
-      {
-        "if": {
-          "properties": {
-            "connectionMode": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "web": {
-                  "const": "device"
-                }
-              }
-            }
-          },
-          "required": ["connectionMode"]
-        },
-        "then": {
-          "properties": {
-            "environmentId": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            }
-          },
-          "required": ["environmentId"]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "connectionMode": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "web": {
-                  "const": "cloud"
-                },
-                "ios": {
-                  "const": "cloud"
-                },
-                "iosSwift": {
-                  "const": "cloud"
-                },
-                "android": {
-                  "const": "cloud"
-                },
-                "androidKotlin": {
-                  "const": "cloud"
-                },
-                "unity": {
-                  "const": "cloud"
-                },
-                "amp": {
-                  "const": "cloud"
-                },
-                "reactnative": {
-                  "const": "cloud"
-                },
-                "flutter": {
-                  "const": "cloud"
-                },
-                "cordova": {
-                  "const": "cloud"
-                },
-                "shopify": {
-                  "const": "cloud"
-                }
-              }
-            }
-          },
-          "required": ["connectionMode"]
-        },
-        "then": {
-          "properties": {
-            "apiKey": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            }
-          },
-          "required": ["apiKey"]
-        }
-      }
-    ]
+    }
   }
 }
