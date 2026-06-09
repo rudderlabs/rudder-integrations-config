@@ -44,3 +44,9 @@
 
 - Destination visibility gating for Custom Audience is configured in `src/configurations/destinations/custom_audience/db-config.json` at `options.hidden.featureFlagName`; when renaming that key, keep the repo change localized to the definition file if repo-wide search confirms no other in-repo references.
 - For this class of definition-key rename, validate scope with targeted string search across `src/`, `generated/`, and `test/` before expanding into generator or test changes.
+
+## INT-6529 — Klaviyo Definition Edit Scope
+
+- Klaviyo destination config is maintained as a hand-authored JSON triplet under `src/configurations/destinations/klaviyo/` (`db-config.json`, `ui-config.json`, `schema.json`) rather than the template-driven `ui-config.jt` + `ui-default.json` flow used by some other destinations.
+- For Klaviyo changes, treat `ui-config.json` and `schema.json` as a synchronized pair for `apiVersion` enum/default behavior; updating only one side creates control-plane/UI-vs-schema drift and downstream validation failures.
+- Klaviyo destination validation fixtures are maintained in `test/data/validation/destinations/klaviyo.json`; any new version-path support should add or update fixture coverage there.

@@ -34,3 +34,8 @@
 
 - No repo-local CI optimization currently skips tests for documentation-only changes; pull requests still run the standard `Tests` and `Code quality checks` workflows (`.github/workflows/test.yml`, `.github/workflows/verify.yml`).
 - If a docs-only validation workflow is introduced later, document the criteria and workflow path here.
+
+## INT-6529 — Versioned Destination Field Sync Pattern
+
+- For destination fields exposed as UI selects and enforced in schema (for example Klaviyo `apiVersion`), changes should be made atomically across UI options and schema enum/defaults; treating these as a single change unit avoids publishing a UI option that backend schema validation rejects.
+- When product requirements are explicitly unresolved (for example conditional non-empty consent rules for a specific API version), keep existing schema validation behavior unchanged and defer stricter conditional rules until approved, while preserving current safe defaults.
