@@ -44,3 +44,9 @@
 
 - Destination visibility gating for Custom Audience is configured in `src/configurations/destinations/custom_audience/db-config.json` at `options.hidden.featureFlagName`; when renaming that key, keep the repo change localized to the definition file if repo-wide search confirms no other in-repo references.
 - For this class of definition-key rename, validate scope with targeted string search across `src/`, `generated/`, and `test/` before expanding into generator or test changes.
+
+## INT-6528 — Klaviyo apiVersion Alignment Rules
+
+- Treat Klaviyo apiVersion exposure as a synchronized config-surface change across `src/configurations/destinations/klaviyo/schema.json` (`configSchema.properties.apiVersion.enum/default`) and `src/configurations/destinations/klaviyo/ui-config.json` (Connection Settings API version options/default); changing only one causes dashboard-selection and backend-validation drift.
+- When adding a new allowed apiVersion (for example `v3` labeled `2026-04-15`), keep the default pinned unless product intent says otherwise (here default stays `v2`) and add a matching valid fixture in `test/data/validation/destinations/klaviyo.json` so schema validation tracks the exposed UI choice.
+- `src/configurations/destinations/klaviyo/db-config.json` should be checked for apiVersion constraints during this class of change, but no edit is required when it contains no hardcoded version/default surface.
