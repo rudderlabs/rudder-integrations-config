@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.157.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.156.0...v1.157.0) (2026-06-04)
+
+
+### Features
+
+* enable RN device mode support for Sprig destination ([#2507](https://github.com/rudderlabs/rudder-config-schema/issues/2507)) ([2b8a308](https://github.com/rudderlabs/rudder-config-schema/commit/2b8a308a6c6dd2a528fff94eb35783eb8bae2e05))
+* **iterable-audience:** add Iterable Audience destination configuration ([#2499](https://github.com/rudderlabs/rudder-config-schema/issues/2499)) ([ed342a1](https://github.com/rudderlabs/rudder-config-schema/commit/ed342a1bac59ef67114575898bbeca1110b8fb66))
+* **survicate:** add Survicate cloud mode destination ([#2480](https://github.com/rudderlabs/rudder-config-schema/issues/2480)) ([f7f85a0](https://github.com/rudderlabs/rudder-config-schema/commit/f7f85a0e76217aed15aea660bfa5f75eeddb08e6))
+
 ## [1.156.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.155.0...v1.156.0) (2026-06-02)
 
 

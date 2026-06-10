@@ -11,6 +11,7 @@ from utils import (
     update_config_definition,
     create_config_definition,
     initialize_debug_log,
+    normalize_nullable_column_deletions,
 )
 
 ALL_SELECTORS = ["destination", "source"]
@@ -118,29 +119,9 @@ AUTH = (USERNAME, PASSWORD)
 # UTIL METHODS
 
 
-def normalize_nullable_column_deletions(diff, persisted_data, updated_data):
-    """Convert top-level deletions of nullable DB-column fields into explicit nulls.
-
-    jsondiff reports keys removed from the local file under `$delete`. When that's
-    the only diff key, the `len(diff) > 0` gate in update_diff_db skips the API
-    call and the DB retains the stale value forever. For fields that map to
-    nullable DB columns (NULLABLE_COLUMN_FIELDS), set the field to None on both
-    the diff and the payload — producing a real diff entry, opening the gate, and
-    making the server clear the column explicitly. `$delete` is always popped
-    afterwards; other entries are ignored by design (the full local file is
-    posted, so missing keys fall out naturally on the server).
-
-    Mutates `diff` and `updated_data` in place.
-    """
-    delete_fields = diff.get("$delete") or []
-    for field in NULLABLE_COLUMN_FIELDS:
-        if field in delete_fields and persisted_data.get(field):
-            diff[field] = None
-            updated_data[field] = None
-    diff.pop("$delete", None)
-
-
-def update_diff_db(selector, persisted_by_name, item_name=None, dry_run=False, verbose=False):
+def update_diff_db(
+    selector, persisted_by_name, item_name=None, dry_run=False, verbose=False
+):
     final_report = []
 
     ## data sets
@@ -170,10 +151,10 @@ def update_diff_db(selector, persisted_by_name, item_name=None, dry_run=False, v
         persisted_data = persisted_by_name.get(updated_data["name"])
 
         if persisted_data is not None:
-            diff = jsondiff.diff(
-                persisted_data, updated_data, marshal=True
+            diff = jsondiff.diff(persisted_data, updated_data, marshal=True)
+            normalize_nullable_column_deletions(
+                diff, persisted_data, updated_data, NULLABLE_COLUMN_FIELDS
             )
-            normalize_nullable_column_deletions(diff, persisted_data, updated_data)
 
             if len(diff.keys()) > 0:  # changes exist
                 status, _ = update_config_definition(
@@ -302,8 +283,16 @@ def print_summary(selector, final_report, dry_run=False):
 
     failures = [item for item in final_report if is_failed(item)]
     failed_names = {item["name"] for item in failures}
-    creates = [item for item in final_report if "create" in item["action"] and item["name"] not in failed_names]
-    updates = [item for item in final_report if "update" in item["action"] and item["name"] not in failed_names]
+    creates = [
+        item
+        for item in final_report
+        if "create" in item["action"] and item["name"] not in failed_names
+    ]
+    updates = [
+        item
+        for item in final_report
+        if "update" in item["action"] and item["name"] not in failed_names
+    ]
     no_changes = [item for item in final_report if item["action"] == "N/A"]
 
     print(f"📊 Total configurations processed: {len(final_report)}")
@@ -321,7 +310,9 @@ def print_summary(selector, final_report, dry_run=False):
     if failures:
         print(f"\n❌ Records that FAILED:")
         for item in failures:
-            print(f"   - {item['name']} (action={item['action']}, status={item['status']})")
+            print(
+                f"   - {item['name']} (action={item['action']}, status={item['status']})"
+            )
 
     if creates:
         if dry_run:
@@ -382,7 +373,9 @@ if __name__ == "__main__":
         )
         persisted_by_name = {item["name"]: item for item in persisted_store}
 
-        final_report = update_diff_db(selector, persisted_by_name, ITEM_NAME, DRY_RUN, VERBOSE)
+        final_report = update_diff_db(
+            selector, persisted_by_name, ITEM_NAME, DRY_RUN, VERBOSE
+        )
 
         # Always show summary first (most important for users)
         print_summary(selector, final_report, DRY_RUN)
