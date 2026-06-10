@@ -12,9 +12,16 @@ from utils import (
     create_config_definition,
     get_formatted_json,
     initialize_debug_log,
+    normalize_nullable_column_deletions,
 )
 
 BLACK_LIST_DESTINATIONS = []
+
+# Top-level fields that map to nullable DB columns on `account_definitions`.
+# Keep in sync with the DDL. See `normalize_nullable_column_deletions` for why
+# this matters — removing one of these from a db-config.json must clear the
+# column in the DB rather than leave the stale value behind.
+ACCOUNT_NULLABLE_COLUMN_FIELDS = ["displayOptions"]
 
 
 def get_command_line_arguments():
@@ -282,7 +289,12 @@ def update_account_db(
                         diff = jsondiff.diff(
                             existing_account, updated_data, marshal=True
                         )
-                        diff.pop("$delete", None)
+                        normalize_nullable_column_deletions(
+                            diff,
+                            existing_account,
+                            updated_data,
+                            ACCOUNT_NULLABLE_COLUMN_FIELDS,
+                        )
 
                         if diff and len(diff.keys()) > 0:
                             status, _ = update_config_definition(
