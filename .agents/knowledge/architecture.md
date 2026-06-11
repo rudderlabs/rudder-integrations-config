@@ -37,3 +37,9 @@
 - Security posture is layered rather than centralized: validator-level secret/include-key checks prevent client exposure, while deploy tooling relies on dry-run defaults and explicit no-dry-run opt-in to avoid accidental remote writes (`src/validator/index.ts:30`, `scripts/deployToDB.py::get_command_line_arguments`, `scripts/deployAccountsToDB.py::get_command_line_arguments`).
 - Generation pipelines (`pre-process`, `generate:constants`) and strict CI test thresholds tie repo hygiene to script execution order; skipped generation can desync committed artifacts from source configs and break validation/test expectations (`package.json:30`, `package.json:43`, `package.json:44`, `jest.config.js:43`).
 - Known technical debt is explicit in commented-out/ TODO validation rules, and the same risk is reflected in targeted rule tests; this signals deliberate temporary gaps rather than unobserved behavior (`src/validator/index.ts` TODO blocks, `test/validator/validator.test.ts:895`).
+
+## INT-5981 — Google Ads Enhanced Conversions Is Config-Only
+
+- `google_adwords_enhanced_conversions` in this repository is definition-only scaffolding (destination definition triplet plus OAuth account-definition config) under `src/configurations/destinations/google_adwords_enhanced_conversions/`.
+- Runtime integration behavior is intentionally out of scope here: no Google Ads SDK wiring, request/network handlers, or versioned API endpoint implementation should be expected in this repo.
+- Implementation/runtime concerns for this integration belong to a consuming runtime repository (for example, transformer/runtime services), while this repo remains the source of configuration truth.

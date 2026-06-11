@@ -44,3 +44,9 @@
 
 - Destination visibility gating for Custom Audience is configured in `src/configurations/destinations/custom_audience/db-config.json` at `options.hidden.featureFlagName`; when renaming that key, keep the repo change localized to the definition file if repo-wide search confirms no other in-repo references.
 - For this class of definition-key rename, validate scope with targeted string search across `src/`, `generated/`, and `test/` before expanding into generator or test changes.
+
+## INT-5981 — Config Change Guardrails Require Generator + Validation Passes
+
+- Destination config edits are expected to stay in sync with generated artifacts and preprocessing outputs; changes may require regeneration of `generated/*` constants and UI pre-process outputs.
+- Repository workflow assumes strict validation discipline with full Jest coverage expectations (100%), so config-only edits still carry test-and-generation obligations.
+- Husky pre-commit flow is part of the normal edit contract and runs: `generate:constants`, display-name validation, pre-process, tests, lint-staged, and `validate_diff_accounts`.
