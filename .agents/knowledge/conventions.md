@@ -39,3 +39,8 @@
 
 - For destinations using custom mappings, `ui-config.json` is a generated artifact derived from `ui-config.jt` and `ui-default.json` through pre-process flow.
 - To avoid regeneration drift, behavior changes should be made in the template/default inputs when applicable, not only in generated `ui-config.json`.
+
+## INT-6524 — Feature-Flag Rename Scope
+
+- Destination visibility gating for Custom Audience is configured in `src/configurations/destinations/custom_audience/db-config.json` at `options.hidden.featureFlagName`; when renaming that key, keep the repo change localized to the definition file if repo-wide search confirms no other in-repo references.
+- For this class of definition-key rename, validate scope with targeted string search across `src/`, `generated/`, and `test/` before expanding into generator or test changes.

@@ -320,6 +320,33 @@ def update_config_definition(
     return parse_response(resp)
 
 
+def normalize_nullable_column_deletions(
+    diff, persisted_data, updated_data, nullable_fields
+):
+    """Convert top-level deletions of nullable DB-column fields into explicit nulls.
+
+    jsondiff reports keys removed from the local file under `$delete`. When that's
+    the only diff key, the `len(diff) > 0` gate in the deploy scripts skips the API
+    call and the DB retains the stale value forever. For fields that map to
+    nullable DB columns (`nullable_fields`), set the field to None on both
+    the diff and the payload — producing a real diff entry, opening the gate, and
+    making the server clear the column explicitly. `$delete` is always popped
+    afterwards; other entries are ignored by design (the full local file is
+    posted, so missing keys fall out naturally on the server).
+
+    `nullable_fields` is the tuple of top-level fields that map to nullable DB
+    columns for the entity being deployed, supplied by the caller.
+
+    Mutates `diff` and `updated_data` in place.
+    """
+    delete_fields = diff.get("$delete") or []
+    for field in nullable_fields:
+        if field in delete_fields and persisted_data.get(field):
+            diff[field] = None
+            updated_data[field] = None
+    diff.pop("$delete", None)
+
+
 def create_config_definition(
     base_url, selector, fileData, auth, dry_run=False, verbose=False
 ):
