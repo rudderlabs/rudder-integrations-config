@@ -34,3 +34,8 @@
 
 - No repo-local CI optimization currently skips tests for documentation-only changes; pull requests still run the standard `Tests` and `Code quality checks` workflows (`.github/workflows/test.yml`, `.github/workflows/verify.yml`).
 - If a docs-only validation workflow is introduced later, document the criteria and workflow path here.
+
+## INT-6540 — Resolve Ref by Trigger Context in Reusable Workflows
+
+- In reusable workflow chains, add an explicit `deployment_ref` input for `workflow_call` paths because pull request context is not guaranteed.
+- Resolve the effective ref once (caller-supplied for `workflow_call`; PR head SHA for merged release PR paths) and reuse that value consistently for checkout, version extraction, and downstream deploy inputs.

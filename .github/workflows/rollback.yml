@@ -17,6 +17,8 @@ jobs:
     needs: validate-actor
     name: Rollback Production To a Tag
     uses: ./.github/workflows/deploy-to-prod.yml
+    with:
+      deployment_ref: ${{ github.ref }}
     secrets:
       PROD_USERNAME: ${{ secrets.PROD_USERNAME }}
       PROD_PASSWORD: ${{ secrets.PROD_PASSWORD }}

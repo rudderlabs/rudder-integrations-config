@@ -37,3 +37,9 @@
 - Security posture is layered rather than centralized: validator-level secret/include-key checks prevent client exposure, while deploy tooling relies on dry-run defaults and explicit no-dry-run opt-in to avoid accidental remote writes (`src/validator/index.ts:30`, `scripts/deployToDB.py::get_command_line_arguments`, `scripts/deployAccountsToDB.py::get_command_line_arguments`).
 - Generation pipelines (`pre-process`, `generate:constants`) and strict CI test thresholds tie repo hygiene to script execution order; skipped generation can desync committed artifacts from source configs and break validation/test expectations (`package.json:30`, `package.json:43`, `package.json:44`, `jest.config.js:43`).
 - Known technical debt is explicit in commented-out/ TODO validation rules, and the same risk is reflected in targeted rule tests; this signals deliberate temporary gaps rather than unobserved behavior (`src/validator/index.ts` TODO blocks, `test/validator/validator.test.ts:895`).
+
+## INT-6540 — Rollback Deployment Ref Propagation
+
+- Production rollback execution flows through `.github/workflows/rollback.yml` -> `.github/workflows/deploy-to-prod.yml` -> `.github/workflows/deploy.yml`.
+- The deploy ref must be propagated from the rollback caller (`github.ref`) into `deploy-to-prod` and then into `deploy.yml` so rollback deploys the selected tag/branch instead of implicitly defaulting to `main`.
+- Version/Slack metadata and deployed code should be derived from the same resolved ref to keep release reporting and actual deployed artifact aligned.
