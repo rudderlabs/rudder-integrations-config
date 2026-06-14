@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.159.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.158.0...v1.159.0) (2026-06-12)
+
+
+### Features
+
+* add Amplitude SDK version selector ([#2513](https://github.com/rudderlabs/rudder-config-schema/issues/2513)) ([9319086](https://github.com/rudderlabs/rudder-config-schema/commit/93190860e11039d68507f0e575686da73a107f14))
+
+## [1.158.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.157.0...v1.158.0) (2026-06-10)
+
+
+### Features
+
+* **accounts:** plumb displayOptions field for account definitions ([#2520](https://github.com/rudderlabs/rudder-config-schema/issues/2520)) ([888b0ce](https://github.com/rudderlabs/rudder-config-schema/commit/888b0ce317b08ddeb4b2b0498a24f851e7cf7e8c))
+* **garl:** add Data Manager OAuth account definition ([#2515](https://github.com/rudderlabs/rudder-config-schema/issues/2515)) ([c98c602](https://github.com/rudderlabs/rudder-config-schema/commit/c98c602489b63e066c9bce91c641781ff25c9a21))
+
 ## [1.157.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.156.0...v1.157.0) (2026-06-04)
 
 
