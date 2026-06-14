@@ -366,6 +366,7 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
             ):
                 newSingleSelectObj["properties"][sourceType] = singleSelectObj
         singleSelectObj = newSingleSelectObj
+    add_immutable_property(field, singleSelectObj)
     return singleSelectObj
 
 
