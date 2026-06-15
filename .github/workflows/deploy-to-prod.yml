@@ -53,9 +53,12 @@ jobs:
 
       - name: Resolve Deployment Ref
         id: resolve_ref
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DEPLOYMENT_REF: ${{ inputs.deployment_ref }}
         run: |
-          if [[ "${{ github.event_name }}" == "workflow_call" ]]; then
-            deploy_ref="${{ inputs.deployment_ref }}"
+          if [[ "$EVENT_NAME" == "workflow_call" ]]; then
+            deploy_ref="$DEPLOYMENT_REF"
           else
             deploy_ref="main"
           fi
