@@ -271,6 +271,7 @@
     "result": true
   },
   {
+    "testTitle": "With Azure Blob hierarchical namespace disabled and no credentials",
     "config": {
       "host": "test-host",
       "path": "test-path",
@@ -282,6 +283,7 @@
       "bucketProvider": "AZURE_BLOB",
       "containerName": "test-container",
       "accountName": "test-account-name",
+      "enableHierarchicalNamespace": false,
       "useSSL": true
     },
     "result": false,
@@ -292,6 +294,24 @@
       " must match a schema in anyOf",
       " must match \"then\" schema"
     ]
+  },
+  {
+    "testTitle": "With Azure Blob hierarchical namespace enabled without access key or SAS token",
+    "config": {
+      "host": "test-host",
+      "path": "test-path",
+      "token": "test-token",
+      "port": "0000",
+      "sslMode": "disable",
+      "syncFrequency": "30",
+      "useRudderStorage": false,
+      "bucketProvider": "AZURE_BLOB",
+      "containerName": "test-container",
+      "accountName": "test-account-name",
+      "enableHierarchicalNamespace": true,
+      "useSSL": true
+    },
+    "result": true
   },
   {
     "config": {

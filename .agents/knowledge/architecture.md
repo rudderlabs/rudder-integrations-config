@@ -37,3 +37,8 @@
 - Security posture is layered rather than centralized: validator-level secret/include-key checks prevent client exposure, while deploy tooling relies on dry-run defaults and explicit no-dry-run opt-in to avoid accidental remote writes (`src/validator/index.ts:30`, `scripts/deployToDB.py::get_command_line_arguments`, `scripts/deployAccountsToDB.py::get_command_line_arguments`).
 - Generation pipelines (`pre-process`, `generate:constants`) and strict CI test thresholds tie repo hygiene to script execution order; skipped generation can desync committed artifacts from source configs and break validation/test expectations (`package.json:30`, `package.json:43`, `package.json:44`, `jest.config.js:43`).
 - Known technical debt is explicit in commented-out/ TODO validation rules, and the same risk is reflected in targeted rule tests; this signals deliberate temporary gaps rather than unobserved behavior (`src/validator/index.ts` TODO blocks, `test/validator/validator.test.ts:895`).
+
+## INT-6150 — Delta Lake Config Responsibilities
+
+- Databricks Delta Lake destination configuration is owned by the canonical triplet under `src/configurations/destinations/deltalake/`: `ui-config.json` controls rendered fields, `db-config.json` `destConfig.defaultConfig` is the allowlist for persisted destination config keys, and `schema.json` validates storage-provider-specific config.
+- For custom Azure Blob Delta Lake storage, hierarchical namespace behavior is modeled through the persisted `enableHierarchicalNamespace` config key; schema validation keeps `containerName` and `accountName` required in both HNS and non-HNS modes, while `accountKey`/SAS credentials remain required unless `enableHierarchicalNamespace` is explicitly `true`.
