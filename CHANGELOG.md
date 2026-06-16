@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.160.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.159.1...v1.160.0) (2026-06-16)
+
+
+### Features
+
+* add BigQuery Stream All Events destination definition ([#2502](https://github.com/rudderlabs/rudder-config-schema/issues/2502)) ([9af1c99](https://github.com/rudderlabs/rudder-config-schema/commit/9af1c99ab8f7caad1cbcdfd309c2f14244f40daa))
+
 ### [1.159.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.159.0...v1.159.1) (2026-06-12)
 
 ## [1.159.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.158.0...v1.159.0) (2026-06-12)
