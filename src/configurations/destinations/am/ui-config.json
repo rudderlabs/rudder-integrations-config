@@ -710,13 +710,13 @@
           "note": "Track GCLID, referrer, and UTM parameters only once per session, ignoring any new values which may enter a user's session",
           "configKey": "trackNewCampaigns",
           "default": true,
-          "preRequisites": {
-            "fields": [
-              {
-                "configKey": "sdkVersion",
-                "value": 1
-              }
-            ]
+          "conditions": {
+            "expression": { 
+              "type": "configuration", 
+              "key": "sdkVersion.web", 
+              "value": 1
+            },
+            "action": "hide"
           }
         },
         {
