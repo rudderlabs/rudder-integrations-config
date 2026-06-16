@@ -5,10 +5,10 @@
       "fields": [
         {
           "type": "textInput",
-          "label": "Project",
+          "label": "Project ID",
           "labelNote": "GCP Project ID where your BigQuery database is located",
           "value": "project",
-          "regex": "^(.{0,100})$",
+          "regex": "^(.{1,100})$",
           "regexErrorMessage": "Invalid Project",
           "placeholder": "my-sample-project-19XX23",
           "required": true
@@ -25,34 +25,13 @@
         },
         {
           "type": "textInput",
-          "label": "Staging GCS Storage Bucket Name",
-          "labelNote": "GCS Bucket to store data before loading into BigQuery",
-          "value": "bucketName",
-          "regex": "^((?!goog)(?!.*google.*)(?!^(\\d+(\\.|$)){4}$)(?!.*\\.\\..*)[a-z0-9][a-z0-9-._]{1,61}[a-z0-9])$",
-          "regexErrorMessage": "Invalid Staging GCS Storage Bucket Name",
-          "placeholder": "e.g: gcs-event-logs",
-          "required": true,
-          "footerNote": "Please make sure the bucket exists in your GCP Project in the same region as bigquery dataset"
-        },
-        {
-          "type": "textInput",
-          "label": "Prefix",
-          "value": "prefix",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Prefix",
-          "required": false,
-          "placeholder": "e.g: rudder"
-        },
-        {
-          "type": "textInput",
           "label": "Namespace",
           "labelNote": "Schema name for the warehouse where the tables are created",
           "value": "namespace",
-          "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+          "regex": "^((?!pg_|PG_|pG_|Pg_).{1,64})$",
           "regexErrorMessage": "Invalid Namespace",
-          "required": false,
-          "placeholder": "eg: dataset name",
-          "footerNote": "Default will be the source name",
+          "required": true,
+          "placeholder": "e.g: RUDDER_NAMESPACE",
           "immutable": true
         },
         {
@@ -61,92 +40,10 @@
           "label": "Credentials",
           "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your BigQuery database",
           "value": "credentials",
-          "regex": ".*",
+          "regex": ".+",
           "required": true,
           "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'BigQuery User'",
           "secret": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Enable for cleanup of object storage files (deletion) after successful sync",
-          "value": "cleanupObjectStorageFiles",
-          "default": false
-        },
-        {
-          "type": "singleSelect",
-          "label": "Sync Frequency",
-          "value": "syncFrequency",
-          "options": [
-            {
-              "name": "Every 5 minutes",
-              "value": "5",
-              "featureFlag": "HIGH_GRANULARITY_WH_SYNC"
-            },
-            {
-              "name": "Every 15 minutes",
-              "value": "15",
-              "featureFlag": "HIGH_GRANULARITY_WH_SYNC"
-            },
-            {
-              "name": "Every 30 minutes",
-              "value": "30"
-            },
-            {
-              "name": "Every 1 hour",
-              "value": "60"
-            },
-            {
-              "name": "Every 3 hours",
-              "value": "180"
-            },
-            {
-              "name": "Every 6 hours",
-              "value": "360"
-            },
-            {
-              "name": "Every 12 hours",
-              "value": "720"
-            },
-            {
-              "name": "Every 24 hours",
-              "value": "1440"
-            }
-          ],
-          "defaultOption": {
-            "name": "Every 3 hours",
-            "value": "180"
-          },
-          "required": false
-        },
-        {
-          "type": "timePicker",
-          "label": "Sync Starting At (Optional)",
-          "value": "syncStartAt",
-          "options": {
-            "omitSeconds": true,
-            "minuteStep": 15
-          },
-          "required": false,
-          "footerNote": "Note: Please specify time in UTC"
-        },
-        {
-          "type": "timeRangePicker",
-          "label": "Exclude window (Optional)",
-          "value": "excludeWindow",
-          "startTime": {
-            "label": "start time",
-            "value": "excludeWindowStartTime"
-          },
-          "endTime": {
-            "label": "end time",
-            "value": "excludeWindowEndTime"
-          },
-          "options": {
-            "omitSeconds": true,
-            "minuteStep": 1
-          },
-          "required": false,
-          "footerNote": "Note: Please specify time in UTC"
         },
         {
           "type": "singleSelect",
@@ -154,35 +51,14 @@
           "label": "Partition Column",
           "value": "partitionColumn",
           "options": [
-            {
-              "name": "Ingestion Time",
-              "value": "_PARTITIONTIME"
-            },
-            {
-              "name": "Loaded At",
-              "value": "loaded_at"
-            },
-            {
-              "name": "Received At",
-              "value": "received_at"
-            },
-            {
-              "name": "Timestamp",
-              "value": "timestamp"
-            },
-            {
-              "name": "Sent At",
-              "value": "sent_at"
-            },
-            {
-              "name": "Original Timestamp",
-              "value": "original_timestamp"
-            }
+            { "name": "Ingestion Time", "value": "_PARTITIONTIME" },
+            { "name": "Loaded At", "value": "loaded_at" },
+            { "name": "Received At", "value": "received_at" },
+            { "name": "Timestamp", "value": "timestamp" },
+            { "name": "Sent At", "value": "sent_at" },
+            { "name": "Original Timestamp", "value": "original_timestamp" }
           ],
-          "defaultOption": {
-            "name": "Ingestion Time",
-            "value": "_PARTITIONTIME"
-          },
+          "defaultOption": { "name": "Ingestion Time", "value": "_PARTITIONTIME" },
           "required": false
         },
         {
@@ -191,19 +67,10 @@
           "label": "Partition Type",
           "value": "partitionType",
           "options": [
-            {
-              "name": "Hour",
-              "value": "hour"
-            },
-            {
-              "name": "Day",
-              "value": "day"
-            }
+            { "name": "Hour", "value": "hour" },
+            { "name": "Day", "value": "day" }
           ],
-          "defaultOption": {
-            "name": "Day",
-            "value": "day"
-          },
+          "defaultOption": { "name": "Day", "value": "day" },
           "required": false
         }
       ]
@@ -213,16 +80,9 @@
       "fields": [
         {
           "type": "checkbox",
-          "label": "Skip User Table",
-          "value": "skipUsersTable",
-          "footerNote": "Disable the creation of a Users table. The table stores all unique users, but note that due to merge operations, it can significantly increase warehouse operation time.",
-          "default": true
-        },
-        {
-          "type": "checkbox",
           "label": "Skip Tracks Table",
           "value": "skipTracksTable",
-          "footerNote": "Enable this toggle to skip sending the event data to the “tracks” table",
+          "footerNote": "Enable this toggle to skip sending the event data to the tracks table",
           "default": false
         },
         {
@@ -318,7 +178,7 @@
                   "type": "textInput",
                   "placeholder": "Marketing",
                   "value": "consent",
-                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "regex": "^(.{0,100})$",
                   "required": false
                 }
               ]
