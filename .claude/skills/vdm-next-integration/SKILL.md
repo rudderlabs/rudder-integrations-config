@@ -50,6 +50,7 @@ Every VDM Next destination **must** include:
 {
   "name": "<DEST_NAME_UPPER>",
   "displayName": "<Display Name>",
+  "version": "1.0",
   "config": {
     "supportsVisualMapper": true,
     "disableJsonMapper": true,
@@ -96,6 +97,7 @@ Every VDM Next destination **must** include:
 
 - `disableJsonMapper: true` is mandatory — without it, JSON mapper UI shows instead of visual mapper
 - `transformAtV1: "router"` is required — VDM always uses router path
+- `version: "1.0"` is required on every destination db-config (major.minor); start new destinations at `"1.0"`
 - `supportedSourceTypes` must include `"warehouse"`
 - `supportedMessageTypes` must be `{ cloud: ["record"] }`
 - Account definition name format: `DESTINATION_{DEST_NAME_UPPER}_{AUTH_TYPE_UPPER}`

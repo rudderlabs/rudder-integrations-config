@@ -32,7 +32,7 @@ This repository stores the configuration files that power RudderStack’s **sour
 
 - **Definition files** – `src/configurations/destinations/`, define structure and validation rules for every integration.
 - **UI configuration** – `ui-config.json` files specifying how settings appear in the RudderStack dashboard and also for fields validation.
-- **Definition configuration** – `db-config.json` files containing integration fields, supported source types, message types, connection modes and metadata.
+- **Definition configuration** – `db-config.json` files containing the definition version, integration fields, supported source types, message types, connection modes and metadata.
 - **Validation schemas** – JSON Schema `schema.json` files (consumed by AJV) used for fields validation in the backend.
 
 ## Getting started
