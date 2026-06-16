@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "required": ["name", "displayName", "config", "version", "fallbackVersion"],
+  "required": ["name", "displayName", "config", "version"],
   "title": "Destination definition schema",
   "description": "The schema for a destination definition. This is used to validate the destination definition configuration files (db-config.json).",
   "properties": {
@@ -33,13 +33,6 @@
       "$comment": "Bump the minor for backward-compatible changes and the major for breaking changes. This is authored on disk in db-config.json; the archive of non-current majors is assembled by the deploy script (scripts/deployToDB.py) into the upload payload and is not part of this on-disk schema.",
       "pattern": "^\\d+\\.\\d+$",
       "examples": ["1.0", "2.3"]
-    },
-    "fallbackVersion": {
-      "type": "integer",
-      "minimum": 1,
-      "title": "Fallback Version",
-      "description": "The major version assigned to destination instances created without an explicitly requested version. Backfilled to 1 for every definition and advanced manually only when the prior fallback major is retired.",
-      "examples": [1]
     },
     "category": {
       "type": "string",

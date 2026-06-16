@@ -206,7 +206,6 @@ describe('Destination Definition validation tests', () => {
       description: 'missing "name" and "displayName" properties',
       input: {
         version: '1.0',
-        fallbackVersion: 1,
         config: {
           supportedSourceTypes: ['web'],
           destConfig: {
@@ -222,7 +221,6 @@ describe('Destination Definition validation tests', () => {
       input: {
         name: 'test',
         displayName: 'Test',
-        fallbackVersion: 1,
         config: {
           supportedSourceTypes: ['web'],
           destConfig: {
@@ -233,27 +231,11 @@ describe('Destination Definition validation tests', () => {
       expected: '[" must have required property \'version\'"]',
     },
     {
-      description: 'missing "fallbackVersion" property',
-      input: {
-        name: 'test',
-        displayName: 'Test',
-        version: '1.0',
-        config: {
-          supportedSourceTypes: ['web'],
-          destConfig: {
-            defaultConfig: ['temp'],
-          },
-        },
-      },
-      expected: '[" must have required property \'fallbackVersion\'"]',
-    },
-    {
       description: 'hybridModeCloudEventsFilter is not a valid map',
       input: {
         name: 'test',
         displayName: 'Test',
         version: '1.0',
-        fallbackVersion: 1,
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -270,7 +252,6 @@ describe('Destination Definition validation tests', () => {
         name: 'test',
         displayName: 'Test',
         version: '1.0',
-        fallbackVersion: 1,
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -287,7 +268,6 @@ describe('Destination Definition validation tests', () => {
         name: 'test',
         displayName: 'Test',
         version: '1.0',
-        fallbackVersion: 1,
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -311,7 +291,6 @@ describe('Destination Definition validation tests', () => {
         name: 'test',
         displayName: 'Test',
         version: '1.0',
-        fallbackVersion: 1,
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -331,7 +310,6 @@ describe('Destination Definition validation tests', () => {
         name: 'test',
         displayName: 'Test',
         version: '1.0',
-        fallbackVersion: 1,
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -354,7 +332,6 @@ describe('Destination Definition validation tests', () => {
         name: 'test',
         displayName: 'Test',
         version: '1.0',
-        fallbackVersion: 1,
         config: {
           destConfig: {
             defaultConfig: ['temp'],
