@@ -392,6 +392,7 @@ describe('Validator Utils', () => {
       const invalidDestDef = {
         name: 'GOOGLE ANALYTICS!', // invalid pattern
         displayName: 'Google Analytics',
+        version: '1.0',
         config: {
           supportedSourceTypes: ['web'],
           destConfig: {
@@ -423,6 +424,7 @@ describe('Validator Utils', () => {
       const invalidDestDef = {
         name: 'GOOGLE_ANALYTICS',
         displayName: 'Google Analytics',
+        version: '1.0',
         config: {
           supportedSourceTypes: [], // should have minItems: 1
           destConfig: {
