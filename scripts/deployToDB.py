@@ -137,28 +137,6 @@ def initialize_runtime_config():
 # UTIL METHODS
 
 
-def normalize_nullable_column_deletions(diff, persisted_data, updated_data):
-    """Convert top-level deletions of nullable DB-column fields into explicit nulls.
-
-    jsondiff reports keys removed from the local file under `$delete`. When that's
-    the only diff key, the `len(diff) > 0` gate in update_diff_db skips the API
-    call and the DB retains the stale value forever. For fields that map to
-    nullable DB columns (NULLABLE_COLUMN_FIELDS), set the field to None on both
-    the diff and the payload — producing a real diff entry, opening the gate, and
-    making the server clear the column explicitly. `$delete` is always popped
-    afterwards; other entries are ignored by design (the full local file is
-    posted, so missing keys fall out naturally on the server).
-
-    Mutates `diff` and `updated_data` in place.
-    """
-    delete_fields = diff.get("$delete") or []
-    for field in NULLABLE_COLUMN_FIELDS:
-        if field in delete_fields and persisted_data.get(field):
-            diff[field] = None
-            updated_data[field] = None
-    diff.pop("$delete", None)
-
-
 def build_versions_archive(directory):
     versions_directory = os.path.join(directory, "versions")
     if not os.path.isdir(versions_directory):
