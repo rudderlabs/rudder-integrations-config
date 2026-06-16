@@ -1,470 +1,65 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["apiKey", "residencyServer"],
+    "required": ["project", "namespace", "credentials"],
     "type": "object",
-    "additionalProperties": true,
     "properties": {
-      "apiKey": {
+      "project": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "pattern": "^(.{1,100})$"
       },
-      "residencyServer": {
+      "location": {
         "type": "string",
-        "enum": ["standard", "EU"],
-        "default": "standard"
+        "pattern": "^(.{0,100})$"
       },
-      "proxyServerUrl": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "pattern": "^(?!http://)(?:(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(?!.*\\.ngrok\\.io).*)$"
-          }
-        }
+      "namespace": {
+        "type": "string",
+        "pattern": "^((?!pg_|PG_|pG_|Pg_).{1,64})$",
+        "rs-immutable": true
       },
-      "trackAllPages": {
+      "credentials": {
+        "type": "string",
+        "pattern": ".+"
+      },
+      "partitionColumn": {
+        "type": "string",
+        "enum": [
+          "_PARTITIONTIME",
+          "loaded_at",
+          "received_at",
+          "timestamp",
+          "sent_at",
+          "original_timestamp"
+        ],
+        "default": "_PARTITIONTIME",
+        "rs-immutable": true
+      },
+      "partitionType": {
+        "type": "string",
+        "enum": ["hour", "day"],
+        "default": "day",
+        "rs-immutable": true
+      },
+      "skipTracksTable": {
         "type": "boolean",
         "default": false
       },
-      "trackCategorizedPages": {
+      "skipViews": {
         "type": "boolean",
-        "default": true
+        "default": false,
+        "rs-immutable": true
       },
-      "trackNamedPages": {
-        "type": "boolean",
-        "default": true
+      "jsonPaths": {
+        "type": "string",
+        "pattern": "^(.*)$"
       },
-      "useUserDefinedPageEventName": {
+      "allowUsersContextTraits": {
         "type": "boolean",
         "default": false
       },
-      "userProvidedPageEventString": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$"
-      },
-      "groupTypeTrait": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "groupValueTrait": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "traitsToIncrement": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "traits": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "traitsToSetOnce": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "traits": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "traitsToAppend": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "traits": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "traitsToPrepend": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "traits": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "enableEnhancedUserOperations": {
+      "underscoreDivideNumbers": {
         "type": "boolean",
         "default": false
-      },
-      "apiSecret": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "versionName": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "mapDeviceBrand": {
-        "type": "boolean",
-        "default": false
-      },
-      "trackProductsOnce": {
-        "type": "boolean",
-        "default": false
-      },
-      "trackRevenuePerProduct": {
-        "type": "boolean",
-        "default": false
-      },
-      "useUserDefinedScreenEventName": {
-        "type": "boolean",
-        "default": false
-      },
-      "userProvidedScreenEventString": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,200})$"
-      },
-      "eventFilteringOption": {
-        "type": "string",
-        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
-        "default": "disable"
-      },
-      "whitelistedEvents": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "eventName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "blacklistedEvents": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "eventName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "oneTrustCookieCategories": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "ios": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "web": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "unity": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "amp": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "cloud": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "warehouse": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "reactnative": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "flutter": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "cordova": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "shopify": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          }
-        }
-      },
-      "enableLocationListening": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "boolean"
-          },
-          "reactnative": {
-            "type": "boolean"
-          },
-          "flutter": {
-            "type": "boolean"
-          }
-        }
-      },
-      "trackSessionEvents": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "boolean"
-          },
-          "ios": {
-            "type": "boolean"
-          },
-          "reactnative": {
-            "type": "boolean"
-          },
-          "flutter": {
-            "type": "boolean"
-          }
-        }
-      },
-      "useAdvertisingIdForDeviceId": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "boolean"
-          },
-          "reactnative": {
-            "type": "boolean"
-          },
-          "flutter": {
-            "type": "boolean"
-          }
-        }
-      },
-      "useIdfaAsDeviceId": {
-        "type": "object",
-        "properties": {
-          "ios": {
-            "type": "boolean"
-          },
-          "reactnative": {
-            "type": "boolean"
-          },
-          "flutter": {
-            "type": "boolean"
-          }
-        }
-      },
-      "attribution": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "trackUtmProperties": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "trackNewCampaigns": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "unsetParamsReferrerOnNewSession": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "batchEvents": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "eventUploadPeriodMillis": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-          },
-          "ios": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-          },
-          "web": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-          },
-          "reactnative": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-          },
-          "flutter": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-          }
-        }
-      },
-      "eventUploadThreshold": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-          },
-          "ios": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-          },
-          "web": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-          },
-          "reactnative": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-          },
-          "flutter": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$"
-          }
-        }
-      },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "boolean"
-          },
-          "ios": {
-            "type": "boolean"
-          },
-          "web": {
-            "type": "boolean"
-          },
-          "reactnative": {
-            "type": "boolean"
-          },
-          "flutter": {
-            "type": "boolean"
-          }
-        }
       },
       "consentManagement": {
         "type": "object",
@@ -485,7 +80,7 @@
                     "properties": {
                       "consent": {
                         "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        "pattern": "^(.{0,100})$"
                       }
                     }
                   }
@@ -518,7 +113,7 @@
               "uniqueItemProperties": "Only one consent management block can be configured per provider."
             }
           },
-          "warehouse": {
+          "cloudSource": {
             "type": "array",
             "items": {
               "type": "object",
@@ -534,7 +129,7 @@
                     "properties": {
                       "consent": {
                         "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        "pattern": "^(.{0,100})$"
                       }
                     }
                   }
@@ -583,7 +178,7 @@
                     "properties": {
                       "consent": {
                         "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        "pattern": "^(.{0,100})$"
                       }
                     }
                   }
@@ -632,7 +227,7 @@
                     "properties": {
                       "consent": {
                         "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        "pattern": "^(.{0,100})$"
                       }
                     }
                   }
@@ -681,7 +276,7 @@
                     "properties": {
                       "consent": {
                         "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        "pattern": "^(.{0,100})$"
                       }
                     }
                   }
@@ -730,7 +325,7 @@
                     "properties": {
                       "consent": {
                         "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        "pattern": "^(.{0,100})$"
                       }
                     }
                   }
@@ -779,7 +374,7 @@
                     "properties": {
                       "consent": {
                         "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        "pattern": "^(.{0,100})$"
                       }
                     }
                   }
@@ -828,7 +423,7 @@
                     "properties": {
                       "consent": {
                         "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        "pattern": "^(.{0,100})$"
                       }
                     }
                   }
@@ -877,7 +472,7 @@
                     "properties": {
                       "consent": {
                         "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        "pattern": "^(.{0,100})$"
                       }
                     }
                   }
@@ -926,7 +521,7 @@
                     "properties": {
                       "consent": {
                         "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        "pattern": "^(.{0,100})$"
                       }
                     }
                   }
@@ -975,7 +570,7 @@
                     "properties": {
                       "consent": {
                         "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        "pattern": "^(.{0,100})$"
                       }
                     }
                   }
@@ -1024,7 +619,7 @@
                     "properties": {
                       "consent": {
                         "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        "pattern": "^(.{0,100})$"
                       }
                     }
                   }
@@ -1073,7 +668,7 @@
                     "properties": {
                       "consent": {
                         "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                        "pattern": "^(.{0,100})$"
                       }
                     }
                   }
@@ -1111,13 +706,9 @@
       "connectionMode": {
         "type": "object",
         "properties": {
-          "web": {
-            "type": "string",
-            "enum": ["cloud", "device"]
-          },
           "android": {
             "type": "string",
-            "enum": ["cloud", "device"]
+            "enum": ["cloud"]
           },
           "androidKotlin": {
             "type": "string",
@@ -1125,25 +716,29 @@
           },
           "ios": {
             "type": "string",
-            "enum": ["cloud", "device"]
+            "enum": ["cloud"]
           },
           "iosSwift": {
             "type": "string",
             "enum": ["cloud"]
           },
-          "flutter": {
+          "web": {
             "type": "string",
-            "enum": ["cloud", "device"]
-          },
-          "reactnative": {
-            "type": "string",
-            "enum": ["cloud", "device"]
+            "enum": ["cloud"]
           },
           "unity": {
             "type": "string",
             "enum": ["cloud"]
           },
           "amp": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "reactnative": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "flutter": {
             "type": "string",
             "enum": ["cloud"]
           },
@@ -1159,154 +754,9 @@
             "type": "string",
             "enum": ["cloud"]
           },
-          "warehouse": {
+          "cloudSource": {
             "type": "string",
             "enum": ["cloud"]
-          }
-        }
-      },
-      "preferAnonymousIdForDeviceId": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "ketchConsentPurposes": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "ios": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "web": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "unity": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "amp": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "cloud": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "warehouse": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "reactnative": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "flutter": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "cordova": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "shopify": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
           }
         }
       }
