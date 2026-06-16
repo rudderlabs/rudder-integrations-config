@@ -68,10 +68,6 @@
         "type": "boolean",
         "default": false
       },
-      "enableHierarchicalNamespace": {
-        "type": "boolean",
-        "default": false
-      },
       "preferAppend": {
         "type": "boolean",
         "default": true
@@ -1253,32 +1249,13 @@
             "accountName": {
               "type": "string",
               "pattern": "(^env[.].*)|^(.{1,100})$"
+            },
+            "enableHierarchicalNamespace": {
+              "type": "boolean",
+              "default": false
             }
           },
-          "required": ["containerName", "accountName"]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "bucketProvider": {
-              "const": "AZURE_BLOB"
-            },
-            "useRudderStorage": {
-              "const": false
-            }
-          },
-          "required": ["bucketProvider", "useRudderStorage"],
-          "not": {
-            "properties": {
-              "enableHierarchicalNamespace": {
-                "const": true
-              }
-            },
-            "required": ["enableHierarchicalNamespace"]
-          }
-        },
-        "then": {
+          "required": ["containerName", "accountName"],
           "anyOf": [
             {
               "properties": {
