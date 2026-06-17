@@ -467,6 +467,8 @@ if __name__ == "__main__":
         print("DRY RUN MODE - No changes will be made to the database")
         print("=" * 60)
 
+    has_failures = False
+
     for selector in SELECTORS:
         print("\n")
         print("#" * 50)
@@ -498,6 +500,7 @@ if __name__ == "__main__":
 
         # Always show summary first (most important for users)
         print_summary(selector, final_report, DRY_RUN)
+        has_failures = has_failures or any(is_failed(item) for item in final_report)
 
         # Show detailed reports only when verbose flag is used (write to deploy-debug.log)
         if VERBOSE:
@@ -534,3 +537,5 @@ if __name__ == "__main__":
     if VERBOSE:
         print(f"\n📝 Debug logs have been written to: debug.log")
         print(f"💡 Review this file for detailed API request/response information")
+
+    sys.exit(1 if has_failures else 0)
