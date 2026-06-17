@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.160.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.159.1...v1.160.0) (2026-06-17)
+
+
+### Features
+
+* add BigQuery Stream All Events destination definition ([#2502](https://github.com/rudderlabs/rudder-config-schema/issues/2502)) ([9af1c99](https://github.com/rudderlabs/rudder-config-schema/commit/9af1c99ab8f7caad1cbcdfd309c2f14244f40daa))
+* add destination version metadata backfill and archive emission ([#2521](https://github.com/rudderlabs/rudder-config-schema/issues/2521)) ([d4e7cba](https://github.com/rudderlabs/rudder-config-schema/commit/d4e7cba45fec26c00b4bb58733d26ffcf744ec3d))
+
+
+### Bug Fixes
+
+* **am:** gate trackNewCampaigns on sdkVersion web condition ([#2541](https://github.com/rudderlabs/rudder-config-schema/issues/2541)) ([98e1181](https://github.com/rudderlabs/rudder-config-schema/commit/98e118136e4858cb06dd6115cbda2ea931b56194))
+
 ### [1.159.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.159.0...v1.159.1) (2026-06-12)
 
 ## [1.159.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.158.0...v1.159.0) (2026-06-12)
