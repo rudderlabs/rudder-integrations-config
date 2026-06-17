@@ -346,7 +346,7 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
     else:
         enum_values = get_options_list_for_enum(field)
         non_empty = [v for v in enum_values if v != ""]
-        inferred_type = "integer" if non_empty and all(isinstance(v, int) for v in non_empty) else FieldTypeEnum.STRING.value
+        inferred_type = "integer" if non_empty and "" not in enum_values and all(isinstance(v, int) for v in non_empty) else FieldTypeEnum.STRING.value
         singleSelectObj = {"type": inferred_type}
         singleSelectObj["enum"] = enum_values
         if "default" or "defaultOption" in field:
