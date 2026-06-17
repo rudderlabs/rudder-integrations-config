@@ -28,6 +28,8 @@ on:
         required: true
       SLACK_RELEASE_CHANNEL_ID:
         required: true
+      SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID:
+        required: true
 
 permissions:
   contents: read
@@ -99,6 +101,66 @@ jobs:
           DRY_RUN_FLAG: ${{ inputs.dry_run && '--dry-run' || '--no-dry-run' }}
         run: |
           python scripts/deployToDB.py "$DRY_RUN_FLAG" "$DEPLOY_URL"
+
+      - name: Notify Slack Channel On Deployment Failure
+        id: slack_failure
+        # Pinned to v2.1.1 → commit 91efab103c0de0a537f72a35f6b8cda0ee76bf0a
+        uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a
+        continue-on-error: true
+        if: failure() && inputs.dry_run == false
+        env:
+          PROJECT_NAME: 'Rudder Integrations Config'
+          RUN_URL: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          errors: true
+          retries: rapid
+          payload: |
+            {
+              "channel": "${{ secrets.SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID }}",
+              "text": ":rotating_light: ${{ env.PROJECT_NAME }} deployment failed for `${{ inputs.deploy_url }}` on `${{ inputs.ref }}`. Run: ${{ env.RUN_URL }}",
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":rotating_light:  ${{ env.PROJECT_NAME }} Deployment Failed"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Target:*\n${{ inputs.deploy_url }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Ref:*\n${{ inputs.ref }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Version:*\n${{ inputs.version || 'not provided' }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Actor:*\n${{ github.actor }}"
+                    }
+                  ]
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Workflow run:*\n<${{ env.RUN_URL }}|Open failed deployment run>"
+                  }
+                }
+              ]
+            }
 
       - name: Notify Slack Channel
         id: slack
