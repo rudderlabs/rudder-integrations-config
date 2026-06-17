@@ -34,3 +34,8 @@
 
 - No repo-local CI optimization currently skips tests for documentation-only changes; pull requests still run the standard `Tests` and `Code quality checks` workflows (`.github/workflows/test.yml`, `.github/workflows/verify.yml`).
 - If a docs-only validation workflow is introduced later, document the criteria and workflow path here.
+
+## INT-6502 — Import-Safe Python CLI Pattern
+
+- For Python deploy tooling, keep argument parsing and runtime config initialization behind a `__main__`-only path so module imports remain side-effect free (importable without triggering CLI parsing).
+- `scripts/deployToDB.py` follows this by delaying CLI/runtime initialization to `initialize_runtime_config()` at execution time, which preserves command-line behavior while keeping the module safe to import.

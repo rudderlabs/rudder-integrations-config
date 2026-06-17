@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "required": ["name", "displayName", "config"],
+  "required": ["name", "displayName", "config", "version"],
   "title": "Destination definition schema",
   "description": "The schema for a destination definition. This is used to validate the destination definition configuration files (db-config.json).",
   "properties": {
@@ -25,6 +25,14 @@
         "Google Ads Remarketing Lists (Customer Match)",
         "Google Cloud Pub/Sub"
       ]
+    },
+    "version": {
+      "type": "string",
+      "title": "Version",
+      "description": "The current version of this destination definition, in major.minor format. The current version is always the served default, so its lifecycle status is implicit (only archived majors carry an explicit status).",
+      "$comment": "Bump the minor for backward-compatible changes and the major for breaking changes. This is authored on disk in db-config.json; the archive of non-current majors is assembled by the deploy script (scripts/deployToDB.py) into the upload payload and is not part of this on-disk schema.",
+      "pattern": "^\\d+\\.\\d+$",
+      "examples": ["1.0", "2.3"]
     },
     "category": {
       "type": "string",

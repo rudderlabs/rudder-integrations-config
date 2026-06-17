@@ -1,6 +1,7 @@
 {
   "name": "FB_CUSTOM_AUDIENCE",
   "displayName": "Facebook Custom Audience",
+  "version": "1.0",
   "config": {
     "supportedAccountDefinitions": {
       "rudderAccountId": ["DESTINATION_FB_CUSTOM_AUDIENCE_ACCESS_TOKEN"]
@@ -77,7 +78,7 @@
           "createAudience": "no"
         }
       },
-      "mappingGuidance": "Map every clean identifier you have. Facebook ORs across identifiers — more mappings → higher match rate. Use field names below verbatim as `to`; they are exactly what get_audience_destination_schema returns in fields[].name.\n\nStrong (each standalone-sufficient): EMAIL, PHONE, MADID, EXTERN_ID.\n\nPII bundle (contributes only when sent TOGETHER — partial bundles add ~0 match lift): FN, LN, FI (first-initial), CT, ST, ZIP, COUNTRY, DOBY, DOBM, DOBD, GEN.\n\nSend RAW warehouse values. The integration SHA256-hashes and normalizes (email→lowercase, phone→digits-only, ZIP→trim) on send. Do NOT pre-hash. Do NOT pre-bundle the address into a single JSON column. LOOKALIKE_VALUE is only for value-based lookalike audiences — skip it for standard custom-audience syncs."
+      "mappingGuidance": "Map every clean identifier you have. Facebook ORs across identifiers \u2014 more mappings \u2192 higher match rate. Use field names below verbatim as `to`; they are exactly what get_audience_destination_schema returns in fields[].name.\n\nStrong (each standalone-sufficient): EMAIL, PHONE, MADID, EXTERN_ID.\n\nPII bundle (contributes only when sent TOGETHER \u2014 partial bundles add ~0 match lift): FN, LN, FI (first-initial), CT, ST, ZIP, COUNTRY, DOBY, DOBM, DOBD, GEN.\n\nSend RAW warehouse values. The integration SHA256-hashes and normalizes (email\u2192lowercase, phone\u2192digits-only, ZIP\u2192trim) on send. Do NOT pre-hash. Do NOT pre-bundle the address into a single JSON column. LOOKALIKE_VALUE is only for value-based lookalike audiences \u2014 skip it for standard custom-audience syncs."
     }
   }
 }
