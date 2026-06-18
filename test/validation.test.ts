@@ -60,6 +60,38 @@ function getIntegrationData(name: string, type: string): Record<string, unknown>
   return intgData;
 }
 
+function getMinimalDestinationDefinition(visibility?: Record<string, unknown>) {
+  return {
+    name: 'TEST_DESTINATION',
+    displayName: 'Test Destination',
+    version: '1.0',
+    config: {
+      supportedSourceTypes: ['web'],
+      destConfig: {
+        defaultConfig: ['testConfig'],
+      },
+    },
+    ...(visibility && {
+      options: {
+        visibility,
+      },
+    }),
+  };
+}
+
+function getMinimalSourceDefinition(visibility?: Record<string, unknown>) {
+  return {
+    name: 'test_source',
+    displayName: 'Test Source',
+    type: 'cloud',
+    ...(visibility && {
+      options: {
+        visibility,
+      },
+    }),
+  };
+}
+
 let destList: string[] = [];
 if (cmdOpts.destinations !== 'all') {
   destList = cmdOpts.destinations
@@ -346,12 +378,81 @@ describe('Destination Definition validation tests', () => {
       },
       expected: '["config.hybridModeCloudEventsFilter.web.messageType must be array"]',
     },
+    {
+      description: 'visibility flag item is missing "value"',
+      input: getMinimalDestinationDefinition({
+        flags: [{ name: 'AMP_TEST_FLAG' }],
+      }),
+      expected: "must have required property 'value'",
+    },
+    {
+      description: 'visibility flag item is missing "name"',
+      input: getMinimalDestinationDefinition({
+        flags: [{ value: true }],
+      }),
+      expected: "must have required property 'name'",
+    },
+    {
+      description: 'visibility with multiple flags is missing "condition"',
+      input: getMinimalDestinationDefinition({
+        flags: [
+          { name: 'AMP_TEST_FLAG', value: true },
+          { name: 'TEST_BILLING_FEATURE', value: true },
+        ],
+      }),
+      expected: "must have required property 'condition'",
+    },
+    {
+      description: 'visibility has an unknown property',
+      input: getMinimalDestinationDefinition({
+        flags: [{ name: 'AMP_TEST_FLAG', value: true }],
+        unknownProperty: true,
+      }),
+      expected: 'must NOT have additional properties',
+    },
+    {
+      description: 'visibility flag item has an unknown property',
+      input: getMinimalDestinationDefinition({
+        flags: [{ name: 'AMP_TEST_FLAG', value: true, unknownProperty: true }],
+      }),
+      expected: 'must NOT have additional properties',
+    },
+    {
+      description: 'visibility with a single flag includes condition',
+      input: getMinimalDestinationDefinition({
+        flags: [{ name: 'AMP_TEST_FLAG', value: true }],
+        condition: 'and',
+      }),
+      expected: 'boolean schema is false',
+    },
   ];
 
   it.each(malformedDestDefConfigs)('$description', async (testCase) => {
-    await expect(validateDestinationDefinitions(testCase.input)).rejects.toThrow(
-      new Error(testCase.expected),
-    );
+    await expect(validateDestinationDefinitions(testCase.input)).rejects.toThrow(testCase.expected);
+  });
+
+  it('accepts visibility with a single flag and no condition', async () => {
+    await expect(
+      validateDestinationDefinitions(
+        getMinimalDestinationDefinition({
+          flags: [{ name: 'AMP_TEST_FLAG', value: true }],
+        }),
+      ),
+    ).resolves.toEqual(true);
+  });
+
+  it('accepts visibility with two flags and condition', async () => {
+    await expect(
+      validateDestinationDefinitions(
+        getMinimalDestinationDefinition({
+          flags: [
+            { name: 'AMP_TEST_FLAG', value: true },
+            { name: 'TEST_BILLING_FEATURE', value: false },
+          ],
+          condition: 'or',
+        }),
+      ),
+    ).resolves.toEqual(true);
   });
 });
 
@@ -400,12 +501,81 @@ describe('Source Definition validation tests', () => {
       expected:
         '["options.internalSecretKeys must NOT have duplicate items (items ## 1 and 0 are identical)"]',
     },
+    {
+      description: 'visibility flag item is missing "value"',
+      input: getMinimalSourceDefinition({
+        flags: [{ name: 'AMP_TEST_FLAG' }],
+      }),
+      expected: "must have required property 'value'",
+    },
+    {
+      description: 'visibility flag item is missing "name"',
+      input: getMinimalSourceDefinition({
+        flags: [{ value: true }],
+      }),
+      expected: "must have required property 'name'",
+    },
+    {
+      description: 'visibility with multiple flags is missing "condition"',
+      input: getMinimalSourceDefinition({
+        flags: [
+          { name: 'AMP_TEST_FLAG', value: true },
+          { name: 'TEST_BILLING_FEATURE', value: true },
+        ],
+      }),
+      expected: "must have required property 'condition'",
+    },
+    {
+      description: 'visibility has an unknown property',
+      input: getMinimalSourceDefinition({
+        flags: [{ name: 'AMP_TEST_FLAG', value: true }],
+        unknownProperty: true,
+      }),
+      expected: 'must NOT have additional properties',
+    },
+    {
+      description: 'visibility flag item has an unknown property',
+      input: getMinimalSourceDefinition({
+        flags: [{ name: 'AMP_TEST_FLAG', value: true, unknownProperty: true }],
+      }),
+      expected: 'must NOT have additional properties',
+    },
+    {
+      description: 'visibility with a single flag includes condition',
+      input: getMinimalSourceDefinition({
+        flags: [{ name: 'AMP_TEST_FLAG', value: true }],
+        condition: 'and',
+      }),
+      expected: 'boolean schema is false',
+    },
   ];
 
   it.each(malformedSrcDefConfigs)('$description', async (testCase) => {
-    await expect(validateSourceDefinitions(testCase.input)).rejects.toThrow(
-      new Error(testCase.expected),
-    );
+    await expect(validateSourceDefinitions(testCase.input)).rejects.toThrow(testCase.expected);
+  });
+
+  it('accepts visibility with a single flag and no condition', async () => {
+    await expect(
+      validateSourceDefinitions(
+        getMinimalSourceDefinition({
+          flags: [{ name: 'AMP_TEST_FLAG', value: true }],
+        }),
+      ),
+    ).resolves.toEqual(true);
+  });
+
+  it('accepts visibility with two flags and condition', async () => {
+    await expect(
+      validateSourceDefinitions(
+        getMinimalSourceDefinition({
+          flags: [
+            { name: 'AMP_TEST_FLAG', value: true },
+            { name: 'TEST_BILLING_FEATURE', value: false },
+          ],
+          condition: 'and',
+        }),
+      ),
+    ).resolves.toEqual(true);
   });
 });
 

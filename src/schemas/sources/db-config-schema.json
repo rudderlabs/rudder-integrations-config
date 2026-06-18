@@ -150,6 +150,81 @@
             }
           ]
         },
+        "visibility": {
+          "type": "object",
+          "title": "Visibility",
+          "description": "Feature flags or billing features that gate whether the source is visible.",
+          "additionalProperties": false,
+          "required": ["flags"],
+          "properties": {
+            "flags": {
+              "type": "array",
+              "title": "Visibility Flags",
+              "description": "Feature flags or billing features that must match their expected values for the source to be visible.",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "value"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "Name",
+                    "description": "The exact feature name resolved by the webapp."
+                  },
+                  "value": {
+                    "type": "boolean",
+                    "title": "Value",
+                    "description": "The expected boolean value for the feature."
+                  }
+                }
+              }
+            },
+            "condition": {
+              "type": "string",
+              "title": "Condition",
+              "description": "How multiple visibility flags should be combined.",
+              "enum": ["and", "or"]
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "flags": {
+                    "type": "array",
+                    "minItems": 2
+                  }
+                },
+                "required": ["flags"]
+              },
+              "then": {
+                "properties": {
+                  "condition": {
+                    "enum": ["and", "or"]
+                  }
+                },
+                "required": ["condition"]
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "flags": {
+                    "type": "array",
+                    "maxItems": 1
+                  }
+                },
+                "required": ["flags"]
+              },
+              "then": {
+                "properties": {
+                  "condition": false
+                }
+              }
+            }
+          ]
+        },
         "syncBehaviours": {
           "type": "array",
           "title": "Sync Behaviours",

@@ -100,6 +100,35 @@ See `src/configurations/destinations/http/ui-config.json` for a complete example
 
 To contribute a destination, you need to provide all the required data for all the fields you want as the settings to configure the destination.
 
+## Source and destination visibility gating
+
+Use `options.visibility` in source and destination `db-config.json` files when visibility depends on a Flagsmith flag, a billing feature, or both:
+
+```json
+{
+  "options": {
+    "visibility": {
+      "flags": [
+        { "name": "AMP_EXAMPLE_BETA_FLAG", "value": true },
+        { "name": "example_billing_feature", "value": true }
+      ],
+      "condition": "and"
+    }
+  }
+}
+```
+
+Author beta gates with the exact Flagsmith flag name, including the `AMP_` prefix. Author GA billing features as the exact feature name resolved by the webapp. Every flag item must include a boolean `value`.
+
+For a single flag, omit `condition`. For two or more flags, set `condition` to `"and"` or `"or"`.
+
+Beta-to-GA lifecycle:
+
+- During beta, use `options.visibility` with the beta Flagsmith flag.
+- When GA access is controlled by billing, update `options.visibility` to the billing feature, or combine the beta flag and billing feature with an explicit `condition` during transition.
+- Keep `hidden: true` only for blanket hiding from all customers.
+- Do not add real source or destination usages of `options.visibility` until the webapp evaluator for this metadata is deployed.
+
 ## How you can provide your destination connection setting details
 
 You can checkout the sample input file [**here**](/test/configData/inputData.json):

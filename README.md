@@ -35,6 +35,40 @@ This repository stores the configuration files that power RudderStack’s **sour
 - **Definition configuration** – `db-config.json` files containing the definition version, integration fields, supported source types, message types, connection modes and metadata.
 - **Validation schemas** – JSON Schema `schema.json` files (consumed by AJV) used for fields validation in the backend.
 
+## Visibility gating
+
+Source and destination `db-config.json` files can declare feature-driven catalog visibility with `options.visibility`. Use this field when an integration should be visible only when one or more feature gates match the expected boolean value:
+
+```json
+{
+  "options": {
+    "visibility": {
+      "flags": [{ "name": "AMP_EXAMPLE_BETA_FLAG", "value": true }]
+    }
+  }
+}
+```
+
+For two or more flags, include `condition` as `"and"` or `"or"`:
+
+```json
+{
+  "options": {
+    "visibility": {
+      "flags": [
+        { "name": "AMP_EXAMPLE_BETA_FLAG", "value": true },
+        { "name": "example_billing_feature", "value": true }
+      ],
+      "condition": "and"
+    }
+  }
+}
+```
+
+Flag names must match exactly what the webapp resolves. Flagsmith beta flags keep their `AMP_` prefix, and GA billing features are authored as-is. The `value` field is mandatory on every flag item.
+
+Use `options.visibility` for beta-to-GA or billing-feature exposure. Keep `hidden: true` only for definitions that should be hidden from all customers. Do not add real definition usages of `options.visibility` until the webapp evaluator that reads it has been deployed.
+
 ## Getting started
 
 You need to install Python3.
