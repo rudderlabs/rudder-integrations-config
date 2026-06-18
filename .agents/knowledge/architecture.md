@@ -52,6 +52,6 @@
 - When no `versions/` directory exists, payload construction sets `versions` to `{}` to allow jsondiff-driven clearing of previously persisted archive state.
 - Current deploy file-loading behavior remains root-first (`db-config.json`/`ui-config.json`/`schema.json` at destination root), so nested version assets affect deployment only through explicit archive-building logic.
 
-## INT-6597 — Visibility Option Schema Contract
+## INT-6597 — Hidden Gate Schema Contract
 
-- `options.visibility` in both destination and source `db-config-schema.json` files encodes flag-count semantics with paired `allOf` conditionals: `flags` arrays with at least two items require `condition`, while `flags` arrays with at most one item reject `condition` using a false schema. This preserves omission-only single-flag visibility definitions and makes multi-flag visibility logic explicit under AJV strict validation.
+- `options.hidden` in both destination and source `db-config-schema.json` files is a 3-state union: boolean blanket hiding, a legacy `{ featureFlagName, featureFlagValue }` single-flag object, or `{ gate: { flags, condition } }` for one or more Flagsmith flags or billing features. `hidden.gate` uses hide-when semantics: the integration is hidden when the configured flag reduction matches. Gate flag items require `name` and boolean `value`, reject unknown properties, and flag arrays with at least two items require `condition`.

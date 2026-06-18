@@ -37,37 +37,47 @@ This repository stores the configuration files that power RudderStack’s **sour
 
 ## Visibility gating
 
-Source and destination `db-config.json` files can declare feature-driven catalog visibility with `options.visibility`. Use this field when an integration should be visible only when one or more feature gates match the expected boolean value:
+Source and destination `db-config.json` files use `options.hidden` for catalog hiding. It has three supported states:
+
+- `hidden: true` hides the integration from all customers.
+- `hidden.gate` hides the integration when one or more Flagsmith flags or billing features match their expected boolean values.
+- `{ "featureFlagName": "...", "featureFlagValue": ... }` is the legacy single-flag shape and remains supported for existing definitions.
+
+Use `hidden.gate` when beta or GA access depends on a Flagsmith flag, a billing feature, or both:
 
 ```json
 {
   "options": {
-    "visibility": {
-      "flags": [{ "name": "AMP_EXAMPLE_BETA_FLAG", "value": true }]
+    "hidden": {
+      "gate": {
+        "flags": [{ "name": "AMP_EXAMPLE_BETA_FLAG", "value": false }]
+      }
     }
   }
 }
 ```
 
-For two or more flags, include `condition` as `"and"` or `"or"`:
+For two or more flags, include `condition` as `"and"` or `"or"`. During a beta-to-GA transition, hide only when neither the beta flag nor the billing feature grants access:
 
 ```json
 {
   "options": {
-    "visibility": {
-      "flags": [
-        { "name": "AMP_EXAMPLE_BETA_FLAG", "value": true },
-        { "name": "example_billing_feature", "value": true }
-      ],
-      "condition": "and"
+    "hidden": {
+      "gate": {
+        "flags": [
+          { "name": "AMP_EXAMPLE_BETA_FLAG", "value": false },
+          { "name": "example_billing_feature", "value": false }
+        ],
+        "condition": "and"
+      }
     }
   }
 }
 ```
 
-Flag names must match exactly what the webapp resolves. Flagsmith beta flags keep their `AMP_` prefix, and GA billing features are authored as-is. The `value` field is mandatory on every flag item.
+The gate uses hide-when semantics: the integration is hidden when the flag reduction matches the configured values. Flag names must match exactly what the webapp resolves. Flagsmith beta flags keep their `AMP_` prefix, and GA billing features are authored as-is. The `value` field is mandatory on every flag item.
 
-Use `options.visibility` for beta-to-GA or billing-feature exposure. Keep `hidden: true` only for definitions that should be hidden from all customers. Do not add real definition usages of `options.visibility` until the webapp evaluator that reads it has been deployed.
+Use `hidden.gate` for beta-to-GA or billing-feature exposure. Keep `hidden: true` only for definitions that should be hidden from all customers. Do not add real definition usages of `hidden.gate` until the webapp evaluator that reads it has been deployed.
 
 ## Getting started
 

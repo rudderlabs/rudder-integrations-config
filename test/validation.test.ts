@@ -60,7 +60,7 @@ function getIntegrationData(name: string, type: string): Record<string, unknown>
   return intgData;
 }
 
-function getMinimalDestinationDefinition(visibility?: Record<string, unknown>) {
+function getMinimalDestinationDefinition(hidden?: unknown) {
   return {
     name: 'TEST_DESTINATION',
     displayName: 'Test Destination',
@@ -71,22 +71,22 @@ function getMinimalDestinationDefinition(visibility?: Record<string, unknown>) {
         defaultConfig: ['testConfig'],
       },
     },
-    ...(visibility && {
+    ...(hidden !== undefined && {
       options: {
-        visibility,
+        hidden,
       },
     }),
   };
 }
 
-function getMinimalSourceDefinition(visibility?: Record<string, unknown>) {
+function getMinimalSourceDefinition(hidden?: unknown) {
   return {
     name: 'test_source',
     displayName: 'Test Source',
     type: 'cloud',
-    ...(visibility && {
+    ...(hidden !== undefined && {
       options: {
-        visibility,
+        hidden,
       },
     }),
   };
@@ -379,51 +379,64 @@ describe('Destination Definition validation tests', () => {
       expected: '["config.hybridModeCloudEventsFilter.web.messageType must be array"]',
     },
     {
-      description: 'visibility flag item is missing "value"',
+      description: 'hidden gate flag item is missing "value"',
       input: getMinimalDestinationDefinition({
-        flags: [{ name: 'AMP_TEST_FLAG' }],
+        gate: {
+          flags: [{ name: 'AMP_TEST_FLAG' }],
+        },
       }),
       expected: "must have required property 'value'",
     },
     {
-      description: 'visibility flag item is missing "name"',
+      description: 'hidden gate flag item is missing "name"',
       input: getMinimalDestinationDefinition({
-        flags: [{ value: true }],
+        gate: {
+          flags: [{ value: true }],
+        },
       }),
       expected: "must have required property 'name'",
     },
     {
-      description: 'visibility with multiple flags is missing "condition"',
+      description: 'hidden gate with multiple flags is missing "condition"',
       input: getMinimalDestinationDefinition({
-        flags: [
-          { name: 'AMP_TEST_FLAG', value: true },
-          { name: 'TEST_BILLING_FEATURE', value: true },
-        ],
+        gate: {
+          flags: [
+            { name: 'AMP_TEST_FLAG', value: true },
+            { name: 'TEST_BILLING_FEATURE', value: true },
+          ],
+        },
       }),
       expected: "must have required property 'condition'",
     },
     {
-      description: 'visibility has an unknown property',
+      description: 'hidden gate has an unknown property',
       input: getMinimalDestinationDefinition({
-        flags: [{ name: 'AMP_TEST_FLAG', value: true }],
-        unknownProperty: true,
+        gate: {
+          flags: [{ name: 'AMP_TEST_FLAG', value: true }],
+          unknownProperty: true,
+        },
       }),
       expected: 'must NOT have additional properties',
     },
     {
-      description: 'visibility flag item has an unknown property',
+      description: 'hidden gate flag item has an unknown property',
       input: getMinimalDestinationDefinition({
-        flags: [{ name: 'AMP_TEST_FLAG', value: true, unknownProperty: true }],
+        gate: {
+          flags: [{ name: 'AMP_TEST_FLAG', value: true, unknownProperty: true }],
+        },
       }),
       expected: 'must NOT have additional properties',
     },
     {
-      description: 'visibility with a single flag includes condition',
+      description: 'hidden object mixes gate and legacy feature flag fields',
       input: getMinimalDestinationDefinition({
-        flags: [{ name: 'AMP_TEST_FLAG', value: true }],
-        condition: 'and',
+        gate: {
+          flags: [{ name: 'AMP_TEST_FLAG', value: false }],
+        },
+        featureFlagName: 'AMP_TEST_FLAG',
+        featureFlagValue: false,
       }),
-      expected: 'boolean schema is false',
+      expected: 'must NOT have additional properties',
     },
   ];
 
@@ -431,25 +444,59 @@ describe('Destination Definition validation tests', () => {
     await expect(validateDestinationDefinitions(testCase.input)).rejects.toThrow(testCase.expected);
   });
 
-  it('accepts visibility with a single flag and no condition', async () => {
+  it('accepts boolean hidden', async () => {
+    await expect(
+      validateDestinationDefinitions(getMinimalDestinationDefinition(true)),
+    ).resolves.toEqual(true);
+  });
+
+  it('accepts legacy hidden feature flag object', async () => {
     await expect(
       validateDestinationDefinitions(
         getMinimalDestinationDefinition({
-          flags: [{ name: 'AMP_TEST_FLAG', value: true }],
+          featureFlagName: 'AMP_TEST_FLAG',
+          featureFlagValue: false,
         }),
       ),
     ).resolves.toEqual(true);
   });
 
-  it('accepts visibility with two flags and condition', async () => {
+  it('accepts hidden gate with a single flag and no condition', async () => {
     await expect(
       validateDestinationDefinitions(
         getMinimalDestinationDefinition({
-          flags: [
-            { name: 'AMP_TEST_FLAG', value: true },
-            { name: 'TEST_BILLING_FEATURE', value: false },
-          ],
-          condition: 'or',
+          gate: {
+            flags: [{ name: 'AMP_TEST_FLAG', value: false }],
+          },
+        }),
+      ),
+    ).resolves.toEqual(true);
+  });
+
+  it('accepts hidden gate with a single flag and condition', async () => {
+    await expect(
+      validateDestinationDefinitions(
+        getMinimalDestinationDefinition({
+          gate: {
+            flags: [{ name: 'AMP_TEST_FLAG', value: false }],
+            condition: 'and',
+          },
+        }),
+      ),
+    ).resolves.toEqual(true);
+  });
+
+  it('accepts hidden gate with two flags and condition', async () => {
+    await expect(
+      validateDestinationDefinitions(
+        getMinimalDestinationDefinition({
+          gate: {
+            flags: [
+              { name: 'AMP_TEST_FLAG', value: false },
+              { name: 'TEST_BILLING_FEATURE', value: false },
+            ],
+            condition: 'and',
+          },
         }),
       ),
     ).resolves.toEqual(true);
@@ -502,51 +549,64 @@ describe('Source Definition validation tests', () => {
         '["options.internalSecretKeys must NOT have duplicate items (items ## 1 and 0 are identical)"]',
     },
     {
-      description: 'visibility flag item is missing "value"',
+      description: 'hidden gate flag item is missing "value"',
       input: getMinimalSourceDefinition({
-        flags: [{ name: 'AMP_TEST_FLAG' }],
+        gate: {
+          flags: [{ name: 'AMP_TEST_FLAG' }],
+        },
       }),
       expected: "must have required property 'value'",
     },
     {
-      description: 'visibility flag item is missing "name"',
+      description: 'hidden gate flag item is missing "name"',
       input: getMinimalSourceDefinition({
-        flags: [{ value: true }],
+        gate: {
+          flags: [{ value: true }],
+        },
       }),
       expected: "must have required property 'name'",
     },
     {
-      description: 'visibility with multiple flags is missing "condition"',
+      description: 'hidden gate with multiple flags is missing "condition"',
       input: getMinimalSourceDefinition({
-        flags: [
-          { name: 'AMP_TEST_FLAG', value: true },
-          { name: 'TEST_BILLING_FEATURE', value: true },
-        ],
+        gate: {
+          flags: [
+            { name: 'AMP_TEST_FLAG', value: true },
+            { name: 'TEST_BILLING_FEATURE', value: true },
+          ],
+        },
       }),
       expected: "must have required property 'condition'",
     },
     {
-      description: 'visibility has an unknown property',
+      description: 'hidden gate has an unknown property',
       input: getMinimalSourceDefinition({
-        flags: [{ name: 'AMP_TEST_FLAG', value: true }],
-        unknownProperty: true,
+        gate: {
+          flags: [{ name: 'AMP_TEST_FLAG', value: true }],
+          unknownProperty: true,
+        },
       }),
       expected: 'must NOT have additional properties',
     },
     {
-      description: 'visibility flag item has an unknown property',
+      description: 'hidden gate flag item has an unknown property',
       input: getMinimalSourceDefinition({
-        flags: [{ name: 'AMP_TEST_FLAG', value: true, unknownProperty: true }],
+        gate: {
+          flags: [{ name: 'AMP_TEST_FLAG', value: true, unknownProperty: true }],
+        },
       }),
       expected: 'must NOT have additional properties',
     },
     {
-      description: 'visibility with a single flag includes condition',
+      description: 'hidden object mixes gate and legacy feature flag fields',
       input: getMinimalSourceDefinition({
-        flags: [{ name: 'AMP_TEST_FLAG', value: true }],
-        condition: 'and',
+        gate: {
+          flags: [{ name: 'AMP_TEST_FLAG', value: false }],
+        },
+        featureFlagName: 'AMP_TEST_FLAG',
+        featureFlagValue: false,
       }),
-      expected: 'boolean schema is false',
+      expected: 'must NOT have additional properties',
     },
   ];
 
@@ -554,25 +614,59 @@ describe('Source Definition validation tests', () => {
     await expect(validateSourceDefinitions(testCase.input)).rejects.toThrow(testCase.expected);
   });
 
-  it('accepts visibility with a single flag and no condition', async () => {
+  it('accepts boolean hidden', async () => {
+    await expect(validateSourceDefinitions(getMinimalSourceDefinition(true))).resolves.toEqual(
+      true,
+    );
+  });
+
+  it('accepts legacy hidden feature flag object', async () => {
     await expect(
       validateSourceDefinitions(
         getMinimalSourceDefinition({
-          flags: [{ name: 'AMP_TEST_FLAG', value: true }],
+          featureFlagName: 'AMP_TEST_FLAG',
+          featureFlagValue: false,
         }),
       ),
     ).resolves.toEqual(true);
   });
 
-  it('accepts visibility with two flags and condition', async () => {
+  it('accepts hidden gate with a single flag and no condition', async () => {
     await expect(
       validateSourceDefinitions(
         getMinimalSourceDefinition({
-          flags: [
-            { name: 'AMP_TEST_FLAG', value: true },
-            { name: 'TEST_BILLING_FEATURE', value: false },
-          ],
-          condition: 'and',
+          gate: {
+            flags: [{ name: 'AMP_TEST_FLAG', value: false }],
+          },
+        }),
+      ),
+    ).resolves.toEqual(true);
+  });
+
+  it('accepts hidden gate with a single flag and condition', async () => {
+    await expect(
+      validateSourceDefinitions(
+        getMinimalSourceDefinition({
+          gate: {
+            flags: [{ name: 'AMP_TEST_FLAG', value: false }],
+            condition: 'and',
+          },
+        }),
+      ),
+    ).resolves.toEqual(true);
+  });
+
+  it('accepts hidden gate with two flags and condition', async () => {
+    await expect(
+      validateSourceDefinitions(
+        getMinimalSourceDefinition({
+          gate: {
+            flags: [
+              { name: 'AMP_TEST_FLAG', value: false },
+              { name: 'TEST_BILLING_FEATURE', value: false },
+            ],
+            condition: 'and',
+          },
         }),
       ),
     ).resolves.toEqual(true);
