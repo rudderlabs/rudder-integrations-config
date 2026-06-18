@@ -67,11 +67,18 @@ jobs:
           HUSKY: 0
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
-          CONVENTIONAL_GITHUB_RELEASER_TOKEN: ${{ steps.generate-token.outputs.token }}
           RELEASE_VERSION: ${{ steps.extract-version.outputs.release_version }}
           MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
           REPO: ${{ github.repository }}
         run: |
+          # Validate RELEASE_VERSION (derived from the branch name) is SemVer before
+          # interpolating it into tag/release names and shell arguments. Fail fast on
+          # a malformed branch name rather than creating an invalid tag/release.
+          if ! [[ "${RELEASE_VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Invalid RELEASE_VERSION '${RELEASE_VERSION}' (expected SemVer x.y.z)"
+            exit 1
+          fi
+
           # Create annotated tag object via GitHub API (matching original git tag -a behavior)
           TAG_SHA=$(gh api "repos/${REPO}/git/tags" \
             --method POST \
@@ -87,10 +94,22 @@ jobs:
             -f ref="refs/tags/v${RELEASE_VERSION}" \
             -f sha="$TAG_SHA"
 
-          # Fetch the new tag locally for conventional-github-releaser
-          git fetch --tags origin
+          # Slice the CHANGELOG section for this version. The `^#+ \[` pattern matches
+          # both "## [x.y.z]" (minor/major) and "### [x.y.z]" (patch) headings.
+          RELEASE_NOTES="$(awk -v v="${RELEASE_VERSION}" '$0 ~ "^#+ \\["v"\\]"{f=1;next} /^#+ \[/{if(f)exit} f' CHANGELOG.md)"
+          if [[ -z "${RELEASE_NOTES//[[:space:]]/}" ]]; then
+            echo "::error::No CHANGELOG section found for v${RELEASE_VERSION}"
+            exit 1
+          fi
 
-          npm run release:github
+          # Create the GitHub release with notes sliced from CHANGELOG.md.
+          # Use explicit tag + repo so the release always matches the tag we
+          # just created and lands on this repo (avoids conventional-github-releaser
+          # inferring a stale version from tag history or the wrong repo from package.json).
+          gh release create "v${RELEASE_VERSION}" \
+            --repo "${REPO}" \
+            --title "v${RELEASE_VERSION}" \
+            --notes "${RELEASE_NOTES}"
           echo "DATE=$(date)" >> $GITHUB_ENV
 
       - name: Pull Changes Into develop Branch

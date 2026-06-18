@@ -7,6 +7,7 @@ argument-hint: <destination-name> (e.g. "amplitude" or "mixpanel")
 ## Migrate Destination to Accounts Framework
 
 **Reference files — read all before starting:**
+
 - `src/schemas/account/account-db-config-schema.json` — structure and field semantics for the account `db-config.json`
 - `src/schemas/account/account-schema-schema.json` — structure for the account `schema.json` (`secretSchema` vs `optionsSchema`)
 - `src/schemas/account/account-ui-config-schema.json` — structure for the account `ui-config.json`
@@ -81,6 +82,7 @@ Add `accountManagementInput` as the **first** field in the group containing the 
 ### Step 5: Update the destination's `schema.json`
 
 **a)** Add `rudderAccountId` to `properties`:
+
 ```json
 "rudderAccountId": {
   "type": "string",
@@ -89,6 +91,7 @@ Add `accountManagementInput` as the **first** field in the group containing the 
 ```
 
 **b)** Keep existing non-auth required fields unchanged. Remove only the migrated auth fields from the top-level `required` array, then add a `oneOf` mutual-exclusivity constraint (place before `allOf` if present). If multiple auth fields are being migrated as a group, include all of them together in each branch:
+
 ```json
 "oneOf": [
   {
@@ -151,4 +154,3 @@ npm test -- --testPathPattern="<destination>"
 Fix any failures before finishing.
 
 ---
-

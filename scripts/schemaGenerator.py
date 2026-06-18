@@ -344,8 +344,11 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
             elif "default" in field:
                 singleSelectObj["default"] = field["default"]
     else:
-        singleSelectObj = {"type": FieldTypeEnum.STRING.value}
-        singleSelectObj["enum"] = get_options_list_for_enum(field)
+        enum_values = get_options_list_for_enum(field)
+        non_empty = [v for v in enum_values if v != ""]
+        inferred_type = "integer" if non_empty and "" not in enum_values and all(isinstance(v, int) for v in non_empty) else FieldTypeEnum.STRING.value
+        singleSelectObj = {"type": inferred_type}
+        singleSelectObj["enum"] = enum_values
         if "default" or "defaultOption" in field:
             if "defaultOption" in field:
                 singleSelectObj["default"] = field["defaultOption"]["value"]
@@ -366,6 +369,7 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
             ):
                 newSingleSelectObj["properties"][sourceType] = singleSelectObj
         singleSelectObj = newSingleSelectObj
+    add_immutable_property(field, singleSelectObj)
     return singleSelectObj
 
 
@@ -381,12 +385,16 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     Returns:
         object
     """
+    uniqueItemPropertiesErrorMessage = (
+        "Only one consent management block can be configured per provider."
+    )
     dynamicCustomFormObj = {}
     dynamicCustomFormObj["type"] = FieldTypeEnum.ARRAY.value
     dynamicCustomFormItemObj = {}
     dynamicCustomFormItemObj["type"] = FieldTypeEnum.OBJECT.value
     dynamicCustomFormItemObj["properties"] = {}
     allOfSchemaObj = {}
+    requiredFields = []
 
     # For old schema types customFields contains the children, for v2 its is rowFields
     customFieldsKey = "customFields"
@@ -407,6 +415,9 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
 
         if "preRequisites" in customField:
             continue
+
+        if customField.get("required") == True:
+            requiredFields.append(customField[schema_field_name])
 
         if (
             "pattern" not in customFieldSchemaObj
@@ -435,7 +446,15 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     if allOfSchemaObj:
         dynamicCustomFormItemObj["allOf"] = allOfSchemaObj
 
+    if requiredFields:
+        dynamicCustomFormItemObj["required"] = requiredFields
+
     dynamicCustomFormObj["items"] = dynamicCustomFormItemObj
+    if "uniqueRowFields" in field and isinstance(field["uniqueRowFields"], list):
+        dynamicCustomFormObj["uniqueItemProperties"] = field["uniqueRowFields"]
+        dynamicCustomFormObj["errorMessage"] = {
+            "uniqueItemProperties": uniqueItemPropertiesErrorMessage
+        }
     isSourceDependent = is_dest_field_dependent_on_source(
         field, dbConfig, schema_field_name
     )

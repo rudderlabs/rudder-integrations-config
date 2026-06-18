@@ -2,6 +2,69 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.160.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.160.0...v1.160.1) (2026-06-18)
+
+
+### Bug Fixes
+
+* ignore version/versions fields in destination deploy diff ([#2550](https://github.com/rudderlabs/rudder-config-schema/issues/2550)) ([7cd96b1](https://github.com/rudderlabs/rudder-config-schema/commit/7cd96b1acba1be1f5d2955b642ed304b97a14e00))
+* restore FBLA native hidden gate ([#2549](https://github.com/rudderlabs/rudder-config-schema/issues/2549)) ([8168cbe](https://github.com/rudderlabs/rudder-config-schema/commit/8168cbe917e6b7f65f3d516f918dda41ddcf3f52))
+
+## [1.160.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.159.1...v1.160.0) (2026-06-17)
+
+
+### Features
+
+* add BigQuery Stream All Events destination definition ([#2502](https://github.com/rudderlabs/rudder-config-schema/issues/2502)) ([9af1c99](https://github.com/rudderlabs/rudder-config-schema/commit/9af1c99ab8f7caad1cbcdfd309c2f14244f40daa))
+* add destination version metadata backfill and archive emission ([#2521](https://github.com/rudderlabs/rudder-config-schema/issues/2521)) ([d4e7cba](https://github.com/rudderlabs/rudder-config-schema/commit/d4e7cba45fec26c00b4bb58733d26ffcf744ec3d))
+
+
+### Bug Fixes
+
+* **am:** gate trackNewCampaigns on sdkVersion web condition ([#2541](https://github.com/rudderlabs/rudder-config-schema/issues/2541)) ([98e1181](https://github.com/rudderlabs/rudder-config-schema/commit/98e118136e4858cb06dd6115cbda2ea931b56194))
+
+### [1.159.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.159.0...v1.159.1) (2026-06-12)
+
+## [1.159.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.158.0...v1.159.0) (2026-06-12)
+
+
+### Features
+
+* add Amplitude SDK version selector ([#2513](https://github.com/rudderlabs/rudder-config-schema/issues/2513)) ([9319086](https://github.com/rudderlabs/rudder-config-schema/commit/93190860e11039d68507f0e575686da73a107f14))
+
+## [1.158.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.157.0...v1.158.0) (2026-06-10)
+
+
+### Features
+
+* **accounts:** plumb displayOptions field for account definitions ([#2520](https://github.com/rudderlabs/rudder-config-schema/issues/2520)) ([888b0ce](https://github.com/rudderlabs/rudder-config-schema/commit/888b0ce317b08ddeb4b2b0498a24f851e7cf7e8c))
+* **garl:** add Data Manager OAuth account definition ([#2515](https://github.com/rudderlabs/rudder-config-schema/issues/2515)) ([c98c602](https://github.com/rudderlabs/rudder-config-schema/commit/c98c602489b63e066c9bce91c641781ff25c9a21))
+
+## [1.157.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.156.0...v1.157.0) (2026-06-04)
+
+
+### Features
+
+* enable RN device mode support for Sprig destination ([#2507](https://github.com/rudderlabs/rudder-config-schema/issues/2507)) ([2b8a308](https://github.com/rudderlabs/rudder-config-schema/commit/2b8a308a6c6dd2a528fff94eb35783eb8bae2e05))
+* **iterable-audience:** add Iterable Audience destination configuration ([#2499](https://github.com/rudderlabs/rudder-config-schema/issues/2499)) ([ed342a1](https://github.com/rudderlabs/rudder-config-schema/commit/ed342a1bac59ef67114575898bbeca1110b8fb66))
+* **survicate:** add Survicate cloud mode destination ([#2480](https://github.com/rudderlabs/rudder-config-schema/issues/2480)) ([f7f85a0](https://github.com/rudderlabs/rudder-config-schema/commit/f7f85a0e76217aed15aea660bfa5f75eeddb08e6))
+
+## [1.156.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.155.0...v1.156.0) (2026-06-02)
+
+
+### Features
+
+* add sdkBaseUrl to googleads destination config ([#2476](https://github.com/rudderlabs/rudder-config-schema/issues/2476)) ([92bed2c](https://github.com/rudderlabs/rudder-config-schema/commit/92bed2c71b423902d4ab20a67f8e530fcd010fa6))
+* **custom_audience:** add useInsertConfig toggle and require all actions ([#2501](https://github.com/rudderlabs/rudder-config-schema/issues/2501)) ([0a3cfe0](https://github.com/rudderlabs/rudder-config-schema/commit/0a3cfe01a83de850bdc32218b2e66039d98adc79))
+* enforce unique consent providers in integrations schema ([#2505](https://github.com/rudderlabs/rudder-config-schema/issues/2505)) ([583c06a](https://github.com/rudderlabs/rudder-config-schema/commit/583c06aa27898aa85016a5f0098734e046cb6ee3))
+* onboard custom audience destination ([#2478](https://github.com/rudderlabs/rudder-config-schema/issues/2478)) ([379721f](https://github.com/rudderlabs/rudder-config-schema/commit/379721fff92521a53f9d2d62760e31be7daeb80d))
+
+
+### Bug Fixes
+
+* lowercase custom audience action keys ([#2498](https://github.com/rudderlabs/rudder-config-schema/issues/2498)) ([6ca954d](https://github.com/rudderlabs/rudder-config-schema/commit/6ca954d3a2c18ea014aacffb3393c2ba55d7ac69))
+* restrict localhost in place of baseURL ([#2500](https://github.com/rudderlabs/rudder-config-schema/issues/2500)) ([2965c46](https://github.com/rudderlabs/rudder-config-schema/commit/2965c462177703796a1e3e818ddc45f95742b765))
+
 ## [1.155.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.154.0...v1.155.0) (2026-05-22)
 
 

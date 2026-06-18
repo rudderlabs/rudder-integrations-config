@@ -109,9 +109,7 @@
       "partnerId": "12345"
     },
     "result": false,
-    "err": [
-      "consentManagement.web.0.provider must be equal to one of the allowed values"
-    ]
+    "err": ["consentManagement.web.0.provider must be equal to one of the allowed values"]
   },
   {
     "testTitle": "With valid multiple consent management providers config",
@@ -517,10 +515,7 @@
       "partnerId": "12345"
     },
     "result": false,
-    "err": [
-      "oneTrustCookieCategories must be object",
-      "ketchConsentPurposes must be object"
-    ]
+    "err": ["oneTrustCookieCategories must be object", "ketchConsentPurposes must be object"]
   },
   {
     "testTitle": "With valid multiple consent management providers config",
@@ -712,10 +707,7 @@
       "partnerId": "12345"
     },
     "result": false,
-    "err": [
-      "oneTrustCookieCategories.web must be array",
-      "ketchConsentPurposes.web must be array"
-    ]
+    "err": ["oneTrustCookieCategories.web must be array", "ketchConsentPurposes.web must be array"]
   },
   {
     "testTitle": "With valid multiple consent management providers config",
@@ -778,6 +770,36 @@
     "err": [
       "oneTrustCookieCategories.web.0 must be object",
       "ketchConsentPurposes.web.0 must be object"
+    ]
+  },
+  {
+    "testTitle": "With duplicate consent management providers config - web",
+    "config": {
+      "partnerId": "12345",
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "marketing"
+              }
+            ]
+          },
+          {
+            "provider": "ketch",
+            "consents": [
+              {
+                "consent": "analytics"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": [
+      "consentManagement.web Only one consent management block can be configured per provider."
     ]
   }
 ]

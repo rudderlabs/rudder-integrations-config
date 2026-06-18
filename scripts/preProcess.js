@@ -22,7 +22,7 @@ async function getUiDefaultData(destinationName) {
     return JSON.parse(defaults);
   } catch (error) {
     // skip the destination if ui-default.json is not present
-    console.log(`ui-default.json not found for ${destinationName}`);
+    // console.debug(`ui-default.json not found for ${destinationName}`);
     return undefined;
   }
 }
@@ -35,13 +35,14 @@ async function getDestinationNames() {
 async function main() {
   const destinationFolders = await getDestinationNames();
 
-  destinationFolders.forEach(async (destinationName) => {
+  for (const destinationName of destinationFolders) {
     if (destinationName === 'ga4_v2') {
-      console.log('Skipping GA4_v2');
+      // console.debug('Skipping GA4_v2');
+      continue;
     }
     const uiDefaults = await getUiDefaultData(destinationName);
     if (!uiDefaults) {
-      return;
+      continue;
     }
 
     const uiConfigTemplate = await getUiConfigTemplate(destinationName);
@@ -51,7 +52,7 @@ async function main() {
       `${srcPath}/configurations/destinations/${destinationName}/ui-config.json`,
       JSON.stringify(result, null, 2),
     );
-  });
+  }
 }
 
 main().catch((error) => {

@@ -48,6 +48,57 @@
         }
       },
       "additionalProperties": false
+    },
+    "displayOptions": {
+      "type": "object",
+      "title": "Display Options",
+      "description": "UI/display metadata for the account type, consumed by the webapp. Account analogue of the destination 'options' field (same shape, same consumer semantics).",
+      "$comment": "Permissive inner object — new option keys can be added on a single account without a schema PR.",
+      "properties": {
+        "hidden": {
+          "anyOf": [
+            {
+              "type": "boolean",
+              "title": "Hidden",
+              "description": "Whether the account type is hidden.",
+              "$comment": "This is used to hide the account type from the UI.",
+              "default": false
+            },
+            {
+              "type": "object",
+              "title": "Hidden",
+              "description": "Whether the account type is hidden, gated behind a feature flag.",
+              "$comment": "This is used to hide the account type from the UI based on a feature flag.",
+              "properties": {
+                "featureFlagName": {
+                  "type": "string",
+                  "title": "Feature Flag Name",
+                  "description": "The feature flag name to hide the account type."
+                },
+                "featureFlagValue": {
+                  "type": "boolean",
+                  "title": "Feature Flag Value",
+                  "description": "The feature flag value to hide the account type."
+                }
+              }
+            }
+          ]
+        },
+        "deprecated": {
+          "type": "boolean",
+          "title": "Deprecated",
+          "description": "Whether the account type is deprecated.",
+          "$comment": "This is used to display a 'deprecated' badge in the UI.",
+          "default": false
+        },
+        "deprecationLabel": {
+          "type": "string",
+          "title": "Deprecation Label",
+          "description": "The deprecation label for the account type.",
+          "$comment": "This is used to display a deprecation label in the UI when displayOptions.deprecated is 'true'.",
+          "default": "Deprecated"
+        }
+      }
     }
   },
   "additionalProperties": false

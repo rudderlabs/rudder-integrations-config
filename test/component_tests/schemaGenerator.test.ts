@@ -71,6 +71,11 @@ describe('Schema Generator', () => {
         destName: 'create_new_schema_dest_legacy_ui',
         expectedSchemaFile: 'createNewSchemaDestLegacyUI.json',
       },
+      {
+        description: 'singleSelect with integer enum values generates integer type',
+        destName: 'integer_select_dest',
+        expectedSchemaFile: 'integerSelectDest.json',
+      },
     ];
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
