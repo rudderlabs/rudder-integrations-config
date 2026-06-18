@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.161.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.160.1...v1.161.0) (2026-06-18)
+
+
+### Features
+
+* **bigquery:** rETL BigQuery source account management (DEX-374, APL-399, APL-398) ([#2522](https://github.com/rudderlabs/rudder-config-schema/issues/2522)) ([8e68f3c](https://github.com/rudderlabs/rudder-config-schema/commit/8e68f3c8a742b110870e62f03b259b2871b107f3))
+* **klaviyo:** add v3 api version option to destination config ([#2524](https://github.com/rudderlabs/rudder-config-schema/issues/2524)) ([03a498b](https://github.com/rudderlabs/rudder-config-schema/commit/03a498b49e1c01f11ea5c4a48f93f9bff938b680))
+
 ### [1.160.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.160.0...v1.160.1) (2026-06-18)
 
 
