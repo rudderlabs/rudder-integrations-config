@@ -33,3 +33,8 @@
 <!-- RUD-2776 -->
 
 - Language-specific destination constants are generated into `generated/` from template files in `templates/` via `npm run generate:constants` (`package.json:44`, `scripts/generateConstants.js::generateFiles`).
+
+## INT-6594 — Scoped Jest Coverage Gate
+
+- Running `npm test -- --runTestsByPath test/validation.test.ts --watchAll=false` validates all integration definitions but can still exit non-zero after all tests pass because `jest.config.js` enforces 100% global coverage thresholds on the scoped run.
+- When that command reports `Test Suites: 1 passed` and all tests passed, treat the non-zero exit as coverage-threshold behavior rather than a validation assertion failure.

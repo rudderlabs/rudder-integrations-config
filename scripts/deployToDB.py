@@ -24,6 +24,9 @@ NULLABLE_COLUMN_FIELDS = ("options", "uiConfig", "configSchema")
 # Allowed lifecycle statuses for archived (non-current) majors in the `versions`
 # archive. The current version is the served default, so its status is implicit.
 VERSION_ARCHIVE_STATUSES = ("supported", "retired")
+# Top-level fields excluded from the destination update diff: changes confined
+# to these alone should neither trigger an update nor show up in the diff report.
+IGNORED_DESTINATION_DIFF_FIELDS = ("version", "versions")
 
 CONTROL_PLANE_URL = None
 USERNAME = None
@@ -250,6 +253,13 @@ def update_diff_db(
                 normalize_nullable_column_deletions(
                     diff, persisted_data, updated_data, NULLABLE_COLUMN_FIELDS
                 )
+
+                # Drop version-related fields so changes confined to them don't
+                # trigger an update or appear in the reported diff. Destination
+                # definitions only.
+                if selector == "destination":
+                    for ignored_field in IGNORED_DESTINATION_DIFF_FIELDS:
+                        diff.pop(ignored_field, None)
 
                 if len(diff.keys()) > 0:  # changes exist
                     operation = "updating definition"

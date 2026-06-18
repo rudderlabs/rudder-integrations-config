@@ -44,3 +44,8 @@
 
 - Destination visibility gating for Custom Audience is configured in `src/configurations/destinations/custom_audience/db-config.json` at `options.hidden.featureFlagName`; when renaming that key, keep the repo change localized to the definition file if repo-wide search confirms no other in-repo references.
 - For this class of definition-key rename, validate scope with targeted string search across `src/`, `generated/`, and `test/` before expanding into generator or test changes.
+
+## INT-6594 — Hidden-Only GA Rollback Semantics
+
+- For Facebook Lead Ads native GA rollback work, restoring hidden-only behavior means re-adding the feature-flagged `options.hidden` object in `src/configurations/sources/facebook_lead_ads_native/db-config.json` while leaving `options.isBeta` absent.
+- Do not conflate `facebook_lead_ads_native` with the separate `facebook_lead_ads` source; the latter can remain hidden and beta while native visibility is controlled independently.
