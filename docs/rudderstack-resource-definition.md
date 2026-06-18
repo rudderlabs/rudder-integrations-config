@@ -21,6 +21,7 @@ This pattern applies identically to Sources (data ingestion), Destinations (data
 - ATTENTION: Has **weak coupling** to the persistence layer
 - Referenced by all services (web-app, control-plane, data-plane)
 - Defines metadata and capability declarations
+- Carries the required definition `version` (major.minor).
 
 ### 2. schema.json - Input Validation
 

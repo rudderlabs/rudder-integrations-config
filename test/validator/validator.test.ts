@@ -326,7 +326,7 @@ describe('Validator Utils', () => {
 
       const validDestinationSchema = {
         type: 'object',
-        required: ['name', 'displayName', 'config'],
+        required: ['name', 'displayName', 'version', 'config'],
         properties: {
           name: {
             type: 'string',
@@ -335,6 +335,10 @@ describe('Validator Utils', () => {
           displayName: {
             type: 'string',
             pattern: '^[a-zA-Z0-9_ .\\-\\(\\)/]+$',
+          },
+          version: {
+            type: 'string',
+            pattern: '^\\d+\\.\\d+$',
           },
           config: {
             type: 'object',
@@ -363,6 +367,7 @@ describe('Validator Utils', () => {
       const validDestDef = {
         name: 'GOOGLE_ANALYTICS',
         displayName: 'Google Analytics',
+        version: '1.0',
         config: {
           supportedSourceTypes: ['web', 'android', 'ios'],
           destConfig: {
@@ -387,6 +392,23 @@ describe('Validator Utils', () => {
       const invalidDestDef = {
         name: 'GOOGLE ANALYTICS!', // invalid pattern
         displayName: 'Google Analytics',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['apiKey'],
+          },
+        },
+      };
+
+      await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow();
+    });
+
+    it('should throw error for destination definition with invalid version format', async () => {
+      const invalidDestDef = {
+        name: 'GOOGLE_ANALYTICS',
+        displayName: 'Google Analytics',
+        version: '1',
         config: {
           supportedSourceTypes: ['web'],
           destConfig: {
@@ -402,6 +424,7 @@ describe('Validator Utils', () => {
       const invalidDestDef = {
         name: 'GOOGLE_ANALYTICS',
         displayName: 'Google Analytics',
+        version: '1.0',
         config: {
           supportedSourceTypes: [], // should have minItems: 1
           destConfig: {
@@ -437,6 +460,7 @@ describe('Validator Utils', () => {
       const validDestDef = {
         name: 'GOOGLE_ANALYTICS',
         displayName: 'Google Analytics',
+        version: '1.0',
         config: {
           supportedSourceTypes: ['web'],
           destConfig: {

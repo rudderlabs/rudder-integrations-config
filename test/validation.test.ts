@@ -205,6 +205,7 @@ describe('Destination Definition validation tests', () => {
     {
       description: 'missing "name" and "displayName" properties',
       input: {
+        version: '1.0',
         config: {
           supportedSourceTypes: ['web'],
           destConfig: {
@@ -216,10 +217,25 @@ describe('Destination Definition validation tests', () => {
         '[" must have required property \'name\'"," must have required property \'displayName\'"]',
     },
     {
+      description: 'missing "version" property',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+        },
+      },
+      expected: '[" must have required property \'version\'"]',
+    },
+    {
       description: 'hybridModeCloudEventsFilter is not a valid map',
       input: {
         name: 'test',
         displayName: 'Test',
+        version: '1.0',
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -235,6 +251,7 @@ describe('Destination Definition validation tests', () => {
       input: {
         name: 'test',
         displayName: 'Test',
+        version: '1.0',
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -250,6 +267,7 @@ describe('Destination Definition validation tests', () => {
       input: {
         name: 'test',
         displayName: 'Test',
+        version: '1.0',
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -272,6 +290,7 @@ describe('Destination Definition validation tests', () => {
       input: {
         name: 'test',
         displayName: 'Test',
+        version: '1.0',
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -290,6 +309,7 @@ describe('Destination Definition validation tests', () => {
       input: {
         name: 'test',
         displayName: 'Test',
+        version: '1.0',
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -311,6 +331,7 @@ describe('Destination Definition validation tests', () => {
       input: {
         name: 'test',
         displayName: 'Test',
+        version: '1.0',
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -477,6 +498,36 @@ describe('Account Definition validation tests', () => {
         },
       },
       expected: '["config.optionFields.0 must be string"]',
+    },
+    {
+      description: 'displayOptions wrong type',
+      input: {
+        name: 'INVALID_ACCOUNT',
+        type: 'test',
+        category: 'destination',
+        authenticationType: 'oauth',
+        config: {
+          optionFields: ['region'],
+          refreshOAuthToken: true,
+        },
+        displayOptions: 42,
+      },
+      expected: '["displayOptions must be object"]',
+    },
+    {
+      description: 'displayOptions.deprecationLabel wrong type',
+      input: {
+        name: 'INVALID_ACCOUNT',
+        type: 'test',
+        category: 'destination',
+        authenticationType: 'oauth',
+        config: {
+          optionFields: ['region'],
+          refreshOAuthToken: true,
+        },
+        displayOptions: { deprecationLabel: 123 },
+      },
+      expected: '["displayOptions.deprecationLabel must be string"]',
     },
   ];
 
