@@ -49,3 +49,10 @@
 
 - For Facebook Lead Ads native GA rollback work, restoring hidden-only behavior means re-adding the feature-flagged `options.hidden` object in `src/configurations/sources/facebook_lead_ads_native/db-config.json` while leaving `options.isBeta` absent.
 - Do not conflate `facebook_lead_ads_native` with the separate `facebook_lead_ads` source; the latter can remain hidden and beta while native visibility is controlled independently.
+
+## INT-6596 — Visibility Option Authoring Contract
+
+- `options.visibility` in both source and destination definition schemas is a closed object whose `flags` object must be non-empty.
+- Each visibility flag object is closed and carries a string `name` plus boolean `value`.
+- `options.visibility.condition` is limited to `and` or `or`, and draft-07 `if`/`then` validation requires `condition` whenever `flags` contains two or more entries.
+- Runtime behavior may treat a missing condition as `and`, but the authored config contract still requires an explicit `condition` for multi-flag visibility.

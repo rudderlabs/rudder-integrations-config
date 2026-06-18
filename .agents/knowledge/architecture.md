@@ -51,3 +51,8 @@
 - `versions` is a deploy-payload contract only: it is assembled at deploy time and is NOT part of the on-disk `db-config-schema.json`, which validates authored root `db-config.json` files (these carry `version` but never `fallbackVersion` or `versions`; `fallbackVersion` is computed on the fly downstream).
 - When no `versions/` directory exists, payload construction sets `versions` to `{}` to allow jsondiff-driven clearing of previously persisted archive state.
 - Current deploy file-loading behavior remains root-first (`db-config.json`/`ui-config.json`/`schema.json` at destination root), so nested version assets affect deployment only through explicit archive-building logic.
+
+## INT-6596 — Source and Destination Option Schema Split
+
+- Source and destination definition options are validated by separate JSON schemas: `src/schemas/sources/db-config-schema.json` and `src/schemas/destinations/db-config-schema.json`.
+- The destination options schema is closed with `additionalProperties: false`, so new destination options such as `visibility` must be explicitly added to the destination schema before authored destination `db-config.json` files can validate.

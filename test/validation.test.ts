@@ -346,12 +346,164 @@ describe('Destination Definition validation tests', () => {
       },
       expected: '["config.hybridModeCloudEventsFilter.web.messageType must be array"]',
     },
+    {
+      description: 'options.visibility missing flags',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+        },
+        options: {
+          visibility: {},
+        },
+      },
+      expected: '["options.visibility must have required property \'flags\'"]',
+    },
+    {
+      description: 'options.visibility flag missing value',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+        },
+        options: {
+          visibility: {
+            flags: [{ name: 'AMP_FEATURE' }],
+          },
+        },
+      },
+      expected: '["options.visibility.flags.0 must have required property \'value\'"]',
+    },
+    {
+      description: 'options.visibility invalid condition',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+        },
+        options: {
+          visibility: {
+            flags: [
+              { name: 'AMP_FEATURE', value: true },
+              { name: 'billingFeature', value: false },
+            ],
+            condition: 'xor',
+          },
+        },
+      },
+      expected: '["options.visibility.condition must be equal to one of the allowed values"]',
+    },
+    {
+      description: 'options.visibility flag rejects extra properties',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+        },
+        options: {
+          visibility: {
+            flags: [{ name: 'AMP_FEATURE', value: true, configKey: 'AMP_FEATURE' }],
+          },
+        },
+      },
+      expected: '["options.visibility.flags.0 must NOT have additional properties"]',
+    },
+    {
+      description: 'options.visibility rejects extra properties',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+        },
+        options: {
+          visibility: {
+            flags: [{ name: 'AMP_FEATURE', value: true }],
+            configKey: 'AMP_FEATURE',
+          },
+        },
+      },
+      expected: '["options.visibility must NOT have additional properties"]',
+    },
+    {
+      description: 'options.visibility requires condition for multiple flags',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+        },
+        options: {
+          visibility: {
+            flags: [
+              { name: 'AMP_FEATURE', value: true },
+              { name: 'billingFeature', value: false },
+            ],
+          },
+        },
+      },
+      expected:
+        '["options.visibility must have required property \'condition\'","options.visibility must match \\"then\\" schema"]',
+    },
   ];
 
   it.each(malformedDestDefConfigs)('$description', async (testCase) => {
     await expect(validateDestinationDefinitions(testCase.input)).rejects.toThrow(
       new Error(testCase.expected),
     );
+  });
+
+  it('accepts destination definitions with options.visibility', async () => {
+    const destDefConfig = {
+      name: 'test',
+      displayName: 'Test',
+      version: '1.0',
+      config: {
+        supportedSourceTypes: ['web'],
+        destConfig: {
+          defaultConfig: ['temp'],
+        },
+      },
+      options: {
+        visibility: {
+          flags: [
+            { name: 'AMP_FEATURE', value: true },
+            { name: 'billingFeature', value: false },
+          ],
+          condition: 'or',
+        },
+      },
+    };
+
+    await expect(validateDestinationDefinitions(destDefConfig)).resolves.toEqual(true);
   });
 });
 
@@ -400,12 +552,125 @@ describe('Source Definition validation tests', () => {
       expected:
         '["options.internalSecretKeys must NOT have duplicate items (items ## 1 and 0 are identical)"]',
     },
+    {
+      description: 'options.visibility missing flags',
+      input: {
+        name: 'test_source',
+        displayName: 'Test Source',
+        type: 'cloud',
+        category: 'webhook',
+        options: {
+          visibility: {},
+        },
+      },
+      expected: '["options.visibility must have required property \'flags\'"]',
+    },
+    {
+      description: 'options.visibility flag missing value',
+      input: {
+        name: 'test_source',
+        displayName: 'Test Source',
+        type: 'cloud',
+        category: 'webhook',
+        options: {
+          visibility: {
+            flags: [{ name: 'AMP_FEATURE' }],
+          },
+        },
+      },
+      expected: '["options.visibility.flags.0 must have required property \'value\'"]',
+    },
+    {
+      description: 'options.visibility invalid condition',
+      input: {
+        name: 'test_source',
+        displayName: 'Test Source',
+        type: 'cloud',
+        category: 'webhook',
+        options: {
+          visibility: {
+            flags: [
+              { name: 'AMP_FEATURE', value: true },
+              { name: 'billingFeature', value: false },
+            ],
+            condition: 'xor',
+          },
+        },
+      },
+      expected: '["options.visibility.condition must be equal to one of the allowed values"]',
+    },
+    {
+      description: 'options.visibility flag rejects extra properties',
+      input: {
+        name: 'test_source',
+        displayName: 'Test Source',
+        type: 'cloud',
+        category: 'webhook',
+        options: {
+          visibility: {
+            flags: [{ name: 'AMP_FEATURE', value: true, configKey: 'AMP_FEATURE' }],
+          },
+        },
+      },
+      expected: '["options.visibility.flags.0 must NOT have additional properties"]',
+    },
+    {
+      description: 'options.visibility rejects extra properties',
+      input: {
+        name: 'test_source',
+        displayName: 'Test Source',
+        type: 'cloud',
+        category: 'webhook',
+        options: {
+          visibility: {
+            flags: [{ name: 'AMP_FEATURE', value: true }],
+            configKey: 'AMP_FEATURE',
+          },
+        },
+      },
+      expected: '["options.visibility must NOT have additional properties"]',
+    },
+    {
+      description: 'options.visibility requires condition for multiple flags',
+      input: {
+        name: 'test_source',
+        displayName: 'Test Source',
+        type: 'cloud',
+        category: 'webhook',
+        options: {
+          visibility: {
+            flags: [
+              { name: 'AMP_FEATURE', value: true },
+              { name: 'billingFeature', value: false },
+            ],
+          },
+        },
+      },
+      expected:
+        '["options.visibility must have required property \'condition\'","options.visibility must match \\"then\\" schema"]',
+    },
   ];
 
   it.each(malformedSrcDefConfigs)('$description', async (testCase) => {
     await expect(validateSourceDefinitions(testCase.input)).rejects.toThrow(
       new Error(testCase.expected),
     );
+  });
+
+  it('accepts source definitions with options.visibility', async () => {
+    const srcDefConfig = {
+      name: 'test_source',
+      displayName: 'Test Source',
+      type: 'cloud',
+      category: 'webhook',
+      options: {
+        visibility: {
+          flags: [{ name: 'billingFeature', value: true }],
+        },
+      },
+    };
+
+    await expect(validateSourceDefinitions(srcDefConfig)).resolves.toEqual(true);
   });
 });
 

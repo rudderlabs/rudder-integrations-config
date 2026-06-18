@@ -615,6 +615,9 @@
             }
           ]
         },
+        "visibility": {
+          "$ref": "#/definitions/visibility"
+        },
         "deprecated": {
           "type": "boolean",
           "title": "Deprecated",
@@ -812,6 +815,58 @@
         "cordova",
         "shopify",
         "cloudSource"
+      ]
+    },
+    "visibility": {
+      "type": "object",
+      "title": "Visibility",
+      "description": "Feature gates that control whether the destination is visible.",
+      "additionalProperties": false,
+      "required": ["flags"],
+      "properties": {
+        "flags": {
+          "type": "array",
+          "title": "Visibility Flags",
+          "description": "Feature flag or billing feature checks that gate destination visibility.",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "value"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "value": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "condition": {
+          "type": "string",
+          "enum": ["and", "or"]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "flags": {
+                "type": "array",
+                "minItems": 2
+              }
+            },
+            "required": ["flags"]
+          },
+          "then": {
+            "properties": {
+              "condition": {}
+            },
+            "required": ["condition"]
+          }
+        }
       ]
     }
   }
