@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.160.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.160.0...v1.160.1) (2026-06-18)
+
+
+### Bug Fixes
+
+* ignore version/versions fields in destination deploy diff ([#2550](https://github.com/rudderlabs/rudder-config-schema/issues/2550)) ([7cd96b1](https://github.com/rudderlabs/rudder-config-schema/commit/7cd96b1acba1be1f5d2955b642ed304b97a14e00))
+* restore FBLA native hidden gate ([#2549](https://github.com/rudderlabs/rudder-config-schema/issues/2549)) ([8168cbe](https://github.com/rudderlabs/rudder-config-schema/commit/8168cbe917e6b7f65f3d516f918dda41ddcf3f52))
+
 ## [1.160.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.159.1...v1.160.0) (2026-06-17)
 
 
