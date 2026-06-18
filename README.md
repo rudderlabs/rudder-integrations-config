@@ -57,7 +57,7 @@ Use `hidden.gate` when beta or GA access depends on a Flagsmith flag, a billing 
 }
 ```
 
-For two or more flags, include `condition` as `"and"` or `"or"`. During a beta-to-GA transition, hide only when neither the beta flag nor the billing feature grants access:
+For a single flag, `condition` is optional. For two or more flags, include `condition` as `"and"` or `"or"`. During a beta-to-GA transition, hide only when neither the beta flag nor the billing feature grants access:
 
 ```json
 {

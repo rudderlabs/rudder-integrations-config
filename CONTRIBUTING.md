@@ -128,7 +128,7 @@ Use `hidden.gate` when beta or GA access depends on a Flagsmith flag, a billing 
 
 The gate uses hide-when semantics: the integration is hidden when the flag reduction matches the configured values. Author beta gates with the exact Flagsmith flag name, including the `AMP_` prefix. Author GA billing features as the exact feature name resolved by the webapp. Every flag item must include a boolean `value`.
 
-For two or more flags, set `condition` to `"and"` or `"or"`. The beta-to-GA transition shape is usually `value: false` on both the beta flag and the billing feature with `condition: "and"`, so the integration is hidden only when neither gate grants access.
+For a single flag, `condition` is optional. For two or more flags, set `condition` to `"and"` or `"or"`. The beta-to-GA transition shape is usually `value: false` on both the beta flag and the billing feature with `condition: "and"`, so the integration is hidden only when neither gate grants access.
 
 Beta-to-GA lifecycle:
 

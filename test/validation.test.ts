@@ -124,6 +124,15 @@ srcList.forEach((s) => {
   if (intgData) srcTcData[s] = intgData;
 });
 
+function expectValidationError(
+  validation: Promise<boolean>,
+  expected: string,
+  exact = true,
+): Promise<void> {
+  const matcher = expect(validation).rejects;
+  return exact ? matcher.toThrow(new Error(expected)) : matcher.toThrow(expected);
+}
+
 async function getSourceDefinitionConfig(srcName: string) {
   const dirPath = path.resolve(`src/configurations/sources/${srcName}`);
   const configPath = `${dirPath}/db-config.json`;
@@ -386,6 +395,7 @@ describe('Destination Definition validation tests', () => {
         },
       }),
       expected: "must have required property 'value'",
+      exact: false,
     },
     {
       description: 'hidden gate flag item is missing "name"',
@@ -395,6 +405,7 @@ describe('Destination Definition validation tests', () => {
         },
       }),
       expected: "must have required property 'name'",
+      exact: false,
     },
     {
       description: 'hidden gate with multiple flags is missing "condition"',
@@ -407,6 +418,7 @@ describe('Destination Definition validation tests', () => {
         },
       }),
       expected: "must have required property 'condition'",
+      exact: false,
     },
     {
       description: 'hidden gate has an unknown property',
@@ -417,6 +429,7 @@ describe('Destination Definition validation tests', () => {
         },
       }),
       expected: 'must NOT have additional properties',
+      exact: false,
     },
     {
       description: 'hidden gate flag item has an unknown property',
@@ -426,6 +439,7 @@ describe('Destination Definition validation tests', () => {
         },
       }),
       expected: 'must NOT have additional properties',
+      exact: false,
     },
     {
       description: 'hidden object mixes gate and legacy feature flag fields',
@@ -437,11 +451,16 @@ describe('Destination Definition validation tests', () => {
         featureFlagValue: false,
       }),
       expected: 'must NOT have additional properties',
+      exact: false,
     },
   ];
 
   it.each(malformedDestDefConfigs)('$description', async (testCase) => {
-    await expect(validateDestinationDefinitions(testCase.input)).rejects.toThrow(testCase.expected);
+    await expectValidationError(
+      validateDestinationDefinitions(testCase.input),
+      testCase.expected,
+      testCase.exact,
+    );
   });
 
   it('accepts boolean hidden', async () => {
@@ -556,6 +575,7 @@ describe('Source Definition validation tests', () => {
         },
       }),
       expected: "must have required property 'value'",
+      exact: false,
     },
     {
       description: 'hidden gate flag item is missing "name"',
@@ -565,6 +585,7 @@ describe('Source Definition validation tests', () => {
         },
       }),
       expected: "must have required property 'name'",
+      exact: false,
     },
     {
       description: 'hidden gate with multiple flags is missing "condition"',
@@ -577,6 +598,7 @@ describe('Source Definition validation tests', () => {
         },
       }),
       expected: "must have required property 'condition'",
+      exact: false,
     },
     {
       description: 'hidden gate has an unknown property',
@@ -587,6 +609,7 @@ describe('Source Definition validation tests', () => {
         },
       }),
       expected: 'must NOT have additional properties',
+      exact: false,
     },
     {
       description: 'hidden gate flag item has an unknown property',
@@ -596,6 +619,7 @@ describe('Source Definition validation tests', () => {
         },
       }),
       expected: 'must NOT have additional properties',
+      exact: false,
     },
     {
       description: 'hidden object mixes gate and legacy feature flag fields',
@@ -607,11 +631,16 @@ describe('Source Definition validation tests', () => {
         featureFlagValue: false,
       }),
       expected: 'must NOT have additional properties',
+      exact: false,
     },
   ];
 
   it.each(malformedSrcDefConfigs)('$description', async (testCase) => {
-    await expect(validateSourceDefinitions(testCase.input)).rejects.toThrow(testCase.expected);
+    await expectValidationError(
+      validateSourceDefinitions(testCase.input),
+      testCase.expected,
+      testCase.exact,
+    );
   });
 
   it('accepts boolean hidden', async () => {
