@@ -135,7 +135,6 @@ Beta-to-GA lifecycle:
 - During beta, use `hidden.gate` with the beta Flagsmith flag.
 - When GA access is controlled by billing, update `hidden.gate` to the billing feature, or combine the beta flag and billing feature with an explicit `condition` during transition.
 - Keep `hidden: true` only for blanket hiding from all customers.
-- Do not add real source or destination usages of `hidden.gate` until the webapp evaluator for this metadata is deployed.
 
 ## How you can provide your destination connection setting details
 
