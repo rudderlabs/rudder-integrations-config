@@ -43,3 +43,11 @@
 - Production rollback execution flows through `.github/workflows/rollback.yml` -> `.github/workflows/deploy-to-prod.yml` -> `.github/workflows/deploy.yml`.
 - The deploy ref must be propagated from the rollback caller (`github.ref`) into `deploy-to-prod` and then into `deploy.yml` so rollback deploys the selected tag/branch instead of implicitly defaulting to `main`.
 - Version/Slack metadata and deployed code should be derived from the same resolved ref to keep release reporting and actual deployed artifact aligned.
+
+## INT-6502 — Destination Versions Archive Contract
+
+- Destination deploy payload assembly in `scripts/deployToDB.py::update_diff_db` now includes a top-level `versions` object built from `<definition>/versions/<major>/`.
+- `build_versions_archive` reads each archived major's triplet (`db-config.json`/`schema.json`/`ui-config.json`). On disk an archived major carries a flat `version` (major.minor string) plus sibling `status`/`retirementDate?`/`migrationDocsUrl?`, mirroring the root db-config; the assembled `versions[major]` entry renames `version` to `number` and carries `config`/`configSchema`/`uiConfig`. It raises on a missing/invalid `version`, an out-of-enum `status`, or a missing config/configSchema/uiConfig slice rather than emitting a partial entry.
+- `versions` is a deploy-payload contract only: it is assembled at deploy time and is NOT part of the on-disk `db-config-schema.json`, which validates authored root `db-config.json` files (these carry `version` but never `fallbackVersion` or `versions`; `fallbackVersion` is computed on the fly downstream).
+- When no `versions/` directory exists, payload construction sets `versions` to `{}` to allow jsondiff-driven clearing of previously persisted archive state.
+- Current deploy file-loading behavior remains root-first (`db-config.json`/`ui-config.json`/`schema.json` at destination root), so nested version assets affect deployment only through explicit archive-building logic.

@@ -205,6 +205,7 @@ describe('Destination Definition validation tests', () => {
     {
       description: 'missing "name" and "displayName" properties',
       input: {
+        version: '1.0',
         config: {
           supportedSourceTypes: ['web'],
           destConfig: {
@@ -216,10 +217,25 @@ describe('Destination Definition validation tests', () => {
         '[" must have required property \'name\'"," must have required property \'displayName\'"]',
     },
     {
+      description: 'missing "version" property',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+        },
+      },
+      expected: '[" must have required property \'version\'"]',
+    },
+    {
       description: 'hybridModeCloudEventsFilter is not a valid map',
       input: {
         name: 'test',
         displayName: 'Test',
+        version: '1.0',
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -235,6 +251,7 @@ describe('Destination Definition validation tests', () => {
       input: {
         name: 'test',
         displayName: 'Test',
+        version: '1.0',
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -250,6 +267,7 @@ describe('Destination Definition validation tests', () => {
       input: {
         name: 'test',
         displayName: 'Test',
+        version: '1.0',
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -272,6 +290,7 @@ describe('Destination Definition validation tests', () => {
       input: {
         name: 'test',
         displayName: 'Test',
+        version: '1.0',
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -290,6 +309,7 @@ describe('Destination Definition validation tests', () => {
       input: {
         name: 'test',
         displayName: 'Test',
+        version: '1.0',
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -311,6 +331,7 @@ describe('Destination Definition validation tests', () => {
       input: {
         name: 'test',
         displayName: 'Test',
+        version: '1.0',
         config: {
           destConfig: {
             defaultConfig: ['temp'],
