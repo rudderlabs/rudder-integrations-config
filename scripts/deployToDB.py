@@ -164,15 +164,15 @@ def build_versions_archive(directory):
         # On disk, an archived major carries a flat `version` (major.minor string)
         # plus sibling `status`/`retirementDate?`/`migrationDocsUrl?` — the same
         # shape as the root db-config.json. The archive entry the backend persists
-        # renames `version` to `number`.
-        number = versioned_data.get("version")
-        if not isinstance(number, str) or not re.fullmatch(r"\d+\.\d+", number):
+        # carries it under the same `version` key.
+        version = versioned_data.get("version")
+        if not isinstance(version, str) or not re.fullmatch(r"\d+\.\d+", version):
             raise ValueError(
                 f"Archived version requires a major.minor `version` string in {major_directory}/db-config.json"
             )
-        if number.split(".")[0] != major:
+        if version.split(".")[0] != major:
             raise ValueError(
-                f"Archived `version` ({number}) major does not match directory '{major}' in {major_directory}/db-config.json"
+                f"Archived `version` ({version}) major does not match directory '{major}' in {major_directory}/db-config.json"
             )
 
         status = versioned_data.get("status")
@@ -181,7 +181,7 @@ def build_versions_archive(directory):
                 f"Archived version `status` must be one of {list(VERSION_ARCHIVE_STATUSES)} in {major_directory}/db-config.json"
             )
 
-        entry = {"number": number, "status": status}
+        entry = {"version": version, "status": status}
         for slice_key in ("config", "configSchema"):
             slice_value = versioned_data.get(slice_key)
             if not isinstance(slice_value, dict):
