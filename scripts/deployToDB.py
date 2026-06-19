@@ -25,6 +25,10 @@ BLACK_LIST_DESTINATIONS = ["TEST_DESTINATION"]
 # DEPLOY_ENV variable. Production is the only environment that skips the
 # black-listed definitions above; on any other environment they deploy normally.
 PRODUCTION_ENVIRONMENT = "production"
+# Accepted deploy environments. `--environment` is required and must match one
+# of these exactly (no normalization), so a missing or misspelled value fails
+# loudly instead of silently bypassing the production skip above.
+VALID_ENVIRONMENTS = ("development", "staging", "production")
 # Top-level fields that map to nullable DB columns. Keep in sync with the DDL
 # for `destination_definitions` / `source_definitions`. See
 # `normalize_nullable_column_deletions` for why this list matters.
@@ -119,6 +123,12 @@ def get_command_line_arguments():
         )
     else:
         SELECTORS = [selector]
+
+    if environment not in VALID_ENVIRONMENTS:
+        invalid_args.append(
+            "--environment is required and must be one of: "
+            + ", ".join(VALID_ENVIRONMENTS)
+        )
 
     if invalid_args:
         print("Error: The following arguments or environment variables are invalid:")

@@ -1,6 +1,7 @@
 import os
 import sys
 import unittest
+from unittest import mock
 
 # Import the deploy script as a top-level module: it resolves its sibling
 # modules (`constants`, `utils`) relative to the scripts directory, so that
@@ -33,6 +34,28 @@ class TestDeployBlackList(unittest.TestCase):
     def test_regular_destination_never_black_listed(self):
         for environment in ("development", "staging", "production"):
             self.assertFalse(deployToDB.is_black_listed("active_campaign", environment))
+
+
+class TestEnvironmentValidation(unittest.TestCase):
+    """`--environment` is required and validated, so a missing or misspelled
+    value fails loudly rather than silently bypassing the production skip."""
+
+    def _parse(self, *extra):
+        argv = ["deployToDB.py", "http://localhost:5050", "user", "pass", *extra]
+        with mock.patch.object(sys, "argv", argv):
+            return deployToDB.get_command_line_arguments()
+
+    def test_valid_environment_is_returned(self):
+        # environment is the last element of the returned tuple.
+        self.assertEqual(self._parse("--environment", "production")[-1], "production")
+
+    def test_missing_environment_exits(self):
+        with self.assertRaises(SystemExit):
+            self._parse()
+
+    def test_invalid_environment_exits(self):
+        with self.assertRaises(SystemExit):
+            self._parse("--environment", "prod")
 
 
 if __name__ == "__main__":

@@ -401,6 +401,29 @@ describe('Destination Definition validation tests', () => {
       },
       expected: '["config.supportedAccountDefinitions must NOT have additional properties"]',
     },
+    {
+      description: 'unknown property under options.hidden object variant is rejected',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+        },
+        options: {
+          hidden: {
+            featureFlagName: 'AMP_test',
+            featureFlagValue: false,
+            unknownHiddenKey: 'x',
+          },
+        },
+      },
+      expected:
+        '["options.hidden must be boolean","options.hidden must NOT have additional properties","options.hidden must match a schema in anyOf"]',
+    },
   ];
 
   it.each(malformedDestDefConfigs)('$description', async (testCase) => {

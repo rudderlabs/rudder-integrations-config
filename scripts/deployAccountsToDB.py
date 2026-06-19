@@ -20,6 +20,10 @@ BLACK_LIST_DESTINATIONS = []
 # DEPLOY_ENV variable. Production is the only environment that skips the
 # black-listed definitions above.
 PRODUCTION_ENVIRONMENT = "production"
+# Accepted deploy environments. `--environment` is required and must match one
+# of these exactly, so a missing or misspelled value fails loudly instead of
+# silently bypassing the production skip above.
+VALID_ENVIRONMENTS = ("development", "staging", "production")
 ENVIRONMENT = None
 
 # Top-level fields that map to nullable DB columns on `account_definitions`.
@@ -85,6 +89,11 @@ def get_command_line_arguments():
     if password is None:
         invalid_args.append(
             "3rd positional argument or API_PASSWORD environment variable is missing"
+        )
+    if environment not in VALID_ENVIRONMENTS:
+        invalid_args.append(
+            "--environment is required and must be one of: "
+            + ", ".join(VALID_ENVIRONMENTS)
         )
 
     if invalid_args:
