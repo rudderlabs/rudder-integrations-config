@@ -16,9 +16,9 @@ from utils import (
 )
 
 BLACK_LIST_DESTINATIONS = []
-# The deploy target environment is propagated from the GitHub workflow via the
-# DEPLOY_ENV variable. Production is the only environment that skips the
-# black-listed definitions above.
+# The deploy target environment is supplied by the `--environment` CLI flag (the
+# GitHub workflow passes its DEPLOY_ENV value through to it). Production is the
+# only environment that skips the black-listed definitions above.
 PRODUCTION_ENVIRONMENT = "production"
 # Accepted deploy environments. `--environment` is required and must match one
 # of these exactly, so a missing or misspelled value fails loudly instead of
