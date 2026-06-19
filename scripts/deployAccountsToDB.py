@@ -16,6 +16,11 @@ from utils import (
 )
 
 BLACK_LIST_DESTINATIONS = []
+# The deploy target environment is propagated from the GitHub workflow via the
+# DEPLOY_ENV variable. Production is the only environment that skips the
+# black-listed definitions above.
+PRODUCTION_ENVIRONMENT = "production"
+ENVIRONMENT = None
 
 # Top-level fields that map to nullable DB columns on `account_definitions`.
 # Keep in sync with the DDL. See `normalize_nullable_column_deletions` for why
@@ -53,6 +58,11 @@ def get_command_line_arguments():
         help="Show detailed JSON reports in addition to summary",
         default=False,
     )
+    parser.add_argument(
+        "--environment",
+        help="Target deploy environment (e.g. development, staging, production).",
+        default=None,
+    )
 
     args = parser.parse_args()
 
@@ -60,6 +70,7 @@ def get_command_line_arguments():
     username = args.username or os.getenv("API_USER")
     password = args.password or os.getenv("API_PASSWORD")
     definition_name = args.definition_name or os.getenv("DEFINITION_NAME")
+    environment = args.environment
 
     invalid_args = []
 
@@ -89,6 +100,7 @@ def get_command_line_arguments():
         definition_name,
         args.dry_run,
         args.verbose,
+        environment,
     )
 
 
@@ -244,9 +256,9 @@ def update_account_db(
         for item in current_items:
             if (
                 item.upper() in BLACK_LIST_DESTINATIONS
-                and "api.rudderstack.com" in CONTROL_PLANE_URL
+                and ENVIRONMENT == PRODUCTION_ENVIRONMENT
             ):
-                print("Skipping BlakcListed Destination: ", item)
+                print("Skipping black-listed destination: ", item)
                 continue
 
             item_path = f"./{CONFIG_DIR}/{category}/{item}"
@@ -345,9 +357,15 @@ def update_account_db(
 
 if __name__ == "__main__":
     # Get command line arguments
-    CONTROL_PLANE_URL, USERNAME, PASSWORD, DEFINITION_NAME, DRY_RUN, VERBOSE = (
-        get_command_line_arguments()
-    )
+    (
+        CONTROL_PLANE_URL,
+        USERNAME,
+        PASSWORD,
+        DEFINITION_NAME,
+        DRY_RUN,
+        VERBOSE,
+        ENVIRONMENT,
+    ) = get_command_line_arguments()
     AUTH = (USERNAME, PASSWORD)
 
     # Initialize debug logging if verbose mode is enabled

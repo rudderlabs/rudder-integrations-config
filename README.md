@@ -57,7 +57,7 @@ The below commands deploy integration definitions and account configurations to 
 ```
 python3 ./scripts/deployToDB.py --help
 
-usage: deployToDB.py [-h] [--dry-run] [--verbose] [control_plane_url] [username] [password] [selector] [item_name]
+usage: deployToDB.py [-h] [--dry-run] [--verbose] [--environment ENVIRONMENT] [control_plane_url] [username] [password] [selector] [item_name]
 
 Script to deploy config files to DB.
 
@@ -72,6 +72,7 @@ options:
   -h, --help         show this help message and exit
   --dry-run          Show what would be changed without making actual changes to the database
   --verbose          Show detailed JSON reports in addition to summary
+  --environment ENV  Target deploy environment; production skips black-listed (test) definitions
 ```
 
 ## Deploy Account Configurations
@@ -79,7 +80,7 @@ options:
 ```
 python3 ./scripts/deployAccountsToDB.py --help
 
-usage: deployAccountsToDB.py [-h] [--dry-run] [--verbose] [control_plane_url] [username] [password] [definition_name]
+usage: deployAccountsToDB.py [-h] [--dry-run] [--verbose] [--environment ENVIRONMENT] [control_plane_url] [username] [password] [definition_name]
 
 Script to deploy account configurations to DB.
 
@@ -93,6 +94,7 @@ options:
   -h, --help         show this help message and exit
   --dry-run          Show what would be changed without making actual changes to the database
   --verbose          Show detailed JSON reports in addition to summary
+  --environment ENV  Target deploy environment; production skips black-listed (test) definitions
 ```
 
 #### Positional argument environment variable fallback table
