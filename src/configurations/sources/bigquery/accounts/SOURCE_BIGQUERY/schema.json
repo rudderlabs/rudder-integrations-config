@@ -1,0 +1,30 @@
+{
+  "optionsSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["projectId"],
+    "properties": {
+      "projectId": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9.:-]{4,28}[a-z0-9]$",
+        "description": "GCP project ID"
+      },
+      "location": {
+        "type": "string",
+        "description": "BigQuery dataset location (e.g., US, EU)"
+      }
+    }
+  },
+  "secretSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["credentials"],
+    "properties": {
+      "credentials": {
+        "type": "string",
+        "pattern": "^[\\s\\S]+$",
+        "description": "GCP service account key JSON"
+      }
+    }
+  }
+}

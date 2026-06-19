@@ -633,6 +633,51 @@ describe('Source Definition validation tests', () => {
       expected: 'must NOT have additional properties',
       exact: false,
     },
+    {
+      description: 'config.supportedAccountDefinitions.rudderAccountId with non-array value',
+      input: {
+        name: 'test_source',
+        displayName: 'Test Source',
+        type: 'cloud',
+        category: 'webhook',
+        config: {
+          supportedAccountDefinitions: {
+            rudderAccountId: 'SOURCE_TEST_OAUTH',
+          },
+        },
+      },
+      expected: '["config.supportedAccountDefinitions.rudderAccountId must be array"]',
+    },
+    {
+      description: 'config.supportedAccountDefinitions.rudderAccountId with empty array',
+      input: {
+        name: 'test_source',
+        displayName: 'Test Source',
+        type: 'cloud',
+        category: 'webhook',
+        config: {
+          supportedAccountDefinitions: {
+            rudderAccountId: [],
+          },
+        },
+      },
+      expected:
+        '["config.supportedAccountDefinitions.rudderAccountId must NOT have fewer than 1 items"]',
+    },
+    {
+      description: 'config.supportedAccountDefinitions with empty object',
+      input: {
+        name: 'test_source',
+        displayName: 'Test Source',
+        type: 'cloud',
+        category: 'webhook',
+        config: {
+          supportedAccountDefinitions: {},
+        },
+      },
+      expected:
+        '["config.supportedAccountDefinitions must NOT have fewer than 1 properties"]',
+    },
   ];
 
   it.each(malformedSrcDefConfigs)('$description', async (testCase) => {
@@ -699,6 +744,21 @@ describe('Source Definition validation tests', () => {
         }),
       ),
     ).resolves.toEqual(true);
+  });
+
+  it('config.supportedAccountDefinitions.rudderAccountId with valid array value is accepted', async () => {
+    const srcDefConfig = {
+      name: 'test_source',
+      displayName: 'Test Source',
+      type: 'cloud',
+      category: 'webhook',
+      config: {
+        supportedAccountDefinitions: {
+          rudderAccountId: ['SOURCE_TEST_OAUTH'],
+        },
+      },
+    };
+    await expect(validateSourceDefinitions(srcDefConfig)).resolves.toEqual(true);
   });
 });
 
