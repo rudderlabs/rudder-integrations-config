@@ -258,6 +258,32 @@
           "default": false
         }
       }
+    },
+    "config": {
+      "type": "object",
+      "title": "Configuration",
+      "description": "This hosts all the source parameters.",
+      "properties": {
+        "supportedAccountDefinitions": {
+          "type": "object",
+          "title": "Supported Account Definitions",
+          "description": "Account definitionIds for the source.",
+          "$comment": "Account definitionIds (each the `name` of an account definition under this source's accounts/ directory) that this source supports. The account's secret and option fields are declared on the referenced account definition itself (its config.secretFields / config.optionFields, validated by the account's secretSchema / optionsSchema).",
+          "minProperties": 1,
+          "properties": {
+            "rudderAccountId": {
+              "type": "array",
+              "title": "Rudder Account Id",
+              "description": "The account definitionId for the source.",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          }
+        }
+      }
     }
   }
 }

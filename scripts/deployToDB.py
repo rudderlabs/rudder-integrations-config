@@ -4,6 +4,7 @@ import os
 import sys
 import jsondiff
 import argparse
+import re
 from constants import CONFIG_DIR
 from utils import (
     get_all_config_definitions,
@@ -20,6 +21,21 @@ BLACK_LIST_DESTINATIONS = ["RUDDER_TEST"]
 # for `destination_definitions` / `source_definitions`. See
 # `normalize_nullable_column_deletions` for why this list matters.
 NULLABLE_COLUMN_FIELDS = ("options", "uiConfig", "configSchema")
+# Allowed lifecycle statuses for archived (non-current) majors in the `versions`
+# archive. The current version is the served default, so its status is implicit.
+VERSION_ARCHIVE_STATUSES = ("supported", "retired")
+# Top-level fields excluded from the destination update diff: changes confined
+# to these alone should neither trigger an update nor show up in the diff report.
+IGNORED_DESTINATION_DIFF_FIELDS = ("version", "versions")
+
+CONTROL_PLANE_URL = None
+USERNAME = None
+PASSWORD = None
+SELECTORS = []
+ITEM_NAME = None
+DRY_RUN = True
+VERBOSE = False
+AUTH = (None, None)
 
 
 def get_command_line_arguments():
@@ -106,17 +122,90 @@ def get_command_line_arguments():
     )
 
 
-CONTROL_PLANE_URL, USERNAME, PASSWORD, SELECTORS, ITEM_NAME, DRY_RUN, VERBOSE = (
-    get_command_line_arguments()
-)
-
-# CONSTANTS
-AUTH = (USERNAME, PASSWORD)
-#########################
+def initialize_runtime_config():
+    global CONTROL_PLANE_URL, USERNAME, PASSWORD, SELECTORS, ITEM_NAME, DRY_RUN, VERBOSE, AUTH
+    (
+        CONTROL_PLANE_URL,
+        USERNAME,
+        PASSWORD,
+        SELECTORS,
+        ITEM_NAME,
+        DRY_RUN,
+        VERBOSE,
+    ) = get_command_line_arguments()
+    AUTH = (USERNAME, PASSWORD)
 
 
 #########################
 # UTIL METHODS
+
+
+def build_versions_archive(directory):
+    versions_directory = os.path.join(directory, "versions")
+    if not os.path.isdir(versions_directory):
+        return {}
+
+    versions_archive = {}
+    for major in sorted(
+        os.listdir(versions_directory),
+        key=lambda name: (0, int(name)) if name.isdigit() else (1, name),
+    ):
+        major_directory = os.path.join(versions_directory, major)
+        if not os.path.isdir(major_directory):
+            continue
+
+        if not re.fullmatch(r"[1-9]\d*", major):
+            raise ValueError(
+                f"Archived version directory name must be a canonical major integer, got '{major}' in {versions_directory}"
+            )
+
+        versioned_data = get_file_content(major_directory)
+
+        # On disk, an archived major carries a flat `version` (major.minor string)
+        # plus sibling `status`/`retirementDate?`/`migrationDocsUrl?` — the same
+        # shape as the root db-config.json. The archive entry the backend persists
+        # carries it under the same `version` key.
+        version = versioned_data.get("version")
+        if not isinstance(version, str) or not re.fullmatch(r"\d+\.\d+", version):
+            raise ValueError(
+                f"Archived version requires a major.minor `version` string in {major_directory}/db-config.json"
+            )
+        if version.split(".")[0] != major:
+            raise ValueError(
+                f"Archived `version` ({version}) major does not match directory '{major}' in {major_directory}/db-config.json"
+            )
+
+        status = versioned_data.get("status")
+        if status not in VERSION_ARCHIVE_STATUSES:
+            raise ValueError(
+                f"Archived version `status` must be one of {list(VERSION_ARCHIVE_STATUSES)} in {major_directory}/db-config.json"
+            )
+
+        entry = {"version": version, "status": status}
+        for slice_key in ("config", "configSchema"):
+            slice_value = versioned_data.get(slice_key)
+            if not isinstance(slice_value, dict):
+                raise ValueError(
+                    f"Archived version is missing a valid `{slice_key}` object in {major_directory}"
+                )
+            entry[slice_key] = slice_value
+
+        # `uiConfig` may be an object (current `baseTemplate` form) or an array
+        # (legacy form), so accept either rather than forcing a dict.
+        ui_config = versioned_data.get("uiConfig")
+        if not isinstance(ui_config, (dict, list)):
+            raise ValueError(
+                f"Archived version is missing a valid `uiConfig` object or array in {major_directory}"
+            )
+        entry["uiConfig"] = ui_config
+
+        for optional_key in ("retirementDate", "migrationDocsUrl"):
+            if optional_key in versioned_data:
+                entry[optional_key] = versioned_data[optional_key]
+
+        versions_archive[major] = entry
+
+    return versions_archive
 
 
 def update_diff_db(
@@ -146,60 +235,85 @@ def update_diff_db(
             continue
 
         directory = f"./{CONFIG_DIR}/{selector}s/{item}"
-        updated_data = get_file_content(directory)
+        # Track the current operation so a failure can name exactly what broke.
+        # Start with the directory name; switch to the definition name once known.
+        item_name = item
+        operation = "loading config files"
+        try:
+            updated_data = get_file_content(directory)
+            if selector == "destination":
+                operation = "building versions archive"
+                updated_data["versions"] = build_versions_archive(directory)
 
-        persisted_data = persisted_by_name.get(updated_data["name"])
+            item_name = updated_data["name"]
+            persisted_data = persisted_by_name.get(item_name)
 
-        if persisted_data is not None:
-            diff = jsondiff.diff(persisted_data, updated_data, marshal=True)
-            normalize_nullable_column_deletions(
-                diff, persisted_data, updated_data, NULLABLE_COLUMN_FIELDS
-            )
+            if persisted_data is not None:
+                diff = jsondiff.diff(persisted_data, updated_data, marshal=True)
+                normalize_nullable_column_deletions(
+                    diff, persisted_data, updated_data, NULLABLE_COLUMN_FIELDS
+                )
 
-            if len(diff.keys()) > 0:  # changes exist
-                status, _ = update_config_definition(
+                # Drop version-related fields so changes confined to them don't
+                # trigger an update or appear in the reported diff. Destination
+                # definitions only.
+                if selector == "destination":
+                    for ignored_field in IGNORED_DESTINATION_DIFF_FIELDS:
+                        diff.pop(ignored_field, None)
+
+                if len(diff.keys()) > 0:  # changes exist
+                    operation = "updating definition"
+                    status, _ = update_config_definition(
+                        CONTROL_PLANE_URL,
+                        selector,
+                        item_name,
+                        updated_data,
+                        auth=AUTH,
+                        dry_run=dry_run,
+                        verbose=verbose,
+                    )
+                    final_report.append(
+                        {
+                            "name": item_name,
+                            "action": "update",
+                            "status": status,
+                            "diff": diff if dry_run else None,
+                        }
+                    )
+                else:
+                    final_report.append(
+                        {
+                            "name": item_name,
+                            "action": "N/A",
+                            "status": "No changes detected",
+                        }
+                    )
+
+            else:
+                operation = "creating definition"
+                status, _ = create_config_definition(
                     CONTROL_PLANE_URL,
                     selector,
-                    updated_data["name"],
                     updated_data,
-                    auth=AUTH,
+                    AUTH,
                     dry_run=dry_run,
                     verbose=verbose,
                 )
-                action = "update"
                 final_report.append(
                     {
-                        "name": updated_data["name"],
-                        "action": action,
+                        "name": item_name,
+                        "action": "create",
                         "status": status,
-                        "diff": diff if dry_run else None,
+                        "data": updated_data if dry_run else None,
                     }
                 )
-            else:
-                final_report.append(
-                    {
-                        "name": updated_data["name"],
-                        "action": "N/A",
-                        "status": "No changes detected",
-                    }
-                )
-
-        else:
-            status, _ = create_config_definition(
-                CONTROL_PLANE_URL,
-                selector,
-                updated_data,
-                AUTH,
-                dry_run=dry_run,
-                verbose=verbose,
-            )
-            action = "create"
+        except Exception as error:
+            print(f"❌ {item_name}: failed while {operation} — {error}")
             final_report.append(
                 {
-                    "name": updated_data["name"],
-                    "action": action,
-                    "status": status,
-                    "data": updated_data if dry_run else None,
+                    "name": item_name,
+                    "action": "failed",
+                    "status": f"Failed while {operation}: {error}",
                 }
             )
 
@@ -265,7 +379,9 @@ def log_execution_plan():
 
 
 def is_failed(item):
-    """Check if a report item represents a failed API call."""
+    """Check if a report item represents a failed operation."""
+    if item.get("action") == "failed":
+        return True
     status = item.get("status")
     if isinstance(status, int):
         return status < 200 or status > 300
@@ -347,6 +463,8 @@ def print_summary(selector, final_report, dry_run=False):
 
 
 if __name__ == "__main__":
+    initialize_runtime_config()
+
     # Initialize debug logging if verbose mode is enabled
     if VERBOSE:
         initialize_debug_log()
@@ -359,6 +477,8 @@ if __name__ == "__main__":
         print("DRY RUN MODE - No changes will be made to the database")
         print("=" * 60)
 
+    has_failures = False
+
     for selector in SELECTORS:
         print("\n")
         print("#" * 50)
@@ -368,9 +488,20 @@ if __name__ == "__main__":
         )
 
         # Single batch API call to fetch all definitions for this selector
-        persisted_store = get_all_config_definitions(
-            CONTROL_PLANE_URL, selector, auth=AUTH, verbose=VERBOSE
-        )
+        try:
+            persisted_store = get_all_config_definitions(
+                CONTROL_PLANE_URL, selector, AUTH, VERBOSE
+            )
+        except Exception as error:
+            print(
+                f"\n❌ Failed to fetch existing {selector} definitions from "
+                f"{CONTROL_PLANE_URL} — {error}"
+            )
+            print(
+                "   Check that the control plane URL is reachable and the "
+                "credentials are valid, then retry."
+            )
+            sys.exit(1)
         persisted_by_name = {item["name"]: item for item in persisted_store}
 
         final_report = update_diff_db(
@@ -379,6 +510,7 @@ if __name__ == "__main__":
 
         # Always show summary first (most important for users)
         print_summary(selector, final_report, DRY_RUN)
+        has_failures = has_failures or any(is_failed(item) for item in final_report)
 
         # Show detailed reports only when verbose flag is used (write to deploy-debug.log)
         if VERBOSE:
@@ -415,3 +547,5 @@ if __name__ == "__main__":
     if VERBOSE:
         print(f"\n📝 Debug logs have been written to: debug.log")
         print(f"💡 Review this file for detailed API request/response information")
+
+    sys.exit(1 if has_failures else 0)

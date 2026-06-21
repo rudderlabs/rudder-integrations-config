@@ -34,3 +34,18 @@
 
 - No repo-local CI optimization currently skips tests for documentation-only changes; pull requests still run the standard `Tests` and `Code quality checks` workflows (`.github/workflows/test.yml`, `.github/workflows/verify.yml`).
 - If a docs-only validation workflow is introduced later, document the criteria and workflow path here.
+
+## INT-6529 — Versioned Destination Field Sync Pattern
+
+- For destination fields exposed as UI selects and enforced in schema (for example Klaviyo `apiVersion`), changes should be made atomically across UI options and schema enum/defaults; treating these as a single change unit avoids publishing a UI option that backend schema validation rejects.
+- When product requirements are explicitly unresolved (for example conditional non-empty consent rules for a specific API version), keep existing schema validation behavior unchanged and defer stricter conditional rules until approved, while preserving current safe defaults.
+
+## INT-6540 — Resolve Ref by Trigger Context in Reusable Workflows
+
+- In reusable workflow chains, add an explicit `deployment_ref` input for `workflow_call` paths because pull request context is not guaranteed.
+- Resolve the effective ref once (caller-supplied for `workflow_call`; PR head SHA for merged release PR paths) and reuse that value consistently for checkout, version extraction, and downstream deploy inputs.
+
+## INT-6502 — Import-Safe Python CLI Pattern
+
+- For Python deploy tooling, keep argument parsing and runtime config initialization behind a `__main__`-only path so module imports remain side-effect free (importable without triggering CLI parsing).
+- `scripts/deployToDB.py` follows this by delaying CLI/runtime initialization to `initialize_runtime_config()` at execution time, which preserves command-line behavior while keeping the module safe to import.

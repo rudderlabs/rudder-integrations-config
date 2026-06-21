@@ -205,6 +205,7 @@ describe('Destination Definition validation tests', () => {
     {
       description: 'missing "name" and "displayName" properties',
       input: {
+        version: '1.0',
         config: {
           supportedSourceTypes: ['web'],
           destConfig: {
@@ -216,10 +217,25 @@ describe('Destination Definition validation tests', () => {
         '[" must have required property \'name\'"," must have required property \'displayName\'"]',
     },
     {
+      description: 'missing "version" property',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+        },
+      },
+      expected: '[" must have required property \'version\'"]',
+    },
+    {
       description: 'hybridModeCloudEventsFilter is not a valid map',
       input: {
         name: 'test',
         displayName: 'Test',
+        version: '1.0',
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -235,6 +251,7 @@ describe('Destination Definition validation tests', () => {
       input: {
         name: 'test',
         displayName: 'Test',
+        version: '1.0',
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -250,6 +267,7 @@ describe('Destination Definition validation tests', () => {
       input: {
         name: 'test',
         displayName: 'Test',
+        version: '1.0',
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -272,6 +290,7 @@ describe('Destination Definition validation tests', () => {
       input: {
         name: 'test',
         displayName: 'Test',
+        version: '1.0',
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -290,6 +309,7 @@ describe('Destination Definition validation tests', () => {
       input: {
         name: 'test',
         displayName: 'Test',
+        version: '1.0',
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -311,6 +331,7 @@ describe('Destination Definition validation tests', () => {
       input: {
         name: 'test',
         displayName: 'Test',
+        version: '1.0',
         config: {
           destConfig: {
             defaultConfig: ['temp'],
@@ -379,12 +400,72 @@ describe('Source Definition validation tests', () => {
       expected:
         '["options.internalSecretKeys must NOT have duplicate items (items ## 1 and 0 are identical)"]',
     },
+    {
+      description: 'config.supportedAccountDefinitions.rudderAccountId with non-array value',
+      input: {
+        name: 'test_source',
+        displayName: 'Test Source',
+        type: 'cloud',
+        category: 'webhook',
+        config: {
+          supportedAccountDefinitions: {
+            rudderAccountId: 'SOURCE_TEST_OAUTH',
+          },
+        },
+      },
+      expected: '["config.supportedAccountDefinitions.rudderAccountId must be array"]',
+    },
+    {
+      description: 'config.supportedAccountDefinitions.rudderAccountId with empty array',
+      input: {
+        name: 'test_source',
+        displayName: 'Test Source',
+        type: 'cloud',
+        category: 'webhook',
+        config: {
+          supportedAccountDefinitions: {
+            rudderAccountId: [],
+          },
+        },
+      },
+      expected:
+        '["config.supportedAccountDefinitions.rudderAccountId must NOT have fewer than 1 items"]',
+    },
+    {
+      description: 'config.supportedAccountDefinitions with empty object',
+      input: {
+        name: 'test_source',
+        displayName: 'Test Source',
+        type: 'cloud',
+        category: 'webhook',
+        config: {
+          supportedAccountDefinitions: {},
+        },
+      },
+      expected:
+        '["config.supportedAccountDefinitions must NOT have fewer than 1 properties"]',
+    },
   ];
 
   it.each(malformedSrcDefConfigs)('$description', async (testCase) => {
     await expect(validateSourceDefinitions(testCase.input)).rejects.toThrow(
       new Error(testCase.expected),
     );
+  });
+
+  it('config.supportedAccountDefinitions.rudderAccountId with valid array value is accepted', async () => {
+    const srcDefConfig = {
+      name: 'test_source',
+      displayName: 'Test Source',
+      type: 'cloud',
+      category: 'webhook',
+      config: {
+        supportedAccountDefinitions: {
+          rudderAccountId: ['SOURCE_TEST_OAUTH'],
+        },
+      },
+    };
+    await expect(validateSourceDefinitions(srcDefConfig)).resolves.toEqual(true);
   });
 });
 
