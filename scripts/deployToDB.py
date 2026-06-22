@@ -24,6 +24,9 @@ NULLABLE_COLUMN_FIELDS = ("options", "uiConfig", "configSchema")
 # Allowed lifecycle statuses for archived (non-current) majors in the `versions`
 # archive. The current version is the served default, so its status is implicit.
 VERSION_ARCHIVE_STATUSES = ("supported", "retired")
+# Top-level fields excluded from the destination update diff: changes confined
+# to these alone should neither trigger an update nor show up in the diff report.
+IGNORED_DESTINATION_DIFF_FIELDS = ("version", "versions")
 
 CONTROL_PLANE_URL = None
 USERNAME = None
@@ -161,15 +164,15 @@ def build_versions_archive(directory):
         # On disk, an archived major carries a flat `version` (major.minor string)
         # plus sibling `status`/`retirementDate?`/`migrationDocsUrl?` — the same
         # shape as the root db-config.json. The archive entry the backend persists
-        # renames `version` to `number`.
-        number = versioned_data.get("version")
-        if not isinstance(number, str) or not re.fullmatch(r"\d+\.\d+", number):
+        # carries it under the same `version` key.
+        version = versioned_data.get("version")
+        if not isinstance(version, str) or not re.fullmatch(r"\d+\.\d+", version):
             raise ValueError(
                 f"Archived version requires a major.minor `version` string in {major_directory}/db-config.json"
             )
-        if number.split(".")[0] != major:
+        if version.split(".")[0] != major:
             raise ValueError(
-                f"Archived `version` ({number}) major does not match directory '{major}' in {major_directory}/db-config.json"
+                f"Archived `version` ({version}) major does not match directory '{major}' in {major_directory}/db-config.json"
             )
 
         status = versioned_data.get("status")
@@ -178,7 +181,7 @@ def build_versions_archive(directory):
                 f"Archived version `status` must be one of {list(VERSION_ARCHIVE_STATUSES)} in {major_directory}/db-config.json"
             )
 
-        entry = {"number": number, "status": status}
+        entry = {"version": version, "status": status}
         for slice_key in ("config", "configSchema"):
             slice_value = versioned_data.get(slice_key)
             if not isinstance(slice_value, dict):
@@ -250,6 +253,13 @@ def update_diff_db(
                 normalize_nullable_column_deletions(
                     diff, persisted_data, updated_data, NULLABLE_COLUMN_FIELDS
                 )
+
+                # Drop version-related fields so changes confined to them don't
+                # trigger an update or appear in the reported diff. Destination
+                # definitions only.
+                if selector == "destination":
+                    for ignored_field in IGNORED_DESTINATION_DIFF_FIELDS:
+                        diff.pop(ignored_field, None)
 
                 if len(diff.keys()) > 0:  # changes exist
                     operation = "updating definition"

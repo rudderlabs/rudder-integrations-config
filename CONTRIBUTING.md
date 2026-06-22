@@ -5,6 +5,7 @@ Thanks for taking the time and for your help in improving this project!
 ## Table of contents
 
 - [**RudderStack Contributor Agreement**](#rudderstack-contributor-agreement)
+- [**Conventions**](#conventions)
 - [**UI Configuration Development Requirements**](#ui-configuration-development-requirements)
 - [**How you can contribute to RudderStack**](#how-you-can-contribute-to-rudderstack)
 - [**Committing**](#committing)
@@ -13,6 +14,10 @@ Thanks for taking the time and for your help in improving this project!
 ## RudderStack Contributor Agreement
 
 To contribute to this project, we need you to sign the [**Contributor License Agreement ("CLA")**][CLA] for the first commit you make. By agreeing to the [**CLA**][CLA], we can add you to list of approved contributors and review the changes proposed by you.
+
+## Conventions
+
+Before adding new configurations, please review the repository [**conventions**](/CONVENTIONS.md). In particular, account definition names (`accountDefinitionName`) must follow the documented `SCREAMING_SNAKE_CASE` `{CATEGORY}_{TYPE}[_{AUTH_QUALIFIER}]` naming pattern.
 
 ## UI Configuration Development Requirements
 

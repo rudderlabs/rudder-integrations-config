@@ -27,3 +27,8 @@
 
 - `test/validation.test.ts`: broad integration validation across destinations/sources/accounts.
 - `test/validator/validator.test.ts`: unit-level behavior and edge-case tests for validator internals.
+
+## INT-6594 — Facebook Lead Ads Source Definitions
+
+- The legacy FBLA source definition is `src/configurations/sources/facebook_lead_ads/db-config.json`; for INT-6594 it already had `options.isBeta: true` and `options.hidden: true`, so hidden-only rollback work should not be applied there by mistake.
+- The Facebook Lead Ads native source definition is `src/configurations/sources/facebook_lead_ads_native/db-config.json`; PR #2477 made this source GA by removing `options.isBeta: true` and a feature-flagged `options.hidden` object from that definition.

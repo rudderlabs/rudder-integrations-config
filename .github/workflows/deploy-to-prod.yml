@@ -2,6 +2,10 @@ name: Deploy Configurations To Production DB
 
 on:
   workflow_call:
+    inputs:
+      deployment_ref:
+        required: true
+        type: string
     secrets:
       PROD_USERNAME:
         required: true
@@ -42,16 +46,30 @@ jobs:
     if: (((startsWith(github.event.pull_request.head.ref, 'release/') || startsWith(github.event.pull_request.head.ref, 'hotfix-release/')) && github.event.pull_request.merged == true) || github.event_name == 'workflow_call')
     outputs:
       version: ${{ steps.extract_version.outputs.version }}
+      deploy_ref: ${{ steps.resolve_ref.outputs.deploy_ref }}
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
         with:
           egress-policy: audit
 
+      - name: Resolve Deployment Ref
+        id: resolve_ref
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DEPLOYMENT_REF: ${{ inputs.deployment_ref }}
+        run: |
+          if [[ "$EVENT_NAME" == "workflow_call" ]]; then
+            deploy_ref="$DEPLOYMENT_REF"
+          else
+            deploy_ref="main"
+          fi
+          echo "deploy_ref=$deploy_ref" >> "$GITHUB_OUTPUT"
+
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ steps.resolve_ref.outputs.deploy_ref }}
           fetch-depth: 1
 
       - name: Extract Package Version
@@ -71,7 +89,7 @@ jobs:
       deploy_url: https://api.rudderstack.com
       notify: true
       version: ${{ needs.extract-version.outputs.version }}
-      ref: main
+      ref: ${{ needs.extract-version.outputs.deploy_ref }}
     secrets:
       API_USERNAME: ${{ secrets.PROD_USERNAME }}
       API_PASSWORD: ${{ secrets.PROD_PASSWORD }}
