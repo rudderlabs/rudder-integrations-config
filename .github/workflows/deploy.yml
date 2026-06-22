@@ -117,14 +117,16 @@ jobs:
         env:
           PROJECT_NAME: 'Integrations Config'
           RUN_URL: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID: ${{ secrets.SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         with:
           method: chat.postMessage
-          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          token: ${{ env.SLACK_BOT_TOKEN }}
           errors: true
           retries: rapid
           payload: |
             {
-              "channel": "${{ secrets.SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID }}",
+              "channel": "${{ env.SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID }}",
               "text": ${{ toJSON(format(':rotating_light: {0} deployment failed for {1} (`{2}`) on `{3}`. Run: {4}', env.PROJECT_NAME, inputs.environment, inputs.deploy_url, inputs.ref, env.RUN_URL)) }},
               "blocks": [
                 {
