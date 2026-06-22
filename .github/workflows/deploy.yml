@@ -3,6 +3,10 @@ name: Deploy Configurations To DB
 on:
   workflow_call:
     inputs:
+      environment:
+        description: 'Target deploy environment (development, staging, or production). Drives which definitions are skipped on production.'
+        required: true
+        type: string
       deploy_url:
         required: true
         type: string
@@ -27,6 +31,8 @@ on:
       SLACK_BOT_TOKEN:
         required: true
       SLACK_RELEASE_CHANNEL_ID:
+        required: true
+      SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID:
         required: true
 
 permissions:
@@ -86,9 +92,10 @@ jobs:
           API_USER: ${{ secrets.API_USERNAME }}
           API_PASSWORD: ${{ secrets.API_PASSWORD }}
           DEPLOY_URL: ${{ inputs.deploy_url }}
+          DEPLOY_ENV: ${{ inputs.environment }}
           DRY_RUN_FLAG: ${{ inputs.dry_run && '--dry-run' || '--no-dry-run' }}
         run: |
-          python scripts/deployAccountsToDB.py "$DRY_RUN_FLAG" "$DEPLOY_URL"
+          python scripts/deployAccountsToDB.py "$DRY_RUN_FLAG" "$DEPLOY_URL" --environment "$DEPLOY_ENV"
         continue-on-error: false
 
       - name: Deploy Destination & Source Definitions To DB
@@ -96,18 +103,85 @@ jobs:
           API_USER: ${{ secrets.API_USERNAME }}
           API_PASSWORD: ${{ secrets.API_PASSWORD }}
           DEPLOY_URL: ${{ inputs.deploy_url }}
+          DEPLOY_ENV: ${{ inputs.environment }}
           DRY_RUN_FLAG: ${{ inputs.dry_run && '--dry-run' || '--no-dry-run' }}
         run: |
-          python scripts/deployToDB.py "$DRY_RUN_FLAG" "$DEPLOY_URL"
+          python scripts/deployToDB.py "$DRY_RUN_FLAG" "$DEPLOY_URL" --environment "$DEPLOY_ENV"
+
+      - name: Notify Slack Channel On Deployment Failure
+        id: slack_failure
+        # Pinned to v2.1.1 → commit 91efab103c0de0a537f72a35f6b8cda0ee76bf0a
+        uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a
+        continue-on-error: true
+        if: failure() && inputs.dry_run == false
+        env:
+          PROJECT_NAME: 'Integrations Config'
+          RUN_URL: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID: ${{ secrets.SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        with:
+          method: chat.postMessage
+          token: ${{ env.SLACK_BOT_TOKEN }}
+          errors: true
+          retries: rapid
+          payload: |
+            {
+              "channel": "${{ env.SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID }}",
+              "text": ${{ toJSON(format(':rotating_light: {0} deployment failed for {1} (`{2}`) on `{3}`. Run: {4}', env.PROJECT_NAME, inputs.environment, inputs.deploy_url, inputs.ref, env.RUN_URL)) }},
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ${{ toJSON(format(':rotating_light:  {0} Deployment Failed', env.PROJECT_NAME)) }}
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": ${{ toJSON(format('*Target:* {0}', inputs.deploy_url)) }}
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": ${{ toJSON(format('*Environment:* {0}', inputs.environment)) }}
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": ${{ toJSON(format('*Ref:* {0}', inputs.ref)) }}
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": ${{ toJSON(format('*Version:* {0}', inputs.version || 'not provided')) }}
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": ${{ toJSON(format('*Actor:* {0}', github.actor)) }}
+                    }
+                  ]
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ${{ toJSON(format('*Workflow run:* <{0}|Open failed deployment run>', env.RUN_URL)) }}
+                  }
+                }
+              ]
+            }
 
       - name: Notify Slack Channel
         id: slack
         # Pinned to v2.1.1 → commit 91efab103c0de0a537f72a35f6b8cda0ee76bf0a
         uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a
         continue-on-error: true
-        if: inputs.notify == true && inputs.dry_run == false
+        if: success() && inputs.notify == true && inputs.dry_run == false
         env:
-          PROJECT_NAME: 'Rudder Integrations Config'
+          PROJECT_NAME: 'Integrations Config'
           RELEASES_URL: 'https://github.com/rudderlabs/rudder-integrations-config/releases/tag/'
         with:
           method: chat.postMessage

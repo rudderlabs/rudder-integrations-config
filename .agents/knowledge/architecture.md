@@ -52,6 +52,12 @@
 - When no `versions/` directory exists, payload construction sets `versions` to `{}` to allow jsondiff-driven clearing of previously persisted archive state.
 - Current deploy file-loading behavior remains root-first (`db-config.json`/`ui-config.json`/`schema.json` at destination root), so nested version assets affect deployment only through explicit archive-building logic.
 
+## INT-6593 — Deployment Notification Workflow Boundary
+
+- Deployment Slack notifications are implemented in GitHub Actions workflows rather than application code.
+- The reusable deployment workflow `.github/workflows/deploy.yml` owns the Slack notification behavior and declares workflow-call secrets `SLACK_BOT_TOKEN` and `SLACK_RELEASE_CHANNEL_ID`.
+- Caller workflows pass those Slack secrets through deployment wrappers, including `.github/workflows/deploy-to-prod.yml`, `.github/workflows/deploy-to-staging.yml`, `.github/workflows/deploy-to-dev.yml`, `.github/workflows/manual-deploy.yml`, and `.github/workflows/rollback.yml` via the production deploy wrapper.
+
 ## INT-6150 — Delta Lake Config Responsibilities
 
 - Databricks Delta Lake destination configuration is owned by the canonical triplet under `src/configurations/destinations/deltalake/`: `ui-config.json` controls rendered fields, `db-config.json` `destConfig.defaultConfig` is the allowlist for persisted destination config keys, and `schema.json` validates storage-provider-specific config.
