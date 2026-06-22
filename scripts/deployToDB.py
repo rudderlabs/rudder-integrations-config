@@ -16,7 +16,20 @@ from utils import (
 )
 
 ALL_SELECTORS = ["destination", "source"]
-BLACK_LIST_DESTINATIONS = ["RUDDER_TEST"]
+# Definitions to skip when deploying to production. Compared against the
+# directory name upper-cased (which equals the definition `name`). Test
+# destinations are served only on non-prod environments and must never reach
+# production.
+BLACK_LIST_DESTINATIONS = ["TEST_DESTINATION"]
+# The deploy target environment is supplied by the `--environment` CLI flag (the
+# GitHub workflow passes its DEPLOY_ENV value through to it). Production is the
+# only environment that skips the black-listed definitions above; on any other
+# environment they deploy normally.
+PRODUCTION_ENVIRONMENT = "production"
+# Accepted deploy environments. `--environment` is required and must match one
+# of these exactly (no normalization), so a missing or misspelled value fails
+# loudly instead of silently bypassing the production skip above.
+VALID_ENVIRONMENTS = ("development", "staging", "production")
 # Top-level fields that map to nullable DB columns. Keep in sync with the DDL
 # for `destination_definitions` / `source_definitions`. See
 # `normalize_nullable_column_deletions` for why this list matters.
@@ -36,6 +49,7 @@ ITEM_NAME = None
 DRY_RUN = True
 VERBOSE = False
 AUTH = (None, None)
+ENVIRONMENT = None
 
 
 def get_command_line_arguments():
@@ -73,6 +87,11 @@ def get_command_line_arguments():
         help="Show detailed JSON reports in addition to summary",
         default=False,
     )
+    parser.add_argument(
+        "--environment",
+        help="Target deploy environment (e.g. development, staging, production). Black-listed definitions are skipped only on production.",
+        default=None,
+    )
 
     args = parser.parse_args()
 
@@ -81,6 +100,7 @@ def get_command_line_arguments():
     password = args.password or os.getenv("API_PASSWORD")
     selector = args.selector or os.getenv("SELECTOR")
     item_name = args.item_name or os.getenv("ITEM_NAME")
+    environment = args.environment
 
     invalid_args = []
 
@@ -105,6 +125,12 @@ def get_command_line_arguments():
     else:
         SELECTORS = [selector]
 
+    if environment not in VALID_ENVIRONMENTS:
+        invalid_args.append(
+            "--environment is required and must be one of: "
+            + ", ".join(VALID_ENVIRONMENTS)
+        )
+
     if invalid_args:
         print("Error: The following arguments or environment variables are invalid:")
         for arg in invalid_args:
@@ -119,11 +145,12 @@ def get_command_line_arguments():
         item_name,
         args.dry_run,
         args.verbose,
+        environment,
     )
 
 
 def initialize_runtime_config():
-    global CONTROL_PLANE_URL, USERNAME, PASSWORD, SELECTORS, ITEM_NAME, DRY_RUN, VERBOSE, AUTH
+    global CONTROL_PLANE_URL, USERNAME, PASSWORD, SELECTORS, ITEM_NAME, DRY_RUN, VERBOSE, AUTH, ENVIRONMENT
     (
         CONTROL_PLANE_URL,
         USERNAME,
@@ -132,12 +159,22 @@ def initialize_runtime_config():
         ITEM_NAME,
         DRY_RUN,
         VERBOSE,
+        ENVIRONMENT,
     ) = get_command_line_arguments()
     AUTH = (USERNAME, PASSWORD)
 
 
 #########################
 # UTIL METHODS
+
+
+def is_black_listed(item, environment):
+    """A black-listed definition (e.g. the test destination) is skipped only on
+    production; on every other environment it deploys normally."""
+    return (
+        item.upper() in BLACK_LIST_DESTINATIONS
+        and environment == PRODUCTION_ENVIRONMENT
+    )
 
 
 def build_versions_archive(directory):
@@ -226,12 +263,11 @@ def update_diff_db(
         if not os.path.isdir(f"./{CONFIG_DIR}/{selector}s/{item}"):
             print(f"Skipping {item} as it is not a directory")
             continue
-        # check if item is in black list
-        if (
-            item.upper() in BLACK_LIST_DESTINATIONS
-            and CONTROL_PLANE_URL == "https://api.rudderstack.com"
-        ):
-            print(f"Skipping {item} as it is in black list")
+        # Skip black-listed definitions (e.g. the test destination) on production.
+        if is_black_listed(item, ENVIRONMENT):
+            print(
+                f"Skipping {item} as it is black-listed for the {ENVIRONMENT} environment"
+            )
             continue
 
         directory = f"./{CONFIG_DIR}/{selector}s/{item}"
@@ -342,6 +378,7 @@ def log_execution_plan():
     print("EXECUTION PLAN")
     print("=" * 70)
     print(f"Control Plane URL: {CONTROL_PLANE_URL}")
+    print(f"Environment: {ENVIRONMENT}")
     print(f"Username: {USERNAME}")
     print(f"Password: {'*' * len(PASSWORD)}")
     print(f"Selectors to process: {', '.join(SELECTORS)}")
