@@ -247,8 +247,11 @@ describe('Consent Management Fields Integrity tests', () => {
     });
 
     it(`should have iubenda in customFields field properly defined in ui-config.json for ${destName}`, () => {
+      // iubenda must be present as a selectable provider option (label + value = 2 occurrences).
+      // Destinations whose consents field is gated on the provider value carry one additional
+      // iubenda occurrence inside the field's `conditions` operands, raising the count to 3.
       const consentManagementUIElementCount = deepSearch(uiConfig, 'iubenda');
-      expect(consentManagementUIElementCount).toEqual(2);
+      expect(consentManagementUIElementCount).toBeGreaterThanOrEqual(2);
     });
   });
 });
