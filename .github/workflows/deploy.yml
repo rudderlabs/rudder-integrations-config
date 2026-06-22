@@ -125,7 +125,7 @@ jobs:
           payload: |
             {
               "channel": ${{ toJSON(secrets.SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID) }},
-              "text": ${{ toJSON(format(':rotating_light: {0} deployment failed for `{1}` on `{2}`. Run: {3}', env.PROJECT_NAME, inputs.deploy_url, inputs.ref, env.RUN_URL)) }},
+              "text": ${{ toJSON(format(':rotating_light: {0} deployment failed for {1} (`{2}`) on `{3}`. Run: {4}', env.PROJECT_NAME, inputs.environment, inputs.deploy_url, inputs.ref, env.RUN_URL)) }},
               "blocks": [
                 {
                   "type": "header",
@@ -143,6 +143,10 @@ jobs:
                     {
                       "type": "mrkdwn",
                       "text": ${{ toJSON(format('*Target:* {0}', inputs.deploy_url)) }}
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": ${{ toJSON(format('*Environment:* {0}', inputs.environment)) }}
                     },
                     {
                       "type": "mrkdwn",
