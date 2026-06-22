@@ -109,7 +109,7 @@ jobs:
         continue-on-error: true
         if: failure() && inputs.dry_run == false
         env:
-          PROJECT_NAME: 'Rudder Integrations Config'
+          PROJECT_NAME: 'Integrations Config'
           RUN_URL: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
         with:
           method: chat.postMessage
@@ -118,14 +118,14 @@ jobs:
           retries: rapid
           payload: |
             {
-              "channel": "${{ secrets.SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID }}",
-              "text": ":rotating_light: ${{ env.PROJECT_NAME }} deployment failed for `${{ inputs.deploy_url }}` on `${{ inputs.ref }}`. Run: ${{ env.RUN_URL }}",
+              "channel": ${{ toJSON(secrets.SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID) }},
+              "text": ${{ toJSON(format(':rotating_light: {0} deployment failed for `{1}` on `{2}`. Run: {3}', env.PROJECT_NAME, inputs.deploy_url, inputs.ref, env.RUN_URL)) }},
               "blocks": [
                 {
                   "type": "header",
                   "text": {
                     "type": "plain_text",
-                    "text": ":rotating_light:  ${{ env.PROJECT_NAME }} Deployment Failed"
+                    "text": ${{ toJSON(format(':rotating_light:  {0} Deployment Failed', env.PROJECT_NAME)) }}
                   }
                 },
                 {
@@ -136,19 +136,19 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "*Target:*\n${{ inputs.deploy_url }}"
+                      "text": ${{ toJSON(format('*Target:* {0}', inputs.deploy_url)) }}
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Ref:*\n${{ inputs.ref }}"
+                      "text": ${{ toJSON(format('*Ref:* {0}', inputs.ref)) }}
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Version:*\n${{ inputs.version || 'not provided' }}"
+                      "text": ${{ toJSON(format('*Version:* {0}', inputs.version || 'not provided')) }}
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Actor:*\n${{ github.actor }}"
+                      "text": ${{ toJSON(format('*Actor:* {0}', github.actor)) }}
                     }
                   ]
                 },
@@ -156,7 +156,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "*Workflow run:*\n<${{ env.RUN_URL }}|Open failed deployment run>"
+                    "text": ${{ toJSON(format('*Workflow run:* <{0}|Open failed deployment run>', env.RUN_URL)) }}
                   }
                 }
               ]
@@ -167,9 +167,9 @@ jobs:
         # Pinned to v2.1.1 → commit 91efab103c0de0a537f72a35f6b8cda0ee76bf0a
         uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a
         continue-on-error: true
-        if: inputs.notify == true && inputs.dry_run == false
+        if: success() && inputs.notify == true && inputs.dry_run == false
         env:
-          PROJECT_NAME: 'Rudder Integrations Config'
+          PROJECT_NAME: 'Integrations Config'
           RELEASES_URL: 'https://github.com/rudderlabs/rudder-integrations-config/releases/tag/'
         with:
           method: chat.postMessage
