@@ -3,6 +3,10 @@ name: Deploy Configurations To DB
 on:
   workflow_call:
     inputs:
+      environment:
+        description: 'Target deploy environment (development, staging, or production). Drives which definitions are skipped on production.'
+        required: true
+        type: string
       deploy_url:
         required: true
         type: string
@@ -88,9 +92,10 @@ jobs:
           API_USER: ${{ secrets.API_USERNAME }}
           API_PASSWORD: ${{ secrets.API_PASSWORD }}
           DEPLOY_URL: ${{ inputs.deploy_url }}
+          DEPLOY_ENV: ${{ inputs.environment }}
           DRY_RUN_FLAG: ${{ inputs.dry_run && '--dry-run' || '--no-dry-run' }}
         run: |
-          python scripts/deployAccountsToDB.py "$DRY_RUN_FLAG" "$DEPLOY_URL"
+          python scripts/deployAccountsToDB.py "$DRY_RUN_FLAG" "$DEPLOY_URL" --environment "$DEPLOY_ENV"
         continue-on-error: false
 
       - name: Deploy Destination & Source Definitions To DB
@@ -98,9 +103,10 @@ jobs:
           API_USER: ${{ secrets.API_USERNAME }}
           API_PASSWORD: ${{ secrets.API_PASSWORD }}
           DEPLOY_URL: ${{ inputs.deploy_url }}
+          DEPLOY_ENV: ${{ inputs.environment }}
           DRY_RUN_FLAG: ${{ inputs.dry_run && '--dry-run' || '--no-dry-run' }}
         run: |
-          python scripts/deployToDB.py "$DRY_RUN_FLAG" "$DEPLOY_URL"
+          python scripts/deployToDB.py "$DRY_RUN_FLAG" "$DEPLOY_URL" --environment "$DEPLOY_ENV"
 
       - name: Notify Slack Channel On Deployment Failure
         id: slack_failure

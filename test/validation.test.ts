@@ -117,7 +117,8 @@ async function getAccountDefinitionConfig(
 async function getDestinationDefinitionConfig(destName: string) {
   const dirPath = path.resolve(`src/configurations/destinations/${destName}`);
   const configPath = `${dirPath}/db-config.json`;
-  return import(configPath);
+  const config = await import(configPath);
+  return config.default;
 }
 
 const dests = getIntegrationNames('destinations');
@@ -345,6 +346,83 @@ describe('Destination Definition validation tests', () => {
         },
       },
       expected: '["config.hybridModeCloudEventsFilter.web.messageType must be array"]',
+    },
+    {
+      description: 'unknown top-level property is rejected',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        unknownTopLevelKey: true,
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+        },
+      },
+      expected: '[" must NOT have additional properties"]',
+    },
+    {
+      description: 'unknown property under config.auth is rejected',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+          auth: {
+            type: 'OAuth',
+            unknownAuthKey: true,
+          },
+        },
+      },
+      expected: '["config.auth must NOT have additional properties"]',
+    },
+    {
+      description: 'unknown property under config.supportedAccountDefinitions is rejected',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+          supportedAccountDefinitions: {
+            rudderAccountId: ['someAccountDefinitionId'],
+            unknownAccountKey: ['x'],
+          },
+        },
+      },
+      expected: '["config.supportedAccountDefinitions must NOT have additional properties"]',
+    },
+    {
+      description: 'unknown property under options.hidden object variant is rejected',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+        },
+        options: {
+          hidden: {
+            featureFlagName: 'AMP_test',
+            featureFlagValue: false,
+            unknownHiddenKey: 'x',
+          },
+        },
+      },
+      expected:
+        '["options.hidden must be boolean","options.hidden must NOT have additional properties","options.hidden must match a schema in anyOf"]',
     },
   ];
 

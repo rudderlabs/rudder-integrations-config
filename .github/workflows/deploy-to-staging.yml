@@ -19,6 +19,7 @@ jobs:
     if: (startsWith(github.event.pull_request.head.ref, 'release/') || startsWith(github.event.pull_request.head.ref, 'hotfix-release/'))
     uses: ./.github/workflows/deploy.yml
     with:
+      environment: staging
       deploy_url: https://api.staging.rudderlabs.com
       ref: ${{ github.event.pull_request.head.ref }}
     secrets:

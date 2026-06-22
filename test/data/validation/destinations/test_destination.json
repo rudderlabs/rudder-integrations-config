@@ -1,0 +1,23 @@
+[
+  {
+    "config": { "restApiKey": "test-rest-api-key", "dataCenter": "us-1" },
+    "result": true
+  },
+  {
+    "config": { "dataCenter": "us-1" },
+    "result": false,
+    "err": [" must have required property 'restApiKey'"]
+  },
+  {
+    "config": { "restApiKey": "test-rest-api-key" },
+    "result": false,
+    "err": [" must have required property 'dataCenter'"]
+  },
+  {
+    "config": { "restApiKey": "", "dataCenter": "us-1" },
+    "result": false,
+    "err": [
+      "restApiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
+    ]
+  }
+]
