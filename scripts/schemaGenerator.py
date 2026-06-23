@@ -336,13 +336,14 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
             "type": FieldTypeEnum.STRING.value,
             "enum": get_options_list_for_enum(field),
         }
-        if "default" or "defaultOption" in field:
-            if isinstance(field["defaultOption"]["value"], list):
-                singleSelectObj["default"] = field["defaultOption"]["value"]
-            elif field["defaultOption"]["value"]:
-                singleSelectObj["default"] = [field["defaultOption"]["value"]]
-            elif "default" in field:
-                singleSelectObj["default"] = field["default"]
+        if "defaultOption" in field and isinstance(
+            field["defaultOption"]["value"], list
+        ):
+            singleSelectObj["default"] = field["defaultOption"]["value"]
+        elif "defaultOption" in field and field["defaultOption"]["value"]:
+            singleSelectObj["default"] = [field["defaultOption"]["value"]]
+        elif "default" in field:
+            singleSelectObj["default"] = field["default"]
     else:
         enum_values = get_options_list_for_enum(field)
         non_empty = [v for v in enum_values if v != ""]
@@ -355,11 +356,10 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
         )
         singleSelectObj = {"type": inferred_type}
         singleSelectObj["enum"] = enum_values
-        if "default" or "defaultOption" in field:
-            if "defaultOption" in field:
-                singleSelectObj["default"] = field["defaultOption"]["value"]
-            elif "default" in field:
-                singleSelectObj["default"] = field["default"]
+        if "defaultOption" in field:
+            singleSelectObj["default"] = field["defaultOption"]["value"]
+        elif "default" in field:
+            singleSelectObj["default"] = field["default"]
 
     isSourceDependent = is_dest_field_dependent_on_source(
         field, dbConfig, schema_field_name
@@ -559,6 +559,10 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     )
     dynamicCustomFormObj = {}
     dynamicCustomFormObj["type"] = FieldTypeEnum.ARRAY.value
+    # A required dynamicCustomForm must hold at least one entry; an empty array
+    # would otherwise satisfy the schema.
+    if field.get("required") == True:
+        dynamicCustomFormObj["minItems"] = 1
     dynamicCustomFormItemObj = {}
     dynamicCustomFormItemObj["type"] = FieldTypeEnum.OBJECT.value
     dynamicCustomFormItemObj["properties"] = {}
@@ -820,6 +824,10 @@ def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
     """
     tagObject = {}
     tagObject["type"] = FieldTypeEnum.ARRAY.value
+    # A required tagInput must hold at least one entry; an empty array would
+    # otherwise satisfy the schema.
+    if field.get("required") == True:
+        tagObject["minItems"] = 1
     tagItem = {}
     tagItem["type"] = FieldTypeEnum.OBJECT.value
     tagItemProps = {
