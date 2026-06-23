@@ -55,3 +55,9 @@
 ## INT-6597 — Hidden Gate Schema Contract
 
 - `options.hidden` in both destination and source `db-config-schema.json` files is a 3-state union: boolean blanket hiding, a legacy `{ featureFlagName, featureFlagValue }` single-flag object, or `{ gate: { flags, condition } }` for one or more Flagsmith flags or billing features. `hidden.gate` uses hide-when semantics: the integration is hidden when the configured flag reduction matches. Gate flag items require `name` and boolean `value`, reject unknown properties, and flag arrays with at least two items require `condition`.
+
+## INT-6593 — Deployment Notification Workflow Boundary
+
+- Deployment Slack notifications are implemented in GitHub Actions workflows rather than application code.
+- The reusable deployment workflow `.github/workflows/deploy.yml` owns the Slack notification behavior and declares workflow-call secrets `SLACK_BOT_TOKEN` and `SLACK_RELEASE_CHANNEL_ID`.
+- Caller workflows pass those Slack secrets through deployment wrappers, including `.github/workflows/deploy-to-prod.yml`, `.github/workflows/deploy-to-staging.yml`, `.github/workflows/deploy-to-dev.yml`, `.github/workflows/manual-deploy.yml`, and `.github/workflows/rollback.yml` via the production deploy wrapper.
