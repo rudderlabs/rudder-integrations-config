@@ -340,7 +340,10 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
             field["defaultOption"]["value"], list
         ):
             singleSelectObj["default"] = field["defaultOption"]["value"]
-        elif "defaultOption" in field and field["defaultOption"]["value"]:
+        elif "defaultOption" in field and field["defaultOption"]["value"] not in (
+            None,
+            "",
+        ):
             singleSelectObj["default"] = [field["defaultOption"]["value"]]
         elif "default" in field:
             singleSelectObj["default"] = field["default"]
@@ -837,6 +840,10 @@ def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
         }
     }
     tagItem["properties"] = tagItemProps
+    # When the tagInput field is required, each entry must carry the tag key, so
+    # mark it required on the item (mirrors the dynamicCustomForm behaviour).
+    if field.get("required") == True:
+        tagItem["required"] = [str(field["tagKey"])]
     tagObject["items"] = tagItem
     isSourceDependent = is_dest_field_dependent_on_source(
         field, dbConfig, schema_field_name
