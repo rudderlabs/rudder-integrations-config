@@ -52,6 +52,10 @@
 - When no `versions/` directory exists, payload construction sets `versions` to `{}` to allow jsondiff-driven clearing of previously persisted archive state.
 - Current deploy file-loading behavior remains root-first (`db-config.json`/`ui-config.json`/`schema.json` at destination root), so nested version assets affect deployment only through explicit archive-building logic.
 
+## INT-6597 — Hidden Gate Schema Contract
+
+- `options.hidden` in both destination and source `db-config-schema.json` files is a 3-state union: boolean blanket hiding, a legacy `{ featureFlagName, featureFlagValue }` single-flag object, or `{ gate: { flags, condition } }` for one or more Flagsmith flags or billing features. `hidden.gate` uses hide-when semantics: the integration is hidden when the configured flag reduction matches. Gate flag items require `name` and boolean `value`, reject unknown properties, and flag arrays with at least two items require `condition`.
+
 ## INT-6593 — Deployment Notification Workflow Boundary
 
 - Deployment Slack notifications are implemented in GitHub Actions workflows rather than application code.
