@@ -37,11 +37,10 @@ This repository stores the configuration files that power RudderStack’s **sour
 
 ## Visibility gating
 
-Source and destination `db-config.json` files use `options.hidden` for catalog hiding. It has three supported states:
+Source and destination `db-config.json` files use `options.hidden` for catalog hiding. It has two supported states:
 
 - `hidden: true` hides the integration from all customers.
 - `hidden.gate` hides the integration when one or more Flagsmith flags or billing features match their expected boolean values.
-- `{ "featureFlagName": "...", "featureFlagValue": ... }` is the legacy single-flag shape and remains supported for existing definitions.
 
 Use `hidden.gate` when beta or GA access depends on a Flagsmith flag, a billing feature, or both:
 

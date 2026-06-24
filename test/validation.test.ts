@@ -92,6 +92,24 @@ function getMinimalSourceDefinition(hidden?: unknown) {
   };
 }
 
+function getMinimalAccountDefinition(hidden?: unknown) {
+  return {
+    name: 'TEST_ACCOUNT',
+    type: 'test',
+    category: 'destination',
+    authenticationType: 'oauth',
+    config: {
+      optionFields: ['region'],
+      refreshOAuthToken: true,
+    },
+    ...(hidden !== undefined && {
+      displayOptions: {
+        hidden,
+      },
+    }),
+  };
+}
+
 let destList: string[] = [];
 if (cmdOpts.destinations !== 'all') {
   destList = cmdOpts.destinations
@@ -562,8 +580,8 @@ describe('Destination Definition validation tests', () => {
           },
         },
       },
-      expected:
-        '["options.hidden must be boolean","options.hidden must have required property \'gate\'","options.hidden must NOT have additional properties","options.hidden must NOT have additional properties","options.hidden must NOT have additional properties","options.hidden must NOT have additional properties","options.hidden must match a schema in anyOf"]',
+      expected: 'must NOT have additional properties',
+      exact: false,
     },
   ];
 
@@ -581,15 +599,17 @@ describe('Destination Definition validation tests', () => {
     ).resolves.toEqual(true);
   });
 
-  it('accepts legacy hidden feature flag object', async () => {
-    await expect(
+  it('rejects legacy hidden feature flag object', async () => {
+    await expectValidationError(
       validateDestinationDefinitions(
         getMinimalDestinationDefinition({
           featureFlagName: 'AMP_TEST_FLAG',
           featureFlagValue: false,
         }),
       ),
-    ).resolves.toEqual(true);
+      "must have required property 'gate'",
+      false,
+    );
   });
 
   it('accepts hidden gate with a single flag and no condition', async () => {
@@ -787,8 +807,7 @@ describe('Source Definition validation tests', () => {
           supportedAccountDefinitions: {},
         },
       },
-      expected:
-        '["config.supportedAccountDefinitions must NOT have fewer than 1 properties"]',
+      expected: '["config.supportedAccountDefinitions must NOT have fewer than 1 properties"]',
     },
   ];
 
@@ -806,15 +825,17 @@ describe('Source Definition validation tests', () => {
     );
   });
 
-  it('accepts legacy hidden feature flag object', async () => {
-    await expect(
+  it('rejects legacy hidden feature flag object', async () => {
+    await expectValidationError(
       validateSourceDefinitions(
         getMinimalSourceDefinition({
           featureFlagName: 'AMP_TEST_FLAG',
           featureFlagValue: false,
         }),
       ),
-    ).resolves.toEqual(true);
+      "must have required property 'gate'",
+      false,
+    );
   });
 
   it('accepts hidden gate with a single flag and no condition', async () => {
@@ -999,6 +1020,70 @@ describe('Account Definition validation tests', () => {
   it.each(malformedAccountDefConfigs)('$description', async (testCase) => {
     await expect(validateAccountDefinitions(testCase.input)).rejects.toThrow(
       new Error(testCase.expected),
+    );
+  });
+
+  it('accepts boolean hidden', async () => {
+    await expect(validateAccountDefinitions(getMinimalAccountDefinition(true))).resolves.toEqual(
+      true,
+    );
+  });
+
+  it('accepts hidden gate with a single flag and no condition', async () => {
+    await expect(
+      validateAccountDefinitions(
+        getMinimalAccountDefinition({
+          gate: {
+            flags: [{ name: 'AMP_TEST_FLAG', value: false }],
+          },
+        }),
+      ),
+    ).resolves.toEqual(true);
+  });
+
+  it('accepts hidden gate with two flags and condition', async () => {
+    await expect(
+      validateAccountDefinitions(
+        getMinimalAccountDefinition({
+          gate: {
+            flags: [
+              { name: 'AMP_TEST_FLAG', value: false },
+              { name: 'TEST_BILLING_FEATURE', value: false },
+            ],
+            condition: 'and',
+          },
+        }),
+      ),
+    ).resolves.toEqual(true);
+  });
+
+  it('rejects hidden gate with multiple flags and no condition', async () => {
+    await expectValidationError(
+      validateAccountDefinitions(
+        getMinimalAccountDefinition({
+          gate: {
+            flags: [
+              { name: 'AMP_TEST_FLAG', value: false },
+              { name: 'TEST_BILLING_FEATURE', value: false },
+            ],
+          },
+        }),
+      ),
+      "must have required property 'condition'",
+      false,
+    );
+  });
+
+  it('rejects legacy hidden feature flag object', async () => {
+    await expectValidationError(
+      validateAccountDefinitions(
+        getMinimalAccountDefinition({
+          featureFlagName: 'AMP_TEST_FLAG',
+          featureFlagValue: false,
+        }),
+      ),
+      "must have required property 'gate'",
+      false,
     );
   });
 });

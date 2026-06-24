@@ -53,3 +53,9 @@
 
 - Reusing an Amplitude `sdkTemplate.fields` field for a newly added web `destConfig` key can also apply that field's conditions to mobile copies of the same config key, because SDK template fields are copied into per-source SDK groups based on `db-config.json` `config.destConfig.<sourceType>`.
 - Source-specific web-only behavior may require a renderer-supported source filter or a separate UI field shape instead of relying only on a field-level condition.
+
+## INT-6598 — Hidden Gate Billing Feature Confirmation
+
+- During INT-6598, beta hidden definitions with unknown billing feature names were migrated to single-flag `hidden.gate` entries that preserve the existing Flagsmith flag and boolean value instead of inventing billing feature names.
+- Only two migrated definitions had confirmed two-flag gates at the time of the change: `src/configurations/destinations/snowpipe_streaming/db-config.json` uses `AMP_snowpipe_streaming` with `SNOWFLAKE_STREAMING`, and `src/configurations/sources/facebook_lead_ads_native/db-config.json` uses `AMP_enable-fbla-source` with `FBLA_SOURCE`.
+- Remaining migrated beta gates still need confirmed billing feature additions before the GA no-release behavior is fully complete.

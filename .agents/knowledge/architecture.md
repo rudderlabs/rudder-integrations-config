@@ -67,3 +67,9 @@
 - The Amplitude destination is hand-authored under `src/configurations/destinations/am/` as `db-config.json`, `ui-config.json`, and `schema.json`; there is no Amplitude `ui-config.jt` or `ui-default.json` generation flow, so destination setting changes belong directly in that JSON triplet.
 - For Amplitude Browser SDK settings, `schema.json` owns configSchema booleans/defaults, `db-config.json` owns `includeKeys` and per-source `config.destConfig.<sourceType>` exposure, and `ui-config.json` owns dashboard grouping, visibility, defaults, and SDK-version conditions.
 - Amplitude Browser SDK settings are sourced from `ui-config.json` `sdkTemplate.fields` and copied into per-source SDK groups according to the keys exposed in `db-config.json` `config.destConfig.<sourceType>`.
+
+## INT-6598 — Account Visibility Schema Boundary
+
+- Account definition visibility is authored under `displayOptions.hidden` and validated by `src/schemas/account/account-db-config-schema.json`, separately from source/destination visibility under `options.hidden`.
+- After INT-6598, account `displayOptions.hidden` is intended to follow the same strict boolean-or-`hidden.gate` contract as source/destination definitions: gate flags require `name` and mandatory boolean `value`, reject extra flag properties, and require `gate.condition` when two or more flags are present.
+- Legacy account hidden objects using `featureFlagName`/`featureFlagValue` should be treated as rejected by the tightened account schema.
