@@ -107,11 +107,10 @@ To contribute a destination, you need to provide all the required data for all t
 
 ## Source and destination visibility gating
 
-Use `options.hidden` in source and destination `db-config.json` files for catalog hiding. It supports three states:
+Use `options.hidden` in source and destination `db-config.json` files for catalog hiding. It supports two states:
 
 - `hidden: true` for blanket hiding from all customers.
 - `hidden.gate` for hide-when gating by one or more Flagsmith flags or billing features.
-- `{ "featureFlagName": "...", "featureFlagValue": ... }` for the legacy single-flag shape.
 
 Use `hidden.gate` when beta or GA access depends on a Flagsmith flag, a billing feature, or both:
 
