@@ -405,6 +405,11 @@
           "title": "Supports Visual Mapper",
           "description": "TBD"
         },
+        "supportsVisualMapperV2": {
+          "type": "boolean",
+          "title": "Supports Visual Mapper V2",
+          "description": "Whether the destination supports Visual Mapper V2 for configuring mappings."
+        },
         "disableJsonMapper": {
           "type": "boolean",
           "title": "Disable JSON Mapper",
@@ -560,6 +565,40 @@
               "hybridModeCloudEventsFilter": {
                 "type": "object"
               }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "supportsVisualMapperV2": {
+                "const": true
+              }
+            },
+            "required": ["supportsVisualMapperV2"]
+          },
+          "then": {
+            "not": {
+              "anyOf": [
+                {
+                  "properties": {
+                    "supportsVisualMapper": {}
+                  },
+                  "required": ["supportsVisualMapper"]
+                },
+                {
+                  "properties": {
+                    "supportsBlankAudienceCreation": {}
+                  },
+                  "required": ["supportsBlankAudienceCreation"]
+                },
+                {
+                  "properties": {
+                    "isAudienceSupported": {}
+                  },
+                  "required": ["isAudienceSupported"]
+                }
+              ]
             }
           }
         }

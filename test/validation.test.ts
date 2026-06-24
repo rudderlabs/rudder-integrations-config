@@ -273,6 +273,40 @@ describe('Destination Definition validation tests', () => {
       expected: '[" must have required property \'version\'"]',
     },
     {
+      description: 'supportsVisualMapperV2 cannot be combined with VDMv1 mapper flags',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+          supportsVisualMapperV2: true,
+          supportsBlankAudienceCreation: true,
+        },
+      },
+      expected: '["config must NOT be valid","config must match \\"then\\" schema"]',
+    },
+    {
+      description: 'supportsVisualMapperV2 cannot be combined with legacy audience support',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+          supportsVisualMapperV2: true,
+          isAudienceSupported: true,
+        },
+      },
+      expected: '["config must NOT be valid","config must match \\"then\\" schema"]',
+    },
+    {
       description: 'hybridModeCloudEventsFilter is not a valid map',
       input: {
         name: 'test',
