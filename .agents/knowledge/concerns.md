@@ -48,3 +48,9 @@
 
 - `.github/workflows/deploy-to-dev.yml` has been observed mapping `SLACK_BOT_TOKEN` as `$$ {{ secrets.SLACK_BOT_TOKEN }}` with an extra `$` and a space inside the expression.
 - That malformed expression can prevent the dev deployment path from receiving the intended Slack token, which makes dev an unreliable signal when validating deployment Slack notification changes.
+
+## INT-6598 — Hidden Gate Billing Feature Confirmation
+
+- During INT-6598, beta hidden definitions with unknown billing feature names were migrated to single-flag `hidden.gate` entries that preserve the existing Flagsmith flag and boolean value instead of inventing billing feature names.
+- Only two migrated definitions had confirmed two-flag gates at the time of the change: `src/configurations/destinations/snowpipe_streaming/db-config.json` uses `AMP_snowpipe_streaming` with `SNOWFLAKE_STREAMING`, and `src/configurations/sources/facebook_lead_ads_native/db-config.json` uses `AMP_enable-fbla-source` with `FBLA_SOURCE`.
+- Remaining migrated beta gates still need confirmed billing feature additions before the GA no-release behavior is fully complete.
