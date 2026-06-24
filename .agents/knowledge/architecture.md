@@ -61,3 +61,9 @@
 - Deployment Slack notifications are implemented in GitHub Actions workflows rather than application code.
 - The reusable deployment workflow `.github/workflows/deploy.yml` owns the Slack notification behavior and declares workflow-call secrets `SLACK_BOT_TOKEN` and `SLACK_RELEASE_CHANNEL_ID`.
 - Caller workflows pass those Slack secrets through deployment wrappers, including `.github/workflows/deploy-to-prod.yml`, `.github/workflows/deploy-to-staging.yml`, `.github/workflows/deploy-to-dev.yml`, `.github/workflows/manual-deploy.yml`, and `.github/workflows/rollback.yml` via the production deploy wrapper.
+
+## INT-6598 — Account Visibility Schema Boundary
+
+- Account definition visibility is authored under `displayOptions.hidden` and validated by `src/schemas/account/account-db-config-schema.json`, separately from source/destination visibility under `options.hidden`.
+- After INT-6598, account `displayOptions.hidden` is intended to follow the same strict boolean-or-`hidden.gate` contract as source/destination definitions: gate flags require `name` and mandatory boolean `value`, reject extra flag properties, and require `gate.condition` when two or more flags are present.
+- Legacy account hidden objects using `featureFlagName`/`featureFlagValue` should be treated as rejected by the tightened account schema.
