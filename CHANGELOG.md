@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.161.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.161.0...v1.161.1) (2026-06-24)
+
+
+### Bug Fixes
+
+* bq stream all events docs url ([#2566](https://github.com/rudderlabs/rudder-config-schema/issues/2566)) ([635332e](https://github.com/rudderlabs/rudder-config-schema/commit/635332e39c378e43b8ce5f5262f08f7ea003ec8b))
+
 ## [1.161.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.160.1...v1.161.0) (2026-06-22)
 
 
