@@ -32,3 +32,8 @@
 
 - The legacy FBLA source definition is `src/configurations/sources/facebook_lead_ads/db-config.json`; for INT-6594 it already had `options.isBeta: true` and `options.hidden: true`, so hidden-only rollback work should not be applied there by mistake.
 - The Facebook Lead Ads native source definition is `src/configurations/sources/facebook_lead_ads_native/db-config.json`; PR #2477 made this source GA by removing `options.isBeta: true` and a feature-flagged `options.hidden` object from that definition.
+
+## SDK-5013 — Amplitude Validation Fixture
+
+- The repo-wide validation test runner reads every `destinations/<name>.json` fixture under `test/data/validation/destinations/` and validates each case against the matching destination definition.
+- For Amplitude destination config changes, update `test/data/validation/destinations/am.json` to exercise the changed definition.

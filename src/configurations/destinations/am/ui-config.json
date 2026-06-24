@@ -210,6 +210,46 @@
                         }
                       ]
                     }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Auto-capture page views",
+                    "configKey": "pageViews",
+                    "note": "Automatically capture page views through Amplitude Browser SDK v2. (V2 specific)",
+                    "default": false,
+                    "badges": [
+                      {
+                        "text": "V2",
+                        "type": "info"
+                      }
+                    ],
+                    "conditions": {
+                      "expression": {
+                        "type": "configuration",
+                        "key": "sdkVersion.web",
+                        "value": 2
+                      }
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Page URL Enrichment",
+                    "configKey": "pageUrlEnrichment",
+                    "note": "Enrich page events with URL details through Amplitude Browser SDK v2. (V2 specific)",
+                    "default": false,
+                    "badges": [
+                      {
+                        "text": "V2",
+                        "type": "info"
+                      }
+                    ],
+                    "conditions": {
+                      "expression": {
+                        "type": "configuration",
+                        "key": "sdkVersion.web",
+                        "value": 2
+                      }
+                    }
                   }
                 ]
               },
@@ -506,6 +546,144 @@
                     "default": false
                   }
                 ]
+              },
+              {
+                "title": "Enhanced tracking",
+                "note": "Configure Amplitude Browser SDK v2 enhanced tracking features",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Web Vitals",
+                    "configKey": "webVitals",
+                    "note": "Capture web vitals through Amplitude Browser SDK v2. (V2 specific)",
+                    "default": false,
+                    "badges": [
+                      {
+                        "text": "V2",
+                        "type": "info"
+                      }
+                    ],
+                    "conditions": {
+                      "expression": {
+                        "type": "configuration",
+                        "key": "sdkVersion.web",
+                        "value": 2
+                      }
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "File Downloads",
+                    "configKey": "fileDownloads",
+                    "note": "Capture file download interactions through Amplitude Browser SDK v2. (V2 specific)",
+                    "default": false,
+                    "badges": [
+                      {
+                        "text": "V2",
+                        "type": "info"
+                      }
+                    ],
+                    "conditions": {
+                      "expression": {
+                        "type": "configuration",
+                        "key": "sdkVersion.web",
+                        "value": 2
+                      }
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Frustration Interactions",
+                    "configKey": "frustrationInteractions",
+                    "note": "Capture frustration interactions through Amplitude Browser SDK v2. (V2 specific)",
+                    "default": false,
+                    "badges": [
+                      {
+                        "text": "V2",
+                        "type": "info"
+                      }
+                    ],
+                    "conditions": {
+                      "expression": {
+                        "type": "configuration",
+                        "key": "sdkVersion.web",
+                        "value": 2
+                      }
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Network Tracking",
+                    "configKey": "networkTracking",
+                    "note": "Capture network requests through Amplitude Browser SDK v2. (V2 specific) Risk: enabling this can collect request metadata from your site. Review your privacy and compliance requirements before enabling.",
+                    "default": false,
+                    "badges": [
+                      {
+                        "text": "V2",
+                        "type": "info"
+                      },
+                      {
+                        "text": "RISK",
+                        "type": "warning"
+                      }
+                    ],
+                    "conditions": {
+                      "expression": {
+                        "type": "configuration",
+                        "key": "sdkVersion.web",
+                        "value": 2
+                      }
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Element Interactions",
+                    "configKey": "elementInteractions",
+                    "note": "Capture element interactions through Amplitude Browser SDK v2. (V2 specific) Risk: enabling this can collect user interaction data from page elements. Review your privacy and compliance requirements before enabling.",
+                    "default": false,
+                    "badges": [
+                      {
+                        "text": "V2",
+                        "type": "info"
+                      },
+                      {
+                        "text": "RISK",
+                        "type": "warning"
+                      }
+                    ],
+                    "conditions": {
+                      "expression": {
+                        "type": "configuration",
+                        "key": "sdkVersion.web",
+                        "value": 2
+                      }
+                    }
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Form Interactions",
+                    "configKey": "formInteractions",
+                    "note": "Capture form interactions through Amplitude Browser SDK v2. (V2 specific) Risk: enabling this can collect user interaction data from forms. Review your privacy and compliance requirements before enabling.",
+                    "default": false,
+                    "badges": [
+                      {
+                        "text": "V2",
+                        "type": "info"
+                      },
+                      {
+                        "text": "RISK",
+                        "type": "warning"
+                      }
+                    ],
+                    "conditions": {
+                      "expression": {
+                        "type": "configuration",
+                        "key": "sdkVersion.web",
+                        "value": 2
+                      }
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -666,9 +844,68 @@
         {
           "type": "checkbox",
           "label": "Track session events",
-          "note": "Send start and end session events",
+          "note": "Send start and end session events. (V2 specific for JavaScript sources)",
           "configKey": "trackSessionEvents",
-          "default": false
+          "default": false,
+          "badges": [
+            {
+              "text": "V2",
+              "type": "info"
+            }
+          ],
+          "conditions": {
+            "expression": {
+              "operator": "OR",
+              "operands": [
+                {
+                  "type": "configuration",
+                  "key": "sdkVersion.web",
+                  "value": 2
+                },
+                {
+                  "type": "configuration",
+                  "key": "connectionMode.android",
+                  "value": "device"
+                },
+                {
+                  "type": "configuration",
+                  "key": "connectionMode.ios",
+                  "value": "device"
+                },
+                {
+                  "type": "configuration",
+                  "key": "connectionMode.flutter",
+                  "value": "device"
+                },
+                {
+                  "type": "configuration",
+                  "key": "connectionMode.reactnative",
+                  "value": "device"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "checkbox",
+          "label": "Enable attribution tracking",
+          "note": "Enable attribution tracking through Amplitude Browser SDK v2. (V2 specific)",
+          "configKey": "attribution",
+          "default": true,
+          "valueTransformer": "inverseBoolean",
+          "badges": [
+            {
+              "text": "V2",
+              "type": "info"
+            }
+          ],
+          "conditions": {
+            "expression": {
+              "type": "configuration",
+              "key": "sdkVersion.web",
+              "value": 2
+            }
+          }
         },
         {
           "type": "checkbox",
@@ -702,7 +939,14 @@
           "label": "Disable Attribution",
           "note": "Disable the attribution tracking",
           "configKey": "attribution",
-          "default": false
+          "default": false,
+          "conditions": {
+            "expression": {
+              "type": "configuration",
+              "key": "sdkVersion.web",
+              "value": 1
+            }
+          }
         },
         {
           "type": "checkbox",
