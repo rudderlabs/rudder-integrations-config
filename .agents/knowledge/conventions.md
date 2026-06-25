@@ -59,3 +59,8 @@
 ## INT-6604 — Destination Config Flag Schema Gate
 
 - Destination definition metadata flags under the `config` object in `src/configurations/destinations/<name>/db-config.json` are schema-gated by `src/schemas/destinations/db-config-schema.json`, where `config.additionalProperties` is false. When adding a new destination `config` flag such as `supportsVisualMapperV2`, add the matching schema property too, otherwise broad destination validation rejects the edited definitions.
+
+## INT-6644 — Braze Prerequisite Coverage Alignment
+
+- For Braze fields matching broad connection-mode coverage, keep `preRequisites.condition` as `or` and normalize `preRequisites.fields` to the 18 unique source/mode pairs: cloud for `cloud`, `web`, `android`, `androidKotlin`, `ios`, `iosSwift`, `flutter`, `reactnative`, `unity`, `amp`, `cordova`, `shopify`, and `warehouse`; hybrid for `web`, `android`, `androidKotlin`, `ios`, and `iosSwift`.
+- During INT-6644, `enableSubscriptionGroupInGroupCall`, `enableNestedArrayOperations`, and `sendPurchaseEventWithExtraProperties` were aligned to that 18-pair coverage without adding `useEcommerceRecommendedEvents` when it was absent from the local checkout.
