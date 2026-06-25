@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.162.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.161.1...v1.162.0) (2026-06-25)
+
+
+### Features
+
+* add visibility gating schema ([#2551](https://github.com/rudderlabs/rudder-config-schema/issues/2551)) ([1add317](https://github.com/rudderlabs/rudder-config-schema/commit/1add317d1af5a48c54742b21cb785caeec3ff02f))
+* **bigquery:** rETL BigQuery source account management (DEX-374, APL-399, APL-398) ([#2522](https://github.com/rudderlabs/rudder-config-schema/issues/2522)) ([8e68f3c](https://github.com/rudderlabs/rudder-config-schema/commit/8e68f3c8a742b110870e62f03b259b2871b107f3))
+* enable visual mapper v2 for VDM v2 GA destinations ([#2555](https://github.com/rudderlabs/rudder-config-schema/issues/2555)) ([d4c2d33](https://github.com/rudderlabs/rudder-config-schema/commit/d4c2d3392953a8ee73014acc0f1220f1036f4b2a))
+* **klaviyo:** add v3 api version option to destination config ([#2524](https://github.com/rudderlabs/rudder-config-schema/issues/2524)) ([03a498b](https://github.com/rudderlabs/rudder-config-schema/commit/03a498b49e1c01f11ea5c4a48f93f9bff938b680))
+* migrate integration hidden gates ([#2565](https://github.com/rudderlabs/rudder-config-schema/issues/2565)) ([bf0cfb5](https://github.com/rudderlabs/rudder-config-schema/commit/bf0cfb5b06422f30bc5cb4b6ecc6ddb0edffc2d0))
+* **test_destination:** add dev-only feature-flagged test destination (v1) [INT-6492] ([#2559](https://github.com/rudderlabs/rudder-config-schema/issues/2559)) ([ccdf276](https://github.com/rudderlabs/rudder-config-schema/commit/ccdf2768058fafd7650da697ae0b0219064a2bc5))
+
+
+### Bug Fixes
+
+* (bigquery) SOURCE_BIGQUERY account option 'projectId' → 'project' ([#2569](https://github.com/rudderlabs/rudder-config-schema/issues/2569)) ([6befb42](https://github.com/rudderlabs/rudder-config-schema/commit/6befb42b83b90845a1aecfe35b1f6e807fbf0aff))
+
 ### [1.161.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.161.0...v1.161.1) (2026-06-24)
 
 
