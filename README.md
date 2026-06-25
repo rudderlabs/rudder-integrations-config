@@ -35,6 +35,49 @@ This repository stores the configuration files that power RudderStack’s **sour
 - **Definition configuration** – `db-config.json` files containing the definition version, integration fields, supported source types, message types, connection modes and metadata.
 - **Validation schemas** – JSON Schema `schema.json` files (consumed by AJV) used for fields validation in the backend.
 
+## Visibility gating
+
+Source and destination `db-config.json` files use `options.hidden` for catalog hiding. It has two supported states:
+
+- `hidden: true` hides the integration from all customers.
+- `hidden.gate` hides the integration when one or more Flagsmith flags or billing features match their expected boolean values.
+
+Use `hidden.gate` when beta or GA access depends on a Flagsmith flag, a billing feature, or both:
+
+```json
+{
+  "options": {
+    "hidden": {
+      "gate": {
+        "flags": [{ "name": "AMP_EXAMPLE_BETA_FLAG", "value": false }]
+      }
+    }
+  }
+}
+```
+
+For a single flag, `condition` is optional. For two or more flags, include `condition` as `"and"` or `"or"`. During a beta-to-GA transition, hide only when neither the beta flag nor the billing feature grants access:
+
+```json
+{
+  "options": {
+    "hidden": {
+      "gate": {
+        "flags": [
+          { "name": "AMP_EXAMPLE_BETA_FLAG", "value": false },
+          { "name": "example_billing_feature", "value": false }
+        ],
+        "condition": "and"
+      }
+    }
+  }
+}
+```
+
+The gate uses hide-when semantics: the integration is hidden when the flag reduction matches the configured values. Flag names must match exactly what the webapp resolves. Flagsmith beta flags keep their `AMP_` prefix, and GA billing features are authored as-is. The `value` field is mandatory on every flag item.
+
+Use `hidden.gate` for beta-to-GA or billing-feature exposure. Keep `hidden: true` only for definitions that should be hidden from all customers.
+
 ## Getting started
 
 You need to install Python3.
@@ -57,7 +100,7 @@ The below commands deploy integration definitions and account configurations to 
 ```
 python3 ./scripts/deployToDB.py --help
 
-usage: deployToDB.py [-h] [--dry-run] [--verbose] [control_plane_url] [username] [password] [selector] [item_name]
+usage: deployToDB.py [-h] [--dry-run] [--verbose] [--environment ENVIRONMENT] [control_plane_url] [username] [password] [selector] [item_name]
 
 Script to deploy config files to DB.
 
@@ -72,6 +115,7 @@ options:
   -h, --help         show this help message and exit
   --dry-run          Show what would be changed without making actual changes to the database
   --verbose          Show detailed JSON reports in addition to summary
+  --environment ENVIRONMENT  Target deploy environment (required): development, staging, or production
 ```
 
 ## Deploy Account Configurations
@@ -79,7 +123,7 @@ options:
 ```
 python3 ./scripts/deployAccountsToDB.py --help
 
-usage: deployAccountsToDB.py [-h] [--dry-run] [--verbose] [control_plane_url] [username] [password] [definition_name]
+usage: deployAccountsToDB.py [-h] [--dry-run] [--verbose] [--environment ENVIRONMENT] [control_plane_url] [username] [password] [definition_name]
 
 Script to deploy account configurations to DB.
 
@@ -93,6 +137,7 @@ options:
   -h, --help         show this help message and exit
   --dry-run          Show what would be changed without making actual changes to the database
   --verbose          Show detailed JSON reports in addition to summary
+  --environment ENVIRONMENT  Target deploy environment (required): development, staging, or production
 ```
 
 #### Positional argument environment variable fallback table
@@ -109,32 +154,32 @@ options:
 
 ```bash
 # Just command line args
-python3 ./scripts/deployToDB.py http://localhost:5050 foo bar
+python3 ./scripts/deployToDB.py http://localhost:5050 foo bar --environment development
 
 # Some command line some envs
-API_USER=foo API_PASSWORD=bar python3 ./scripts/deployToDB.py http://localhost:5050
+API_USER=foo API_PASSWORD=bar python3 ./scripts/deployToDB.py http://localhost:5050 --environment development
 
 # Just envs
-CONTROL_PLANE_URL=http://foo.bar API_USER=foo API_PASSWORD=bar python3 ./scripts/deployToDB.py
+CONTROL_PLANE_URL=http://foo.bar API_USER=foo API_PASSWORD=bar python3 ./scripts/deployToDB.py --environment development
 ```
 
 #### Account Configurations (deployAccountsToDB.py)
 
 ```bash
 # Deploy all account configurations
-python3 ./scripts/deployAccountsToDB.py http://localhost:5050 admin password123
+python3 ./scripts/deployAccountsToDB.py http://localhost:5050 admin password123 --environment development
 
 # Deploy specific account configuration
-python3 ./scripts/deployAccountsToDB.py http://localhost:5050 admin password123 AMPLITUDE_ACCOUNT
+python3 ./scripts/deployAccountsToDB.py http://localhost:5050 admin password123 AMPLITUDE_ACCOUNT --environment development
 
 # Using environment variables
-CONTROL_PLANE_URL=http://localhost:5050 API_USER=admin API_PASSWORD=password123 python3 ./scripts/deployAccountsToDB.py
+CONTROL_PLANE_URL=http://localhost:5050 API_USER=admin API_PASSWORD=password123 python3 ./scripts/deployAccountsToDB.py --environment development
 
 # Dry run for all accounts
-python3 ./scripts/deployAccountsToDB.py http://localhost:5050 admin password123 --dry-run
+python3 ./scripts/deployAccountsToDB.py http://localhost:5050 admin password123 --dry-run --environment development
 
 # Dry run with verbose output
-python3 ./scripts/deployAccountsToDB.py http://localhost:5050 admin password123 --dry-run --verbose
+python3 ./scripts/deployAccountsToDB.py http://localhost:5050 admin password123 --dry-run --verbose --environment development
 ```
 
 ### Dry Run Mode
@@ -147,38 +192,38 @@ Both `deployToDB.py` and `deployAccountsToDB.py` scripts support a dry run mode 
 
 ```bash
 # Dry run for all destinations (summary only)
-python3 ./scripts/deployToDB.py https://api.example.com admin password123 destination --dry-run
+python3 ./scripts/deployToDB.py https://api.example.com admin password123 destination --dry-run --environment development
 
 # Dry run with detailed JSON reports
-python3 ./scripts/deployToDB.py https://api.example.com admin password123 destination --dry-run --verbose
+python3 ./scripts/deployToDB.py https://api.example.com admin password123 destination --dry-run --verbose --environment development
 
 # Dry run for a specific item
-python3 ./scripts/deployToDB.py https://api.example.com admin password123 source AMPLITUDE --dry-run
+python3 ./scripts/deployToDB.py https://api.example.com admin password123 source AMPLITUDE --dry-run --environment development
 
 # Using environment variables with dry run and verbose output
 export CONTROL_PLANE_URL="https://api.example.com"
 export API_USER="admin"
 export API_PASSWORD="password123"
-python3 ./scripts/deployToDB.py --dry-run --verbose
+python3 ./scripts/deployToDB.py --dry-run --verbose --environment development
 ```
 
 **Account Configurations (deployAccountsToDB.py):**
 
 ```bash
 # Dry run for all account configurations (summary only)
-python3 ./scripts/deployAccountsToDB.py https://api.example.com admin password123 --dry-run
+python3 ./scripts/deployAccountsToDB.py https://api.example.com admin password123 --dry-run --environment development
 
 # Dry run with detailed JSON reports
-python3 ./scripts/deployAccountsToDB.py https://api.example.com admin password123 --dry-run --verbose
+python3 ./scripts/deployAccountsToDB.py https://api.example.com admin password123 --dry-run --verbose --environment development
 
 # Dry run for a specific account
-python3 ./scripts/deployAccountsToDB.py https://api.example.com admin password123 AMPLITUDE_ACCOUNT --dry-run
+python3 ./scripts/deployAccountsToDB.py https://api.example.com admin password123 AMPLITUDE_ACCOUNT --dry-run --environment development
 
 # Using environment variables with dry run
 export CONTROL_PLANE_URL="https://api.example.com"
 export API_USER="admin"
 export API_PASSWORD="password123"
-python3 ./scripts/deployAccountsToDB.py --dry-run --verbose
+python3 ./scripts/deployAccountsToDB.py --dry-run --verbose --environment development
 ```
 
 #### What Dry Run Does

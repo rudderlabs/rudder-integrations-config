@@ -4,6 +4,7 @@
   "required": ["name", "displayName", "config", "version"],
   "title": "Destination definition schema",
   "description": "The schema for a destination definition. This is used to validate the destination definition configuration files (db-config.json).",
+  "additionalProperties": false,
   "properties": {
     "name": {
       "type": "string",
@@ -53,6 +54,7 @@
           "title": "Supported Account Definitions",
           "description": "Account definitionIds for the destination.",
           "$comment": "For non-OAuth account definitions, all fields (secretFields + optionFields) must also be listed in destConfig.defaultConfig; otherwise the workspace config API will silently drop them from its response. Additionally, all secretFields must be listed in secretKeys.",
+          "additionalProperties": false,
           "properties": {
             "rudderAccountId": {
               "type": "array",
@@ -350,6 +352,7 @@
           "title": "Authentication",
           "description": "The authentication parameters for the destination.",
           "required": ["type"],
+          "additionalProperties": false,
           "properties": {
             "type": {
               "type": "string",
@@ -401,6 +404,11 @@
           "type": "boolean",
           "title": "Supports Visual Mapper",
           "description": "TBD"
+        },
+        "supportsVisualMapperV2": {
+          "type": "boolean",
+          "title": "Supports Visual Mapper V2",
+          "description": "Whether the destination supports Visual Mapper V2 for configuring mappings."
         },
         "disableJsonMapper": {
           "type": "boolean",
@@ -559,6 +567,40 @@
               }
             }
           }
+        },
+        {
+          "if": {
+            "properties": {
+              "supportsVisualMapperV2": {
+                "const": true
+              }
+            },
+            "required": ["supportsVisualMapperV2"]
+          },
+          "then": {
+            "not": {
+              "anyOf": [
+                {
+                  "properties": {
+                    "supportsVisualMapper": {}
+                  },
+                  "required": ["supportsVisualMapper"]
+                },
+                {
+                  "properties": {
+                    "supportsBlankAudienceCreation": {}
+                  },
+                  "required": ["supportsBlankAudienceCreation"]
+                },
+                {
+                  "properties": {
+                    "isAudienceSupported": {}
+                  },
+                  "required": ["isAudienceSupported"]
+                }
+              ]
+            }
+          }
         }
       ]
     },
@@ -595,21 +637,70 @@
             },
             {
               "type": "object",
-              "title": "Hidden",
-              "description": "Whether the destination is hidden.",
-              "$comment": "This is used to hide the destination from the UI.",
+              "title": "Hidden Gate",
+              "description": "Feature flags or billing features that hide the destination when they match their expected values.",
+              "$comment": "This is used to hide the destination from the UI based on one or more gates.",
+              "additionalProperties": false,
+              "required": ["gate"],
               "properties": {
-                "featureFlagName": {
-                  "type": "string",
-                  "title": "Feature Flag Name",
-                  "description": "The feature flag name to hide the destination.",
-                  "$comment": "This is used to hide the destination from the UI based on the feature flag."
-                },
-                "featureFlagValue": {
-                  "type": "boolean",
-                  "title": "Feature Flag Value",
-                  "description": "The feature flag value to hide the destination.",
-                  "$comment": "This is used to hide the destination from the UI based on the feature flag value."
+                "gate": {
+                  "type": "object",
+                  "title": "Hidden Gate",
+                  "description": "Feature flags or billing features that hide the destination when their reduction matches.",
+                  "additionalProperties": false,
+                  "required": ["flags"],
+                  "properties": {
+                    "flags": {
+                      "type": "array",
+                      "title": "Hidden Gate Flags",
+                      "description": "Feature flags or billing features that must match their expected values for the destination to be hidden.",
+                      "minItems": 1,
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": ["name", "value"],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "title": "Name",
+                            "description": "The exact feature name resolved by the webapp."
+                          },
+                          "value": {
+                            "type": "boolean",
+                            "title": "Value",
+                            "description": "The boolean value that hides the destination."
+                          }
+                        }
+                      }
+                    },
+                    "condition": {
+                      "type": "string",
+                      "title": "Condition",
+                      "description": "How multiple hidden gate flags should be combined.",
+                      "enum": ["and", "or"]
+                    }
+                  },
+                  "allOf": [
+                    {
+                      "if": {
+                        "properties": {
+                          "flags": {
+                            "type": "array",
+                            "minItems": 2
+                          }
+                        },
+                        "required": ["flags"]
+                      },
+                      "then": {
+                        "properties": {
+                          "condition": {
+                            "enum": ["and", "or"]
+                          }
+                        },
+                        "required": ["condition"]
+                      }
+                    }
+                  ]
                 }
               }
             }

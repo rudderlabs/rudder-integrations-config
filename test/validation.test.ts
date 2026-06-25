@@ -60,6 +60,56 @@ function getIntegrationData(name: string, type: string): Record<string, unknown>
   return intgData;
 }
 
+function getMinimalDestinationDefinition(hidden?: unknown) {
+  return {
+    name: 'TEST_DESTINATION',
+    displayName: 'Test Destination',
+    version: '1.0',
+    config: {
+      supportedSourceTypes: ['web'],
+      destConfig: {
+        defaultConfig: ['testConfig'],
+      },
+    },
+    ...(hidden !== undefined && {
+      options: {
+        hidden,
+      },
+    }),
+  };
+}
+
+function getMinimalSourceDefinition(hidden?: unknown) {
+  return {
+    name: 'test_source',
+    displayName: 'Test Source',
+    type: 'cloud',
+    ...(hidden !== undefined && {
+      options: {
+        hidden,
+      },
+    }),
+  };
+}
+
+function getMinimalAccountDefinition(hidden?: unknown) {
+  return {
+    name: 'TEST_ACCOUNT',
+    type: 'test',
+    category: 'destination',
+    authenticationType: 'oauth',
+    config: {
+      optionFields: ['region'],
+      refreshOAuthToken: true,
+    },
+    ...(hidden !== undefined && {
+      displayOptions: {
+        hidden,
+      },
+    }),
+  };
+}
+
 let destList: string[] = [];
 if (cmdOpts.destinations !== 'all') {
   destList = cmdOpts.destinations
@@ -92,6 +142,15 @@ srcList.forEach((s) => {
   if (intgData) srcTcData[s] = intgData;
 });
 
+function expectValidationError(
+  validation: Promise<boolean>,
+  expected: string,
+  exact = true,
+): Promise<void> {
+  const matcher = expect(validation).rejects;
+  return exact ? matcher.toThrow(new Error(expected)) : matcher.toThrow(expected);
+}
+
 async function getSourceDefinitionConfig(srcName: string) {
   const dirPath = path.resolve(`src/configurations/sources/${srcName}`);
   const configPath = `${dirPath}/db-config.json`;
@@ -117,7 +176,8 @@ async function getAccountDefinitionConfig(
 async function getDestinationDefinitionConfig(destName: string) {
   const dirPath = path.resolve(`src/configurations/destinations/${destName}`);
   const configPath = `${dirPath}/db-config.json`;
-  return import(configPath);
+  const config = await import(configPath);
+  return config.default;
 }
 
 const dests = getIntegrationNames('destinations');
@@ -229,6 +289,40 @@ describe('Destination Definition validation tests', () => {
         },
       },
       expected: '[" must have required property \'version\'"]',
+    },
+    {
+      description: 'supportsVisualMapperV2 cannot be combined with VDMv1 mapper flags',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+          supportsVisualMapperV2: true,
+          supportsBlankAudienceCreation: true,
+        },
+      },
+      expected: '["config must NOT be valid","config must match \\"then\\" schema"]',
+    },
+    {
+      description: 'supportsVisualMapperV2 cannot be combined with legacy audience support',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+          supportsVisualMapperV2: true,
+          isAudienceSupported: true,
+        },
+      },
+      expected: '["config must NOT be valid","config must match \\"then\\" schema"]',
     },
     {
       description: 'hybridModeCloudEventsFilter is not a valid map',
@@ -346,12 +440,217 @@ describe('Destination Definition validation tests', () => {
       },
       expected: '["config.hybridModeCloudEventsFilter.web.messageType must be array"]',
     },
+    {
+      description: 'hidden gate flag item is missing "value"',
+      input: getMinimalDestinationDefinition({
+        gate: {
+          flags: [{ name: 'AMP_TEST_FLAG' }],
+        },
+      }),
+      expected: "must have required property 'value'",
+      exact: false,
+    },
+    {
+      description: 'hidden gate flag item is missing "name"',
+      input: getMinimalDestinationDefinition({
+        gate: {
+          flags: [{ value: true }],
+        },
+      }),
+      expected: "must have required property 'name'",
+      exact: false,
+    },
+    {
+      description: 'hidden gate with multiple flags is missing "condition"',
+      input: getMinimalDestinationDefinition({
+        gate: {
+          flags: [
+            { name: 'AMP_TEST_FLAG', value: true },
+            { name: 'TEST_BILLING_FEATURE', value: true },
+          ],
+        },
+      }),
+      expected: "must have required property 'condition'",
+      exact: false,
+    },
+    {
+      description: 'hidden gate has an unknown property',
+      input: getMinimalDestinationDefinition({
+        gate: {
+          flags: [{ name: 'AMP_TEST_FLAG', value: true }],
+          unknownProperty: true,
+        },
+      }),
+      expected: 'must NOT have additional properties',
+      exact: false,
+    },
+    {
+      description: 'hidden gate flag item has an unknown property',
+      input: getMinimalDestinationDefinition({
+        gate: {
+          flags: [{ name: 'AMP_TEST_FLAG', value: true, unknownProperty: true }],
+        },
+      }),
+      expected: 'must NOT have additional properties',
+      exact: false,
+    },
+    {
+      description: 'hidden object mixes gate and legacy feature flag fields',
+      input: getMinimalDestinationDefinition({
+        gate: {
+          flags: [{ name: 'AMP_TEST_FLAG', value: false }],
+        },
+        featureFlagName: 'AMP_TEST_FLAG',
+        featureFlagValue: false,
+      }),
+      expected: 'must NOT have additional properties',
+      exact: false,
+    },
+    {
+      description: 'unknown top-level property is rejected',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        unknownTopLevelKey: true,
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+        },
+      },
+      expected: '[" must NOT have additional properties"]',
+    },
+    {
+      description: 'unknown property under config.auth is rejected',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+          auth: {
+            type: 'OAuth',
+            unknownAuthKey: true,
+          },
+        },
+      },
+      expected: '["config.auth must NOT have additional properties"]',
+    },
+    {
+      description: 'unknown property under config.supportedAccountDefinitions is rejected',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+          supportedAccountDefinitions: {
+            rudderAccountId: ['someAccountDefinitionId'],
+            unknownAccountKey: ['x'],
+          },
+        },
+      },
+      expected: '["config.supportedAccountDefinitions must NOT have additional properties"]',
+    },
+    {
+      description: 'unknown property under options.hidden object variant is rejected',
+      input: {
+        name: 'test',
+        displayName: 'Test',
+        version: '1.0',
+        config: {
+          supportedSourceTypes: ['web'],
+          destConfig: {
+            defaultConfig: ['temp'],
+          },
+        },
+        options: {
+          hidden: {
+            featureFlagName: 'AMP_test',
+            featureFlagValue: false,
+            unknownHiddenKey: 'x',
+          },
+        },
+      },
+      expected: 'must NOT have additional properties',
+      exact: false,
+    },
   ];
 
   it.each(malformedDestDefConfigs)('$description', async (testCase) => {
-    await expect(validateDestinationDefinitions(testCase.input)).rejects.toThrow(
-      new Error(testCase.expected),
+    await expectValidationError(
+      validateDestinationDefinitions(testCase.input),
+      testCase.expected,
+      testCase.exact,
     );
+  });
+
+  it('accepts boolean hidden', async () => {
+    await expect(
+      validateDestinationDefinitions(getMinimalDestinationDefinition(true)),
+    ).resolves.toEqual(true);
+  });
+
+  it('rejects legacy hidden feature flag object', async () => {
+    await expectValidationError(
+      validateDestinationDefinitions(
+        getMinimalDestinationDefinition({
+          featureFlagName: 'AMP_TEST_FLAG',
+          featureFlagValue: false,
+        }),
+      ),
+      "must have required property 'gate'",
+      false,
+    );
+  });
+
+  it('accepts hidden gate with a single flag and no condition', async () => {
+    await expect(
+      validateDestinationDefinitions(
+        getMinimalDestinationDefinition({
+          gate: {
+            flags: [{ name: 'AMP_TEST_FLAG', value: false }],
+          },
+        }),
+      ),
+    ).resolves.toEqual(true);
+  });
+
+  it('accepts hidden gate with a single flag and condition', async () => {
+    await expect(
+      validateDestinationDefinitions(
+        getMinimalDestinationDefinition({
+          gate: {
+            flags: [{ name: 'AMP_TEST_FLAG', value: false }],
+            condition: 'and',
+          },
+        }),
+      ),
+    ).resolves.toEqual(true);
+  });
+
+  it('accepts hidden gate with two flags and condition', async () => {
+    await expect(
+      validateDestinationDefinitions(
+        getMinimalDestinationDefinition({
+          gate: {
+            flags: [
+              { name: 'AMP_TEST_FLAG', value: false },
+              { name: 'TEST_BILLING_FEATURE', value: false },
+            ],
+            condition: 'and',
+          },
+        }),
+      ),
+    ).resolves.toEqual(true);
   });
 });
 
@@ -401,6 +700,72 @@ describe('Source Definition validation tests', () => {
         '["options.internalSecretKeys must NOT have duplicate items (items ## 1 and 0 are identical)"]',
     },
     {
+      description: 'hidden gate flag item is missing "value"',
+      input: getMinimalSourceDefinition({
+        gate: {
+          flags: [{ name: 'AMP_TEST_FLAG' }],
+        },
+      }),
+      expected: "must have required property 'value'",
+      exact: false,
+    },
+    {
+      description: 'hidden gate flag item is missing "name"',
+      input: getMinimalSourceDefinition({
+        gate: {
+          flags: [{ value: true }],
+        },
+      }),
+      expected: "must have required property 'name'",
+      exact: false,
+    },
+    {
+      description: 'hidden gate with multiple flags is missing "condition"',
+      input: getMinimalSourceDefinition({
+        gate: {
+          flags: [
+            { name: 'AMP_TEST_FLAG', value: true },
+            { name: 'TEST_BILLING_FEATURE', value: true },
+          ],
+        },
+      }),
+      expected: "must have required property 'condition'",
+      exact: false,
+    },
+    {
+      description: 'hidden gate has an unknown property',
+      input: getMinimalSourceDefinition({
+        gate: {
+          flags: [{ name: 'AMP_TEST_FLAG', value: true }],
+          unknownProperty: true,
+        },
+      }),
+      expected: 'must NOT have additional properties',
+      exact: false,
+    },
+    {
+      description: 'hidden gate flag item has an unknown property',
+      input: getMinimalSourceDefinition({
+        gate: {
+          flags: [{ name: 'AMP_TEST_FLAG', value: true, unknownProperty: true }],
+        },
+      }),
+      expected: 'must NOT have additional properties',
+      exact: false,
+    },
+    {
+      description: 'hidden object mixes gate and legacy feature flag fields',
+      input: getMinimalSourceDefinition({
+        gate: {
+          flags: [{ name: 'AMP_TEST_FLAG', value: false }],
+        },
+        featureFlagName: 'AMP_TEST_FLAG',
+        featureFlagValue: false,
+      }),
+      expected: 'must NOT have additional properties',
+      exact: false,
+    },
+    {
       description: 'config.supportedAccountDefinitions.rudderAccountId with non-array value',
       input: {
         name: 'test_source',
@@ -442,15 +807,76 @@ describe('Source Definition validation tests', () => {
           supportedAccountDefinitions: {},
         },
       },
-      expected:
-        '["config.supportedAccountDefinitions must NOT have fewer than 1 properties"]',
+      expected: '["config.supportedAccountDefinitions must NOT have fewer than 1 properties"]',
     },
   ];
 
   it.each(malformedSrcDefConfigs)('$description', async (testCase) => {
-    await expect(validateSourceDefinitions(testCase.input)).rejects.toThrow(
-      new Error(testCase.expected),
+    await expectValidationError(
+      validateSourceDefinitions(testCase.input),
+      testCase.expected,
+      testCase.exact,
     );
+  });
+
+  it('accepts boolean hidden', async () => {
+    await expect(validateSourceDefinitions(getMinimalSourceDefinition(true))).resolves.toEqual(
+      true,
+    );
+  });
+
+  it('rejects legacy hidden feature flag object', async () => {
+    await expectValidationError(
+      validateSourceDefinitions(
+        getMinimalSourceDefinition({
+          featureFlagName: 'AMP_TEST_FLAG',
+          featureFlagValue: false,
+        }),
+      ),
+      "must have required property 'gate'",
+      false,
+    );
+  });
+
+  it('accepts hidden gate with a single flag and no condition', async () => {
+    await expect(
+      validateSourceDefinitions(
+        getMinimalSourceDefinition({
+          gate: {
+            flags: [{ name: 'AMP_TEST_FLAG', value: false }],
+          },
+        }),
+      ),
+    ).resolves.toEqual(true);
+  });
+
+  it('accepts hidden gate with a single flag and condition', async () => {
+    await expect(
+      validateSourceDefinitions(
+        getMinimalSourceDefinition({
+          gate: {
+            flags: [{ name: 'AMP_TEST_FLAG', value: false }],
+            condition: 'and',
+          },
+        }),
+      ),
+    ).resolves.toEqual(true);
+  });
+
+  it('accepts hidden gate with two flags and condition', async () => {
+    await expect(
+      validateSourceDefinitions(
+        getMinimalSourceDefinition({
+          gate: {
+            flags: [
+              { name: 'AMP_TEST_FLAG', value: false },
+              { name: 'TEST_BILLING_FEATURE', value: false },
+            ],
+            condition: 'and',
+          },
+        }),
+      ),
+    ).resolves.toEqual(true);
   });
 
   it('config.supportedAccountDefinitions.rudderAccountId with valid array value is accepted', async () => {
@@ -594,6 +1020,70 @@ describe('Account Definition validation tests', () => {
   it.each(malformedAccountDefConfigs)('$description', async (testCase) => {
     await expect(validateAccountDefinitions(testCase.input)).rejects.toThrow(
       new Error(testCase.expected),
+    );
+  });
+
+  it('accepts boolean hidden', async () => {
+    await expect(validateAccountDefinitions(getMinimalAccountDefinition(true))).resolves.toEqual(
+      true,
+    );
+  });
+
+  it('accepts hidden gate with a single flag and no condition', async () => {
+    await expect(
+      validateAccountDefinitions(
+        getMinimalAccountDefinition({
+          gate: {
+            flags: [{ name: 'AMP_TEST_FLAG', value: false }],
+          },
+        }),
+      ),
+    ).resolves.toEqual(true);
+  });
+
+  it('accepts hidden gate with two flags and condition', async () => {
+    await expect(
+      validateAccountDefinitions(
+        getMinimalAccountDefinition({
+          gate: {
+            flags: [
+              { name: 'AMP_TEST_FLAG', value: false },
+              { name: 'TEST_BILLING_FEATURE', value: false },
+            ],
+            condition: 'and',
+          },
+        }),
+      ),
+    ).resolves.toEqual(true);
+  });
+
+  it('rejects hidden gate with multiple flags and no condition', async () => {
+    await expectValidationError(
+      validateAccountDefinitions(
+        getMinimalAccountDefinition({
+          gate: {
+            flags: [
+              { name: 'AMP_TEST_FLAG', value: false },
+              { name: 'TEST_BILLING_FEATURE', value: false },
+            ],
+          },
+        }),
+      ),
+      "must have required property 'condition'",
+      false,
+    );
+  });
+
+  it('rejects legacy hidden feature flag object', async () => {
+    await expectValidationError(
+      validateAccountDefinitions(
+        getMinimalAccountDefinition({
+          featureFlagName: 'AMP_TEST_FLAG',
+          featureFlagValue: false,
+        }),
+      ),
+      "must have required property 'gate'",
+      false,
     );
   });
 });

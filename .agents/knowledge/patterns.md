@@ -49,3 +49,9 @@
 
 - For Python deploy tooling, keep argument parsing and runtime config initialization behind a `__main__`-only path so module imports remain side-effect free (importable without triggering CLI parsing).
 - `scripts/deployToDB.py` follows this by delaying CLI/runtime initialization to `initialize_runtime_config()` at execution time, which preserves command-line behavior while keeping the module safe to import.
+
+## INT-6593 — Deployment Slack Notification Gates
+
+- In `.github/workflows/deploy.yml`, release-channel success Slack messages remain opt-in: they are gated by `inputs.notify == true && inputs.dry_run == false`.
+- Deployment failure alerts are intentionally broader: the failure alert gate is `failure() && inputs.dry_run == false` and does not include `inputs.notify`, so internal responders are notified for every real deployment failure.
+- Dry runs should suppress both success and failure Slack notifications; real deployment failures should notify internal channels even when optional release notifications are disabled.

@@ -15,6 +15,8 @@ on:
         required: true
       SLACK_RELEASE_CHANNEL_ID:
         required: true
+      SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID:
+        required: true
       CODECOV_TOKEN:
         required: false # report-code-coverage only runs on 'push' events, never on workflow_call
   push:
@@ -84,6 +86,7 @@ jobs:
     if: (((startsWith(github.event.pull_request.head.ref, 'release/') || startsWith(github.event.pull_request.head.ref, 'hotfix-release/')) && github.event.pull_request.merged == true) || github.event_name == 'workflow_call')
     uses: ./.github/workflows/deploy.yml
     with:
+      environment: production
       deploy_url: https://api.rudderstack.com
       notify: true
       version: ${{ needs.extract-version.outputs.version }}
@@ -93,3 +96,4 @@ jobs:
       API_PASSWORD: ${{ secrets.PROD_PASSWORD }}
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       SLACK_RELEASE_CHANNEL_ID: ${{ secrets.SLACK_RELEASE_CHANNEL_ID }}
+      SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID: ${{ secrets.SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID }}

@@ -19,6 +19,7 @@ jobs:
     if: (startsWith(github.event.pull_request.head.ref, 'release/') || startsWith(github.event.pull_request.head.ref, 'hotfix-release/'))
     uses: ./.github/workflows/deploy.yml
     with:
+      environment: staging
       deploy_url: https://api.staging.rudderlabs.com
       ref: ${{ github.event.pull_request.head.ref }}
     secrets:
@@ -26,6 +27,7 @@ jobs:
       API_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       SLACK_RELEASE_CHANNEL_ID: ${{ secrets.SLACK_RELEASE_CHANNEL_ID }}
+      SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID: ${{ secrets.SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID }}
 
   trigger-post-deployment-tests:
     name: Trigger Post Deployment Tests

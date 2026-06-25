@@ -1,11 +1,10 @@
 {
-  "name": "BQSTREAM_ALL_EVENTS",
-  "displayName": "BigQuery Stream (All Events)",
+  "name": "TEST_DESTINATION",
+  "displayName": "Test Destination",
   "version": "1.0",
   "config": {
     "transformAtV1": "processor",
-    "saveDestinationResponse": true,
-    "excludeKeys": [],
+    "saveDestinationResponse": false,
     "supportedSourceTypes": [
       "android",
       "androidKotlin",
@@ -15,12 +14,16 @@
       "unity",
       "amp",
       "cloud",
+      "warehouse",
       "reactnative",
-      "cloudSource",
       "flutter",
       "cordova",
-      "shopify"
+      "shopify",
+      "cloudSource"
     ],
+    "supportedMessageTypes": {
+      "cloud": ["track", "identify", "page", "screen", "group", "alias"]
+    },
     "supportedConnectionModes": {
       "android": ["cloud"],
       "androidKotlin": ["cloud"],
@@ -29,27 +32,16 @@
       "web": ["cloud"],
       "unity": ["cloud"],
       "amp": ["cloud"],
+      "cloud": ["cloud"],
+      "warehouse": ["cloud"],
       "reactnative": ["cloud"],
       "flutter": ["cloud"],
       "cordova": ["cloud"],
       "shopify": ["cloud"],
-      "cloud": ["cloud"],
       "cloudSource": ["cloud"]
     },
     "destConfig": {
-      "defaultConfig": [
-        "project",
-        "location",
-        "namespace",
-        "credentials",
-        "partitionColumn",
-        "partitionType",
-        "skipTracksTable",
-        "skipViews",
-        "jsonPaths",
-        "underscoreDivideNumbers",
-        "allowUsersContextTraits"
-      ],
+      "defaultConfig": ["restApiKey", "dataCenter"],
       "android": ["connectionMode", "consentManagement"],
       "androidKotlin": ["connectionMode", "consentManagement"],
       "ios": ["connectionMode", "consentManagement"],
@@ -58,20 +50,20 @@
       "unity": ["connectionMode", "consentManagement"],
       "amp": ["connectionMode", "consentManagement"],
       "cloud": ["connectionMode", "consentManagement"],
+      "warehouse": ["connectionMode", "consentManagement"],
       "reactnative": ["connectionMode", "consentManagement"],
       "flutter": ["connectionMode", "consentManagement"],
       "cordova": ["connectionMode", "consentManagement"],
-      "cloudSource": ["connectionMode", "consentManagement"],
-      "shopify": ["connectionMode", "consentManagement"]
+      "shopify": ["connectionMode", "consentManagement"],
+      "cloudSource": ["connectionMode", "consentManagement"]
     },
-    "secretKeys": ["credentials"]
+    "secretKeys": ["restApiKey"]
   },
   "options": {
-    "disableLiveEvents": true,
     "isBeta": true,
     "hidden": {
       "gate": {
-        "flags": [{ "name": "AMP_enable-bqstream-all-events", "value": false }]
+        "flags": [{ "name": "AMP_enable_test_destination", "value": false }]
       }
     }
   }

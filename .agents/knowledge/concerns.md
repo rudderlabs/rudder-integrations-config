@@ -43,3 +43,14 @@
 - Destination-definition validation is rooted in `src/schemas/destinations/db-config-schema.json`, and broad tests (`test/validation.test.ts`) validate every root destination `db-config.json`. Only the authored top-level key `version` is added to that schema; `fallbackVersion` is no longer authored on disk (it is computed on the fly downstream), and the `versions` archive is deploy-payload-only and must NOT be added to it, since the validated on-disk file never carries it.
 - The broad validation path covers root destination definitions, not nested `versions/<major>/` artifacts. Their shape is enforced at deploy time by `build_versions_archive`, which raises on an invalid `version`/`status` or a missing config/configSchema/uiConfig slice rather than emitting a partial entry; a JSON-schema validation path for nested on-disk files is still absent and should land when the first real `versions/<major>/` tree is authored.
 - New destination archive fields emitted by this repository have a dependency boundary with `rudder-config-backend`; the `destination_definitions` columns (`version`/`versions`) must exist there before this deploy change runs against an environment, since the payload now always carries them. `fallbackVersion` is computed on the fly by `rudder-config-backend` and is no longer authored on disk or emitted in the deploy payload. Deploy ordering is CBE-columns-first, then these versioned definitions.
+
+## INT-6593 — Dev Deployment Slack Secret Mapping Risk
+
+- `.github/workflows/deploy-to-dev.yml` has been observed mapping `SLACK_BOT_TOKEN` as `$$ {{ secrets.SLACK_BOT_TOKEN }}` with an extra `$` and a space inside the expression.
+- That malformed expression can prevent the dev deployment path from receiving the intended Slack token, which makes dev an unreliable signal when validating deployment Slack notification changes.
+
+## INT-6598 — Hidden Gate Billing Feature Confirmation
+
+- During INT-6598, beta hidden definitions with unknown billing feature names were migrated to single-flag `hidden.gate` entries that preserve the existing Flagsmith flag and boolean value instead of inventing billing feature names.
+- Only two migrated definitions had confirmed two-flag gates at the time of the change: `src/configurations/destinations/snowpipe_streaming/db-config.json` uses `AMP_snowpipe_streaming` with `SNOWFLAKE_STREAMING`, and `src/configurations/sources/facebook_lead_ads_native/db-config.json` uses `AMP_enable-fbla-source` with `FBLA_SOURCE`.
+- Remaining migrated beta gates still need confirmed billing feature additions before the GA no-release behavior is fully complete.
