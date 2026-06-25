@@ -21,3 +21,8 @@
 - During INT-6598 inspection, `src/schemas/account/account-db-config-schema.json` was first read as rejecting `displayOptions.hidden.gate` because the visible legacy branch listed only `featureFlagName` and `featureFlagValue`.
 - The correction was that the account hidden object branch had no `required` list and no `additionalProperties: false`, so arbitrary object keys such as `gate` could pass validation while still not enforcing the strict `hidden.gate` contract.
 - When reviewing account visibility changes, distinguish permissive acceptance from schema enforcement: a passing account hidden object is not evidence that `flags[].name`, mandatory `flags[].value`, or required multi-flag `condition` are being validated.
+
+## INT-6644 — Do Not Use Braze DB Config for Field Visibility
+
+- During INT-6644 orientation, Braze prerequisite coverage was initially attributed to `src/configurations/destinations/braze/db-config.json`; inspection corrected that per-field source connection-mode visibility lives in `src/configurations/destinations/braze/ui-config.json`.
+- Corrective rule: for Braze per-field UI visibility or prerequisite coverage changes, inspect and edit the field object's `preRequisites.fields` in `ui-config.json`; use `db-config.json` only for included config keys and supported source type metadata.
