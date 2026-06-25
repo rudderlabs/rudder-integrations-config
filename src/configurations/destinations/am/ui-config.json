@@ -215,7 +215,7 @@
                     "type": "checkbox",
                     "label": "Auto-capture page views",
                     "configKey": "autoCapturePageViews",
-                    "note": "Automatically capture page views through Amplitude Browser SDK v2. (V2 specific)",
+                    "note": "(V2 specific) Let the Amplitude SDK auto-detect browser navigation and emit [Amplitude] Page Viewed events on its own, in addition to any RudderStack-translated \"page()\" calls. Leave OFF if your app already instruments \"rudder.page()\" to avoid duplicate page events in Amplitude.",
                     "default": false,
                     "conditions": {
                       "expression": {
@@ -229,7 +229,7 @@
                     "type": "checkbox",
                     "label": "Page URL Enrichment",
                     "configKey": "pageUrlEnrichment",
-                    "note": "Enrich page events with URL details through Amplitude Browser SDK v2. (V2 specific)",
+                    "note": "(V2 specific) Attach the current page URL to every event sent to Amplitude. Useful for cross-page analytics.",
                     "default": false,
                     "conditions": {
                       "expression": {
@@ -548,7 +548,7 @@
                     "type": "checkbox",
                     "label": "Web Vitals",
                     "configKey": "webVitals",
-                    "note": "Capture web vitals through Amplitude Browser SDK v2. (V2 specific)",
+                    "note": "(V2 specific) Capture Core Web Vitals (LCP, FCP, INP, CLS, TTFB) as Amplitude events for performance monitoring.",
                     "default": false,
                     "conditions": {
                       "expression": {
@@ -562,7 +562,7 @@
                     "type": "checkbox",
                     "label": "File Downloads",
                     "configKey": "fileDownloads",
-                    "note": "Capture file download interactions through Amplitude Browser SDK v2. (V2 specific)",
+                    "note": "(V2 specific) Automatically track clicks on download links (PDFs, ZIPs, documents) as Amplitude events.",
                     "default": false,
                     "conditions": {
                       "expression": {
@@ -576,7 +576,7 @@
                     "type": "checkbox",
                     "label": "Frustration Interactions",
                     "configKey": "frustrationInteractions",
-                    "note": "Capture frustration interactions through Amplitude Browser SDK v2. (V2 specific)",
+                    "note": "(V2 specific) Capture rage clicks, dead clicks, and error clicks as Amplitude events for UX-research signals.",
                     "default": false,
                     "conditions": {
                       "expression": {
@@ -590,7 +590,7 @@
                     "type": "checkbox",
                     "label": "Network Tracking",
                     "configKey": "networkTracking",
-                    "note": "Capture network requests through Amplitude Browser SDK v2. (V2 specific) Risk: enabling this can collect request metadata from your site. Review your privacy and compliance requirements before enabling.",
+                    "note": "(V2 specific) Capture failed network requests as Amplitude events.\nRisk: Most teams use Sentry or Datadog for this. Enable only if you want network errors in your analytics pipeline.",
                     "default": false,
                     "conditions": {
                       "expression": {
@@ -604,7 +604,7 @@
                     "type": "checkbox",
                     "label": "Element Interactions",
                     "configKey": "elementInteractions",
-                    "note": "Capture element interactions through Amplitude Browser SDK v2. (V2 specific) Risk: enabling this can collect user interaction data from page elements. Review your privacy and compliance requirements before enabling.",
+                    "note": "(V2 specific) Capture clicks, changes, and other DOM events on every element on the page.\nRisk: High event volume — every DOM click — and may capture user-entered text or other PII. Review your data-volume budget and PII handling before enabling.",
                     "default": false,
                     "conditions": {
                       "expression": {
@@ -618,7 +618,7 @@
                     "type": "checkbox",
                     "label": "Form Interactions",
                     "configKey": "formInteractions",
-                    "note": "Capture form interactions through Amplitude Browser SDK v2. (V2 specific) Risk: enabling this can collect user interaction data from forms. Review your privacy and compliance requirements before enabling.",
+                    "note": "(V2 specific) Capture form submissions and field changes as Amplitude events.\nRisk: Captures form field values, which may include PII (emails, names, payment data). Audit your forms before enabling.",
                     "default": false,
                     "conditions": {
                       "expression": {
@@ -789,7 +789,7 @@
         {
           "type": "checkbox",
           "label": "Track session events",
-          "note": "Send start and end session events. (V2 specific for JavaScript sources)",
+          "note": "(V2 specific for JavaScript sources) Send start and end session events.",
           "configKey": "trackSessionEvents",
           "default": false,
           "conditions": {
@@ -828,7 +828,7 @@
         {
           "type": "checkbox",
           "label": "Enable attribution tracking",
-          "note": "Enable attribution tracking through Amplitude Browser SDK v2. (V2 specific)",
+          "note": "(V2 specific) Send UTM parameters, referrer, and gclid with Amplitude events. Also automatically tracks new campaigns. Replaces v1's two separate flags (Disable Attribution + Save Referrer… once per session).",
           "configKey": "attribution",
           "default": true,
           "valueTransformer": "inverseBoolean",
