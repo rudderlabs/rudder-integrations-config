@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.163.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.162.0...v1.163.0) (2026-06-25)
+
+
+### Features
+
+* **customerio:** add record event type and syncBehaviours for VDM v2 ([#2544](https://github.com/rudderlabs/rudder-config-schema/issues/2544)) ([dc7e671](https://github.com/rudderlabs/rudder-config-schema/commit/dc7e6713e88e4fc8ca1a76507681038e3495516b))
+
+
+### Bug Fixes
+
+* align Braze prerequisite connection modes ([#2571](https://github.com/rudderlabs/rudder-config-schema/issues/2571)) ([d972474](https://github.com/rudderlabs/rudder-config-schema/commit/d972474d3998215d9988f877a8aacab8b3d6bc86))
+
 ## [1.162.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.161.1...v1.162.0) (2026-06-25)
 
 
