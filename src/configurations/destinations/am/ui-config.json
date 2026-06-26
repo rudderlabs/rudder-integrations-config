@@ -210,34 +210,6 @@
                         }
                       ]
                     }
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "Auto-capture page views",
-                    "configKey": "pageViews",
-                    "note": "(V2 specific) Let the Amplitude SDK auto-detect browser navigation and emit [Amplitude] Page Viewed events on its own, in addition to any RudderStack-translated \"page()\" calls. Leave OFF if your app already instruments \"rudder.page()\" to avoid duplicate page events in Amplitude.",
-                    "default": false,
-                    "conditions": {
-                      "expression": {
-                        "type": "configuration",
-                        "key": "sdkVersion.web",
-                        "value": 2
-                      }
-                    }
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "Page URL Enrichment",
-                    "configKey": "pageUrlEnrichment",
-                    "note": "(V2 specific) Attach the current page URL to every event sent to Amplitude. Useful for cross-page analytics.",
-                    "default": false,
-                    "conditions": {
-                      "expression": {
-                        "type": "configuration",
-                        "key": "sdkVersion.web",
-                        "value": 2
-                      }
-                    }
                   }
                 ]
               },
@@ -538,101 +510,6 @@
             ]
           },
           {
-            "groups": [
-              {
-                "title": "Enhanced tracking",
-                "note": "Configure Amplitude Browser SDK v2 enhanced tracking features",
-                "icon": "sliders",
-                "fields": [
-                  {
-                    "type": "checkbox",
-                    "label": "Web Vitals",
-                    "configKey": "webVitals",
-                    "note": "(V2 specific) Capture Core Web Vitals (LCP, FCP, INP, CLS, TTFB) as Amplitude events for performance monitoring.",
-                    "default": false,
-                    "conditions": {
-                      "expression": {
-                        "type": "configuration",
-                        "key": "sdkVersion.web",
-                        "value": 2
-                      }
-                    }
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "File Downloads",
-                    "configKey": "fileDownloads",
-                    "note": "(V2 specific) Automatically track clicks on download links (PDFs, ZIPs, documents) as Amplitude events.",
-                    "default": false,
-                    "conditions": {
-                      "expression": {
-                        "type": "configuration",
-                        "key": "sdkVersion.web",
-                        "value": 2
-                      }
-                    }
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "Frustration Interactions",
-                    "configKey": "frustrationInteractions",
-                    "note": "(V2 specific) Capture rage clicks, dead clicks, and error clicks as Amplitude events for UX-research signals.",
-                    "default": false,
-                    "conditions": {
-                      "expression": {
-                        "type": "configuration",
-                        "key": "sdkVersion.web",
-                        "value": 2
-                      }
-                    }
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "Network Tracking",
-                    "configKey": "networkTracking",
-                    "note": "(V2 specific) Capture failed network requests as Amplitude events.\nRisk: Most teams use Sentry or Datadog for this. Enable only if you want network errors in your analytics pipeline.",
-                    "default": false,
-                    "conditions": {
-                      "expression": {
-                        "type": "configuration",
-                        "key": "sdkVersion.web",
-                        "value": 2
-                      }
-                    }
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "Element Interactions",
-                    "configKey": "elementInteractions",
-                    "note": "(V2 specific) Capture clicks, changes, and other DOM events on every element on the page.\nRisk: High event volume — every DOM click — and may capture user-entered text or other PII. Review your data-volume budget and PII handling before enabling.",
-                    "default": false,
-                    "conditions": {
-                      "expression": {
-                        "type": "configuration",
-                        "key": "sdkVersion.web",
-                        "value": 2
-                      }
-                    }
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "Form Interactions",
-                    "configKey": "formInteractions",
-                    "note": "(V2 specific) Capture form submissions and field changes as Amplitude events.\nRisk: Captures form field values, which may include PII (emails, names, payment data). Audit your forms before enabling.",
-                    "default": false,
-                    "conditions": {
-                      "expression": {
-                        "type": "configuration",
-                        "key": "sdkVersion.web",
-                        "value": 2
-                      }
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          {
             "id": "consentSettings",
             "title": "Consent settings",
             "note": "Configure consent settings for each provider here",
@@ -831,7 +708,6 @@
           "note": "(V2 specific) Send UTM parameters, referrer, and gclid with Amplitude events. Also automatically tracks new campaigns. Replaces v1's two separate flags (Disable Attribution + Save Referrer… once per session).",
           "configKey": "attribution",
           "default": true,
-          "valueTransformer": "inverseBoolean",
           "conditions": {
             "expression": {
               "type": "configuration",
@@ -914,6 +790,77 @@
           "regexErrorMessage": "Invalid Value",
           "default": "30",
           "placeholder": "e.g: 30"
+        }
+      ],
+      "groups": [
+        {
+          "title": "Enhanced tracking",
+          "note": "(V2 specific fields for JavaScript sources) Automatically capture browser activity — performance, downloads, interactions, network errors — without writing custom \"track()\" calls. Each toggle is independent; review the risk notes before enabling the higher-volume or PII-sensitive options.",
+          "fields": [
+            {
+              "type": "checkbox",
+              "label": "Auto-capture page views",
+              "configKey": "pageViews",
+              "note": "Let the Amplitude SDK auto-detect browser navigation and emit [Amplitude] Page Viewed events on its own, in addition to any RudderStack-translated \"page()\" calls. Leave OFF if your app already instruments \"rudder.page()\" to avoid duplicate page events in Amplitude.",
+              "default": false
+            },
+            {
+              "type": "checkbox",
+              "label": "Page URL Enrichment",
+              "configKey": "pageUrlEnrichment",
+              "note": "Attach the current page URL to every event sent to Amplitude. Useful for cross-page analytics.",
+              "default": false
+            },
+            {
+              "type": "checkbox",
+              "label": "Web Vitals",
+              "configKey": "webVitals",
+              "note": "Capture Core Web Vitals (LCP, FCP, INP, CLS, TTFB) as Amplitude events for performance monitoring.",
+              "default": false
+            },
+            {
+              "type": "checkbox",
+              "label": "File Downloads",
+              "configKey": "fileDownloads",
+              "note": "Automatically track clicks on download links (PDFs, ZIPs, documents) as Amplitude events.",
+              "default": false
+            },
+            {
+              "type": "checkbox",
+              "label": "Frustration Interactions",
+              "configKey": "frustrationInteractions",
+              "note": "Capture rage clicks, dead clicks, and error clicks as Amplitude events for UX-research signals.",
+              "default": false
+            },
+            {
+              "type": "checkbox",
+              "label": "Network Tracking",
+              "configKey": "networkTracking",
+              "note": "Capture failed network requests as Amplitude events.\nRISK: Most teams use Sentry or Datadog for this. Enable only if you want network errors in your analytics pipeline.",
+              "default": false
+            },
+            {
+              "type": "checkbox",
+              "label": "Element Interactions",
+              "configKey": "elementInteractions",
+              "note": "Capture clicks, changes, and other DOM events on every element on the page.\nRISK: High event volume — every DOM click — and may capture user-entered text or other PII. Review your data-volume budget and PII handling before enabling.",
+              "default": false
+            },
+            {
+              "type": "checkbox",
+              "label": "Form Interactions",
+              "configKey": "formInteractions",
+              "note": "Capture form submissions and field changes as Amplitude events.\nRISK: Captures form field values, which may include PII (emails, names, payment data). Audit your forms before enabling.",
+              "default": false
+            }
+          ],
+          "conditions": {
+            "expression": {
+              "type": "configuration",
+              "key": "sdkVersion.web",
+              "value": 2
+            }
+          }
         }
       ]
     },
