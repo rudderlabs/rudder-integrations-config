@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import glob from 'glob';
+import { glob } from 'glob';
 import Ajv, { ValidateFunction } from 'ajv';
 import addKeywords from 'ajv-keywords';
 import ajvErrors from 'ajv-errors';
