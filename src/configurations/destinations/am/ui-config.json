@@ -666,18 +666,13 @@
         {
           "type": "checkbox",
           "label": "Track session events",
-          "note": "(V2 specific for JavaScript sources) Send start and end session events.",
+          "note": "Send start and end session events.",
           "configKey": "trackSessionEvents",
           "default": false,
           "conditions": {
             "expression": {
               "operator": "OR",
               "operands": [
-                {
-                  "type": "configuration",
-                  "key": "sdkVersion.web",
-                  "value": 2
-                },
                 {
                   "type": "configuration",
                   "key": "connectionMode.android",
@@ -699,20 +694,6 @@
                   "value": "device"
                 }
               ]
-            }
-          }
-        },
-        {
-          "type": "checkbox",
-          "label": "Enable attribution tracking",
-          "note": "(V2 specific) Send UTM parameters, referrer, and gclid with Amplitude events. Also automatically tracks new campaigns. Replaces v1's two separate flags (Disable Attribution + Save Referrer… once per session).",
-          "configKey": "attribution",
-          "default": true,
-          "conditions": {
-            "expression": {
-              "type": "configuration",
-              "key": "sdkVersion.web",
-              "value": 2
             }
           }
         },
@@ -744,34 +725,6 @@
           "default": false
         },
         {
-          "type": "checkbox",
-          "label": "Disable Attribution",
-          "note": "Disable the attribution tracking",
-          "configKey": "attribution",
-          "default": false,
-          "conditions": {
-            "expression": {
-              "type": "configuration",
-              "key": "sdkVersion.web",
-              "value": 1
-            }
-          }
-        },
-        {
-          "type": "checkbox",
-          "label": "Save Referrer, URL Params, GCLID only once per session",
-          "note": "Track GCLID, referrer, and UTM parameters only once per session, ignoring any new values which may enter a user's session",
-          "configKey": "trackNewCampaigns",
-          "default": true,
-          "conditions": {
-            "expression": {
-              "type": "configuration",
-              "key": "sdkVersion.web",
-              "value": 1
-            }
-          }
-        },
-        {
           "type": "textInput",
           "label": "Batch event upload period (ms)",
           "note": "Set the time limit (in ms) between batch uploads",
@@ -795,13 +748,64 @@
       "groups": [
         {
           "title": "Enhanced tracking",
-          "note": "(V2 specific fields for JavaScript sources) Automatically capture browser activity — performance, downloads, interactions, network errors — without writing custom \"track()\" calls. Each toggle is independent; review the risk notes before enabling the higher-volume or PII-sensitive options.",
+          "note": "(V1 specific) Control marketing attribution and campaign parameters sent with Amplitude events.",
           "fields": [
+            {
+              "type": "checkbox",
+              "label": "Disable Attribution",
+              "note": "Disable the attribution tracking",
+              "configKey": "attribution",
+              "default": false
+            },
+            {
+              "type": "checkbox",
+              "label": "Save Referrer, URL Params, GCLID only once per session",
+              "note": "Track GCLID, referrer, and UTM parameters only once per session, ignoring any new values which may enter a user's session",
+              "configKey": "trackNewCampaigns",
+              "default": true
+            }
+          ],
+          "conditions": {
+            "expression": {
+              "operator": "AND",
+              "operands": [
+                {
+                  "type": "configuration",
+                  "key": "connectionMode.web",
+                  "value": "device"
+                },
+                {
+                  "type": "configuration",
+                  "key": "sdkVersion.web",
+                  "value": 1
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "Enhanced tracking",
+          "note": "(V2 specific) Automatically capture browser activity — performance, downloads, interactions, network errors — without writing custom \"track()\" calls. Each toggle is independent; review the risk notes before enabling the higher-volume or PII-sensitive options.",
+          "fields": [
+            {
+              "type": "checkbox",
+              "label": "Disable Attribution",
+              "note": "Disable the attribution tracking",
+              "configKey": "attribution",
+              "default": false
+            },
             {
               "type": "checkbox",
               "label": "Auto-capture page views",
               "configKey": "pageViews",
               "note": "Let the Amplitude SDK auto-detect browser navigation and emit [Amplitude] Page Viewed events on its own, in addition to any RudderStack-translated \"page()\" calls. Leave OFF if your app already instruments \"rudder.page()\" to avoid duplicate page events in Amplitude.",
+              "default": false
+            },
+            {
+              "type": "checkbox",
+              "label": "Track session events",
+              "note": "Send start and end session events.",
+              "configKey": "trackSessionEvents",
               "default": false
             },
             {
@@ -856,9 +860,19 @@
           ],
           "conditions": {
             "expression": {
-              "type": "configuration",
-              "key": "sdkVersion.web",
-              "value": 2
+              "operator": "AND",
+              "operands": [
+                {
+                  "type": "configuration",
+                  "key": "connectionMode.web",
+                  "value": "device"
+                },
+                {
+                  "type": "configuration",
+                  "key": "sdkVersion.web",
+                  "value": 2
+                }
+              ]
             }
           }
         }
@@ -936,7 +950,9 @@
               ]
             }
           ],
-          "uniqueRowFields": ["provider"]
+          "uniqueRowFields": [
+            "provider"
+          ]
         }
       ]
     }
