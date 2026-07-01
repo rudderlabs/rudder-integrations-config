@@ -918,6 +918,19 @@ describe('Account Definition validation tests', () => {
     });
   });
 
+  const dataRetentionAccounts = getAccountNames('data-retention');
+  dataRetentionAccounts.forEach((account) => {
+    const [integration, accountName] = account.split('/');
+    it(`${integration}/${accountName} - account definition test`, async () => {
+      const accDefConfig = await getAccountDefinitionConfig(
+        integration,
+        accountName,
+        'data-retention',
+      );
+      await expect(validateAccountDefinitions(accDefConfig)).resolves.toEqual(true);
+    });
+  });
+
   const malformedAccountDefConfigs = [
     {
       description: 'missing required properties',
