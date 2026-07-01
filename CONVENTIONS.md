@@ -32,9 +32,9 @@ The `[_{AUTH_QUALIFIER}]` segment is optional — include it only when it is nee
 | `SOURCE_FACEBOOK_LEAD_ADS_NATIVE_OAUTH` | `SOURCE`         | `facebook_lead_ads_native` | `OAUTH`        |
 | `DESTINATION_HUBSPOT_OAUTH`             | `DESTINATION`    | `hubspot`                  | `OAUTH`        |
 | `DESTINATION_SALESFORCE_OAUTH`          | `DESTINATION`    | `salesforce`               | `OAUTH`        |
-| `DATA_RETENTION_S3_ACCESS_KEYS`         | `DATA_RETENTION` | `data_retention_s3`        | `ACCESS_KEYS`  |
-| `DATA_RETENTION_S3_IAM_ROLE`            | `DATA_RETENTION` | `data_retention_s3`        | `IAM_ROLE`     |
-| `DATA_RETENTION_GCS`                    | `DATA_RETENTION` | `data_retention_gcs`       | _(none)_       |
+| `DATA_RETENTION_S3_ACCESS_KEYS`         | `DATA_RETENTION` | `S3`                       | `ACCESS_KEYS`  |
+| `DATA_RETENTION_S3_IAM_ROLE`            | `DATA_RETENTION` | `S3`                       | `IAM_ROLE`     |
+| `DATA_RETENTION_GCS`                    | `DATA_RETENTION` | `GCS`                      | _(none)_       |
 
 ### Enforcement
 
