@@ -1,0 +1,67 @@
+{
+  "uiConfig": {
+    "name": "Access Keys",
+    "icon": "key",
+    "description": "Grant access to your S3 bucket using AWS access keys",
+    "recommended": false,
+    "form": {
+      "title": "Connect your S3 bucket",
+      "fields": [
+        {
+          "component": "textField",
+          "label": "Account name",
+          "placeholder": "e.g: Data Retention S3 prod",
+          "key": "name"
+        },
+        {
+          "component": "textField",
+          "label": "Access Key ID",
+          "placeholder": "e.g: AKIAIOSFODNN7EXAMPLE",
+          "key": ["options", "accessKeyID"],
+          "secret": true,
+          "note": "AWS access key ID with write access to the bucket."
+        },
+        {
+          "component": "textField",
+          "label": "Secret Access Key",
+          "placeholder": "e.g: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "key": ["options", "accessKey"],
+          "secret": true,
+          "note": "AWS secret access key paired with the access key ID."
+        },
+        {
+          "component": "textField",
+          "label": "Bucket name",
+          "placeholder": "e.g: my-data-retention-bucket",
+          "key": ["options", "bucketName"],
+          "note": "Name of the S3 bucket where data is retained."
+        },
+        {
+          "component": "textField",
+          "label": "Prefix",
+          "placeholder": "e.g: rudder",
+          "key": ["options", "prefix"],
+          "optional": true,
+          "note": "Optional path prefix within the bucket."
+        },
+        {
+          "component": "selectField",
+          "label": "Enable SSE",
+          "key": ["options", "enableSSE"],
+          "options": [
+            {
+              "label": "Enabled",
+              "value": "true"
+            },
+            {
+              "label": "Disabled",
+              "value": "false"
+            }
+          ],
+          "default": "false",
+          "note": "Enable server-side encryption for objects written to the bucket."
+        }
+      ]
+    }
+  }
+}
