@@ -134,6 +134,7 @@ def log_execution_plan(
     print("3. Scan local account configuration directories:")
     print("   - ./src/configurations/destinations/*/accounts/*")
     print("   - ./src/configurations/sources/*/accounts/*")
+    print("   - ./src/configurations/data-retention/*/accounts/*")
     print("4. For each account configuration found:")
     print("   a) Compare local vs remote configurations")
     print("   b) If differences found: UPDATE the database record")
@@ -244,8 +245,11 @@ def update_account_db(
     # Create a map of account names for faster lookup
     account_map = {account["name"]: account for account in account_definitions}
 
-    # Determine which categories to process
-    supported_categories = ["destinations", "sources"]
+    # Determine which categories to process. These are the top-level
+    # configuration group directories under `src/configurations`, not the
+    # db-config `category` VALUES. The `data-retention` group holds storage
+    # account definitions (db-config `category` = `dataRetention`).
+    supported_categories = ["destinations", "sources", "data-retention"]
 
     # Process each category
     for category in supported_categories:
@@ -283,7 +287,7 @@ def update_account_db(
             try:
                 authentication_types = os.listdir(accounts_path)
             except FileNotFoundError:
-                print(f"Warning :: Emppty directory {accounts_path}. Skipping.")
+                print(f"Warning :: Empty directory {accounts_path}. Skipping.")
                 continue
 
             for auth_type in authentication_types:
