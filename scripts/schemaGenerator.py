@@ -336,33 +336,24 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
             "type": FieldTypeEnum.STRING.value,
             "enum": get_options_list_for_enum(field),
         }
-        if "defaultOption" in field and isinstance(
-            field["defaultOption"]["value"], list
-        ):
-            singleSelectObj["default"] = field["defaultOption"]["value"]
-        elif "defaultOption" in field and field["defaultOption"]["value"] not in (
-            None,
-            "",
-        ):
-            singleSelectObj["default"] = [field["defaultOption"]["value"]]
-        elif "default" in field:
-            singleSelectObj["default"] = field["default"]
+        if "default" or "defaultOption" in field:
+            if isinstance(field["defaultOption"]["value"], list):
+                singleSelectObj["default"] = field["defaultOption"]["value"]
+            elif field["defaultOption"]["value"]:
+                singleSelectObj["default"] = [field["defaultOption"]["value"]]
+            elif "default" in field:
+                singleSelectObj["default"] = field["default"]
     else:
         enum_values = get_options_list_for_enum(field)
         non_empty = [v for v in enum_values if v != ""]
-        inferred_type = (
-            "integer"
-            if non_empty
-            and "" not in enum_values
-            and all(isinstance(v, int) for v in non_empty)
-            else FieldTypeEnum.STRING.value
-        )
+        inferred_type = "integer" if non_empty and "" not in enum_values and all(isinstance(v, int) for v in non_empty) else FieldTypeEnum.STRING.value
         singleSelectObj = {"type": inferred_type}
         singleSelectObj["enum"] = enum_values
-        if "defaultOption" in field:
-            singleSelectObj["default"] = field["defaultOption"]["value"]
-        elif "default" in field:
-            singleSelectObj["default"] = field["default"]
+        if "default" or "defaultOption" in field:
+            if "defaultOption" in field:
+                singleSelectObj["default"] = field["defaultOption"]["value"]
+            elif "default" in field:
+                singleSelectObj["default"] = field["default"]
 
     isSourceDependent = is_dest_field_dependent_on_source(
         field, dbConfig, schema_field_name
@@ -382,169 +373,6 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
     return singleSelectObj
 
 
-def get_single_dependency_visibility(field):
-    """Parses a field's action:'hide' visibility condition into a single
-    dependency.
-
-    Args:
-        field (object): Individual field in ui-config.
-
-    Returns:
-        tuple|None: (key, visible_values) when the field has a `conditions` block
-        with action 'hide' expressed as a simple OR over a single referenced
-        field, where visible_values are the values of that field which keep this
-        field shown. Returns None for no/too-complex condition.
-    """
-    conditions = field.get("conditions")
-    if not conditions or conditions.get("action") != "hide":
-        return None
-
-    expression = conditions.get("expression", {})
-
-    # For each referenced field, collect the values that keep this field visible.
-    visible_values_by_key = {}
-    for operand in expression.get("operands", []):
-        key = operand.get("key")
-        if key is not None:
-            visible_values_by_key.setdefault(key, set()).add(operand.get("value"))
-
-    # Only a simple OR over a single dependency can be reasoned about; treat
-    # anything else as too complex to express as one if/then.
-    if expression.get("operator", "OR") != "OR" or len(visible_values_by_key) != 1:
-        return None
-
-    ((key, visible_values),) = visible_values_by_key.items()
-    return key, visible_values
-
-
-def is_always_visible(field, sibling_fields, schema_field_name):
-    """Determines whether a (required) field is always shown in the UI.
-
-    A field is "always visible" when it either has no hide-condition, or its
-    `conditions` block (with action 'hide') keeps it visible for *every* option
-    of the single field it depends on. Only always-visible fields belong in the
-    unconditional `required` list; a field that is hidden for some value of its
-    dependency is required only conditionally (via allOf) and must be left out.
-
-    The check is generic: it derives the answer from the condition's operands
-    and the dependency's options, without hardcoding any field names.
-
-    Args:
-        field (object): Individual field in ui-config.
-        sibling_fields (list): Fields sharing the same parent, used to resolve
-            the dependency's available options.
-        schema_field_name (string): For old schema types, it is 'value' else
-            'configKey'.
-
-    Returns:
-        boolean: True if the field is always visible, else False.
-    """
-    if field.get("conditions", {}).get("action") != "hide":
-        return True
-
-    visibility = get_single_dependency_visibility(field)
-    if visibility is None:
-        return False
-
-    key, visible_values = visibility
-    dependency = next(
-        (
-            f
-            for f in sibling_fields
-            if f.get(schema_field_name) == key and "options" in f
-        ),
-        None,
-    )
-    if dependency is None:
-        return False
-
-    # Always visible only if it stays shown for every option of the dependency.
-    option_values = set(get_options_list_for_enum(dependency)) - {""}
-    return option_values.issubset(visible_values)
-
-
-def get_conditional_visibility(field, sibling_fields, schema_field_name):
-    """Returns (key, visible_values) for a field that is hidden for *some* values
-    of a single dependency - and therefore required only conditionally - or None
-    when the field is always visible or its condition is too complex to express
-    as one if/then block.
-
-    Args:
-        field (object): Individual field in ui-config.
-        sibling_fields (list): Fields sharing the same parent.
-        schema_field_name (string): For old schema types, it is 'value' else
-            'configKey'.
-
-    Returns:
-        tuple|None: (key, visible_values) or None.
-    """
-    visibility = get_single_dependency_visibility(field)
-    if visibility is None:
-        return None
-    if is_always_visible(field, sibling_fields, schema_field_name):
-        return None
-    return visibility
-
-
-def build_condition_match(visible_values):
-    """Builds the schema match for a dependency's revealing value(s): `const`
-    for a single value, `enum` for several."""
-    if len(visible_values) == 1:
-        return {"const": next(iter(visible_values))}
-    return {"enum": sorted(visible_values)}
-
-
-def generate_schema_for_conditions_allOf(customFields, dbConfig, schema_field_name):
-    """Builds allOf if/then blocks for fields shown via a `conditions` block.
-
-    A field whose action:'hide' condition hides it for some values of its
-    dependency is required only while visible. Its schema and (optional)
-    requirement are emitted inside an `if`/`then` keyed on the dependency
-    value(s) that reveal it - mirroring how `preRequisites` fields are handled.
-    Fields revealed by the same condition are grouped into a single block.
-
-    Args:
-        customFields (collection): child fields from ui-config.json.
-        dbConfig (object): Configurations of db-config.json.
-        schema_field_name (string): For old schema types, it is 'value' else
-            'configKey'.
-
-    Returns:
-        list: allOf items derived from conditions.
-    """
-    conditionOrder = []
-    conditionGroups = {}
-    for field in customFields:
-        if "preRequisites" in field:
-            continue
-        visibility = get_conditional_visibility(field, customFields, schema_field_name)
-        if visibility is None:
-            continue
-        key, visible_values = visibility
-        groupKey = (key, frozenset(visible_values))
-        if groupKey not in conditionGroups:
-            conditionGroups[groupKey] = []
-            conditionOrder.append(groupKey)
-        conditionGroups[groupKey].append(field)
-
-    allOfItemList = []
-    for groupKey in conditionOrder:
-        key, visible_values = groupKey
-        ifObj = {
-            "properties": {key: build_condition_match(visible_values)},
-            "required": [key],
-        }
-        thenObj = {"properties": {}, "required": []}
-        for field in conditionGroups[groupKey]:
-            thenObj["properties"][field[schema_field_name]] = uiTypetoSchemaFn.get(
-                field["type"]
-            )(field, dbConfig, schema_field_name)
-            if field.get("required") == True:
-                thenObj["required"].append(field[schema_field_name])
-        allOfItemList.append({"if": ifObj, "then": thenObj})
-    return allOfItemList
-
-
 def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     """Creates a schema object of dynamicCustomForm.
 
@@ -562,10 +390,6 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     )
     dynamicCustomFormObj = {}
     dynamicCustomFormObj["type"] = FieldTypeEnum.ARRAY.value
-    # A required dynamicCustomForm must hold at least one entry; an empty array
-    # would otherwise satisfy the schema.
-    if field.get("required") == True:
-        dynamicCustomFormObj["minItems"] = 1
     dynamicCustomFormItemObj = {}
     dynamicCustomFormItemObj["type"] = FieldTypeEnum.OBJECT.value
     dynamicCustomFormItemObj["properties"] = {}
@@ -578,8 +402,6 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
         customFieldsKey = "rowFields"
 
     allOfSchemaObj = generate_schema_for_dynamic_custom_form_allOf(
-        field[customFieldsKey], dbConfig, schema_field_name
-    ) + generate_schema_for_conditions_allOf(
         field[customFieldsKey], dbConfig, schema_field_name
     )
 
@@ -594,19 +416,7 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
         if "preRequisites" in customField:
             continue
 
-        # Fields hidden for some dependency values are emitted inside allOf
-        # above, so keep them out of the unconditional properties and required.
-        if (
-            get_conditional_visibility(
-                customField, field[customFieldsKey], schema_field_name
-            )
-            is not None
-        ):
-            continue
-
-        if customField.get("required") == True and is_always_visible(
-            customField, field[customFieldsKey], schema_field_name
-        ):
+        if customField.get("required") == True:
             requiredFields.append(customField[schema_field_name])
 
         if (
@@ -827,10 +637,6 @@ def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
     """
     tagObject = {}
     tagObject["type"] = FieldTypeEnum.ARRAY.value
-    # A required tagInput must hold at least one entry; an empty array would
-    # otherwise satisfy the schema.
-    if field.get("required") == True:
-        tagObject["minItems"] = 1
     tagItem = {}
     tagItem["type"] = FieldTypeEnum.OBJECT.value
     tagItemProps = {
@@ -840,10 +646,6 @@ def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
         }
     }
     tagItem["properties"] = tagItemProps
-    # When the tagInput field is required, each entry must carry the tag key, so
-    # mark it required on the item (mirrors the dynamicCustomForm behaviour).
-    if field.get("required") == True:
-        tagItem["required"] = [str(field["tagKey"])]
     tagObject["items"] = tagItem
     isSourceDependent = is_dest_field_dependent_on_source(
         field, dbConfig, schema_field_name

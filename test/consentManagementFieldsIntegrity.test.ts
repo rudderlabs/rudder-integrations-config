@@ -247,23 +247,8 @@ describe('Consent Management Fields Integrity tests', () => {
     });
 
     it(`should have iubenda in customFields field properly defined in ui-config.json for ${destName}`, () => {
-      // Assert directly that iubenda is a selectable provider option, rather than
-      // counting occurrences (which a `conditions` operand could satisfy without
-      // the provider option actually being present in the dropdown).
-      const consentManagementForm = findConsentManagementDynamicCustomForm(uiConfig) as any;
-      expect(consentManagementForm).toBeDefined();
-
-      const childFields =
-        consentManagementForm?.customFields ?? consentManagementForm?.rowFields ?? [];
-      const providerField = childFields.find(
-        (childField: any) => childField.value === 'provider' || childField.configKey === 'provider',
-      );
-      expect(providerField).toBeDefined();
-
-      const providerOptionValues = (providerField?.options ?? []).map(
-        (option: any) => option.value,
-      );
-      expect(providerOptionValues).toContain('iubenda');
+      const consentManagementUIElementCount = deepSearch(uiConfig, 'iubenda');
+      expect(consentManagementUIElementCount).toEqual(2);
     });
   });
 });

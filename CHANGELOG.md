@@ -2,20 +2,6 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [1.164.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.163.0...v1.164.0) (2026-07-01)
-
-
-### Features
-
-* add useEcommerceRecommendedEvents config for Braze (INT-6465) ([#2511](https://github.com/rudderlabs/rudder-config-schema/issues/2511)) ([b4232c5](https://github.com/rudderlabs/rudder-config-schema/commit/b4232c5a5683e032ecc49297fd2ad809b28184d1))
-* **braze:** add feature flag to hide the recommendedEcommerce option ([#2582](https://github.com/rudderlabs/rudder-config-schema/issues/2582)) ([0452d13](https://github.com/rudderlabs/rudder-config-schema/commit/0452d1378b556d49399a88abb3db2f7788a1b599))
-* **schema-generator:** generate required constraints from ui-config [SDK-4965] ([#2562](https://github.com/rudderlabs/rudder-config-schema/issues/2562)) ([78e6208](https://github.com/rudderlabs/rudder-config-schema/commit/78e6208344ab3828bc03aa92d398b2e1181c51ab))
-
-
-### Bug Fixes
-
-* rename apiKey to destinationKey and update setup note ([#2564](https://github.com/rudderlabs/rudder-config-schema/issues/2564)) ([e879375](https://github.com/rudderlabs/rudder-config-schema/commit/e87937509122ed301e04c639a6df8e65e77836be))
-
 ## [1.163.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.162.0...v1.163.0) (2026-06-25)
 
 
