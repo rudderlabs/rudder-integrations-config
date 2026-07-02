@@ -67,3 +67,8 @@
 - Account definition visibility is authored under `displayOptions.hidden` and validated by `src/schemas/account/account-db-config-schema.json`, separately from source/destination visibility under `options.hidden`.
 - After INT-6598, account `displayOptions.hidden` is intended to follow the same strict boolean-or-`hidden.gate` contract as source/destination definitions: gate flags require `name` and mandatory boolean `value`, reject extra flag properties, and require `gate.condition` when two or more flags are present.
 - Legacy account hidden objects using `featureFlagName`/`featureFlagValue` should be treated as rejected by the tightened account schema.
+
+## INT-6150 — Delta Lake Config Responsibilities
+
+- Databricks Delta Lake destination configuration is owned by the canonical triplet under `src/configurations/destinations/deltalake/`: `ui-config.json` controls rendered fields, `db-config.json` `destConfig.defaultConfig` is the allowlist for persisted destination config keys, and `schema.json` validates storage-provider-specific config.
+- For custom Azure Blob Delta Lake storage, hierarchical namespace behavior is modeled through the persisted `enableHierarchicalNamespace` config key; schema validation keeps `containerName` and `accountName` required in both HNS and non-HNS modes, while `accountKey`/SAS credentials remain required unless `enableHierarchicalNamespace` is explicitly `true`.

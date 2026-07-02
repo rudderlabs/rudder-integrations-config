@@ -64,3 +64,8 @@
 
 - For Braze fields matching broad connection-mode coverage, keep `preRequisites.condition` as `or` and normalize `preRequisites.fields` to the 18 unique source/mode pairs: cloud for `cloud`, `web`, `android`, `androidKotlin`, `ios`, `iosSwift`, `flutter`, `reactnative`, `unity`, `amp`, `cordova`, `shopify`, and `warehouse`; hybrid for `web`, `android`, `androidKotlin`, `ios`, and `iosSwift`.
 - During INT-6644, `enableSubscriptionGroupInGroupCall`, `enableNestedArrayOperations`, and `sendPurchaseEventWithExtraProperties` were aligned to that 18-pair coverage without adding `useEcommerceRecommendedEvents` when it was absent from the local checkout.
+
+## INT-6150 — Delta Lake Azure Blob Naming
+
+- The Databricks Delta Lake Azure storage provider value is exactly `AZURE_BLOB`; do not use `AZUREBLOB` when wiring UI conditions, schema branches, or persisted config behavior.
+- The Azure Blob hierarchical namespace toggle is named `enableHierarchicalNamespace`, defaults false in UI config, and is shown only when `bucketProvider` is `AZURE_BLOB` and `useRudderStorage` is false.
