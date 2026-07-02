@@ -37,6 +37,7 @@
 
 - The repo-wide validation test runner reads every `destinations/<name>.json` fixture under `test/data/validation/destinations/` and validates each case against the matching destination definition.
 - For Amplitude destination config changes, update `test/data/validation/destinations/am.json` to exercise the changed definition.
+
 ## INT-6644 — Braze Field Visibility Entry Point
 
 - Braze destination field visibility by source connection mode is encoded in `src/configurations/destinations/braze/ui-config.json` under each field object's `preRequisites.fields` list.
