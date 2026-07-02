@@ -105,6 +105,41 @@ See `src/configurations/destinations/http/ui-config.json` for a complete example
 
 To contribute a destination, you need to provide all the required data for all the fields you want as the settings to configure the destination.
 
+## Source and destination visibility gating
+
+Use `options.hidden` in source and destination `db-config.json` files for catalog hiding. It supports two states:
+
+- `hidden: true` for blanket hiding from all customers.
+- `hidden.gate` for hide-when gating by one or more Flagsmith flags or billing features.
+
+Use `hidden.gate` when beta or GA access depends on a Flagsmith flag, a billing feature, or both:
+
+```json
+{
+  "options": {
+    "hidden": {
+      "gate": {
+        "flags": [
+          { "name": "AMP_EXAMPLE_BETA_FLAG", "value": false },
+          { "name": "example_billing_feature", "value": false }
+        ],
+        "condition": "and"
+      }
+    }
+  }
+}
+```
+
+The gate uses hide-when semantics: the integration is hidden when the flag reduction matches the configured values. Author beta gates with the exact Flagsmith flag name, including the `AMP_` prefix. Author GA billing features as the exact feature name resolved by the webapp. Every flag item must include a boolean `value`.
+
+For a single flag, `condition` is optional. For two or more flags, set `condition` to `"and"` or `"or"`. The beta-to-GA transition shape is usually `value: false` on both the beta flag and the billing feature with `condition: "and"`, so the integration is hidden only when neither gate grants access.
+
+Beta-to-GA lifecycle:
+
+- During beta, use `hidden.gate` with the beta Flagsmith flag.
+- When GA access is controlled by billing, update `hidden.gate` to the billing feature, or combine the beta flag and billing feature with an explicit `condition` during transition.
+- Keep `hidden: true` only for blanket hiding from all customers.
+
 ## How you can provide your destination connection setting details
 
 You can checkout the sample input file [**here**](/test/configData/inputData.json):

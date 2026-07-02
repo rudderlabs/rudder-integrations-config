@@ -35,6 +35,49 @@ This repository stores the configuration files that power RudderStack’s **sour
 - **Definition configuration** – `db-config.json` files containing the definition version, integration fields, supported source types, message types, connection modes and metadata.
 - **Validation schemas** – JSON Schema `schema.json` files (consumed by AJV) used for fields validation in the backend.
 
+## Visibility gating
+
+Source and destination `db-config.json` files use `options.hidden` for catalog hiding. It has two supported states:
+
+- `hidden: true` hides the integration from all customers.
+- `hidden.gate` hides the integration when one or more Flagsmith flags or billing features match their expected boolean values.
+
+Use `hidden.gate` when beta or GA access depends on a Flagsmith flag, a billing feature, or both:
+
+```json
+{
+  "options": {
+    "hidden": {
+      "gate": {
+        "flags": [{ "name": "AMP_EXAMPLE_BETA_FLAG", "value": false }]
+      }
+    }
+  }
+}
+```
+
+For a single flag, `condition` is optional. For two or more flags, include `condition` as `"and"` or `"or"`. During a beta-to-GA transition, hide only when neither the beta flag nor the billing feature grants access:
+
+```json
+{
+  "options": {
+    "hidden": {
+      "gate": {
+        "flags": [
+          { "name": "AMP_EXAMPLE_BETA_FLAG", "value": false },
+          { "name": "example_billing_feature", "value": false }
+        ],
+        "condition": "and"
+      }
+    }
+  }
+}
+```
+
+The gate uses hide-when semantics: the integration is hidden when the flag reduction matches the configured values. Flag names must match exactly what the webapp resolves. Flagsmith beta flags keep their `AMP_` prefix, and GA billing features are authored as-is. The `value` field is mandatory on every flag item.
+
+Use `hidden.gate` for beta-to-GA or billing-feature exposure. Keep `hidden: true` only for definitions that should be hidden from all customers.
+
 ## Getting started
 
 You need to install Python3.

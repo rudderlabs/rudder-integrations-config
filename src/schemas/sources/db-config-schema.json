@@ -130,21 +130,70 @@
             },
             {
               "type": "object",
-              "title": "Hidden",
-              "description": "Whether the source is hidden.",
-              "$comment": "This is used to hide the source from the UI.",
+              "title": "Hidden Gate",
+              "description": "Feature flags or billing features that hide the source when they match their expected values.",
+              "$comment": "This is used to hide the source from the UI based on one or more gates.",
+              "additionalProperties": false,
+              "required": ["gate"],
               "properties": {
-                "featureFlagName": {
-                  "type": "string",
-                  "title": "Feature Flag Name",
-                  "description": "The feature flag name to hide the source.",
-                  "$comment": "This is used to hide the source from the UI based on the feature flag."
-                },
-                "featureFlagValue": {
-                  "type": "boolean",
-                  "title": "Feature Flag Value",
-                  "description": "The feature flag value to hide the source.",
-                  "$comment": "This is used to hide the source from the UI based on the feature flag value."
+                "gate": {
+                  "type": "object",
+                  "title": "Hidden Gate",
+                  "description": "Feature flags or billing features that hide the source when their reduction matches.",
+                  "additionalProperties": false,
+                  "required": ["flags"],
+                  "properties": {
+                    "flags": {
+                      "type": "array",
+                      "title": "Hidden Gate Flags",
+                      "description": "Feature flags or billing features that must match their expected values for the source to be hidden.",
+                      "minItems": 1,
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": ["name", "value"],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "title": "Name",
+                            "description": "The exact feature name resolved by the webapp."
+                          },
+                          "value": {
+                            "type": "boolean",
+                            "title": "Value",
+                            "description": "The boolean value that hides the source."
+                          }
+                        }
+                      }
+                    },
+                    "condition": {
+                      "type": "string",
+                      "title": "Condition",
+                      "description": "How multiple hidden gate flags should be combined.",
+                      "enum": ["and", "or"]
+                    }
+                  },
+                  "allOf": [
+                    {
+                      "if": {
+                        "properties": {
+                          "flags": {
+                            "type": "array",
+                            "minItems": 2
+                          }
+                        },
+                        "required": ["flags"]
+                      },
+                      "then": {
+                        "properties": {
+                          "condition": {
+                            "enum": ["and", "or"]
+                          }
+                        },
+                        "required": ["condition"]
+                      }
+                    }
+                  ]
                 }
               }
             }

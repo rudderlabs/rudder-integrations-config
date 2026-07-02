@@ -789,13 +789,18 @@
               ],
               "required": true,
               "variant": "badge",
-              "preRequisites": {
-                "fields": [
-                  {
-                    "configKey": "provider",
-                    "value": "custom"
-                  }
-                ]
+              "conditions": {
+                "expression": {
+                  "operator": "OR",
+                  "operands": [
+                    {
+                      "type": "configuration",
+                      "key": "provider",
+                      "value": "custom"
+                    }
+                  ]
+                },
+                "action": "hide"
               }
             },
             {
@@ -804,12 +809,37 @@
               "note": "Input your consent category IDs by pressing 'Enter' after each entry. We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
               "configKey": "consents",
               "tagKey": "consent",
-              "placeholder": "e.g: Marketing",
-              "default": [
-                {
-                  "consent": ""
-                }
-              ]
+              "placeholder": "e.g: ID1",
+              "required": true,
+              "regex": "^(?=.*\\S).{1,100}$",
+              "conditions": {
+                "expression": {
+                  "operator": "OR",
+                  "operands": [
+                    {
+                      "type": "configuration",
+                      "key": "provider",
+                      "value": "oneTrust"
+                    },
+                    {
+                      "type": "configuration",
+                      "key": "provider",
+                      "value": "iubenda"
+                    },
+                    {
+                      "type": "configuration",
+                      "key": "provider",
+                      "value": "ketch"
+                    },
+                    {
+                      "type": "configuration",
+                      "key": "provider",
+                      "value": "custom"
+                    }
+                  ]
+                },
+                "action": "hide"
+              }
             }
           ],
           "uniqueRowFields": ["provider"]
