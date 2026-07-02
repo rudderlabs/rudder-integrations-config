@@ -64,3 +64,8 @@
 
 - For Braze fields matching broad connection-mode coverage, keep `preRequisites.condition` as `or` and normalize `preRequisites.fields` to the 18 unique source/mode pairs: cloud for `cloud`, `web`, `android`, `androidKotlin`, `ios`, `iosSwift`, `flutter`, `reactnative`, `unity`, `amp`, `cordova`, `shopify`, and `warehouse`; hybrid for `web`, `android`, `androidKotlin`, `ios`, and `iosSwift`.
 - During INT-6644, `enableSubscriptionGroupInGroupCall`, `enableNestedArrayOperations`, and `sendPurchaseEventWithExtraProperties` were aligned to that 18-pair coverage without adding `useEcommerceRecommendedEvents` when it was absent from the local checkout.
+
+## INT-6696 — Destination Audience Support Schema Coupling
+
+- Destination `config.isAudienceSupported` is authored in each destination's `src/configurations/destinations/<name>/db-config.json` and is schema-gated by `src/schemas/destinations/db-config-schema.json`; restoring or changing that flag requires keeping the destination configs and destination meta-schema aligned.
+- Treat `config.isAudienceSupported` and `config.supportsVisualMapperV2` as a guarded combination: PR #2555 added a destination schema exclusion that rejects audience support when Visual Mapper V2 support is present/enabled, so reintroducing legacy audience support may require an intentional schema change, not only per-destination JSON edits.
