@@ -69,3 +69,8 @@
 
 - Destination `config.isAudienceSupported` is authored in each destination's `src/configurations/destinations/<name>/db-config.json` and is schema-gated by `src/schemas/destinations/db-config-schema.json`; restoring or changing that flag requires keeping the destination configs and destination meta-schema aligned.
 - Treat `config.isAudienceSupported` and `config.supportsVisualMapperV2` as a guarded combination: PR #2555 added a destination schema exclusion that rejects audience support when Visual Mapper V2 support is present/enabled, so reintroducing legacy audience support may require an intentional schema change, not only per-destination JSON edits.
+
+## INT-6150 — Delta Lake Azure Blob Naming
+
+- The Databricks Delta Lake Azure storage provider value is exactly `AZURE_BLOB`; do not use `AZUREBLOB` when wiring UI conditions, schema branches, or persisted config behavior.
+- The Azure Blob hierarchical namespace toggle is named `enableHierarchicalNamespace`, defaults false in UI config, and is shown only when `bucketProvider` is `AZURE_BLOB` and `useRudderStorage` is false.
