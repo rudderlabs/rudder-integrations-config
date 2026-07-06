@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.165.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.164.0...v1.165.0) (2026-07-06)
+
+
+### Features
+
+* support deltalake azure hierarchical namespace config ([#2540](https://github.com/rudderlabs/rudder-config-schema/issues/2540)) ([0deec58](https://github.com/rudderlabs/rudder-config-schema/commit/0deec58a0b05033df9ac8cfae0fbccaaae2a9620))
+
+
+### Bug Fixes
+
+* restore legacy audience support for vdm v2 destinations ([#2585](https://github.com/rudderlabs/rudder-config-schema/issues/2585)) ([28822fe](https://github.com/rudderlabs/rudder-config-schema/commit/28822fef68da0e979e8fd0f4aa60a106828e12d9))
+
 ## [1.164.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.163.0...v1.164.0) (2026-07-01)
 
 
