@@ -308,23 +308,6 @@ describe('Destination Definition validation tests', () => {
       expected: '["config must NOT be valid","config must match \\"then\\" schema"]',
     },
     {
-      description: 'supportsVisualMapperV2 cannot be combined with legacy audience support',
-      input: {
-        name: 'test',
-        displayName: 'Test',
-        version: '1.0',
-        config: {
-          supportedSourceTypes: ['web'],
-          destConfig: {
-            defaultConfig: ['temp'],
-          },
-          supportsVisualMapperV2: true,
-          isAudienceSupported: true,
-        },
-      },
-      expected: '["config must NOT be valid","config must match \\"then\\" schema"]',
-    },
-    {
       description: 'hybridModeCloudEventsFilter is not a valid map',
       input: {
         name: 'test',
@@ -591,6 +574,21 @@ describe('Destination Definition validation tests', () => {
       testCase.expected,
       testCase.exact,
     );
+  });
+
+  it('accepts Visual Mapper V2 with legacy audience support', async () => {
+    const destinationDefinition = getMinimalDestinationDefinition();
+
+    await expect(
+      validateDestinationDefinitions({
+        ...destinationDefinition,
+        config: {
+          ...destinationDefinition.config,
+          supportsVisualMapperV2: true,
+          isAudienceSupported: true,
+        },
+      }),
+    ).resolves.toEqual(true);
   });
 
   it('accepts boolean hidden', async () => {

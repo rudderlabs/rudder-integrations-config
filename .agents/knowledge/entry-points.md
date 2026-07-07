@@ -37,3 +37,8 @@
 
 - Braze destination field visibility by source connection mode is encoded in `src/configurations/destinations/braze/ui-config.json` under each field object's `preRequisites.fields` list.
 - The adjacent `src/configurations/destinations/braze/db-config.json` controls included config keys and supported source types, but it is not the per-field UI prerequisite coverage source of truth.
+
+## INT-6696 — Audience Destination Restore Entry Points
+
+- PR #2555 removed `config.isAudienceSupported: true` from these seven destination definitions: `src/configurations/destinations/custom_audience/db-config.json`, `src/configurations/destinations/customerio_audience/db-config.json`, `src/configurations/destinations/fb_custom_audience/db-config.json`, `src/configurations/destinations/google_adwords_remarketing_lists/db-config.json`, `src/configurations/destinations/linkedin_audience/db-config.json`, `src/configurations/destinations/tiktok_audience/db-config.json`, and `src/configurations/destinations/zoho/db-config.json`.
+- The paired schema change in that PR was in `src/schemas/destinations/db-config-schema.json`, where the destination config schema began rejecting `config.isAudienceSupported` in combination with `config.supportsVisualMapperV2`.
