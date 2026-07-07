@@ -1,6 +1,7 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "additionalProperties": false,
     "required": ["authorizationType", "apiVersion"],
     "type": "object",
     "properties": {
@@ -374,7 +375,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -423,7 +425,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -472,7 +475,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -521,7 +525,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -570,7 +575,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -619,7 +625,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -668,7 +675,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -717,7 +725,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -766,7 +775,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -815,7 +825,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -864,7 +875,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -913,7 +925,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -962,7 +975,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -1027,6 +1041,54 @@
             "enum": ["cloud"]
           }
         }
+      },
+      "apiKey": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "accessToken": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      },
+      "lookupField": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "doAssociation": {
+        "type": "boolean",
+        "default": false
+      },
+      "hubspotEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "rsEventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "hubspotEventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "eventProperties": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "from": {
+                    "type": "string",
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  },
+                  "to": {
+                    "type": "string",
+                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "allOf": [
@@ -1082,42 +1144,6 @@
             "lookupField": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            },
-            "doAssociation": {
-              "type": "boolean",
-              "default": false
-            },
-            "hubspotEvents": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "rsEventName": {
-                    "type": "string",
-                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                  },
-                  "hubspotEventName": {
-                    "type": "string",
-                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                  },
-                  "eventProperties": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "from": {
-                          "type": "string",
-                          "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                        },
-                        "to": {
-                          "type": "string",
-                          "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
             }
           },
           "required": ["lookupField"]
