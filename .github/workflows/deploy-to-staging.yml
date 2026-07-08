@@ -35,9 +35,20 @@ jobs:
     needs: deploy
     permissions: {}
     steps:
+      - name: Generate token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ vars.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: |
+            rudder-integrations-config
+            rudder-api-test
+
       - name: Trigger Post Deployment Tests
         env:
-          GH_TOKEN: ${{ secrets.PAT }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           curl -L \
             -X POST \
