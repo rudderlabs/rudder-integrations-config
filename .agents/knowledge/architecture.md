@@ -62,6 +62,12 @@
 - The reusable deployment workflow `.github/workflows/deploy.yml` owns the Slack notification behavior and declares workflow-call secrets `SLACK_BOT_TOKEN` and `SLACK_RELEASE_CHANNEL_ID`.
 - Caller workflows pass those Slack secrets through deployment wrappers, including `.github/workflows/deploy-to-prod.yml`, `.github/workflows/deploy-to-staging.yml`, `.github/workflows/deploy-to-dev.yml`, `.github/workflows/manual-deploy.yml`, and `.github/workflows/rollback.yml` via the production deploy wrapper.
 
+## SDK-5013 — Amplitude Hand-Authored Config Triplet
+
+- The Amplitude destination is hand-authored under `src/configurations/destinations/am/` as `db-config.json`, `ui-config.json`, and `schema.json`; there is no Amplitude `ui-config.jt` or `ui-default.json` generation flow, so destination setting changes belong directly in that JSON triplet.
+- For Amplitude Browser SDK settings, `schema.json` owns configSchema booleans/defaults, `db-config.json` owns `includeKeys` and per-source `config.destConfig.<sourceType>` exposure, and `ui-config.json` owns dashboard grouping, visibility, defaults, and SDK-version conditions.
+- Amplitude Browser SDK settings are sourced from `ui-config.json` `sdkTemplate.fields` and copied into per-source SDK groups according to the keys exposed in `db-config.json` `config.destConfig.<sourceType>`.
+
 ## INT-6598 — Account Visibility Schema Boundary
 
 - Account definition visibility is authored under `displayOptions.hidden` and validated by `src/schemas/account/account-db-config-schema.json`, separately from source/destination visibility under `options.hidden`.

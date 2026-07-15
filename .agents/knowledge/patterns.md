@@ -55,3 +55,9 @@
 - In `.github/workflows/deploy.yml`, release-channel success Slack messages remain opt-in: they are gated by `inputs.notify == true && inputs.dry_run == false`.
 - Deployment failure alerts are intentionally broader: the failure alert gate is `failure() && inputs.dry_run == false` and does not include `inputs.notify`, so internal responders are notified for every real deployment failure.
 - Dry runs should suppress both success and failure Slack notifications; real deployment failures should notify internal channels even when optional release notifications are disabled.
+
+## SDK-5013 — Amplitude Browser SDK Version Gating
+
+- Amplitude `ui-config.json` gates the legacy "Save Referrer, URL Params, GCLID only once per session" field with a `conditions.expression` built from an `operator` (`AND`/`OR`) plus an `operands` array — each operand is `{ type: "configuration", key, value }`. There is no top-level `expression.type`; the `type: "configuration"` lives on the operands. This field ANDs `connectionMode.web == "device"` with `sdkVersion.web == 1`.
+- Reuse that operand pattern (wrapped in the required `AND`/`OR` expression structure) for other Amplitude Browser SDK settings that need SDK-version-specific visibility.
+- When extending an existing Amplitude config object to web, prefer adding a `web` boolean property to the existing object in `schema.json` and adding the same key to `db-config.json` `config.destConfig.web`, rather than introducing a parallel key.
