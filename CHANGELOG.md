@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.165.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.165.0...v1.165.1) (2026-07-14)
+
+
+### Bug Fixes
+
+* **customerio:** unmark apiKey as secret in UI config ([#2594](https://github.com/rudderlabs/rudder-config-schema/issues/2594)) ([6b811b1](https://github.com/rudderlabs/rudder-config-schema/commit/6b811b19bc5b6eaf79146afbda8ac80d9cbf7615))
+
 ## [1.165.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.164.0...v1.165.0) (2026-07-06)
 
 
