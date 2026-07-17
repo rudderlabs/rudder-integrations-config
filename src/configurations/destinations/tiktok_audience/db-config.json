@@ -29,5 +29,25 @@
     "supportedConnectionModes": {
       "warehouse": ["cloud"]
     }
+  },
+  "options": {
+    "audienceActivation": {
+      "discovery": {
+        "operations": {
+          "listFields": "listFields",
+          "listAudiences": "listAudiences",
+          "setup": "setup"
+        },
+        "contextFields": ["advertiserId"]
+      },
+      "vdm": {
+        "configDefaults": {
+          "syncMode": "mirror",
+          "isHashRequired": "yes",
+          "createAudience": "no"
+        }
+      },
+      "mappingGuidance": "Map every clean identifier you have. TikTok matches on any provided identifier — each is standalone-sufficient. Use field names below verbatim as `to`; they are exactly what get_audience_destination_schema returns in fields[].name.\n\nAll 6 fields are identifier slots whose suffix names the hash algorithm the integration applies — not a cue to hash the values yourself:\n- EMAIL_SHA256, PHONE_SHA256 — for email and phone.\n- IDFA_SHA256 (iOS), AAID_SHA256 (Android) — mobile advertising IDs.\n- IDFA_MD5, AAID_MD5 — same mobile IDs in MD5, legacy only. Prefer the SHA256 variants.\n\nSend RAW warehouse values. The integration hashes (using the algorithm named in the field) and normalizes (email→lowercase, phone→E.164 digits-only) on send. Do NOT pre-hash."
+    }
   }
 }
