@@ -74,3 +74,8 @@
 
 - The Databricks Delta Lake Azure storage provider value is exactly `AZURE_BLOB`; do not use `AZUREBLOB` when wiring UI conditions, schema branches, or persisted config behavior.
 - The Azure Blob hierarchical namespace toggle is named `enableHierarchicalNamespace`, defaults false in UI config, and is shown only when `bucketProvider` is `AZURE_BLOB` and `useRudderStorage` is false.
+
+## SDK-5126 — Amplitude Browser SDK Default Sync
+
+- Amplitude Browser SDK default changes must keep `src/configurations/destinations/am/schema.json` `configSchema.properties.sdkVersion.properties.web.default` and the `ui-config.json` SDK Version singleSelect default synchronized; after SDK-5126 both default to `2` while enum/options still allow both `1` and `2`.
+- Treat Amplitude `sdkVersion.web` condition blocks as behavior gates, not automatic migration targets: SDK-5126 intentionally changed only new-destination defaults and stale UI copy, leaving existing conditional UI blocks keyed on `sdkVersion.web` unchanged so explicit stored values and v1 selection remain supported.
