@@ -1,0 +1,33 @@
+{
+  "optionsSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["bucketName", "iamRoleARN"],
+    "properties": {
+      "bucketName": {
+        "type": "string",
+        "pattern": "^(?!.*\\.\\.)(?!.*\\.$)(?!^\\.)[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$",
+        "description": "Name of the S3 bucket where data is retained."
+      },
+      "prefix": {
+        "type": "string",
+        "description": "Optional path prefix within the bucket."
+      },
+      "enableSSE": {
+        "type": "string",
+        "enum": ["true", "false"],
+        "default": "false",
+        "description": "Enable server-side encryption for objects written to the bucket."
+      },
+      "iamRoleARN": {
+        "type": "string",
+        "pattern": "^arn:aws[a-zA-Z-]*:iam::\\d{12}:role/.+$",
+        "description": "ARN of the IAM role RudderStack assumes to access the bucket."
+      },
+      "roleBasedAuth": {
+        "type": "boolean",
+        "description": "Selects assume-role authentication in the data plane. True for this IAM-role account definition."
+      }
+    }
+  }
+}
