@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.166.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.165.1...v1.166.0) (2026-07-21)
+
+
+### Features
+
+* add amplitude v2 autocapture toggles ([#2563](https://github.com/rudderlabs/rudder-config-schema/issues/2563)) ([4838181](https://github.com/rudderlabs/rudder-config-schema/commit/483818107cd5095d601379ed4d18c1f91598b84a))
+* **data-retention:** storage account definitions (S3/GCS/Azure/MinIO) ([#2584](https://github.com/rudderlabs/rudder-config-schema/issues/2584)) ([a9f9586](https://github.com/rudderlabs/rudder-config-schema/commit/a9f9586181bf8f803db8ac5ce4fa7ba003adc116))
+* gate 5/15-min warehouse sync options behind AMP_enable-high-granularity-wh-syncs ([#2603](https://github.com/rudderlabs/rudder-config-schema/issues/2603)) ([70f9470](https://github.com/rudderlabs/rudder-config-schema/commit/70f94705117ef32a1e8bf6aa9682a9b927102512))
+* **tiktok_audience:** add audienceActivation metadata ([#2519](https://github.com/rudderlabs/rudder-config-schema/issues/2519)) ([631b459](https://github.com/rudderlabs/rudder-config-schema/commit/631b4595f8934e6088b84f9f1884bc855732390f))
+
 ### [1.165.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.165.0...v1.165.1) (2026-07-14)
 
 
