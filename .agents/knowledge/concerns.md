@@ -49,6 +49,11 @@
 - `.github/workflows/deploy-to-dev.yml` has been observed mapping `SLACK_BOT_TOKEN` as `$$ {{ secrets.SLACK_BOT_TOKEN }}` with an extra `$` and a space inside the expression.
 - That malformed expression can prevent the dev deployment path from receiving the intended Slack token, which makes dev an unreliable signal when validating deployment Slack notification changes.
 
+## SDK-5013 — Amplitude Shared SDK Template Condition Risk
+
+- Reusing an Amplitude `sdkTemplate.fields` field for a newly added web `destConfig` key can also apply that field's conditions to mobile copies of the same config key, because SDK template fields are copied into per-source SDK groups based on `db-config.json` `config.destConfig.<sourceType>`.
+- Source-specific web-only behavior may require a renderer-supported source filter or a separate UI field shape instead of relying only on a field-level condition.
+
 ## INT-6598 — Hidden Gate Billing Feature Confirmation
 
 - During INT-6598, beta hidden definitions with unknown billing feature names were migrated to single-flag `hidden.gate` entries that preserve the existing Flagsmith flag and boolean value instead of inventing billing feature names.

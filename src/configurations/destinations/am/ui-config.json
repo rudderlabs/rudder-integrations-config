@@ -629,7 +629,7 @@
           "label": "SDK Version",
           "configKey": "sdkVersion",
           "note": [
-            "Specifies the Amplitude Web SDK version to use for JavaScript sources (defaults to 1). If you are upgrading to 2, be aware of the following behavioral changes: Attribution will automatically track new campaigns, and re-identifying a user will no longer reset the active session. For more information, visit the ",
+            "Specifies the Amplitude Web SDK version to use for JavaScript sources (defaults to 1.x). If you are upgrading to 2.x, be aware of the following behavioral changes: Attribution will automatically track new campaigns, and re-identifying a user will no longer reset the active session. Refer to the Enhanced Tracking section to review and configure these behaviors for your source. For more information, visit the ",
             {
               "text": "documentation",
               "link": "https://www.rudderstack.com/docs/destinations/streaming-destinations/amplitude/device-mode/#amplitude-browser-sdk-version"
@@ -637,11 +637,11 @@
           ],
           "options": [
             {
-              "label": "1",
+              "label": "1.x",
               "value": 1
             },
             {
-              "label": "2",
+              "label": "2.x",
               "value": 2
             }
           ],
@@ -662,13 +662,6 @@
           "note": "Capture user location information for anyone who has granted app location permission",
           "configKey": "enableLocationListening",
           "default": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Track session events",
-          "note": "Send start and end session events",
-          "configKey": "trackSessionEvents",
-          "default": false
         },
         {
           "type": "checkbox",
@@ -698,27 +691,6 @@
           "default": false
         },
         {
-          "type": "checkbox",
-          "label": "Disable Attribution",
-          "note": "Disable the attribution tracking",
-          "configKey": "attribution",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Save Referrer, URL Params, GCLID only once per session",
-          "note": "Track GCLID, referrer, and UTM parameters only once per session, ignoring any new values which may enter a user's session",
-          "configKey": "trackNewCampaigns",
-          "default": true,
-          "conditions": {
-            "expression": {
-              "type": "configuration",
-              "key": "sdkVersion.web",
-              "value": 1
-            }
-          }
-        },
-        {
           "type": "textInput",
           "label": "Batch event upload period (ms)",
           "note": "Set the time limit (in ms) between batch uploads",
@@ -737,6 +709,293 @@
           "regexErrorMessage": "Invalid Value",
           "default": "30",
           "placeholder": "e.g: 30"
+        }
+      ],
+      "groups": [
+        {
+          "title": "Enhanced tracking",
+          "note": "Configure additional enhanced tracking behavior for the Amplitude SDK.",
+          "fields": [
+            {
+              "type": "checkbox",
+              "label": "Disable Attribution",
+              "note": "Disable the attribution tracking",
+              "configKey": "attribution",
+              "default": false,
+              "conditions": {
+                "expression": {
+                  "type": "configuration",
+                  "key": "connectionMode.web",
+                  "value": "device"
+                }
+              }
+            },
+            {
+              "type": "checkbox",
+              "label": "Save Referrer, URL Params, GCLID only once per session",
+              "note": "Track GCLID, referrer, and UTM parameters only once per session, ignoring any new values which may enter a user's session",
+              "configKey": "trackNewCampaigns",
+              "default": true,
+              "conditions": {
+                "expression": {
+                  "operator": "AND",
+                  "operands": [
+                    {
+                      "type": "configuration",
+                      "key": "connectionMode.web",
+                      "value": "device"
+                    },
+                    {
+                      "type": "configuration",
+                      "key": "sdkVersion.web",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "checkbox",
+              "label": "Auto-capture page views",
+              "configKey": "enablePageViewsAutoCapture",
+              "note": "Let the Amplitude SDK auto-detect browser navigation and emit [Amplitude] Page Viewed events on its own, in addition to any RudderStack-translated \"page()\" calls. Leave OFF if your app already instruments \"rudder.page()\" to avoid duplicate page events in Amplitude.",
+              "default": false,
+              "conditions": {
+                "expression": {
+                  "operator": "AND",
+                  "operands": [
+                    {
+                      "type": "configuration",
+                      "key": "connectionMode.web",
+                      "value": "device"
+                    },
+                    {
+                      "type": "configuration",
+                      "key": "sdkVersion.web",
+                      "value": 2
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "checkbox",
+              "label": "Track session events",
+              "note": "Send start and end session events.",
+              "configKey": "trackSessionEvents",
+              "default": false,
+              "conditions": {
+                "expression": {
+                  "operator": "OR",
+                  "operands": [
+                    {
+                      "type": "configuration",
+                      "key": "connectionMode.android",
+                      "value": "device"
+                    },
+                    {
+                      "type": "configuration",
+                      "key": "connectionMode.ios",
+                      "value": "device"
+                    },
+                    {
+                      "type": "configuration",
+                      "key": "connectionMode.flutter",
+                      "value": "device"
+                    },
+                    {
+                      "type": "configuration",
+                      "key": "connectionMode.reactnative",
+                      "value": "device"
+                    },
+                    {
+                      "operator": "AND",
+                      "operands": [
+                        {
+                          "type": "configuration",
+                          "key": "connectionMode.web",
+                          "value": "device"
+                        },
+                        {
+                          "type": "configuration",
+                          "key": "sdkVersion.web",
+                          "value": 2
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "checkbox",
+              "label": "Page URL Enrichment",
+              "configKey": "enablePageUrlEnrichmentAutoCapture",
+              "note": "Attach the current page URL to every event sent to Amplitude. Useful for cross-page analytics.",
+              "default": false,
+              "conditions": {
+                "expression": {
+                  "operator": "AND",
+                  "operands": [
+                    {
+                      "type": "configuration",
+                      "key": "connectionMode.web",
+                      "value": "device"
+                    },
+                    {
+                      "type": "configuration",
+                      "key": "sdkVersion.web",
+                      "value": 2
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "checkbox",
+              "label": "Web Vitals",
+              "configKey": "enableWebVitalsAutoCapture",
+              "note": "Capture Core Web Vitals (LCP, FCP, INP, CLS, TTFB) as Amplitude events for performance monitoring.",
+              "default": false,
+              "conditions": {
+                "expression": {
+                  "operator": "AND",
+                  "operands": [
+                    {
+                      "type": "configuration",
+                      "key": "connectionMode.web",
+                      "value": "device"
+                    },
+                    {
+                      "type": "configuration",
+                      "key": "sdkVersion.web",
+                      "value": 2
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "checkbox",
+              "label": "File Downloads",
+              "configKey": "enableFileDownloadsAutoCapture",
+              "note": "Automatically track clicks on download links (PDFs, ZIPs, documents) as Amplitude events.",
+              "default": false,
+              "conditions": {
+                "expression": {
+                  "operator": "AND",
+                  "operands": [
+                    {
+                      "type": "configuration",
+                      "key": "connectionMode.web",
+                      "value": "device"
+                    },
+                    {
+                      "type": "configuration",
+                      "key": "sdkVersion.web",
+                      "value": 2
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "checkbox",
+              "label": "Frustration Interactions",
+              "configKey": "enableFrustrationInteractionsAutoCapture",
+              "note": "Capture rage clicks, dead clicks, and error clicks as Amplitude events for UX-research signals.",
+              "default": false,
+              "conditions": {
+                "expression": {
+                  "operator": "AND",
+                  "operands": [
+                    {
+                      "type": "configuration",
+                      "key": "connectionMode.web",
+                      "value": "device"
+                    },
+                    {
+                      "type": "configuration",
+                      "key": "sdkVersion.web",
+                      "value": 2
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "checkbox",
+              "label": "Network Tracking",
+              "configKey": "enableNetworkTrackingAutoCapture",
+              "note": "Capture failed network requests as Amplitude events.\nRISK: Most teams use Sentry or Datadog for this. Enable only if you want network errors in your analytics pipeline.",
+              "default": false,
+              "conditions": {
+                "expression": {
+                  "operator": "AND",
+                  "operands": [
+                    {
+                      "type": "configuration",
+                      "key": "connectionMode.web",
+                      "value": "device"
+                    },
+                    {
+                      "type": "configuration",
+                      "key": "sdkVersion.web",
+                      "value": 2
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "checkbox",
+              "label": "Element Interactions",
+              "configKey": "enableElementInteractionsAutoCapture",
+              "note": "Capture clicks, changes, and other DOM events on every element on the page.\nRISK: High event volume — every DOM click — and may capture user-entered text or other PII. Review your data-volume budget and PII handling before enabling.",
+              "default": false,
+              "conditions": {
+                "expression": {
+                  "operator": "AND",
+                  "operands": [
+                    {
+                      "type": "configuration",
+                      "key": "connectionMode.web",
+                      "value": "device"
+                    },
+                    {
+                      "type": "configuration",
+                      "key": "sdkVersion.web",
+                      "value": 2
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "checkbox",
+              "label": "Form Interactions",
+              "configKey": "enableFormInteractionsAutoCapture",
+              "note": "Capture form submissions and field changes as Amplitude events.\nRISK: Captures form field values, which may include PII (emails, names, payment data). Audit your forms before enabling.",
+              "default": false,
+              "conditions": {
+                "expression": {
+                  "operator": "AND",
+                  "operands": [
+                    {
+                      "type": "configuration",
+                      "key": "connectionMode.web",
+                      "value": "device"
+                    },
+                    {
+                      "type": "configuration",
+                      "key": "sdkVersion.web",
+                      "value": 2
+                    }
+                  ]
+                }
+              }
+            }
+          ]
         }
       ]
     },

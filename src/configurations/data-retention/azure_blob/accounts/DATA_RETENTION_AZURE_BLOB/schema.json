@@ -1,0 +1,34 @@
+{
+  "secretSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["accountKey"],
+    "properties": {
+      "accountKey": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|^(.{1,500})$"
+      }
+    }
+  },
+  "optionsSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["containerName", "accountName"],
+    "properties": {
+      "containerName": {
+        "type": "string",
+        "pattern": "^[a-z0-9](?!.*--)[a-z0-9-]{1,61}[a-z0-9]$",
+        "description": "Name of the Azure Blob container where data is retained."
+      },
+      "prefix": {
+        "type": "string",
+        "description": "Optional path prefix within the container."
+      },
+      "accountName": {
+        "type": "string",
+        "pattern": "^[a-z0-9]{3,24}$",
+        "description": "Azure storage account name that owns the container."
+      }
+    }
+  }
+}
