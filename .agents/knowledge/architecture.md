@@ -78,3 +78,9 @@
 
 - Databricks Delta Lake destination configuration is owned by the canonical triplet under `src/configurations/destinations/deltalake/`: `ui-config.json` controls rendered fields, `db-config.json` `destConfig.defaultConfig` is the allowlist for persisted destination config keys, and `schema.json` validates storage-provider-specific config.
 - For custom Azure Blob Delta Lake storage, hierarchical namespace behavior is modeled through the persisted `enableHierarchicalNamespace` config key; schema validation keeps `containerName` and `accountName` required in both HNS and non-HNS modes, while `accountKey`/SAS credentials remain required unless `enableHierarchicalNamespace` is explicitly `true`.
+
+## AI-1226 — Heap Hand-Authored Configuration Boundary
+
+- The Heap destination is a pure configuration bundle under `src/configurations/destinations/heap/` with only `db-config.json`, `ui-config.json`, and `schema.json`; there is no Heap `ui-config.jt`/`ui-default.json` generation path in this checkout.
+- Heap destination setting changes such as `dataResidency` belong in that hand-authored triplet: `ui-config.json` controls the dashboard field, `schema.json` validates the persisted config value, and `db-config.json` `includeKeys` plus `config.destConfig.defaultConfig` expose it to runtime consumers.
+- Runtime endpoint switching for Heap cloud mode is outside this repository; this repo supplies declarative integration metadata consumed by the transformer/control plane.
