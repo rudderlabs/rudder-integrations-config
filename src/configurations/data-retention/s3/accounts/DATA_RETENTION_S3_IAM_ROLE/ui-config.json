@@ -1,0 +1,58 @@
+{
+  "uiConfig": {
+    "name": "IAM Role",
+    "icon": "key",
+    "description": "Grant access to your S3 bucket using an AWS IAM role",
+    "recommended": true,
+    "form": {
+      "title": "Connect your S3 bucket",
+      "fields": [
+        {
+          "component": "textField",
+          "label": "Account name",
+          "placeholder": "e.g: Data Retention S3 prod",
+          "key": "name"
+        },
+        {
+          "component": "textField",
+          "label": "Bucket name",
+          "placeholder": "e.g: my-data-retention-bucket",
+          "key": ["options", "bucketName"],
+          "note": "Name of the S3 bucket where data is retained."
+        },
+        {
+          "component": "textField",
+          "label": "IAM Role ARN",
+          "placeholder": "e.g: arn:aws:iam::123456789012:role/rudderstack-s3-access",
+          "key": ["options", "iamRoleARN"],
+          "note": "ARN of the IAM role RudderStack assumes to access the bucket."
+        },
+        {
+          "component": "textField",
+          "label": "Prefix",
+          "placeholder": "e.g: rudder",
+          "key": ["options", "prefix"],
+          "optional": true,
+          "note": "Optional path prefix within the bucket."
+        },
+        {
+          "component": "selectField",
+          "label": "Enable SSE",
+          "key": ["options", "enableSSE"],
+          "options": [
+            {
+              "label": "Enabled",
+              "value": "true"
+            },
+            {
+              "label": "Disabled",
+              "value": "false"
+            }
+          ],
+          "default": "false",
+          "note": "Enable server-side encryption for objects written to the bucket."
+        }
+      ]
+    }
+  }
+}

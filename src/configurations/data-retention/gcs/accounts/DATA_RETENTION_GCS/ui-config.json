@@ -1,0 +1,42 @@
+{
+  "uiConfig": {
+    "name": "Service Account Key",
+    "icon": "key",
+    "description": "Grant access to your GCS bucket using a GCP service account key",
+    "recommended": true,
+    "form": {
+      "title": "Connect your GCS bucket",
+      "fields": [
+        {
+          "component": "textField",
+          "label": "Account name",
+          "placeholder": "e.g: Data Retention GCS prod",
+          "key": "name"
+        },
+        {
+          "component": "textField",
+          "label": "Credentials",
+          "placeholder": "e.g: { \"type\": \"service_account\", ... }",
+          "key": ["options", "credentials"],
+          "secret": true,
+          "note": "Paste the full GCP service account key JSON with write access to the bucket."
+        },
+        {
+          "component": "textField",
+          "label": "Bucket name",
+          "placeholder": "e.g: my-data-retention-bucket",
+          "key": ["options", "bucketName"],
+          "note": "Name of the GCS bucket where data is retained."
+        },
+        {
+          "component": "textField",
+          "label": "Prefix",
+          "placeholder": "e.g: rudder",
+          "key": ["options", "prefix"],
+          "optional": true,
+          "note": "Optional path prefix within the bucket."
+        }
+      ]
+    }
+  }
+}
