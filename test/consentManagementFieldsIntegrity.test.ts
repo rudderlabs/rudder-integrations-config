@@ -70,6 +70,7 @@ describe('Consent Management Fields Integrity tests', () => {
     'linkedin_audience',
     'custom_audience',
     'iterable_audience',
+    'braze_audience',
   ];
 
   const destDir = path.resolve('src/configurations/destinations');
