@@ -74,3 +74,8 @@
 
 - The Databricks Delta Lake Azure storage provider value is exactly `AZURE_BLOB`; do not use `AZUREBLOB` when wiring UI conditions, schema branches, or persisted config behavior.
 - The Azure Blob hierarchical namespace toggle is named `enableHierarchicalNamespace`, defaults false in UI config, and is shown only when `bucketProvider` is `AZURE_BLOB` and `useRudderStorage` is false.
+
+## AI-1226 — Heap Legacy UI Config Shape
+
+- Heap `ui-config.json` uses the legacy array field shape, so new fields should follow that local style (`value`, option `name`, and `defaultOption`) instead of newer destinations' `configKey`/`label`/`default` shape.
+- `scripts/schemaGenerator.py` recognizes old-format destination fields through `value` plus `defaultOption`; copying newer Mixpanel-style field keys literally into Heap can make generation/validation tooling miss the setting.

@@ -59,3 +59,8 @@
 - During INT-6598, beta hidden definitions with unknown billing feature names were migrated to single-flag `hidden.gate` entries that preserve the existing Flagsmith flag and boolean value instead of inventing billing feature names.
 - Only two migrated definitions had confirmed two-flag gates at the time of the change: `src/configurations/destinations/snowpipe_streaming/db-config.json` uses `AMP_snowpipe_streaming` with `SNOWFLAKE_STREAMING`, and `src/configurations/sources/facebook_lead_ads_native/db-config.json` uses `AMP_enable-fbla-source` with `FBLA_SOURCE`.
 - Remaining migrated beta gates still need confirmed billing feature additions before the GA no-release behavior is fully complete.
+
+## AI-1226 — Heap Schema Generator Baseline Drift
+
+- Running `scripts/schemaGenerator.py destination -name heap` during AI-1226 succeeded but reported pre-existing Heap schema drift around `consentManagement`: the generator expected each source's consent-management item schema to include `required: ["provider"]` and also printed the generic `additionalProperties: false` recommendation.
+- The AI-1226 `dataResidency` field was not part of that generator diff, so future Heap schema maintenance should distinguish this baseline `consentManagement` drift from new field changes.
