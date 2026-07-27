@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.167.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.166.0...v1.167.0) (2026-07-24)
+
+
+### Features
+
+* add Heap data residency config ([#2608](https://github.com/rudderlabs/rudder-config-schema/issues/2608)) ([b0c38c6](https://github.com/rudderlabs/rudder-config-schema/commit/b0c38c6492ef3fcb1b4839f01149371f09bd7752))
+
 ## [1.166.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.165.1...v1.166.0) (2026-07-21)
 
 
