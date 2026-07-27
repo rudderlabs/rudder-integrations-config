@@ -79,3 +79,8 @@
 
 - Heap `ui-config.json` uses the legacy array field shape, so new fields should follow that local style (`value`, option `name`, and `defaultOption`) instead of newer destinations' `configKey`/`label`/`default` shape.
 - `scripts/schemaGenerator.py` recognizes old-format destination fields through `value` plus `defaultOption`; copying newer Mixpanel-style field keys literally into Heap can make generation/validation tooling miss the setting.
+
+## SDK-5126 — Amplitude Browser SDK Default Sync
+
+- Amplitude Browser SDK default changes must keep `src/configurations/destinations/am/schema.json` `configSchema.properties.sdkVersion.properties.web.default` and the `ui-config.json` SDK Version singleSelect default synchronized; after SDK-5126 both default to `2` while enum/options still allow both `1` and `2`.
+- Treat Amplitude `sdkVersion.web` condition blocks as behavior gates, not automatic migration targets: SDK-5126 intentionally changed only new-destination defaults and stale UI copy, leaving existing conditional UI blocks keyed on `sdkVersion.web` unchanged so explicit stored values and v1 selection remain supported.
