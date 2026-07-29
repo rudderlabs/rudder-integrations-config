@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.168.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.167.0...v1.168.0) (2026-07-29)
+
+
+### Features
+
+* introduce supportsDeliveredWithWarnings flag to gate warning feature ([#2607](https://github.com/rudderlabs/rudder-config-schema/issues/2607)) ([e00b0c7](https://github.com/rudderlabs/rudder-config-schema/commit/e00b0c75a219010824c4c6739ed5c133a72eeef8))
+
+
+### Bug Fixes
+
+* default Amplitude Browser SDK to v2 ([#2602](https://github.com/rudderlabs/rudder-config-schema/issues/2602)) ([1d9ab17](https://github.com/rudderlabs/rudder-config-schema/commit/1d9ab1792dc0898d490bc3337a9f99b9fbe092a0))
+
 ## [1.167.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.166.0...v1.167.0) (2026-07-24)
 
 
