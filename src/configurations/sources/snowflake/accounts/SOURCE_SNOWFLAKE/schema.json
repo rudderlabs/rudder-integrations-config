@@ -1,0 +1,83 @@
+{
+  "optionsSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["account", "dbname", "warehouse", "user", "authenticationType"],
+    "properties": {
+      "account": { "type": "string", "description": "Snowflake account identifier" },
+      "dbname": { "type": "string", "description": "Database name" },
+      "warehouse": { "type": "string", "description": "Virtual warehouse" },
+      "user": { "type": "string", "description": "Login name" },
+      "role": { "type": "string", "description": "Snowflake role (optional)" },
+      "authenticationType": {
+        "type": "string",
+        "enum": ["keyPair", "password"],
+        "default": "keyPair",
+        "description": "Auth method discriminator (matches the Snowflake source form; NOT the destination's boolean useKeyPairAuth)"
+      }
+    }
+  },
+  "secretSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "password": { "type": "string", "pattern": "^[\\s\\S]+$", "description": "Password (password auth)" },
+      "privateKey": { "type": "string", "pattern": "^[\\s\\S]+$", "description": "PEM private key (keyPair auth)" },
+      "privateKeyPassphrase": { "type": "string", "pattern": "^[\\s\\S]*$", "description": "Private-key passphrase (optional, keyPair auth)" }
+    }
+  },
+  "combinedSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["options", "secret"],
+    "properties": {
+      "options": {
+        "type": "object",
+        "required": ["account", "dbname", "warehouse", "user", "authenticationType"],
+        "properties": {
+          "account": { "type": "string" },
+          "dbname": { "type": "string" },
+          "warehouse": { "type": "string" },
+          "user": { "type": "string" },
+          "role": { "type": "string" },
+          "authenticationType": { "type": "string", "enum": ["keyPair", "password"] }
+        }
+      },
+      "secret": { "type": "object" }
+    },
+    "if": {
+      "type": "object",
+      "properties": {
+        "options": {
+          "type": "object",
+          "properties": { "authenticationType": { "const": "keyPair" } }
+        }
+      }
+    },
+    "then": {
+      "type": "object",
+      "properties": {
+        "secret": {
+          "type": "object",
+          "required": ["privateKey"],
+          "properties": {
+            "privateKey": { "type": "string" },
+            "privateKeyPassphrase": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "else": {
+      "type": "object",
+      "properties": {
+        "secret": {
+          "type": "object",
+          "required": ["password"],
+          "properties": { "password": { "type": "string" } },
+          "additionalProperties": false
+        }
+      }
+    }
+  }
+}
