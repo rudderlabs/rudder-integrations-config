@@ -47,3 +47,8 @@
 
 - PR #2555 removed `config.isAudienceSupported: true` from these seven destination definitions: `src/configurations/destinations/custom_audience/db-config.json`, `src/configurations/destinations/customerio_audience/db-config.json`, `src/configurations/destinations/fb_custom_audience/db-config.json`, `src/configurations/destinations/google_adwords_remarketing_lists/db-config.json`, `src/configurations/destinations/linkedin_audience/db-config.json`, `src/configurations/destinations/tiktok_audience/db-config.json`, and `src/configurations/destinations/zoho/db-config.json`.
 - The paired schema change in that PR was in `src/schemas/destinations/db-config-schema.json`, where the destination config schema began rejecting `config.isAudienceSupported` in combination with `config.supportsVisualMapperV2`.
+
+## DAW-4034 — Destination Client Config Helpers
+
+- `src/destinationConfig.ts` is the entry point for web app/Public API/Terraform client-visible destination config filtering helpers.
+- `db-config.json` `config.destConfig` in each destination definition is the metadata source to inspect when deciding which destination config keys should be exposed to those clients.

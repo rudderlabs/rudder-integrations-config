@@ -291,8 +291,8 @@
         "destConfig": {
           "type": "object",
           "title": "Destination Configuration",
-          "description": "The parameters for the destination that the user can configure.",
-          "$comment": "This is used to display default and source type specific destination configuration in the UI. The workspace config API filters its response based on the fields declared here — fields from linked account definitions that are absent from defaultConfig will be silently dropped from the API response.",
+          "description": "The destination config keys that dashboard and Public API clients can view and configure.",
+          "$comment": "This is the client-visible allowlist for dashboard/Public API destination config responses, including Terraform-facing APIs. It is separate from includeKeys: includeKeys controls SDK/source-configuration exposure and must not be treated as equivalent. Filtering for web app/Public API clients should be derived from defaultConfig plus source-type-specific entries here. The workspace config API filters its response based on the fields declared here — fields from linked account definitions that are absent from defaultConfig will be silently dropped from the API response.",
           "patternProperties": {
             "^(android|androidKotlin|ios|iosSwift|web|unity|amp|cloud|warehouse|reactnative|flutter|cordova|shopify|cloudSource|defaultConfig)$": {
               "type": "array",
@@ -310,7 +310,7 @@
           "type": "array",
           "title": "Include Keys",
           "description": "The list of properties that are to be included in the destination configuration sent to the client SDKs via source configuration response.",
-          "$comment": "For destinations that support device/hybrid mode, this should be mandatorily defined. Otherwise, it should not be defined at all. No fields will be included in the destination configuration if this field is not defined or empty.",
+          "$comment": "For destinations that support device/hybrid mode, this should be mandatorily defined. Otherwise, it should not be defined at all. No fields will be included in the SDK/source-configuration destination payload if this field is not defined or empty. Do not use includeKeys as the dashboard/Public API client-visible allowlist; use config.destConfig for that contract.",
           "items": {
             "type": "string"
           },

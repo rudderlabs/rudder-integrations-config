@@ -8,6 +8,11 @@ import {
   validateSourceDefinitions,
   validateAccountDefinitions,
 } from '../../src/validator';
+import {
+  auditDestinationClientConfigMetadata,
+  filterDestinationClientVisibleConfig,
+  getDestinationClientVisibleConfigKeys,
+} from '../../src/destinationConfig';
 
 // Also import from main entry point to test exports
 import * as mainExports from '../../src';
@@ -35,6 +40,9 @@ describe('Validator Utils', () => {
       expect(mainExports.validateDestinationDefinitions).toBeDefined();
       expect(mainExports.validateSourceDefinitions).toBeDefined();
       expect(mainExports.validateAccountDefinitions).toBeDefined();
+      expect(mainExports.getDestinationClientVisibleConfigKeys).toBeDefined();
+      expect(mainExports.filterDestinationClientVisibleConfig).toBeDefined();
+      expect(mainExports.auditDestinationClientConfigMetadata).toBeDefined();
 
       // Verify they are functions
       expect(typeof mainExports.init).toBe('function');
@@ -42,6 +50,207 @@ describe('Validator Utils', () => {
       expect(typeof mainExports.validateDestinationDefinitions).toBe('function');
       expect(typeof mainExports.validateSourceDefinitions).toBe('function');
       expect(typeof mainExports.validateAccountDefinitions).toBe('function');
+      expect(typeof mainExports.getDestinationClientVisibleConfigKeys).toBe('function');
+      expect(typeof mainExports.filterDestinationClientVisibleConfig).toBe('function');
+      expect(typeof mainExports.auditDestinationClientConfigMetadata).toBe('function');
+    });
+  });
+
+  describe('Destination client-visible config helpers', () => {
+    const destinationDefinition = {
+      name: 'TEST',
+      displayName: 'Test',
+      config: {
+        includeKeys: ['sdkOnlyKey', 'sharedKey'],
+        destConfig: {
+          defaultConfig: ['sharedKey', 'defaultOnlyKey'],
+          web: ['webOnlyKey'],
+          android: ['androidOnlyKey'],
+        },
+      },
+    };
+
+    it('derives client-visible keys only from destConfig', () => {
+      expect(getDestinationClientVisibleConfigKeys(destinationDefinition)).toEqual([
+        'defaultOnlyKey',
+        'sharedKey',
+      ]);
+      expect(getDestinationClientVisibleConfigKeys(destinationDefinition, 'web')).toEqual([
+        'defaultOnlyKey',
+        'sharedKey',
+        'webOnlyKey',
+      ]);
+    });
+
+    it('defaults to defaultConfig only when filtering without source context', () => {
+      expect(
+        filterDestinationClientVisibleConfig(destinationDefinition, {
+          sharedKey: true,
+          defaultOnlyKey: 'default',
+          webOnlyKey: 'web',
+          androidOnlyKey: 'android',
+        }),
+      ).toEqual({
+        sharedKey: true,
+        defaultOnlyKey: 'default',
+      });
+    });
+
+    it('filters persisted config without using includeKeys or schema properties', () => {
+      expect(
+        filterDestinationClientVisibleConfig(
+          destinationDefinition,
+          {
+            sharedKey: true,
+            defaultOnlyKey: 'default',
+            webOnlyKey: 'web',
+            androidOnlyKey: 'android',
+            sdkOnlyKey: 'should not leak',
+            schemaOnlyKey: 'legacy persisted value',
+          },
+          'web',
+        ),
+      ).toEqual({
+        sharedKey: true,
+        defaultOnlyKey: 'default',
+        webOnlyKey: 'web',
+      });
+    });
+
+    it('reports metadata drift as audit-only output', () => {
+      expect(
+        auditDestinationClientConfigMetadata({
+          destinationDefinition,
+          schema: {
+            configSchema: {
+              properties: {
+                sharedKey: { type: 'boolean' },
+                webOnlyKey: { type: 'string' },
+                schemaOnlyKey: { type: 'string' },
+              },
+            },
+          },
+          uiConfig: {
+            uiConfig: {
+              baseTemplate: [
+                {
+                  sections: [
+                    {
+                      groups: [
+                        {
+                          fields: [
+                            { type: 'textInput', configKey: 'sharedKey' },
+                            { type: 'textInput', configKey: 'uiOnlyKey' },
+                            {
+                              type: 'dynamicCustomForm',
+                              configKey: 'webOnlyKey',
+                              customFields: [{ type: 'textInput', configKey: 'nestedItemKey' }],
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        }),
+      ).toEqual({
+        destConfigKeysNotInSchema: ['androidOnlyKey', 'defaultOnlyKey'],
+        schemaKeysNotInDestConfig: ['schemaOnlyKey'],
+        uiConfigKeysNotInDestConfig: ['uiOnlyKey'],
+        includeKeysNotInDestConfig: ['sdkOnlyKey'],
+        destConfigKeysNotInIncludeKeys: ['androidOnlyKey', 'defaultOnlyKey', 'webOnlyKey'],
+      });
+    });
+
+    it('handles missing destConfig as an empty client-visible allowlist', () => {
+      const destinationWithoutDestConfig = {
+        name: 'TEST',
+        displayName: 'Test',
+        config: {
+          includeKeys: ['sdkOnlyKey'],
+        },
+      };
+
+      expect(getDestinationClientVisibleConfigKeys(destinationWithoutDestConfig)).toEqual([]);
+      expect(getDestinationClientVisibleConfigKeys(destinationWithoutDestConfig, 'web')).toEqual(
+        [],
+      );
+      expect(
+        filterDestinationClientVisibleConfig(destinationWithoutDestConfig, {
+          sdkOnlyKey: 'should not leak',
+        }),
+      ).toEqual({});
+    });
+
+    it('handles partial audit inputs without failing validation paths', () => {
+      expect(
+        auditDestinationClientConfigMetadata({
+          destinationDefinition: {
+            name: 'TEST',
+            displayName: 'Test',
+            config: {
+              destConfig: {
+                defaultConfig: ['defaultOnlyKey', 123],
+                web: 'not-an-array',
+              },
+            },
+          },
+          schema: {
+            properties: {
+              defaultOnlyKey: { type: 'string' },
+              rawSchemaOnlyKey: { type: 'string' },
+            },
+          },
+          uiConfig: [
+            {
+              fields: [
+                { type: 'checkbox', value: 'defaultOnlyKey' },
+                { type: 'textInput', value: 'uiOnlyLegacyKey' },
+                { type: 'sectionNote', label: 'No config key' },
+              ],
+            },
+            'non-object node',
+          ],
+        }),
+      ).toEqual({
+        destConfigKeysNotInSchema: [],
+        schemaKeysNotInDestConfig: ['rawSchemaOnlyKey'],
+        uiConfigKeysNotInDestConfig: ['uiOnlyLegacyKey'],
+        includeKeysNotInDestConfig: [],
+        destConfigKeysNotInIncludeKeys: ['defaultOnlyKey'],
+      });
+
+      expect(
+        auditDestinationClientConfigMetadata({
+          destinationDefinition: {
+            name: 'TEST',
+            displayName: 'Test',
+          },
+          schema: true as unknown as Record<string, unknown>,
+          uiConfig: true,
+        }),
+      ).toEqual({
+        destConfigKeysNotInSchema: [],
+        schemaKeysNotInDestConfig: [],
+        uiConfigKeysNotInDestConfig: [],
+        includeKeysNotInDestConfig: [],
+        destConfigKeysNotInIncludeKeys: [],
+      });
+
+      expect(
+        auditDestinationClientConfigMetadata({
+          destinationDefinition,
+        }),
+      ).toEqual({
+        destConfigKeysNotInSchema: ['androidOnlyKey', 'defaultOnlyKey', 'sharedKey', 'webOnlyKey'],
+        schemaKeysNotInDestConfig: [],
+        uiConfigKeysNotInDestConfig: [],
+        includeKeysNotInDestConfig: ['sdkOnlyKey'],
+        destConfigKeysNotInIncludeKeys: ['androidOnlyKey', 'defaultOnlyKey', 'webOnlyKey'],
+      });
     });
   });
 
@@ -1124,6 +1333,23 @@ describe('Validator Utils', () => {
               web: ['device', 'cloud'],
               android: ['device'],
               ios: ['hybrid'],
+            },
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+    });
+
+    describe('Rule boundary: destConfig is not includeKeys parity validation', () => {
+      it('should pass when destConfig and includeKeys intentionally differ', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            includeKeys: ['sdkOnlyKey', 'sharedKey'],
+            destConfig: {
+              defaultConfig: ['sharedKey', 'apiOnlyKey'],
             },
           },
         };
