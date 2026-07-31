@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.169.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.168.0...v1.169.0) (2026-07-30)
+
+
+### Features
+
+* **braze_audience:** add BRAZE_AUDIENCE destination and account defs ([b379aa3](https://github.com/rudderlabs/rudder-config-schema/commit/b379aa36b62f0c08f871ad690f003c041bf9ed42))
+* **braze_audience:** add BRAZE_AUDIENCE destination and account defs ([#2613](https://github.com/rudderlabs/rudder-config-schema/issues/2613)) ([888677c](https://github.com/rudderlabs/rudder-config-schema/commit/888677ca485cfffcdd721d8a997b36e7cfbe8363))
+
+
+### Bug Fixes
+
+* **braze_audience:** clarify REST API key permission note ([3d0d7b1](https://github.com/rudderlabs/rudder-config-schema/commit/3d0d7b17dc3ccca1466d2a70ed12752c7497d695))
+* **braze_audience:** drop legacy templated-secret pattern ([b580a7e](https://github.com/rudderlabs/rudder-config-schema/commit/b580a7e26def6f81287dd63f14984e86b162064f))
+* **braze_audience:** gate Directory visibility behind DG audiences flag ([b34dd29](https://github.com/rudderlabs/rudder-config-schema/commit/b34dd29bc3a6d75fdab3aab6f0ab42b59acb22bc))
+* **braze_audience:** set isAudienceSupported for Audiences Next ([098be0d](https://github.com/rudderlabs/rudder-config-schema/commit/098be0dc7b5ff7c4fb7a5bb70a0034fe8c49e1fc))
+
+## [1.168.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.167.0...v1.168.0) (2026-07-29)
+
+
+### Features
+
+* introduce supportsDeliveredWithWarnings flag to gate warning feature ([#2607](https://github.com/rudderlabs/rudder-config-schema/issues/2607)) ([e00b0c7](https://github.com/rudderlabs/rudder-config-schema/commit/e00b0c75a219010824c4c6739ed5c133a72eeef8))
+
+
+### Bug Fixes
+
+* default Amplitude Browser SDK to v2 ([#2602](https://github.com/rudderlabs/rudder-config-schema/issues/2602)) ([1d9ab17](https://github.com/rudderlabs/rudder-config-schema/commit/1d9ab1792dc0898d490bc3337a9f99b9fbe092a0))
+
 ## [1.167.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.166.0...v1.167.0) (2026-07-24)
 
 
