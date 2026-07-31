@@ -84,3 +84,8 @@
 
 - Amplitude Browser SDK default changes must keep `src/configurations/destinations/am/schema.json` `configSchema.properties.sdkVersion.properties.web.default` and the `ui-config.json` SDK Version singleSelect default synchronized; after SDK-5126 both default to `2` while enum/options still allow both `1` and `2`.
 - Treat Amplitude `sdkVersion.web` condition blocks as behavior gates, not automatic migration targets: SDK-5126 intentionally changed only new-destination defaults and stale UI copy, leaving existing conditional UI blocks keyed on `sdkVersion.web` unchanged so explicit stored values and v1 selection remain supported.
+
+## AI-1266 — S3 Datalake Time Window Layout Field Contract
+
+- S3 Datalake `timeWindowLayout` is exposed as an immutable legacy-shape `singleSelect` in `src/configurations/destinations/s3_datalake/ui-config.json`; preserve the intentional task-provided mismatch where the default option is `2006/01/02/15` while the first selectable option value is an empty string.
+- For S3 Datalake, `src/configurations/destinations/s3_datalake/schema.json` keeps `timeWindowLayout` as a loose string with `rs-immutable: true`; `npm run check:schema:destination -- s3_datalake` may warn that it would add an enum/default from the UI field, but AI-1266 intentionally avoided making the schema stricter than the requested contract.
