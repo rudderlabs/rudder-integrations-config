@@ -250,7 +250,9 @@ describe('Validation Tests', () => {
 
     warehouseDestinationNames.forEach((dest) => {
       it(`${dest} accepts 10-minute sync frequency and rejects invalid frequency`, () => {
-        const validCase = getIntegrationData(dest, 'destinations')?.find((td) => td.result === true);
+        const validCase = getIntegrationData(dest, 'destinations')?.find(
+          (td) => td.result === true,
+        );
         if (!validCase) {
           throw new Error(`Missing valid test fixture for warehouse destination: ${dest}`);
         }
@@ -262,6 +264,72 @@ describe('Validation Tests', () => {
         expect(() => {
           validateConfig(dest, { ...baseConfig, syncFrequency: '11' }, 'destinations', true);
         }).toThrow();
+      });
+    });
+  });
+
+  describe('S3 Datalake time window layout UI config', () => {
+    it('accepts the date partition layout config value', () => {
+      const validCase = getIntegrationData('s3_datalake', 'destinations')?.find(
+        (td) => td.result === true,
+      );
+      if (!validCase) {
+        throw new Error('Missing valid test fixture for S3 Datalake destination');
+      }
+
+      expect(() => {
+        validateConfig(
+          's3_datalake',
+          {
+            ...(validCase.config as Record<string, unknown>),
+            timeWindowLayout: 'dt=2006-01-02',
+          },
+          'destinations',
+          true,
+        );
+      }).not.toThrow();
+    });
+
+    it('defines an optional immutable Glue-gated time window layout dropdown', () => {
+      const uiConfig = JSON.parse(
+        fs.readFileSync(
+          path.resolve('src/configurations/destinations/s3_datalake/ui-config.json'),
+          'utf-8',
+        ),
+      );
+      const connectionCredentials = uiConfig.uiConfig.find(
+        (section: Record<string, unknown>) => section.title === 'Connection Credentials',
+      );
+      const fields = connectionCredentials.fields as Record<string, unknown>[];
+      const fieldIndex = fields.findIndex((field) => field.value === 'timeWindowLayout');
+      const field = fields[fieldIndex];
+
+      expect(fields[fieldIndex - 1].value).toBe('cleanupObjectStorageFiles');
+      expect(fields[fieldIndex + 1].value).toBe('syncFrequency');
+      expect(field).toMatchObject({
+        type: 'singleSelect',
+        label: 'Choose time window layout',
+        value: 'timeWindowLayout',
+        options: [
+          {
+            name: 'Default (YYYY/MM/DD/HH)',
+            value: '',
+          },
+          {
+            name: 'Upto Date (dt=YYYY-MM-DD)',
+            value: 'dt=2006-01-02',
+          },
+        ],
+        defaultOption: {
+          name: 'Default (YYYY/MM/DD/HH)',
+          value: '',
+        },
+        required: false,
+        preRequisiteField: {
+          name: 'useGlue',
+          selectedValue: true,
+        },
+        immutable: true,
       });
     });
   });
