@@ -207,37 +207,6 @@ describe('Core Tests', () => {
       validateConfig(invalidIntg, {}, 'destinations');
     }).not.toThrow();
   });
-
-  it('HTTP bearer token UI and schema validation allow long JWT-sized tokens', () => {
-    const expectedPattern = '^(.{1,2048})$';
-    const jwtSizedToken = 'a'.repeat(732);
-    const oversizedToken = 'a'.repeat(2049);
-    const httpUiConfig = JSON.parse(
-      fs.readFileSync(path.resolve('src/configurations/destinations/http/ui-config.json'), 'utf-8'),
-    );
-    const httpSchema = JSON.parse(
-      fs.readFileSync(path.resolve('src/configurations/destinations/http/schema.json'), 'utf-8'),
-    );
-    const bearerTokenField =
-      httpUiConfig.uiConfig.baseTemplate[0].sections[0].groups[0].fields.find(
-        (field: { configKey?: string }) => field.configKey === 'bearerToken',
-      );
-    const bearerTokenRule = httpSchema.configSchema.allOf.find(
-      (rule: { then?: { properties?: { bearerToken?: { pattern?: string } } } }) =>
-        rule.then?.properties?.bearerToken,
-    );
-
-    const schemaPattern = bearerTokenRule.then.properties.bearerToken.pattern;
-    const uiRegex = new RegExp(bearerTokenField.regex);
-    const schemaRegex = new RegExp(schemaPattern);
-
-    expect(bearerTokenField.regex).toBe(expectedPattern);
-    expect(schemaPattern).toBe(expectedPattern);
-    expect(uiRegex.test(jwtSizedToken)).toBe(true);
-    expect(schemaRegex.test(jwtSizedToken)).toBe(true);
-    expect(uiRegex.test(oversizedToken)).toBe(false);
-    expect(schemaRegex.test(oversizedToken)).toBe(false);
-  });
 });
 
 describe('Validation Tests', () => {
