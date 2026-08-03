@@ -1,0 +1,43 @@
+{
+  "optionsSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["host", "dbname", "user", "port", "sslMode"],
+    "properties": {
+      "host": {
+        "type": "string",
+        "description": "Database host"
+      },
+      "dbname": {
+        "type": "string",
+        "description": "Database name"
+      },
+      "user": {
+        "type": "string",
+        "description": "Database username (non-secret, matches the Postgres source form)"
+      },
+      "port": {
+        "type": "string",
+        "description": "Database port (string, matching the Postgres source form)"
+      },
+      "sslMode": {
+        "type": "string",
+        "enum": ["disable", "require"],
+        "default": "disable",
+        "description": "SSL mode"
+      }
+    }
+  },
+  "secretSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["password"],
+    "properties": {
+      "password": {
+        "type": "string",
+        "pattern": "^[\\s\\S]+$",
+        "description": "Database password"
+      }
+    }
+  }
+}
