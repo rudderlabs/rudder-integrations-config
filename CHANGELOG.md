@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.170.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.169.0...v1.170.0) (2026-08-03)
+
+
+### Features
+
+* add 10-minute warehouse sync option ([#2627](https://github.com/rudderlabs/rudder-config-schema/issues/2627)) ([5fe174f](https://github.com/rudderlabs/rudder-config-schema/commit/5fe174fcb2a16a2c0adb0b481304f34549389828))
+* add S3 Datalake time window layout UI config ([#2626](https://github.com/rudderlabs/rudder-config-schema/issues/2626)) ([8a1adbc](https://github.com/rudderlabs/rudder-config-schema/commit/8a1adbc56350315bce2b5e4b00d84ff91d099666))
+* add SOURCE_POSTGRES and SOURCE_SNOWFLAKE account definitions ([#2624](https://github.com/rudderlabs/rudder-config-schema/issues/2624)) ([46944a8](https://github.com/rudderlabs/rudder-config-schema/commit/46944a899f7d267d55c3162998e873a1af9b9391))
+
+
+### Bug Fixes
+
+* increase http webhook bearer token limit ([#2625](https://github.com/rudderlabs/rudder-config-schema/issues/2625)) ([670c450](https://github.com/rudderlabs/rudder-config-schema/commit/670c450233d690bf113d03cb13395427c6644736))
+
 ## [1.169.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.168.0...v1.169.0) (2026-07-30)
 
 
