@@ -626,6 +626,24 @@ describe('Destination Definition validation tests', () => {
     ).resolves.toEqual(true);
   });
 
+  it('accepts destination definitions where destConfig and includeKeys differ', async () => {
+    const destinationDefinition = getMinimalDestinationDefinition();
+
+    await expect(
+      validateDestinationDefinitions({
+        ...destinationDefinition,
+        config: {
+          ...destinationDefinition.config,
+          destConfig: {
+            defaultConfig: ['clientVisibleKey'],
+            web: ['webOnlyClientVisibleKey'],
+          },
+          includeKeys: ['sdkVisibleKey'],
+        },
+      }),
+    ).resolves.toEqual(true);
+  });
+
   it('accepts boolean hidden', async () => {
     await expect(
       validateDestinationDefinitions(getMinimalDestinationDefinition(true)),

@@ -61,3 +61,9 @@
 - Amplitude `ui-config.json` gates the legacy "Save Referrer, URL Params, GCLID only once per session" field with a `conditions.expression` built from an `operator` (`AND`/`OR`) plus an `operands` array — each operand is `{ type: "configuration", key, value }`. There is no top-level `expression.type`; the `type: "configuration"` lives on the operands. This field ANDs `connectionMode.web == "device"` with `sdkVersion.web == 1`.
 - Reuse that operand pattern (wrapped in the required `AND`/`OR` expression structure) for other Amplitude Browser SDK settings that need SDK-version-specific visibility.
 - When extending an existing Amplitude config object to web, prefer adding a `web` boolean property to the existing object in `schema.json` and adding the same key to `db-config.json` `config.destConfig.web`, rather than introducing a parallel key.
+
+## DAW-4034 — Audit-Only Destination Metadata Drift
+
+- `src/destinationConfig.ts` exports `getDestinationClientVisibleConfigKeys`, `filterDestinationClientVisibleConfig`, and `auditDestinationClientConfigMetadata` for client-visible destination config handling.
+- The filtering path should use `config.destConfig` as the allowlist for web app/Public API/Terraform clients.
+- Drift detection against `schema.json`, `ui-config.json`, and `includeKeys` is audit-only and should not be wired into failing destination validation unless product requirements explicitly change.

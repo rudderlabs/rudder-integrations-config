@@ -35,6 +35,12 @@ This repository stores the configuration files that power RudderStack’s **sour
 - **Definition configuration** – `db-config.json` files containing the definition version, integration fields, supported source types, message types, connection modes and metadata.
 - **Validation schemas** – JSON Schema `schema.json` files (consumed by AJV) used for fields validation in the backend.
 
+## Destination config visibility contract
+
+For destinations, `db-config.json` `config.destConfig` is the documented source of truth for destination config keys that dashboard, Public API, and Terraform-facing clients can view or configure. Client-facing response filtering should derive its allowlist from `defaultConfig` plus the relevant source-type-specific `destConfig` entries.
+
+Do not use `config.includeKeys` as an equivalent allowlist for these APIs. `includeKeys` controls SDK/source-configuration exposure and can intentionally differ from `destConfig`. `schema.json` remains a validation and backward-compatibility contract, so schema-only legacy fields may continue to be accepted even when they should not be returned to web app or Public API clients.
+
 ## Visibility gating
 
 Source and destination `db-config.json` files use `options.hidden` for catalog hiding. It has two supported states:

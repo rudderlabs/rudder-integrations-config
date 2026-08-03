@@ -84,3 +84,9 @@
 - The Heap destination is a pure configuration bundle under `src/configurations/destinations/heap/` with only `db-config.json`, `ui-config.json`, and `schema.json`; there is no Heap `ui-config.jt`/`ui-default.json` generation path in this checkout.
 - Heap destination setting changes such as `dataResidency` belong in that hand-authored triplet: `ui-config.json` controls the dashboard field, `schema.json` validates the persisted config value, and `db-config.json` `includeKeys` plus `config.destConfig.defaultConfig` expose it to runtime consumers.
 - Runtime endpoint switching for Heap cloud mode is outside this repository; this repo supplies declarative integration metadata consumed by the transformer/control plane.
+
+## DAW-4034 — Destination Client-Visible Config Boundary
+
+- Web app/Public API/Terraform-visible destination config fields are derived from `db-config.json` `config.destConfig`, not from `includeKeys` or the destination `schema.json` alone.
+- `includeKeys` remains the SDK/source-configuration exposure surface and may intentionally differ from `config.destConfig`, so stale-client-field fixes should not remove `includeKeys` or enforce strict `includeKeys`/`destConfig` parity.
+- Destination-client filtering is implemented as a repository-local metadata helper (`src/destinationConfig.ts`) rather than by globally tightening destination `schema.json` `additionalProperties` or destination-definition validation.
