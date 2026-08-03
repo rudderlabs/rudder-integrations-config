@@ -87,5 +87,6 @@
 
 ## AI-1266 — S3 Datalake Time Window Layout Field Contract
 
-- S3 Datalake `timeWindowLayout` is exposed as an immutable legacy-shape `singleSelect` in `src/configurations/destinations/s3_datalake/ui-config.json`; preserve the intentional task-provided mismatch where the default option is `2006/01/02/15` while the first selectable option value is an empty string.
-- For S3 Datalake, `src/configurations/destinations/s3_datalake/schema.json` keeps `timeWindowLayout` as a loose string with `rs-immutable: true`; `npm run check:schema:destination -- s3_datalake` may warn that it would add an enum/default from the UI field, but AI-1266 intentionally avoided making the schema stricter than the requested contract.
+- S3 Datalake `timeWindowLayout` is exposed as an immutable legacy-shape optional `singleSelect` in `src/configurations/destinations/s3_datalake/ui-config.json`; keep `required: false` even though the field has a `defaultOption`.
+- The S3 Datalake "Default (YYYY/MM/DD/HH)" option and `defaultOption.value` should both use the empty string, and the field should be gated with `preRequisiteField: { "name": "useGlue", "selectedValue": true }` so it is shown only when AWS Glue registration is enabled.
+- For S3 Datalake, `src/configurations/destinations/s3_datalake/schema.json` keeps `timeWindowLayout` as a loose string with `rs-immutable: true`; schema generation may warn that it would add enum/default details from the UI field, but AI-1266 intentionally avoided making the schema stricter than the requested contract.
