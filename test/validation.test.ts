@@ -250,7 +250,9 @@ describe('Validation Tests', () => {
 
     warehouseDestinationNames.forEach((dest) => {
       it(`${dest} accepts 10-minute sync frequency and rejects invalid frequency`, () => {
-        const validCase = getIntegrationData(dest, 'destinations')?.find((td) => td.result === true);
+        const validCase = getIntegrationData(dest, 'destinations')?.find(
+          (td) => td.result === true,
+        );
         if (!validCase) {
           throw new Error(`Missing valid test fixture for warehouse destination: ${dest}`);
         }
