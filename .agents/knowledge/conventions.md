@@ -84,3 +84,7 @@
 
 - Amplitude Browser SDK default changes must keep `src/configurations/destinations/am/schema.json` `configSchema.properties.sdkVersion.properties.web.default` and the `ui-config.json` SDK Version singleSelect default synchronized; after SDK-5126 both default to `2` while enum/options still allow both `1` and `2`.
 - Treat Amplitude `sdkVersion.web` condition blocks as behavior gates, not automatic migration targets: SDK-5126 intentionally changed only new-destination defaults and stale UI copy, leaving existing conditional UI blocks keyed on `sdkVersion.web` unchanged so explicit stored values and v1 selection remain supported.
+
+## INT-6916 — Warehouse Sync Granularity Flag
+
+- Warehouse destination UI sync-frequency options for high-granularity intervals should use the existing Flagsmith flag `AMP_enable-high-granularity-wh-syncs`; the 10-minute option follows the same flag convention as the existing 5-minute and 15-minute options across the warehouse destination `ui-config.json` files unless product explicitly supplies a different flag.
