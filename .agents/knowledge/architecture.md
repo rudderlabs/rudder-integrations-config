@@ -84,3 +84,9 @@
 - The Heap destination is a pure configuration bundle under `src/configurations/destinations/heap/` with only `db-config.json`, `ui-config.json`, and `schema.json`; there is no Heap `ui-config.jt`/`ui-default.json` generation path in this checkout.
 - Heap destination setting changes such as `dataResidency` belong in that hand-authored triplet: `ui-config.json` controls the dashboard field, `schema.json` validates the persisted config value, and `db-config.json` `includeKeys` plus `config.destConfig.defaultConfig` expose it to runtime consumers.
 - Runtime endpoint switching for Heap cloud mode is outside this repository; this repo supplies declarative integration metadata consumed by the transformer/control plane.
+
+## INT-6915 — Customer.io v2 Rollout Mitigation Boundary
+
+- Customer.io destination definition files under `src/configurations/destinations/customerio/` do not own workspace-level destination-instance pins, staged v2 rollout percentages, `fallbackVersion`, nested `versions/` archives, or a Customer.io-specific v1/v2 runtime switch.
+- Targeted mitigations such as pinning destination instance `2wST0yHS0Ma1Cp2SkfjIV93ETl2` back to v1 or halting a staged v2 rollout are rollout/control-plane/transformer concerns outside this config-definition repository.
+- Avoid using broad definition fields such as `options.hidden`, `transformAtV1`, `supportedMessageTypes`, VDM metadata, or a new config flag as an incident mitigation unless downstream support exists; those changes affect all Customer.io customers rather than one workspace/destination instance.
