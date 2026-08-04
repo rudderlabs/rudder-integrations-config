@@ -26,3 +26,8 @@
 
 - During INT-6644 orientation, Braze prerequisite coverage was initially attributed to `src/configurations/destinations/braze/db-config.json`; inspection corrected that per-field source connection-mode visibility lives in `src/configurations/destinations/braze/ui-config.json`.
 - Corrective rule: for Braze per-field UI visibility or prerequisite coverage changes, inspect and edit the field object's `preRequisites.fields` in `ui-config.json`; use `db-config.json` only for included config keys and supported source type metadata.
+
+## INT-6915 — Keep Branches Formatter-Clean Before PR Updates
+
+- Code quality checks can fail even for inspection-only Customer.io work when the branch is not repo-wide formatter-clean; observed failures included Black reporting `scripts/validate_account_definitions.py` would be reformatted and `npm run lint` rewriting Markdown/JSON before `git diff --exit-code` failed.
+- Corrective rule: run `python3 -m black .` and `npm run lint` before opening or updating PRs in this repo, then commit all formatter output those commands produce.
