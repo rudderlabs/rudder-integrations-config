@@ -68,3 +68,8 @@
 ## INT-6914 — HTTP Auth Conditional Schema Baseline
 
 - HTTP destination `schema.json` has a pre-existing generated conditional shape where auth-specific `if.required` arrays reference the auth value (for example `required: ["bearerTokenAuth"]`) instead of the `auth` property. A scoped Bearer Token limit change should not be broadened into fixing all HTTP auth conditional enforcement unless schema-generator baseline drift is intentionally addressed.
+
+## INT-6678 — Criteo Audience Schema Generator Baseline Drift
+
+- Running `npm run check:schema:destination -- criteo_audience` during INT-6678 can exit 0 when Python has `jsondiff` installed while still reporting pre-existing generator drift: no generator function for `accountManagementInput`, a `dynamicCustomForm` `consentManagement` diff that would add `required: ["provider"]` under warehouse items, and an `anyOf` diff that would change `gumCallerId` from the schema's templated/env/numeric pattern to the UI-derived `^[0-9]+$` pattern.
+- INT-6678 made no Criteo Audience config/schema edits, so those schema-generator warnings should be treated as baseline drift rather than regressions from API-version audit work.

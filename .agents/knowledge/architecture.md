@@ -84,3 +84,8 @@
 - The Heap destination is a pure configuration bundle under `src/configurations/destinations/heap/` with only `db-config.json`, `ui-config.json`, and `schema.json`; there is no Heap `ui-config.jt`/`ui-default.json` generation path in this checkout.
 - Heap destination setting changes such as `dataResidency` belong in that hand-authored triplet: `ui-config.json` controls the dashboard field, `schema.json` validates the persisted config value, and `db-config.json` `includeKeys` plus `config.destConfig.defaultConfig` expose it to runtime consumers.
 - Runtime endpoint switching for Heap cloud mode is outside this repository; this repo supplies declarative integration metadata consumed by the transformer/control plane.
+
+## INT-6678 — Criteo Audience Runtime Version Boundary
+
+- Criteo Audience API-version migrations are not owned by the config triplet in this repository: targeted audit found no runtime `CriteoAudience` SDK implementation, `versions.json`, API-version constants, `/2025-04/` contactlist path, or `2025.10`/`2026-07` Criteo API-version references here.
+- Runtime Criteo Audience endpoint/version changes belong in downstream runtime repositories such as integrations-lib, integrations-info, or cloud-mode-services; this repo should avoid adding API-version metadata to `src/configurations/destinations/criteo_audience/{db-config.json,schema.json,ui-config.json}` unless a persisted destination config contract is explicitly introduced.

@@ -99,3 +99,9 @@
 - The S3 Datalake "Default (YYYY/MM/DD/HH)" option and `defaultOption.value` should both use the empty string, and the field should be gated with `preRequisiteField: { "name": "useGlue", "selectedValue": true }` so it is shown only when AWS Glue registration is enabled.
 - For S3 Datalake, `src/configurations/destinations/s3_datalake/schema.json` keeps `timeWindowLayout` as a loose string with `rs-immutable: true`; schema generation may warn that it would add enum/default details from the UI field, but AI-1266 intentionally avoided making the schema stricter than the requested contract.
 - S3 Datalake destination UI/config additions such as `timeWindowLayout` should include focused coverage: add persisted config cases to `test/data/validation/destinations/s3_datalake.json` and assert the UI field contract in `test/validation.test.ts` when the UI shape is part of the change.
+
+## INT-6678 — Criteo Audience Identifier Scope
+
+- Criteo Audience's primary destination definition name is `CRITEO_AUDIENCE` in `src/configurations/destinations/criteo_audience/db-config.json`; the display name is `Criteo Audience`, the filesystem/fixture key is `criteo_audience`, and supported usage is warehouse source with cloud connection mode and `audiencelist` message type.
+- Do not conflate `CRITEO_AUDIENCE` with the separate device-mode Criteo destination under `src/configurations/destinations/criteo/`; current generated `Destinations.*` constants include device-mode `CRITEO` but not warehouse/cloud-only `CRITEO_AUDIENCE` under the generator filter.
+- Repo audit found no alias or migration mapping for `CRITEO_AUDIENCE`; downstream customer-inventory work should use that exact definition name plus the `criteo_audience` fixture/filesystem key.
