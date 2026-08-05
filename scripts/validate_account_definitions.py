@@ -186,7 +186,9 @@ def validate_account_field_coverage(dest_dir):
         option_fields = account_cfg.get("optionFields", [])
         all_fields = secret_fields + option_fields
 
-        missing_from_dest_config = [f for f in all_fields if f not in dest_config_fields]
+        missing_from_dest_config = [
+            f for f in all_fields if f not in dest_config_fields
+        ]
         if missing_from_dest_config:
             print(
                 f"\nERROR: Account '{account_name}' has fields missing from destination "
@@ -201,7 +203,9 @@ def validate_account_field_coverage(dest_dir):
             )
             success = False
 
-        missing_from_secret_keys = [f for f in secret_fields if f not in dest_secret_keys]
+        missing_from_secret_keys = [
+            f for f in secret_fields if f not in dest_secret_keys
+        ]
         if missing_from_secret_keys:
             print(
                 f"\nERROR: Account '{account_name}' has secretFields missing from destination "
@@ -209,9 +213,7 @@ def validate_account_field_coverage(dest_dir):
             )
             for field in missing_from_secret_keys:
                 print(f"  - {field}")
-            print(
-                f"\n  Add the missing field(s) to '{dest_dir.name}' secretKeys."
-            )
+            print(f"\n  Add the missing field(s) to '{dest_dir.name}' secretKeys.")
             success = False
 
     return success
@@ -234,7 +236,11 @@ def main():
     if len(sys.argv) > 1:
         dest_dirs = [base_dir / sys.argv[1]]
     else:
-        dest_dirs = [d for d in base_dir.glob("*") if d.is_dir() and (d / "db-config.json").exists()]
+        dest_dirs = [
+            d
+            for d in base_dir.glob("*")
+            if d.is_dir() and (d / "db-config.json").exists()
+        ]
 
     sys.exit(0 if validate_destinations(dest_dirs) else 1)
 
