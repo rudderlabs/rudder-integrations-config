@@ -88,6 +88,7 @@
 ## INT-6914 — Destination Validation Fixture Coverage
 
 - For destination config validation changes, prefer adding or updating the destination's JSON fixture under `test/data/validation/destinations/<destination>.json` instead of adding bespoke assertions to `test/validation.test.ts` when the existing fixture-driven destination validation loop already covers the behavior.
+
 ## INT-6916 — Warehouse Sync Granularity Flag
 
 - Warehouse destination UI sync-frequency options for high-granularity intervals should use the existing Flagsmith flag `AMP_enable-high-granularity-wh-syncs`; the 10-minute option follows the same flag convention as the existing 5-minute and 15-minute options across the warehouse destination `ui-config.json` files unless product explicitly supplies a different flag.
