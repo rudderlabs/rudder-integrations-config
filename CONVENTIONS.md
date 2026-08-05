@@ -18,11 +18,11 @@ The `[_{AUTH_QUALIFIER}]` segment is optional — include it only when it is nee
 
 ### Segments
 
-| Segment            | Required | Description                                                                                                                                                             |
-| ------------------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CATEGORY`         | Yes      | The kind of integration the account belongs to. One of `SOURCE`, `DESTINATION`, or `DATA_RETENTION` (storage accounts, whose db-config `category` value is `dataRetention`). |
-| `TYPE`             | Yes      | The integration key in `SCREAMING_SNAKE_CASE` (the uppercase form of the integration `type`), e.g. `BIGQUERY`, `HUBSPOT`, `SALESFORCE`, `FACEBOOK_LEAD_ADS_NATIVE`.     |
-| `AUTH_QUALIFIER`   | No       | A qualifier describing the authentication / credential variant, e.g. `OAUTH`, `NATIVE_OAUTH`. Use it to distinguish multiple account definitions for the same integration. |
+| Segment          | Required | Description                                                                                                                                                                  |
+| ---------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CATEGORY`       | Yes      | The kind of integration the account belongs to. One of `SOURCE`, `DESTINATION`, or `DATA_RETENTION` (storage accounts, whose db-config `category` value is `dataRetention`). |
+| `TYPE`           | Yes      | The integration key in `SCREAMING_SNAKE_CASE` (the uppercase form of the integration `type`), e.g. `BIGQUERY`, `HUBSPOT`, `SALESFORCE`, `FACEBOOK_LEAD_ADS_NATIVE`.          |
+| `AUTH_QUALIFIER` | No       | A qualifier describing the authentication / credential variant, e.g. `OAUTH`, `NATIVE_OAUTH`. Use it to distinguish multiple account definitions for the same integration.   |
 
 ### Examples
 
