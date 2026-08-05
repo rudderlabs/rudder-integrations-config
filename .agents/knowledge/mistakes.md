@@ -26,3 +26,8 @@
 
 - During INT-6644 orientation, Braze prerequisite coverage was initially attributed to `src/configurations/destinations/braze/db-config.json`; inspection corrected that per-field source connection-mode visibility lives in `src/configurations/destinations/braze/ui-config.json`.
 - Corrective rule: for Braze per-field UI visibility or prerequisite coverage changes, inspect and edit the field object's `preRequisites.fields` in `ui-config.json`; use `db-config.json` only for included config keys and supported source type metadata.
+
+## INT-6678 — Run Full Repo Formatting Gates Before Push
+
+- CI failed because only targeted formatting was validated locally, while the repository Code quality workflow runs Python Black across all Python files and `npm run lint`, which runs full-repo Prettier plus ESLint fix.
+- Corrective rule: before pushing broad repo changes, run `python3 -m black . --check` and repo-wide `npm run lint`, then commit any formatter-only files those checks require.
