@@ -85,6 +85,11 @@
 - Amplitude Browser SDK default changes must keep `src/configurations/destinations/am/schema.json` `configSchema.properties.sdkVersion.properties.web.default` and the `ui-config.json` SDK Version singleSelect default synchronized; after SDK-5126 both default to `2` while enum/options still allow both `1` and `2`.
 - Treat Amplitude `sdkVersion.web` condition blocks as behavior gates, not automatic migration targets: SDK-5126 intentionally changed only new-destination defaults and stale UI copy, leaving existing conditional UI blocks keyed on `sdkVersion.web` unchanged so explicit stored values and v1 selection remain supported.
 
+## SDK-5266 — CleverTap Swift Device Mode Contract
+
+- CleverTap `destConfig.iosSwift` follows the established narrower Swift device-mode contract: include `useNativeSDK`, `connectionMode`, and `consentManagement`, but do not add legacy mobile `oneTrustCookieCategories` or `ketchConsentPurposes` unless the Swift plugin/control-plane contract explicitly consumes them.
+- For CleverTap Swift device-mode parity, mirror the legacy mobile feature set only to the extent supported by existing Swift-enabled destination conventions; additional Tata Cliq-specific requirements should stay out until confirmed.
+
 ## INT-6914 — Destination Validation Fixture Coverage
 
 - For destination config validation changes, prefer adding or updating the destination's JSON fixture under `test/data/validation/destinations/<destination>.json` instead of adding bespoke assertions to `test/validation.test.ts` when the existing fixture-driven destination validation loop already covers the behavior.
