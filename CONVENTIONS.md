@@ -5,6 +5,9 @@ This document captures naming and structural conventions used across this reposi
 ## Table of contents
 
 - [**AccountDefinition naming (`accountDefinitionName`)**](#accountdefinition-naming-accountdefinitionname)
+- [**String `pattern` in `schema.json`**](#string-pattern-in-schemajson)
+- [**Deduplication / event-id config key (`deduplicationKey`)**](#deduplication--event-id-config-key-deduplicationkey)
+- [**Restricting a field by connection mode**](#restricting-a-field-by-connection-mode)
 
 ## AccountDefinition naming (`accountDefinitionName`)
 
@@ -39,3 +42,81 @@ The `[_{AUTH_QUALIFIER}]` segment is optional — include it only when it is nee
 ### Enforcement
 
 The `name` field is validated against the pattern `^[A-Z0-9_]+$` defined in [`src/schemas/account/account-db-config-schema.json`](src/schemas/account/account-db-config-schema.json). This pattern restricts names to uppercase letters, digits, and underscores, but does not by itself enforce full `SCREAMING_SNAKE_CASE` (for example, it does not prevent leading, trailing, or doubled underscores). The `{CATEGORY}_{TYPE}[_{AUTH_QUALIFIER}]` segment structure above is a convention contributors are expected to follow, not something the regex enforces.
+
+## String `pattern` in `schema.json`
+
+Use a plain pattern for the value the field actually accepts:
+
+```json
+{ "type": "string", "pattern": "^.{1,100}$" }
+```
+
+**Do not use the `(^\{\{.*\|\|(.*)\}\}$)|(^env[.].+)|…` prefix. It is deprecated.**
+
+That prefix exists to let a config value be a `{{ }}` template or an `env.` reference, and it
+is the single biggest copy-paste trap in this repo: **239 of 245 destination schemas still
+carry it**, so whichever existing destination you open as a template will almost certainly
+have it. The recently-added schemas do not — `custom_audience` (2026-05), `iterable_audience`
+(2026-06), `bqstream_all_events` (2026-06), `braze_audience` (2026-07) all use plain
+patterns.
+
+Existing schemas are not being rewritten; the rule applies to new fields and new
+destinations.
+
+## Deduplication / event-id config key (`deduplicationKey`)
+
+When a destination lets the customer choose which message field carries the id the partner
+dedupes on (typically because the same conversion is also sent by a browser pixel), the
+config key is **`deduplicationKey`** — not `eventId`, `conversionId`, or a new spelling.
+
+Four destinations use it today: `pinterest_tag`, `linkedIn_ads`, `snapchat_conversion`,
+`snap_pixel`. Copy the UI field from
+[`linkedin_ads/ui-config.json`](src/configurations/destinations/linkedin_ads/ui-config.json)
+— a `textInput` labelled "Deduplication Key", placeholder `e.g: messageId`, with a note
+explaining that a dot-path such as `properties.orderId` maps from `message.properties.orderId`
+(but with a plain `pattern`, per the section above).
+
+Semantics the transformer implements: resolve the customer's path(s) against the message and
+fall back to `messageId` when unset or unresolvable. `pinterest_tag` and `linkedin_ads` accept
+a comma-separated list and take the first that resolves (`getOneByPaths`);
+`snapchat_conversion` takes a single path and gates the whole thing on a separate
+`enableDeduplication` checkbox — only add that toggle if the partner's id field is genuinely
+optional.
+
+## Restricting a field by connection mode
+
+When a value is valid in one connection mode but not another — e.g. a partner's browser SDK
+supports fewer events than its server API — express it as **conditional validation in
+`schema.json`**, keyed on `connectionMode.<sourceType>`:
+
+```jsonc
+"allOf": [{
+  "if": {
+    "properties": { "connectionMode": { "properties": { "web": { "const": "device" } },
+                                        "required": ["web"] } },
+    "required": ["connectionMode"]
+  },
+  "then": {
+    "properties": { "eventsMapping": { "items": { "properties": {
+      "to": { "not": { "enum": ["app_installed", "app_opened"] } } } } } },
+    "errorMessage": { "properties": { "eventsMapping":
+      "app_installed and app_opened are not supported by the browser SDK. Map them on a cloud-mode connection instead." } }
+  }
+}]
+```
+
+Draft-07 `if`/`then` is available and already used by 242 destination schemas; `errorMessage`
+comes from `ajv-errors`, so the customer gets a readable reason rather than a raw schema
+failure (see `src/validator/index.ts`).
+
+Prefer this over the two alternatives:
+
+- **A second config field per mode**, gated with `preRequisites` — the field count then grows
+  with every (mode × platform) the partner supports, and existing configs have to be reasoned
+  about against several overlapping tables.
+- **Duplicating the rule into the transformer or the SDK** — a second copy on a different
+  release train drifts from the first, and the customer gets no feedback until runtime rather
+  than at save time.
+
+One config field, one source of truth, validated where the config is written. A new mode is
+one more `if`/`then` block.

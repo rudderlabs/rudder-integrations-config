@@ -57,6 +57,8 @@ Copy field shapes, the `schema.json` consent / `connectionMode` blocks, and `sdk
 - `scripts/template-db-config.json`, `scripts/template-ui-config.json` — the canonical starting templates. **Copy these as your base**; they already carry `version: "1.0"`, the standard structure, and the consent block.
 - `src/schemas/destinations/db-config-schema.json` — authoritative meta-schema for `db-config.json`. `config.additionalProperties` is `false`; an unknown key fails validation.
 
+- [`CONVENTIONS.md`](../../../CONVENTIONS.md) — naming and structural conventions that apply across the repo (`accountDefinitionName`, string `pattern`s, `deduplicationKey`, mode-conditional validation). **Where an existing destination and CONVENTIONS.md disagree, CONVENTIONS.md is current** — most files predate it.
+
 The templates do **not** produce `schema.json` — author it by hand (step 3).
 
 ## File layout
@@ -173,9 +175,11 @@ A `configSchema` (JSON Schema draft-07) whose `required`/`properties` mirror the
 }
 ```
 
-- Prefix every string `pattern` with `(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|` (allows templating/env refs), then the field's own regex — as the example destination does.
+- Use a **plain** string `pattern` — just the field's own regex, e.g. `"^.{1,100}$"`. **Do not prefix it with `(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|`; that templating/env prefix is deprecated.** 239 of 245 existing schemas still carry it, so *any* destination you open as an example will have it — copy the field's regex, not the prefix. Recent additions (`custom_audience`, `iterable_audience`, `bqstream_all_events`, `braze_audience`) use plain patterns. See [CONVENTIONS.md](../../../CONVENTIONS.md#string-pattern-in-schemajson).
 - Copy the `consentManagement` and `connectionMode` property blocks from the example destination. The `consentManagement.properties` keys must **exactly equal** `supportedSourceTypes`; each is an array with `uniqueItemProperties: ["provider"]` and the standard `errorMessage`. Replicate the per-source-type pattern for any source type the example lacks (e.g. `cloudSource`).
 - Do **not** add `oneTrustCookieCategories` / `ketchConsentPurposes` properties.
+- **A value valid in one connection mode but not another** (e.g. the partner's browser SDK supports fewer events than its server API) goes in `schema.json` as an `allOf` / `if` / `then` block keyed on `connectionMode.<sourceType>`, with an `ajv-errors` `errorMessage` so the customer sees a readable reason. Don't add a second mode-specific config field for it, and don't push the rule into the transformer or the SDK. Full shape: [CONVENTIONS.md](../../../CONVENTIONS.md#restricting-a-field-by-connection-mode).
+- **A customer-chosen dedupe/event-id field** is named `deduplicationKey` — see [CONVENTIONS.md](../../../CONVENTIONS.md#deduplication--event-id-config-key-deduplicationkey).
 
 ### 4. Test data — `test/data/validation/destinations/<dir>.json`
 
