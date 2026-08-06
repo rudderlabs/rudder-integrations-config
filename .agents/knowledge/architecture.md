@@ -84,3 +84,9 @@
 - The Heap destination is a pure configuration bundle under `src/configurations/destinations/heap/` with only `db-config.json`, `ui-config.json`, and `schema.json`; there is no Heap `ui-config.jt`/`ui-default.json` generation path in this checkout.
 - Heap destination setting changes such as `dataResidency` belong in that hand-authored triplet: `ui-config.json` controls the dashboard field, `schema.json` validates the persisted config value, and `db-config.json` `includeKeys` plus `config.destConfig.defaultConfig` expose it to runtime consumers.
 - Runtime endpoint switching for Heap cloud mode is outside this repository; this repo supplies declarative integration metadata consumed by the transformer/control plane.
+
+## SDK-5265 — CleverTap Kotlin Device Mode Metadata
+
+- CleverTap androidKotlin device mode is modeled in the existing destination triplet under `src/configurations/destinations/clevertap/`: `db-config.json` mirrors legacy Android with `supportedConnectionModes.androidKotlin` set to cloud/device, `supportedMessageTypes.device.androidKotlin` covering `identify`, `track`, and `screen`, and `config.destConfig.androidKotlin` exposing `useNativeSDK`, `connectionMode`, and `consentManagement`.
+- `schema.json` explicitly validates `useNativeSDK.androidKotlin` as a boolean, and `test/data/validation/destinations/clevertap.json` carries a valid androidKotlin device-mode fixture with credentials, event filtering, consent management, connection mode, and native SDK enablement.
+- This repository has no source-type-specific visibility gate that can hide only CleverTap androidKotlin device mode until the compatible Kotlin SDK release; release sequencing should be handled externally rather than by adding a whole-destination `options.hidden` gate or unconfirmed Tata Cliq-specific placeholder.
