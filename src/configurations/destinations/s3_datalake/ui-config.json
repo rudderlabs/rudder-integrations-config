@@ -119,12 +119,42 @@
         },
         {
           "type": "singleSelect",
+          "label": "Choose time window layout",
+          "value": "timeWindowLayout",
+          "options": [
+            {
+              "name": "Default (YYYY/MM/DD/HH)",
+              "value": ""
+            },
+            {
+              "name": "Upto Date (dt=YYYY-MM-DD)",
+              "value": "dt=2006-01-02"
+            }
+          ],
+          "defaultOption": {
+            "name": "Default (YYYY/MM/DD/HH)",
+            "value": ""
+          },
+          "required": false,
+          "preRequisiteField": {
+            "name": "useGlue",
+            "selectedValue": true
+          },
+          "immutable": true
+        },
+        {
+          "type": "singleSelect",
           "label": "Sync Frequency",
           "value": "syncFrequency",
           "options": [
             {
               "name": "Every 5 minutes",
               "value": "5",
+              "featureFlag": "AMP_enable-high-granularity-wh-syncs"
+            },
+            {
+              "name": "Every 10 minutes",
+              "value": "10",
               "featureFlag": "AMP_enable-high-granularity-wh-syncs"
             },
             {

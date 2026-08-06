@@ -64,3 +64,7 @@
 
 - Running `scripts/schemaGenerator.py destination -name heap` during AI-1226 succeeded but reported pre-existing Heap schema drift around `consentManagement`: the generator expected each source's consent-management item schema to include `required: ["provider"]` and also printed the generic `additionalProperties: false` recommendation.
 - The AI-1226 `dataResidency` field was not part of that generator diff, so future Heap schema maintenance should distinguish this baseline `consentManagement` drift from new field changes.
+
+## INT-6914 — HTTP Auth Conditional Schema Baseline
+
+- HTTP destination `schema.json` has a pre-existing generated conditional shape where auth-specific `if.required` arrays reference the auth value (for example `required: ["bearerTokenAuth"]`) instead of the `auth` property. A scoped Bearer Token limit change should not be broadened into fixing all HTTP auth conditional enforcement unless schema-generator baseline drift is intentionally addressed.

@@ -68,6 +68,10 @@
         }
       },
       "additionalProperties": false
+    },
+    "combinedSchema": {
+      "type": "object",
+      "description": "Optional JSON Schema (draft-07) that validates the nested document { options, secret } as a single unit, for cross-field rules an independent optionsSchema/secretSchema cannot express (e.g. Snowflake authenticationType -> which secret is required). It supplements those schemas rather than replacing them: config-backend runs it in place of the two on the account create/edit path, but optionsSchema/secretSchema stay the field contract for every other consumer -- notably the OAuth path, which validates against optionsSchema alone and never sees a combinedSchema. That is why the anyOf below still requires one of them: a definition carrying only a combinedSchema would leave those consumers validating against nothing. Loosely typed here because it may use if/then/else, const, etc."
     }
   },
   "anyOf": [{ "required": ["secretSchema"] }, { "required": ["optionsSchema"] }],

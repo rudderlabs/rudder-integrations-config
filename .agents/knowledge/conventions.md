@@ -84,3 +84,18 @@
 
 - Amplitude Browser SDK default changes must keep `src/configurations/destinations/am/schema.json` `configSchema.properties.sdkVersion.properties.web.default` and the `ui-config.json` SDK Version singleSelect default synchronized; after SDK-5126 both default to `2` while enum/options still allow both `1` and `2`.
 - Treat Amplitude `sdkVersion.web` condition blocks as behavior gates, not automatic migration targets: SDK-5126 intentionally changed only new-destination defaults and stale UI copy, leaving existing conditional UI blocks keyed on `sdkVersion.web` unchanged so explicit stored values and v1 selection remain supported.
+
+## INT-6914 — Destination Validation Fixture Coverage
+
+- For destination config validation changes, prefer adding or updating the destination's JSON fixture under `test/data/validation/destinations/<destination>.json` instead of adding bespoke assertions to `test/validation.test.ts` when the existing fixture-driven destination validation loop already covers the behavior.
+## INT-6916 — Warehouse Sync Granularity Flag
+
+- Warehouse destination UI sync-frequency options for high-granularity intervals should use the existing Flagsmith flag `AMP_enable-high-granularity-wh-syncs`; the 10-minute option follows the same flag convention as the existing 5-minute and 15-minute options across the warehouse destination `ui-config.json` files unless product explicitly supplies a different flag.
+- Warehouse destination schema/UI option changes such as `syncFrequency` should add validation fixture cases under `test/data/validation/destinations/<destination>.json` for each affected warehouse integration, so broad fixture-driven validation covers every destination directly rather than relying only on focused validator coverage.
+
+## AI-1266 — S3 Datalake Time Window Layout Field Contract
+
+- S3 Datalake `timeWindowLayout` is exposed as an immutable legacy-shape optional `singleSelect` in `src/configurations/destinations/s3_datalake/ui-config.json`; keep `required: false` even though the field has a `defaultOption`.
+- The S3 Datalake "Default (YYYY/MM/DD/HH)" option and `defaultOption.value` should both use the empty string, and the field should be gated with `preRequisiteField: { "name": "useGlue", "selectedValue": true }` so it is shown only when AWS Glue registration is enabled.
+- For S3 Datalake, `src/configurations/destinations/s3_datalake/schema.json` keeps `timeWindowLayout` as a loose string with `rs-immutable: true`; schema generation may warn that it would add enum/default details from the UI field, but AI-1266 intentionally avoided making the schema stricter than the requested contract.
+- S3 Datalake destination UI/config additions such as `timeWindowLayout` should include focused coverage: add persisted config cases to `test/data/validation/destinations/s3_datalake.json` and assert the UI field contract in `test/validation.test.ts` when the UI shape is part of the change.

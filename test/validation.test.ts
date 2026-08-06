@@ -233,6 +233,41 @@ describe('Validation Tests', () => {
     });
   });
 
+  describe('Warehouse sync frequency validation', () => {
+    const warehouseDestinationNames = [
+      'azure_datalake',
+      'azure_synapse',
+      'bq',
+      'clickhouse',
+      'deltalake',
+      'gcs_datalake',
+      'mssql',
+      'postgres',
+      'rs',
+      's3_datalake',
+      'snowflake',
+    ];
+
+    warehouseDestinationNames.forEach((dest) => {
+      it(`${dest} accepts 10-minute sync frequency and rejects invalid frequency`, () => {
+        const validCase = getIntegrationData(dest, 'destinations')?.find(
+          (td) => td.result === true,
+        );
+        if (!validCase) {
+          throw new Error(`Missing valid test fixture for warehouse destination: ${dest}`);
+        }
+
+        const baseConfig = validCase.config as Record<string, unknown>;
+        expect(() => {
+          validateConfig(dest, { ...baseConfig, syncFrequency: '10' }, 'destinations', true);
+        }).not.toThrow();
+        expect(() => {
+          validateConfig(dest, { ...baseConfig, syncFrequency: '11' }, 'destinations', true);
+        }).toThrow();
+      });
+    });
+  });
+
   // Source tests
   Object.keys(srcTcData).forEach((src: string, srcIdx: number) => {
     describe(`${srcIdx + 1}. Source - ${src}`, () => {
