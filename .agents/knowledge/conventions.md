@@ -100,3 +100,9 @@
 - The S3 Datalake "Default (YYYY/MM/DD/HH)" option and `defaultOption.value` should both use the empty string, and the field should be gated with `preRequisiteField: { "name": "useGlue", "selectedValue": true }` so it is shown only when AWS Glue registration is enabled.
 - For S3 Datalake, `src/configurations/destinations/s3_datalake/schema.json` keeps `timeWindowLayout` as a loose string with `rs-immutable: true`; schema generation may warn that it would add enum/default details from the UI field, but AI-1266 intentionally avoided making the schema stricter than the requested contract.
 - S3 Datalake destination UI/config additions such as `timeWindowLayout` should include focused coverage: add persisted config cases to `test/data/validation/destinations/s3_datalake.json` and assert the UI field contract in `test/validation.test.ts` when the UI shape is part of the change.
+
+## SDK-5265 — CleverTap Kotlin Release-Coupling Discipline
+
+- For CleverTap Android Kotlin device-mode exposure, keep the repository metadata change scoped to the initial legacy Android feature set and do not add speculative Tata Cliq requirements until product/SDK support is confirmed.
+- Do not expose CleverTap Android Kotlin `oneTrustCookieCategories` or `ketchConsentPurposes` in `config.destConfig.androidKotlin` unless the Kotlin SDK explicitly supports or safely ignores those consent fields; SDK-5265 intentionally exposed only `useNativeSDK`, `connectionMode`, and `consentManagement`.
+- Treat Kotlin runtime release validation as an external acceptance gate for this config repository: this repo can publish declarative metadata, but actual device-mode availability depends on the Kotlin SDK runtime integration.
