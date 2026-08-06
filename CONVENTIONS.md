@@ -109,6 +109,32 @@ Draft-07 `if`/`then` is available and already used by 242 destination schemas; `
 comes from `ajv-errors`, so the customer gets a readable reason rather than a raw schema
 failure (see `src/validator/index.ts`).
 
+### Where this is actually enforced — know what the customer sees
+
+**Server-side, at save time. There is no inline UI validation for it.**
+
+- **config-backend** compiles the destination's `configSchema` with ajv — `allErrors`,
+  `ajv-errors`, `ajv-keywords` (`src/validations/configValidationErrors.ts` `createAjv`,
+  applied in `src/validations/validator.ts` `validateConfigCore`). Conditionals **are**
+  enforced and the `errorMessage` **does** surface.
+- **rudder-webapp** renders the destination config form from `ui-config.json`, not
+  `schema.json`. The destination configuration components contain no reference to
+  `configSchema` or ajv at all. Its client-side validation is limited to what `ui-config.json`
+  expresses: `required`, `regex` / `regexErrorMessage`, and `preRequisites`.
+
+So the customer picks the disallowed value, fills in the rest of the form, hits **Save**, and
+gets the `errorMessage` back from the API. Correctness is guaranteed; discoverability is not.
+
+**Pair the conditional with a plain-language `note` (or `callout`) on the field** stating the
+restriction, so it is visible before the save round-trip. That is the cheap half of the UX;
+the conditional is what actually enforces it.
+
+If a destination genuinely needs the value to be *unselectable* rather than rejected, that is
+today only achievable with a separate `preRequisites`-gated field per mode — with the scaling
+cost described above. Weigh it per destination; for a restriction affecting a couple of enum
+values, schema validation plus a note is the better trade. Inline UI support for conditional
+validation would remove the trade entirely and is worth raising against rudder-webapp.
+
 Prefer this over the two alternatives:
 
 - **A second config field per mode**, gated with `preRequisites` — the field count then grows
