@@ -5,7 +5,7 @@ This document captures naming and structural conventions used across this reposi
 ## Table of contents
 
 - [**AccountDefinition naming (`accountDefinitionName`)**](#accountdefinition-naming-accountdefinitionname)
-- [**String `pattern` in `schema.json`**](#string-pattern-in-schemajson)
+- [**String `pattern` and `regex`**](#string-pattern-and-regex)
 - [**Deduplication / event-id config key (`deduplicationKey`)**](#deduplication--event-id-config-key-deduplicationkey)
 - [**Restricting a field by connection mode**](#restricting-a-field-by-connection-mode)
 
@@ -43,17 +43,17 @@ The `[_{AUTH_QUALIFIER}]` segment is optional — include it only when it is nee
 
 The `name` field is validated against the pattern `^[A-Z0-9_]+$` defined in [`src/schemas/account/account-db-config-schema.json`](src/schemas/account/account-db-config-schema.json). This pattern restricts names to uppercase letters, digits, and underscores, but does not by itself enforce full `SCREAMING_SNAKE_CASE` (for example, it does not prevent leading, trailing, or doubled underscores). The `{CATEGORY}_{TYPE}[_{AUTH_QUALIFIER}]` segment structure above is a convention contributors are expected to follow, not something the regex enforces.
 
-## String `pattern` in `schema.json`
+## String `pattern` and `regex`
 
-Use a plain pattern for the value the field actually accepts:
+This applies equally to `pattern` in `schema.json` and to the `regex` on the same field in
+`ui-config.json`. Use a plain expression for the value the field actually accepts:
 
 ```json
 { "type": "string", "pattern": "^.{1,100}$" }
 ```
 
 **Do not use the `(^\{\{.*\|\|(.*)\}\}$)|(^env[.].+)|…` prefix. It is deprecated** — going
-forward it should not be added to a new field, in either `schema.json` (`pattern`) or
-`ui-config.json` (`regex`).
+forward it should not be added to a new field, in either file.
 
 That prefix exists to let a config value be a `{{ }}` template or an `env.` reference, and it
 is the single biggest copy-paste trap in this repo: **239 of 245 destination schemas still
@@ -63,10 +63,9 @@ field's own regex, not the prefix.
 
 Size the pattern to the value the field genuinely accepts, and stop there. Don't stretch it to
 keep `{{ }}` / `env.` values passing: config-backend syntax-checks those and then validates
-them against this pattern unchanged (`src/validations/validator.ts`), so a narrow pattern — a
-URL or a strict id format — will reject them. That is fine and intended. Going forward a new
-field is not expected to preserve templating support; write the pattern the field's own value
-needs.
+them against this pattern unchanged, so a narrow pattern — a URL or a strict id format — will
+reject them. That is fine and intended. Going forward a new field is not expected to preserve
+templating support; write the pattern the field's own value needs.
 
 Six schemas don't carry the prefix: `custom_audience` (2026-05), `iterable_audience` (2026-06),
 `bqstream_all_events` (2026-06) and `braze_audience` (2026-07) use plain patterns, while
@@ -96,6 +95,12 @@ take the first that resolves, falling back when the config is unset _or_ no path
 only when the config is unset (`deduplicationKey || 'messageId'`) — a set-but-unresolvable
 path yields no id rather than `messageId`. Prefer the `getOneByPaths` shape for new
 destinations.
+
+`snap_pixel` is device-mode only (`web: ["device"]`), so it has no transformer implementation;
+its web SDK integration resolves the key with the same single-path shape as
+`snapchat_conversion` (`get(message, deduplicationKey || 'messageId')`). A device-mode
+destination therefore needs the equivalent handling in the SDK integration, not in the
+transformer — the config key and UI field stay the same either way.
 
 `snapchat_conversion` and `snap_pixel` both gate the field on a separate `enableDeduplication`
 checkbox — only add that toggle if the partner's id field is genuinely optional.
@@ -133,18 +138,17 @@ failure (see `src/validator/index.ts`).
 the keyword that actually failed (inside `then`) and one for the `if` keyword itself
 (`must match "then" schema`, with an empty `instancePath`). The `errorMessage` inside `then`
 only replaces the first. config-backend maps _every_ error into the response with no
-filtering (`formatAjvErrorMessages`), so omitting the outer `errorMessage` gets the customer
-a readable sentence followed by a raw, field-less schema failure.
+filtering, so omitting the outer `errorMessage` gets the customer a readable sentence followed
+by a raw, field-less schema failure.
 
 ### Where this is actually enforced — know what the customer sees
 
 **Server-side, at save time. There is no inline UI validation for it.**
 
-- **config-backend** compiles the destination's `configSchema` with ajv — `allErrors`,
-  `ajv-errors`, `ajv-keywords` (`src/validations/configValidationErrors.ts` `createAjv`,
-  applied in `src/validations/validator.ts` `validateConfigCore`). Conditionals **are**
-  enforced and the `errorMessage` **does** surface — every ajv error is mapped into the
-  response, which is why the `if` needs its own `errorMessage` too (above).
+- **config-backend** compiles the destination's `configSchema` with ajv, configured the same
+  way as here — `allErrors`, `ajv-errors`, `ajv-keywords`. Conditionals **are** enforced and
+  the `errorMessage` **does** surface — every ajv error is mapped into the response, which is
+  why the `if` needs its own `errorMessage` too (above).
 - **rudder-webapp** renders the destination config form from `ui-config.json`, not
   `schema.json`. The destination configuration components contain no reference to
   `configSchema` or ajv at all. Its client-side validation is limited to what `ui-config.json`
