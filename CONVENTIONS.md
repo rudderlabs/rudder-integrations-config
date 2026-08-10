@@ -61,11 +61,12 @@ carry it**, so whichever existing destination you open as a template will almost
 have it — including in the `ui-config.json` `regex` sitting next to the field. Copy the
 field's own regex, not the prefix.
 
-Keep the plain pattern permissive enough for what the field genuinely accepts. A simple bound
-like `^.{1,100}$` still admits a templated or `env.`-prefixed value, so simplifying to it
-costs nothing: config-backend syntax-checks `{{ }}` / `env.` values and then validates them
-against this pattern unchanged (`src/validations/validator.ts`), so only a deliberately narrow
-pattern — a URL or a strict id format — would turn them away.
+Size the pattern to the value the field genuinely accepts, and stop there. Don't stretch it to
+keep `{{ }}` / `env.` values passing: config-backend syntax-checks those and then validates
+them against this pattern unchanged (`src/validations/validator.ts`), so a narrow pattern — a
+URL or a strict id format — will reject them. That is fine and intended. Going forward a new
+field is not expected to preserve templating support; write the pattern the field's own value
+needs.
 
 Six schemas don't carry the prefix: `custom_audience` (2026-05), `iterable_audience` (2026-06),
 `bqstream_all_events` (2026-06) and `braze_audience` (2026-07) use plain patterns, while
@@ -89,11 +90,15 @@ explaining that a dot-path such as `properties.orderId` maps from `message.prope
 deprecated prefix).
 
 Semantics the transformer implements: resolve the customer's path(s) against the message and
-fall back to `messageId` when unset or unresolvable. `pinterest_tag` and `linkedIn_ads` accept
-a comma-separated list and take the first that resolves (`getOneByPaths`);
-`snapchat_conversion` takes a single path. `snapchat_conversion` and `snap_pixel` both gate
-the field on a separate `enableDeduplication` checkbox — only add that toggle if the partner's
-id field is genuinely optional.
+fall back to `messageId`. `pinterest_tag` and `linkedIn_ads` accept a comma-separated list and
+take the first that resolves, falling back when the config is unset _or_ no path resolves
+(`getOneByPaths(…) ?? .messageId`). `snapchat_conversion` takes a single path and falls back
+only when the config is unset (`deduplicationKey || 'messageId'`) — a set-but-unresolvable
+path yields no id rather than `messageId`. Prefer the `getOneByPaths` shape for new
+destinations.
+
+`snapchat_conversion` and `snap_pixel` both gate the field on a separate `enableDeduplication`
+checkbox — only add that toggle if the partner's id field is genuinely optional.
 
 ## Restricting a field by connection mode
 
@@ -113,13 +118,23 @@ supports fewer events than its server API — express it as **conditional valida
       "to": { "not": { "enum": ["app_installed", "app_opened"] } } } } } },
     "errorMessage": { "properties": { "eventsMapping":
       "app_installed and app_opened are not supported by the browser SDK. Map them on a cloud-mode connection instead." } }
-  }
+  },
+  // Required. Without this, ajv also emits a bare `must match "then" schema` alongside the
+  // message above, and config-backend returns both to the customer. See below.
+  "errorMessage": { "if": "This value is not valid for the selected connection mode." }
 }]
 ```
 
 Draft-07 `if`/`then` is available and already used by 242 destination schemas; `errorMessage`
 comes from `ajv-errors`, so the customer gets a readable reason rather than a raw schema
 failure (see `src/validator/index.ts`).
+
+**Both `errorMessage`s are needed.** A failing `if`/`then` produces two ajv errors: one from
+the keyword that actually failed (inside `then`) and one for the `if` keyword itself
+(`must match "then" schema`, with an empty `instancePath`). The `errorMessage` inside `then`
+only replaces the first. config-backend maps _every_ error into the response with no
+filtering (`formatAjvErrorMessages`), so omitting the outer `errorMessage` gets the customer
+a readable sentence followed by a raw, field-less schema failure.
 
 ### Where this is actually enforced — know what the customer sees
 
@@ -128,7 +143,8 @@ failure (see `src/validator/index.ts`).
 - **config-backend** compiles the destination's `configSchema` with ajv — `allErrors`,
   `ajv-errors`, `ajv-keywords` (`src/validations/configValidationErrors.ts` `createAjv`,
   applied in `src/validations/validator.ts` `validateConfigCore`). Conditionals **are**
-  enforced and the `errorMessage` **does** surface.
+  enforced and the `errorMessage` **does** surface — every ajv error is mapped into the
+  response, which is why the `if` needs its own `errorMessage` too (above).
 - **rudder-webapp** renders the destination config form from `ui-config.json`, not
   `schema.json`. The destination configuration components contain no reference to
   `configSchema` or ajv at all. Its client-side validation is limited to what `ui-config.json`
@@ -141,7 +157,7 @@ gets the `errorMessage` back from the API. Correctness is guaranteed; discoverab
 restriction, so it is visible before the save round-trip. That is the cheap half of the UX;
 the conditional is what actually enforces it.
 
-If a destination genuinely needs the value to be *unselectable* rather than rejected, that is
+If a destination genuinely needs the value to be _unselectable_ rather than rejected, that is
 today only achievable with a separate `preRequisites`-gated field per mode — with the scaling
 cost described above. Weigh it per destination; for a restriction affecting a couple of enum
 values, schema validation plus a note is the better trade. Inline UI support for conditional
