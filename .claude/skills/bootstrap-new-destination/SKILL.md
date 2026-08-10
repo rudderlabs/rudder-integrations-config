@@ -152,6 +152,7 @@ Copy the template as-is — it already includes the standard consent block. Add 
 When real fields are introduced, replace it — add each to the "Connection settings" group (page 1) if required, else "Configure settings" (page 2), using the same shape. `type` ∈ `textInput | checkbox | singleSelect | multiSelect | tagInput`; omit `required` to make a field required, set `"required": false` for optional, and mark secrets with `"secret": true`.
 
 - Device/hybrid: populate `sdkTemplate.fields` with the web SDK settings from the example destination. Cloud-only: leave it `[]`.
+- Keep `regex` **plain**, exactly as in the template. The deprecated `(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|` prefix is carried by most existing destinations' `ui-config.json` too, so don't bring it along when you copy a field from one — the same rule applies here as to `pattern` in `schema.json`. See [CONVENTIONS.md](../../../CONVENTIONS.md#string-pattern-in-schemajson).
 - Do not add any `oneTrustCookieCategories` / `ketchConsentPurposes` fields.
 
 ### 3. `schema.json` (author by hand — no template)

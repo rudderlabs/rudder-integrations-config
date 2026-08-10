@@ -51,14 +51,25 @@ Use a plain pattern for the value the field actually accepts:
 { "type": "string", "pattern": "^.{1,100}$" }
 ```
 
-**Do not use the `(^\{\{.*\|\|(.*)\}\}$)|(^env[.].+)|…` prefix. It is deprecated.**
+**Do not use the `(^\{\{.*\|\|(.*)\}\}$)|(^env[.].+)|…` prefix. It is deprecated** — going
+forward it should not be added to a new field, in either `schema.json` (`pattern`) or
+`ui-config.json` (`regex`).
 
 That prefix exists to let a config value be a `{{ }}` template or an `env.` reference, and it
 is the single biggest copy-paste trap in this repo: **239 of 245 destination schemas still
 carry it**, so whichever existing destination you open as a template will almost certainly
-have it. The recently-added schemas do not — `custom_audience` (2026-05), `iterable_audience`
-(2026-06), `bqstream_all_events` (2026-06), `braze_audience` (2026-07) all use plain
-patterns.
+have it — including in the `ui-config.json` `regex` sitting next to the field. Copy the
+field's own regex, not the prefix.
+
+Keep the plain pattern permissive enough for what the field genuinely accepts. A simple bound
+like `^.{1,100}$` still admits a templated or `env.`-prefixed value, so simplifying to it
+costs nothing: config-backend syntax-checks `{{ }}` / `env.` values and then validates them
+against this pattern unchanged (`src/validations/validator.ts`), so only a deliberately narrow
+pattern — a URL or a strict id format — would turn them away.
+
+Six schemas don't carry the prefix: `custom_audience` (2026-05), `iterable_audience` (2026-06),
+`bqstream_all_events` (2026-06) and `braze_audience` (2026-07) use plain patterns, while
+`linkedin_audience` and `tiktok_audience` declare no string patterns at all.
 
 Existing schemas are not being rewritten; the rule applies to new fields and new
 destinations.
@@ -71,17 +82,18 @@ config key is **`deduplicationKey`** — not `eventId`, `conversionId`, or a new
 
 Four destinations use it today: `pinterest_tag`, `linkedIn_ads`, `snapchat_conversion`,
 `snap_pixel`. Copy the UI field from
-[`linkedin_ads/ui-config.json`](src/configurations/destinations/linkedin_ads/ui-config.json)
+[`linkedIn_ads/ui-config.json`](src/configurations/destinations/linkedIn_ads/ui-config.json)
 — a `textInput` labelled "Deduplication Key", placeholder `e.g: messageId`, with a note
 explaining that a dot-path such as `properties.orderId` maps from `message.properties.orderId`
-(but with a plain `pattern`, per the section above).
+(but with a plain `regex`, per the section above — the field there still carries the
+deprecated prefix).
 
 Semantics the transformer implements: resolve the customer's path(s) against the message and
-fall back to `messageId` when unset or unresolvable. `pinterest_tag` and `linkedin_ads` accept
+fall back to `messageId` when unset or unresolvable. `pinterest_tag` and `linkedIn_ads` accept
 a comma-separated list and take the first that resolves (`getOneByPaths`);
-`snapchat_conversion` takes a single path and gates the whole thing on a separate
-`enableDeduplication` checkbox — only add that toggle if the partner's id field is genuinely
-optional.
+`snapchat_conversion` takes a single path. `snapchat_conversion` and `snap_pixel` both gate
+the field on a separate `enableDeduplication` checkbox — only add that toggle if the partner's
+id field is genuinely optional.
 
 ## Restricting a field by connection mode
 
