@@ -57,6 +57,8 @@ Copy field shapes, the `schema.json` consent / `connectionMode` blocks, and `sdk
 - `scripts/template-db-config.json`, `scripts/template-ui-config.json` — the canonical starting templates. **Copy these as your base**; they already carry `version: "1.0"`, the standard structure, and the consent block.
 - `src/schemas/destinations/db-config-schema.json` — authoritative meta-schema for `db-config.json`. `config.additionalProperties` is `false`; an unknown key fails validation.
 
+- [`CONVENTIONS.md`](../../../CONVENTIONS.md) — naming and structural conventions that apply across the repo (`accountDefinitionName`, string `pattern`s, `deduplicationKey`, mode-conditional validation). **Where an existing destination and CONVENTIONS.md disagree, CONVENTIONS.md is current** — most files predate it.
+
 The templates do **not** produce `schema.json` — author it by hand (step 3).
 
 ## File layout
@@ -150,6 +152,7 @@ Copy the template as-is — it already includes the standard consent block. Add 
 When real fields are introduced, replace it — add each to the "Connection settings" group (page 1) if required, else "Configure settings" (page 2), using the same shape. `type` ∈ `textInput | checkbox | singleSelect | multiSelect | tagInput`; omit `required` to make a field required, set `"required": false` for optional, and mark secrets with `"secret": true`.
 
 - Device/hybrid: populate `sdkTemplate.fields` with the web SDK settings from the example destination. Cloud-only: leave it `[]`.
+- Keep `regex` **plain**, exactly as in the placeholder field above (`scripts/template-ui-config.json` ships no fields, so there is no `regex` in it to copy). The deprecated `(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|` prefix is carried by most existing destinations' `ui-config.json` too, so don't bring it along when you copy a field from one — the same rule applies here as to `pattern` in `schema.json`. See [CONVENTIONS.md](../../../CONVENTIONS.md#string-pattern-and-regex).
 - Do not add any `oneTrustCookieCategories` / `ketchConsentPurposes` fields.
 
 ### 3. `schema.json` (author by hand — no template)
@@ -173,9 +176,11 @@ A `configSchema` (JSON Schema draft-07) whose `required`/`properties` mirror the
 }
 ```
 
-- Prefix every string `pattern` with `(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|` (allows templating/env refs), then the field's own regex — as the example destination does.
+- Use a **plain** string `pattern` — just the field's own regex, e.g. `"^.{1,100}$"`. **Do not prefix it with `(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|`; that templating/env prefix is deprecated.** 239 of 245 existing schemas still carry it, so _any_ destination you open as an example will have it — copy the field's regex, not the prefix. Recent additions (`custom_audience`, `iterable_audience`, `bqstream_all_events`, `braze_audience`) use plain patterns. See [CONVENTIONS.md](../../../CONVENTIONS.md#string-pattern-and-regex).
 - Copy the `consentManagement` and `connectionMode` property blocks from the example destination. The `consentManagement.properties` keys must **exactly equal** `supportedSourceTypes`; each is an array with `uniqueItemProperties: ["provider"]` and the standard `errorMessage`. Replicate the per-source-type pattern for any source type the example lacks (e.g. `cloudSource`).
 - Do **not** add `oneTrustCookieCategories` / `ketchConsentPurposes` properties.
+- **A value valid in one connection mode but not another** (e.g. the partner's browser SDK supports fewer events than its server API) goes in `schema.json` as an `allOf` / `if` / `then` block keyed on `connectionMode.<sourceType>`, with `ajv-errors` `errorMessage`s on **both** the `then` and the `if` so the customer sees a readable reason and no raw schema failure. Don't add a second mode-specific config field for it, and don't push the rule into the transformer or the SDK. Full shape: [CONVENTIONS.md](../../../CONVENTIONS.md#restricting-a-field-by-connection-mode).
+- **A customer-chosen dedupe/event-id field** is named `deduplicationKey` — see [CONVENTIONS.md](../../../CONVENTIONS.md#deduplication--event-id-config-key-deduplicationkey).
 
 ### 4. Test data — `test/data/validation/destinations/<dir>.json`
 

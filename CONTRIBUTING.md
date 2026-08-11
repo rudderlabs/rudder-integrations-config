@@ -137,7 +137,8 @@ For a single flag, `condition` is optional. For two or more flags, set `conditio
 Beta-to-GA lifecycle:
 
 - During beta, use `hidden.gate` with the beta Flagsmith flag.
-- When GA access is controlled by billing, update `hidden.gate` to the billing feature, or combine the beta flag and billing feature with an explicit `condition` during transition.
+- **At GA, remove the `options.hidden` block entirely** — this is the default. An integration that everyone on any plan can use should carry no gate at all.
+- Only if GA access is genuinely **plan-gated** should `hidden.gate` move to the billing feature (or combine the beta flag and the billing feature with an explicit `condition` during the transition). Don't reach for a billing feature just because the integration is leaving beta.
 - Keep `hidden: true` only for blanket hiding from all customers.
 
 ## How you can provide your destination connection setting details
