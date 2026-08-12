@@ -84,3 +84,9 @@
 - The Heap destination is a pure configuration bundle under `src/configurations/destinations/heap/` with only `db-config.json`, `ui-config.json`, and `schema.json`; there is no Heap `ui-config.jt`/`ui-default.json` generation path in this checkout.
 - Heap destination setting changes such as `dataResidency` belong in that hand-authored triplet: `ui-config.json` controls the dashboard field, `schema.json` validates the persisted config value, and `db-config.json` `includeKeys` plus `config.destConfig.defaultConfig` expose it to runtime consumers.
 - Runtime endpoint switching for Heap cloud mode is outside this repository; this repo supplies declarative integration metadata consumed by the transformer/control plane.
+
+## AI-1317 — Webhook URL Secret Boundary
+
+- The Webhook destination's `webhookUrl` field is authored in `src/configurations/destinations/webhook/ui-config.json` as a required `textInput` without `secret: true`.
+- Webhook destination secret metadata is scoped in `src/configurations/destinations/webhook/db-config.json`; during AI-1317 only `headers.to` was listed under `config.secretKeys`, not `webhookUrl`.
+- If the add-channel Webhook URL is masked as a secret, first verify whether the affected flow is the alert/notification channel UI or service rather than the destination Webhook configuration metadata; adding `secret: false` in this repo may mask the wrong product boundary.
