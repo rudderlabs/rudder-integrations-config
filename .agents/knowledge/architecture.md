@@ -84,3 +84,9 @@
 - The Heap destination is a pure configuration bundle under `src/configurations/destinations/heap/` with only `db-config.json`, `ui-config.json`, and `schema.json`; there is no Heap `ui-config.jt`/`ui-default.json` generation path in this checkout.
 - Heap destination setting changes such as `dataResidency` belong in that hand-authored triplet: `ui-config.json` controls the dashboard field, `schema.json` validates the persisted config value, and `db-config.json` `includeKeys` plus `config.destConfig.defaultConfig` expose it to runtime consumers.
 - Runtime endpoint switching for Heap cloud mode is outside this repository; this repo supplies declarative integration metadata consumed by the transformer/control plane.
+
+## INT-6957 — Snowflake Namespace Immutable Validation Boundary
+
+- Snowflake `namespace` is authored in this repo as an optional immutable destination config field: `src/configurations/destinations/snowflake/schema.json` has no schema default and marks `namespace` with `"rs-immutable": true`, while `src/configurations/destinations/snowflake/ui-config.json` exposes it as an optional immutable text input.
+- This repository's `src/validator/index.ts::validateConfig` validates a single config against JSON Schema; it does not compare original-vs-updated configs, so update-time immutable-change detection belongs in `rudder-config-backend` rather than Snowflake-specific config here.
+- Adding a Snowflake schema default or changing only this repo's Snowflake UI config would not repair existing persisted destinations where `namespace` is absent and would leave other `rs-immutable` destination fields exposed to the same backend comparison issue.
