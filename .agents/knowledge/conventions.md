@@ -100,3 +100,8 @@
 - The S3 Datalake "Default (YYYY/MM/DD/HH)" option and `defaultOption.value` should both use the empty string, and the field should be gated with `preRequisiteField: { "name": "useGlue", "selectedValue": true }` so it is shown only when AWS Glue registration is enabled.
 - For S3 Datalake, `src/configurations/destinations/s3_datalake/schema.json` keeps `timeWindowLayout` as a loose string with `rs-immutable: true`; schema generation may warn that it would add enum/default details from the UI field, but AI-1266 intentionally avoided making the schema stricter than the requested contract.
 - S3 Datalake destination UI/config additions such as `timeWindowLayout` should include focused coverage: add persisted config cases to `test/data/validation/destinations/s3_datalake.json` and assert the UI field contract in `test/validation.test.ts` when the UI shape is part of the change.
+
+## AI-1317 — Webhook URL Secret Classification
+
+- The Webhook destination's `webhookUrl` is not intended to be classified as a secret in `src/configurations/destinations/webhook/db-config.json`; the destination secret metadata should remain limited to `headers.to` unless product explicitly changes that contract.
+- If Webhook secret metadata changes, keep a regression assertion in `test/validation.test.ts` that `secretKeys` equals `["headers.to"]` and does not include `webhookUrl`, because schemas/UI config are not the source of truth for this masking classification.

@@ -296,6 +296,12 @@ describe('Destination Definition validation tests', () => {
     });
   });
 
+  it('webhook does not classify webhookUrl as a secret destination key', async () => {
+    const destDefConfig = await getDestinationDefinitionConfig('webhook');
+    expect(destDefConfig.config.secretKeys).toEqual(['headers.to']);
+    expect(destDefConfig.config.secretKeys).not.toContain('webhookUrl');
+  });
+
   const malformedDestDefConfigs = [
     {
       description: 'missing "name" and "displayName" properties',
