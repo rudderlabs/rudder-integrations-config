@@ -84,3 +84,9 @@
 - The Heap destination is a pure configuration bundle under `src/configurations/destinations/heap/` with only `db-config.json`, `ui-config.json`, and `schema.json`; there is no Heap `ui-config.jt`/`ui-default.json` generation path in this checkout.
 - Heap destination setting changes such as `dataResidency` belong in that hand-authored triplet: `ui-config.json` controls the dashboard field, `schema.json` validates the persisted config value, and `db-config.json` `includeKeys` plus `config.destConfig.defaultConfig` expose it to runtime consumers.
 - Runtime endpoint switching for Heap cloud mode is outside this repository; this repo supplies declarative integration metadata consumed by the transformer/control plane.
+
+## DEX-498 — Facebook Conversions Canonical Config Boundary
+
+- `facebook_conversions` already has canonical destination assets in this repository under `src/configurations/destinations/facebook_conversions/`, including the standard `db-config.json`, `schema.json`, and `ui-config.json` triplet plus validation fixture coverage at `test/data/validation/destinations/facebook_conversions.json`.
+- CLI onboarding for `facebook_conversions` is outside this repository's current surface: this checkout provides canonical integrations-config metadata and local skills such as `bootstrap-new-destination`, `migrate-to-accounts-framework`, and `vdm-next-integration`, but no `onboard-cli-destination` skill or CLI destination-definition implementation surface.
+- When asked to onboard `facebook_conversions` in a CLI, treat `rudder-integrations-config` as source material unless the canonical triplet or validation fixture is incorrect; avoid duplicating an already-present destination definition here.
