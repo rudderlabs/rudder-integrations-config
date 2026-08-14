@@ -60,6 +60,30 @@ function getIntegrationData(name: string, type: string): Record<string, unknown>
   return intgData;
 }
 
+function findFieldByConfigKey(
+  node: unknown,
+  configKey: string,
+): Record<string, unknown> | undefined {
+  if (Array.isArray(node)) {
+    return node.reduce<Record<string, unknown> | undefined>(
+      (result, item) => result || findFieldByConfigKey(item, configKey),
+      undefined,
+    );
+  }
+
+  if (node && typeof node === 'object') {
+    const record = node as Record<string, unknown>;
+    if (record.configKey === configKey) return record;
+
+    return Object.values(record).reduce<Record<string, unknown> | undefined>(
+      (result, value) => result || findFieldByConfigKey(value, configKey),
+      undefined,
+    );
+  }
+
+  return undefined;
+}
+
 function getMinimalDestinationDefinition(hidden?: unknown) {
   return {
     name: 'TEST_DESTINATION',
@@ -230,6 +254,49 @@ describe('Validation Tests', () => {
           }
         });
       });
+    });
+  });
+
+  describe('Braze UI field visibility', () => {
+    it('shows ecommerce recommended events only for cloud-mode connections', () => {
+      const brazeUiConfig = JSON.parse(
+        fs.readFileSync(
+          path.resolve('src/configurations/destinations/braze/ui-config.json'),
+          'utf-8',
+        ),
+      );
+      const field = findFieldByConfigKey(brazeUiConfig, 'useEcommerceRecommendedEvents');
+      expect(field).toBeDefined();
+      expect(field?.default).toBeUndefined();
+
+      const preRequisites = field?.preRequisites as Record<string, unknown>;
+      const fields = preRequisites.fields as Record<string, unknown>[];
+      expect(fields).toEqual([
+        { configKey: 'connectionMode.cloud', value: 'cloud' },
+        { configKey: 'connectionMode.web', value: 'cloud' },
+        { configKey: 'connectionMode.android', value: 'cloud' },
+        { configKey: 'connectionMode.androidKotlin', value: 'cloud' },
+        { configKey: 'connectionMode.ios', value: 'cloud' },
+        { configKey: 'connectionMode.iosSwift', value: 'cloud' },
+        { configKey: 'connectionMode.flutter', value: 'cloud' },
+        { configKey: 'connectionMode.reactnative', value: 'cloud' },
+        { configKey: 'connectionMode.unity', value: 'cloud' },
+        { configKey: 'connectionMode.amp', value: 'cloud' },
+        { configKey: 'connectionMode.cordova', value: 'cloud' },
+        { configKey: 'connectionMode.shopify', value: 'cloud' },
+        { configKey: 'connectionMode.warehouse', value: 'cloud' },
+      ]);
+      expect(preRequisites.condition).toBe('or');
+
+      const brazeDbConfig = JSON.parse(
+        fs.readFileSync(
+          path.resolve('src/configurations/destinations/braze/db-config.json'),
+          'utf-8',
+        ),
+      );
+      expect(brazeDbConfig.config.destConfig.defaultConfig).not.toContain(
+        'useEcommerceRecommendedEvents',
+      );
     });
   });
 

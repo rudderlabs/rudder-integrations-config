@@ -61,3 +61,8 @@
 - Amplitude `ui-config.json` gates the legacy "Save Referrer, URL Params, GCLID only once per session" field with a `conditions.expression` built from an `operator` (`AND`/`OR`) plus an `operands` array — each operand is `{ type: "configuration", key, value }`. There is no top-level `expression.type`; the `type: "configuration"` lives on the operands. This field ANDs `connectionMode.web == "device"` with `sdkVersion.web == 1`.
 - Reuse that operand pattern (wrapped in the required `AND`/`OR` expression structure) for other Amplitude Browser SDK settings that need SDK-version-specific visibility.
 - When extending an existing Amplitude config object to web, prefer adding a `web` boolean property to the existing object in `schema.json` and adding the same key to `db-config.json` `config.destConfig.web`, rather than introducing a parallel key.
+
+## INT-6983 — AJV Defaults With Conditional Rejections
+
+- This repo's AJV validation uses `useDefaults: true`, so a JSON Schema `default` can be injected into configs that omit a field before later conditional validation runs.
+- For optional rollback guardrails like Braze `useEcommerceRecommendedEvents`, do not keep a schema default of `true` when non-cloud configs should only fail on explicit `true`; otherwise omitted device/hybrid configs are mutated into failing configs. Keep the UI default for the visible cloud-only field instead.

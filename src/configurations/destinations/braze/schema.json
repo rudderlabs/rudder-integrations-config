@@ -1099,12 +1099,130 @@
         }
       },
       "useEcommerceRecommendedEvents": {
-        "type": "boolean",
-        "default": true
+        "type": "boolean"
       }
     },
     "additonalProperties": false,
     "allOf": [
+      {
+        "if": {
+          "properties": {
+            "useEcommerceRecommendedEvents": {
+              "const": true
+            },
+            "connectionMode": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "required": ["web"],
+                  "properties": {
+                    "web": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["web"],
+                  "properties": {
+                    "web": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["ios"],
+                  "properties": {
+                    "ios": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["ios"],
+                  "properties": {
+                    "ios": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["iosSwift"],
+                  "properties": {
+                    "iosSwift": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["iosSwift"],
+                  "properties": {
+                    "iosSwift": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["android"],
+                  "properties": {
+                    "android": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["android"],
+                  "properties": {
+                    "android": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["androidKotlin"],
+                  "properties": {
+                    "androidKotlin": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["androidKotlin"],
+                  "properties": {
+                    "androidKotlin": {
+                      "const": "hybrid"
+                    }
+                  }
+                },
+                {
+                  "required": ["flutter"],
+                  "properties": {
+                    "flutter": {
+                      "const": "device"
+                    }
+                  }
+                },
+                {
+                  "required": ["reactnative"],
+                  "properties": {
+                    "reactnative": {
+                      "const": "device"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["useEcommerceRecommendedEvents", "connectionMode"]
+        },
+        "then": {
+          "properties": {
+            "useEcommerceRecommendedEvents": {
+              "const": false,
+              "errorMessage": "can only be enabled for cloud mode connections"
+            }
+          }
+        }
+      },
       {
         "if": {
           "properties": {

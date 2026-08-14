@@ -100,3 +100,8 @@
 - The S3 Datalake "Default (YYYY/MM/DD/HH)" option and `defaultOption.value` should both use the empty string, and the field should be gated with `preRequisiteField: { "name": "useGlue", "selectedValue": true }` so it is shown only when AWS Glue registration is enabled.
 - For S3 Datalake, `src/configurations/destinations/s3_datalake/schema.json` keeps `timeWindowLayout` as a loose string with `rs-immutable: true`; schema generation may warn that it would add enum/default details from the UI field, but AI-1266 intentionally avoided making the schema stricter than the requested contract.
 - S3 Datalake destination UI/config additions such as `timeWindowLayout` should include focused coverage: add persisted config cases to `test/data/validation/destinations/s3_datalake.json` and assert the UI field contract in `test/validation.test.ts` when the UI shape is part of the change.
+
+## INT-6983 — Braze Ecommerce Recommended Events Rollback Scope
+
+- `useEcommerceRecommendedEvents` for Braze should remain cloud-mode-only unless runtime support for device/hybrid modes is confirmed; rolling back device/hybrid exposure should update both `src/configurations/destinations/braze/ui-config.json` prerequisites and `src/configurations/destinations/braze/schema.json` guardrails rather than relying on UI visibility alone.
+- Preserve existing cloud-mode behavior when applying this rollback class: keep the cloud UI default enabled, but reject explicit `true` values for non-cloud `connectionMode` configs so API-authored or persisted device/hybrid configs cannot reach runtime with the risky flag enabled.
