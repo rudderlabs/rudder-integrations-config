@@ -84,3 +84,10 @@
 - The Heap destination is a pure configuration bundle under `src/configurations/destinations/heap/` with only `db-config.json`, `ui-config.json`, and `schema.json`; there is no Heap `ui-config.jt`/`ui-default.json` generation path in this checkout.
 - Heap destination setting changes such as `dataResidency` belong in that hand-authored triplet: `ui-config.json` controls the dashboard field, `schema.json` validates the persisted config value, and `db-config.json` `includeKeys` plus `config.destConfig.defaultConfig` expose it to runtime consumers.
 - Runtime endpoint switching for Heap cloud mode is outside this repository; this repo supplies declarative integration metadata consumed by the transformer/control plane.
+
+## DEX-516 — Kinesis Destination CLI Onboarding Source Metadata
+
+- The Kinesis destination source-of-truth lives in the canonical hand-authored triplet under `src/configurations/destinations/kinesis/`: `db-config.json`, `schema.json`, and `ui-config.json`.
+- Kinesis destination metadata is `name: KINESIS`, `displayName: Amazon Kinesis`, `version: 1.0`, and cloud-only connection modes for supported sources; CLI onboarding should derive metadata from this existing definition rather than inventing a parallel shape.
+- Kinesis persisted/default config keys are `iamRoleARN`, `roleBasedAuth`, `region`, `stream`, `accessKeyID`, `accessKey`, and `useMessageId`; `accessKeyID` and `accessKey` are secret keys, and the UI labels `useMessageId` as `Use MessageId as Partition Key`.
+- Kinesis schema validation requires `region` and `stream`, defaults `roleBasedAuth: true` and `useMessageId: false`, conditionally requires `iamRoleARN` when role-based auth is enabled, and conditionally requires `accessKeyID`/`accessKey` when role-based auth is disabled while allowing empty auth strings via `.{0,100}` patterns.
