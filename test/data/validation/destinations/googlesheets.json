@@ -817,5 +817,84 @@
       "consentManagement.cloud.0 must have required property 'resolutionStrategy'",
       "consentManagement.cloud.0 must match \"then\" schema"
     ]
+  },
+  {
+    "testTitle": "With only the required fields - minimal valid config",
+    "config": {
+      "credentials": "{\"type\":\"service_account\",\"project_id\":\"test-project\",\"private_key\":\"XXXX\"}",
+      "sheetId": "13N0gXX9Be_2gR2afax2G4j6hXXXCOgmDcCRgopTc905",
+      "sheetName": "Sheet1",
+      "eventKeyMap": [
+        {
+          "from": "addedToCart",
+          "to": "Added To Cart"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With all required fields missing",
+    "config": {},
+    "result": false,
+    "err": [
+      " must have required property 'credentials'",
+      " must have required property 'sheetId'",
+      " must have required property 'sheetName'",
+      " must have required property 'eventKeyMap'"
+    ]
+  },
+  {
+    "testTitle": "With invalid types for the required fields",
+    "config": {
+      "credentials": 123,
+      "sheetId": 456,
+      "sheetName": 789,
+      "eventKeyMap": "not-an-array"
+    },
+    "result": false,
+    "err": [
+      "credentials must be string",
+      "sheetId must be string",
+      "sheetName must be string",
+      "eventKeyMap must be array"
+    ]
+  },
+  {
+    "testTitle": "With invalid eventKeyMap entry value types",
+    "config": {
+      "credentials": "{\"type\":\"service_account\",\"project_id\":\"test-project\",\"private_key\":\"XXXX\"}",
+      "sheetId": "13N0gXX9Be_2gR2afax2G4j6hXXXCOgmDcCRgopTc905",
+      "sheetName": "Sheet1",
+      "eventKeyMap": [
+        {
+          "from": 1,
+          "to": 2
+        }
+      ]
+    },
+    "result": false,
+    "err": ["eventKeyMap.0.from must be string", "eventKeyMap.0.to must be string"]
+  },
+  {
+    "testTitle": "With eventKeyMap entries that are not objects",
+    "config": {
+      "credentials": "{\"type\":\"service_account\",\"project_id\":\"test-project\",\"private_key\":\"XXXX\"}",
+      "sheetId": "13N0gXX9Be_2gR2afax2G4j6hXXXCOgmDcCRgopTc905",
+      "sheetName": "Sheet1",
+      "eventKeyMap": ["addedToCart"]
+    },
+    "result": false,
+    "err": ["eventKeyMap.0 must be object"]
+  },
+  {
+    "testTitle": "With empty eventKeyMap",
+    "config": {
+      "credentials": "{\"type\":\"service_account\",\"project_id\":\"test-project\",\"private_key\":\"XXXX\"}",
+      "sheetId": "13N0gXX9Be_2gR2afax2G4j6hXXXCOgmDcCRgopTc905",
+      "sheetName": "Sheet1",
+      "eventKeyMap": []
+    },
+    "result": true
   }
 ]
