@@ -84,3 +84,10 @@
 - The Heap destination is a pure configuration bundle under `src/configurations/destinations/heap/` with only `db-config.json`, `ui-config.json`, and `schema.json`; there is no Heap `ui-config.jt`/`ui-default.json` generation path in this checkout.
 - Heap destination setting changes such as `dataResidency` belong in that hand-authored triplet: `ui-config.json` controls the dashboard field, `schema.json` validates the persisted config value, and `db-config.json` `includeKeys` plus `config.destConfig.defaultConfig` expose it to runtime consumers.
 - Runtime endpoint switching for Heap cloud mode is outside this repository; this repo supplies declarative integration metadata consumed by the transformer/control plane.
+
+## DEX-521 — Marketo Destination Config Reference
+
+- The primary Marketo destination is the existing integration-config triplet under `src/configurations/destinations/marketo/`, with db name `MARKETO`, display name `Marketo`, and version `1.0`.
+- Marketo's primary destination definition is cloud-only across android/androidKotlin/ios/iosSwift/web/unity/amp/cloud/warehouse/reactnative/flutter/cordova/shopify, and supports cloud message types `identify` and `track`.
+- Marketo requires `accountId` (UI label `Munchkin Account Id`), `clientId`, and secret `clientSecret`; all three use the same secret/env/template-compatible string pattern `(^\{\{.*\|\|(.*)\}\}$)|(^env[.].+)|^(.{1,100})$`.
+- Marketo optional/defaulted config fields are `trackAnonymousEvents` default false, `createIfNotExist` default true, and mapping arrays `rudderEventsMapping` (`event`, `marketoPrimarykey`, `marketoActivityId`), `leadTraitMapping` (`from`, `to`), and `customActivityPropertyMap` (`from`, `to`).
