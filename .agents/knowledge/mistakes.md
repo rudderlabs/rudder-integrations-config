@@ -26,3 +26,8 @@
 
 - During INT-6644 orientation, Braze prerequisite coverage was initially attributed to `src/configurations/destinations/braze/db-config.json`; inspection corrected that per-field source connection-mode visibility lives in `src/configurations/destinations/braze/ui-config.json`.
 - Corrective rule: for Braze per-field UI visibility or prerequisite coverage changes, inspect and edit the field object's `preRequisites.fields` in `ui-config.json`; use `db-config.json` only for included config keys and supported source type metadata.
+
+## INT-6707 — Run Black After Python Script Edits
+
+- CI failed after `scripts/schemaGenerator.py` was edited without applying Black; the Code quality checks job reported `would reformat .../scripts/schemaGenerator.py` and exited 1.
+- Corrective rule: after Python script edits, run `python3 -m black scripts/schemaGenerator.py` or `python3 -m black --check .` so helper/function spacing matches the repository formatter before CI.
