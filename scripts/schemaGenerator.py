@@ -58,6 +58,7 @@ def get_options_list_for_enum(field):
     Returns:
         list: list of options
     """
+
     def append_option_value(option):
         if isinstance(option, int) or isinstance(option, str):
             option_value = option
