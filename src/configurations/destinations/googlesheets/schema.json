@@ -1,8 +1,37 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["credentials", "sheetId", "sheetName", "eventKeyMap"],
     "type": "object",
     "properties": {
+      "credentials": {
+        "type": "string",
+        "pattern": ".*"
+      },
+      "sheetId": {
+        "type": "string",
+        "pattern": ".*"
+      },
+      "sheetName": {
+        "type": "string",
+        "pattern": ".*"
+      },
+      "eventKeyMap": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            },
+            "to": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
       "oneTrustCookieCategories": {
         "type": "object",
         "properties": {
