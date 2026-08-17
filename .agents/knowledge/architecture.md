@@ -84,3 +84,9 @@
 - The Heap destination is a pure configuration bundle under `src/configurations/destinations/heap/` with only `db-config.json`, `ui-config.json`, and `schema.json`; there is no Heap `ui-config.jt`/`ui-default.json` generation path in this checkout.
 - Heap destination setting changes such as `dataResidency` belong in that hand-authored triplet: `ui-config.json` controls the dashboard field, `schema.json` validates the persisted config value, and `db-config.json` `includeKeys` plus `config.destConfig.defaultConfig` expose it to runtime consumers.
 - Runtime endpoint switching for Heap cloud mode is outside this repository; this repo supplies declarative integration metadata consumed by the transformer/control plane.
+
+## DEX-505 — Google Pub/Sub CLI Catalog Boundary
+
+- Google Cloud Pub/Sub destination metadata is authored in this repo under `src/configurations/destinations/googlepubsub/` as the canonical `db-config.json`/`schema.json`/`ui-config.json` triplet, while downstream CLI/IaC onboarding for resource name `google_pubsub` is outside this repository.
+- The destination's catalog identity maps the folder `googlepubsub` to destination definition name `GOOGLEPUBSUB` and display name `Google Cloud Pub/Sub`; the CLI resource name expected by downstream tooling is `google_pubsub`.
+- Google Pub/Sub's persisted config surface includes required `projectId` and secret `credentials`, with optional mapping arrays; repository changes should be limited to this source-of-truth triplet unless a catalog mismatch is found.
