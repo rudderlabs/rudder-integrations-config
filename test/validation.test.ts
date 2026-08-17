@@ -180,6 +180,35 @@ async function getDestinationDefinitionConfig(destName: string) {
   return config.default;
 }
 
+function getDestinationUiConfig(destName: string): Record<string, unknown> {
+  const configPath = path.resolve(`src/configurations/destinations/${destName}/ui-config.json`);
+  return JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+}
+
+function findFieldByConfigKey(
+  node: unknown,
+  configKey: string,
+): Record<string, unknown> | undefined {
+  if (Array.isArray(node)) {
+    return node
+      .map((item) => findFieldByConfigKey(item, configKey))
+      .find((result): result is Record<string, unknown> => Boolean(result));
+  }
+
+  if (node && typeof node === 'object') {
+    const record = node as Record<string, unknown>;
+    if (record.configKey === configKey) {
+      return record;
+    }
+
+    return Object.values(record)
+      .map((value) => findFieldByConfigKey(value, configKey))
+      .find((result): result is Record<string, unknown> => Boolean(result));
+  }
+
+  return undefined;
+}
+
 const dests = getIntegrationNames('destinations');
 const sources = getIntegrationNames('sources');
 
@@ -265,6 +294,57 @@ describe('Validation Tests', () => {
           validateConfig(dest, { ...baseConfig, syncFrequency: '11' }, 'destinations', true);
         }).toThrow();
       });
+    });
+  });
+
+  describe('Braze ecommerce recommended events UI contract', () => {
+    it('exposes the feature-flagged field for cloud, device, and hybrid modes', () => {
+      const brazeUiConfig = getDestinationUiConfig('braze');
+      const field = findFieldByConfigKey(brazeUiConfig, 'useEcommerceRecommendedEvents');
+
+      expect(field).toEqual(
+        expect.objectContaining({
+          type: 'checkbox',
+          label: 'Enable ecommerce recommended events',
+          default: true,
+        }),
+      );
+
+      const preRequisites = field?.preRequisites as Record<string, unknown>;
+      expect(preRequisites.condition).toBe('or');
+      expect(preRequisites.fields).toEqual(
+        expect.arrayContaining([
+          { configKey: 'connectionMode.cloud', value: 'cloud' },
+          { configKey: 'connectionMode.web', value: 'cloud' },
+          { configKey: 'connectionMode.web', value: 'device' },
+          { configKey: 'connectionMode.android', value: 'device' },
+          { configKey: 'connectionMode.androidKotlin', value: 'device' },
+          { configKey: 'connectionMode.ios', value: 'device' },
+          { configKey: 'connectionMode.iosSwift', value: 'device' },
+          { configKey: 'connectionMode.flutter', value: 'device' },
+          { configKey: 'connectionMode.reactnative', value: 'device' },
+          { configKey: 'connectionMode.web', value: 'hybrid' },
+          { configKey: 'connectionMode.android', value: 'hybrid' },
+          { configKey: 'connectionMode.androidKotlin', value: 'hybrid' },
+          { configKey: 'connectionMode.ios', value: 'hybrid' },
+          { configKey: 'connectionMode.iosSwift', value: 'hybrid' },
+        ]),
+      );
+
+      expect(field?.conditions).toEqual(
+        expect.objectContaining({
+          expression: expect.objectContaining({
+            operator: 'AND',
+            operands: expect.arrayContaining([
+              {
+                type: 'featureFlag',
+                key: 'AMP_enable-braze-ecommerce-recommended-events',
+                value: true,
+              },
+            ]),
+          }),
+        }),
+      );
     });
   });
 

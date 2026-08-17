@@ -68,3 +68,8 @@
 ## INT-6914 — HTTP Auth Conditional Schema Baseline
 
 - HTTP destination `schema.json` has a pre-existing generated conditional shape where auth-specific `if.required` arrays reference the auth value (for example `required: ["bearerTokenAuth"]`) instead of the `auth` property. A scoped Bearer Token limit change should not be broadened into fixing all HTTP auth conditional enforcement unless schema-generator baseline drift is intentionally addressed.
+
+## INT-7006 — Braze Schema Generator Baseline Drift
+
+- Running `npm run check:schema:destination -- braze` during INT-7006 succeeded but reported pre-existing Braze schema-generator drift: generic `additionalProperties: false` recommendations, warnings that `usePlatformSpecificApiKeys`, `appKey`, `androidApiKey`, `iOSApiKey`, and `webApiKey` are not in schema, consent-management item `required` differences across source types, and required-field insertions for those app/platform key fields.
+- The INT-7006 `useEcommerceRecommendedEvents` coverage was not part of that generator diff, so future Braze schema work should distinguish this baseline drift from ecommerce recommended events changes.
