@@ -100,3 +100,8 @@
 - The S3 Datalake "Default (YYYY/MM/DD/HH)" option and `defaultOption.value` should both use the empty string, and the field should be gated with `preRequisiteField: { "name": "useGlue", "selectedValue": true }` so it is shown only when AWS Glue registration is enabled.
 - For S3 Datalake, `src/configurations/destinations/s3_datalake/schema.json` keeps `timeWindowLayout` as a loose string with `rs-immutable: true`; schema generation may warn that it would add enum/default details from the UI field, but AI-1266 intentionally avoided making the schema stricter than the requested contract.
 - S3 Datalake destination UI/config additions such as `timeWindowLayout` should include focused coverage: add persisted config cases to `test/data/validation/destinations/s3_datalake.json` and assert the UI field contract in `test/validation.test.ts` when the UI shape is part of the change.
+
+## DEX-512 — LinkedIn Ads CLI Onboarding Name
+
+- LinkedIn Ads destination metadata is authored in this repo under the legacy mixed-case directory `src/configurations/destinations/linkedIn_ads/`, but downstream CLI onboarding should use the canonical destination type `linkedin_ads`.
+- The existing LinkedIn Ads definition triplet should be treated as source-of-truth for CLI onboarding metadata; avoid changing integrations-config unless that triplet is actually defective.
