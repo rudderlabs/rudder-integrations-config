@@ -190,6 +190,34 @@ describe('Core Tests', () => {
     }).toThrow('Missing definitionName');
   });
 
+  it('HubSpot authorization type options exclude legacy API key while retaining saved-config compatibility metadata', () => {
+    const hsUiConfig = JSON.parse(
+      fs.readFileSync(path.resolve('src/configurations/destinations/hs/ui-config.json'), 'utf-8'),
+    );
+    const fields = hsUiConfig.uiConfig.baseTemplate[0].sections[0].groups[0].fields;
+    const authorizationTypeField = fields.find(
+      (field: Record<string, unknown>) => field.configKey === 'authorizationType',
+    );
+    const apiKeyField = fields.find(
+      (field: Record<string, unknown>) => field.configKey === 'apiKey',
+    );
+
+    expect(authorizationTypeField.options).toEqual([
+      {
+        label: 'Private Apps',
+        value: 'newPrivateAppApi',
+      },
+    ]);
+    expect(authorizationTypeField.displayOptions).toContainEqual({
+      label: 'API Key (deprecating soon)',
+      value: 'legacyApiKey',
+    });
+    expect(apiKeyField.preRequisites.fields).toContainEqual({
+      configKey: 'authorizationType',
+      value: 'legacyApiKey',
+    });
+  });
+
   it('If unknown integration name is provided, throw error', async () => {
     await init();
 

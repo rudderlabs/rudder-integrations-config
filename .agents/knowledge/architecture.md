@@ -84,3 +84,9 @@
 - The Heap destination is a pure configuration bundle under `src/configurations/destinations/heap/` with only `db-config.json`, `ui-config.json`, and `schema.json`; there is no Heap `ui-config.jt`/`ui-default.json` generation path in this checkout.
 - Heap destination setting changes such as `dataResidency` belong in that hand-authored triplet: `ui-config.json` controls the dashboard field, `schema.json` validates the persisted config value, and `db-config.json` `includeKeys` plus `config.destConfig.defaultConfig` expose it to runtime consumers.
 - Runtime endpoint switching for Heap cloud mode is outside this repository; this repo supplies declarative integration metadata consumed by the transformer/control plane.
+
+## INT-6707 — HubSpot Legacy Auth Compatibility Boundary
+
+- HubSpot legacy API-key auth removal in this repo is scoped to removing `legacyApiKey` from the active Authorization Type options in `src/configurations/destinations/hs/ui-config.json`.
+- Keep HubSpot's legacy `apiKey` UI field prerequisite, `schema.json` `authorizationType` enum/conditional API-key validation, and `db-config.json` destConfig/secret metadata for saved-configuration compatibility; removing them can break persisted legacy destinations' loading, redaction, or round-trip behavior.
+- Runtime rejection of HubSpot `authorizationType: legacyApiKey` belongs in `rudder-transformer`; this integrations-config repo supplies declarative metadata and should continue allowing old saved configs to validate/load until the webapp has a deprecated/unknown selected-value display contract.

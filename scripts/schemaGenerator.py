@@ -58,12 +58,21 @@ def get_options_list_for_enum(field):
     Returns:
         list: list of options
     """
+    def append_option_value(option):
+        if isinstance(option, int) or isinstance(option, str):
+            option_value = option
+        else:
+            option_value = option["value"]
+        if option_value not in options_list:
+            options_list.append(option_value)
+
     options_list = []
     for i in range(0, len(field["options"])):
-        if isinstance(field["options"][i], int) or isinstance(field["options"][i], str):
-            options_list.append(field["options"][i])
-        else:
-            options_list.append(field["options"][i]["value"])
+        append_option_value(field["options"][i])
+    display_options = field.get("displayOptions", [])
+    if isinstance(display_options, list):
+        for option in display_options:
+            append_option_value(option)
     # allow empty field in enum if field in not required.
     if (
         "default" not in field
