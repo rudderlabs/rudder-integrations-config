@@ -100,3 +100,8 @@
 - The S3 Datalake "Default (YYYY/MM/DD/HH)" option and `defaultOption.value` should both use the empty string, and the field should be gated with `preRequisiteField: { "name": "useGlue", "selectedValue": true }` so it is shown only when AWS Glue registration is enabled.
 - For S3 Datalake, `src/configurations/destinations/s3_datalake/schema.json` keeps `timeWindowLayout` as a loose string with `rs-immutable: true`; schema generation may warn that it would add enum/default details from the UI field, but AI-1266 intentionally avoided making the schema stricter than the requested contract.
 - S3 Datalake destination UI/config additions such as `timeWindowLayout` should include focused coverage: add persisted config cases to `test/data/validation/destinations/s3_datalake.json` and assert the UI field contract in `test/validation.test.ts` when the UI shape is part of the change.
+
+## DEX-523 — Salesforce CLI Onboarding Scope
+
+- For Salesforce destination CLI onboarding, treat `rudder-integrations-config` as the catalog source of truth and avoid scaffolding additional local catalog metadata here unless a concrete drift is found in the existing Salesforce definitions.
+- During DEX-523, no `onboard-destination` skill was present in this checkout or visible skills library, so the repository-side result was reference-only rather than an implementation edit.
