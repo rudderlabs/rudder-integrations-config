@@ -1581,5 +1581,59 @@
     },
     "result": false,
     "err": ["useEcommerceRecommendedEvents must be boolean"]
+  },
+  {
+    "testTitle": "cloud-mode source connection (server-side SDK / event stream) without restApiKey should fail",
+    "config": {
+      "dataCenter": "US-05",
+      "connectionMode": {
+        "cloud": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'restApiKey'", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "warehouse (RETL) source connection without restApiKey should fail",
+    "config": {
+      "dataCenter": "US-05",
+      "connectionMode": {
+        "warehouse": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'restApiKey'", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "cloud-mode source connection with restApiKey should pass",
+    "config": {
+      "dataCenter": "US-05",
+      "connectionMode": {
+        "cloud": "cloud"
+      },
+      "restApiKey": "dummyKey"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "warehouse (RETL) source connection with restApiKey should pass",
+    "config": {
+      "dataCenter": "US-05",
+      "connectionMode": {
+        "warehouse": "cloud"
+      },
+      "restApiKey": "dummyKey"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "device-only connection without restApiKey should still pass",
+    "config": {
+      "dataCenter": "US-05",
+      "connectionMode": {
+        "web": "device"
+      }
+    },
+    "result": true
   }
 ]
