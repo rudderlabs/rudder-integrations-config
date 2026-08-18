@@ -21,6 +21,15 @@
         "enum": ["US", "EU"],
         "default": "US"
       },
+      "apiVersion": {
+        "type": "string",
+        "enum": ["v1", "v2"],
+        "default": "v1"
+      },
+      "userIdMapping": {
+        "type": "string",
+        "enum": ["id", "email", "phone", "cio_id"]
+      },
       "sendPageNameInSDK": {
         "type": "object",
         "properties": {
@@ -1095,6 +1104,21 @@
           }
         }
       }
-    }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "apiVersion": {
+              "const": "v2"
+            }
+          },
+          "required": ["apiVersion"]
+        },
+        "then": {
+          "required": ["userIdMapping"]
+        }
+      }
+    ]
   }
 }

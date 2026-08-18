@@ -979,5 +979,93 @@
     "err": [
       "consentManagement.iosSwift Only one consent management block can be configured per provider."
     ]
+  },
+  {
+    "testTitle": "With explicit v1 API version and no userIdMapping",
+    "config": {
+      "apiKey": "dummy-test-value",
+      "siteID": "dummy-test-value",
+      "datacenter": "US",
+      "apiVersion": "v1"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With v2 API version and id userIdMapping",
+    "config": {
+      "apiKey": "dummy-test-value",
+      "siteID": "dummy-test-value",
+      "datacenter": "US",
+      "apiVersion": "v2",
+      "userIdMapping": "id"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With v2 API version and email userIdMapping",
+    "config": {
+      "apiKey": "dummy-test-value",
+      "siteID": "dummy-test-value",
+      "datacenter": "US",
+      "apiVersion": "v2",
+      "userIdMapping": "email"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With v2 API version and phone userIdMapping",
+    "config": {
+      "apiKey": "dummy-test-value",
+      "siteID": "dummy-test-value",
+      "datacenter": "US",
+      "apiVersion": "v2",
+      "userIdMapping": "phone"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With v2 API version and cio_id userIdMapping",
+    "config": {
+      "apiKey": "dummy-test-value",
+      "siteID": "dummy-test-value",
+      "datacenter": "US",
+      "apiVersion": "v2",
+      "userIdMapping": "cio_id"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With v2 API version and no userIdMapping",
+    "config": {
+      "apiKey": "dummy-test-value",
+      "siteID": "dummy-test-value",
+      "datacenter": "US",
+      "apiVersion": "v2"
+    },
+    "result": false,
+    "err": [" must have required property 'userIdMapping'", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "With invalid API version",
+    "config": {
+      "apiKey": "dummy-test-value",
+      "siteID": "dummy-test-value",
+      "datacenter": "US",
+      "apiVersion": "v3"
+    },
+    "result": false,
+    "err": ["apiVersion must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With invalid userIdMapping",
+    "config": {
+      "apiKey": "dummy-test-value",
+      "siteID": "dummy-test-value",
+      "datacenter": "US",
+      "apiVersion": "v2",
+      "userIdMapping": "customer_id"
+    },
+    "result": false,
+    "err": ["userIdMapping must be equal to one of the allowed values"]
   }
 ]

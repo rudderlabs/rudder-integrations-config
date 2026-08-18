@@ -120,3 +120,9 @@
 - Do not keep the legacy API-key config as a visible UI field in integrations config. Compatibility for persisted `authorizationType: legacyApiKey` destinations may remain in schema/db metadata outside the visible UI, while runtime rejection of that legacy value is owned by transformer.
 - Keep HubSpot persisted legacy compatibility explicit when removing visible API-key auth: retaining schema enum/conditional validation, `db-config.json` default/secret metadata, and the legacy API Key field prerequisite can be intentional so existing saved destinations remain view/edit compatible until transformer rejects the legacy runtime path.
 - Do not invent non-selectable/deprecated `singleSelect` option metadata in this repo unless the renderer contract is verified.
+
+## INT-7014 — CustomerIO API Version Compatibility
+
+- CustomerIO `apiVersion` must remain optional in `src/configurations/destinations/customerio/schema.json` even when the UI defaults to `v1`; absent/undefined `apiVersion` is the backward-compatible v1 behavior. Enforce `userIdMapping` only through the conditional branch where `apiVersion` is explicitly `v2`.
+- To keep schema-generator checks aligned with that optional persisted contract, mark the CustomerIO API Version UI field `required: false` and gate it behind `connectionModes.cloud == true`; this avoids generator attempts to add `apiVersion` to top-level schema `required` while keeping the selector in the Connection settings flow.
+- Gate CustomerIO `userIdMapping` UI visibility on both cloud mode and `apiVersion == v2`, because the v1/v2 selector controls cloud/router event-stream API behavior rather than device-mode SDK behavior.

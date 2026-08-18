@@ -46,6 +46,69 @@
                       }
                     ],
                     "default": "US"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "API Version",
+                    "configKey": "apiVersion",
+                    "note": "Select the Customer.io event stream API version. Version 1 preserves the existing per-endpoint API behavior; version 2 uses Customer.io's unified batch API.",
+                    "options": [
+                      {
+                        "label": "v1",
+                        "value": "v1"
+                      },
+                      {
+                        "label": "v2",
+                        "value": "v2"
+                      }
+                    ],
+                    "default": "v1",
+                    "required": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "userId Mapping",
+                    "configKey": "userIdMapping",
+                    "note": "Select which Customer.io identifier RudderStack userId maps to for the v2 event stream API.",
+                    "options": [
+                      {
+                        "label": "ID",
+                        "value": "id"
+                      },
+                      {
+                        "label": "Email",
+                        "value": "email"
+                      },
+                      {
+                        "label": "Phone",
+                        "value": "phone"
+                      },
+                      {
+                        "label": "CIO ID",
+                        "value": "cio_id"
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        },
+                        {
+                          "configKey": "apiVersion",
+                          "value": "v2"
+                        }
+                      ],
+                      "condition": "and"
+                    }
                   }
                 ]
               }
