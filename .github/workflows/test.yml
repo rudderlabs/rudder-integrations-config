@@ -63,6 +63,8 @@ jobs:
         run: echo "$files_to_validate"
 
       - name: Run schema validation for changed files
+        env:
+          BASE_REF: ${{ github.base_ref }}
         run: |
           chmod +x scripts/run-schema-validation.sh
           scripts/run-schema-validation.sh $files_to_validate
