@@ -233,37 +233,78 @@ describe('Validation Tests', () => {
     });
   });
 
-  describe('Warehouse sync frequency validation', () => {
-    const warehouseDestinationNames = [
-      'azure_datalake',
-      'azure_synapse',
-      'bq',
-      'clickhouse',
-      'deltalake',
-      'gcs_datalake',
-      'mssql',
-      'postgres',
-      'rs',
-      's3_datalake',
-      'snowflake',
-    ];
+  const warehouseDestinationNames = [
+    'azure_datalake',
+    'azure_synapse',
+    'bq',
+    'clickhouse',
+    'deltalake',
+    'gcs_datalake',
+    'mssql',
+    'postgres',
+    'rs',
+    's3_datalake',
+    'snowflake',
+  ];
 
+  const getWarehouseBaseConfig = (dest: string): Record<string, unknown> => {
+    const validCase = getIntegrationData(dest, 'destinations')?.find((td) => td.result === true);
+    if (!validCase) {
+      throw new Error(`Missing valid test fixture for warehouse destination: ${dest}`);
+    }
+    return validCase.config as Record<string, unknown>;
+  };
+
+  describe('Warehouse sync frequency validation', () => {
     warehouseDestinationNames.forEach((dest) => {
       it(`${dest} accepts 10-minute sync frequency and rejects invalid frequency`, () => {
-        const validCase = getIntegrationData(dest, 'destinations')?.find(
-          (td) => td.result === true,
-        );
-        if (!validCase) {
-          throw new Error(`Missing valid test fixture for warehouse destination: ${dest}`);
-        }
-
-        const baseConfig = validCase.config as Record<string, unknown>;
+        const baseConfig = getWarehouseBaseConfig(dest);
         expect(() => {
           validateConfig(dest, { ...baseConfig, syncFrequency: '10' }, 'destinations', true);
         }).not.toThrow();
         expect(() => {
           validateConfig(dest, { ...baseConfig, syncFrequency: '11' }, 'destinations', true);
         }).toThrow();
+      });
+    });
+  });
+
+  describe('Warehouse backward-compatibility flag validation', () => {
+    const backwardCompatibilityFlags = ['allowUsersContextTraits', 'underscoreDivideNumbers'];
+    // Every destination declaring the flags, not just those with a sync frequency.
+    const backwardCompatibilityDestinationNames = [
+      ...warehouseDestinationNames,
+      'bqstream_all_events',
+      'snowpipe_streaming',
+    ];
+
+    backwardCompatibilityDestinationNames.forEach((dest) => {
+      backwardCompatibilityFlags.forEach((flag) => {
+        it(`${dest} accepts boolean ${flag} and rejects non-boolean values`, () => {
+          const baseConfig = getWarehouseBaseConfig(dest);
+
+          [true, false].forEach((value) => {
+            expect(() => {
+              validateConfig(dest, { ...baseConfig, [flag]: value }, 'destinations', true);
+            }).not.toThrow();
+          });
+
+          ['false', 0, null].forEach((value) => {
+            expect(() => {
+              validateConfig(dest, { ...baseConfig, [flag]: value }, 'destinations', true);
+            }).toThrow(`${flag} must be boolean`);
+          });
+        });
+      });
+
+      it(`${dest} omitting the backward-compatibility flags is valid`, () => {
+        // Existing stored configs predate these flags, so absence must stay valid.
+        const configWithoutFlags = { ...getWarehouseBaseConfig(dest) };
+        backwardCompatibilityFlags.forEach((flag) => delete configWithoutFlags[flag]);
+
+        expect(() => {
+          validateConfig(dest, configWithoutFlags, 'destinations', true);
+        }).not.toThrow();
       });
     });
   });
