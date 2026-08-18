@@ -89,3 +89,9 @@
 
 - `.github/workflows/draft-new-release.yml` should not depend on the reusable `.github/workflows/validate-actor.yml` gate; release draft triggering relies on GitHub `workflow_dispatch` permissions and downstream release PR approval rather than team-name validation.
 - Keep `.github/workflows/validate-actor.yml` available even when draft release no longer uses it, because other workflows such as `create-hotfix-branch.yml` and rollback paths may still reference that reusable actor-validation workflow.
+
+## SDK-5265 — CleverTap Android Kotlin Device-Mode Contract
+
+- CleverTap Android Kotlin device-mode metadata is authored in the existing CleverTap destination triplet under `src/configurations/destinations/clevertap/` rather than as a separate integration directory.
+- For SDK-5265, `db-config.json` exposes Android Kotlin with `supportedConnectionModes.androidKotlin` as `['cloud','device']`, `supportedMessageTypes.device.androidKotlin` as `['identify','track','screen']`, and `config.destConfig.androidKotlin` limited to `['useNativeSDK','connectionMode','consentManagement']`.
+- `schema.json` owns the Android Kotlin `useNativeSDK` boolean shape for CleverTap, while credential include/exclude/secret handling remains unchanged.
