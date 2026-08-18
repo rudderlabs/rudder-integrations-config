@@ -73,3 +73,8 @@
 
 - Running `python3 scripts/schemaGenerator.py destination -name clevertap` after adding CleverTap `iosSwift` device mode succeeds but reports pre-existing/intentional CleverTap generator drift: it recommends `additionalProperties: false`, expects generated `useNativeSDK` properties for legacy device sources `android`, `ios`, and `reactnative`, and expects `required: ["provider"]` under each `consentManagement.<source>.items`.
 - The SDK-5266 change intentionally added only `useNativeSDK.properties.iosSwift`; future CleverTap schema maintenance should distinguish that Swift addition from unrelated generator-baseline normalization.
+
+## DEX-677 — Confluent Cloud Schema Generator Baseline Drift
+
+- Running `/usr/local/bin/python3 scripts/schemaGenerator.py destination -name confluent_cloud` on the existing Confluent Cloud destination succeeds but reports pre-existing generator drift: top-level `additionalProperties: false` is recommended, and dynamicCustomForm diffs would add `required: ["provider"]` to every `consentManagement.<source>.items` schema.
+- DEX-677 did not change Confluent Cloud config metadata, so future Confluent Cloud schema maintenance should distinguish this baseline generator drift from actual onboarding or field changes.
