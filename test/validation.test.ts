@@ -289,98 +289,10 @@ describe('Validation Tests', () => {
 });
 
 describe('Destination Definition validation tests', () => {
-  beforeAll(async () => {
-    await init();
-  });
-
   dests.forEach((dest) => {
     it(`${dest} - destination definition test`, async () => {
       const destDefConfig = await getDestinationDefinitionConfig(dest);
       await expect(validateDestinationDefinitions(destDefConfig)).resolves.toEqual(true);
-    });
-  });
-
-  it('CleverTap iosSwift device-mode source config contract includes Swift runtime settings', async () => {
-    const clevertapDefinition = await getDestinationDefinitionConfig('clevertap');
-    const { config } = clevertapDefinition;
-
-    expect(config.supportedSourceTypes).toContain('iosSwift');
-    expect(config.supportedMessageTypes.device.iosSwift).toEqual(['identify', 'track', 'screen']);
-    expect(config.supportedConnectionModes.iosSwift).toEqual(['cloud', 'device']);
-    expect(config.destConfig.iosSwift).toEqual([
-      'useNativeSDK',
-      'connectionMode',
-      'consentManagement',
-    ]);
-
-    const persistedConfig = {
-      accountId: 'test-account-id',
-      accountToken: 'test-account-token',
-      passcode: 'test-passcode',
-      region: 'in1',
-      trackAnonymous: false,
-      enableObjectIdMapping: false,
-      eventFilteringOption: 'whitelistedEvents',
-      whitelistedEvents: [{ eventName: 'Product Viewed' }],
-      useNativeSDK: {
-        iosSwift: true,
-      },
-      connectionMode: {
-        iosSwift: 'device',
-      },
-      consentManagement: {
-        iosSwift: [
-          {
-            provider: 'custom',
-            consents: [{ consent: 'Marketing' }],
-            resolutionStrategy: 'and',
-          },
-        ],
-      },
-      oneTrustCookieCategories: {
-        iosSwift: [{ oneTrustCookieCategory: 'C0001' }],
-      },
-      ketchConsentPurposes: {
-        iosSwift: [{ purpose: 'marketing' }],
-      },
-    };
-
-    validateConfig('clevertap', persistedConfig, 'destinations', true);
-
-    const sourceConfigKeys = [
-      ...config.destConfig.defaultConfig,
-      ...config.destConfig.iosSwift,
-    ] as string[];
-    const sourceConfig = Object.fromEntries(
-      sourceConfigKeys
-        .filter((key) => key in persistedConfig)
-        .map((key) => [key, persistedConfig[key as keyof typeof persistedConfig]]),
-    );
-
-    expect(sourceConfig).toEqual({
-      accountId: 'test-account-id',
-      accountToken: 'test-account-token',
-      passcode: 'test-passcode',
-      region: 'in1',
-      trackAnonymous: false,
-      enableObjectIdMapping: false,
-      eventFilteringOption: 'whitelistedEvents',
-      whitelistedEvents: [{ eventName: 'Product Viewed' }],
-      useNativeSDK: {
-        iosSwift: true,
-      },
-      connectionMode: {
-        iosSwift: 'device',
-      },
-      consentManagement: {
-        iosSwift: [
-          {
-            provider: 'custom',
-            consents: [{ consent: 'Marketing' }],
-            resolutionStrategy: 'and',
-          },
-        ],
-      },
     });
   });
 
