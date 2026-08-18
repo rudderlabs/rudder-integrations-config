@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.171.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.170.0...v1.171.0) (2026-08-18)
+
+
+### Features
+
+* add clevertap android kotlin device mode ([#2636](https://github.com/rudderlabs/rudder-config-schema/issues/2636)) ([02f35a5](https://github.com/rudderlabs/rudder-config-schema/commit/02f35a5f00e59078e1ee685860dfff37488f3826))
+* enable braze ecommerce option for device mode sources ([#2641](https://github.com/rudderlabs/rudder-config-schema/issues/2641)) ([211b7a4](https://github.com/rudderlabs/rudder-config-schema/commit/211b7a4e5c740cfefb4629e494467f2dbb853d56))
+* enable CleverTap device mode for Swift SDK ([#2637](https://github.com/rudderlabs/rudder-config-schema/issues/2637)) ([fcb8a4b](https://github.com/rudderlabs/rudder-config-schema/commit/fcb8a4b3eab29187a7078de3249ec89d9d40c0a1))
+
+
+### Bug Fixes
+
+* **braze:** require restApiKey for cloud and warehouse connection modes ([#2645](https://github.com/rudderlabs/rudder-config-schema/issues/2645)) ([0c91304](https://github.com/rudderlabs/rudder-config-schema/commit/0c91304855b9395ddf9e041d272f84c66f44f9ff))
+
 ## [1.170.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.169.0...v1.170.0) (2026-08-05)
 
 
