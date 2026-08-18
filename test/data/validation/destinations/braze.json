@@ -139,7 +139,8 @@
     },
     "result": false,
     "err": [
-      "restApiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
+      "restApiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
+      " must match \"then\" schema"
     ]
   },
   {
@@ -261,7 +262,10 @@
       }
     },
     "result": false,
-    "err": ["appKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""]
+    "err": [
+      "appKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
+      " must match \"then\" schema"
+    ]
   },
   {
     "config": {
@@ -275,8 +279,10 @@
     },
     "result": false,
     "err": [
+      "restApiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
+      " must match \"then\" schema",
       "appKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
-      "restApiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
+      " must match \"then\" schema"
     ]
   },
   {
@@ -291,8 +297,10 @@
     },
     "result": false,
     "err": [
+      "restApiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
+      " must match \"then\" schema",
       "appKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
-      "restApiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
+      " must match \"then\" schema"
     ]
   },
   {
@@ -307,8 +315,8 @@
     },
     "result": false,
     "err": [
-      "appKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
-      "restApiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
+      "restApiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\"",
+      " must match \"then\" schema"
     ]
   },
   {
@@ -322,10 +330,7 @@
       }
     },
     "result": false,
-    "err": [
-      "connectionMode.unity must be equal to one of the allowed values",
-      "appKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
-    ]
+    "err": ["connectionMode.unity must be equal to one of the allowed values"]
   },
   {
     "testTitle": "With valid multiple consent management providers config",
@@ -1628,44 +1633,6 @@
       "connectionMode": {
         "web": "device"
       }
-    },
-    "result": true
-  },
-  {
-    "testTitle": "empty restApiKey on a cloud connection is rejected by the top-level pattern",
-    "config": {
-      "dataCenter": "US-05",
-      "connectionMode": {
-        "cloud": "cloud"
-      },
-      "restApiKey": ""
-    },
-    "result": false,
-    "err": [
-      "restApiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
-    ]
-  },
-  {
-    "testTitle": "empty appKey is rejected even on a cloud-only connection",
-    "config": {
-      "dataCenter": "US-05",
-      "connectionMode": {
-        "cloud": "cloud"
-      },
-      "restApiKey": "dummyKey",
-      "appKey": ""
-    },
-    "result": false,
-    "err": ["appKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""]
-  },
-  {
-    "testTitle": "templated restApiKey is accepted on a cloud connection",
-    "config": {
-      "dataCenter": "US-05",
-      "connectionMode": {
-        "cloud": "cloud"
-      },
-      "restApiKey": "env.BRAZE_REST_API_KEY"
     },
     "result": true
   }

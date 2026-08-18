@@ -1333,13 +1333,6 @@ def generate_schema_properties(
                                     "preRequisites" not in field
                                     or field.get("required")
                                 )
-                                # A field that is hidden for some values of its
-                                # dependency is required only conditionally - via
-                                # allOf - and must stay out of the unconditional
-                                # `required` list.
-                                and is_always_visible(
-                                    field, group.get("fields", []), "configKey"
-                                )
                             ):
                                 schemaObject["required"].append(field["configKey"])
 
