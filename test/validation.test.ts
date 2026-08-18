@@ -271,8 +271,14 @@ describe('Validation Tests', () => {
 
   describe('Warehouse backward-compatibility flag validation', () => {
     const backwardCompatibilityFlags = ['allowUsersContextTraits', 'underscoreDivideNumbers'];
+    // Every destination declaring the flags, not just those with a sync frequency.
+    const backwardCompatibilityDestinationNames = [
+      ...warehouseDestinationNames,
+      'bqstream_all_events',
+      'snowpipe_streaming',
+    ];
 
-    warehouseDestinationNames.forEach((dest) => {
+    backwardCompatibilityDestinationNames.forEach((dest) => {
       backwardCompatibilityFlags.forEach((flag) => {
         it(`${dest} accepts boolean ${flag} and rejects non-boolean values`, () => {
           const baseConfig = getWarehouseBaseConfig(dest);
@@ -292,12 +298,12 @@ describe('Validation Tests', () => {
       });
 
       it(`${dest} omitting the backward-compatibility flags is valid`, () => {
-        const baseConfig = getWarehouseBaseConfig(dest);
-        backwardCompatibilityFlags.forEach((flag) => {
-          expect(baseConfig).not.toHaveProperty(flag);
-        });
+        // Existing stored configs predate these flags, so absence must stay valid.
+        const configWithoutFlags = { ...getWarehouseBaseConfig(dest) };
+        backwardCompatibilityFlags.forEach((flag) => delete configWithoutFlags[flag]);
+
         expect(() => {
-          validateConfig(dest, baseConfig, 'destinations', true);
+          validateConfig(dest, configWithoutFlags, 'destinations', true);
         }).not.toThrow();
       });
     });
