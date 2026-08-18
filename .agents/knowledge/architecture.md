@@ -84,3 +84,8 @@
 - The Heap destination is a pure configuration bundle under `src/configurations/destinations/heap/` with only `db-config.json`, `ui-config.json`, and `schema.json`; there is no Heap `ui-config.jt`/`ui-default.json` generation path in this checkout.
 - Heap destination setting changes such as `dataResidency` belong in that hand-authored triplet: `ui-config.json` controls the dashboard field, `schema.json` validates the persisted config value, and `db-config.json` `includeKeys` plus `config.destConfig.defaultConfig` expose it to runtime consumers.
 - Runtime endpoint switching for Heap cloud mode is outside this repository; this repo supplies declarative integration metadata consumed by the transformer/control plane.
+
+## AI-1339 — Release Draft Actor Gate Boundary
+
+- `.github/workflows/draft-new-release.yml` should not depend on the reusable `.github/workflows/validate-actor.yml` gate; release draft triggering relies on GitHub `workflow_dispatch` permissions and downstream release PR approval rather than team-name validation.
+- Keep `.github/workflows/validate-actor.yml` available even when draft release no longer uses it, because other workflows such as `create-hotfix-branch.yml` and rollback paths may still reference that reusable actor-validation workflow.
