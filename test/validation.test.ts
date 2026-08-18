@@ -233,6 +233,50 @@ describe('Validation Tests', () => {
     });
   });
 
+  it('HubSpot authorization type UI exposes only Private Apps for new selections', () => {
+    const hsUiConfig = JSON.parse(
+      fs.readFileSync(path.resolve('src/configurations/destinations/hs/ui-config.json'), 'utf-8'),
+    ) as {
+      uiConfig: {
+        baseTemplate: Array<{
+          sections: Array<{
+            groups: Array<{
+              fields?: Array<Record<string, unknown>>;
+            }>;
+          }>;
+        }>;
+      };
+    };
+
+    const fields = hsUiConfig.uiConfig.baseTemplate
+      .flatMap((template) => template.sections)
+      .flatMap((section) => section.groups)
+      .flatMap((group) => group.fields ?? []);
+    const authorizationTypeField = fields.find(
+      (field) => field.configKey === 'authorizationType',
+    ) as { options?: Array<{ label: string; value: string }> } | undefined;
+
+    expect(authorizationTypeField).toBeDefined();
+    expect(authorizationTypeField?.options).toEqual([
+      {
+        label: 'Private Apps',
+        value: 'newPrivateAppApi',
+      },
+    ]);
+
+    const apiKeyField = fields.find((field) => field.configKey === 'apiKey') as
+      | {
+          preRequisites?: {
+            fields?: Array<{ configKey: string; value: string }>;
+          };
+        }
+      | undefined;
+    expect(apiKeyField?.preRequisites?.fields).toContainEqual({
+      configKey: 'authorizationType',
+      value: 'legacyApiKey',
+    });
+  });
+
   const warehouseDestinationNames = [
     'azure_datalake',
     'azure_synapse',

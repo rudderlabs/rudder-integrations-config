@@ -113,3 +113,8 @@
 - Do not expose CleverTap Android Kotlin `oneTrustCookieCategories` or `ketchConsentPurposes` in `config.destConfig.androidKotlin` unless the Kotlin SDK explicitly supports or safely ignores those consent fields; SDK-5265 intentionally exposed only `useNativeSDK`, `connectionMode`, and `consentManagement`.
 - Treat Kotlin runtime release validation as an external acceptance gate for this config repository: this repo can publish declarative metadata, but actual device-mode availability depends on the Kotlin SDK runtime integration.
 - A complete CleverTap Android Kotlin device-mode release must include a new `CleverTapIntegration` in `rudder-sdk-kotlin` that mirrors the legacy `rudder-integration-clevertap-android` runtime behavior; config metadata enablement alone is not sufficient.
+
+## INT-6707 — HubSpot Legacy API Key Compatibility
+
+- For HubSpot authorization deprecation, remove `legacyApiKey` only from the selectable Authorization Type options in `src/configurations/destinations/hs/ui-config.json`; keep `legacyApiKey` in `schema.json` enum/conditional validation and in `db-config.json` defaults/secret-key exposure so existing persisted destinations remain view/edit compatible.
+- Do not invent non-selectable/deprecated `singleSelect` option metadata in this repo unless the renderer contract is verified; runtime rejection of HubSpot `authorizationType: legacyApiKey` is owned by transformer rather than by integrations-config schema removal.
