@@ -6,19 +6,11 @@ permissions:
   contents: read
 
 jobs:
-  validate-actor:
-    uses: ./.github/workflows/validate-actor.yml
-    with:
-      team_names: 'integrations,data-management,sdk_team'
-    secrets:
-      RELEASE_PRIVATE_KEY: ${{ secrets.RELEASE_PRIVATE_KEY }}
-
   draft-new-release:
     permissions:
       contents: read # GITHUB_TOKEN only needs read access
     name: Draft New Release
     runs-on: ubuntu-latest
-    needs: validate-actor
 
     # Only allow release stakeholders to initiate releases
     if: (github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/hotfix/'))
