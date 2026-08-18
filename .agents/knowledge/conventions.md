@@ -89,6 +89,7 @@
 
 - CleverTap `destConfig.iosSwift` follows the established narrower Swift device-mode contract: include `useNativeSDK`, `connectionMode`, and `consentManagement`, but do not add legacy mobile `oneTrustCookieCategories` or `ketchConsentPurposes` unless the Swift plugin/control-plane contract explicitly consumes them.
 - For CleverTap Swift device-mode parity, mirror the legacy mobile feature set only to the extent supported by existing Swift-enabled destination conventions; additional Tata Cliq-specific requirements should stay out until confirmed.
+- For destination config changes under `src/configurations/destinations/<destination>/`, `.github/workflows/test.yml` passes changed files to `scripts/run-schema-validation.sh`; schema-generator warnings for the changed destination are fatal in that path, so run the targeted schema validation flow and commit required schema updates until warnings are cleared.
 
 ## INT-6914 — Destination Validation Fixture Coverage
 
