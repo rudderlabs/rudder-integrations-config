@@ -14,3 +14,8 @@
 
 - Reviewer guidance for Braze schema-generator baseline drift: do not describe `usePlatformSpecificApiKeys`, `appKey`, `androidApiKey`, `iOSApiKey`, or `webApiKey` as missing from `src/configurations/destinations/braze/schema.json`; those fields are already present under conditional `allOf` branches.
 - Treat generator warnings about those API-key fields as generator/root-schema expectation drift, not absent schema fields, when separating baseline noise from scoped Braze UI-only cleanup.
+
+## INT-7014 — CustomerIO User Mapping UI Copy
+
+- CustomerIO `userIdMapping` UI copy should describe the setting generically as how RudderStack `userId` is sent to Customer.io when API Version is v2.
+- Do not mention internal implementation terms such as record event or VDM v2, and do not imply this mapping setting affects record-event API behavior.
