@@ -68,8 +68,3 @@
 ## INT-6914 — HTTP Auth Conditional Schema Baseline
 
 - HTTP destination `schema.json` has a pre-existing generated conditional shape where auth-specific `if.required` arrays reference the auth value (for example `required: ["bearerTokenAuth"]`) instead of the `auth` property. A scoped Bearer Token limit change should not be broadened into fixing all HTTP auth conditional enforcement unless schema-generator baseline drift is intentionally addressed.
-
-## SDK-5266 — CleverTap Schema Generator Baseline Drift
-
-- Running `scripts/schemaGenerator.py destination -name clevertap` during SDK-5266 succeeded but reported baseline CleverTap schema drift: the generator recommended `additionalProperties: false`, expected `useNativeSDK` generated properties for legacy device sources `android`, `ios`, and `reactnative`, and expected `required: ["provider"]` under each `consentManagement.<source>.items`.
-- The SDK-5266 Swift device-mode change intentionally added only `useNativeSDK.properties.iosSwift` and did not normalize unrelated CleverTap generator drift, so future CleverTap schema work should distinguish that baseline from new Swift changes.
