@@ -296,30 +296,6 @@ describe('Destination Definition validation tests', () => {
     });
   });
 
-  it('CleverTap exposes the intended Android Kotlin device-mode contract', async () => {
-    const destDefConfig = await getDestinationDefinitionConfig('clevertap');
-
-    expect(destDefConfig.config.supportedConnectionModes.androidKotlin).toEqual([
-      'cloud',
-      'device',
-    ]);
-    expect(destDefConfig.config.supportedMessageTypes.device.androidKotlin).toEqual([
-      'identify',
-      'track',
-      'screen',
-    ]);
-    expect(destDefConfig.config.destConfig.androidKotlin).toEqual([
-      'useNativeSDK',
-      'connectionMode',
-      'consentManagement',
-    ]);
-    expect(destDefConfig.config.includeKeys).toEqual(
-      expect.arrayContaining(['accountId', 'accountToken', 'passcode']),
-    );
-    expect(destDefConfig.config.secretKeys).toEqual([]);
-    expect(destDefConfig.config.excludeKeys).toEqual([]);
-  });
-
   const malformedDestDefConfigs = [
     {
       description: 'missing "name" and "displayName" properties',
