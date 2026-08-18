@@ -723,5 +723,35 @@
     "err": [
       "consentManagement.iosSwift Only one consent management block can be configured per provider."
     ]
+  },
+  {
+    "testTitle": "With useNativeSDK set per source type",
+    "config": {
+      "useNativeSDK": {
+        "android": true,
+        "ios": false,
+        "flutter": true,
+        "unity": false
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With useNativeSDK given as a flat boolean instead of per-source-type",
+    "config": {
+      "useNativeSDK": true
+    },
+    "result": false,
+    "err": ["useNativeSDK must be object"]
+  },
+  {
+    "testTitle": "With a non-boolean useNativeSDK per-source-type value",
+    "config": {
+      "useNativeSDK": {
+        "android": "true"
+      }
+    },
+    "result": false,
+    "err": ["useNativeSDK.android must be boolean"]
   }
 ]
