@@ -2,37 +2,21 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "required": [
-      "accessToken",
-      "residency",
-      "workspaceKey",
-      "apiVersion",
-      "ingestionKey",
-      "deliveryMode",
-      "account"
-    ],
+    "required": ["restApiKey", "dataCenter", "projectId"],
     "properties": {
-      "accessToken": {
+      "restApiKey": {
         "type": "string",
         "pattern": "^(.{1,100})$"
       },
-      "residency": {
+      "dataCenter": {
         "type": "string",
-        "enum": ["us", "eu", "ap"]
+        "pattern": "^(.{1,100})$"
+      },
+      "projectId": {
+        "type": "string",
+        "pattern": "^(.{1,100})$"
       },
       "endpoint": {
-        "type": "string",
-        "pattern": "^(.{1,100})$"
-      },
-      "workspaceKey": {
-        "type": "string",
-        "pattern": "^(.{1,100})$"
-      },
-      "apiVersion": {
-        "type": "string",
-        "enum": ["2024-10", "2025-06"]
-      },
-      "ingestionKey": {
         "type": "string",
         "pattern": "^(.{1,100})$"
       },
@@ -41,23 +25,8 @@
         "minimum": 1,
         "maximum": 10000
       },
-      "deliveryMode": {
-        "type": "string",
-        "enum": ["batch", "stream"]
-      },
-      "account": {
-        "type": "object",
-        "properties": {
-          "projectId": {
-            "type": "string",
-            "pattern": "^(.{1,100})$"
-          },
-          "id": {
-            "type": "string",
-            "pattern": "^(.{1,100})$"
-          }
-        },
-        "required": ["projectId", "id"]
+      "enableDeduplication": {
+        "type": "boolean"
       },
       "connectionMode": {
         "type": "object",
