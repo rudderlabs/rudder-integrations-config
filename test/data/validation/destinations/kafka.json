@@ -884,5 +884,103 @@
     "err": [
       "consentManagement.iosSwift Only one consent management block can be configured per provider."
     ]
+  },
+  {
+    "testTitle": "With multi-topic routing configured",
+    "config": {
+      "hostName": "b-2.helloworld.XXXXXX.XXX.kafka.us-east-1.amazonaws.com",
+      "port": "443",
+      "topic": "test-topic",
+      "enableMultiTopic": true,
+      "eventTypeToTopicMap": [
+        {
+          "from": "identify",
+          "to": "identify-topic"
+        },
+        {
+          "from": "page",
+          "to": "page-topic"
+        }
+      ],
+      "eventToTopicMap": [
+        {
+          "from": "Product Viewed",
+          "to": "product-topic"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With multi-topic enabled and only track event mapping",
+    "config": {
+      "hostName": "b-2.helloworld.XXXXXX.XXX.kafka.us-east-1.amazonaws.com",
+      "port": "443",
+      "topic": "test-topic",
+      "enableMultiTopic": true,
+      "eventToTopicMap": [
+        {
+          "from": "Order Completed",
+          "to": "orders"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With empty multi-topic maps",
+    "config": {
+      "hostName": "b-2.helloworld.XXXXXX.XXX.kafka.us-east-1.amazonaws.com",
+      "port": "443",
+      "topic": "test-topic",
+      "enableMultiTopic": false,
+      "eventTypeToTopicMap": [],
+      "eventToTopicMap": []
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With a non-boolean enableMultiTopic",
+    "config": {
+      "hostName": "b-2.helloworld.XXXXXX.XXX.kafka.us-east-1.amazonaws.com",
+      "port": "443",
+      "topic": "test-topic",
+      "enableMultiTopic": "true"
+    },
+    "result": false,
+    "err": ["enableMultiTopic must be boolean"]
+  },
+  {
+    "testTitle": "With an unsupported event type in eventTypeToTopicMap",
+    "config": {
+      "hostName": "b-2.helloworld.XXXXXX.XXX.kafka.us-east-1.amazonaws.com",
+      "port": "443",
+      "topic": "test-topic",
+      "eventTypeToTopicMap": [
+        {
+          "from": "track",
+          "to": "track-topic"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["eventTypeToTopicMap.0.from must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With invalid multi-topic map types",
+    "config": {
+      "hostName": "b-2.helloworld.XXXXXX.XXX.kafka.us-east-1.amazonaws.com",
+      "port": "443",
+      "topic": "test-topic",
+      "eventToTopicMap": "product-topic",
+      "eventTypeToTopicMap": [
+        {
+          "from": "identify",
+          "to": 1
+        }
+      ]
+    },
+    "result": false,
+    "err": ["eventTypeToTopicMap.0.to must be string", "eventToTopicMap must be array"]
   }
 ]
