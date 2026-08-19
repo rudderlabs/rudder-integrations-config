@@ -1,5 +1,7 @@
+import json
 import os
 import sys
+import tempfile
 import unittest
 from unittest import mock
 
@@ -60,3 +62,66 @@ class TestEnvironmentValidation(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestVersionsArchive(unittest.TestCase):
+    """The archive is how a retired major reaches the control plane, so every field the advisory
+    is built from has to survive the trip — not just the ones the schema requires."""
+
+    def _write_major(self, root, major, **overrides):
+        directory = os.path.join(root, "versions", str(major))
+        os.makedirs(directory)
+        payload = {
+            "version": f"{major}.0",
+            "status": "supported",
+            "config": {"destConfig": {"defaultConfig": []}},
+            **overrides,
+        }
+        with open(os.path.join(directory, "db-config.json"), "w") as handle:
+            json.dump(payload, handle)
+        with open(os.path.join(directory, "schema.json"), "w") as handle:
+            json.dump({"configSchema": {"type": "object"}}, handle)
+        with open(os.path.join(directory, "ui-config.json"), "w") as handle:
+            json.dump({"uiConfig": {"baseTemplate": []}}, handle)
+
+    def test_carries_the_retirement_advisory_fields(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._write_major(
+                root,
+                1,
+                status="retired",
+                retirementDate="2026-06-01",
+                migrationDocsUrl="https://example.com/versions",
+            )
+
+            archive = deployToDB.build_versions_archive(root)
+
+            self.assertEqual(archive["1"]["status"], "retired")
+            self.assertEqual(archive["1"]["retirementDate"], "2026-06-01")
+            self.assertEqual(
+                archive["1"]["migrationDocsUrl"], "https://example.com/versions"
+            )
+
+    def test_omits_advisory_fields_the_major_does_not_declare(self):
+        # Absence is meaningful downstream: no retirement date means none is scheduled yet, which is
+        # different from one the deploy quietly dropped.
+        with tempfile.TemporaryDirectory() as root:
+            self._write_major(root, 2)
+
+            archive = deployToDB.build_versions_archive(root)
+
+            self.assertNotIn("retirementDate", archive["2"])
+            self.assertNotIn("migrationDocsUrl", archive["2"])
+
+    def test_rejects_a_status_outside_the_lifecycle(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._write_major(root, 3, status="deprecated")
+
+            with self.assertRaises(ValueError):
+                deployToDB.build_versions_archive(root)
+
+    def test_no_archive_directory_yields_an_empty_archive(self):
+        # Matches what the control plane stores for a definition that has never been versioned, so a
+        # definition without an archive does not diff against the database on every deploy.
+        with tempfile.TemporaryDirectory() as root:
+            self.assertEqual(deployToDB.build_versions_archive(root), {})
