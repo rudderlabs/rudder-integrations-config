@@ -60,10 +60,6 @@ class TestEnvironmentValidation(unittest.TestCase):
             self._parse("--environment", "prod")
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class TestVersionsArchive(unittest.TestCase):
     """The archive is how a retired major reaches the control plane, so every field the advisory
     is built from has to survive the trip — not just the ones the schema requires."""
@@ -125,3 +121,7 @@ class TestVersionsArchive(unittest.TestCase):
         # definition without an archive does not diff against the database on every deploy.
         with tempfile.TemporaryDirectory() as root:
             self.assertEqual(deployToDB.build_versions_archive(root), {})
+
+
+if __name__ == "__main__":
+    unittest.main()
