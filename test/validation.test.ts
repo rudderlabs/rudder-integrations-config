@@ -233,7 +233,7 @@ describe('Validation Tests', () => {
     });
   });
 
-  it('HubSpot authorization type UI exposes only Private Apps for new selections', () => {
+  it('HubSpot authorization UI exposes only Access Token credentials', () => {
     const hsUiConfig = JSON.parse(
       fs.readFileSync(path.resolve('src/configurations/destinations/hs/ui-config.json'), 'utf-8'),
     ) as {
@@ -252,29 +252,22 @@ describe('Validation Tests', () => {
       .flatMap((template) => template.sections)
       .flatMap((section) => section.groups)
       .flatMap((group) => group.fields ?? []);
-    const authorizationTypeField = fields.find(
-      (field) => field.configKey === 'authorizationType',
-    ) as { options?: Array<{ label: string; value: string }> } | undefined;
+    expect(fields.find((field) => field.configKey === 'authorizationType')).toBeUndefined();
+    expect(fields.find((field) => field.configKey === 'apiKey')).toBeUndefined();
 
-    expect(authorizationTypeField).toBeDefined();
-    expect(authorizationTypeField?.options).toEqual([
-      {
-        label: 'Private Apps',
-        value: 'newPrivateAppApi',
-      },
-    ]);
-
-    const apiKeyField = fields.find((field) => field.configKey === 'apiKey') as
+    const accessTokenField = fields.find((field) => field.configKey === 'accessToken') as
       | {
-          preRequisites?: {
-            fields?: Array<{ configKey: string; value: string }>;
-          };
+          label?: string;
+          secret?: boolean;
+          preRequisites?: unknown;
         }
       | undefined;
-    expect(apiKeyField?.preRequisites?.fields).toContainEqual({
-      configKey: 'authorizationType',
-      value: 'legacyApiKey',
+
+    expect(accessTokenField).toMatchObject({
+      label: 'Access Token',
+      secret: true,
     });
+    expect(accessTokenField?.preRequisites).toBeUndefined();
   });
 
   const warehouseDestinationNames = [
