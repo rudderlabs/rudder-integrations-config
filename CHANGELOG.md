@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.172.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.171.0...v1.172.0) (2026-08-19)
+
+
+### Features
+
+* add salesforce oauth v2 account definition and deprecate v1 ([#2644](https://github.com/rudderlabs/rudder-config-schema/issues/2644)) ([15ef6dd](https://github.com/rudderlabs/rudder-config-schema/commit/15ef6dd42b4dbffe4160433bc97e357438d31b40))
+* **device-mode:** declare legacy device-mode keys in schema (DEX-681) ([#2666](https://github.com/rudderlabs/rudder-config-schema/issues/2666)) ([1a7ffb2](https://github.com/rudderlabs/rudder-config-schema/commit/1a7ffb2c7ea04fef15ac39892c40dccb55aa1798))
+* enable delivered-with-warnings for braze, beta tag and includeKeys for ecommerce ([#2667](https://github.com/rudderlabs/rudder-config-schema/issues/2667)) ([bb0be8f](https://github.com/rudderlabs/rudder-config-schema/commit/bb0be8fe9bbe2343c04bc6448afe5d6f17e1e7b1))
+* **googlesheets:** declare credentials, sheetId, sheetName and eventKeyMap in schema ([#2648](https://github.com/rudderlabs/rudder-config-schema/issues/2648)) ([e5aa41c](https://github.com/rudderlabs/rudder-config-schema/commit/e5aa41c63752e3550dbe6e434f6dfc22f0d6cd5c))
+* **qualtrics:** declare defaultConfig keys in schema (DEX-672) ([#2658](https://github.com/rudderlabs/rudder-config-schema/issues/2658)) ([d389c25](https://github.com/rudderlabs/rudder-config-schema/commit/d389c25913f23f5c741e880edcd389f60f1e64f4))
+* **warehouse:** declare allowUsersContextTraits and underscoreDivideNumbers in schema (DEX-667) ([#2647](https://github.com/rudderlabs/rudder-config-schema/issues/2647)) ([f2fc97e](https://github.com/rudderlabs/rudder-config-schema/commit/f2fc97ec09db678d6190958650dc9e62c0779a81))
+
+
+### Bug Fixes
+
+* **hubspot:** remove flat rsEventName, hubspotEventName and eventProperties from db-config (DEX-678) ([#2664](https://github.com/rudderlabs/rudder-config-schema/issues/2664)) ([6d567f4](https://github.com/rudderlabs/rudder-config-schema/commit/6d567f4e0950846dc15c609a09a4244007da0c21))
+* **s3_datalake:** remove excludeWindow from db-config (DEX-679) ([#2665](https://github.com/rudderlabs/rudder-config-schema/issues/2665)) ([c20d764](https://github.com/rudderlabs/rudder-config-schema/commit/c20d764d7938ebf4726a715728799f6b3d0294a0))
+
 ## [1.171.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.170.0...v1.171.0) (2026-08-18)
 
 
