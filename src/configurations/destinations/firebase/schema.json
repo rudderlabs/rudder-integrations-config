@@ -481,6 +481,61 @@
             }
           }
         }
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "boolean"
+          },
+          "androidKotlin": {
+            "type": "boolean"
+          },
+          "ios": {
+            "type": "boolean"
+          },
+          "iosSwift": {
+            "type": "boolean"
+          },
+          "unity": {
+            "type": "boolean"
+          },
+          "reactnative": {
+            "type": "boolean"
+          },
+          "flutter": {
+            "type": "boolean"
+          }
+        }
+      },
+      "eventFilteringOption": {
+        "type": "string",
+        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+        "default": "disable"
+      },
+      "whitelistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
+      },
+      "blacklistedEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+            }
+          }
+        }
       }
     }
   }
