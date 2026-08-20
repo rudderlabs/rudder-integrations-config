@@ -1182,5 +1182,52 @@
     "err": [
       "consentManagement.iosSwift Only one consent management block can be configured per provider."
     ]
+  },
+  {
+    "testTitle": "With event filtering configured per source type",
+    "config": {
+      "apiKey": "test-api-key",
+      "dataCenter": "USDC",
+      "eventFilteringOption": {
+        "web": "blacklistedEvents"
+      },
+      "blacklistedEvents": {
+        "web": [
+          {
+            "eventName": "Debug Event"
+          }
+        ]
+      },
+      "whitelistedEvents": {
+        "web": [
+          {
+            "eventName": "Product Viewed"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With eventFilteringOption given flat instead of per-source-type",
+    "config": {
+      "apiKey": "test-api-key",
+      "dataCenter": "USDC",
+      "eventFilteringOption": "disable"
+    },
+    "result": false,
+    "err": ["eventFilteringOption must be object"]
+  },
+  {
+    "testTitle": "With an unsupported per-source-type eventFilteringOption value",
+    "config": {
+      "apiKey": "test-api-key",
+      "dataCenter": "USDC",
+      "eventFilteringOption": {
+        "web": "allowlist"
+      }
+    },
+    "result": false,
+    "err": ["eventFilteringOption.web must be equal to one of the allowed values"]
   }
 ]

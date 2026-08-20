@@ -723,5 +723,73 @@
     "err": [
       "consentManagement.iosSwift Only one consent management block can be configured per provider."
     ]
+  },
+  {
+    "testTitle": "With useNativeSDK set per source type",
+    "config": {
+      "useNativeSDK": {
+        "android": true,
+        "ios": false,
+        "flutter": true,
+        "unity": false
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With useNativeSDK given as a flat boolean instead of per-source-type",
+    "config": {
+      "useNativeSDK": true
+    },
+    "result": false,
+    "err": ["useNativeSDK must be object"]
+  },
+  {
+    "testTitle": "With a non-boolean useNativeSDK per-source-type value",
+    "config": {
+      "useNativeSDK": {
+        "android": "true"
+      }
+    },
+    "result": false,
+    "err": ["useNativeSDK.android must be boolean"]
+  },
+  {
+    "testTitle": "With event filtering configured",
+    "config": {
+      "eventFilteringOption": "whitelistedEvents",
+      "whitelistedEvents": [
+        {
+          "eventName": "Product Viewed"
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": "Debug Event"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With an unsupported eventFilteringOption value",
+    "config": {
+      "eventFilteringOption": "allowlist"
+    },
+    "result": false,
+    "err": ["eventFilteringOption must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With invalid event filtering list types",
+    "config": {
+      "whitelistedEvents": "Product Viewed",
+      "blacklistedEvents": [
+        {
+          "eventName": 1
+        }
+      ]
+    },
+    "result": false,
+    "err": ["whitelistedEvents must be array", "blacklistedEvents.0.eventName must be string"]
   }
 ]
