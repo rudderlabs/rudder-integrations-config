@@ -73,3 +73,9 @@
 
 - Running `python3 scripts/schemaGenerator.py destination -name clevertap` after adding CleverTap `iosSwift` device mode succeeds but reports pre-existing/intentional CleverTap generator drift: it recommends `additionalProperties: false`, expects generated `useNativeSDK` properties for legacy device sources `android`, `ios`, and `reactnative`, and expects `required: ["provider"]` under each `consentManagement.<source>.items`.
 - The SDK-5266 change intentionally added only `useNativeSDK.properties.iosSwift`; future CleverTap schema maintenance should distinguish that Swift addition from unrelated generator-baseline normalization.
+
+## DEX-690 — Redshift Schema Generator Baseline Drift
+
+- Running `python3 scripts/schemaGenerator.py destination -name rs` during DEX-690 required exposing Python dependencies to the harness virtualenv via `PYTHONPATH=/usr/local/lib/python3.14/site-packages`; without that environment wiring, the generator could not be used as a signal.
+- The successful Redshift generator run reported pre-existing drift: unsupported `textareaInputCopy`, the generic `additionalProperties: false` recommendation, `namespace` differing by `rs-immutable: true`, generated `consentManagement` items adding `required: ["provider"]`, and generated `allOf` ordering/shape differences around SSH/object-storage conditionals.
+- Treat those Redshift generator warnings as baseline drift unless a future Redshift change intentionally normalizes generator output.

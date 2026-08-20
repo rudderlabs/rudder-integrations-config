@@ -95,3 +95,8 @@
 - CleverTap Android Kotlin device-mode metadata is authored in the existing CleverTap destination triplet under `src/configurations/destinations/clevertap/` rather than as a separate integration directory.
 - For SDK-5265, `db-config.json` exposes Android Kotlin with `supportedConnectionModes.androidKotlin` as `['cloud','device']`, `supportedMessageTypes.device.androidKotlin` as `['identify','track','screen']`, and `config.destConfig.androidKotlin` limited to `['useNativeSDK','connectionMode','consentManagement']`.
 - `schema.json` owns the Android Kotlin `useNativeSDK` boolean shape for CleverTap, while credential include/exclude/secret handling remains unchanged.
+
+## DEX-690 — Redshift CLI Source-of-Truth Boundary
+
+- Redshift destination re-onboarding should treat `src/configurations/destinations/rs/` as the integrations-config source of truth for CLI metadata: `db-config.json`, `schema.json`, `ui-config.json`, and the existing validation surface already cover the expected CLI onboarding keys and behaviors.
+- The verified Redshift surface includes `destConfig.defaultConfig`, secret keys, 10-minute sync frequency, conditional IAM/serverless/object-storage/SSH schema behavior, and backward-compatibility flags, so CLI repo work should not duplicate config changes here unless a concrete mismatch is found.
