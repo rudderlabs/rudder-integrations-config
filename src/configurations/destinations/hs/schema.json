@@ -1,17 +1,12 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["authorizationType", "apiVersion"],
+    "required": ["accessToken", "apiVersion"],
     "type": "object",
     "properties": {
       "hubID": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-      },
-      "authorizationType": {
-        "type": "string",
-        "enum": ["legacyApiKey", "newPrivateAppApi"],
-        "default": "newPrivateAppApi"
       },
       "apiVersion": {
         "type": "string",
@@ -1027,47 +1022,13 @@
             "enum": ["cloud"]
           }
         }
+      },
+      "accessToken": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       }
     },
     "allOf": [
-      {
-        "if": {
-          "properties": {
-            "authorizationType": {
-              "const": "legacyApiKey"
-            }
-          },
-          "required": ["authorizationType"]
-        },
-        "then": {
-          "properties": {
-            "apiKey": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            }
-          },
-          "required": ["apiKey"]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "authorizationType": {
-              "const": "newPrivateAppApi"
-            }
-          },
-          "required": ["authorizationType"]
-        },
-        "then": {
-          "properties": {
-            "accessToken": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            }
-          },
-          "required": ["accessToken"]
-        }
-      },
       {
         "if": {
           "properties": {

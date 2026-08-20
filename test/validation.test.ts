@@ -247,6 +247,23 @@ describe('Validation Tests', () => {
         }>;
       };
     };
+    const hsDbConfig = JSON.parse(
+      fs.readFileSync(path.resolve('src/configurations/destinations/hs/db-config.json'), 'utf-8'),
+    ) as {
+      config: {
+        destConfig: {
+          defaultConfig: string[];
+        };
+      };
+    };
+    const hsSchema = JSON.parse(
+      fs.readFileSync(path.resolve('src/configurations/destinations/hs/schema.json'), 'utf-8'),
+    ) as {
+      configSchema: {
+        required?: string[];
+        properties?: Record<string, unknown>;
+      };
+    };
 
     const fields = hsUiConfig.uiConfig.baseTemplate
       .flatMap((template) => template.sections)
@@ -268,6 +285,12 @@ describe('Validation Tests', () => {
       secret: true,
     });
     expect(accessTokenField?.preRequisites).toBeUndefined();
+    expect(hsDbConfig.config.destConfig.defaultConfig).not.toEqual(
+      expect.arrayContaining(['authorizationType', 'apiKey']),
+    );
+    expect(hsSchema.configSchema.required).toEqual(expect.arrayContaining(['accessToken']));
+    expect(hsSchema.configSchema.required).not.toContain('authorizationType');
+    expect(hsSchema.configSchema.properties).not.toHaveProperty('authorizationType');
   });
 
   const warehouseDestinationNames = [
