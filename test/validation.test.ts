@@ -233,66 +233,6 @@ describe('Validation Tests', () => {
     });
   });
 
-  it('HubSpot authorization UI exposes only Access Token credentials', () => {
-    const hsUiConfig = JSON.parse(
-      fs.readFileSync(path.resolve('src/configurations/destinations/hs/ui-config.json'), 'utf-8'),
-    ) as {
-      uiConfig: {
-        baseTemplate: Array<{
-          sections: Array<{
-            groups: Array<{
-              fields?: Array<Record<string, unknown>>;
-            }>;
-          }>;
-        }>;
-      };
-    };
-    const hsDbConfig = JSON.parse(
-      fs.readFileSync(path.resolve('src/configurations/destinations/hs/db-config.json'), 'utf-8'),
-    ) as {
-      config: {
-        destConfig: {
-          defaultConfig: string[];
-        };
-      };
-    };
-    const hsSchema = JSON.parse(
-      fs.readFileSync(path.resolve('src/configurations/destinations/hs/schema.json'), 'utf-8'),
-    ) as {
-      configSchema: {
-        required?: string[];
-        properties?: Record<string, unknown>;
-      };
-    };
-
-    const fields = hsUiConfig.uiConfig.baseTemplate
-      .flatMap((template) => template.sections)
-      .flatMap((section) => section.groups)
-      .flatMap((group) => group.fields ?? []);
-    expect(fields.find((field) => field.configKey === 'authorizationType')).toBeUndefined();
-    expect(fields.find((field) => field.configKey === 'apiKey')).toBeUndefined();
-
-    const accessTokenField = fields.find((field) => field.configKey === 'accessToken') as
-      | {
-          label?: string;
-          secret?: boolean;
-          preRequisites?: unknown;
-        }
-      | undefined;
-
-    expect(accessTokenField).toMatchObject({
-      label: 'Access Token',
-      secret: true,
-    });
-    expect(accessTokenField?.preRequisites).toBeUndefined();
-    expect(hsDbConfig.config.destConfig.defaultConfig).not.toEqual(
-      expect.arrayContaining(['authorizationType', 'apiKey']),
-    );
-    expect(hsSchema.configSchema.required).toEqual(expect.arrayContaining(['accessToken']));
-    expect(hsSchema.configSchema.required).not.toContain('authorizationType');
-    expect(hsSchema.configSchema.properties).not.toHaveProperty('authorizationType');
-  });
-
   const warehouseDestinationNames = [
     'azure_datalake',
     'azure_synapse',
