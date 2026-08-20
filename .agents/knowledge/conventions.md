@@ -116,5 +116,6 @@
 
 ## INT-6707 — HubSpot Legacy API Key Compatibility
 
-- For HubSpot authorization deprecation, remove `legacyApiKey` only from the selectable Authorization Type options in `src/configurations/destinations/hs/ui-config.json`; keep `legacyApiKey` in `schema.json` enum/conditional validation and in `db-config.json` defaults/secret-key exposure so existing persisted destinations remain view/edit compatible.
-- Do not invent non-selectable/deprecated `singleSelect` option metadata in this repo unless the renderer contract is verified; runtime rejection of HubSpot `authorizationType: legacyApiKey` is owned by transformer rather than by integrations-config schema removal.
+- For HubSpot authorization deprecation, do not expose the `authorizationType` singleSelect in `src/configurations/destinations/hs/ui-config.json` when Private Apps is the only supported choice; supported configs should rely on the `accessToken` credential field instead of a one-option auth selector.
+- Do not keep the legacy API-key config as a visible UI field in integrations config. Compatibility for persisted `authorizationType: legacyApiKey` destinations may remain in schema/db metadata outside the visible UI, while runtime rejection of that legacy value is owned by transformer.
+- Do not invent non-selectable/deprecated `singleSelect` option metadata in this repo unless the renderer contract is verified.
