@@ -487,11 +487,11 @@
     },
     "result": false,
     "err": [
-      "oneTrustCookieCategories.android.0.oneTrustCookieCategory must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "oneTrustCookieCategories.android.0.oneTrustCookieCategory must match pattern \"^(.{0,100})$\"",
       "oneTrustCookieCategories.ios.0.oneTrustCookieCategory must be string",
       "oneTrustCookieCategories.web must be array",
       "oneTrustCookieCategories.unity.0 must be object",
-      "ketchConsentPurposes.android.0.purpose must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\"",
+      "ketchConsentPurposes.android.0.purpose must match pattern \"^(.{0,100})$\"",
       "ketchConsentPurposes.ios.0.purpose must be string",
       "ketchConsentPurposes.web must be array",
       "ketchConsentPurposes.unity.0 must be object"
@@ -885,6 +885,63 @@
     "result": false,
     "err": [
       "consentManagement.iosSwift Only one consent management block can be configured per provider."
+    ]
+  },
+  {
+    "testTitle": "With valid regex eventName - no quantifier on group",
+    "config": {
+      "webhookUrl": "https://hooks.slack.com/services/XXXX/XXXX/4cg8sTTqSOrX5vXYwuTsEHPc",
+      "eventChannelSettings": [
+        {
+          "eventName": "^product\\.events\\.[a-zA-Z_]+$",
+          "eventChannel": "general",
+          "eventChannelWebhook": "",
+          "eventRegex": true
+        }
+      ],
+      "eventTemplateSettings": [
+        {
+          "eventName": "(abc)",
+          "eventTemplate": "template",
+          "eventRegex": true
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With blocked eventName - quantifier applied to group containing quantifier (a+)+",
+    "config": {
+      "webhookUrl": "https://hooks.slack.com/services/XXXX/XXXX/4cg8sTTqSOrX5vXYwuTsEHPc",
+      "eventChannelSettings": [
+        {
+          "eventName": "(a+)+",
+          "eventChannel": "general",
+          "eventChannelWebhook": "",
+          "eventRegex": true
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventChannelSettings.0.eventName must match pattern \"^(?!.*\\([^()]*(?:[*+{]|\\|)[^()]*\\)\\s*[*+{?])(.{0,100})$\""
+    ]
+  },
+  {
+    "testTitle": "With blocked eventName - quantifier applied to group containing alternation (foo|bar)*",
+    "config": {
+      "webhookUrl": "https://hooks.slack.com/services/XXXX/XXXX/4cg8sTTqSOrX5vXYwuTsEHPc",
+      "eventTemplateSettings": [
+        {
+          "eventName": "(foo|bar)*",
+          "eventTemplate": "template",
+          "eventRegex": true
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventTemplateSettings.0.eventName must match pattern \"^(?!.*\\([^()]*(?:[*+{]|\\|)[^()]*\\)\\s*[*+{?])(.{0,100})$\""
     ]
   }
 ]
