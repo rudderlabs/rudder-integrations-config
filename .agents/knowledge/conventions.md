@@ -113,3 +113,8 @@
 - Do not expose CleverTap Android Kotlin `oneTrustCookieCategories` or `ketchConsentPurposes` in `config.destConfig.androidKotlin` unless the Kotlin SDK explicitly supports or safely ignores those consent fields; SDK-5265 intentionally exposed only `useNativeSDK`, `connectionMode`, and `consentManagement`.
 - Treat Kotlin runtime release validation as an external acceptance gate for this config repository: this repo can publish declarative metadata, but actual device-mode availability depends on the Kotlin SDK runtime integration.
 - A complete CleverTap Android Kotlin device-mode release must include a new `CleverTapIntegration` in `rudder-sdk-kotlin` that mirrors the legacy `rudder-integration-clevertap-android` runtime behavior; config metadata enablement alone is not sufficient.
+
+## DEX-509 — Kafka CLI Mapping Contract
+
+- Kafka's authoritative destination config surface in integrations-config uses the plural key `avroSchemas` across `src/configurations/destinations/kafka/db-config.json`, `schema.json`, `ui-config.json`, and its validation fixture; downstream CLI mappings should preserve that plural API key even if another client/provider has a stale singular `avroSchema` spelling.
+- Kafka's supported source-type set matches the Confluent Cloud-style streaming destination precedent: `android`, `android_kotlin`, `ios`, `ios_swift`, `web`, `unity`, `amp`, `cloud`, `warehouse`, `react_native`, `flutter`, `cordova`, and `shopify` should be considered in scope for CLI onboarding when explicit mappings exist.
