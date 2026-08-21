@@ -95,3 +95,10 @@
 - CleverTap Android Kotlin device-mode metadata is authored in the existing CleverTap destination triplet under `src/configurations/destinations/clevertap/` rather than as a separate integration directory.
 - For SDK-5265, `db-config.json` exposes Android Kotlin with `supportedConnectionModes.androidKotlin` as `['cloud','device']`, `supportedMessageTypes.device.androidKotlin` as `['identify','track','screen']`, and `config.destConfig.androidKotlin` limited to `['useNativeSDK','connectionMode','consentManagement']`.
 - `schema.json` owns the Android Kotlin `useNativeSDK` boolean shape for CleverTap, while credential include/exclude/secret handling remains unchanged.
+
+## DEX-487 — ActiveCampaign Destination Metadata Reference
+
+- The ActiveCampaign destination is authored under `src/configurations/destinations/active_campaign/` with name `ACTIVE_CAMPAIGN` and display name `ActiveCampaign`; CLI onboarding work should use this repository as reference metadata rather than editing integrations-config when the task explicitly targets the CLI repository.
+- ActiveCampaign supports source types `android`, `androidKotlin`, `ios`, `iosSwift`, `web`, `unity`, `amp`, `cloud`, `warehouse`, `reactnative`, `flutter`, `cordova`, and `shopify`; `web` supports `cloud`, `device`, and `hybrid` connection modes, while the other listed source types are cloud-only.
+- ActiveCampaign destination config exposes default config keys `apiUrl`, `apiKey`, `eventKey`, and `actid`; `apiKey` and `eventKey` are the secret keys, while `ui-config.json` marks `apiKey`, `eventKey`, and `actid` as secret fields.
+- ActiveCampaign schema validation requires `apiUrl` and `apiKey`, treats `eventKey` and `actid` as optional strings, and includes optional `useNativeSDK.web` plus consent/CMP configuration objects.
