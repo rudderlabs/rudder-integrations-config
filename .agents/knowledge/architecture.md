@@ -95,3 +95,7 @@
 - CleverTap Android Kotlin device-mode metadata is authored in the existing CleverTap destination triplet under `src/configurations/destinations/clevertap/` rather than as a separate integration directory.
 - For SDK-5265, `db-config.json` exposes Android Kotlin with `supportedConnectionModes.androidKotlin` as `['cloud','device']`, `supportedMessageTypes.device.androidKotlin` as `['identify','track','screen']`, and `config.destConfig.androidKotlin` limited to `['useNativeSDK','connectionMode','consentManagement']`.
 - `schema.json` owns the Android Kotlin `useNativeSDK` boolean shape for CleverTap, while credential include/exclude/secret handling remains unchanged.
+
+## CFD-71 — Provider Onboarding Reference Boundary
+
+- Terraform provider onboarding for Google Ads Offline Conversions and Bing Ads Offline Conversions treats this repository as read-only reference data: provider resources, examples, docs, and generated artifacts belong in sibling `terraform-provider-rudderstack`, while this repo supplies the destination config triplets under `src/configurations/destinations/google_adwords_offline_conversions/` and `src/configurations/destinations/bingads_offline_conversions/`.
