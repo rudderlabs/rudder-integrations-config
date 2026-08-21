@@ -5,11 +5,11 @@
     "required": [
       "accessToken",
       "residency",
+      "projectId",
+      "accountId",
       "workspaceKey",
       "apiVersion",
-      "ingestionKey",
-      "deliveryMode",
-      "account"
+      "deliveryMode"
     ],
     "properties": {
       "accessToken": {
@@ -20,7 +20,15 @@
         "type": "string",
         "enum": ["us", "eu", "ap"]
       },
+      "projectId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
       "endpoint": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "accountId": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
@@ -32,10 +40,6 @@
         "type": "string",
         "enum": ["2024-10", "2025-06"]
       },
-      "ingestionKey": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-      },
       "batchSize": {
         "type": "integer",
         "minimum": 1,
@@ -44,20 +48,6 @@
       "deliveryMode": {
         "type": "string",
         "enum": ["batch", "stream"]
-      },
-      "account": {
-        "type": "object",
-        "properties": {
-          "projectId": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-          },
-          "id": {
-            "type": "string",
-            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-          }
-        },
-        "required": ["projectId", "id"]
       },
       "connectionMode": {
         "type": "object",
