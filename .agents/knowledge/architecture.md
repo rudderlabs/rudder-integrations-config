@@ -95,3 +95,10 @@
 - CleverTap Android Kotlin device-mode metadata is authored in the existing CleverTap destination triplet under `src/configurations/destinations/clevertap/` rather than as a separate integration directory.
 - For SDK-5265, `db-config.json` exposes Android Kotlin with `supportedConnectionModes.androidKotlin` as `['cloud','device']`, `supportedMessageTypes.device.androidKotlin` as `['identify','track','screen']`, and `config.destConfig.androidKotlin` limited to `['useNativeSDK','connectionMode','consentManagement']`.
 - `schema.json` owns the Android Kotlin `useNativeSDK` boolean shape for CleverTap, while credential include/exclude/secret handling remains unchanged.
+
+## CFD-72 — Offline Conversions CLI Reference Metadata
+
+- Google Ads Offline Conversions metadata is under `src/configurations/destinations/google_adwords_offline_conversions/` with db-config API name `GOOGLE_ADWORDS_OFFLINE_CONVERSIONS`; its config schema requires `rudderAccountId` and `customerId`, and conditionally requires `loginCustomerId` when `subAccount` is true.
+- Google Ads Offline Conversions uses OAuth through `supportedAccountDefinitions.rudderAccountId` mapped to `DESTINATION_GOOGLE_ADWORDS_OFFLINE_CONVERSIONS_OAUTH`, and exposes config keys including `customerId`, `subAccount`, `loginCustomerId`, event/conversion mapping fields, custom variables, user identifier fields, `conversionEnvironment`, hashing, and `validateOnly`.
+- Bing Ads Offline Conversions metadata is under `src/configurations/destinations/bingads_offline_conversions/` with db-config API name `BINGADS_OFFLINE_CONVERSIONS`; it is warehouse-only cloud mode with required schema keys `rudderAccountId`, `customerAccountId`, and `customerId`, plus optional `isHashRequired` defaulting to false.
+- In the observed checkout, Bing Ads Offline Conversions had no `supportedAccountDefinitions` entry or nested account-definition directory even though downstream CLI support treats it as OAuth via `rudderAccountId`.
