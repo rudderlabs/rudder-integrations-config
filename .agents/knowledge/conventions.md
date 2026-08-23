@@ -113,3 +113,8 @@
 - Do not expose CleverTap Android Kotlin `oneTrustCookieCategories` or `ketchConsentPurposes` in `config.destConfig.androidKotlin` unless the Kotlin SDK explicitly supports or safely ignores those consent fields; SDK-5265 intentionally exposed only `useNativeSDK`, `connectionMode`, and `consentManagement`.
 - Treat Kotlin runtime release validation as an external acceptance gate for this config repository: this repo can publish declarative metadata, but actual device-mode availability depends on the Kotlin SDK runtime integration.
 - A complete CleverTap Android Kotlin device-mode release must include a new `CleverTapIntegration` in `rudder-sdk-kotlin` that mirrors the legacy `rudder-integration-clevertap-android` runtime behavior; config metadata enablement alone is not sufficient.
+
+## DEX-529 — Integrations Config Read-Only for CLI Onboarding
+
+- When a task is to onboard a destination in a separate CLI context and the user explicitly says not to change `integrations-config`, treat this repository as read-only reference metadata even if it is the active checkout.
+- For VWO CLI onboarding, `src/configurations/destinations/vwo/{db-config.json,ui-config.json,schema.json}` and `test/data/validation/destinations/vwo.json` were reference inputs only; do not scaffold, edit, generate, format, test, commit, or publish changes in this repo for that task scope.
