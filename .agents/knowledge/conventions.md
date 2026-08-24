@@ -113,3 +113,8 @@
 - Do not expose CleverTap Android Kotlin `oneTrustCookieCategories` or `ketchConsentPurposes` in `config.destConfig.androidKotlin` unless the Kotlin SDK explicitly supports or safely ignores those consent fields; SDK-5265 intentionally exposed only `useNativeSDK`, `connectionMode`, and `consentManagement`.
 - Treat Kotlin runtime release validation as an external acceptance gate for this config repository: this repo can publish declarative metadata, but actual device-mode availability depends on the Kotlin SDK runtime integration.
 - A complete CleverTap Android Kotlin device-mode release must include a new `CleverTapIntegration` in `rudder-sdk-kotlin` that mirrors the legacy `rudder-integration-clevertap-android` runtime behavior; config metadata enablement alone is not sufficient.
+
+## INT-7017 — ClickHouse JSON Paths Field Gate
+
+- ClickHouse `jsonPaths` UI exposure uses whole-field gating on the field's `preRequisites.featureFlags`, not the option-level `featureFlag` attribute; the option-level attribute is reserved for select options and should not be used for a whole `textInput` field.
+- The chosen Flagsmith key for ClickHouse native JSON columns/json paths UI exposure is `AMP_enable-clickhouse-json-columns`, matching the user-facing "JSON columns" terminology and the warehouse-style `AMP_enable-*` flag naming convention.

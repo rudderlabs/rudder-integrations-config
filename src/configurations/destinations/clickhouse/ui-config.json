@@ -629,6 +629,27 @@
           "value": "skipTracksTable",
           "footerNote": "Enable this toggle to skip sending the event data to the “tracks” table",
           "default": false
+        },
+        {
+          "type": "textInput",
+          "label": "JSON columns (Optional)",
+          "labelNote": "Specify required JSON properties in dot notation separated by commas",
+          "value": "jsonPaths",
+          "regex": "^(.*)$",
+          "placeholder": "e.g: testMap.nestedMap, testArray",
+          "required": false,
+          "footerURL": {
+            "link": "https://www.rudderstack.com/docs/destinations/warehouse-destinations/clickhouse/#configuring-clickhouse-destination-in-rudderstack",
+            "text": "Instructions for setting up JSON columns. Native JSON columns require ClickHouse >= 25.3; RudderStack does not validate the server version. If unset, RudderStack uses the 1024-path default."
+          },
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "value": true,
+                "configKey": "AMP_enable-clickhouse-json-columns"
+              }
+            ]
+          }
         }
       ]
     },
