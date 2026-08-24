@@ -73,3 +73,8 @@
 
 - Running `python3 scripts/schemaGenerator.py destination -name clevertap` after adding CleverTap `iosSwift` device mode succeeds but reports pre-existing/intentional CleverTap generator drift: it recommends `additionalProperties: false`, expects generated `useNativeSDK` properties for legacy device sources `android`, `ios`, and `reactnative`, and expects `required: ["provider"]` under each `consentManagement.<source>.items`.
 - The SDK-5266 change intentionally added only `useNativeSDK.properties.iosSwift`; future CleverTap schema maintenance should distinguish that Swift addition from unrelated generator-baseline normalization.
+
+## INT-7040 — Braze Schema Generator Baseline Drift
+
+- Running `scripts/run-schema-validation.sh src/configurations/destinations/braze/ui-config.json` can fail on the Braze HEAD baseline because `scripts/schemaGenerator.py destination -name braze` emits pre-existing warnings unrelated to UI-only ecommerce cleanup, including missing `usePlatformSpecificApiKeys`/`appKey`/platform API key schema fields, consent-management item `required` drift across source types, required-field insertions, and an `additionalProperties: false` recommendation.
+- When changing Braze UI field visibility only, such as removing the `AMP_enable-braze-ecommerce-recommended-events` conditions block from `useEcommerceRecommendedEvents`, distinguish this baseline generator drift from the scoped UI change.
