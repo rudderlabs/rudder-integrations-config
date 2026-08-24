@@ -1,23 +1,64 @@
 [
   {
-    "config": { "restApiKey": "test-rest-api-key", "dataCenter": "us-1" },
+    "config": {
+      "accessToken": "test-access-token",
+      "residency": "us",
+      "workspaceKey": "wk_9f2c",
+      "apiVersion": "2025-06",
+      "ingestionKey": "test-ingestion-key",
+      "deliveryMode": "batch",
+      "account": { "projectId": "prj_01H8X", "id": "ACC-10024" }
+    },
     "result": true
   },
   {
-    "config": { "dataCenter": "us-1" },
+    "config": {
+      "residency": "us",
+      "workspaceKey": "wk_9f2c",
+      "apiVersion": "2025-06",
+      "ingestionKey": "test-ingestion-key",
+      "deliveryMode": "batch",
+      "account": { "projectId": "prj_01H8X", "id": "ACC-10024" }
+    },
     "result": false,
-    "err": [" must have required property 'restApiKey'"]
+    "err": [" must have required property 'accessToken'"]
   },
   {
-    "config": { "restApiKey": "test-rest-api-key" },
+    "config": {
+      "accessToken": "test-access-token",
+      "residency": "us",
+      "workspaceKey": "wk_9f2c",
+      "apiVersion": "2025-06",
+      "deliveryMode": "batch",
+      "account": { "projectId": "prj_01H8X", "id": "ACC-10024" }
+    },
     "result": false,
-    "err": [" must have required property 'dataCenter'"]
+    "err": [" must have required property 'ingestionKey'"]
   },
   {
-    "config": { "restApiKey": "", "dataCenter": "us-1" },
+    "config": {
+      "accessToken": "test-access-token",
+      "residency": "on-prem",
+      "workspaceKey": "wk_9f2c",
+      "apiVersion": "2025-06",
+      "ingestionKey": "test-ingestion-key",
+      "deliveryMode": "batch",
+      "account": { "projectId": "prj_01H8X", "id": "ACC-10024" }
+    },
     "result": false,
-    "err": [
-      "restApiKey must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""
-    ]
+    "err": ["residency must be equal to one of the allowed values"]
+  },
+  {
+    "config": {
+      "accessToken": "test-access-token",
+      "residency": "eu",
+      "workspaceKey": "wk_9f2c",
+      "apiVersion": "2025-06",
+      "ingestionKey": "test-ingestion-key",
+      "deliveryMode": "batch",
+      "account": { "projectId": "prj_01H8X" }
+    },
+    "result": false,
+    "err": ["account must have required property 'id'"]
   }
 ]
