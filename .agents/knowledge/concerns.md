@@ -73,3 +73,8 @@
 
 - Running `python3 scripts/schemaGenerator.py destination -name clevertap` after adding CleverTap `iosSwift` device mode succeeds but reports pre-existing/intentional CleverTap generator drift: it recommends `additionalProperties: false`, expects generated `useNativeSDK` properties for legacy device sources `android`, `ios`, and `reactnative`, and expects `required: ["provider"]` under each `consentManagement.<source>.items`.
 - The SDK-5266 change intentionally added only `useNativeSDK.properties.iosSwift`; future CleverTap schema maintenance should distinguish that Swift addition from unrelated generator-baseline normalization.
+
+## INT-7023 — ClickHouse jsonPaths Terraform Dependency
+
+- This repository contains no Terraform files or Flagsmith Terraform resources for ClickHouse `jsonPaths`; end-to-end flagged rendering depends on an external Terraform/control-plane change that registers the ClickHouse component and uses the exact same Flagsmith flag contract as the ClickHouse UI config.
+- Avoid guessing a flag key such as `AMP_enable-clickhouse-json-paths` inside integration-config without the external contract, because mismatched Flagsmith keys would let repository validation pass while dashboard gating still fails.
