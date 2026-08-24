@@ -77,4 +77,9 @@
 ## INT-7040 — Braze Schema Generator Baseline Drift
 
 - Running `scripts/run-schema-validation.sh src/configurations/destinations/braze/ui-config.json` can fail on the Braze HEAD baseline because `scripts/schemaGenerator.py destination -name braze` emits pre-existing warnings unrelated to UI-only ecommerce cleanup: the generator reports `usePlatformSpecificApiKeys`/`appKey`/platform API key fields and required-field insertions even though those fields are already modeled in conditional `allOf` branches, reports consent-management item `required` drift across source types, and prints the generic `additionalProperties: false` recommendation.
-- When changing Braze UI field visibility only, such as removing the `AMP_enable-braze-ecommerce-recommended-events` conditions block from `useEcommerceRecommendedEvents`, distinguish this baseline generator drift from the scoped UI change.
+- When changing Braze UI field visibility only, such as removing the retired ecommerce recommended-events feature-flag conditions block from `useEcommerceRecommendedEvents`, distinguish this baseline generator drift from the scoped UI change.
+
+## INT-6707 — HubSpot Schema Generator Compatibility Diff
+
+- After removing `legacyApiKey` from HubSpot `ui-config.json` Authorization Type options while keeping it in `schema.json` for persisted-config compatibility, `python3 scripts/schemaGenerator.py destination -name hs` succeeds but recommends removing `legacyApiKey` from the `authorizationType` enum. That diff is intentional for INT-6707 and should not be applied unless legacy persisted HubSpot configs no longer need schema-valid rendering.
+- The same HubSpot schema-generator run can also emit baseline/noisy output for `redirect`, `additionalProperties: false`, and consent-management `provider` requirements; distinguish those pre-existing generator recommendations from the scoped legacy API-key UI removal.
