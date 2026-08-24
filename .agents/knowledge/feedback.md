@@ -17,6 +17,6 @@
 
 ## INT-7014 — CustomerIO User Mapping UI Copy
 
-- CustomerIO `userIdMapping` UI copy should describe the setting generically as how RudderStack `userId` is sent to Customer.io when API Version is v2.
-- Do not mention internal implementation terms such as record event or VDM v2, and do not imply this mapping setting affects record-event API behavior.
-- CustomerIO `apiVersion` and `userIdMapping` dashboard copy should scope these settings to cloud-mode delivery and avoid implying they affect Customer.io SDK/device-mode behavior.
+- CustomerIO `userIdIdentifierType` UI copy should describe the setting generically as how RudderStack `userId` is sent to Customer.io when API Version is v2.
+- Do not mention internal implementation terms such as record event or VDM v2, and do not imply this setting affects record-event API behavior.
+- CustomerIO `apiVersion` and `userIdIdentifierType` dashboard copy should scope these settings to cloud-mode delivery and avoid implying they affect Customer.io SDK/device-mode behavior.
