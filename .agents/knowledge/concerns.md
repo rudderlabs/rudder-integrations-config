@@ -74,6 +74,11 @@
 - Running `python3 scripts/schemaGenerator.py destination -name clevertap` after adding CleverTap `iosSwift` device mode succeeds but reports pre-existing/intentional CleverTap generator drift: it recommends `additionalProperties: false`, expects generated `useNativeSDK` properties for legacy device sources `android`, `ios`, and `reactnative`, and expects `required: ["provider"]` under each `consentManagement.<source>.items`.
 - The SDK-5266 change intentionally added only `useNativeSDK.properties.iosSwift`; future CleverTap schema maintenance should distinguish that Swift addition from unrelated generator-baseline normalization.
 
+## INT-7040 — Braze Schema Generator Baseline Drift
+
+- Running `scripts/run-schema-validation.sh src/configurations/destinations/braze/ui-config.json` can fail on the Braze HEAD baseline because `scripts/schemaGenerator.py destination -name braze` emits pre-existing warnings unrelated to UI-only ecommerce cleanup: the generator reports `usePlatformSpecificApiKeys`/`appKey`/platform API key fields and required-field insertions even though those fields are already modeled in conditional `allOf` branches, reports consent-management item `required` drift across source types, and prints the generic `additionalProperties: false` recommendation.
+- When changing Braze UI field visibility only, such as removing the retired ecommerce recommended-events feature-flag conditions block from `useEcommerceRecommendedEvents`, distinguish this baseline generator drift from the scoped UI change.
+
 ## INT-6707 — HubSpot Schema Generator Compatibility Diff
 
 - After removing `legacyApiKey` from HubSpot `ui-config.json` Authorization Type options while keeping it in `schema.json` for persisted-config compatibility, `python3 scripts/schemaGenerator.py destination -name hs` succeeds but recommends removing `legacyApiKey` from the `authorizationType` enum. That diff is intentional for INT-6707 and should not be applied unless legacy persisted HubSpot configs no longer need schema-valid rendering.
