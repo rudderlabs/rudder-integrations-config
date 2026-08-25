@@ -46,6 +46,69 @@
                       }
                     ],
                     "default": "US"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "API Version",
+                    "configKey": "apiVersion",
+                    "note": "Select the Customer.io API version for cloud-mode delivery. Version 1 preserves the existing per-endpoint API behavior; version 2 uses Customer.io's unified batch API.",
+                    "options": [
+                      {
+                        "label": "v1",
+                        "value": "v1"
+                      },
+                      {
+                        "label": "v2",
+                        "value": "v2"
+                      }
+                    ],
+                    "default": "v1",
+                    "required": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "userId Identifier Type",
+                    "configKey": "userIdIdentifierType",
+                    "note": "Select which Customer.io identifier should receive the RudderStack userId for cloud-mode delivery when API Version is v2.",
+                    "options": [
+                      {
+                        "label": "ID",
+                        "value": "id"
+                      },
+                      {
+                        "label": "Email",
+                        "value": "email"
+                      },
+                      {
+                        "label": "Phone",
+                        "value": "phone"
+                      },
+                      {
+                        "label": "CIO ID",
+                        "value": "cio_id"
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "connectionModes.cloud",
+                          "value": true
+                        },
+                        {
+                          "configKey": "apiVersion",
+                          "value": "v2"
+                        }
+                      ],
+                      "condition": "and"
+                    }
                   }
                 ]
               }
