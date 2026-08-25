@@ -1235,5 +1235,34 @@
     "err": [
       "consentManagement.iosSwift Only one consent management block can be configured per provider."
     ]
+  },
+  {
+    "testTitle": "With the service account authentication path",
+    "config": {
+      "token": "dummyToken",
+      "dataResidency": "us",
+      "identityMergeApi": "simplified",
+      "serviceAccountUserName": "dummyServiceAccountUser",
+      "serviceAccountSecret": "dummyServiceAccountSecret",
+      "projectId": "dummyProjectId"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With non-string service account fields",
+    "config": {
+      "token": "dummyToken",
+      "dataResidency": "us",
+      "identityMergeApi": "simplified",
+      "serviceAccountUserName": 1,
+      "serviceAccountSecret": 2,
+      "projectId": 3
+    },
+    "result": false,
+    "err": [
+      "serviceAccountUserName must be string",
+      "serviceAccountSecret must be string",
+      "projectId must be string"
+    ]
   }
 ]

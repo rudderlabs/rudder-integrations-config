@@ -19,3 +19,10 @@
 
 - Reviewer guidance for the ClickHouse `jsonPaths` UI field: use the concise footer note `Stored as native JSON columns, which require ClickHouse 25.3 or newer.` instead of longer linked help text.
 - Keep ClickHouse `jsonPaths` UI terminology path-oriented for the field label and label note (`JSON paths`, `JSON paths in dot notation`); reserve `native JSON columns` wording for describing ClickHouse storage behavior.
+
+## INT-7014 — CustomerIO User Mapping UI Copy
+
+- CustomerIO `userIdIdentifierType` UI copy should describe the setting generically as how RudderStack `userId` is sent to Customer.io when API Version is v2.
+- Do not mention internal implementation terms such as record event or VDM v2, and do not imply this setting affects record-event API behavior.
+- CustomerIO `apiVersion` and `userIdIdentifierType` dashboard copy should scope these settings to cloud-mode delivery and avoid implying they affect Customer.io SDK/device-mode behavior.
+- For the newer `userIdMapping` field name, keep the same customer-facing copy rule: describe how RudderStack `userId` is sent to Customer.io when API Version is v2, avoid internal terms such as record event or VDM v2, and scope both `apiVersion` and `userIdMapping` to cloud-mode delivery rather than SDK/device-mode behavior.
