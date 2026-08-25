@@ -18,3 +18,4 @@
 ## INT-7017 — ClickHouse JSON Paths Review Guidance
 
 - Reviewer guidance for the ClickHouse `jsonPaths` UI field: use the concise footer note `Stored as native JSON columns, which require ClickHouse 25.3 or newer.` instead of longer linked help text.
+- Keep ClickHouse `jsonPaths` UI terminology path-oriented for the field label and label note (`JSON paths`, `JSON paths in dot notation`); reserve `native JSON columns` wording for describing ClickHouse storage behavior.
