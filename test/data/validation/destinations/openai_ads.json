@@ -1,0 +1,145 @@
+[
+  {
+    "testTitle": "Valid minimal cloud config with standard event mapping",
+    "config": {
+      "apiKey": "sk-test-api-key",
+      "conversionIdentifier": "conv_default",
+      "defaultCurrency": "USD",
+      "defaultActionSource": "website",
+      "eventsToStandard": [
+        {
+          "from": "Product Viewed",
+          "to": "view_content"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid standard event mapping with conversion identifier override",
+    "config": {
+      "apiKey": "sk-test-api-key",
+      "conversionIdentifier": "conv_default",
+      "defaultCurrency": "EUR",
+      "defaultActionSource": "app",
+      "eventsToStandard": [
+        {
+          "from": "Order Completed",
+          "to": "purchase",
+          "conversionIdentifier": "conv_purchase"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid custom event mapping",
+    "config": {
+      "apiKey": "sk-test-api-key",
+      "conversionIdentifier": "conv_default",
+      "defaultCurrency": "GBP",
+      "defaultActionSource": "email",
+      "eventsToStandard": [
+        {
+          "from": "Trial Started",
+          "to": "custom",
+          "customEventName": "trial_started",
+          "conversionIdentifier": "conv_trial"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Missing required default currency",
+    "config": {
+      "apiKey": "sk-test-api-key",
+      "conversionIdentifier": "conv_default",
+      "defaultActionSource": "website",
+      "eventsToStandard": [
+        {
+          "from": "Product Viewed",
+          "to": "view_content"
+        }
+      ]
+    },
+    "result": false,
+    "err": [" must have required property 'defaultCurrency'"]
+  },
+  {
+    "testTitle": "Missing required default action source",
+    "config": {
+      "apiKey": "sk-test-api-key",
+      "conversionIdentifier": "conv_default",
+      "defaultCurrency": "USD",
+      "eventsToStandard": [
+        {
+          "from": "Product Viewed",
+          "to": "view_content"
+        }
+      ]
+    },
+    "result": false,
+    "err": [" must have required property 'defaultActionSource'"]
+  },
+  {
+    "testTitle": "Missing required event mappings",
+    "config": {
+      "apiKey": "sk-test-api-key",
+      "conversionIdentifier": "conv_default",
+      "defaultCurrency": "USD",
+      "defaultActionSource": "website"
+    },
+    "result": false,
+    "err": [" must have required property 'eventsToStandard'"]
+  },
+  {
+    "testTitle": "Empty event mappings are invalid",
+    "config": {
+      "apiKey": "sk-test-api-key",
+      "conversionIdentifier": "conv_default",
+      "defaultCurrency": "USD",
+      "defaultActionSource": "website",
+      "eventsToStandard": []
+    },
+    "result": false,
+    "err": ["eventsToStandard must NOT have fewer than 1 items"]
+  },
+  {
+    "testTitle": "Invalid default action source enum",
+    "config": {
+      "apiKey": "sk-test-api-key",
+      "conversionIdentifier": "conv_default",
+      "defaultCurrency": "USD",
+      "defaultActionSource": "chat",
+      "eventsToStandard": [
+        {
+          "from": "Product Viewed",
+          "to": "view_content"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["defaultActionSource must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "Custom mapping requires custom event name",
+    "config": {
+      "apiKey": "sk-test-api-key",
+      "conversionIdentifier": "conv_default",
+      "defaultCurrency": "USD",
+      "defaultActionSource": "website",
+      "eventsToStandard": [
+        {
+          "from": "Trial Started",
+          "to": "custom"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventsToStandard.0 must have required property 'customEventName'",
+      "eventsToStandard.0 must match \"then\" schema"
+    ]
+  }
+]

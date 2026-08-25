@@ -1,0 +1,317 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "API Key",
+                    "note": "Enter the OpenAI Ads API key used for cloud-mode event delivery. This key is not exposed to device-mode SDKs.",
+                    "configKey": "apiKey",
+                    "regex": "^.{1,500}$",
+                    "regexErrorMessage": "Invalid API Key",
+                    "placeholder": "e.g: sk-...",
+                    "secret": true
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Conversion Identifier",
+                    "note": "Enter the default conversion identifier used when an event mapping row does not specify an override.",
+                    "configKey": "conversionIdentifier",
+                    "regex": "^.{1,100}$",
+                    "regexErrorMessage": "Invalid Conversion Identifier",
+                    "placeholder": "e.g: conv_12345"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Destination settings",
+                "note": "Configure OpenAI Ads event defaults and event mappings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Default Currency",
+                    "note": "Enter the fallback ISO 4217 currency code to use when an event does not include a currency. No hardcoded fallback is applied.",
+                    "configKey": "defaultCurrency",
+                    "regex": "^[A-Z]{3}$",
+                    "regexErrorMessage": "Enter a valid three-letter uppercase ISO 4217 currency code.",
+                    "placeholder": "e.g: USD",
+                    "required": true
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Default Action Source",
+                    "note": "Choose the fallback action source to use when an event does not include an action source.",
+                    "configKey": "defaultActionSource",
+                    "options": [
+                      {
+                        "label": "Website",
+                        "value": "website"
+                      },
+                      {
+                        "label": "App",
+                        "value": "app"
+                      },
+                      {
+                        "label": "Offline",
+                        "value": "offline"
+                      },
+                      {
+                        "label": "Physical store",
+                        "value": "physical_store"
+                      },
+                      {
+                        "label": "Phone call",
+                        "value": "phone_call"
+                      },
+                      {
+                        "label": "Email",
+                        "value": "email"
+                      }
+                    ],
+                    "required": true
+                  },
+                  {
+                    "type": "dynamicCustomForm",
+                    "label": "RudderStack to OpenAI Ads event mappings",
+                    "note": "Map each RudderStack event to an OpenAI Ads standard event or to a custom event. Custom event name is required when the target is Custom.",
+                    "configKey": "eventsToStandard",
+                    "default": [],
+                    "required": true,
+                    "rowFields": [
+                      {
+                        "type": "textInput",
+                        "label": "RudderStack Event",
+                        "configKey": "from",
+                        "regex": "^.{1,100}$",
+                        "regexErrorMessage": "Enter a valid RudderStack event name.",
+                        "placeholder": "e.g: Product Viewed",
+                        "required": true
+                      },
+                      {
+                        "type": "singleSelect",
+                        "label": "OpenAI Ads Event",
+                        "configKey": "to",
+                        "options": [
+                          {
+                            "label": "Page View",
+                            "value": "page_view"
+                          },
+                          {
+                            "label": "View Content",
+                            "value": "view_content"
+                          },
+                          {
+                            "label": "Search",
+                            "value": "search"
+                          },
+                          {
+                            "label": "Add To Cart",
+                            "value": "add_to_cart"
+                          },
+                          {
+                            "label": "Add To Wishlist",
+                            "value": "add_to_wishlist"
+                          },
+                          {
+                            "label": "Initiate Checkout",
+                            "value": "initiate_checkout"
+                          },
+                          {
+                            "label": "Add Payment Info",
+                            "value": "add_payment_info"
+                          },
+                          {
+                            "label": "Purchase",
+                            "value": "purchase"
+                          },
+                          {
+                            "label": "Lead",
+                            "value": "lead"
+                          },
+                          {
+                            "label": "Complete Registration",
+                            "value": "complete_registration"
+                          },
+                          {
+                            "label": "Contact",
+                            "value": "contact"
+                          },
+                          {
+                            "label": "Subscribe",
+                            "value": "subscribe"
+                          },
+                          {
+                            "label": "Start Trial",
+                            "value": "start_trial"
+                          },
+                          {
+                            "label": "Custom",
+                            "value": "custom"
+                          }
+                        ],
+                        "required": true
+                      },
+                      {
+                        "type": "textInput",
+                        "label": "Conversion Identifier Override",
+                        "note": "Optionally override the default conversion identifier for this event mapping.",
+                        "configKey": "conversionIdentifier",
+                        "regex": "^.{1,100}$",
+                        "regexErrorMessage": "Enter a valid Conversion Identifier.",
+                        "placeholder": "e.g: conv_purchase",
+                        "required": false
+                      },
+                      {
+                        "type": "textInput",
+                        "label": "Custom Event Name",
+                        "note": "Required when OpenAI Ads Event is Custom.",
+                        "configKey": "customEventName",
+                        "regex": "^.{1,100}$",
+                        "regexErrorMessage": "Enter a valid Custom Event Name.",
+                        "placeholder": "e.g: Trial Started",
+                        "required": true,
+                        "preRequisites": {
+                          "fields": [
+                            {
+                              "configKey": "to",
+                              "value": "custom"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                },
+                {
+                  "label": "iubenda",
+                  "value": "iubenda"
+                }
+              ],
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category IDs",
+              "note": "Input your consent category IDs by pressing 'Enter' after each entry. We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ],
+          "uniqueRowFields": ["provider"]
+        }
+      ]
+    }
+  }
+}

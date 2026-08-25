@@ -95,3 +95,10 @@
 - CleverTap Android Kotlin device-mode metadata is authored in the existing CleverTap destination triplet under `src/configurations/destinations/clevertap/` rather than as a separate integration directory.
 - For SDK-5265, `db-config.json` exposes Android Kotlin with `supportedConnectionModes.androidKotlin` as `['cloud','device']`, `supportedMessageTypes.device.androidKotlin` as `['identify','track','screen']`, and `config.destConfig.androidKotlin` limited to `['useNativeSDK','connectionMode','consentManagement']`.
 - `schema.json` owns the Android Kotlin `useNativeSDK` boolean shape for CleverTap, while credential include/exclude/secret handling remains unchanged.
+
+## INT-7055 — OpenAI Ads Destination Metadata Contract
+
+- OpenAI Ads is modeled as a standalone destination under `src/configurations/destinations/openai_ads/` with destination key `OPENAI_ADS`, display name `OpenAI Ads`, and router transformation support; it is not part of a unified ad-platform destination surface.
+- Cloud/CAPI metadata supports `track`, `page`, and `screen` across standard source types, while device-mode metadata is limited to the web JavaScript SDK with `identify`, `track`, `page`, and `screen`; no native mobile device modes are exposed for v1.
+- The v1 configuration contract intentionally omits a pre-hashed-data toggle and legacy consent-provider fields such as `oneTrustCookieCategories`/`ketchConsentPurposes`; PII hashing is expected to be unconditional in transformer/runtime.
+- OpenAI Ads configuration exposes required `apiKey`, required `conversionIdentifier`, required no-default `defaultCurrency`, required no-default `defaultActionSource`, and required non-empty `eventsToStandard`; `oppref` is a properties passthrough, not a UI-level destination setting.
