@@ -118,3 +118,5 @@
 
 - ClickHouse `jsonPaths` UI exposure uses whole-field gating on the field's `preRequisites.featureFlags`, not the option-level `featureFlag` attribute; the option-level attribute is reserved for select options and should not be used for a whole `textInput` field.
 - The chosen Flagsmith key for ClickHouse native JSON columns/json paths UI exposure is `AMP_enable-clickhouse-json-columns`, matching the user-facing "JSON columns" terminology and the warehouse-style `AMP_enable-*` flag naming convention.
+- ClickHouse `jsonPaths` in `src/configurations/destinations/clickhouse/schema.json` should use a plain string pattern `.*`, not the generic env-var pattern `(^env[.].*)|.*`.
+- For ClickHouse destination validation coverage in `test/data/validation/destinations/clickhouse.json`, add a new fixture case for new config behavior instead of modifying an existing fixture.
