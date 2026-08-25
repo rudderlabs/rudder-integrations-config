@@ -120,3 +120,4 @@
 - The chosen Flagsmith key for ClickHouse native JSON columns/json paths UI exposure is `AMP_enable-clickhouse-json-columns`, matching the user-facing "JSON columns" terminology and the warehouse-style `AMP_enable-*` flag naming convention.
 - ClickHouse `jsonPaths` in `src/configurations/destinations/clickhouse/schema.json` should use a plain string pattern `.*`, not the generic env-var pattern `(^env[.].*)|.*`.
 - For ClickHouse destination validation coverage in `test/data/validation/destinations/clickhouse.json`, add a new fixture case for new config behavior instead of modifying an existing fixture.
+- ClickHouse `jsonPaths` UI examples and validation fixtures should use the single-path sample `testMap.nestedMap`, not the multi-path sample `testMap.nestedMap, testArray`.
