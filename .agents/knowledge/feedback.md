@@ -18,7 +18,8 @@
 ## INT-7017 — ClickHouse JSON Paths Review Guidance
 
 - Reviewer guidance for the ClickHouse `jsonPaths` UI field: use the concise footer note `Stored as native JSON columns, which require ClickHouse 25.3 or newer.` instead of longer linked help text.
-- Keep ClickHouse `jsonPaths` UI terminology path-oriented for the field label and label note (`JSON paths`, `JSON paths in dot notation`); reserve `native JSON columns` wording for describing ClickHouse storage behavior.
+- Final reviewer guidance for ClickHouse `jsonPaths` UI copy: label the field `JSON columns` without `(Optional)`, keep the helper text path-oriented because the input value is paths, and reserve `native JSON columns` wording for ClickHouse storage behavior.
+- Use a CSV-style placeholder such as `e.g: testMap.nestedMap,testMap.testProperties` for the ClickHouse `jsonPaths` UI field.
 
 ## INT-7014 — CustomerIO User Mapping UI Copy
 
