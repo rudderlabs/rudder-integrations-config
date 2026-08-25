@@ -114,6 +114,14 @@
 - Treat Kotlin runtime release validation as an external acceptance gate for this config repository: this repo can publish declarative metadata, but actual device-mode availability depends on the Kotlin SDK runtime integration.
 - A complete CleverTap Android Kotlin device-mode release must include a new `CleverTapIntegration` in `rudder-sdk-kotlin` that mirrors the legacy `rudder-integration-clevertap-android` runtime behavior; config metadata enablement alone is not sufficient.
 
+## INT-7017 — ClickHouse JSON Paths Field Gate
+
+- ClickHouse `jsonPaths` UI exposure uses whole-field gating on the field's `preRequisites.featureFlags`, not the option-level `featureFlag` attribute; the option-level attribute is reserved for select options and should not be used for a whole `textInput` field.
+- The chosen Flagsmith key for ClickHouse native JSON columns/json paths UI exposure is `AMP_enable-clickhouse-json-columns`, matching the user-facing "JSON columns" terminology and the warehouse-style `AMP_enable-*` flag naming convention.
+- ClickHouse `jsonPaths` in `src/configurations/destinations/clickhouse/schema.json` should use a plain string pattern `.*`, not the generic env-var pattern `(^env[.].*)|.*`.
+- For ClickHouse destination validation coverage in `test/data/validation/destinations/clickhouse.json`, add a new fixture case for new config behavior instead of modifying an existing fixture.
+- ClickHouse `jsonPaths` UI examples and validation fixtures should use the single-path sample `testMap.nestedMap`, not the multi-path sample `testMap.nestedMap, testArray`.
+
 ## INT-6707 — HubSpot Legacy API Key Compatibility
 
 - For HubSpot authorization deprecation, do not expose the `authorizationType` singleSelect in `src/configurations/destinations/hs/ui-config.json` when Private Apps is the only supported choice; supported configs should rely on the `accessToken` credential field instead of a one-option auth selector.

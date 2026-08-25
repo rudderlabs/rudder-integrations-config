@@ -15,6 +15,12 @@
 - Reviewer guidance for Braze schema-generator baseline drift: do not describe `usePlatformSpecificApiKeys`, `appKey`, `androidApiKey`, `iOSApiKey`, or `webApiKey` as missing from `src/configurations/destinations/braze/schema.json`; those fields are already present under conditional `allOf` branches.
 - Treat generator warnings about those API-key fields as generator/root-schema expectation drift, not absent schema fields, when separating baseline noise from scoped Braze UI-only cleanup.
 
+## INT-7017 — ClickHouse JSON Paths Review Guidance
+
+- Reviewer guidance for the ClickHouse `jsonPaths` UI field: use the concise footer note `Stored as native JSON columns, which require ClickHouse 25.3 or newer.` instead of longer linked help text.
+- Final reviewer guidance for ClickHouse `jsonPaths` UI copy: label the field `JSON columns` without `(Optional)`, keep the helper text path-oriented because the input value is paths, and reserve `native JSON columns` wording for ClickHouse storage behavior.
+- Use a CSV-style placeholder such as `e.g: testMap.nestedMap,testMap.testProperties` for the ClickHouse `jsonPaths` UI field.
+
 ## INT-7014 — CustomerIO User Mapping UI Copy
 
 - CustomerIO `userIdIdentifierType` UI copy should describe the setting generically as how RudderStack `userId` is sent to Customer.io when API Version is v2.
