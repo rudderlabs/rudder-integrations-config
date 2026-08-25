@@ -979,5 +979,93 @@
     "err": [
       "consentManagement.iosSwift Only one consent management block can be configured per provider."
     ]
+  },
+  {
+    "testTitle": "With explicit v1 API version and no userIdIdentifierType",
+    "config": {
+      "apiKey": "dummy-test-value",
+      "siteID": "dummy-test-value",
+      "datacenter": "US",
+      "apiVersion": "v1"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With v2 API version and id userIdIdentifierType",
+    "config": {
+      "apiKey": "dummy-test-value",
+      "siteID": "dummy-test-value",
+      "datacenter": "US",
+      "apiVersion": "v2",
+      "userIdIdentifierType": "id"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With v2 API version and email userIdIdentifierType",
+    "config": {
+      "apiKey": "dummy-test-value",
+      "siteID": "dummy-test-value",
+      "datacenter": "US",
+      "apiVersion": "v2",
+      "userIdIdentifierType": "email"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With v2 API version and phone userIdIdentifierType",
+    "config": {
+      "apiKey": "dummy-test-value",
+      "siteID": "dummy-test-value",
+      "datacenter": "US",
+      "apiVersion": "v2",
+      "userIdIdentifierType": "phone"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With v2 API version and cio_id userIdIdentifierType",
+    "config": {
+      "apiKey": "dummy-test-value",
+      "siteID": "dummy-test-value",
+      "datacenter": "US",
+      "apiVersion": "v2",
+      "userIdIdentifierType": "cio_id"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With v2 API version and no userIdIdentifierType",
+    "config": {
+      "apiKey": "dummy-test-value",
+      "siteID": "dummy-test-value",
+      "datacenter": "US",
+      "apiVersion": "v2"
+    },
+    "result": false,
+    "err": [" must have required property 'userIdIdentifierType'", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "With invalid API version",
+    "config": {
+      "apiKey": "dummy-test-value",
+      "siteID": "dummy-test-value",
+      "datacenter": "US",
+      "apiVersion": "v3"
+    },
+    "result": false,
+    "err": ["apiVersion must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With invalid userIdIdentifierType",
+    "config": {
+      "apiKey": "dummy-test-value",
+      "siteID": "dummy-test-value",
+      "datacenter": "US",
+      "apiVersion": "v2",
+      "userIdIdentifierType": "customer_id"
+    },
+    "result": false,
+    "err": ["userIdIdentifierType must be equal to one of the allowed values"]
   }
 ]
