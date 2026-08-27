@@ -2,15 +2,123 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "required": ["restApiKey", "dataCenter"],
+    "required": [
+      "accessToken",
+      "residency",
+      "workspaceKey",
+      "apiVersion",
+      "ingestionKey",
+      "deliveryMode",
+      "account"
+    ],
     "properties": {
-      "restApiKey": {
+      "accessToken": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "dataCenter": {
+      "residency": {
+        "type": "string",
+        "enum": ["us", "eu", "ap"]
+      },
+      "endpoint": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "workspaceKey": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "apiVersion": {
+        "type": "string",
+        "enum": ["2024-10", "2025-06"]
+      },
+      "ingestionKey": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "batchSize": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10000
+      },
+      "deliveryMode": {
+        "type": "string",
+        "enum": ["batch", "stream"]
+      },
+      "account": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+          },
+          "id": {
+            "type": "string",
+            "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+          }
+        },
+        "required": ["projectId", "id"]
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "androidKotlin": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "ios": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "iosSwift": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "web": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "unity": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "amp": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cloud": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "warehouse": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "reactnative": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "flutter": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cordova": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "shopify": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cloudSource": {
+            "type": "string",
+            "enum": ["cloud"]
+          }
+        }
       },
       "consentManagement": {
         "type": "object",
@@ -702,69 +810,7 @@
             }
           }
         }
-      },
-      "connectionMode": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "androidKotlin": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "ios": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "iosSwift": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "web": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "unity": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "amp": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "cloud": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "warehouse": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "reactnative": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "flutter": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "cordova": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "shopify": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "cloudSource": {
-            "type": "string",
-            "enum": ["cloud"]
-          }
-        }
       }
-    },
-    "additionalProperties": true
+    }
   }
 }

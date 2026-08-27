@@ -1,326 +1,100 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["accessToken", "apiVersion"],
     "type": "object",
+    "required": ["accessToken", "region", "projectId", "accountId", "workspaceKey", "deliveryMode"],
     "properties": {
-      "hubID": {
+      "accessToken": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "apiVersion": {
+      "region": {
         "type": "string",
-        "enum": ["newApi", "legacyApi"],
-        "default": "newApi"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "useNativeSDK": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "boolean"
-          }
-        }
-      },
-      "eventFilteringOption": {
+      "projectId": {
         "type": "string",
-        "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
-        "default": "disable"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "whitelistedEvents": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "eventName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
+      "endpoint": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "blacklistedEvents": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "eventName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
+      "accountId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
-      "oneTrustCookieCategories": {
+      "workspaceKey": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "batchSize": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10000
+      },
+      "deliveryMode": {
+        "type": "string",
+        "enum": ["batch", "stream"]
+      },
+      "connectionMode": {
         "type": "object",
         "properties": {
           "android": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "androidKotlin": {
+            "type": "string",
+            "enum": ["cloud"]
           },
           "ios": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "iosSwift": {
+            "type": "string",
+            "enum": ["cloud"]
           },
           "web": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
+            "type": "string",
+            "enum": ["cloud"]
           },
           "unity": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
+            "type": "string",
+            "enum": ["cloud"]
           },
           "amp": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
+            "type": "string",
+            "enum": ["cloud"]
           },
           "cloud": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
+            "type": "string",
+            "enum": ["cloud"]
           },
           "warehouse": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
+            "type": "string",
+            "enum": ["cloud"]
           },
           "reactnative": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
+            "type": "string",
+            "enum": ["cloud"]
           },
           "flutter": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
+            "type": "string",
+            "enum": ["cloud"]
           },
           "cordova": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
+            "type": "string",
+            "enum": ["cloud"]
           },
           "shopify": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          }
-        }
-      },
-      "ketchConsentPurposes": {
-        "type": "object",
-        "properties": {
-          "android": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
+            "type": "string",
+            "enum": ["cloud"]
           },
-          "ios": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "web": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "unity": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "amp": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "cloud": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "warehouse": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "reactnative": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "flutter": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "cordova": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "shopify": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
+          "cloudSource": {
+            "type": "string",
+            "enum": ["cloud"]
           }
         }
       },
@@ -376,7 +150,105 @@
               "uniqueItemProperties": "Only one consent management block can be configured per provider."
             }
           },
+          "androidKotlin": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            },
+            "uniqueItemProperties": ["provider"],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
+            }
+          },
           "ios": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ]
+            },
+            "uniqueItemProperties": ["provider"],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
+            }
+          },
+          "iosSwift": {
             "type": "array",
             "items": {
               "type": "object",
@@ -866,56 +738,7 @@
               "uniqueItemProperties": "Only one consent management block can be configured per provider."
             }
           },
-          "androidKotlin": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "string",
-                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
-                },
-                "consents": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "consent": {
-                        "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                      }
-                    }
-                  }
-                }
-              },
-              "allOf": [
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
-                    "required": ["provider"]
-                  },
-                  "then": {
-                    "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
-                    },
-                    "required": ["resolutionStrategy"]
-                  }
-                }
-              ]
-            },
-            "uniqueItemProperties": ["provider"],
-            "errorMessage": {
-              "uniqueItemProperties": "Only one consent management block can be configured per provider."
-            }
-          },
-          "iosSwift": {
+          "cloudSource": {
             "type": "array",
             "items": {
               "type": "object",
@@ -965,125 +788,7 @@
             }
           }
         }
-      },
-      "connectionMode": {
-        "type": "object",
-        "properties": {
-          "web": {
-            "type": "string",
-            "enum": ["cloud", "device"]
-          },
-          "android": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "androidKotlin": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "ios": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "iosSwift": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "unity": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "amp": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "reactnative": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "flutter": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "cordova": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "shopify": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "cloud": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
-          "warehouse": {
-            "type": "string",
-            "enum": ["cloud"]
-          }
-        }
-      },
-      "accessToken": {
-        "type": "string",
-        "pattern": "^(.{1,100})$"
       }
-    },
-    "allOf": [
-      {
-        "if": {
-          "properties": {
-            "apiVersion": {
-              "const": "newApi"
-            }
-          },
-          "required": ["apiVersion"]
-        },
-        "then": {
-          "properties": {
-            "lookupField": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
-            },
-            "doAssociation": {
-              "type": "boolean",
-              "default": false
-            },
-            "hubspotEvents": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "rsEventName": {
-                    "type": "string",
-                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                  },
-                  "hubspotEventName": {
-                    "type": "string",
-                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                  },
-                  "eventProperties": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "from": {
-                          "type": "string",
-                          "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                        },
-                        "to": {
-                          "type": "string",
-                          "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "required": ["lookupField"]
-        }
-      }
-    ]
+    }
   }
 }

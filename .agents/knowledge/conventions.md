@@ -113,3 +113,27 @@
 - Do not expose CleverTap Android Kotlin `oneTrustCookieCategories` or `ketchConsentPurposes` in `config.destConfig.androidKotlin` unless the Kotlin SDK explicitly supports or safely ignores those consent fields; SDK-5265 intentionally exposed only `useNativeSDK`, `connectionMode`, and `consentManagement`.
 - Treat Kotlin runtime release validation as an external acceptance gate for this config repository: this repo can publish declarative metadata, but actual device-mode availability depends on the Kotlin SDK runtime integration.
 - A complete CleverTap Android Kotlin device-mode release must include a new `CleverTapIntegration` in `rudder-sdk-kotlin` that mirrors the legacy `rudder-integration-clevertap-android` runtime behavior; config metadata enablement alone is not sufficient.
+
+## INT-7017 — ClickHouse JSON Paths Field Gate
+
+- ClickHouse `jsonPaths` UI exposure uses whole-field gating on the field's `preRequisites.featureFlags`, not the option-level `featureFlag` attribute; the option-level attribute is reserved for select options and should not be used for a whole `textInput` field.
+- The chosen Flagsmith key for ClickHouse native JSON columns/json paths UI exposure is `AMP_enable-clickhouse-json-columns`, matching the user-facing "JSON columns" terminology and the warehouse-style `AMP_enable-*` flag naming convention.
+- ClickHouse `jsonPaths` in `src/configurations/destinations/clickhouse/schema.json` should use a plain string pattern `.*`, not the generic env-var pattern `(^env[.].*)|.*`.
+- For ClickHouse destination validation coverage in `test/data/validation/destinations/clickhouse.json`, add a new fixture case for new config behavior instead of modifying an existing fixture.
+- ClickHouse `jsonPaths` UI examples and validation fixtures should use the single-path sample `testMap.nestedMap`, not the multi-path sample `testMap.nestedMap, testArray`.
+
+## INT-6707 — HubSpot Legacy API Key Compatibility
+
+- For HubSpot authorization deprecation, do not expose the `authorizationType` singleSelect in `src/configurations/destinations/hs/ui-config.json` when Private Apps is the only supported choice; supported configs should rely on the `accessToken` credential field instead of a one-option auth selector.
+- Do not keep the legacy API-key config as a visible UI field in integrations config. Compatibility for persisted `authorizationType: legacyApiKey` destinations may remain in schema/db metadata outside the visible UI, while runtime rejection of that legacy value is owned by transformer.
+- Keep HubSpot persisted legacy compatibility explicit when removing visible API-key auth: retaining schema enum/conditional validation, `db-config.json` default/secret metadata, and the legacy API Key field prerequisite can be intentional so existing saved destinations remain view/edit compatible until transformer rejects the legacy runtime path.
+- Do not invent non-selectable/deprecated `singleSelect` option metadata in this repo unless the renderer contract is verified.
+
+## INT-7014 — CustomerIO API Version Compatibility
+
+- CustomerIO `apiVersion` must remain optional in `src/configurations/destinations/customerio/schema.json` (not in top-level `required`), so configs saved without it stay valid. Enforce `userIdIdentifierType` only through the conditional branch where `apiVersion` is explicitly `v2`.
+- CustomerIO `apiVersion` defaults to `v1` in both `ui-config.json` and `schema.json`, keeping absent/undefined `apiVersion` equivalent to v1 for existing connections. Flipping the default to `v2` is deliberately deferred until after the config-be migration script has run: the validator uses ajv with `useDefaults: true` (`src/validator/index.ts`), so the default is _written into_ any config that omits `apiVersion`, and a `v2` default would silently upgrade every legacy connection the migration had not yet backfilled with an explicit `apiVersion: "v1"`. Such a connection would also validate as v2 without tripping the `allOf` guard, since the guard's `if` requires `apiVersion` to be present and an injected default does not satisfy it. Flip the default only once the migration has run and been verified.
+- To keep schema-generator checks aligned with that optional persisted contract, mark the CustomerIO API Version UI field `required: false` and gate it behind `connectionModes.cloud == true`; this avoids generator attempts to add `apiVersion` to top-level schema `required` while keeping the selector in the Connection settings flow.
+- Gate CustomerIO `userIdIdentifierType` UI visibility on both cloud mode and `apiVersion == v2`, because the v1/v2 selector controls cloud/router event-stream API behavior rather than device-mode SDK behavior.
+- Do not add CustomerIO cloud-only `apiVersion` or `userIdIdentifierType` to `src/configurations/destinations/customerio/db-config.json` `config.includeKeys`; they should be validated and exposed through schema/UI/default config without being included for device-mode consumers.
+- For the newer `userIdMapping` field name, keep the same cloud-only contract: `apiVersion` remains optional with `v1` defaults in schema/UI, `userIdMapping` is required only by the `apiVersion == v2` conditional, the UI fields are gated to cloud mode (with `userIdMapping` additionally gated on v2), and neither key belongs in `config.includeKeys` for device-mode consumers.
