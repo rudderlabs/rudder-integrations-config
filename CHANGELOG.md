@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.173.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.172.0...v1.173.0) (2026-08-27)
+
+
+### Features
+
+* add customerio api version config ([#2661](https://github.com/rudderlabs/rudder-config-schema/issues/2661)) ([386d096](https://github.com/rudderlabs/rudder-config-schema/commit/386d0960b90babcf9fd99a7a0afe6525a1721788))
+* expose ClickHouse JSON paths setting ([#2685](https://github.com/rudderlabs/rudder-config-schema/issues/2685)) ([de5e201](https://github.com/rudderlabs/rudder-config-schema/commit/de5e201dc46242c9f4fd4082dd6f41b2fdafa733))
+* **googleads:** restore dynamicRemarketing in schema (DEX-688) ([#2671](https://github.com/rudderlabs/rudder-config-schema/issues/2671)) ([4267376](https://github.com/rudderlabs/rudder-config-schema/commit/42673767eeacff1b7a7d2d2d23680574c9c66244))
+* **kafka:** declare multi-topic routing keys in schema (DEX-682) ([#2668](https://github.com/rudderlabs/rudder-config-schema/issues/2668)) ([31fdb51](https://github.com/rudderlabs/rudder-config-schema/commit/31fdb510d77a6c09bca8417718fd17c24a411907))
+* **mp:** restore the service account fields in schema (DEX-687) ([#2670](https://github.com/rudderlabs/rudder-config-schema/issues/2670)) ([815c46e](https://github.com/rudderlabs/rudder-config-schema/commit/815c46e9a10104cbdf1008f5e53db265e2c7d104))
+* **test_destination:** five majors exercising distinct breaking changes ([#2673](https://github.com/rudderlabs/rudder-config-schema/issues/2673)) ([6b30539](https://github.com/rudderlabs/rudder-config-schema/commit/6b30539f7a03b6976559aaf63be4f7aadb71c271))
+
+
+### Bug Fixes
+
+* remove legacy HubSpot API key auth option ([#2663](https://github.com/rudderlabs/rudder-config-schema/issues/2663)) ([97159a9](https://github.com/rudderlabs/rudder-config-schema/commit/97159a933df25ca7bbe0ce579c13154f36a87992))
+* restrict event name for blocking quantifier groups ([#2672](https://github.com/rudderlabs/rudder-config-schema/issues/2672)) ([68da76b](https://github.com/rudderlabs/rudder-config-schema/commit/68da76b1810b05845cf1dc6f65eaa8e4f91cdb23))
+
 ## [1.172.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.171.0...v1.172.0) (2026-08-19)
 
 
