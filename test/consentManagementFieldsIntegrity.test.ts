@@ -71,6 +71,7 @@ describe('Consent Management Fields Integrity tests', () => {
     'custom_audience',
     'iterable_audience',
     'braze_audience',
+    'reddit_audience',
   ];
 
   const destDir = path.resolve('src/configurations/destinations');

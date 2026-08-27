@@ -1,0 +1,51 @@
+{
+  "name": "REDDIT_AUDIENCE",
+  "displayName": "Reddit Audience",
+  "version": "1.0",
+  "config": {
+    "auth": {
+      "type": "OAuth",
+      "role": "reddit_audience"
+    },
+    "supportedAccountDefinitions": {
+      "rudderAccountId": ["DESTINATION_REDDIT_AUDIENCE_OAUTH"]
+    },
+    "syncBehaviours": ["mirror"],
+    "supportsVisualMapperV2": true,
+    "isAudienceSupported": true,
+    "transformAtV1": "router",
+    "supportedSourceTypes": ["warehouse"],
+    "supportedMessageTypes": {
+      "cloud": ["record"]
+    },
+    "supportedConnectionModes": {
+      "warehouse": ["cloud"]
+    },
+    "destConfig": {
+      "defaultConfig": ["rudderAccountId", "adAccountId"],
+      "warehouse": ["connectionMode"]
+    },
+    "secretKeys": []
+  },
+  "options": {
+    "isBeta": true,
+    "audienceActivation": {
+      "discovery": {
+        "operations": {
+          "listFields": "listFields",
+          "listAudiences": "listAudiences",
+          "setup": "setup"
+        },
+        "contextFields": ["adAccountId"]
+      },
+      "vdm": {
+        "configDefaults": {
+          "syncMode": "mirror",
+          "isHashRequired": "yes",
+          "createAudience": "no"
+        }
+      },
+      "mappingGuidance": "Reddit Custom Audiences accept exactly two identifier columns. Use these names verbatim as `to`; they are what get_audience_destination_schema returns in fields[].name.\n- EMAIL_SHA256 — the user's email address.\n- MAID_SHA256 — a mobile advertising ID (IDFA on iOS, AAID on Android). One column covers both.\n\nMap BOTH when you have them: Reddit matches a user if any column in the row matches, so a row carrying email and MAID together has a higher match probability than either alone.\n\nSend RAW warehouse values. The suffix names the hash the integration applies on send — it is NOT an instruction to pre-hash. The integration canonicalizes (email: lowercase, strip +alias, strip non-alphanumerics from the username) and SHA-256s to lowercase hex. Do NOT pre-hash unless you also turn hashing off.\n\nPhone numbers, user IDs and IP addresses are NOT supported by this endpoint — do not map them. (Reddit's Conversions API accepts them; Custom Audiences does not.)\n\nNote: an audience needs at least 1000 matched users before Reddit marks it VALID, and processing can take up to 4 hours."
+    }
+  }
+}

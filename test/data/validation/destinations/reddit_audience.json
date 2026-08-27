@@ -1,0 +1,45 @@
+[
+  {
+    "testTitle": "Valid config with rudderAccountId and adAccountId",
+    "config": {
+      "rudderAccountId": "acc123",
+      "adAccountId": "a2_abcdefg"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid config with connectionMode",
+    "config": {
+      "rudderAccountId": "acc123",
+      "adAccountId": "a2_abcdefg",
+      "connectionMode": {
+        "warehouse": "cloud"
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Invalid config \u2014 missing rudderAccountId",
+    "config": {
+      "adAccountId": "a2_abcdefg"
+    },
+    "result": false,
+    "err": [" must have required property 'rudderAccountId'"]
+  },
+  {
+    "testTitle": "Invalid config \u2014 missing adAccountId",
+    "config": {
+      "rudderAccountId": "acc123"
+    },
+    "result": false,
+    "err": [" must have required property 'adAccountId'"]
+  },
+  {
+    "testTitle": "Valid config \u2014 ad account id formats are not constrained (mirrors the shipped reddit destination)",
+    "config": {
+      "rudderAccountId": "acc123",
+      "adAccountId": "ads_V08jv8UE-etZAAep"
+    },
+    "result": true
+  }
+]
