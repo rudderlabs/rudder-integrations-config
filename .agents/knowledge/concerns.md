@@ -83,3 +83,8 @@
 
 - After removing `legacyApiKey` from HubSpot `ui-config.json` Authorization Type options while keeping it in `schema.json` for persisted-config compatibility, `python3 scripts/schemaGenerator.py destination -name hs` succeeds but recommends removing `legacyApiKey` from the `authorizationType` enum. That diff is intentional for INT-6707 and should not be applied unless legacy persisted HubSpot configs no longer need schema-valid rendering.
 - The same HubSpot schema-generator run can also emit baseline/noisy output for `redirect`, `additionalProperties: false`, and consent-management `provider` requirements; distinguish those pre-existing generator recommendations from the scoped legacy API-key UI removal.
+
+## DEX-725 — Connection Mode Destinations Schema Generator Baseline Drift
+
+- Running `scripts/schemaGenerator.py destination -name <dest>` for `bqstream`, `confluent_cloud`, or `googlesheets` can exit 0 while still printing pre-existing recommendations to set `additionalProperties` to false and add `required: ["provider"]` under generated `consentManagement.<source>.items` schemas for all source types.
+- Treat those generator messages as baseline drift unrelated to connection-mode metadata when the scoped change is only about `connectionMode`, which is already represented in each supported `destConfig.<sourceType>` array and schema source property for these destinations.
