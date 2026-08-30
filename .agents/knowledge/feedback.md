@@ -27,3 +27,8 @@
 - Do not mention internal implementation terms such as record event or VDM v2, and do not imply this setting affects record-event API behavior.
 - CustomerIO `apiVersion` and `userIdIdentifierType` dashboard copy should scope these settings to cloud-mode delivery and avoid implying they affect Customer.io SDK/device-mode behavior.
 - For the newer `userIdMapping` field name, keep the same customer-facing copy rule: describe how RudderStack `userId` is sent to Customer.io when API Version is v2, avoid internal terms such as record event or VDM v2, and scope both `apiVersion` and `userIdMapping` to cloud-mode delivery rather than SDK/device-mode behavior.
+
+## DEX-518 — Qualtrics CLI Onboarding Scope
+
+- User direction for Qualtrics onboarding was to make no changes in `rudder-integrations-config` or Terraform; the destination metadata in this repository should be treated as read-only source/reference material for this task.
+- Actual Qualtrics onboarding work belongs in the CLI implementation repository using its `onboard-destination` workflow/skill, not in the integrations-config repository.
