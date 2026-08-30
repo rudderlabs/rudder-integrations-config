@@ -95,3 +95,8 @@
 - CleverTap Android Kotlin device-mode metadata is authored in the existing CleverTap destination triplet under `src/configurations/destinations/clevertap/` rather than as a separate integration directory.
 - For SDK-5265, `db-config.json` exposes Android Kotlin with `supportedConnectionModes.androidKotlin` as `['cloud','device']`, `supportedMessageTypes.device.androidKotlin` as `['identify','track','screen']`, and `config.destConfig.androidKotlin` limited to `['useNativeSDK','connectionMode','consentManagement']`.
 - `schema.json` owns the Android Kotlin `useNativeSDK` boolean shape for CleverTap, while credential include/exclude/secret handling remains unchanged.
+
+## INT-7050 — Sprig Documentation Source Boundary
+
+- Sprig destination documentation work belongs in `rudder-transformer` under `src/cdk/v2/destinations/sprig/`; do not create placeholder documentation in `rudder-integrations-config` for that task.
+- For Sprig docs work, this repository is read-only configuration evidence via `src/configurations/destinations/sprig/db-config.json`, `src/configurations/destinations/sprig/ui-config.json`, and `src/configurations/destinations/sprig/schema.json`.
