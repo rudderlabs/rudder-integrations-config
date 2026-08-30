@@ -95,3 +95,8 @@
 - CleverTap Android Kotlin device-mode metadata is authored in the existing CleverTap destination triplet under `src/configurations/destinations/clevertap/` rather than as a separate integration directory.
 - For SDK-5265, `db-config.json` exposes Android Kotlin with `supportedConnectionModes.androidKotlin` as `['cloud','device']`, `supportedMessageTypes.device.androidKotlin` as `['identify','track','screen']`, and `config.destConfig.androidKotlin` limited to `['useNativeSDK','connectionMode','consentManagement']`.
 - `schema.json` owns the Android Kotlin `useNativeSDK` boolean shape for CleverTap, while credential include/exclude/secret handling remains unchanged.
+
+## RUD-3089 — Docs Destination Catalog Boundary
+
+- `rudder-integrations-config` is the read-only upstream catalog for docs destination-list generation; implementation of `destination_list.yml` generation belongs in `rudder-hugo`, which consumes copied destination `db-config.json` files via its `external-config` submodule flow.
+- The downstream docs generation contract should treat destination `db-config.json` as authoritative for `displayName`, `config.isAudienceSupported`, and `config.supportedSourceTypes` when deriving docs catalog fields.
