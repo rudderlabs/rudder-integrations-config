@@ -95,3 +95,8 @@
 - CleverTap Android Kotlin device-mode metadata is authored in the existing CleverTap destination triplet under `src/configurations/destinations/clevertap/` rather than as a separate integration directory.
 - For SDK-5265, `db-config.json` exposes Android Kotlin with `supportedConnectionModes.androidKotlin` as `['cloud','device']`, `supportedMessageTypes.device.androidKotlin` as `['identify','track','screen']`, and `config.destConfig.androidKotlin` limited to `['useNativeSDK','connectionMode','consentManagement']`.
 - `schema.json` owns the Android Kotlin `useNativeSDK` boolean shape for CleverTap, while credential include/exclude/secret handling remains unchanged.
+
+## DEX-508 — Intercom Destination Selection Boundary
+
+- This repo has two Intercom destination definitions: legacy `src/configurations/destinations/intercom/` with display key `INTERCOM`, API key/appId credentials, cloud+device support, cloud messages `identify`/`track`/`group`, web device messages `identify`/`track`/`page`, mobile device messages `identify`/`track`, `apiServer` values `standard`/`eu`/`au`, and `apiVersion` values `v1`/`v2`; and account-based `src/configurations/destinations/intercom_v2/` with display key `INTERCOM_V2`, OAuth account-management auth role `intercom`, cloud-only support, beta/hidden gate `AMP_intercom_v2`, cloud messages `identify`/`track`/`group`/`record`, required `rudderAccountId`, and `apiServer` values US/Europe/Australia defaulting to US.
+- For modern CLI onboarding using slug `intercom`, confirm whether the CLI should target the account-based `INTERCOM_V2` definition before falling back to the legacy `INTERCOM` definition.
