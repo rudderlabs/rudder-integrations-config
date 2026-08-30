@@ -1,0 +1,183 @@
+{
+  "uiConfig": [
+    {
+      "title": "Connection Credentials",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Endpoint",
+          "labelNote": "MaxCompute endpoint URL",
+          "value": "host",
+          "regex": "^(https?:\\/\\/.{1,200})$",
+          "regexErrorMessage": "Invalid Endpoint",
+          "placeholder": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+          "required": true
+        },
+        {
+          "type": "textInput",
+          "label": "Project",
+          "value": "project",
+          "regex": "^(.{1,100})$",
+          "regexErrorMessage": "Invalid Project",
+          "placeholder": "my_maxcompute_project",
+          "required": true
+        },
+        {
+          "type": "textInput",
+          "label": "Access Key ID",
+          "value": "accessKeyID",
+          "regex": "^(.{1,200})$",
+          "regexErrorMessage": "Invalid Access Key ID",
+          "placeholder": "LTAI...",
+          "required": true,
+          "secret": true
+        },
+        {
+          "type": "textInput",
+          "label": "Access Key Secret",
+          "value": "accessKey",
+          "regex": "^(.{1,200})$",
+          "regexErrorMessage": "Invalid Access Key Secret",
+          "placeholder": "********",
+          "required": true,
+          "secret": true
+        },
+        {
+          "type": "textareaInput",
+          "label": "STS Token (Optional)",
+          "value": "stsToken",
+          "regex": "^(.*)$",
+          "required": false,
+          "secret": true
+        },
+        {
+          "type": "textInput",
+          "label": "Tunnel Endpoint (Optional)",
+          "value": "tunnelEndpoint",
+          "regex": "^(|https?:\\/\\/.{1,200})$",
+          "regexErrorMessage": "Invalid Tunnel Endpoint",
+          "placeholder": "https://dt.cn-hangzhou.maxcompute.aliyun.com"
+        },
+        {
+          "type": "textInput",
+          "label": "Namespace",
+          "labelNote": "Prefix used for generated tables",
+          "value": "namespace",
+          "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+          "regexErrorMessage": "Invalid Namespace",
+          "required": false,
+          "placeholder": "e.g: source_name",
+          "immutable": true
+        },
+        {
+          "type": "checkbox",
+          "label": "Use RudderStack managed object storage",
+          "value": "useRudderStorage",
+          "default": true,
+          "footerNote": "Note: Only available for RudderStack managed data planes"
+        },
+        {
+          "type": "checkbox",
+          "label": "Enable for cleanup of object storage files (deletion) after successful sync",
+          "value": "cleanupObjectStorageFiles",
+          "default": false
+        },
+        {
+          "type": "singleSelect",
+          "label": "Sync Frequency",
+          "value": "syncFrequency",
+          "options": [
+            {
+              "name": "Every 5 minutes",
+              "value": "5",
+              "featureFlag": "HIGH_GRANULARITY_WH_SYNC"
+            },
+            {
+              "name": "Every 15 minutes",
+              "value": "15",
+              "featureFlag": "HIGH_GRANULARITY_WH_SYNC"
+            },
+            {
+              "name": "Every 30 minutes",
+              "value": "30"
+            },
+            {
+              "name": "Every 1 hour",
+              "value": "60"
+            },
+            {
+              "name": "Every 3 hours",
+              "value": "180"
+            },
+            {
+              "name": "Every 6 hours",
+              "value": "360"
+            },
+            {
+              "name": "Every 12 hours",
+              "value": "720"
+            },
+            {
+              "name": "Every 24 hours",
+              "value": "1440"
+            }
+          ],
+          "defaultOption": {
+            "name": "Every 3 hours",
+            "value": "180"
+          },
+          "required": false
+        },
+        {
+          "type": "timePicker",
+          "label": "Sync Starting At (Optional)",
+          "value": "syncStartAt",
+          "options": {
+            "omitSeconds": true,
+            "minuteStep": 15
+          },
+          "required": false,
+          "footerNote": "Note: Please specify time in UTC"
+        },
+        {
+          "type": "timeRangePicker",
+          "label": "Exclude window (Optional)",
+          "value": "excludeWindow",
+          "startTime": {
+            "label": "start time",
+            "value": "excludeWindowStartTime"
+          },
+          "endTime": {
+            "label": "end time",
+            "value": "excludeWindowEndTime"
+          },
+          "options": {
+            "omitSeconds": true,
+            "minuteStep": 1
+          },
+          "required": false,
+          "footerNote": "Note: Please specify time in UTC"
+        }
+      ]
+    },
+    {
+      "title": "Advanced Settings",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Skip User Table",
+          "value": "skipUsersTable",
+          "footerNote": "Disable the creation of a Users table",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "label": "Skip Tracks Table",
+          "value": "skipTracksTable",
+          "footerNote": "Enable this toggle to skip sending the event data to the tracks table",
+          "default": false
+        }
+      ]
+    }
+  ]
+}
