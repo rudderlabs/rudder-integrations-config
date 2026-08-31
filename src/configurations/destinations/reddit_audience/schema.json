@@ -1,0 +1,26 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["rudderAccountId"],
+    "properties": {
+      "rudderAccountId": {
+        "type": "string",
+        "pattern": "^.{1,100}$"
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "warehouse": {
+            "type": "string",
+            "enum": ["cloud"]
+          }
+        }
+      },
+      "adAccountId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+      }
+    }
+  }
+}

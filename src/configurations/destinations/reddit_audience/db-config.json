@@ -1,0 +1,58 @@
+{
+  "name": "REDDIT_AUDIENCE",
+  "displayName": "Reddit Audience",
+  "version": "1.0",
+  "config": {
+    "auth": {
+      "type": "OAuth",
+      "role": "reddit_audience",
+      "rudderScopes": ["delivery"]
+    },
+    "supportedAccountDefinitions": {
+      "rudderAccountId": ["DESTINATION_REDDIT_AUDIENCE_OAUTH"]
+    },
+    "syncBehaviours": ["mirror"],
+    "supportsVisualMapperV2": true,
+    "isAudienceSupported": true,
+    "transformAtV1": "router",
+    "supportedSourceTypes": ["warehouse"],
+    "supportedMessageTypes": {
+      "cloud": ["record"]
+    },
+    "supportedConnectionModes": {
+      "warehouse": ["cloud"]
+    },
+    "destConfig": {
+      "defaultConfig": ["rudderAccountId", "adAccountId"],
+      "warehouse": ["connectionMode"]
+    },
+    "secretKeys": [],
+    "saveDestinationResponse": true
+  },
+  "options": {
+    "isBeta": true,
+    "hidden": {
+      "gate": {
+        "flags": [{ "name": "AMP_enable-data-graph-audiences", "value": false }]
+      }
+    },
+    "audienceActivation": {
+      "discovery": {
+        "operations": {
+          "listFields": "listFields",
+          "listAudiences": "listAudiences",
+          "setup": "setup"
+        },
+        "contextFields": ["adAccountId"]
+      },
+      "vdm": {
+        "configDefaults": {
+          "syncMode": "mirror",
+          "isHashRequired": true,
+          "createAudience": "no"
+        }
+      },
+      "mappingGuidance": "Reddit Custom Audiences accept exactly two identifier columns. Use these names verbatim as `to`; they are what get_audience_destination_schema returns in fields[].name.\n- EMAIL_SHA256 \u2014 the user's email address.\n- MAID_SHA256 \u2014 a mobile advertising ID (IDFA on iOS, AAID on Android). One column covers both.\n\nMap BOTH when you have them: Reddit matches a user if any column in the row matches, so a row carrying email and MAID together has a higher match probability than either alone.\n\nSend RAW warehouse values. The suffix names the hash the integration applies on send \u2014 it is NOT an instruction to pre-hash. The integration canonicalizes (email: lowercase, strip +alias, strip non-alphanumerics from the username) and SHA-256s to lowercase hex. Do NOT pre-hash unless you also turn hashing off.\n\nPhone numbers, user IDs and IP addresses are NOT supported by this endpoint \u2014 do not map them. (Reddit's Conversions API accepts them; Custom Audiences does not.)\n\nNote: an audience needs at least 1000 matched users before Reddit marks it VALID, and processing can take up to 4 hours.\n\nAD ACCOUNT: this destination's `adAccountId` (Reddit's `a2_`-prefixed API id) is OPTIONAL on the destination and is normally chosen in the sync wizard's picker. The agentic surface has no picker and cannot discover it \u2014 `listAdAccounts` is not declarable in discovery.operations \u2014 so an agent MUST have `adAccountId` set on the destination config before calling listAudiences or setup, or those calls fail. Ask the user for it rather than guessing: the id shown in Reddit Ads Manager is a DIFFERENT `ads_`-prefixed id that the API rejects with 404."
+    }
+  }
+}
