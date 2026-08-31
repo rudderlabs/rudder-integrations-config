@@ -61,3 +61,8 @@
 - Amplitude `ui-config.json` gates the legacy "Save Referrer, URL Params, GCLID only once per session" field with a `conditions.expression` built from an `operator` (`AND`/`OR`) plus an `operands` array — each operand is `{ type: "configuration", key, value }`. There is no top-level `expression.type`; the `type: "configuration"` lives on the operands. This field ANDs `connectionMode.web == "device"` with `sdkVersion.web == 1`.
 - Reuse that operand pattern (wrapped in the required `AND`/`OR` expression structure) for other Amplitude Browser SDK settings that need SDK-version-specific visibility.
 - When extending an existing Amplitude config object to web, prefer adding a `web` boolean property to the existing object in `schema.json` and adding the same key to `db-config.json` `config.destConfig.web`, rather than introducing a parallel key.
+
+## INT-7065 — OpenAI Ads Mapping Validation
+
+- For OpenAI Ads `eventMapping`, enforce duplicate `from` rejection in the destination `schema.json` with AJV's registered `uniqueItemProperties: ["from"]` keyword rather than custom validator code or full-object `uniqueItems`.
+- The duplicate check is exact-value uniqueness only; normalized trim/lowercase duplicate handling belongs in a separate custom rule only if a future product contract explicitly requires it.

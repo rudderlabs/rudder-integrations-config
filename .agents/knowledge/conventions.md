@@ -137,3 +137,9 @@
 - Gate CustomerIO `userIdIdentifierType` UI visibility on both cloud mode and `apiVersion == v2`, because the v1/v2 selector controls cloud/router event-stream API behavior rather than device-mode SDK behavior.
 - Do not add CustomerIO cloud-only `apiVersion` or `userIdIdentifierType` to `src/configurations/destinations/customerio/db-config.json` `config.includeKeys`; they should be validated and exposed through schema/UI/default config without being included for device-mode consumers.
 - For the newer `userIdMapping` field name, keep the same cloud-only contract: `apiVersion` remains optional with `v1` defaults in schema/UI, `userIdMapping` is required only by the `apiVersion == v2` conditional, the UI fields are gated to cloud mode (with `userIdMapping` additionally gated on v2), and neither key belongs in `config.includeKeys` for device-mode consumers.
+
+## INT-7065 — OpenAI Ads Destination Definition Scope
+
+- OpenAI Ads is authored as a destination-level config triplet under `src/configurations/destinations/openai_ads/` with exact persisted field names `apiKey`, `conversionIdentifier`, `defaultCurrency`, `defaultActionSource`, and `eventMapping` rows containing `from`/`to`/`conversionIdentifier`/`customEventName`.
+- For INT-7065, account-framework files and account-level credential fields such as `pixelId` were intentionally out of scope despite conflicting spec history; future OpenAI Ads config work should not add account definitions unless the product contract is explicitly revised.
+- Do not add an OpenAI Ads `oppref` UI field or a pre-hashed-data toggle in this repository; those are outside the destination definition contract captured for this task.

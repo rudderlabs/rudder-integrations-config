@@ -69,6 +69,7 @@ def get_options_list_for_enum(field):
         "default" not in field
         and "defaultOption" not in field
         and field.get("required", False) == False
+        and field.get("allowEmptyOption", True) != False
     ):
         options_list.append("")
     return options_list
@@ -557,8 +558,9 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    uniqueItemPropertiesErrorMessage = (
-        "Only one consent management block can be configured per provider."
+    uniqueItemPropertiesErrorMessage = field.get(
+        "uniqueRowFieldsErrorMessage",
+        "Only one consent management block can be configured per provider.",
     )
     dynamicCustomFormObj = {}
     dynamicCustomFormObj["type"] = FieldTypeEnum.ARRAY.value

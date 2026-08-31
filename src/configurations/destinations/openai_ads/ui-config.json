@@ -1,0 +1,271 @@
+{
+  "uiConfig": [
+    {
+      "title": "Connection Settings",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "API Key",
+          "value": "apiKey",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,500})$",
+          "regexErrorMessage": "Invalid API Key",
+          "required": true,
+          "placeholder": "e.g: sk-proj-...",
+          "secret": true,
+          "footerNote": "Enter your OpenAI Ads API key."
+        },
+        {
+          "type": "textInput",
+          "label": "Conversion Identifier",
+          "value": "conversionIdentifier",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+          "regexErrorMessage": "Invalid Conversion Identifier",
+          "required": true,
+          "placeholder": "e.g: properties.orderId",
+          "footerNote": "Used as the default conversion identifier when a mapped event does not override it."
+        },
+        {
+          "type": "textInput",
+          "label": "Default Currency",
+          "value": "defaultCurrency",
+          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([A-Z]{3})$",
+          "regexErrorMessage": "Default Currency must be a three-letter uppercase ISO-4217 code.",
+          "required": false,
+          "placeholder": "e.g: USD"
+        },
+        {
+          "type": "singleSelect",
+          "label": "Default Action Source",
+          "value": "defaultActionSource",
+          "required": false,
+          "allowEmptyOption": false,
+          "options": [
+            {
+              "name": "Website",
+              "value": "website"
+            },
+            {
+              "name": "App",
+              "value": "app"
+            },
+            {
+              "name": "Offline",
+              "value": "offline"
+            },
+            {
+              "name": "Physical Store",
+              "value": "physical_store"
+            },
+            {
+              "name": "Phone Call",
+              "value": "phone_call"
+            },
+            {
+              "name": "Email",
+              "value": "email"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Event Mapping",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "eventMapping",
+          "label": "Map RudderStack events to OpenAI Ads events",
+          "required": true,
+          "footerNote": "Map each source event to an OpenAI Ads standard event, or choose Custom and provide a custom event name.",
+          "customFields": [
+            {
+              "type": "textInput",
+              "label": "RudderStack Event",
+              "value": "from",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+              "regexErrorMessage": "Invalid RudderStack Event",
+              "required": true,
+              "placeholder": "e.g: Order Completed"
+            },
+            {
+              "type": "singleSelect",
+              "label": "OpenAI Ads Event",
+              "value": "to",
+              "required": true,
+              "options": [
+                {
+                  "name": "App Installed",
+                  "value": "app_installed"
+                },
+                {
+                  "name": "App Opened",
+                  "value": "app_opened"
+                },
+                {
+                  "name": "Appointment Scheduled",
+                  "value": "appointment_scheduled"
+                },
+                {
+                  "name": "Checkout Started",
+                  "value": "checkout_started"
+                },
+                {
+                  "name": "Contents Viewed",
+                  "value": "contents_viewed"
+                },
+                {
+                  "name": "Items Added",
+                  "value": "items_added"
+                },
+                {
+                  "name": "Lead Created",
+                  "value": "lead_created"
+                },
+                {
+                  "name": "Order Created",
+                  "value": "order_created"
+                },
+                {
+                  "name": "Page Viewed",
+                  "value": "page_viewed"
+                },
+                {
+                  "name": "Registration Completed",
+                  "value": "registration_completed"
+                },
+                {
+                  "name": "Subscription Created",
+                  "value": "subscription_created"
+                },
+                {
+                  "name": "Trial Started",
+                  "value": "trial_started"
+                },
+                {
+                  "name": "Custom",
+                  "value": "custom"
+                }
+              ]
+            },
+            {
+              "type": "textInput",
+              "label": "Conversion Identifier",
+              "value": "conversionIdentifier",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+              "regexErrorMessage": "Invalid Conversion Identifier",
+              "required": false,
+              "placeholder": "e.g: properties.orderId"
+            },
+            {
+              "type": "textInput",
+              "label": "Custom Event Name",
+              "value": "customEventName",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+              "regexErrorMessage": "Invalid Custom Event Name",
+              "required": true,
+              "placeholder": "e.g: qualified_lead",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "to",
+                    "value": "custom"
+                  }
+                ]
+              }
+            }
+          ],
+          "uniqueRowFields": ["from"],
+          "uniqueRowFieldsErrorMessage": "Each OpenAI Ads event mapping must have a unique RudderStack Event value."
+        }
+      ]
+    },
+    {
+      "title": "Native SDK",
+      "fields": [
+        {
+          "type": "checkbox",
+          "label": "Use device-mode to send events",
+          "value": "useNativeSDK",
+          "default": false
+        }
+      ]
+    },
+    {
+      "title": "Consent Settings",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "value": "consentManagement",
+          "label": "Consent management settings",
+          "footerNote": "We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "customFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "value": "provider",
+              "options": [
+                {
+                  "name": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "name": "iubenda",
+                  "value": "iubenda"
+                },
+                {
+                  "name": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "name": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "value": "resolutionStrategy",
+              "options": [
+                {
+                  "name": "AND",
+                  "value": "and"
+                },
+                {
+                  "name": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "dynamicCustomForm",
+              "value": "consents",
+              "label": "Enter consent category IDs",
+              "customFields": [
+                {
+                  "type": "textInput",
+                  "placeholder": "Marketing",
+                  "value": "consent",
+                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                  "required": false
+                }
+              ]
+            }
+          ],
+          "uniqueRowFields": ["provider"]
+        }
+      ]
+    }
+  ]
+}
