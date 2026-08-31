@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.174.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.173.0...v1.174.0) (2026-08-31)
+
+
+### Features
+
+* **customerio:** enable visual mapper v2 ([#2692](https://github.com/rudderlabs/rudder-config-schema/issues/2692)) ([97abc93](https://github.com/rudderlabs/rudder-config-schema/commit/97abc932dcc6a7988f71002a18345f3d9e3eaf90))
+* declare connectionMode in schema for confluent_cloud, bqstream and googlesheets (DEX-724) ([#2695](https://github.com/rudderlabs/rudder-config-schema/issues/2695)) ([b9cdb1d](https://github.com/rudderlabs/rudder-config-schema/commit/b9cdb1dd0fd3da7bc5eeeb7f940def353bd7cc4e))
+* **reddit_audience:** add Reddit Audience destination and OAuth account definition ([#2694](https://github.com/rudderlabs/rudder-config-schema/issues/2694)) ([c3f6cfe](https://github.com/rudderlabs/rudder-config-schema/commit/c3f6cfe1f20a7ad3b74e6d322bf99b7bddb62c57))
+
 ## [1.173.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.172.0...v1.173.0) (2026-08-27)
 
 
