@@ -1,0 +1,41 @@
+[
+  {
+    "testTitle": "Valid config with rudderAccountId",
+    "config": {
+      "rudderAccountId": "acc123"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid config with connectionMode",
+    "config": {
+      "rudderAccountId": "acc123",
+      "connectionMode": {
+        "warehouse": "cloud"
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid config \u2014 adAccountId left blank, which is the documented 'pick it in the sync wizard' path",
+    "config": {
+      "rudderAccountId": "acc123",
+      "adAccountId": ""
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid config \u2014 adAccountId as a templated value, which the schema permits",
+    "config": {
+      "rudderAccountId": "acc123",
+      "adAccountId": "{{ workspace.redditAdAccount || \"a2_fallback\" }}"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Invalid config \u2014 missing rudderAccountId",
+    "config": {},
+    "result": false,
+    "err": [" must have required property 'rudderAccountId'"]
+  }
+]
