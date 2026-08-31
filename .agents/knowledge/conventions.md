@@ -95,6 +95,12 @@
 
 - For destination config validation changes, prefer adding or updating the destination's JSON fixture under `test/data/validation/destinations/<destination>.json` instead of adding bespoke assertions to `test/validation.test.ts` when the existing fixture-driven destination validation loop already covers the behavior.
 
+## INT-6880 — GA RETL Record Destination Source
+
+- For GA RETL Record enablement, treat root `src/configurations/destinations/*/db-config.json` destination definitions as the source of truth: destinations that support mirror-mode RETL should advertise `record` in `config.supportedMessageTypes.cloud` so rudder-sources can rely on metadata instead of the `RSOURCES_MIRRORMODENEWEVENT_SUPPORTEDDESTINATIONS` environment allowlist.
+- In repo-only contexts without an external product/Linear/env allowlist, classify the concrete GA mirror-mode set from checked-in destination metadata: include definitions whose `config.syncBehaviours` contains `mirror` and that are not hidden or beta (`options.hidden`/`options.isBeta` absent), and do not infer GA visibility changes from adding record support.
+- Under that INT-6880 classification, the GA mirror destinations that needed `record` added to `config.supportedMessageTypes.cloud` were `bingads_audience`, `criteo_audience`, and `snapchat_custom_audience`; beta mirror destinations such as `launchdarkly_audience` and non-mirror audience-only definitions such as `yahoo_dsp` were intentionally excluded.
+
 ## INT-6916 — Warehouse Sync Granularity Flag
 
 - Warehouse destination UI sync-frequency options for high-granularity intervals should use the existing Flagsmith flag `AMP_enable-high-granularity-wh-syncs`; the 10-minute option follows the same flag convention as the existing 5-minute and 15-minute options across the warehouse destination `ui-config.json` files unless product explicitly supplies a different flag.

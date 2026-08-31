@@ -337,6 +337,32 @@ describe('Destination Definition validation tests', () => {
     });
   });
 
+  it('GA mirror destinations declare record message support', async () => {
+    const missingRecordDestinations: string[] = [];
+
+    await Promise.all(
+      dests.map(async (dest) => {
+        const destDefConfig = await getDestinationDefinitionConfig(dest);
+        const options = destDefConfig.options ?? {};
+        const isGa = options.isBeta !== true && !options.hidden;
+        const syncBehaviours = destDefConfig.config?.syncBehaviours ?? [];
+        const supportedMessageTypes = destDefConfig.config?.supportedMessageTypes;
+        let cloudMessageTypes: string[] = [];
+        if (Array.isArray(supportedMessageTypes)) {
+          cloudMessageTypes = supportedMessageTypes;
+        } else if (Array.isArray(supportedMessageTypes?.cloud)) {
+          cloudMessageTypes = supportedMessageTypes.cloud;
+        }
+
+        if (isGa && syncBehaviours.includes('mirror') && !cloudMessageTypes.includes('record')) {
+          missingRecordDestinations.push(dest);
+        }
+      }),
+    );
+
+    expect(missingRecordDestinations.sort()).toEqual([]);
+  });
+
   const malformedDestDefConfigs = [
     {
       description: 'missing "name" and "displayName" properties',
