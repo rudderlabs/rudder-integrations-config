@@ -137,3 +137,8 @@
 - Gate CustomerIO `userIdIdentifierType` UI visibility on both cloud mode and `apiVersion == v2`, because the v1/v2 selector controls cloud/router event-stream API behavior rather than device-mode SDK behavior.
 - Do not add CustomerIO cloud-only `apiVersion` or `userIdIdentifierType` to `src/configurations/destinations/customerio/db-config.json` `config.includeKeys`; they should be validated and exposed through schema/UI/default config without being included for device-mode consumers.
 - For the newer `userIdMapping` field name, keep the same cloud-only contract: `apiVersion` remains optional with `v1` defaults in schema/UI, `userIdMapping` is required only by the `apiVersion == v2` conditional, the UI fields are gated to cloud mode (with `userIdMapping` additionally gated on v2), and neither key belongs in `config.includeKeys` for device-mode consumers.
+
+## DEX-730 — Destination Definition Annotation Discipline
+
+- Destination `db-config.json` files are strict schema-validated definitions; do not add arbitrary internal comment/annotation keys unless the destination meta-schema and downstream backend contract explicitly support them.
+- For Customer.io Audience, a requested non-user-facing TODO to move `src/configurations/destinations/customerio_audience/` to verified destinations when warehouse sources are supported should not be implemented as an unsupported JSON key or dashboard-visible UI note.

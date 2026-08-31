@@ -83,3 +83,9 @@
 
 - After removing `legacyApiKey` from HubSpot `ui-config.json` Authorization Type options while keeping it in `schema.json` for persisted-config compatibility, `python3 scripts/schemaGenerator.py destination -name hs` succeeds but recommends removing `legacyApiKey` from the `authorizationType` enum. That diff is intentional for INT-6707 and should not be applied unless legacy persisted HubSpot configs no longer need schema-valid rendering.
 - The same HubSpot schema-generator run can also emit baseline/noisy output for `redirect`, `additionalProperties: false`, and consent-management `provider` requirements; distinguish those pre-existing generator recommendations from the scoped legacy API-key UI removal.
+
+## DEX-730 — HTTP Webhook Schema Generator Baseline Drift
+
+- Running `scripts/run-schema-validation.sh src/configurations/destinations/http/ui-config.json` during DEX-730 failed on the HTTP Webhook HEAD baseline before changing `whitelistedEvents`/`blacklistedEvents` from `tagInput` to `dynamicCustomForm`.
+- The HTTP schema generator baseline warning comes from `scripts/schemaGenerator.py destination -name http`: it expects deleting `required` from every `consentManagement` dynamic-custom-form source item, prints the generic `additionalProperties: false` recommendation, and logs `No schema generator function found for field: redirect`.
+- Treat those warnings as pre-existing HTTP schema-generator drift, not as fallout from scoped whitelist/blacklist dynamic form support changes.
