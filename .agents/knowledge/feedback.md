@@ -27,3 +27,8 @@
 - Do not mention internal implementation terms such as record event or VDM v2, and do not imply this setting affects record-event API behavior.
 - CustomerIO `apiVersion` and `userIdIdentifierType` dashboard copy should scope these settings to cloud-mode delivery and avoid implying they affect Customer.io SDK/device-mode behavior.
 - For the newer `userIdMapping` field name, keep the same customer-facing copy rule: describe how RudderStack `userId` is sent to Customer.io when API Version is v2, avoid internal terms such as record event or VDM v2, and scope both `apiVersion` and `userIdMapping` to cloud-mode delivery rather than SDK/device-mode behavior.
+
+## INT-7065 — OpenAI Ads Spec Drift Correction
+
+- Reviewer guidance corrected earlier OpenAI Ads ticket drift against the merged spec: do not add destination-level `conversionIdentifier` or `deduplicationKey` fields.
+- OpenAI Ads mapping rows should use `deduplicationKey` rather than `conversionIdentifier`, and `defaultActionSource` options should be `web`, `mobile_app`, `offline`, `physical_store`, `phone_call`, `email`, and `other`.
