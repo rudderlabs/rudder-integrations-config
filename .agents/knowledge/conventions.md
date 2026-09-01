@@ -140,6 +140,7 @@
 
 ## INT-7065 — OpenAI Ads Destination Definition Scope
 
-- OpenAI Ads is authored as a destination-level config triplet under `src/configurations/destinations/openai_ads/` with exact persisted field names `apiKey`, `conversionIdentifier`, `defaultCurrency`, `defaultActionSource`, and `eventMapping` rows containing `from`/`to`/`conversionIdentifier`/`customEventName`.
+- OpenAI Ads is authored as a destination-level config triplet under `src/configurations/destinations/openai_ads/` with persisted destination field names `apiKey`, `defaultCurrency`, `defaultActionSource`, and `eventMapping`; there is no destination-level `conversionIdentifier` or `deduplicationKey`.
+- OpenAI Ads `eventMapping` rows contain `from`/`to`/`deduplicationKey`/`customEventName`; the optional row-level `deduplicationKey` is a plain dot path used to derive the conversion identifier, with runtime fallback to `messageId`.
 - For INT-7065, account-framework files and account-level credential fields such as `pixelId` were intentionally out of scope despite conflicting spec history; future OpenAI Ads config work should not add account definitions unless the product contract is explicitly revised.
 - Do not add an OpenAI Ads `oppref` UI field or a pre-hashed-data toggle in this repository; those are outside the destination definition contract captured for this task.

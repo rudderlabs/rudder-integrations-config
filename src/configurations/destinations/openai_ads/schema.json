@@ -1,16 +1,12 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["apiKey", "conversionIdentifier", "eventMapping"],
+    "required": ["apiKey", "eventMapping"],
     "type": "object",
     "properties": {
       "apiKey": {
         "type": "string",
         "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,500})$"
-      },
-      "conversionIdentifier": {
-        "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
       },
       "defaultCurrency": {
         "type": "string",
@@ -18,7 +14,7 @@
       },
       "defaultActionSource": {
         "type": "string",
-        "enum": ["website", "app", "offline", "physical_store", "phone_call", "email"]
+        "enum": ["web", "mobile_app", "offline", "physical_store", "phone_call", "email", "other"]
       },
       "eventMapping": {
         "type": "array",
@@ -50,9 +46,9 @@
                 "custom"
               ]
             },
-            "conversionIdentifier": {
+            "deduplicationKey": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+              "pattern": "^[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)*$"
             }
           },
           "allOf": [

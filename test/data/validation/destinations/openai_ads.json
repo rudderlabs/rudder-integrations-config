@@ -3,7 +3,6 @@
     "testTitle": "valid minimal config",
     "config": {
       "apiKey": "openai-api-key",
-      "conversionIdentifier": "properties.orderId",
       "eventMapping": [
         {
           "from": "Order Completed",
@@ -17,19 +16,18 @@
     "testTitle": "valid standard mapping config",
     "config": {
       "apiKey": "openai-api-key",
-      "conversionIdentifier": "messageId",
       "defaultCurrency": "USD",
-      "defaultActionSource": "website",
+      "defaultActionSource": "web",
       "eventMapping": [
         {
           "from": "Product Viewed",
           "to": "contents_viewed",
-          "conversionIdentifier": "properties.productId"
+          "deduplicationKey": "properties.productId"
         },
         {
           "from": "Checkout Started",
           "to": "checkout_started",
-          "conversionIdentifier": "properties.checkoutId"
+          "deduplicationKey": "properties.checkoutId"
         }
       ]
     },
@@ -39,14 +37,27 @@
     "testTitle": "valid custom mapping config",
     "config": {
       "apiKey": "openai-api-key",
-      "conversionIdentifier": "messageId",
-      "defaultActionSource": "app",
+      "defaultActionSource": "mobile_app",
       "eventMapping": [
         {
           "from": "Qualified Lead",
           "to": "custom",
-          "conversionIdentifier": "properties.leadId",
+          "deduplicationKey": "properties.leadId",
           "customEventName": "qualified_lead"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid other default action source",
+    "config": {
+      "apiKey": "openai-api-key",
+      "defaultActionSource": "other",
+      "eventMapping": [
+        {
+          "from": "Trial Started",
+          "to": "trial_started"
         }
       ]
     },
@@ -55,21 +66,16 @@
   {
     "testTitle": "missing required top-level fields",
     "config": {
-      "defaultActionSource": "website"
+      "defaultActionSource": "web"
     },
     "result": false,
-    "err": [
-      " must have required property 'apiKey'",
-      " must have required property 'conversionIdentifier'",
-      " must have required property 'eventMapping'"
-    ]
+    "err": [" must have required property 'apiKey'", " must have required property 'eventMapping'"]
   },
   {
     "testTitle": "invalid default action source",
     "config": {
       "apiKey": "openai-api-key",
-      "conversionIdentifier": "messageId",
-      "defaultActionSource": "web",
+      "defaultActionSource": "website",
       "eventMapping": [
         {
           "from": "Page Viewed",
@@ -84,7 +90,6 @@
     "testTitle": "empty event mapping array",
     "config": {
       "apiKey": "openai-api-key",
-      "conversionIdentifier": "messageId",
       "eventMapping": []
     },
     "result": false,
@@ -94,7 +99,6 @@
     "testTitle": "missing custom event name",
     "config": {
       "apiKey": "openai-api-key",
-      "conversionIdentifier": "messageId",
       "eventMapping": [
         {
           "from": "Qualified Lead",
@@ -112,7 +116,6 @@
     "testTitle": "duplicate from values in event mappings",
     "config": {
       "apiKey": "openai-api-key",
-      "conversionIdentifier": "messageId",
       "eventMapping": [
         {
           "from": "Order Completed",
@@ -127,6 +130,29 @@
     "result": false,
     "err": [
       "eventMapping Each OpenAI Ads event mapping must have a unique RudderStack Event value."
+    ]
+  },
+  {
+    "testTitle": "invalid deduplication key dot paths",
+    "config": {
+      "apiKey": "openai-api-key",
+      "eventMapping": [
+        {
+          "from": "Order Completed",
+          "to": "order_created",
+          "deduplicationKey": "$.properties.id"
+        },
+        {
+          "from": "Product Viewed",
+          "to": "contents_viewed",
+          "deduplicationKey": "properties.items[].orderId"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventMapping.0.deduplicationKey must match pattern \"^[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)*$\"",
+      "eventMapping.1.deduplicationKey must match pattern \"^[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)*$\""
     ]
   }
 ]
