@@ -137,3 +137,9 @@
 - Gate CustomerIO `userIdIdentifierType` UI visibility on both cloud mode and `apiVersion == v2`, because the v1/v2 selector controls cloud/router event-stream API behavior rather than device-mode SDK behavior.
 - Do not add CustomerIO cloud-only `apiVersion` or `userIdIdentifierType` to `src/configurations/destinations/customerio/db-config.json` `config.includeKeys`; they should be validated and exposed through schema/UI/default config without being included for device-mode consumers.
 - For the newer `userIdMapping` field name, keep the same cloud-only contract: `apiVersion` remains optional with `v1` defaults in schema/UI, `userIdMapping` is required only by the `apiVersion == v2` conditional, the UI fields are gated to cloud mode (with `userIdMapping` additionally gated on v2), and neither key belongs in `config.includeKeys` for device-mode consumers.
+
+## INT-7071 — CustomerIO v2 Default After Migration
+
+- CustomerIO `apiVersion` now defaults to `v2` in both `src/configurations/destinations/customerio/ui-config.json` and `schema.json`; this supersedes the earlier INT-7014 deferral because existing destinations were migrated to explicitly save `apiVersion: "v1"` before the default flip.
+- Keep `apiVersion` optional for CustomerIO so migrated legacy configs with explicit `apiVersion: "v1"` remain valid, while newly created configs that omit `apiVersion` are defaulted by AJV (`useDefaults: true`) to `"v2"`.
+- Omitted-`apiVersion` validation fixtures should represent new v2-style configs and include `userIdIdentifierType`/`userIdMapping` as required by the v2 contract; legacy compatibility fixtures should be explicit `apiVersion: "v1"`, not raw omission.
