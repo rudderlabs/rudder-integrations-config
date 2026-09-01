@@ -383,6 +383,8 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
                 and field[schema_field_name] in dbConfig["destConfig"][sourceType]
             ):
                 newSingleSelectObj["properties"][sourceType] = singleSelectObj
+        if field.get("additionalProperties") == False:
+            newSingleSelectObj["additionalProperties"] = False
         singleSelectObj = newSingleSelectObj
     add_immutable_property(field, singleSelectObj)
     return singleSelectObj
