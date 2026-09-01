@@ -1,0 +1,309 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["rudderAccountId"],
+    "additionalProperties": false,
+    "properties": {
+      "rudderAccountId": {
+        "type": "string"
+      },
+      "defaultCurrency": {
+        "type": "string",
+        "pattern": "^[A-Z]{3}$"
+      },
+      "defaultActionSource": {
+        "type": "string",
+        "enum": ["web", "mobile_app", "offline", "physical_store", "phone_call", "email", "other"]
+      },
+      "eventMapping": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "^(?=.*\\S).{1,100}$"
+            },
+            "to": {
+              "type": "string",
+              "enum": [
+                "app_installed",
+                "app_opened",
+                "appointment_scheduled",
+                "checkout_started",
+                "contents_viewed",
+                "items_added",
+                "lead_created",
+                "order_created",
+                "page_viewed",
+                "registration_completed",
+                "subscription_created",
+                "trial_started",
+                "custom"
+              ]
+            },
+            "customEventName": {
+              "type": "string",
+              "pattern": "^(?=.*\\S).{1,100}$"
+            },
+            "deduplicationKey": {
+              "type": "string",
+              "pattern": "^(?!\\$)(?!.*\\.\\.)(?!.*\\[)(?!.*\\])(?!.*\\*)(?!.*\\?)(?!.*\\()(?!.*\\))(?!.*(^|\\.)\\d+(\\.|$))[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)*$"
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "to": {
+                    "const": "custom"
+                  }
+                },
+                "required": ["to"]
+              },
+              "then": {
+                "properties": {
+                  "customEventName": {
+                    "type": "string",
+                    "pattern": "^(?=.*\\S).{1,100}$"
+                  }
+                },
+                "required": ["customEventName"],
+                "errorMessage": {
+                  "required": {
+                    "customEventName": "Custom event name is required when an OpenAI Ads event mapping uses Custom."
+                  }
+                }
+              }
+            }
+          ],
+          "required": ["from", "to"],
+          "additionalProperties": false
+        },
+        "uniqueItemProperties": ["from"],
+        "errorMessage": {
+          "uniqueItemProperties": "Only one OpenAI Ads event mapping can be configured per RudderStack event name."
+        }
+      },
+      "consentManagement": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ],
+              "required": ["provider"]
+            },
+            "uniqueItemProperties": ["provider"],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
+            }
+          },
+          "cloud": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ],
+              "required": ["provider"]
+            },
+            "uniqueItemProperties": ["provider"],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
+            }
+          }
+        }
+      },
+      "eventFilteringOption": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "enum": ["disable", "whitelistedEvents", "blacklistedEvents"],
+            "default": "disable"
+          }
+        },
+        "additionalProperties": false
+      },
+      "whitelistedEvents": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "eventName": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "blacklistedEvents": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "eventName": {
+                  "type": "string",
+                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                }
+              }
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "useNativeSDK": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "androidKotlin": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "ios": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "iosSwift": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "web": {
+            "type": "string",
+            "enum": ["cloud", "device"]
+          },
+          "unity": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "amp": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "reactnative": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "flutter": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cordova": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "shopify": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cloud": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "warehouse": {
+            "type": "string",
+            "enum": ["cloud"]
+          }
+        }
+      }
+    }
+  }
+}

@@ -13,6 +13,12 @@ import json
 import glob
 from pathlib import Path
 
+# OpenAI Ads keeps API-key account credentials out of destination settings by
+# contract: the linked account resolver supplies pixelId/apiKey at runtime while
+# device-mode payload filtering prevents apiKey exposure. Do not require these
+# account fields in destination destConfig/secretKeys.
+ACCOUNT_FIELD_COVERAGE_EXEMPTIONS = {"DESTINATION_OPENAI_ADS_API_KEY"}
+
 
 def load_json_file(file_path):
     """Load and parse a JSON file."""
@@ -181,6 +187,14 @@ def validate_account_field_coverage(dest_dir):
             continue
 
         account_name = account_config["name"]
+        if account_name in ACCOUNT_FIELD_COVERAGE_EXEMPTIONS:
+            print(
+                f"  - Skipping destination field coverage for account '{account_name}' "
+                "because its credentials are resolved from the linked account, not "
+                "stored as destination settings."
+            )
+            continue
+
         account_cfg = account_config.get("config", {})
         secret_fields = account_cfg.get("secretFields", [])
         option_fields = account_cfg.get("optionFields", [])

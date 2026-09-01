@@ -1,0 +1,330 @@
+[
+  {
+    "testTitle": "valid minimal config with linked account",
+    "config": {
+      "rudderAccountId": "account_123"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid optional fallbacks with no implicit defaults",
+    "config": {
+      "rudderAccountId": "account_123",
+      "defaultCurrency": "USD",
+      "defaultActionSource": "web"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid omitted event mapping",
+    "config": {
+      "rudderAccountId": "account_123",
+      "defaultActionSource": "email"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid empty event mapping",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventMapping": []
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid standard event mapping row",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventMapping": [
+        {
+          "from": "Order Completed",
+          "to": "order_created"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid custom event mapping row",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventMapping": [
+        {
+          "from": "Trial Started",
+          "to": "custom",
+          "customEventName": "Trial Started"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid event mapping deduplication key dot path",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventMapping": [
+        {
+          "from": "Order Completed",
+          "to": "order_created",
+          "deduplicationKey": "properties.orderId"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid web client-side event filtering",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventFilteringOption": {
+        "web": "whitelistedEvents"
+      },
+      "whitelistedEvents": {
+        "web": [
+          {
+            "eventName": "Order Completed"
+          }
+        ]
+      },
+      "blacklistedEvents": {
+        "web": [
+          {
+            "eventName": "Internal Test"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid consent management for cloud and web",
+    "config": {
+      "rudderAccountId": "account_123",
+      "consentManagement": {
+        "cloud": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "and",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          }
+        ],
+        "web": [
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "C0001"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "destination credentials are not required as settings",
+    "config": {
+      "rudderAccountId": "account_123",
+      "connectionMode": {
+        "web": "device"
+      },
+      "useNativeSDK": {
+        "web": true
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "invalid missing linked account",
+    "config": {
+      "eventMapping": []
+    },
+    "result": false,
+    "err": [" must have required property 'rudderAccountId'"]
+  },
+  {
+    "testTitle": "invalid lowercase currency",
+    "config": {
+      "rudderAccountId": "account_123",
+      "defaultCurrency": "usd"
+    },
+    "result": false,
+    "err": ["defaultCurrency must match pattern \"^[A-Z]{3}$\""]
+  },
+  {
+    "testTitle": "invalid action source",
+    "config": {
+      "rudderAccountId": "account_123",
+      "defaultActionSource": "website"
+    },
+    "result": false,
+    "err": ["defaultActionSource must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "invalid web client-side event filtering option",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventFilteringOption": {
+        "web": "allowlist"
+      }
+    },
+    "result": false,
+    "err": ["eventFilteringOption.web must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "invalid non-web client-side event filtering key",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventFilteringOption": {
+        "android": "disable"
+      }
+    },
+    "result": false,
+    "err": ["eventFilteringOption must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid duplicate event mapping from rows",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventMapping": [
+        {
+          "from": "Order Completed",
+          "to": "order_created"
+        },
+        {
+          "from": "Order Completed",
+          "to": "contents_viewed"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventMapping Only one OpenAI Ads event mapping can be configured per RudderStack event name."
+    ]
+  },
+  {
+    "testTitle": "invalid custom event mapping missing custom event name",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventMapping": [
+        {
+          "from": "Trial Started",
+          "to": "custom"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventMapping.0 Custom event name is required when an OpenAI Ads event mapping uses Custom.",
+      "eventMapping.0 must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "invalid leading JSONPath deduplication key",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventMapping": [
+        {
+          "from": "Order Completed",
+          "to": "order_created",
+          "deduplicationKey": "$.properties.orderId"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventMapping.0.deduplicationKey must match pattern \"^(?!\\$)(?!.*\\.\\.)(?!.*\\[)(?!.*\\])(?!.*\\*)(?!.*\\?)(?!.*\\()(?!.*\\))(?!.*(^|\\.)\\d+(\\.|$))[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)*$\""
+    ]
+  },
+  {
+    "testTitle": "invalid bracket deduplication key",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventMapping": [
+        {
+          "from": "Order Completed",
+          "to": "order_created",
+          "deduplicationKey": "properties.items[].orderId"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventMapping.0.deduplicationKey must match pattern \"^(?!\\$)(?!.*\\.\\.)(?!.*\\[)(?!.*\\])(?!.*\\*)(?!.*\\?)(?!.*\\()(?!.*\\))(?!.*(^|\\.)\\d+(\\.|$))[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)*$\""
+    ]
+  },
+  {
+    "testTitle": "invalid numeric index deduplication key",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventMapping": [
+        {
+          "from": "Order Completed",
+          "to": "order_created",
+          "deduplicationKey": "properties.items.0.orderId"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventMapping.0.deduplicationKey must match pattern \"^(?!\\$)(?!.*\\.\\.)(?!.*\\[)(?!.*\\])(?!.*\\*)(?!.*\\?)(?!.*\\()(?!.*\\))(?!.*(^|\\.)\\d+(\\.|$))[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)*$\""
+    ]
+  },
+  {
+    "testTitle": "invalid wildcard deduplication key",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventMapping": [
+        {
+          "from": "Order Completed",
+          "to": "order_created",
+          "deduplicationKey": "properties.*.orderId"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventMapping.0.deduplicationKey must match pattern \"^(?!\\$)(?!.*\\.\\.)(?!.*\\[)(?!.*\\])(?!.*\\*)(?!.*\\?)(?!.*\\()(?!.*\\))(?!.*(^|\\.)\\d+(\\.|$))[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)*$\""
+    ]
+  },
+  {
+    "testTitle": "invalid filter deduplication key",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventMapping": [
+        {
+          "from": "Order Completed",
+          "to": "order_created",
+          "deduplicationKey": "properties.items[?(@.id)]"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventMapping.0.deduplicationKey must match pattern \"^(?!\\$)(?!.*\\.\\.)(?!.*\\[)(?!.*\\])(?!.*\\*)(?!.*\\?)(?!.*\\()(?!.*\\))(?!.*(^|\\.)\\d+(\\.|$))[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)*$\""
+    ]
+  },
+  {
+    "testTitle": "destination-level apiKey is rejected",
+    "config": {
+      "rudderAccountId": "account_123",
+      "apiKey": "sk-test"
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "destination-level pixelId is rejected",
+    "config": {
+      "rudderAccountId": "account_123",
+      "pixelId": "pixel_123"
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  }
+]

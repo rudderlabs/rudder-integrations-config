@@ -137,3 +137,8 @@
 - Gate CustomerIO `userIdIdentifierType` UI visibility on both cloud mode and `apiVersion == v2`, because the v1/v2 selector controls cloud/router event-stream API behavior rather than device-mode SDK behavior.
 - Do not add CustomerIO cloud-only `apiVersion` or `userIdIdentifierType` to `src/configurations/destinations/customerio/db-config.json` `config.includeKeys`; they should be validated and exposed through schema/UI/default config without being included for device-mode consumers.
 - For the newer `userIdMapping` field name, keep the same cloud-only contract: `apiVersion` remains optional with `v1` defaults in schema/UI, `userIdMapping` is required only by the `apiVersion == v2` conditional, the UI fields are gated to cloud mode (with `userIdMapping` additionally gated on v2), and neither key belongs in `config.includeKeys` for device-mode consumers.
+
+## INT-7070 — OpenAI Ads Feature-Flag and Credential Scope
+
+- OpenAI Ads destination visibility uses the standard `options.hidden.gate.flags` hide-when-false pattern. The conventional placeholder Flagsmith key chosen for this destination is `AMP_enable-openai-ads-destination` when no product-specified flag name is available.
+- For OpenAI Ads account-backed setup, keep `apiKey` and `pixelId` account-only under `src/configurations/destinations/openai_ads/accounts/openai_ads_api_key/`; do not add them to OpenAI Ads destination `db-config.json` as destination settings merely to satisfy generic non-OAuth account coverage checks.
