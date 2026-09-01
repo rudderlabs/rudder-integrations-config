@@ -144,3 +144,4 @@
 - For OpenAI Ads account-backed setup, keep credential field definitions under `src/configurations/destinations/openai_ads/accounts/openai_ads_api_key/`, but also mirror account option/secret fields into destination `config.destConfig.defaultConfig` as required by generic account coverage validation.
 - List secret account fields such as `apiKey` in OpenAI Ads destination `config.secretKeys`, but do not add non-device account plumbing fields such as `rudderAccountId` to `config.includeKeys`.
 - Optional OpenAI Ads account UI credential fields should explicitly set `optional: true`.
+- OpenAI Ads should not list `warehouse` as a supported source type; keep warehouse absent from supported source types, supported connection modes, destination config source entries, and generated schema branches.

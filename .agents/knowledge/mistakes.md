@@ -30,5 +30,6 @@
 ## INT-7070 — Keep Consent Management Source Coverage Complete
 
 - CI failed in the Report Code Coverage workflow when OpenAI Ads declared `consentManagement` only for web/cloud while `supportedSourceTypes` also included mobile, warehouse, and other source types; `test/consentManagementFieldsIntegrity.test.ts` requires a `consentManagement` field for every supported source type.
-- Corrective rule: when a destination supports `consentManagement`, list it under every supported source type in `db-config.json` `config.destConfig` and regenerate `schema.json` so `configSchema.properties.consentManagement.properties` has the same source keys as `supportedSourceTypes`.
+- Corrective rule: when a destination supports `consentManagement`, list it under every supported source type in `db-config.json` `config.destConfig` and regenerate `schema.json` so `configSchema.properties.consentManagement.properties` has the same source keys as supported non-warehouse `supportedSourceTypes`.
+- Later review clarified OpenAI Ads should not support `warehouse`; do not add warehouse just to satisfy consent-management coverage.
 - For web-only source-scoped settings, use `additionalProperties: false` on the UI field and ensure schema generation preserves it for source-dependent `singleSelect` fields, rather than narrowing `consentManagement` source coverage.

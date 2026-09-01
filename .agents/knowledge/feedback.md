@@ -33,3 +33,4 @@
 - Reviewer guidance corrected the OpenAI Ads account-backed credential approach: do not add a destination-specific exemption in `scripts/validate_account_definitions.py`; satisfy the generic account coverage validator through destination metadata instead.
 - For OpenAI Ads, account option/secret fields should be represented in destination `config.destConfig.defaultConfig`, and secret account fields such as `apiKey` should also be listed in `config.secretKeys`.
 - Do not add non-device fields such as `rudderAccountId` to destination `config.includeKeys`; optional account UI credential fields should explicitly set `optional: true`.
+- Reviewer guidance clarified that OpenAI Ads should not support `warehouse`; keep it absent from supported source types, supported connection modes, destination config source entries, and generated schema branches.
