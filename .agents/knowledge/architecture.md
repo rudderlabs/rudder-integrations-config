@@ -98,5 +98,5 @@
 
 ## INT-7070 — OpenAI Ads Account-Backed Destination Boundary
 
-- OpenAI Ads is a standalone account-backed destination under `src/configurations/destinations/openai_ads/`; destination credentials (`apiKey`, `pixelId`) live only in `accounts/openai_ads_api_key/` and are deliberately excluded from destination-level settings.
-- The generic non-OAuth account validation expectation in `scripts/validate_account_definitions.py` does not apply to OpenAI Ads credentials; `DESTINATION_OPENAI_ADS_API_KEY` requires an explicit exemption so account-only `apiKey`/`pixelId` do not get duplicated into destination `destConfig.defaultConfig` or `secretKeys`.
+- OpenAI Ads is a standalone account-backed destination under `src/configurations/destinations/openai_ads/`; credential field definitions live under `accounts/openai_ads_api_key/`.
+- Account-backed credential metadata still participates in the generic destination/account validation boundary: OpenAI Ads account option/secret fields should be represented in destination `config.destConfig.defaultConfig`, and secret fields such as `apiKey` should be listed in `config.secretKeys`, rather than bypassing `scripts/validate_account_definitions.py` with a destination-specific exemption.

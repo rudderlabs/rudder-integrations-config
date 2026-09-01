@@ -141,4 +141,6 @@
 ## INT-7070 — OpenAI Ads Feature-Flag and Credential Scope
 
 - OpenAI Ads destination visibility uses the standard `options.hidden.gate.flags` hide-when-false pattern. The conventional placeholder Flagsmith key chosen for this destination is `AMP_enable-openai-ads-destination` when no product-specified flag name is available.
-- For OpenAI Ads account-backed setup, keep `apiKey` and `pixelId` account-only under `src/configurations/destinations/openai_ads/accounts/openai_ads_api_key/`; do not add them to OpenAI Ads destination `db-config.json` as destination settings merely to satisfy generic non-OAuth account coverage checks.
+- For OpenAI Ads account-backed setup, keep credential field definitions under `src/configurations/destinations/openai_ads/accounts/openai_ads_api_key/`, but also mirror account option/secret fields into destination `config.destConfig.defaultConfig` as required by generic account coverage validation.
+- List secret account fields such as `apiKey` in OpenAI Ads destination `config.secretKeys`, but do not add non-device account plumbing fields such as `rudderAccountId` to `config.includeKeys`.
+- Optional OpenAI Ads account UI credential fields should explicitly set `optional: true`.
