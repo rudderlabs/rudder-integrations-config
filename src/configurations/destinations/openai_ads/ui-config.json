@@ -64,7 +64,7 @@
                     "label": "Default action source",
                     "note": "Optional fallback action_source value used when the event does not provide one.",
                     "configKey": "defaultActionSource",
-                    "allowEmptyOption": false,
+                    "allowEmptyOption": true,
                     "options": [
                       {
                         "label": "web",
@@ -110,7 +110,7 @@
                         "type": "textInput",
                         "label": "RudderStack event name",
                         "configKey": "from",
-                        "regex": "^(?=.*\\S).{1,100}$",
+                        "regex": "^(.{1,100})$",
                         "regexErrorMessage": "Enter a non-empty RudderStack event name.",
                         "placeholder": "e.g: Product Viewed",
                         "required": true
@@ -181,7 +181,7 @@
                         "label": "Custom event name",
                         "note": "Required when the OpenAI Ads event is Custom.",
                         "configKey": "customEventName",
-                        "regex": "^(?=.*\\S).{1,100}$",
+                        "regex": "^(.{1,100})$",
                         "regexErrorMessage": "Enter a non-empty custom event name.",
                         "placeholder": "e.g: Trial Started",
                         "required": true,
@@ -206,7 +206,7 @@
                         "label": "Deduplication key dot path",
                         "note": "Optional simple dot path evaluated against the full RudderStack message, such as properties.orderId. JSONPath syntax is not supported.",
                         "configKey": "deduplicationKey",
-                        "regex": "^(?!\\$)(?!.*\\.\\.)(?!.*\\[)(?!.*\\])(?!.*\\*)(?!.*\\?)(?!.*\\()(?!.*\\))(?!.*(^|\\.)\\d+(\\.|$))[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)*$",
+                        "regex": "^[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)*$",
                         "regexErrorMessage": "Enter a simple dot path such as properties.orderId. Do not use JSONPath, brackets, wildcards, filters, numeric indexes, or leading/trailing dots.",
                         "placeholder": "e.g: properties.orderId"
                       }
@@ -269,6 +269,7 @@
                     "note": "Input separate events by pressing Enter. Only web device-mode events matching this list are sent.",
                     "configKey": "whitelistedEvents",
                     "tagKey": "eventName",
+                    "regex": "^(.{0,100})$",
                     "placeholder": "e.g: Product Viewed",
                     "additionalProperties": false,
                     "default": [
@@ -291,6 +292,7 @@
                     "note": "Input separate events by pressing Enter. Web device-mode events matching this list are blocked.",
                     "configKey": "blacklistedEvents",
                     "tagKey": "eventName",
+                    "regex": "^(.{0,100})$",
                     "placeholder": "e.g: Credit Card Added",
                     "additionalProperties": false,
                     "default": [
@@ -384,6 +386,7 @@
               "note": "Input your consent category IDs by pressing Enter after each entry. We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
               "configKey": "consents",
               "tagKey": "consent",
+              "regex": "^(.{0,100})$",
               "placeholder": "e.g: Marketing",
               "default": [
                 {

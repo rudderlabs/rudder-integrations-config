@@ -1023,6 +1023,7 @@ describe('Account Definition validation tests', () => {
     expect(accountConfig.config.optionFields).toEqual(['pixelId']);
     expect(accountConfig.config.secretFields).toEqual(['apiKey']);
     expect(apiKeyField.secret).toBe(true);
+    expect(apiKeyField.optional).toBe(true);
     expect(pixelIdField.secret).toBeUndefined();
   });
 

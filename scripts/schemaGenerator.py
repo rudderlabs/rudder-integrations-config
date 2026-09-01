@@ -69,7 +69,6 @@ def get_options_list_for_enum(field):
         "default" not in field
         and "defaultOption" not in field
         and field.get("required", False) == False
-        and field.get("allowEmptyOption", True) != False
     ):
         options_list.append("")
     return options_list
