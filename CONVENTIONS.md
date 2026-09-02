@@ -146,11 +146,9 @@ browser, `schema.json` `pattern` is what config-backend validates on save. A fie
 
 **`singleSelect` needs no `regex` change and no extra key.** `get_options_list_for_enum` in
 [`scripts/schemaGenerator.py`](scripts/schemaGenerator.py) appends `""` to the generated enum
-whenever the field is `required: false` and declares neither `default` nor `defaultOption`. Get
-those three right and regenerate. In particular, do not reach for `allowEmptyOption`: nothing
-reads that name — not `schemaGenerator.py`, not the ui-config meta-schemas, not rudder-webapp — so
-a field carrying it is carrying dead config that silently does nothing. Delete it where you find
-it.
+whenever the field is `required: false` and declares neither `default` nor `defaultOption`. Those
+three are the whole control surface — get them right and regenerate. A key invented to express the
+same intent is not read by anything and will silently do nothing.
 
 ## Where account credential fields live
 
