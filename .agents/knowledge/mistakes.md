@@ -33,3 +33,4 @@
 - Corrective rule: when a destination supports `consentManagement`, list it under every supported source type in `db-config.json` `config.destConfig` and regenerate `schema.json` so `configSchema.properties.consentManagement.properties` has the same source keys as supported non-warehouse `supportedSourceTypes`.
 - Later review clarified OpenAI Ads should not support `warehouse`; do not add warehouse just to satisfy consent-management coverage.
 - For web-only source-scoped settings, use `additionalProperties: false` on the UI field and ensure schema generation preserves it for source-dependent `singleSelect` fields, rather than narrowing `consentManagement` source coverage.
+- Code quality checks can fail on knowledge-only markdown formatting drift: `npm run lint` runs Prettier across repository markdown files and then checks `git diff --exit-code`, so `.agents/knowledge/*.md` updates must be Prettier-clean and end with a trailing newline before push.
