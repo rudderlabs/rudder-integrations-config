@@ -146,3 +146,4 @@
 - Include linked-account `pixelId` in OpenAI Ads destination `config.includeKeys` for web device mode; it must pass both `config.destConfig.defaultConfig` workspace filtering and the device-mode allowlist for browser SDK initialization.
 - Optional OpenAI Ads account UI credential fields should explicitly set `optional: true`.
 - OpenAI Ads should not list `warehouse` as a supported source type; keep warehouse absent from supported source types, supported connection modes, destination config source entries, and generated schema branches.
+- OpenAI Ads optional text inputs that can be cleared should use regex/schema patterns that allow the empty string; `defaultCurrency` uses `^$|^[A-Z]{3}$` so clearing the optional field does not block destination saves.

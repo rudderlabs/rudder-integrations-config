@@ -35,3 +35,4 @@
 - Do not add non-device fields such as `rudderAccountId` to destination `config.includeKeys`; optional account UI credential fields should explicitly set `optional: true`.
 - For OpenAI Ads web device mode, include the linked-account `pixelId` in destination `config.includeKeys` so it passes both workspace-config filtering and the device-mode allowlist for browser SDK initialization.
 - Reviewer guidance clarified that OpenAI Ads should not support `warehouse`; keep it absent from supported source types, supported connection modes, destination config source entries, and generated schema branches.
+- Optional OpenAI Ads text fields that can be cleared in the UI must accept the empty string in both `ui-config.json` regexes and generated `schema.json` patterns; for `defaultCurrency`, use `^$|^[A-Z]{3}$` rather than a non-empty-only currency regex.
