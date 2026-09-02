@@ -1,0 +1,403 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "accountManagementInput",
+                    "label": "OpenAI Ads account",
+                    "configKey": "rudderAccountId"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Event settings",
+                "note": "Configure optional OpenAI Ads event fallbacks and mappings",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Default currency",
+                    "note": "Optional ISO-4217 currency fallback. Use a three-letter uppercase code such as USD.",
+                    "configKey": "defaultCurrency",
+                    "regex": "^$|^[A-Z]{3}$",
+                    "regexErrorMessage": "Enter a three-letter uppercase ISO-4217 currency code, such as USD.",
+                    "placeholder": "e.g: USD"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Default action source",
+                    "note": "Optional fallback action_source value used when the event does not provide one.",
+                    "configKey": "defaultActionSource",
+                    "allowEmptyOption": true,
+                    "options": [
+                      {
+                        "label": "web",
+                        "value": "web"
+                      },
+                      {
+                        "label": "mobile_app",
+                        "value": "mobile_app"
+                      },
+                      {
+                        "label": "offline",
+                        "value": "offline"
+                      },
+                      {
+                        "label": "physical_store",
+                        "value": "physical_store"
+                      },
+                      {
+                        "label": "phone_call",
+                        "value": "phone_call"
+                      },
+                      {
+                        "label": "email",
+                        "value": "email"
+                      },
+                      {
+                        "label": "other",
+                        "value": "other"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "dynamicCustomForm",
+                    "label": "Event mappings",
+                    "note": "Map RudderStack event names to OpenAI Ads standard events, or choose Custom and provide the custom event name.",
+                    "configKey": "eventMapping",
+                    "default": [],
+                    "uniqueRowFields": ["from"],
+                    "uniqueRowFieldsErrorMessage": "Only one OpenAI Ads event mapping can be configured per RudderStack event name.",
+                    "itemAdditionalProperties": false,
+                    "rowFields": [
+                      {
+                        "type": "textInput",
+                        "label": "RudderStack event name",
+                        "configKey": "from",
+                        "regex": "^(.{1,100})$",
+                        "regexErrorMessage": "Enter a non-empty RudderStack event name.",
+                        "placeholder": "e.g: Product Viewed",
+                        "required": true
+                      },
+                      {
+                        "type": "singleSelect",
+                        "label": "OpenAI Ads event",
+                        "configKey": "to",
+                        "allowEmptyOption": false,
+                        "options": [
+                          {
+                            "label": "app_installed",
+                            "value": "app_installed"
+                          },
+                          {
+                            "label": "app_opened",
+                            "value": "app_opened"
+                          },
+                          {
+                            "label": "appointment_scheduled",
+                            "value": "appointment_scheduled"
+                          },
+                          {
+                            "label": "checkout_started",
+                            "value": "checkout_started"
+                          },
+                          {
+                            "label": "contents_viewed",
+                            "value": "contents_viewed"
+                          },
+                          {
+                            "label": "items_added",
+                            "value": "items_added"
+                          },
+                          {
+                            "label": "lead_created",
+                            "value": "lead_created"
+                          },
+                          {
+                            "label": "order_created",
+                            "value": "order_created"
+                          },
+                          {
+                            "label": "page_viewed",
+                            "value": "page_viewed"
+                          },
+                          {
+                            "label": "registration_completed",
+                            "value": "registration_completed"
+                          },
+                          {
+                            "label": "subscription_created",
+                            "value": "subscription_created"
+                          },
+                          {
+                            "label": "trial_started",
+                            "value": "trial_started"
+                          },
+                          {
+                            "label": "Custom",
+                            "value": "custom"
+                          }
+                        ],
+                        "required": true
+                      },
+                      {
+                        "type": "textInput",
+                        "label": "Custom event name",
+                        "note": "Required when the OpenAI Ads event is Custom.",
+                        "configKey": "customEventName",
+                        "regex": "^(.{1,100})$",
+                        "regexErrorMessage": "Enter a non-empty custom event name.",
+                        "placeholder": "e.g: Trial Started",
+                        "required": true,
+                        "requiredErrorMessage": "Custom event name is required when an OpenAI Ads event mapping uses Custom.",
+                        "includeWhenConditional": true,
+                        "conditions": {
+                          "expression": {
+                            "operator": "OR",
+                            "operands": [
+                              {
+                                "type": "configuration",
+                                "key": "to",
+                                "value": "custom"
+                              }
+                            ]
+                          },
+                          "action": "hide"
+                        }
+                      },
+                      {
+                        "type": "textInput",
+                        "label": "Deduplication key dot path",
+                        "note": "Optional simple dot path evaluated against the full RudderStack message, such as properties.orderId. JSONPath syntax is not supported.",
+                        "configKey": "deduplicationKey",
+                        "regex": "^$|^[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)*$",
+                        "regexErrorMessage": "Enter a simple dot path such as properties.orderId. Do not use JSONPath, brackets, wildcards, filters, numeric indexes, or leading/trailing dots.",
+                        "placeholder": "e.g: properties.orderId"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Client-side event filtering",
+                "note": "Decide what web device-mode events are allowed (allowlisting) and blocked (denylisting)",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.webDevice",
+                      "value": true
+                    }
+                  ]
+                },
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on events filtering:",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering.",
+                    "allowEmptyOption": false,
+                    "additionalProperties": false,
+                    "options": [
+                      {
+                        "label": "No events filtering",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input separate events by pressing Enter. Only web device-mode events matching this list are sent.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "regex": "^(.{0,100})$",
+                    "placeholder": "e.g: Product Viewed",
+                    "additionalProperties": false,
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption.web",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input separate events by pressing Enter. Web device-mode events matching this list are blocked.",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "regex": "^(.{0,100})$",
+                    "placeholder": "e.g: Credit Card Added",
+                    "additionalProperties": false,
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption.web",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "additionalProperties": false,
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "iubenda",
+                  "value": "iubenda"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category IDs",
+              "note": "Input your consent category IDs by pressing Enter after each entry. We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "regex": "^(.{0,100})$",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ],
+          "uniqueRowFields": ["provider"]
+        }
+      ]
+    }
+  }
+}
