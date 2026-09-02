@@ -147,3 +147,9 @@
 - Optional OpenAI Ads account UI credential fields should explicitly set `optional: true`.
 - OpenAI Ads should not list `warehouse` as a supported source type; keep warehouse absent from supported source types, supported connection modes, destination config source entries, and generated schema branches.
 - OpenAI Ads optional text inputs that can be cleared should use regex/schema patterns that allow the empty string; `defaultCurrency` uses `^$|^[A-Z]{3}$` so clearing the optional field does not block destination saves.
+
+## INT-7071 — CustomerIO v2 Default After Migration
+
+- CustomerIO `apiVersion` now defaults to `v2` in both `src/configurations/destinations/customerio/ui-config.json` and `schema.json`; this supersedes the earlier INT-7014 deferral because existing destinations were migrated to explicitly save `apiVersion: "v1"` before the default flip.
+- Keep `apiVersion` optional for CustomerIO so migrated legacy configs with explicit `apiVersion: "v1"` remain valid, while newly created configs that omit `apiVersion` are defaulted by AJV (`useDefaults: true`) to `"v2"`.
+- Omitted-`apiVersion` validation fixtures should represent new v2-style configs and include `userIdIdentifierType`/`userIdMapping` as required by the v2 contract; legacy compatibility fixtures should be explicit `apiVersion: "v1"`, not raw omission.

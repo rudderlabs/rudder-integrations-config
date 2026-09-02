@@ -234,6 +234,18 @@ describe('Validation Tests', () => {
     });
   });
 
+  it('Customer.io applies v2 as the default API version when omitted', () => {
+    const config: Record<string, unknown> = {
+      apiKey: 'dummy-test-value',
+      siteID: 'dummy-test-value',
+      datacenter: 'US',
+      userIdIdentifierType: 'id',
+    };
+
+    expect(validateConfig('customerio', config, 'destinations', true)).toBeUndefined();
+    expect(config.apiVersion).toBe('v2');
+  });
+
   const warehouseDestinationNames = [
     'azure_datalake',
     'azure_synapse',
