@@ -153,3 +153,8 @@
 - CustomerIO `apiVersion` now defaults to `v2` in both `src/configurations/destinations/customerio/ui-config.json` and `schema.json`; this supersedes the earlier INT-7014 deferral because existing destinations were migrated to explicitly save `apiVersion: "v1"` before the default flip.
 - Keep `apiVersion` optional for CustomerIO so migrated legacy configs with explicit `apiVersion: "v1"` remain valid, while newly created configs that omit `apiVersion` are defaulted by AJV (`useDefaults: true`) to `"v2"`.
 - Omitted-`apiVersion` validation fixtures should represent new v2-style configs and include `userIdIdentifierType`/`userIdMapping` as required by the v2 contract; legacy compatibility fixtures should be explicit `apiVersion: "v1"`, not raw omission.
+
+## INT-7024 — ClickHouse JSON Columns Docs Link
+
+- ClickHouse `jsonPaths` UI documentation links should target `https://www.rudderstack.com/docs/destinations/warehouse-destinations/clickhouse/#json-columns`, the stable heading-derived anchor for the ClickHouse JSON columns docs section, rather than older data-warehouse integration paths or a generic configuration anchor.
+- Treat ClickHouse `jsonPaths` docs linking as a UI/footer documentation change only; runtime server-version enforcement and schema behavior remain outside this integrations-config change.
