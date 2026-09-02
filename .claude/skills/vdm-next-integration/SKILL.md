@@ -101,7 +101,8 @@ npm test -- --testPathPattern="<dest_name>"
 python3 scripts/validate_account_definitions.py <dest_name>
 ```
 
-No CI workflow runs the second one.
+CI runs the second one too, on any PR that touches `db-config.json` or `accounts/**` — but no npm
+script or hook does, so run it locally rather than waiting for the build.
 
 ## Critical Rules
 

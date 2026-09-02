@@ -55,5 +55,6 @@ npm run format                           # prettier; CI runs `git diff --exit-co
 
 `npx jest -d <dir>` does not filter — the whole suite runs (~10s). That is expected.
 
-A destination with an `accounts/` directory has one more check that no workflow runs for you — see
+A destination with an `accounts/` directory has one more check. CI runs it, but nothing runs it
+locally — see
 [where account credential fields live](CONVENTIONS.md#where-account-credential-fields-live).

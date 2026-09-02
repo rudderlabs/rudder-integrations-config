@@ -173,7 +173,9 @@ npm test -- --testPathPattern="<destination>"
 python3 scripts/validate_account_definitions.py <destination>
 ```
 
-The second command checks the Step 3 declarations. No CI workflow runs it, so it only fails in
-front of you if you run it. Fix any failures in the definition files.
+The second command checks the Step 3 declarations. CI runs it too — a migration always touches
+`db-config.json`, which is what triggers it — but no npm script or hook does, so run it before you
+push rather than finding out from a red build. Fix any failures in the definition files, never by
+exempting the destination in the validator.
 
 ---

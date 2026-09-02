@@ -87,11 +87,20 @@ destinations.
 ### Always give a ui-config field an explicit `regex`
 
 `generalize_regex_pattern` in [`scripts/schemaGenerator.py`](scripts/schemaGenerator.py) returns
-the field's own `regex` when there is one — and falls back to
-`(^\{\{.*\|\|(.*)\}\}$)|(^env[.].+)|^(.{0,100})$` when there is not. So a `textInput` with no
-`regex` does not generate a permissive pattern; it generates the deprecated prefix. Omitting
-`regex` is the third way that prefix gets into a new destination, alongside copying a field from
-an existing `ui-config.json` and copying a `pattern` from an existing `schema.json`.
+the field's own `regex` when there is one, and falls back to
+`(^\{\{.*\|\|(.*)\}\}$)|(^env[.].+)|^(.{0,100})$` when there is not. Which of those two you get
+by omitting `regex` depends on the field type, and both outcomes are wrong:
+
+- **`textInput` and `textareaInput` generate no `pattern` at all.** Both call
+  `generalize_regex_pattern` only from inside an `if "regex" in field` guard
+  (`generate_schema_for_textinput`, `generate_schema_for_textarea_input`), so the fallback is
+  unreachable for them — the field generates a bare `{"type": "string"}` and config-backend
+  validates the value against nothing on save.
+- **`dynamicForm` / `dynamicSelectForm` keys, `dynamicCustomForm` custom fields and `tagInput`
+  generate the deprecated prefix.** These call it unconditionally, so the fallback lands. For
+  them, omitting `regex` is a third route for that prefix into a new destination, alongside
+  copying a field from an existing `ui-config.json` and copying a `pattern` from an existing
+  `schema.json`.
 
 Give every string field an explicit `regex`, then regenerate.
 
@@ -138,8 +147,10 @@ browser, `schema.json` `pattern` is what config-backend validates on save. A fie
 **`singleSelect` needs no `regex` change and no extra key.** `get_options_list_for_enum` in
 [`scripts/schemaGenerator.py`](scripts/schemaGenerator.py) appends `""` to the generated enum
 whenever the field is `required: false` and declares neither `default` nor `defaultOption`. Get
-those three right and regenerate. In particular there is no `allowEmptyOption` key — nothing in
-this repository, in the ui-config meta-schemas, or in rudder-webapp reads that name.
+those three right and regenerate. In particular, do not reach for `allowEmptyOption`: nothing
+reads that name — not `schemaGenerator.py`, not the ui-config meta-schemas, not rudder-webapp — so
+a field carrying it is carrying dead config that silently does nothing. Delete it where you find
+it.
 
 ## Where account credential fields live
 
@@ -155,7 +166,19 @@ in two places:
 Both are enforced by `validate_account_field_coverage` in
 [`scripts/validate_account_definitions.py`](scripts/validate_account_definitions.py), which skips
 `authenticationType: "oauth"` accounts because the OAuth flow manages those secrets outside
-`destConfig`. That script is **not** wired into CI or an npm script — run it by hand:
+`destConfig`. **CI enforces this**: the `Run account validation for changed files` step in
+[`.github/workflows/test.yml`](.github/workflows/test.yml) invokes
+[`scripts/validate_diff_accounts.sh`](scripts/validate_diff_accounts.sh), which validates every
+destination whose `db-config.json` or `accounts/**` changed. Since those are the only files the
+check reads, the normal case — adding an account definition, or editing the fields it declares —
+is covered, and a coverage miss fails the build.
+
+Two caveats, both arguments for running it yourself before you push:
+
+- Nothing runs it locally. There is no npm script, and neither `npm test` nor the pre-commit hook
+  invokes it, so the first failure you see is a red build.
+- The shell wrapper diffs against a hardcoded `origin/develop`, so on a branch cut from `main` (a
+  hotfix) the changed-file list is wrong and the destination you edited may not be picked up.
 
 ```bash
 python3 scripts/validate_account_definitions.py <destination>
