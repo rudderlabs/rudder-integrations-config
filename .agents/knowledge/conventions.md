@@ -153,3 +153,8 @@
 - CustomerIO `apiVersion` now defaults to `v2` in both `src/configurations/destinations/customerio/ui-config.json` and `schema.json`; this supersedes the earlier INT-7014 deferral because existing destinations were migrated to explicitly save `apiVersion: "v1"` before the default flip.
 - Keep `apiVersion` optional for CustomerIO so migrated legacy configs with explicit `apiVersion: "v1"` remain valid, while newly created configs that omit `apiVersion` are defaulted by AJV (`useDefaults: true`) to `"v2"`.
 - Omitted-`apiVersion` validation fixtures should represent new v2-style configs and include `userIdIdentifierType`/`userIdMapping` as required by the v2 contract; legacy compatibility fixtures should be explicit `apiVersion: "v1"`, not raw omission.
+
+## INT-7092 — GAEC Adjustment Type GA Scope
+
+- Google Ads Enhanced Conversions `adjustmentType` is generally available through `src/configurations/destinations/google_adwords_enhanced_conversions/ui-config.json`; do not reintroduce the removed UI `conditions` gate for `AMP_enable-gaec-adjustment-type`.
+- Keep the existing GAEC `adjustmentType` default as `ENHANCEMENT` and options as `ENHANCEMENT`/`RESTATEMENT`; `schema.json` and `db-config.json` already expose the setting unconditionally and should not need changes for this GA rollout.
