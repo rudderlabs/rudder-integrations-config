@@ -143,5 +143,6 @@
 - OpenAI Ads destination visibility uses the standard `options.hidden.gate.flags` hide-when-false pattern. The conventional placeholder Flagsmith key chosen for this destination is `AMP_enable-openai-ads-destination` when no product-specified flag name is available.
 - For OpenAI Ads account-backed setup, keep credential field definitions under `src/configurations/destinations/openai_ads/accounts/openai_ads_api_key/`, but also mirror account option/secret fields into destination `config.destConfig.defaultConfig` as required by generic account coverage validation.
 - List secret account fields such as `apiKey` in OpenAI Ads destination `config.secretKeys`, but do not add non-device account plumbing fields such as `rudderAccountId` to `config.includeKeys`.
+- Include linked-account `pixelId` in OpenAI Ads destination `config.includeKeys` for web device mode; it must pass both `config.destConfig.defaultConfig` workspace filtering and the device-mode allowlist for browser SDK initialization.
 - Optional OpenAI Ads account UI credential fields should explicitly set `optional: true`.
 - OpenAI Ads should not list `warehouse` as a supported source type; keep warehouse absent from supported source types, supported connection modes, destination config source entries, and generated schema branches.
