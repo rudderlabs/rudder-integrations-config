@@ -19,8 +19,9 @@ that looks like a one-liner. It is short.
 
 **Copying an existing destination reproduces deprecated patterns.** Nearly every definition in the
 tree predates the current conventions, so whichever file you open as a model will usually carry
-something the conventions now forbid — most often the deprecated
-`(^\{\{.*\|\|(.*)\}\}$)|(^env[.].+)|` regex prefix, carried by all but nine destination schemas.
+something the conventions now forbid — see
+[string `pattern` and `regex`](CONVENTIONS.md#string-pattern-and-regex) for the one that catches
+almost everybody.
 
 Copy the _shape_ of a neighbouring destination. Take the individual rules from `CONVENTIONS.md`.
 
@@ -54,9 +55,5 @@ npm run format                           # prettier; CI runs `git diff --exit-co
 
 `npx jest -d <dir>` does not filter — the whole suite runs (~10s). That is expected.
 
-For a destination with an `accounts/` directory, also run the account coverage check, which no
-workflow runs for you:
-
-```bash
-python3 scripts/validate_account_definitions.py <dir>
-```
+A destination with an `accounts/` directory has one more check that no workflow runs for you — see
+[where account credential fields live](CONVENTIONS.md#where-account-credential-fields-live).

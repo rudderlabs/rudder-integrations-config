@@ -92,8 +92,8 @@ Every VDM Next destination **must** include:
 2. Create `db-config.json` using the VDM template above — update name, displayName, auth, account definitions
 3. Create `accounts/<dest_name>_<auth_type>/` with db-config.json, ui-config.json, schema.json (use existing VDM destination as template)
 4. Create root `ui-config.json` — must include `accountManagementInput` field, connection mode, consent settings
-5. Create root `schema.json` — must validate `rudderAccountId` and consent management. Do **not** declare the account's credential fields here; the account's own `secretSchema` / `optionsSchema` validates those.
-6. Mirror the account fields into the destination `db-config.json`: every `secretFields` + `optionFields` entry into `config.destConfig.defaultConfig`, and every `secretFields` entry into `config.secretKeys`. The API Key pattern below uses `authenticationType: "custom"`, so — unlike OAuth — it **is** subject to this check.
+5. Create root `schema.json` — must validate `rudderAccountId` and consent management
+6. Declare the account fields in the destination `db-config.json` per [CONVENTIONS.md](../../../CONVENTIONS.md#where-account-credential-fields-live). The API Key pattern below is `authenticationType: "custom"`, so — unlike OAuth — it **is** subject to that check.
 7. Run validation:
 
 ```bash
@@ -101,7 +101,7 @@ npm test -- --testPathPattern="<dest_name>"
 python3 scripts/validate_account_definitions.py <dest_name>
 ```
 
-The second command covers step 6 and is run by no CI workflow.
+No CI workflow runs the second one.
 
 ## Critical Rules
 

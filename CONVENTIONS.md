@@ -161,17 +161,13 @@ Both are enforced by `validate_account_field_coverage` in
 python3 scripts/validate_account_definitions.py <destination>
 ```
 
-**Do not add a per-destination exemption to that validator.** Other destinations resolve
-credentials from a linked account and carry none; a bypass list is how the rule stops meaning
-anything. If the check fails, the destination metadata is what's wrong.
+If the check fails, the destination metadata is what's wrong — **do not add a per-destination
+exemption to the validator.** Other destinations resolve credentials from a linked account and
+carry none.
 
 **Account credential fields do not belong in the destination `schema.json`.** They are validated
 by the account's own `secretSchema` / `optionsSchema` and are not part of the persisted
-destination config. Only `rudderAccountId` is declared at the destination level. It follows that
-an account-backed destination should leave `configSchema.additionalProperties` open — the config
-the API returns carries the merged account fields, and `additionalProperties: false` will reject
-them on a round-trip. `braze_audience`, `iterable_audience`, and `fb_custom_audience` all declare
-no top-level `additionalProperties`.
+destination config. Only `rudderAccountId` is declared at the destination level.
 
 ### Account fields in device mode
 

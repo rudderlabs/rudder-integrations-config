@@ -152,9 +152,8 @@ Copy the template as-is — it already includes the standard consent block. Add 
 When real fields are introduced, replace it — add each to the "Connection settings" group (page 1) if required, else "Configure settings" (page 2), using the same shape. `type` ∈ `textInput | checkbox | singleSelect | multiSelect | tagInput`; omit `required` to make a field required, set `"required": false` for optional, and mark secrets with `"secret": true`.
 
 - Device/hybrid: populate `sdkTemplate.fields` with the web SDK settings from the example destination. Cloud-only: leave it `[]`.
-- Keep `regex` **plain**, exactly as in the placeholder field above (`scripts/template-ui-config.json` ships no fields, so there is no `regex` in it to copy). The deprecated `(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|` prefix is carried by most existing destinations' `ui-config.json` too, so don't bring it along when you copy a field from one — the same rule applies here as to `pattern` in `schema.json`. See [CONVENTIONS.md](../../../CONVENTIONS.md#string-pattern-and-regex).
-- **Give every string field an explicit `regex`.** Leaving it off does not produce a permissive pattern — `generalize_regex_pattern` in `scripts/schemaGenerator.py` falls back to generating the deprecated prefix. See [CONVENTIONS.md](../../../CONVENTIONS.md#always-give-a-ui-config-field-an-explicit-regex).
-- **An optional field's `regex` must match `""`.** `"required": false` with a regex that can't match the empty string means the customer can fill the field but never clear it. The `^(.{0,100})$` form above already allows it; a constrained shape (currency code, dot-path, id format) needs an explicit empty branch, e.g. `^$|^[A-Z]{3}$`. Applies to `dynamicForm` row fields too. For `singleSelect`, set `"required": false` with no `default`/`defaultOption` and the generator adds `""` to the enum — there is no key to set for it. See [CONVENTIONS.md](../../../CONVENTIONS.md#optional-fields-must-accept-the-empty-string).
+- Keep `regex` **plain**, exactly as in the placeholder field above, and give **every** string field one — `scripts/template-ui-config.json` ships no fields, so there is nothing to copy, and omitting `regex` generates the deprecated prefix rather than a permissive pattern. Don't carry that prefix over from an existing destination either. Both rules and the reasoning: [CONVENTIONS.md](../../../CONVENTIONS.md#string-pattern-and-regex).
+- An **optional** field's `regex` must match `""`, or the customer can fill it but never clear it — the `^(.{0,100})$` form above allows it, a constrained shape needs an explicit empty branch. [CONVENTIONS.md](../../../CONVENTIONS.md#optional-fields-must-accept-the-empty-string) covers `dynamicForm` rows and `singleSelect`.
 - Do not add any `oneTrustCookieCategories` / `ketchConsentPurposes` fields.
 
 ### 3. `schema.json` (author by hand — no template)
@@ -178,7 +177,7 @@ A `configSchema` (JSON Schema draft-07) whose `required`/`properties` mirror the
 }
 ```
 
-- Use a **plain** string `pattern` — just the field's own regex, e.g. `"^.{1,100}$"`. **Do not prefix it with `(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|`; that templating/env prefix is deprecated.** All but nine existing schemas still carry it, so _any_ destination you open as an example will almost certainly have it — copy the field's regex, not the prefix. Recent additions (`custom_audience`, `iterable_audience`, `bqstream_all_events`, `braze_audience`, `openai_ads`) use plain patterns. See [CONVENTIONS.md](../../../CONVENTIONS.md#string-pattern-and-regex).
+- Use a **plain** string `pattern` — just the field's own regex, e.g. `"^.{1,100}$"`. **Do not prefix it with the deprecated `(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|`,** which nearly every existing schema carries, and don't add lookaheads restating what the expression already rejects. Which schemas are clean to copy from: [CONVENTIONS.md](../../../CONVENTIONS.md#string-pattern-and-regex).
 - Copy the `consentManagement` and `connectionMode` property blocks from the example destination. The `consentManagement.properties` keys must **exactly equal** `supportedSourceTypes`; each is an array with `uniqueItemProperties: ["provider"]` and the standard `errorMessage`. Replicate the per-source-type pattern for any source type the example lacks (e.g. `cloudSource`).
 - Do **not** add `oneTrustCookieCategories` / `ketchConsentPurposes` properties.
 - **A value valid in one connection mode but not another** (e.g. the partner's browser SDK supports fewer events than its server API) goes in `schema.json` as an `allOf` / `if` / `then` block keyed on `connectionMode.<sourceType>`, with `ajv-errors` `errorMessage`s on **both** the `then` and the `if` so the customer sees a readable reason and no raw schema failure. Don't add a second mode-specific config field for it, and don't push the rule into the transformer or the SDK. Full shape: [CONVENTIONS.md](../../../CONVENTIONS.md#restricting-a-field-by-connection-mode).
@@ -211,9 +210,9 @@ Prettier matches repo style (lint-staged runs it on commit). Jest runs the defin
 - [ ] Every connection field appears in: ui-config `fields`, schema `properties`, and `destConfig.defaultConfig`.
 - [ ] Every secret field is in `secretKeys` **and** has `secret: true` in ui-config.
 - [ ] Mode wired consistently across `supportedConnectionModes`, `supportedMessageTypes`, `includeKeys`, `sdkTemplate` (cloud-only: `includeKeys`/`excludeKeys` deleted).
-- [ ] Every string field has an explicit `regex`, and no `regex`/`pattern` carries the deprecated `{{ }}` / `env.` prefix or a lookahead that restates what the base expression already rejects.
+- [ ] Every string field has an explicit `regex`; no `regex`/`pattern` carries the deprecated prefix or a redundant lookahead.
 - [ ] Every `"required": false` field matches `""` — in both the ui-config `regex` and the schema `pattern`.
-- [ ] `supportedSourceTypes` lists only source types this destination genuinely accepts — in particular, `warehouse` only for a rETL-capable destination. Every listed type needs its own `destConfig.<sourceType>` entry and a matching key under `consentManagement.properties`, so an aspirational entry is real work and a real support claim.
+- [ ] `supportedSourceTypes` claims only what this destination genuinely accepts — `warehouse` only if it is rETL-capable.
 - [ ] No file under `scripts/` was modified to get this destination through a check.
 - [ ] No `oneTrustCookieCategories` / `ketchConsentPurposes` anywhere.
 - [ ] `npx jest test/validation.test.ts` is green.
