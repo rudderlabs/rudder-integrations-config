@@ -34,7 +34,9 @@ Refer src/schemas/destinations/, src/schemas/account for adding any additional n
 
 ## Reference
 
-Find existing VDM destinations by searching for `supportsVisualMapper: true` in `src/configurations/destinations/*/db-config.json`. Read their complete config (db-config, ui-config, schema, and accounts/) for patterns.
+[`CONVENTIONS.md`](../../../CONVENTIONS.md) is the repo-wide source of truth — read it first. The sections that bite here are [account definition naming](../../../CONVENTIONS.md#accountdefinition-naming-accountdefinitionname), [where account credential fields live](../../../CONVENTIONS.md#where-account-credential-fields-live), [string `pattern` / `regex`](../../../CONVENTIONS.md#string-pattern-and-regex), and [optional fields must accept the empty string](../../../CONVENTIONS.md#optional-fields-must-accept-the-empty-string).
+
+Find existing VDM destinations by searching for `supportsVisualMapper: true` in `src/configurations/destinations/*/db-config.json`. Read their complete config (db-config, ui-config, schema, and accounts/) for patterns. **Copy their shape, not their rules** — most predate `CONVENTIONS.md`, so they will carry the deprecated `{{ }}` / `env.` regex prefix and other patterns the conventions now forbid. Where the two disagree, `CONVENTIONS.md` is current.
 
 Also read the account definition schemas for structural rules:
 
@@ -90,8 +92,16 @@ Every VDM Next destination **must** include:
 2. Create `db-config.json` using the VDM template above — update name, displayName, auth, account definitions
 3. Create `accounts/<dest_name>_<auth_type>/` with db-config.json, ui-config.json, schema.json (use existing VDM destination as template)
 4. Create root `ui-config.json` — must include `accountManagementInput` field, connection mode, consent settings
-5. Create root `schema.json` — must validate `rudderAccountId` and consent management
-6. Run validation: `npm test -- --testPathPattern="<dest_name>"`
+5. Create root `schema.json` — must validate `rudderAccountId` and consent management. Do **not** declare the account's credential fields here; the account's own `secretSchema` / `optionsSchema` validates those.
+6. Mirror the account fields into the destination `db-config.json`: every `secretFields` + `optionFields` entry into `config.destConfig.defaultConfig`, and every `secretFields` entry into `config.secretKeys`. The API Key pattern below uses `authenticationType: "custom"`, so — unlike OAuth — it **is** subject to this check.
+7. Run validation:
+
+```bash
+npm test -- --testPathPattern="<dest_name>"
+python3 scripts/validate_account_definitions.py <dest_name>
+```
+
+The second command covers step 6 and is run by no CI workflow.
 
 ## Critical Rules
 

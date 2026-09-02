@@ -8,6 +8,7 @@ argument-hint: <destination-name> (e.g. "amplitude" or "mixpanel")
 
 **Reference files — read all before starting:**
 
+- [`CONVENTIONS.md`](../../../CONVENTIONS.md) — repo-wide rules. [Account definition naming](../../../CONVENTIONS.md#accountdefinition-naming-accountdefinitionname), [where account credential fields live](../../../CONVENTIONS.md#where-account-credential-fields-live), and [string `pattern` / `regex`](../../../CONVENTIONS.md#string-pattern-and-regex) all apply here. Where an existing account definition and `CONVENTIONS.md` disagree, **`CONVENTIONS.md` is current** — most files predate it, so copy the shape of a neighbour but take the rules from there.
 - `src/schemas/account/account-db-config-schema.json` — structure and field semantics for the account `db-config.json`
 - `src/schemas/account/account-schema-schema.json` — structure for the account `schema.json` (`secretSchema` vs `optionsSchema`)
 - `src/schemas/account/account-ui-config-schema.json` — structure for the account `ui-config.json`
@@ -63,6 +64,37 @@ Add `supportedAccountDefinitions` and prepend `rudderAccountId` to `destConfig.d
 }
 ```
 
+**The account fields themselves stay declared here too.** Moving a field to the account level does
+not remove it from destination metadata — the account owns its _definition_, the destination still
+has to declare it:
+
+- every `secretFields` + `optionFields` entry from the account `db-config.json` must be in
+  `config.destConfig.defaultConfig`
+- every `secretFields` entry must also be in `config.secretKeys`
+
+The workspace config API (v1) filters its response against `destConfig`, so a field missing there
+is silently dropped from the response rather than rejected — the destination reads as having no
+credential at runtime.
+
+Both rules are checked by `validate_account_field_coverage`, which skips `oauth` accounts because
+the OAuth flow manages those secrets outside `destConfig`. No workflow runs it, so run it yourself:
+
+```bash
+python3 scripts/validate_account_definitions.py <destination>
+```
+
+If it fails, fix the destination metadata. **Do not add a per-destination exemption to the
+validator** — other destinations resolve credentials from a linked account and carry none.
+
+**Device mode.** `config.includeKeys` is the allowlist forwarded to the browser SDK, applied after
+the `destConfig` filter. If the SDK needs one of the account fields — a pixel or tag id — it must
+be in **both** `destConfig.defaultConfig` and `includeKeys`; in `defaultConfig` alone it is
+stripped before reaching the browser and the SDK initialises without it, silently dropping every
+event. `rudderAccountId` is credential-resolution plumbing the SDK has no use for: keep it out of
+`includeKeys`.
+
+Full rules: [CONVENTIONS.md](../../../CONVENTIONS.md#where-account-credential-fields-live).
+
 ---
 
 ### Step 4: Update the destination's `ui-config.json`
@@ -80,6 +112,20 @@ Add `accountManagementInput` as the **first** field in the group containing the 
 ---
 
 ### Step 5: Update the destination's `schema.json`
+
+`rudderAccountId` is the only account-related key the destination schema declares. The credential
+fields are validated by the account's own `secretSchema` / `optionsSchema` and are not part of the
+persisted destination config, so they get no `properties` entry here — this is the one place they
+are _not_ mirrored.
+
+Leave `configSchema.additionalProperties` open (declare it `true`, or omit it — `braze_audience`,
+`iterable_audience`, and `fb_custom_audience` all omit it). The config the API returns carries the
+merged account fields, and `additionalProperties: false` rejects them on a save round-trip, on
+keys the customer never touched.
+
+The `oneOf` in **(b)** below exists because a _migration_ must keep configs valid that still carry
+the legacy destination-level auth fields. A net-new account-backed destination has no legacy
+fields: it declares `rudderAccountId` and no `oneOf` at all.
 
 **a)** Add `rudderAccountId` to `properties`:
 
@@ -149,8 +195,13 @@ Error strings must match AJV output exactly.
 
 ```bash
 npm test -- --testPathPattern="<destination>"
+python3 scripts/validate_account_definitions.py <destination>
 ```
 
-Fix any failures before finishing.
+The second command is the account/destination metadata contract from Step 3 (`destConfig`
+coverage and `secretKeys`). No CI workflow or npm script runs it, so it only fails in front of you
+if you run it.
+
+Fix any failures before finishing — in the definition files, never by editing the validator.
 
 ---
