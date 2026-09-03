@@ -39,4 +39,5 @@
 
 - CI failed after adding GCS Datalake `jsonPaths` because the full Tests workflow runs `scripts/run-schema-validation.sh` on changed destination config directories, and that wrapper treats any `schemaGenerator.py` `UserWarning` as fatal.
 - For `gcs_datalake`, schema generation warned that `schema.json` was missing `namespace.rs-immutable: true` and `required: ["provider"]` on each `consentManagement` source item, plus it recommended top-level `additionalProperties: false`.
+- When adding GCS Datalake UI fields such as `jsonPaths`, CI's schema-generator alignment can require schema details beyond the task-provided snippet; for `jsonPaths`, the generated `schema.json` pattern is the plain catch-all `^(.*)$`.
 - Corrective rule: when CI validates a changed destination schema, align the changed destination schema with generator output instead of dismissing generator warnings as pre-existing drift.
