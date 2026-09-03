@@ -83,3 +83,9 @@
 
 - After removing `legacyApiKey` from HubSpot `ui-config.json` Authorization Type options while keeping it in `schema.json` for persisted-config compatibility, `python3 scripts/schemaGenerator.py destination -name hs` succeeds but recommends removing `legacyApiKey` from the `authorizationType` enum. That diff is intentional for INT-6707 and should not be applied unless legacy persisted HubSpot configs no longer need schema-valid rendering.
 - The same HubSpot schema-generator run can also emit baseline/noisy output for `redirect`, `additionalProperties: false`, and consent-management `provider` requirements; distinguish those pre-existing generator recommendations from the scoped legacy API-key UI removal.
+
+## AI-1402 — S3/Azure Datalake Schema Generator Baseline Drift
+
+- `scripts/run-schema-validation.sh` for S3 Datalake and Azure Datalake can fail because it treats pre-existing `schemaGenerator.py` warnings as fatal, even when direct `npm run check:schema:destination s3_datalake` and `npm run check:schema:destination azure_datalake` exit successfully with warnings/recommendations.
+- For S3 Datalake, distinguish `jsonPaths` changes from baseline generator drift around `prefix` pattern handling, `consentManagement.*.items.required: ["provider"]`, `timeWindowLayout` conditional enum/default expectations, and the generic `additionalProperties: false` recommendation.
+- For Azure Datalake, distinguish `jsonPaths` changes from baseline generator drift around `containerName`, `prefix`, `namespace`, and `accountName` pattern/immutable handling, `consentManagement.*.items.required: ["provider"]`, `accountKey`/`sasToken` conditional pattern expectations, and the generic `additionalProperties: false` recommendation.
