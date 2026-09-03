@@ -34,3 +34,9 @@
 - Later review clarified OpenAI Ads should not support `warehouse`; do not add warehouse just to satisfy consent-management coverage.
 - For web-only source-scoped settings, use `additionalProperties: false` on the UI field and ensure schema generation preserves it for source-dependent `singleSelect` fields, rather than narrowing `consentManagement` source coverage.
 - Code quality checks can fail on knowledge-only markdown formatting drift: `npm run lint` runs Prettier across repository markdown files and then checks `git diff --exit-code`, so `.agents/knowledge/*.md` updates must be Prettier-clean and end with a trailing newline before push.
+
+## AI-1394 — Treat GCS Datalake Schema Generator Warnings as Fatal in CI
+
+- CI failed after adding GCS Datalake `jsonPaths` because the full Tests workflow runs `scripts/run-schema-validation.sh` on changed destination config directories, and that wrapper treats any `schemaGenerator.py` `UserWarning` as fatal.
+- For `gcs_datalake`, schema generation warned that `schema.json` was missing `namespace.rs-immutable: true` and `required: ["provider"]` on each `consentManagement` source item, plus it recommended top-level `additionalProperties: false`.
+- Corrective rule: when CI validates a changed destination schema, align the changed destination schema with generator output instead of dismissing generator warnings as pre-existing drift.
