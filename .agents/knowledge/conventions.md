@@ -158,3 +158,7 @@
 
 - Google Ads Enhanced Conversions `adjustmentType` is generally available through `src/configurations/destinations/google_adwords_enhanced_conversions/ui-config.json`; do not reintroduce the removed UI `conditions` gate for `AMP_enable-gaec-adjustment-type`.
 - Keep the existing GAEC `adjustmentType` default as `ENHANCEMENT` and options as `ENHANCEMENT`/`RESTATEMENT`; `schema.json` and `db-config.json` already expose the setting unconditionally and should not need changes for this GA rollout.
+
+## AI-1402 — Datalake JSON Paths Compatibility Pattern
+
+- S3 Datalake and Azure Datalake `jsonPaths` use the existing Snowflake-style warehouse regex/pattern `(^\{\{.*\|\|(.*)\}\}$)|(^env[.].+)|^(.*)$` in both UI and schema, even though newer `CONVENTIONS.md` guidance discourages adding the deprecated `{{ }} || env.` prefix to new string patterns; this preserves warehouse `jsonPaths` compatibility and still allows empty strings through the trailing `^(.*)$` branch.
