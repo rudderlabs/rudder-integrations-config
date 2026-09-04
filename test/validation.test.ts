@@ -3,6 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 import Commander from 'commander';
+import Ajv from 'ajv';
 import {
   init,
   validateConfig,
@@ -993,6 +994,49 @@ describe('Account Definition validation tests', () => {
       );
       await expect(validateAccountDefinitions(accDefConfig)).resolves.toEqual(true);
     });
+  });
+
+  it('openai_ads account schema accepts required pixelId and optional apiKey', () => {
+    const accountSchemaPath = path.resolve(
+      'src/configurations/destinations/openai_ads/accounts/openai_ads_api_key/schema.json',
+    );
+    const accountSchema = JSON.parse(fs.readFileSync(accountSchemaPath, 'utf-8'));
+    const ajv = new Ajv({ allErrors: true, strict: false });
+    const validateOptions = ajv.compile(accountSchema.optionsSchema);
+    const validateSecrets = ajv.compile(accountSchema.secretSchema);
+
+    expect(validateOptions({ pixelId: 'pixel_123' })).toBe(true);
+    expect(validateOptions({})).toBe(false);
+    expect(validateOptions({ pixelId: '' })).toBe(false);
+    expect(validateSecrets({})).toBe(true);
+    expect(validateSecrets({ apiKey: 'sk-test' })).toBe(true);
+    expect(validateSecrets({ apiKey: '' })).toBe(false);
+  });
+
+  it('openai_ads account marks apiKey secret and pixelId non-secret', async () => {
+    const accountConfig = await getAccountDefinitionConfig(
+      'openai_ads',
+      'openai_ads_api_key',
+      'destinations',
+    );
+    const accountUiConfigPath = path.resolve(
+      'src/configurations/destinations/openai_ads/accounts/openai_ads_api_key/ui-config.json',
+    );
+    const accountUiConfig = JSON.parse(fs.readFileSync(accountUiConfigPath, 'utf-8'));
+    const apiKeyField = accountUiConfig.uiConfig.form.fields.find(
+      (field: Record<string, unknown>) =>
+        JSON.stringify(field.key) === JSON.stringify(['options', 'apiKey']),
+    );
+    const pixelIdField = accountUiConfig.uiConfig.form.fields.find(
+      (field: Record<string, unknown>) =>
+        JSON.stringify(field.key) === JSON.stringify(['options', 'pixelId']),
+    );
+
+    expect(accountConfig.config.optionFields).toEqual(['pixelId']);
+    expect(accountConfig.config.secretFields).toEqual(['apiKey']);
+    expect(apiKeyField.secret).toBe(true);
+    expect(apiKeyField.optional).toBe(true);
+    expect(pixelIdField.secret).toBeUndefined();
   });
 
   const sourceAccounts = getAccountNames('sources');

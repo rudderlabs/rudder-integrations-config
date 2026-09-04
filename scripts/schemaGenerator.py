@@ -308,6 +308,11 @@ def generate_schema_for_dynamic_data_select(field, dbConfig, schema_field_name):
     return {"type": FieldTypeEnum.STRING.value}
 
 
+def generate_schema_for_account_management_input(field, dbConfig, schema_field_name):
+    """Creates a schema object for an accountManagementInput field."""
+    return {"type": FieldTypeEnum.STRING.value}
+
+
 def generate_schema_for_textarea_input(field, dbConfig, schema_field_name):
     """Creates a schema object of textareaInput.
 
@@ -386,6 +391,8 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
                 and field[schema_field_name] in dbConfig["destConfig"][sourceType]
             ):
                 newSingleSelectObj["properties"][sourceType] = singleSelectObj
+        if field.get("additionalProperties") == False:
+            newSingleSelectObj["additionalProperties"] = False
         singleSelectObj = newSingleSelectObj
     add_immutable_property(field, singleSelectObj)
     return singleSelectObj
@@ -550,6 +557,11 @@ def generate_schema_for_conditions_allOf(customFields, dbConfig, schema_field_na
             )(field, dbConfig, schema_field_name)
             if field.get("required") == True:
                 thenObj["required"].append(field[schema_field_name])
+                if "requiredErrorMessage" in field:
+                    thenObj.setdefault("errorMessage", {"required": {}})
+                    thenObj["errorMessage"]["required"][field[schema_field_name]] = (
+                        field["requiredErrorMessage"]
+                    )
         allOfItemList.append({"if": ifObj, "then": thenObj})
     return allOfItemList
 
@@ -566,8 +578,9 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    uniqueItemPropertiesErrorMessage = (
-        "Only one consent management block can be configured per provider."
+    uniqueItemPropertiesErrorMessage = field.get(
+        "uniqueRowFieldsErrorMessage",
+        "Only one consent management block can be configured per provider.",
     )
     dynamicCustomFormObj = {}
     dynamicCustomFormObj["type"] = FieldTypeEnum.ARRAY.value
@@ -610,6 +623,7 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
                 customField, field[customFieldsKey], schema_field_name
             )
             is not None
+            and customField.get("includeWhenConditional") != True
         ):
             continue
 
@@ -648,6 +662,9 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     if requiredFields:
         dynamicCustomFormItemObj["required"] = requiredFields
 
+    if field.get("itemAdditionalProperties") == False:
+        dynamicCustomFormItemObj["additionalProperties"] = False
+
     dynamicCustomFormObj["items"] = dynamicCustomFormItemObj
     if "uniqueRowFields" in field and isinstance(field["uniqueRowFields"], list):
         dynamicCustomFormObj["uniqueItemProperties"] = field["uniqueRowFields"]
@@ -668,6 +685,8 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
                 and field[schema_field_name] in dbConfig["destConfig"][sourceType]
             ):
                 newDynamicCustomFormObj["properties"][sourceType] = dynamicCustomFormObj
+        if field.get("additionalProperties") == False:
+            newDynamicCustomFormObj["additionalProperties"] = False
         dynamicCustomFormObj = newDynamicCustomFormObj
 
     return dynamicCustomFormObj
@@ -722,6 +741,11 @@ def generate_schema_for_dynamic_custom_form_allOf(
                 )(field, dbConfig, schema_field_name)
                 if "required" in field and field["required"] == True:
                     thenObj["required"].append(field[schema_field_name])
+                    if "requiredErrorMessage" in field:
+                        thenObj.setdefault("errorMessage", {"required": {}})
+                        thenObj["errorMessage"]["required"][
+                            field[schema_field_name]
+                        ] = field["requiredErrorMessage"]
         allOfItemObj["then"] = thenObj
         allOfItemList.append(allOfItemObj)
 
@@ -868,6 +892,8 @@ def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
                 and field[schema_field_name] in dbConfig["destConfig"][sourceType]
             ):
                 tagObject["properties"][sourceType] = tagObjectCopy
+        if field.get("additionalProperties") == False:
+            tagObject["additionalProperties"] = False
     return tagObject
 
 
@@ -1655,6 +1681,7 @@ uiTypetoSchemaFn = {
     "textInput": generate_schema_for_textinput,
     "textareaInput": generate_schema_for_textarea_input,
     "singleSelect": generate_schema_for_single_select,
+    "accountManagementInput": generate_schema_for_account_management_input,
     "dynamicCustomForm": generate_schema_for_dynamic_custom_form,
     "dynamicForm": generate_schema_for_dynamic_form,
     "mapping": generate_schema_for_mapping,

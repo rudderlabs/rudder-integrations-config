@@ -138,8 +138,23 @@
 - Do not add CustomerIO cloud-only `apiVersion` or `userIdIdentifierType` to `src/configurations/destinations/customerio/db-config.json` `config.includeKeys`; they should be validated and exposed through schema/UI/default config without being included for device-mode consumers.
 - For the newer `userIdMapping` field name, keep the same cloud-only contract: `apiVersion` remains optional with `v1` defaults in schema/UI, `userIdMapping` is required only by the `apiVersion == v2` conditional, the UI fields are gated to cloud mode (with `userIdMapping` additionally gated on v2), and neither key belongs in `config.includeKeys` for device-mode consumers.
 
+## INT-7070 — OpenAI Ads Feature-Flag and Credential Scope
+
+- OpenAI Ads destination visibility uses the standard `options.hidden.gate.flags` hide-when-false pattern. The conventional placeholder Flagsmith key chosen for this destination is `AMP_enable-openai-ads-destination` when no product-specified flag name is available.
+- For OpenAI Ads account-backed setup, keep credential field definitions under `src/configurations/destinations/openai_ads/accounts/openai_ads_api_key/`, but also mirror account option/secret fields into destination `config.destConfig.defaultConfig` as required by generic account coverage validation.
+- List secret account fields such as `apiKey` in OpenAI Ads destination `config.secretKeys`, but do not add non-device account plumbing fields such as `rudderAccountId` to `config.includeKeys`.
+- Include linked-account `pixelId` in OpenAI Ads destination `config.includeKeys` for web device mode; it must pass both `config.destConfig.defaultConfig` workspace filtering and the device-mode allowlist for browser SDK initialization.
+- Optional OpenAI Ads account UI credential fields should explicitly set `optional: true`.
+- OpenAI Ads should not list `warehouse` as a supported source type; keep warehouse absent from supported source types, supported connection modes, destination config source entries, and generated schema branches.
+- OpenAI Ads optional text inputs that can be cleared should use regex/schema patterns that allow the empty string; `defaultCurrency` uses `^$|^[A-Z]{3}$` so clearing the optional field does not block destination saves.
+
 ## INT-7071 — CustomerIO v2 Default After Migration
 
 - CustomerIO `apiVersion` now defaults to `v2` in both `src/configurations/destinations/customerio/ui-config.json` and `schema.json`; this supersedes the earlier INT-7014 deferral because existing destinations were migrated to explicitly save `apiVersion: "v1"` before the default flip.
 - Keep `apiVersion` optional for CustomerIO so migrated legacy configs with explicit `apiVersion: "v1"` remain valid, while newly created configs that omit `apiVersion` are defaulted by AJV (`useDefaults: true`) to `"v2"`.
 - Omitted-`apiVersion` validation fixtures should represent new v2-style configs and include `userIdIdentifierType`/`userIdMapping` as required by the v2 contract; legacy compatibility fixtures should be explicit `apiVersion: "v1"`, not raw omission.
+
+## INT-7092 — GAEC Adjustment Type GA Scope
+
+- Google Ads Enhanced Conversions `adjustmentType` is generally available through `src/configurations/destinations/google_adwords_enhanced_conversions/ui-config.json`; do not reintroduce the removed UI `conditions` gate for `AMP_enable-gaec-adjustment-type`.
+- Keep the existing GAEC `adjustmentType` default as `ENHANCEMENT` and options as `ENHANCEMENT`/`RESTATEMENT`; `schema.json` and `db-config.json` already expose the setting unconditionally and should not need changes for this GA rollout.

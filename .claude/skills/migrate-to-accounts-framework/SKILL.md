@@ -8,6 +8,7 @@ argument-hint: <destination-name> (e.g. "amplitude" or "mixpanel")
 
 **Reference files — read all before starting:**
 
+- [`CONVENTIONS.md`](../../../CONVENTIONS.md) — repo-wide rules. [Account definition naming](../../../CONVENTIONS.md#accountdefinition-naming-accountdefinitionname), [where account credential fields live](../../../CONVENTIONS.md#where-account-credential-fields-live), and [string `pattern` / `regex`](../../../CONVENTIONS.md#string-pattern-and-regex) all apply here. Where an existing account definition and `CONVENTIONS.md` disagree, **`CONVENTIONS.md` is current** — most files predate it, so copy the shape of a neighbour but take the rules from there.
 - `src/schemas/account/account-db-config-schema.json` — structure and field semantics for the account `db-config.json`
 - `src/schemas/account/account-schema-schema.json` — structure for the account `schema.json` (`secretSchema` vs `optionsSchema`)
 - `src/schemas/account/account-ui-config-schema.json` — structure for the account `ui-config.json`
@@ -63,6 +64,18 @@ Add `supportedAccountDefinitions` and prepend `rudderAccountId` to `destConfig.d
 }
 ```
 
+**The account fields themselves stay declared here too.** Moving a field to the account level does
+not remove it from destination metadata — the account owns its _definition_, the destination still
+declares it:
+
+- every `secretFields` + `optionFields` entry from the account `db-config.json` → `config.destConfig.defaultConfig`
+- every `secretFields` entry → also `config.secretKeys`
+- device mode only: any account field the browser SDK needs → also `config.includeKeys`, but never `rudderAccountId`
+
+What each of these does, what breaks when one is missed, and why the validator takes no
+exemptions: [CONVENTIONS.md — where account credential fields live](../../../CONVENTIONS.md#where-account-credential-fields-live).
+Step 7 verifies them.
+
 ---
 
 ### Step 4: Update the destination's `ui-config.json`
@@ -80,6 +93,14 @@ Add `accountManagementInput` as the **first** field in the group containing the 
 ---
 
 ### Step 5: Update the destination's `schema.json`
+
+`rudderAccountId` is the only account-related key the destination schema declares — the credential
+fields get no `properties` entry here. This is the one place they are _not_ mirrored; Step 3 has
+the rest.
+
+The `oneOf` in **(b)** below exists because a _migration_ must keep configs valid that still carry
+the legacy destination-level auth fields. A net-new account-backed destination has no legacy
+fields: it declares `rudderAccountId` and no `oneOf` at all.
 
 **a)** Add `rudderAccountId` to `properties`:
 
@@ -149,8 +170,12 @@ Error strings must match AJV output exactly.
 
 ```bash
 npm test -- --testPathPattern="<destination>"
+python3 scripts/validate_account_definitions.py <destination>
 ```
 
-Fix any failures before finishing.
+The second command checks the Step 3 declarations. CI runs it too — a migration always touches
+`db-config.json`, which is what triggers it — but no npm script or hook does, so run it before you
+push rather than finding out from a red build. Fix any failures in the definition files, never by
+exempting the destination in the validator.
 
 ---
