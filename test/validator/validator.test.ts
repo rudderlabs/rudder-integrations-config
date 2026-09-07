@@ -1025,6 +1025,158 @@ describe('Validator Utils', () => {
       });
     });
 
+    describe('Rule: event-filtering-fields-in-defaultConfig', () => {
+      it('should pass when event-filtering fields are only in defaultConfig', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            destConfig: {
+              defaultConfig: [
+                'apiKey',
+                'eventFilteringOption',
+                'whitelistedEvents',
+                'blacklistedEvents',
+              ],
+              web: ['useNativeSDK', 'connectionMode'],
+              android: ['connectionMode'],
+            },
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should pass when destination has no event-filtering fields', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            destConfig: {
+              defaultConfig: ['apiKey'],
+              web: ['useNativeSDK', 'connectionMode'],
+              android: ['connectionMode'],
+            },
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should pass when destination has no destConfig', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {},
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should pass when config has a malformed shape handled by schema validation elsewhere', async () => {
+        const readFileMock = mockedFs.promises.readFile as jest.MockedFunction<
+          typeof fs.promises.readFile
+        >;
+        readFileMock.mockResolvedValueOnce(
+          JSON.stringify({
+            type: 'object',
+            required: ['name', 'displayName', 'config'],
+            properties: {
+              name: { type: 'string' },
+              displayName: { type: 'string' },
+              config: {},
+            },
+          }),
+        );
+
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: 'invalid-config-shape',
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should pass when destConfig has a malformed shape handled by schema validation elsewhere', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            destConfig: 'invalid-dest-config-shape',
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should pass when a source-type destConfig section has a malformed shape handled by schema validation elsewhere', async () => {
+        const validDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            destConfig: {
+              defaultConfig: ['eventFilteringOption'],
+              web: 'invalid-source-section-shape',
+            },
+          },
+        };
+
+        await expect(validateDestinationDefinitions(validDestDef)).resolves.toBe(true);
+      });
+
+      it('should fail when eventFilteringOption appears in destConfig.web', async () => {
+        const invalidDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            destConfig: {
+              defaultConfig: ['apiKey'],
+              web: ['useNativeSDK', 'eventFilteringOption'],
+            },
+          },
+        };
+
+        await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow(
+          /Event filtering fields must be in destConfig\.defaultConfig.*eventFilteringOption.*destConfig\.web/,
+        );
+      });
+
+      it('should fail and name all event-filtering fields found in destConfig.web', async () => {
+        const invalidDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            destConfig: {
+              defaultConfig: ['apiKey'],
+              web: ['eventFilteringOption', 'whitelistedEvents', 'blacklistedEvents'],
+            },
+          },
+        };
+
+        await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow(
+          /eventFilteringOption.*whitelistedEvents.*blacklistedEvents.*destConfig\.web/,
+        );
+      });
+
+      it('should fail when whitelistedEvents appears in a non-web destConfig section', async () => {
+        const invalidDestDef = {
+          name: 'TEST',
+          displayName: 'Test',
+          config: {
+            destConfig: {
+              defaultConfig: ['apiKey'],
+              android: ['connectionMode', 'whitelistedEvents'],
+            },
+          },
+        };
+
+        await expect(validateDestinationDefinitions(invalidDestDef)).rejects.toThrow(
+          /whitelistedEvents.*destConfig\.android/,
+        );
+      });
+    });
+
     describe('Rule: includeKeys-must-be-defined-when-device-hybrid-mode-is-supported', () => {
       it('should pass when includeKeys is defined and device mode is supported', async () => {
         const validDestDef = {

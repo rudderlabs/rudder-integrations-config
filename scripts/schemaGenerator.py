@@ -105,6 +105,50 @@ def generalize_regex_pattern(field):
     return pattern
 
 
+def get_dest_field_dependency_sources(field, dbConfig, schema_field_name):
+    """Returns source types that should wrap the given destination field in schema.
+
+    Most source-scoped fields are detected from db-config destConfig.<source> arrays.
+    Some fields, like client-side event filtering fields, must live in
+    destConfig.defaultConfig for workspace-config filtering while still persisting as
+    a source-scoped schema object. Such fields can declare sourceDependentSources in
+    ui-config to make this generator preserve the source wrapper without duplicating
+    the field in a source-type destConfig section.
+    """
+    if not dbConfig:
+        return []
+
+    field_name = field.get(schema_field_name)
+    supported_source_types = dbConfig.get("supportedSourceTypes", [])
+    dest_config = dbConfig.get("destConfig", {})
+
+    if (
+        not field_name
+        or not isinstance(supported_source_types, list)
+        or not isinstance(dest_config, dict)
+    ):
+        return []
+
+    dependency_sources = []
+    for sourceType in supported_source_types:
+        source_config = dest_config.get(sourceType)
+        if isinstance(source_config, list) and field_name in source_config:
+            dependency_sources.append(sourceType)
+
+    explicit_dependency_sources = field.get("sourceDependentSources", [])
+    if isinstance(
+        explicit_dependency_sources, list
+    ) and is_field_present_in_default_config(field, dbConfig, schema_field_name):
+        for sourceType in explicit_dependency_sources:
+            if (
+                sourceType in supported_source_types
+                and sourceType not in dependency_sources
+            ):
+                dependency_sources.append(sourceType)
+
+    return dependency_sources
+
+
 def is_dest_field_dependent_on_source(field, dbConfig, schema_field_name):
     """Checks if the given field is source-specific by using dbConfig.
     In dbConfig all the sources are listed in 'supportedSourceTypes',
@@ -120,15 +164,7 @@ def is_dest_field_dependent_on_source(field, dbConfig, schema_field_name):
     Returns:
         boolean: True if the field is source dependent else, False.
     """
-    if not dbConfig:
-        return False
-    for sourceType in dbConfig["supportedSourceTypes"]:
-        if (
-            sourceType in dbConfig["destConfig"]
-            and field[schema_field_name] in dbConfig["destConfig"][sourceType]
-        ):
-            return True
-    return False
+    return bool(get_dest_field_dependency_sources(field, dbConfig, schema_field_name))
 
 
 def is_key_present_in_dest_config(dbConfig, key):
@@ -193,15 +229,13 @@ def generate_schema_for_default_checkbox(field, dbConfig, schema_field_name):
     if isSourceDependent:
         defaultCheckboxSchemaObj["type"] = FieldTypeEnum.OBJECT.value
         defaultCheckboxSchemaObj["properties"] = {}
-        # iterates over supported sources and sets the field for that source if field is present inside that source
-        for sourceType in dbConfig["supportedSourceTypes"]:
-            if (
-                sourceType in dbConfig["destConfig"]
-                and field[schema_field_name] in dbConfig["destConfig"][sourceType]
-            ):
-                defaultCheckboxSchemaObj["properties"][sourceType] = {
-                    "type": FieldTypeEnum.BOOLEAN.value
-                }
+        # iterates over dependent sources and sets the field for that source
+        for sourceType in get_dest_field_dependency_sources(
+            field, dbConfig, schema_field_name
+        ):
+            defaultCheckboxSchemaObj["properties"][sourceType] = {
+                "type": FieldTypeEnum.BOOLEAN.value
+            }
     else:
         defaultCheckboxSchemaObj["type"] = FieldTypeEnum.BOOLEAN.value
         if "default" in field:
@@ -228,15 +262,13 @@ def generate_schema_for_checkbox(field, dbConfig, schema_field_name):
     if isSourceDependent:
         checkboxSchemaObj["type"] = FieldTypeEnum.OBJECT.value
         checkboxSchemaObj["properties"] = {}
-        # iterates over supported sources and sets the field for that source if field is present inside that source
-        for sourceType in dbConfig["supportedSourceTypes"]:
-            if (
-                sourceType in dbConfig["destConfig"]
-                and field[schema_field_name] in dbConfig["destConfig"][sourceType]
-            ):
-                checkboxSchemaObj["properties"][sourceType] = {
-                    "type": FieldTypeEnum.BOOLEAN.value
-                }
+        # iterates over dependent sources and sets the field for that source
+        for sourceType in get_dest_field_dependency_sources(
+            field, dbConfig, schema_field_name
+        ):
+            checkboxSchemaObj["properties"][sourceType] = {
+                "type": FieldTypeEnum.BOOLEAN.value
+            }
     else:
         checkboxSchemaObj["type"] = FieldTypeEnum.BOOLEAN.value
         if "default" in field:
@@ -264,19 +296,17 @@ def generate_schema_for_textinput(field, dbConfig, schema_field_name):
     if isSourceDependent:
         textInputSchemaObj["type"] = FieldTypeEnum.OBJECT.value
         textInputSchemaObj["properties"] = {}
-        # iterates over supported sources and sets the field for that source if field is present inside that source
-        for sourceType in dbConfig["supportedSourceTypes"]:
-            if (
-                sourceType in dbConfig["destConfig"]
-                and field[schema_field_name] in dbConfig["destConfig"][sourceType]
-            ):
-                textInputSchemaObj["properties"][sourceType] = {
-                    "type": FieldTypeEnum.STRING.value
-                }
-                if "regex" in field:
-                    textInputSchemaObj["properties"][sourceType]["pattern"] = (
-                        generalize_regex_pattern(field)
-                    )
+        # iterates over dependent sources and sets the field for that source
+        for sourceType in get_dest_field_dependency_sources(
+            field, dbConfig, schema_field_name
+        ):
+            textInputSchemaObj["properties"][sourceType] = {
+                "type": FieldTypeEnum.STRING.value
+            }
+            if "regex" in field:
+                textInputSchemaObj["properties"][sourceType]["pattern"] = (
+                    generalize_regex_pattern(field)
+                )
     else:
         # A field marked inputFieldType "number" is coerced with Number() in the
         # UI, so it reaches the config as a JSON number, not a string. "pattern"
@@ -384,13 +414,11 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
     if isSourceDependent:
         newSingleSelectObj = {"type": FieldTypeEnum.OBJECT.value}
         newSingleSelectObj["properties"] = {}
-        # iterates over supported sources and sets the field for that source if field is present inside that source
-        for sourceType in dbConfig["supportedSourceTypes"]:
-            if (
-                sourceType in dbConfig["destConfig"]
-                and field[schema_field_name] in dbConfig["destConfig"][sourceType]
-            ):
-                newSingleSelectObj["properties"][sourceType] = singleSelectObj
+        # iterates over dependent sources and sets the field for that source
+        for sourceType in get_dest_field_dependency_sources(
+            field, dbConfig, schema_field_name
+        ):
+            newSingleSelectObj["properties"][sourceType] = singleSelectObj
         if field.get("additionalProperties") == False:
             newSingleSelectObj["additionalProperties"] = False
         singleSelectObj = newSingleSelectObj
@@ -643,15 +671,11 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
 
         # If the custom field is source dependent, we remove the source keys as it's not required inside custom fields, rather they need to be moved to top.
         if isCustomFieldDependentOnSource:
-            for sourceType in dbConfig["supportedSourceTypes"]:
-                if (
-                    sourceType in dbConfig["destConfig"]
-                    and field[schema_field_name] in dbConfig["destConfig"][sourceType]
-                ):
-                    customFieldSchemaObj = customFieldSchemaObj["properties"][
-                        sourceType
-                    ]
-                    break
+            for sourceType in get_dest_field_dependency_sources(
+                field, dbConfig, schema_field_name
+            ):
+                customFieldSchemaObj = customFieldSchemaObj["properties"][sourceType]
+                break
         dynamicCustomFormItemObj["properties"][
             customField[schema_field_name]
         ] = customFieldSchemaObj
@@ -679,12 +703,10 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     if isSourceDependent:
         newDynamicCustomFormObj = {"type": FieldTypeEnum.OBJECT.value}
         newDynamicCustomFormObj["properties"] = {}
-        for sourceType in dbConfig["supportedSourceTypes"]:
-            if (
-                sourceType in dbConfig["destConfig"]
-                and field[schema_field_name] in dbConfig["destConfig"][sourceType]
-            ):
-                newDynamicCustomFormObj["properties"][sourceType] = dynamicCustomFormObj
+        for sourceType in get_dest_field_dependency_sources(
+            field, dbConfig, schema_field_name
+        ):
+            newDynamicCustomFormObj["properties"][sourceType] = dynamicCustomFormObj
         if field.get("additionalProperties") == False:
             newDynamicCustomFormObj["additionalProperties"] = False
         dynamicCustomFormObj = newDynamicCustomFormObj
@@ -804,14 +826,10 @@ def generate_schema_for_dynamic_form(field, dbConfig, schema_field_name):
     if isSourceDependent:
         newDynamicFormFormObj = {"type": FieldTypeEnum.OBJECT.value}
         newDynamicFormFormObj["properties"] = {}
-        for sourceType in dbConfig["supportedSourceTypes"]:
-            if (
-                sourceType in dbConfig["destConfig"]
-                and field[schema_field_name] in dbConfig["destConfig"][sourceType]
-            ):
-                newDynamicFormFormObj["properties"][
-                    sourceType
-                ] = dynamicFormSchemaObject
+        for sourceType in get_dest_field_dependency_sources(
+            field, dbConfig, schema_field_name
+        ):
+            newDynamicFormFormObj["properties"][sourceType] = dynamicFormSchemaObject
         dynamicFormSchemaObject = newDynamicFormFormObj
     return dynamicFormSchemaObject
 
@@ -886,12 +904,10 @@ def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
         tagObject = {}
         tagObject = {"type": FieldTypeEnum.OBJECT.value}
         tagObject["properties"] = {}
-        for sourceType in dbConfig["supportedSourceTypes"]:
-            if (
-                sourceType in dbConfig["destConfig"]
-                and field[schema_field_name] in dbConfig["destConfig"][sourceType]
-            ):
-                tagObject["properties"][sourceType] = tagObjectCopy
+        for sourceType in get_dest_field_dependency_sources(
+            field, dbConfig, schema_field_name
+        ):
+            tagObject["properties"][sourceType] = tagObjectCopy
         if field.get("additionalProperties") == False:
             tagObject["additionalProperties"] = False
     return tagObject
