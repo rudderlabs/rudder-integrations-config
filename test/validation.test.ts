@@ -350,6 +350,38 @@ describe('Destination Definition validation tests', () => {
     });
   });
 
+  it('openai_ads event filtering UI is visible for cloud and web device connections', () => {
+    const uiConfigPath = path.resolve('src/configurations/destinations/openai_ads/ui-config.json');
+    const uiConfig = JSON.parse(fs.readFileSync(uiConfigPath, 'utf-8')) as {
+      uiConfig: { baseTemplate: Record<string, unknown>[] };
+    };
+    const groups = uiConfig.uiConfig.baseTemplate.flatMap((template) =>
+      ((template.sections as Record<string, unknown>[] | undefined) ?? []).flatMap(
+        (section) => (section.groups as Record<string, unknown>[] | undefined) ?? [],
+      ),
+    );
+    const eventFilteringGroup = groups.find((group) =>
+      ((group.fields as Record<string, unknown>[] | undefined) ?? []).some(
+        (field) => field.configKey === 'eventFilteringOption',
+      ),
+    );
+
+    expect(eventFilteringGroup?.preRequisites).toEqual({
+      fields: [
+        {
+          configKey: 'connectionModes.cloud',
+          value: true,
+        },
+        {
+          configKey: 'connectionModes.webDevice',
+          value: true,
+        },
+      ],
+      condition: 'or',
+    });
+    expect(JSON.stringify(eventFilteringGroup)).not.toContain('web device-mode');
+  });
+
   const malformedDestDefConfigs = [
     {
       description: 'missing "name" and "displayName" properties',

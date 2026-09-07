@@ -227,15 +227,20 @@
             "icon": "otherSettings",
             "groups": [
               {
-                "title": "Client-side event filtering",
-                "note": "Decide what web device-mode events are allowed (allowlisting) and blocked (denylisting)",
+                "title": "Event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
                 "preRequisites": {
                   "fields": [
+                    {
+                      "configKey": "connectionModes.cloud",
+                      "value": true
+                    },
                     {
                       "configKey": "connectionModes.webDevice",
                       "value": true
                     }
-                  ]
+                  ],
+                  "condition": "or"
                 },
                 "fields": [
                   {
@@ -263,7 +268,7 @@
                   {
                     "type": "tagInput",
                     "label": "Allowlisted events",
-                    "note": "Input separate events by pressing Enter. Only web device-mode events matching this list are sent.",
+                    "note": "Input separate events by pressing Enter. Only events matching this list are sent.",
                     "configKey": "whitelistedEvents",
                     "tagKey": "eventName",
                     "regex": "^(.{0,100})$",
@@ -277,7 +282,7 @@
                     "preRequisites": {
                       "fields": [
                         {
-                          "configKey": "eventFilteringOption.web",
+                          "configKey": "eventFilteringOption",
                           "value": "whitelistedEvents"
                         }
                       ]
@@ -286,7 +291,7 @@
                   {
                     "type": "tagInput",
                     "label": "Denylisted events",
-                    "note": "Input separate events by pressing Enter. Web device-mode events matching this list are blocked.",
+                    "note": "Input separate events by pressing Enter. Events matching this list are blocked.",
                     "configKey": "blacklistedEvents",
                     "tagKey": "eventName",
                     "regex": "^(.{0,100})$",
@@ -300,7 +305,7 @@
                     "preRequisites": {
                       "fields": [
                         {
-                          "configKey": "eventFilteringOption.web",
+                          "configKey": "eventFilteringOption",
                           "value": "blacklistedEvents"
                         }
                       ]
