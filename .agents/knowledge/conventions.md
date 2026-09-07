@@ -163,4 +163,4 @@
 
 - OpenAI Ads event filtering is destination-wide, not web-device-only: keep `eventFilteringOption`, `whitelistedEvents`, and `blacklistedEvents` in `src/configurations/destinations/openai_ads/db-config.json` `config.destConfig.defaultConfig`, not `config.destConfig.web`.
 - OpenAI Ads event-filtering schema and validation fixtures should use the flat top-level shape for those three keys, not the obsolete nested `{ web: ... }` shape.
-- OpenAI Ads event-filtering UI prerequisites should reference `eventFilteringOption` without a `.web` qualifier; keep the UI group visible for either cloud mode or web device mode and avoid web-device-only copy for these destination-wide fields.
+- OpenAI Ads event-filtering UI prerequisites should reference `eventFilteringOption` without a `.web` qualifier, but the dashboard group is client-side only and should remain visible only for `connectionModes.webDevice`.
