@@ -350,7 +350,7 @@ describe('Destination Definition validation tests', () => {
     });
   });
 
-  it('openai_ads event filtering UI is visible for cloud and web device connections', () => {
+  it('openai_ads event filtering UI is visible only for web device connections', () => {
     const uiConfigPath = path.resolve('src/configurations/destinations/openai_ads/ui-config.json');
     const uiConfig = JSON.parse(fs.readFileSync(uiConfigPath, 'utf-8')) as {
       uiConfig: { baseTemplate: Record<string, unknown>[] };
@@ -365,21 +365,29 @@ describe('Destination Definition validation tests', () => {
         (field) => field.configKey === 'eventFilteringOption',
       ),
     );
+    const preRequisites = eventFilteringGroup?.preRequisites as
+      | { fields: Record<string, unknown>[]; condition?: string }
+      | undefined;
 
-    expect(eventFilteringGroup?.preRequisites).toEqual({
-      fields: [
-        {
-          configKey: 'connectionModes.cloud',
-          value: true,
-        },
+    expect(eventFilteringGroup).toBeDefined();
+    expect(preRequisites?.fields).toEqual(
+      expect.arrayContaining([
         {
           configKey: 'connectionModes.webDevice',
           value: true,
         },
-      ],
-      condition: 'or',
-    });
-    expect(JSON.stringify(eventFilteringGroup)).not.toContain('web device-mode');
+      ]),
+    );
+    expect(preRequisites?.fields).not.toEqual(
+      expect.arrayContaining([
+        {
+          configKey: 'connectionModes.cloud',
+          value: true,
+        },
+      ]),
+    );
+    expect(preRequisites?.condition).toBeUndefined();
+    expect(JSON.stringify(eventFilteringGroup)).toContain('web device-mode');
   });
 
   const malformedDestDefConfigs = [
