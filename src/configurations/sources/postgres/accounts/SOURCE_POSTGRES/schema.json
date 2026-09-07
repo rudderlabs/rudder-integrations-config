@@ -17,14 +17,24 @@
         "description": "Database username (non-secret, matches the Postgres source form)"
       },
       "port": {
-        "type": "string",
-        "description": "Database port (string, matching the Postgres source form)"
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65535
+          },
+          {
+            "type": "string",
+            "pattern": "^[0-9]{1,5}$"
+          }
+        ],
+        "description": "Database port. Integer is the shape every rudder-sources consumer expects (sqlconnect-go unmarshals into Port int); the string form is retained only for the existing rudder-cli e2e fixture and should not be used by new callers."
       },
       "sslMode": {
         "type": "string",
-        "enum": ["disable", "require"],
+        "enum": ["disable", "allow", "prefer", "require", "verify-ca", "verify-full"],
         "default": "disable",
-        "description": "SSL mode"
+        "description": "SSL mode, passed through to lib/pq unchanged by sqlconnect-go. The set matches the modes rudder-lookout accepts for Postgres (POSTGRES_SSLMODES, src/lib/postgres-connection.ts); its own default is `require`."
       }
     }
   },
