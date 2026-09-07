@@ -158,3 +158,8 @@
 
 - Google Ads Enhanced Conversions `adjustmentType` is generally available through `src/configurations/destinations/google_adwords_enhanced_conversions/ui-config.json`; do not reintroduce the removed UI `conditions` gate for `AMP_enable-gaec-adjustment-type`.
 - Keep the existing GAEC `adjustmentType` default as `ENHANCEMENT` and options as `ENHANCEMENT`/`RESTATEMENT`; `schema.json` and `db-config.json` already expose the setting unconditionally and should not need changes for this GA rollout.
+
+## ANA-134 — Event Filtering DestConfig Scope
+
+- Destination event-filtering fields `eventFilteringOption`, `whitelistedEvents`, and `blacklistedEvents` must be listed in `config.destConfig.defaultConfig`, not in source-type arrays such as `config.destConfig.web`, `android`, or `cloud`; the destination-definition custom validator rejects those fields outside `defaultConfig`.
+- Source-scoped persisted schema behavior should be modeled separately from workspace-config filtering. For example, OpenAI Ads can keep event-filtering fields in `defaultConfig` while UI fields declare `sourceDependentSources: ["web"]` so schema generation preserves a web-scoped object wrapper without adding those fields to `destConfig.web`.
