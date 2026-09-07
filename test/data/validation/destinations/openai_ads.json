@@ -95,26 +95,20 @@
     "result": true
   },
   {
-    "testTitle": "valid web client-side event filtering",
+    "testTitle": "valid shared event filtering",
     "config": {
       "rudderAccountId": "account_123",
-      "eventFilteringOption": {
-        "web": "whitelistedEvents"
-      },
-      "whitelistedEvents": {
-        "web": [
-          {
-            "eventName": "Order Completed"
-          }
-        ]
-      },
-      "blacklistedEvents": {
-        "web": [
-          {
-            "eventName": "Internal Test"
-          }
-        ]
-      }
+      "eventFilteringOption": "whitelistedEvents",
+      "whitelistedEvents": [
+        {
+          "eventName": "Order Completed"
+        }
+      ],
+      "blacklistedEvents": [
+        {
+          "eventName": "Internal Test"
+        }
+      ]
     },
     "result": true
   },
@@ -188,18 +182,16 @@
     "err": ["defaultActionSource must be equal to one of the allowed values"]
   },
   {
-    "testTitle": "invalid web client-side event filtering option",
+    "testTitle": "invalid event filtering option",
     "config": {
       "rudderAccountId": "account_123",
-      "eventFilteringOption": {
-        "web": "allowlist"
-      }
+      "eventFilteringOption": "allowlist"
     },
     "result": false,
-    "err": ["eventFilteringOption.web must be equal to one of the allowed values"]
+    "err": ["eventFilteringOption must be equal to one of the allowed values"]
   },
   {
-    "testTitle": "invalid non-web client-side event filtering key",
+    "testTitle": "invalid nested event filtering object",
     "config": {
       "rudderAccountId": "account_123",
       "eventFilteringOption": {
@@ -207,7 +199,10 @@
       }
     },
     "result": false,
-    "err": ["eventFilteringOption must NOT have additional properties"]
+    "err": [
+      "eventFilteringOption must be string",
+      "eventFilteringOption must be equal to one of the allowed values"
+    ]
   },
   {
     "testTitle": "invalid duplicate event mapping from rows",
