@@ -174,6 +174,21 @@ async function getAccountDefinitionConfig(
   throw new Error(`Account configuration not found for ${integrationName}/${accountName}`);
 }
 
+function getAccountDefinitionSchema(integrationName: string, accountName: string, type: string) {
+  const schemaPath = path.resolve(
+    `src/configurations/${type}/${integrationName}/accounts/${accountName}/schema.json`,
+  );
+  return JSON.parse(fs.readFileSync(schemaPath, 'utf-8'));
+}
+
+// Mirrors the ajv configuration config-backend uses when validating an account
+// payload against an account definition's schema. Deliberately no `coerceTypes`,
+// so a stringified port stays a type error here exactly as it is in production.
+function compileAccountSchema(schema: unknown) {
+  const ajv = new Ajv({ allErrors: true, useDefaults: true, strict: false });
+  return ajv.compile(schema as Record<string, unknown>);
+}
+
 async function getDestinationDefinitionConfig(destName: string) {
   const dirPath = path.resolve(`src/configurations/destinations/${destName}`);
   const configPath = `${dirPath}/db-config.json`;
@@ -1046,6 +1061,186 @@ describe('Account Definition validation tests', () => {
       const accDefConfig = await getAccountDefinitionConfig(integration, accountName, 'sources');
       await expect(validateAccountDefinitions(accDefConfig)).resolves.toEqual(true);
     });
+  });
+
+  // The `combinedSchema` if/then/else is the only thing binding an auth branch to the
+  // credential it needs: the standalone `secretSchema` of these warehouse source accounts
+  // accepts any object, and `scripts/validate_account_definitions.py` only walks
+  // `src/configurations/destinations`, so nothing else in this repo exercises it.
+  const accountSchemaMetaSchemaPath = path.resolve(
+    'src/schemas/account/account-schema-schema.json',
+  );
+
+  const redshiftPasswordPayload = () => ({
+    options: {
+      host: 'examplecluster.abc123.us-east-1.redshift.amazonaws.com',
+      port: 5439,
+      user: 'rudder',
+      dbname: 'analytics',
+      sslMode: 'verify-full',
+      authenticationType: 'password',
+    },
+    secret: { password: 'super-secret' },
+  });
+
+  const redshiftIamPayload = () => ({
+    options: {
+      user: 'rudder',
+      dbname: 'analytics',
+      sslMode: 'verify-full',
+      authenticationType: 'iam',
+      clusterIdentifier: 'examplecluster',
+      region: 'us-east-1',
+      roleARN: 'arn:aws:iam::123456789012:role/RudderStackRedshift',
+    },
+    secret: {},
+  });
+
+  it('SOURCE_REDSHIFT account schema is valid against the account schema meta-schema', () => {
+    const accountSchema = getAccountDefinitionSchema('redshift', 'SOURCE_REDSHIFT', 'sources');
+    const metaSchema = JSON.parse(fs.readFileSync(accountSchemaMetaSchemaPath, 'utf-8'));
+    const validateAccountSchema = compileAccountSchema(metaSchema);
+
+    const isValid = validateAccountSchema(accountSchema);
+    expect(validateAccountSchema.errors ?? []).toEqual([]);
+    expect(isValid).toBe(true);
+    expect(accountSchema.combinedSchema).toBeDefined();
+  });
+
+  it('SOURCE_REDSHIFT combinedSchema accepts the password and iam auth branches', () => {
+    const accountSchema = getAccountDefinitionSchema('redshift', 'SOURCE_REDSHIFT', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    expect(validateCombined(redshiftPasswordPayload())).toBe(true);
+    expect(validateCombined(redshiftIamPayload())).toBe(true);
+  });
+
+  it('SOURCE_REDSHIFT combinedSchema rejects credentials that do not match the auth branch', () => {
+    const accountSchema = getAccountDefinitionSchema('redshift', 'SOURCE_REDSHIFT', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    // iam never carries a stored credential; a password here would be silently persisted.
+    expect(
+      validateCombined({ ...redshiftIamPayload(), secret: { password: 'super-secret' } }),
+    ).toBe(false);
+    // password auth without a password would produce an unusable connection.
+    expect(validateCombined({ ...redshiftPasswordPayload(), secret: {} })).toBe(false);
+
+    // Without the discriminator neither branch is selectable, whichever way it defaults.
+    const passwordOptions: Record<string, unknown> = redshiftPasswordPayload().options;
+    delete passwordOptions.authenticationType;
+    const iamOptions: Record<string, unknown> = redshiftIamPayload().options;
+    delete iamOptions.authenticationType;
+    expect(
+      validateCombined({ options: passwordOptions, secret: { password: 'super-secret' } }),
+    ).toBe(false);
+    expect(validateCombined({ options: iamOptions, secret: {} })).toBe(false);
+  });
+
+  it('SOURCE_REDSHIFT db-config option and secret fields match its schema properties', async () => {
+    const accountConfig = await getAccountDefinitionConfig(
+      'redshift',
+      'SOURCE_REDSHIFT',
+      'sources',
+    );
+    const accountSchema = getAccountDefinitionSchema('redshift', 'SOURCE_REDSHIFT', 'sources');
+
+    expect([...accountConfig.config.optionFields].sort()).toEqual(
+      Object.keys(accountSchema.optionsSchema.properties).sort(),
+    );
+    expect([...accountConfig.config.secretFields].sort()).toEqual(
+      Object.keys(accountSchema.secretSchema.properties).sort(),
+    );
+  });
+
+  const databricksPatPayload = () => ({
+    options: {
+      host: 'dbc-abc12345-6789.cloud.databricks.com',
+      port: 443,
+      path: '/sql/1.0/warehouses/abcdef1234567890',
+      catalog: 'main',
+      authenticationType: 'pat',
+    },
+    secret: { token: 'dapi-super-secret' },
+  });
+
+  const databricksOauthPayload = () => ({
+    options: {
+      host: 'dbc-abc12345-6789.cloud.databricks.com',
+      port: 443,
+      path: '/sql/1.0/warehouses/abcdef1234567890',
+      catalog: 'main',
+      authenticationType: 'oauth',
+      oauthClientId: 'client-id-123',
+    },
+    secret: { oauthClientSecret: 'client-secret-456' },
+  });
+
+  it('SOURCE_DATABRICKS account schema is valid against the account schema meta-schema', () => {
+    const accountSchema = getAccountDefinitionSchema('databricks', 'SOURCE_DATABRICKS', 'sources');
+    const metaSchema = JSON.parse(fs.readFileSync(accountSchemaMetaSchemaPath, 'utf-8'));
+    const validateAccountSchema = compileAccountSchema(metaSchema);
+
+    const isValid = validateAccountSchema(accountSchema);
+    expect(validateAccountSchema.errors ?? []).toEqual([]);
+    expect(isValid).toBe(true);
+    expect(accountSchema.combinedSchema).toBeDefined();
+  });
+
+  it('SOURCE_DATABRICKS combinedSchema accepts the pat and oauth auth branches', () => {
+    const accountSchema = getAccountDefinitionSchema('databricks', 'SOURCE_DATABRICKS', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    expect(validateCombined(databricksPatPayload())).toBe(true);
+    expect(validateCombined(databricksOauthPayload())).toBe(true);
+  });
+
+  it('SOURCE_DATABRICKS combinedSchema rejects credentials that do not match the auth branch', () => {
+    const accountSchema = getAccountDefinitionSchema('databricks', 'SOURCE_DATABRICKS', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    // oauth must carry the client secret, never a personal access token.
+    expect(
+      validateCombined({ ...databricksOauthPayload(), secret: { token: 'dapi-super-secret' } }),
+    ).toBe(false);
+    // pat must carry the token, never an oauth client secret.
+    expect(
+      validateCombined({
+        ...databricksPatPayload(),
+        secret: { oauthClientSecret: 'client-secret-456' },
+      }),
+    ).toBe(false);
+
+    // Without the discriminator neither branch is selectable, whichever way it defaults.
+    const patOptions: Record<string, unknown> = databricksPatPayload().options;
+    delete patOptions.authenticationType;
+    const oauthOptions: Record<string, unknown> = databricksOauthPayload().options;
+    delete oauthOptions.authenticationType;
+    expect(validateCombined({ options: patOptions, secret: { token: 'dapi-super-secret' } })).toBe(
+      false,
+    );
+    expect(
+      validateCombined({
+        options: oauthOptions,
+        secret: { oauthClientSecret: 'client-secret-456' },
+      }),
+    ).toBe(false);
+  });
+
+  it('SOURCE_DATABRICKS db-config option and secret fields match its schema properties', async () => {
+    const accountConfig = await getAccountDefinitionConfig(
+      'databricks',
+      'SOURCE_DATABRICKS',
+      'sources',
+    );
+    const accountSchema = getAccountDefinitionSchema('databricks', 'SOURCE_DATABRICKS', 'sources');
+
+    expect([...accountConfig.config.optionFields].sort()).toEqual(
+      Object.keys(accountSchema.optionsSchema.properties).sort(),
+    );
+    expect([...accountConfig.config.secretFields].sort()).toEqual(
+      Object.keys(accountSchema.secretSchema.properties).sort(),
+    );
   });
 
   const dataRetentionAccounts = getAccountNames('data-retention');

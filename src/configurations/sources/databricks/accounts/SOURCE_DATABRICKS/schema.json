@@ -52,10 +52,11 @@
     "properties": {
       "options": {
         "type": "object",
+        "additionalProperties": false,
         "required": ["host", "port", "path", "authenticationType"],
         "properties": {
           "host": { "type": "string" },
-          "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+          "port": { "type": "integer", "minimum": 1, "maximum": 65535, "default": 443 },
           "path": { "type": "string" },
           "catalog": { "type": "string" },
           "authenticationType": { "type": "string", "enum": ["pat", "oauth"] },
@@ -69,6 +70,7 @@
       "properties": {
         "options": {
           "type": "object",
+          "required": ["authenticationType"],
           "properties": { "authenticationType": { "const": "oauth" } }
         }
       }
