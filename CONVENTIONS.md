@@ -6,6 +6,8 @@ This document captures naming and structural conventions used across this reposi
 
 - [**AccountDefinition naming (`accountDefinitionName`)**](#accountdefinition-naming-accountdefinitionname)
 - [**String `pattern` and `regex`**](#string-pattern-and-regex)
+- [**Optional fields must accept the empty string**](#optional-fields-must-accept-the-empty-string)
+- [**Where account credential fields live**](#where-account-credential-fields-live)
 - [**Deduplication / event-id config key (`deduplicationKey`)**](#deduplication--event-id-config-key-deduplicationkey)
 - [**Restricting a field by connection mode**](#restricting-a-field-by-connection-mode)
 
@@ -56,7 +58,7 @@ This applies equally to `pattern` in `schema.json` and to the `regex` on the sam
 forward it should not be added to a new field, in either file.
 
 That prefix exists to let a config value be a `{{ }}` template or an `env.` reference, and it
-is the single biggest copy-paste trap in this repo: **239 of 245 destination schemas still
+is the single biggest copy-paste trap in this repo: **238 of 247 destination schemas still
 carry it**, so whichever existing destination you open as a template will almost certainly
 have it — including in the `ui-config.json` `regex` sitting next to the field. Copy the
 field's own regex, not the prefix.
@@ -67,12 +69,141 @@ them against this pattern unchanged, so a narrow pattern — a URL or a strict i
 reject them. That is fine and intended. Going forward a new field is not expected to preserve
 templating support; write the pattern the field's own value needs.
 
-Six schemas don't carry the prefix: `custom_audience` (2026-05), `iterable_audience` (2026-06),
-`bqstream_all_events` (2026-06) and `braze_audience` (2026-07) use plain patterns, while
-`linkedin_audience` and `tiktok_audience` declare no string patterns at all.
+Nine schemas don't carry the prefix. `custom_audience` (2026-05), `iterable_audience` (2026-06),
+`bqstream_all_events` (2026-06), `braze_audience` (2026-07) and `openai_ads` (2026-09) use plain
+patterns and are the ones to copy from; `linkedin_audience` and `tiktok_audience` declare no
+string patterns at all; `discord` and `slack` avoid the prefix but use lookaheads, so take the
+prefix lesson from them and not the expression style (see below).
+
+These counts move as destinations are added. To recompute:
+
+```bash
+grep -L 'env\[\.\]' src/configurations/destinations/*/schema.json | wc -l
+```
 
 Existing schemas are not being rewritten; the rule applies to new fields and new
 destinations.
+
+### Always give a ui-config field an explicit `regex`
+
+`generalize_regex_pattern` in [`scripts/schemaGenerator.py`](scripts/schemaGenerator.py) returns
+the field's own `regex` when there is one, and falls back to
+`(^\{\{.*\|\|(.*)\}\}$)|(^env[.].+)|^(.{0,100})$` when there is not. Which of those two you get
+by omitting `regex` depends on the field type, and both outcomes are wrong:
+
+- **`textInput` and `textareaInput` generate no `pattern` at all.** Both call
+  `generalize_regex_pattern` only from inside an `if "regex" in field` guard
+  (`generate_schema_for_textinput`, `generate_schema_for_textarea_input`), so the fallback is
+  unreachable for them — the field generates a bare `{"type": "string"}` and config-backend
+  validates the value against nothing on save.
+- **`dynamicForm` / `dynamicSelectForm` keys, `dynamicCustomForm` custom fields and `tagInput`
+  generate the deprecated prefix.** These call it unconditionally, so the fallback lands. For
+  them, omitting `regex` is a third route for that prefix into a new destination, alongside
+  copying a field from an existing `ui-config.json` and copying a `pattern` from an existing
+  `schema.json`.
+
+Give every string field an explicit `regex`, then regenerate.
+
+### Keep the expression to what the value is
+
+Write the smallest expression that describes the accepted value. Two habits to avoid:
+
+- **Alternations for `{{ }}` / `env.` values** — deprecated, per the section above. Note also that
+  a trailing `^(.{0,100})$` branch already matches those strings, so the alternation is dead
+  weight even on its own terms.
+- **Negative lookaheads that restate what the base expression already rejects.** A dot-path
+  pattern such as `^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)*$` cannot match `$`, `..`,
+  `[`, `]`, `*`, `?`, `(`, `)`, or a leading-digit segment, so a `(?!…)` guarding against any of
+  those adds nothing but review load.
+
+## Optional fields must accept the empty string
+
+A field marked `"required": false` in `ui-config.json` whose `regex` cannot match `""` is a
+contradiction: the customer can fill the field but cannot clear it. Once a value has been entered
+and removed, the empty string is what round-trips, and it is checked against the same expression —
+so the save fails on a field the customer just emptied, and the only way out is to retype a value.
+
+The prevailing form for free-text optional fields already handles this, because a `{0,n}`
+quantifier matches the empty string (about 550 occurrences across destination ui-configs):
+
+```json
+{ "type": "textInput", "configKey": "note", "regex": "^(.{0,100})$", "required": false }
+```
+
+When the value has a constrained shape — a currency code, a dot-path, an id format — that form
+doesn't apply, so add an explicit empty branch:
+
+```json
+{ "regex": "^$|^[A-Z]{3}$" }
+```
+
+This applies to fields nested in `dynamicForm` / `dynamicCustomForm` rows too, which are optional
+unless the row marks them `required`.
+
+The rule holds in both files: `ui-config.json` `regex` is what rudder-webapp validates in the
+browser, `schema.json` `pattern` is what config-backend validates on save. A field that permits
+`""` in one and not the other still fails.
+
+**`singleSelect` needs no `regex` change and no extra key.** `get_options_list_for_enum` in
+[`scripts/schemaGenerator.py`](scripts/schemaGenerator.py) appends `""` to the generated enum
+whenever the field is `required: false` and declares neither `default` nor `defaultOption`. Those
+three are the whole control surface — get them right and regenerate. A key invented to express the
+same intent is not read by anything and will silently do nothing.
+
+## Where account credential fields live
+
+An account definition under `src/configurations/destinations/<dest>/accounts/<account>/` owns the
+_definition_ of its credential fields. The destination `db-config.json` still has to declare them,
+in two places:
+
+- Every `secretFields` + `optionFields` entry must appear in `config.destConfig.defaultConfig`.
+  The workspace config API (v1) filters its response against `destConfig`; a field missing here is
+  silently dropped from the API response rather than rejected.
+- Every `secretFields` entry must also appear in `config.secretKeys`.
+
+Both are enforced by `validate_account_field_coverage` in
+[`scripts/validate_account_definitions.py`](scripts/validate_account_definitions.py), which skips
+`authenticationType: "oauth"` accounts because the OAuth flow manages those secrets outside
+`destConfig`. **CI enforces this**: the `Run account validation for changed files` step in
+[`.github/workflows/test.yml`](.github/workflows/test.yml) invokes
+[`scripts/validate_diff_accounts.sh`](scripts/validate_diff_accounts.sh), which validates every
+destination whose `db-config.json` or `accounts/**` changed. Since those are the only files the
+check reads, the normal case — adding an account definition, or editing the fields it declares —
+is covered, and a coverage miss fails the build.
+
+Two caveats, both arguments for running it yourself before you push:
+
+- Nothing runs it locally. There is no npm script, and neither `npm test` nor the pre-commit hook
+  invokes it, so the first failure you see is a red build.
+- The shell wrapper diffs against a hardcoded `origin/develop`, so on a branch cut from `main` (a
+  hotfix) the changed-file list is wrong and the destination you edited may not be picked up.
+
+```bash
+python3 scripts/validate_account_definitions.py <destination>
+```
+
+If the check fails, the destination metadata is what's wrong — **do not add a per-destination
+exemption to the validator.** Other destinations resolve credentials from a linked account and
+carry none.
+
+**Account credential fields do not belong in the destination `schema.json`.** They are validated
+by the account's own `secretSchema` / `optionsSchema` and are not part of the persisted
+destination config. Only `rudderAccountId` is declared at the destination level.
+
+### Account fields in device mode
+
+`config.includeKeys` is the allowlist of destination-config keys forwarded to the device-mode SDK,
+applied _after_ the `destConfig` filter above. An account field the browser SDK needs — a pixel or
+tag id, say — must therefore be in **both** lists; present in `destConfig.defaultConfig` alone, it
+reaches config-backend and is then stripped before the browser, and the SDK initialises without
+it and silently drops every event.
+
+`rudderAccountId` is the opposite case: it is plumbing for credential resolution, the SDK has no
+use for it, and it should stay out of `includeKeys`.
+
+This combination is new — `openai_ads` is currently the only destination pairing
+`supportedAccountDefinitions` with a `device` connection mode, so there is no second example to
+check against.
 
 ## Deduplication / event-id config key (`deduplicationKey`)
 
