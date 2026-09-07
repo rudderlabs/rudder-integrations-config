@@ -42,6 +42,7 @@ class FieldTypeEnum(Enum):
     OBJECT = "object"
     BOOLEAN = "boolean"
     ARRAY = "array"
+    NUMBER = "number"
 
 
 def add_immutable_property(field, schema_obj):
@@ -277,9 +278,17 @@ def generate_schema_for_textinput(field, dbConfig, schema_field_name):
                         generalize_regex_pattern(field)
                     )
     else:
-        textInputSchemaObj = {"type": FieldTypeEnum.STRING.value}
-        if "regex" in field:
-            textInputSchemaObj["pattern"] = generalize_regex_pattern(field)
+        # A field marked inputFieldType "number" is coerced with Number() in the
+        # UI, so it reaches the config as a JSON number, not a string. "pattern"
+        # only applies to strings, so it is dropped for these — a union type
+        # would carry the regex but AJV runs in strict mode here and rejects
+        # union types without allowUnionTypes.
+        if field.get("inputFieldType") == "number":
+            textInputSchemaObj = {"type": FieldTypeEnum.NUMBER.value}
+        else:
+            textInputSchemaObj = {"type": FieldTypeEnum.STRING.value}
+            if "regex" in field:
+                textInputSchemaObj["pattern"] = generalize_regex_pattern(field)
     add_immutable_property(field, textInputSchemaObj)
     return textInputSchemaObj
 
@@ -296,6 +305,11 @@ def generate_schema_for_dynamic_data_select(field, dbConfig, schema_field_name):
     Returns:
         object
     """
+    return {"type": FieldTypeEnum.STRING.value}
+
+
+def generate_schema_for_account_management_input(field, dbConfig, schema_field_name):
+    """Creates a schema object for an accountManagementInput field."""
     return {"type": FieldTypeEnum.STRING.value}
 
 
@@ -377,6 +391,8 @@ def generate_schema_for_single_select(field, dbConfig, schema_field_name):
                 and field[schema_field_name] in dbConfig["destConfig"][sourceType]
             ):
                 newSingleSelectObj["properties"][sourceType] = singleSelectObj
+        if field.get("additionalProperties") == False:
+            newSingleSelectObj["additionalProperties"] = False
         singleSelectObj = newSingleSelectObj
     add_immutable_property(field, singleSelectObj)
     return singleSelectObj
@@ -541,6 +557,11 @@ def generate_schema_for_conditions_allOf(customFields, dbConfig, schema_field_na
             )(field, dbConfig, schema_field_name)
             if field.get("required") == True:
                 thenObj["required"].append(field[schema_field_name])
+                if "requiredErrorMessage" in field:
+                    thenObj.setdefault("errorMessage", {"required": {}})
+                    thenObj["errorMessage"]["required"][field[schema_field_name]] = (
+                        field["requiredErrorMessage"]
+                    )
         allOfItemList.append({"if": ifObj, "then": thenObj})
     return allOfItemList
 
@@ -557,8 +578,9 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    uniqueItemPropertiesErrorMessage = (
-        "Only one consent management block can be configured per provider."
+    uniqueItemPropertiesErrorMessage = field.get(
+        "uniqueRowFieldsErrorMessage",
+        "Only one consent management block can be configured per provider.",
     )
     dynamicCustomFormObj = {}
     dynamicCustomFormObj["type"] = FieldTypeEnum.ARRAY.value
@@ -601,6 +623,7 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
                 customField, field[customFieldsKey], schema_field_name
             )
             is not None
+            and customField.get("includeWhenConditional") != True
         ):
             continue
 
@@ -639,6 +662,9 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
     if requiredFields:
         dynamicCustomFormItemObj["required"] = requiredFields
 
+    if field.get("itemAdditionalProperties") == False:
+        dynamicCustomFormItemObj["additionalProperties"] = False
+
     dynamicCustomFormObj["items"] = dynamicCustomFormItemObj
     if "uniqueRowFields" in field and isinstance(field["uniqueRowFields"], list):
         dynamicCustomFormObj["uniqueItemProperties"] = field["uniqueRowFields"]
@@ -659,6 +685,8 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
                 and field[schema_field_name] in dbConfig["destConfig"][sourceType]
             ):
                 newDynamicCustomFormObj["properties"][sourceType] = dynamicCustomFormObj
+        if field.get("additionalProperties") == False:
+            newDynamicCustomFormObj["additionalProperties"] = False
         dynamicCustomFormObj = newDynamicCustomFormObj
 
     return dynamicCustomFormObj
@@ -713,6 +741,11 @@ def generate_schema_for_dynamic_custom_form_allOf(
                 )(field, dbConfig, schema_field_name)
                 if "required" in field and field["required"] == True:
                     thenObj["required"].append(field[schema_field_name])
+                    if "requiredErrorMessage" in field:
+                        thenObj.setdefault("errorMessage", {"required": {}})
+                        thenObj["errorMessage"]["required"][
+                            field[schema_field_name]
+                        ] = field["requiredErrorMessage"]
         allOfItemObj["then"] = thenObj
         allOfItemList.append(allOfItemObj)
 
@@ -859,6 +892,8 @@ def generate_schema_for_tag_input(field, dbConfig, schema_field_name):
                 and field[schema_field_name] in dbConfig["destConfig"][sourceType]
             ):
                 tagObject["properties"][sourceType] = tagObjectCopy
+        if field.get("additionalProperties") == False:
+            tagObject["additionalProperties"] = False
     return tagObject
 
 
@@ -1257,9 +1292,17 @@ def generate_schema_properties(
                 if "preRequisiteField" in field:
                     continue
                 generateFunction = uiTypetoSchemaFn.get(field["type"], None)
+                # destConfig / defaultConfig are destination-only structures. A
+                # source db-config has neither, so gating on them dropped every
+                # unconditional source field from the schema (only the
+                # preRequisiteField ones survived, via the allOf pass). Sources
+                # take their fields straight from ui-config instead.
+                is_source = selector == "source"
                 if generateFunction:
                     # Generate schema for the field if it is defined in the destination config
-                    if is_key_present_in_dest_config(dbConfig, field["value"]):
+                    if is_source or is_key_present_in_dest_config(
+                        dbConfig, field["value"]
+                    ):
                         properties[field["value"]] = generateFunction(
                             field, dbConfig, "value"
                         )
@@ -1273,10 +1316,9 @@ def generate_schema_properties(
                         f"No schema generator function found for field: {field['type']}"
                     )
 
-                if field.get(
-                    "required", False
-                ) == True and is_field_present_in_default_config(
-                    field, dbConfig, "value"
+                if field.get("required", False) == True and (
+                    is_source
+                    or is_field_present_in_default_config(field, dbConfig, "value")
                 ):
                     schemaObject["required"].append(field["value"])
 
@@ -1639,6 +1681,7 @@ uiTypetoSchemaFn = {
     "textInput": generate_schema_for_textinput,
     "textareaInput": generate_schema_for_textarea_input,
     "singleSelect": generate_schema_for_single_select,
+    "accountManagementInput": generate_schema_for_account_management_input,
     "dynamicCustomForm": generate_schema_for_dynamic_custom_form,
     "dynamicForm": generate_schema_for_dynamic_form,
     "mapping": generate_schema_for_mapping,

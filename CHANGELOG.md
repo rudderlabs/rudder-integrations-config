@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.175.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.174.0...v1.175.0) (2026-09-07)
+
+
+### Features
+
+* add OpenAI Ads destination config ([#2704](https://github.com/rudderlabs/rudder-config-schema/issues/2704)) ([e5caba8](https://github.com/rudderlabs/rudder-config-schema/commit/e5caba8f13b3a31aeb5018023d13b2a56b46657f))
+* default Customer.io API version to v2 ([#2705](https://github.com/rudderlabs/rudder-config-schema/issues/2705)) ([fce70cf](https://github.com/rudderlabs/rudder-config-schema/commit/fce70cf4cb5289934d0ab2b8ffa4154f26c3e3ed))
+* make GAEC adjustment type generally available ([#2709](https://github.com/rudderlabs/rudder-config-schema/issues/2709)) ([48500e9](https://github.com/rudderlabs/rudder-config-schema/commit/48500e94ebc71056b094fb6a29c34243094c3c06))
+* **sftp:** add SFTP source definition (INT-7063) ([#2706](https://github.com/rudderlabs/rudder-config-schema/issues/2706)) ([7a1fe06](https://github.com/rudderlabs/rudder-config-schema/commit/7a1fe06367490fc50b8be6743d8e3ca5d3df0866))
+
+
+### Bug Fixes
+
+* **iterable:** store event filtering keys flat like every other destination ([#2712](https://github.com/rudderlabs/rudder-config-schema/issues/2712)) ([54ff4ff](https://github.com/rudderlabs/rudder-config-schema/commit/54ff4ff3a0e72692008d0fdd5afc720dc1147127))
+
 ## [1.174.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.173.0...v1.174.0) (2026-08-31)
 
 

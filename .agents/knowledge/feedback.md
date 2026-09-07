@@ -27,3 +27,13 @@
 - Do not mention internal implementation terms such as record event or VDM v2, and do not imply this setting affects record-event API behavior.
 - CustomerIO `apiVersion` and `userIdIdentifierType` dashboard copy should scope these settings to cloud-mode delivery and avoid implying they affect Customer.io SDK/device-mode behavior.
 - For the newer `userIdMapping` field name, keep the same customer-facing copy rule: describe how RudderStack `userId` is sent to Customer.io when API Version is v2, avoid internal terms such as record event or VDM v2, and scope both `apiVersion` and `userIdMapping` to cloud-mode delivery rather than SDK/device-mode behavior.
+
+## INT-7070 — OpenAI Ads Account Metadata Review Guidance
+
+- Reviewer guidance corrected the OpenAI Ads account-backed credential approach: do not add a destination-specific exemption in `scripts/validate_account_definitions.py`; satisfy the generic account coverage validator through destination metadata instead.
+- For OpenAI Ads, account option/secret fields should be represented in destination `config.destConfig.defaultConfig`, and secret account fields such as `apiKey` should also be listed in `config.secretKeys`.
+- Do not add non-device fields such as `rudderAccountId` to destination `config.includeKeys`; optional account UI credential fields should explicitly set `optional: true`.
+- For OpenAI Ads web device mode, include the linked-account `pixelId` in destination `config.includeKeys` so it passes both workspace-config filtering and the device-mode allowlist for browser SDK initialization.
+- Reviewer guidance clarified that OpenAI Ads should not support `warehouse`; keep it absent from supported source types, supported connection modes, destination config source entries, and generated schema branches.
+- Optional OpenAI Ads text fields that can be cleared in the UI must accept the empty string in both `ui-config.json` regexes and generated `schema.json` patterns; for `defaultCurrency`, use `^$|^[A-Z]{3}$` rather than a non-empty-only currency regex.
+- OpenAI Ads `eventMapping[].deduplicationKey` is optional and must allow an empty string when cleared; keep the UI regex and generated schema pattern as `^$|^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)*$`, while still rejecting JSONPath, brackets, wildcards, filters, numeric index segments, and malformed dot paths.

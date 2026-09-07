@@ -95,3 +95,8 @@
 - CleverTap Android Kotlin device-mode metadata is authored in the existing CleverTap destination triplet under `src/configurations/destinations/clevertap/` rather than as a separate integration directory.
 - For SDK-5265, `db-config.json` exposes Android Kotlin with `supportedConnectionModes.androidKotlin` as `['cloud','device']`, `supportedMessageTypes.device.androidKotlin` as `['identify','track','screen']`, and `config.destConfig.androidKotlin` limited to `['useNativeSDK','connectionMode','consentManagement']`.
 - `schema.json` owns the Android Kotlin `useNativeSDK` boolean shape for CleverTap, while credential include/exclude/secret handling remains unchanged.
+
+## INT-7070 — OpenAI Ads Account-Backed Destination Boundary
+
+- OpenAI Ads is a standalone account-backed destination under `src/configurations/destinations/openai_ads/`; credential field definitions live under `accounts/openai_ads_api_key/`.
+- Account-backed credential metadata still participates in the generic destination/account validation boundary: OpenAI Ads account option/secret fields should be represented in destination `config.destConfig.defaultConfig`, and secret fields such as `apiKey` should be listed in `config.secretKeys`, rather than bypassing `scripts/validate_account_definitions.py` with a destination-specific exemption.

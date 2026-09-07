@@ -61,3 +61,9 @@
 - Amplitude `ui-config.json` gates the legacy "Save Referrer, URL Params, GCLID only once per session" field with a `conditions.expression` built from an `operator` (`AND`/`OR`) plus an `operands` array — each operand is `{ type: "configuration", key, value }`. There is no top-level `expression.type`; the `type: "configuration"` lives on the operands. This field ANDs `connectionMode.web == "device"` with `sdkVersion.web == 1`.
 - Reuse that operand pattern (wrapped in the required `AND`/`OR` expression structure) for other Amplitude Browser SDK settings that need SDK-version-specific visibility.
 - When extending an existing Amplitude config object to web, prefer adding a `web` boolean property to the existing object in `schema.json` and adding the same key to `db-config.json` `config.destConfig.web`, rather than introducing a parallel key.
+
+## INT-7070 — OpenAI Ads Declarative Validation Pattern
+
+- OpenAI Ads destination config stays within the repository's declarative JSON validation model: `src/configurations/destinations/openai_ads/schema.json` enforces source-scoped web-only client-side filtering objects, duplicate event mappings with `uniqueItemProperties: ["from"]`, and `customEventName` only when an event mapping's `to` value is `custom`.
+- The OpenAI Ads `eventMapping.from` uniqueness rule only catches exact duplicate values. AJV keywords used in this repo do not provide trim/lowercase uniqueness for array item properties, so normalized lookup semantics should be handled outside the destination schema unless a broader custom validator path is introduced.
+- OpenAI Ads is account-backed, but account option/secret fields are mirrored in destination metadata for generic account validation; avoid destination-specific validator exemptions and keep non-device account plumbing out of `config.includeKeys`.
