@@ -72,3 +72,8 @@
 
 - For Google Ads Offline Conversions, keep the `subAccount` to `loginCustomerId` requiredness rule scoped to the destination schema. Do not add a shared `scripts/schemaGenerator.py` workaround for this migration unless a broader Form Builder V2 generator change is explicitly requested.
 - Form Builder V2 schema generation intentionally avoids adding Initial setup fields that have `preRequisites` to the top-level schema `required` array; conditional requiredness for hidden/gated fields should stay in destination-specific conditional schema branches instead of becoming unconditional required fields.
+
+## ANA-134 — Destination Definition Guardrails
+
+- Destination-definition custom rules in `src/validator/index.ts` are the right layer for cross-key `db-config.json` constraints that the JSON Schema cannot express through `destConfig` pattern properties, such as forbidding event-filtering fields in non-`defaultConfig` source sections.
+- `test/validator/validator.test.ts` should cover these custom rules with minimal destination definitions passed to `validateDestinationDefinitions()`, including positive cases for absent optional structures and negative cases that assert the offending field names and `destConfig.<section>` path in the error.
