@@ -1,0 +1,69 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["host", "port", "username"],
+    "type": "object",
+    "properties": {
+      "host": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9.\\-]{1,255}$"
+      },
+      "port": {
+        "type": "number"
+      },
+      "username": {
+        "type": "string",
+        "pattern": "^.{1,100}$"
+      },
+      "authMethod": {
+        "type": "string",
+        "enum": ["keyAuth", "passwordAuth"],
+        "default": "keyAuth"
+      }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "authMethod": {
+              "const": "passwordAuth"
+            }
+          },
+          "required": ["authMethod"]
+        },
+        "then": {
+          "properties": {
+            "password": {
+              "type": "string",
+              "pattern": "^.{1,100}$"
+            }
+          },
+          "required": ["password"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "authMethod": {
+              "const": "keyAuth"
+            }
+          },
+          "required": ["authMethod"]
+        },
+        "then": {
+          "properties": {
+            "privateKey": {
+              "type": "string",
+              "pattern": "^[\\s\\S]+$"
+            },
+            "privateKeyPassphrase": {
+              "type": "string",
+              "pattern": "^.{0,200}$"
+            }
+          },
+          "required": ["privateKey"]
+        }
+      }
+    ]
+  }
+}

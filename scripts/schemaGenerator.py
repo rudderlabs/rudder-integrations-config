@@ -42,6 +42,7 @@ class FieldTypeEnum(Enum):
     OBJECT = "object"
     BOOLEAN = "boolean"
     ARRAY = "array"
+    NUMBER = "number"
 
 
 def add_immutable_property(field, schema_obj):
@@ -277,9 +278,17 @@ def generate_schema_for_textinput(field, dbConfig, schema_field_name):
                         generalize_regex_pattern(field)
                     )
     else:
-        textInputSchemaObj = {"type": FieldTypeEnum.STRING.value}
-        if "regex" in field:
-            textInputSchemaObj["pattern"] = generalize_regex_pattern(field)
+        # A field marked inputFieldType "number" is coerced with Number() in the
+        # UI, so it reaches the config as a JSON number, not a string. "pattern"
+        # only applies to strings, so it is dropped for these — a union type
+        # would carry the regex but AJV runs in strict mode here and rejects
+        # union types without allowUnionTypes.
+        if field.get("inputFieldType") == "number":
+            textInputSchemaObj = {"type": FieldTypeEnum.NUMBER.value}
+        else:
+            textInputSchemaObj = {"type": FieldTypeEnum.STRING.value}
+            if "regex" in field:
+                textInputSchemaObj["pattern"] = generalize_regex_pattern(field)
     add_immutable_property(field, textInputSchemaObj)
     return textInputSchemaObj
 
@@ -1283,9 +1292,17 @@ def generate_schema_properties(
                 if "preRequisiteField" in field:
                     continue
                 generateFunction = uiTypetoSchemaFn.get(field["type"], None)
+                # destConfig / defaultConfig are destination-only structures. A
+                # source db-config has neither, so gating on them dropped every
+                # unconditional source field from the schema (only the
+                # preRequisiteField ones survived, via the allOf pass). Sources
+                # take their fields straight from ui-config instead.
+                is_source = selector == "source"
                 if generateFunction:
                     # Generate schema for the field if it is defined in the destination config
-                    if is_key_present_in_dest_config(dbConfig, field["value"]):
+                    if is_source or is_key_present_in_dest_config(
+                        dbConfig, field["value"]
+                    ):
                         properties[field["value"]] = generateFunction(
                             field, dbConfig, "value"
                         )
@@ -1299,10 +1316,9 @@ def generate_schema_properties(
                         f"No schema generator function found for field: {field['type']}"
                     )
 
-                if field.get(
-                    "required", False
-                ) == True and is_field_present_in_default_config(
-                    field, dbConfig, "value"
+                if field.get("required", False) == True and (
+                    is_source
+                    or is_field_present_in_default_config(field, dbConfig, "value")
                 ):
                     schemaObject["required"].append(field["value"])
 
