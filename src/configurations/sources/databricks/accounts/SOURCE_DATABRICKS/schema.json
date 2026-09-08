@@ -21,6 +21,7 @@
         "type": "string",
         "enum": ["pat", "oauth"],
         "default": "pat",
+        "$comment": "config-backend runs `combinedSchema` instead of this schema on the account create/edit path (`validateAccountConfig` early-returns on `hasCombinedSchema`), so this `default` is never applied there and `combinedSchema` requires the field outright. It documents the fallback rudder-sources itself applies to an absent discriminator, and applies for consumers that validate `optionsSchema` on its own.",
         "description": "Auth method discriminator; rudder-sources sets UseOAuth when this is 'oauth' and treats every other value as a personal access token"
       },
       "oauthClientId": {
@@ -85,7 +86,9 @@
         "secret": {
           "type": "object",
           "required": ["oauthClientSecret"],
-          "properties": { "oauthClientSecret": { "type": "string" } },
+          "properties": {
+            "oauthClientSecret": { "type": "string", "pattern": "^[\\s\\S]+$" }
+          },
           "additionalProperties": false
         }
       }
@@ -96,7 +99,7 @@
         "secret": {
           "type": "object",
           "required": ["token"],
-          "properties": { "token": { "type": "string" } },
+          "properties": { "token": { "type": "string", "pattern": "^[\\s\\S]+$" } },
           "additionalProperties": false
         }
       }

@@ -1071,6 +1071,33 @@ describe('Account Definition validation tests', () => {
     'src/schemas/account/account-schema-schema.json',
   );
 
+  // sqlconnect-go unmarshals the port into `Port int`, so the integer form is the only
+  // one that survives a sync. The string form is a transitional allowance for the
+  // rudder-iac fixture; a follow-up PR drops it once rudderlabs/rudder-iac#827 has merged.
+  // Either way an out-of-range value is not a port and neither form should accept one.
+  it('SOURCE_POSTGRES optionsSchema accepts both port forms and bounds each to 1-65535', () => {
+    const accountSchema = getAccountDefinitionSchema('postgres', 'SOURCE_POSTGRES', 'sources');
+    const validateOptions = compileAccountSchema(accountSchema.optionsSchema);
+    const options = (port: unknown) => ({
+      host: 'db.example.internal',
+      dbname: 'analytics',
+      user: 'rudder',
+      sslMode: 'require',
+      port,
+    });
+
+    expect(validateOptions(options(5432))).toBe(true);
+    expect(validateOptions(options('5432'))).toBe(true);
+    expect(validateOptions(options(65535))).toBe(true);
+    expect(validateOptions(options('65535'))).toBe(true);
+
+    expect(validateOptions(options(0))).toBe(false);
+    expect(validateOptions(options('0'))).toBe(false);
+    expect(validateOptions(options(65536))).toBe(false);
+    expect(validateOptions(options('99999'))).toBe(false);
+    expect(validateOptions(options('5432abc'))).toBe(false);
+  });
+
   const redshiftPasswordPayload = () => ({
     options: {
       host: 'examplecluster.abc123.us-east-1.redshift.amazonaws.com',
@@ -1135,6 +1162,19 @@ describe('Account Definition validation tests', () => {
       validateCombined({ options: passwordOptions, secret: { password: 'super-secret' } }),
     ).toBe(false);
     expect(validateCombined({ options: iamOptions, secret: {} })).toBe(false);
+  });
+
+  it('SOURCE_REDSHIFT combinedSchema rejects an empty password', () => {
+    const accountSchema = getAccountDefinitionSchema('redshift', 'SOURCE_REDSHIFT', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    // config-backend runs `combinedSchema` in place of `secretSchema`, so the non-empty
+    // pattern declared there never executes. Without the same pattern here an account
+    // stores an empty password, lib/pq drops it from the DSN, and the failure surfaces at
+    // sync time rather than at create time.
+    expect(validateCombined({ ...redshiftPasswordPayload(), secret: { password: '' } })).toBe(
+      false,
+    );
   });
 
   it('SOURCE_REDSHIFT db-config option and secret fields match its schema properties', async () => {
@@ -1224,6 +1264,16 @@ describe('Account Definition validation tests', () => {
         options: oauthOptions,
         secret: { oauthClientSecret: 'client-secret-456' },
       }),
+    ).toBe(false);
+  });
+
+  it('SOURCE_DATABRICKS combinedSchema rejects an empty token or client secret', () => {
+    const accountSchema = getAccountDefinitionSchema('databricks', 'SOURCE_DATABRICKS', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    expect(validateCombined({ ...databricksPatPayload(), secret: { token: '' } })).toBe(false);
+    expect(
+      validateCombined({ ...databricksOauthPayload(), secret: { oauthClientSecret: '' } }),
     ).toBe(false);
   });
 
