@@ -1,0 +1,117 @@
+[
+  {
+    "testTitle": "Valid config with only rudderAccountId and authenticationType password",
+    "config": {
+      "rudderAccountId": "acc123",
+      "authenticationType": "password"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid config with only rudderAccountId and authenticationType iam",
+    "config": {
+      "rudderAccountId": "acc123",
+      "authenticationType": "iam"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid config with rudderAccountId and no authenticationType, which the account carries",
+    "comment": "Exercises the source-level configSchema, not the SOURCE_REDSHIFT account definition. It records which account-backed source shapes are accepted; the account credential rules live in the combinedSchema tests in test/validation.test.ts.",
+    "config": {
+      "rudderAccountId": "acc123"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid config with rudderAccountId alongside non-credential connection fields",
+    "comment": "Source-level configSchema, as above. Deliberately accepted: only the credential-bearing fields are forbidden next to an account reference.",
+    "config": {
+      "rudderAccountId": "acc123",
+      "authenticationType": "password",
+      "host": "redshift.example.com",
+      "port": "5439",
+      "dbname": "dev",
+      "user": "rudder",
+      "sslMode": "disable"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid legacy config with inline password credentials and no account",
+    "config": {
+      "host": "redshift.example.com",
+      "port": "5439",
+      "dbname": "dev",
+      "user": "rudder",
+      "sslMode": "disable",
+      "authenticationType": "password",
+      "password": "s3cret"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid legacy config with inline iam credentials and no account",
+    "config": {
+      "dbname": "dev",
+      "user": "rudder",
+      "sslMode": "disable",
+      "authenticationType": "iam",
+      "roleARN": "arn:aws:iam::123456789012:role/MyRedshiftRole",
+      "clusterIdentifier": "warehouse-cluster",
+      "region": "us-east-1"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Invalid config with both password and rudderAccountId present",
+    "config": {
+      "rudderAccountId": "acc123",
+      "authenticationType": "password",
+      "password": "s3cret"
+    },
+    "result": false,
+    "err": [" must NOT be valid", " must NOT be valid", " must match exactly one schema in oneOf"]
+  },
+  {
+    "testTitle": "Invalid config with both iam credentials and rudderAccountId present",
+    "config": {
+      "rudderAccountId": "acc123",
+      "authenticationType": "iam",
+      "roleARN": "arn:aws:iam::123456789012:role/MyRedshiftRole",
+      "clusterIdentifier": "warehouse-cluster",
+      "region": "us-east-1"
+    },
+    "result": false,
+    "err": [
+      " must NOT be valid",
+      " must NOT be valid",
+      " must NOT be valid",
+      " must NOT be valid",
+      " must match exactly one schema in oneOf"
+    ]
+  },
+  {
+    "testTitle": "Invalid legacy iam config without an account and without roleARN",
+    "config": {
+      "dbname": "dev",
+      "user": "rudder",
+      "authenticationType": "iam",
+      "clusterIdentifier": "warehouse-cluster",
+      "region": "us-east-1"
+    },
+    "result": false,
+    "err": [" must have required property 'roleARN'", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "Invalid legacy password config without an account and without password",
+    "config": {
+      "host": "redshift.example.com",
+      "dbname": "dev",
+      "user": "rudder",
+      "authenticationType": "password"
+    },
+    "result": false,
+    "err": [" must have required property 'password'", " must match \"then\" schema"]
+  }
+]

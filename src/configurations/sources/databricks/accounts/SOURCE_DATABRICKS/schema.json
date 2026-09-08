@@ -1,0 +1,108 @@
+{
+  "optionsSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["host", "port", "path", "authenticationType"],
+    "properties": {
+      "host": { "type": "string", "description": "Workspace hostname" },
+      "port": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 65535,
+        "default": 443,
+        "description": "SQL warehouse port (integer, matching the value rudder-sources unmarshals into Port int)"
+      },
+      "path": { "type": "string", "description": "HTTP path of the SQL warehouse" },
+      "catalog": {
+        "type": "string",
+        "description": "Unity Catalog name (optional; the client defaults to hive_metastore)"
+      },
+      "authenticationType": {
+        "type": "string",
+        "enum": ["pat", "oauth"],
+        "default": "pat",
+        "$comment": "config-backend runs `combinedSchema` on the account create/edit path, not this schema, so this `default` never fires there; `combinedSchema` requires the field outright. rudder-sources applies it when the discriminator is absent, treating anything but `oauth` as a personal access token. It stays here for consumers that validate `optionsSchema` standalone.",
+        "description": "Auth method discriminator; rudder-sources sets UseOAuth when this is 'oauth' and treats every other value as a personal access token"
+      },
+      "oauthClientId": {
+        "type": "string",
+        "description": "OAuth machine-to-machine client id (oauth auth)"
+      }
+    }
+  },
+  "secretSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "token": {
+        "type": "string",
+        "pattern": "^[\\s\\S]+$",
+        "description": "Personal access token (pat auth)"
+      },
+      "oauthClientSecret": {
+        "type": "string",
+        "pattern": "^[\\s\\S]+$",
+        "description": "OAuth machine-to-machine client secret (oauth auth)"
+      }
+    }
+  },
+  "combinedSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["options", "secret"],
+    "properties": {
+      "options": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["host", "port", "path", "authenticationType"],
+        "properties": {
+          "host": { "type": "string" },
+          "port": { "type": "integer", "minimum": 1, "maximum": 65535, "default": 443 },
+          "path": { "type": "string" },
+          "catalog": { "type": "string" },
+          "authenticationType": { "type": "string", "enum": ["pat", "oauth"] },
+          "oauthClientId": { "type": "string" }
+        }
+      },
+      "secret": { "type": "object" }
+    },
+    "if": {
+      "type": "object",
+      "properties": {
+        "options": {
+          "type": "object",
+          "required": ["authenticationType"],
+          "properties": { "authenticationType": { "const": "oauth" } }
+        }
+      }
+    },
+    "then": {
+      "type": "object",
+      "properties": {
+        "options": {
+          "type": "object",
+          "required": ["oauthClientId"]
+        },
+        "secret": {
+          "type": "object",
+          "required": ["oauthClientSecret"],
+          "properties": {
+            "oauthClientSecret": { "type": "string", "pattern": "^[\\s\\S]+$" }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "else": {
+      "type": "object",
+      "properties": {
+        "secret": {
+          "type": "object",
+          "required": ["token"],
+          "properties": { "token": { "type": "string", "pattern": "^[\\s\\S]+$" } },
+          "additionalProperties": false
+        }
+      }
+    }
+  }
+}

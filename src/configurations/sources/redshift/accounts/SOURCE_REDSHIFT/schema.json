@@ -1,0 +1,160 @@
+{
+  "optionsSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["dbname", "user", "authenticationType", "sslMode"],
+    "properties": {
+      "host": {
+        "type": "string",
+        "description": "Cluster endpoint (password auth)"
+      },
+      "port": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 65535,
+        "description": "Database port (integer, matching the value rudder-sources unmarshals into Port int)"
+      },
+      "user": {
+        "type": "string",
+        "description": "Database username"
+      },
+      "dbname": {
+        "type": "string",
+        "description": "Database name"
+      },
+      "sslMode": {
+        "type": "string",
+        "enum": ["disable", "require", "verify-full"],
+        "default": "require",
+        "description": "SSL mode. `require` encrypts but does not validate the server certificate; `verify-full` additionally verifies the certificate chain and hostname and is what rudder-lookout pins for every Redshift connection. Passed through to lib/pq unchanged by sqlconnect-go, which reuses the Postgres config for Redshift."
+      },
+      "authenticationType": {
+        "type": "string",
+        "enum": ["password", "iam"],
+        "default": "password",
+        "$comment": "config-backend runs `combinedSchema` on the account create/edit path, not this schema, so this `default` never fires there; `combinedSchema` requires the field outright. rudder-sources applies it when the discriminator is absent, taking the password path for anything but the literal `iam`. It stays here for consumers that validate `optionsSchema` standalone.",
+        "description": "Auth method discriminator; rudder-sources branches on this value (lowercase 'iam' selects the Redshift Data API path)"
+      },
+      "clusterIdentifier": {
+        "type": "string",
+        "description": "Redshift cluster identifier (iam auth)"
+      },
+      "region": {
+        "type": "string",
+        "description": "AWS region (iam auth)"
+      },
+      "roleARN": {
+        "type": "string",
+        "description": "IAM role ARN assumed at connect time (iam auth)"
+      }
+    }
+  },
+  "secretSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "password": {
+        "type": "string",
+        "pattern": "^[\\s\\S]+$",
+        "description": "Database password (password auth). Not used by iam auth, which carries no stored credential."
+      }
+    }
+  },
+  "combinedSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["options", "secret"],
+    "properties": {
+      "options": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["dbname", "user", "authenticationType", "sslMode"],
+        "properties": {
+          "host": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65535
+          },
+          "user": {
+            "type": "string"
+          },
+          "dbname": {
+            "type": "string"
+          },
+          "sslMode": {
+            "type": "string",
+            "enum": ["disable", "require", "verify-full"],
+            "default": "require"
+          },
+          "authenticationType": {
+            "type": "string",
+            "enum": ["password", "iam"]
+          },
+          "clusterIdentifier": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "roleARN": {
+            "type": "string"
+          }
+        }
+      },
+      "secret": {
+        "type": "object"
+      }
+    },
+    "if": {
+      "type": "object",
+      "properties": {
+        "options": {
+          "type": "object",
+          "required": ["authenticationType"],
+          "properties": {
+            "authenticationType": {
+              "const": "iam"
+            }
+          }
+        }
+      }
+    },
+    "then": {
+      "type": "object",
+      "properties": {
+        "options": {
+          "type": "object",
+          "required": ["clusterIdentifier", "region", "roleARN"]
+        },
+        "secret": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        }
+      }
+    },
+    "else": {
+      "type": "object",
+      "properties": {
+        "options": {
+          "type": "object",
+          "required": ["host", "port"]
+        },
+        "secret": {
+          "type": "object",
+          "required": ["password"],
+          "properties": {
+            "password": {
+              "type": "string",
+              "pattern": "^[\\s\\S]+$"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  }
+}
