@@ -156,7 +156,7 @@
 
 ## INT-7024 — ClickHouse JSON Columns Docs Link
 
-- ClickHouse `jsonPaths` UI documentation links should target `https://www.rudderstack.com/docs/destinations/warehouse-destinations/clickhouse/#json-columns`, the stable heading-derived anchor for the ClickHouse JSON columns docs section, rather than older data-warehouse integration paths or a generic configuration anchor.
+- Warehouse `jsonPaths` UI documentation links should target each warehouse destination page's `#advanced-settings` anchor, where the JSON Columns setting is documented, rather than older configuration-section anchors or a standalone ClickHouse `#json-columns` anchor.
 - Treat ClickHouse `jsonPaths` docs linking as a UI/footer documentation change only; runtime server-version enforcement and schema behavior remain outside this integrations-config change.
 
 ## INT-7092 — GAEC Adjustment Type GA Scope
