@@ -1086,6 +1086,8 @@ describe('Account Definition validation tests', () => {
       port,
     });
 
+    expect(validateOptions(options(1))).toBe(true);
+    expect(validateOptions(options('1'))).toBe(true);
     expect(validateOptions(options(5432))).toBe(true);
     expect(validateOptions(options('5432'))).toBe(true);
     expect(validateOptions(options(65535))).toBe(true);
@@ -1095,6 +1097,7 @@ describe('Account Definition validation tests', () => {
     expect(validateOptions(options('0'))).toBe(false);
     expect(validateOptions(options(65536))).toBe(false);
     expect(validateOptions(options('99999'))).toBe(false);
+    expect(validateOptions(options('00001'))).toBe(false);
     expect(validateOptions(options('5432abc'))).toBe(false);
   });
 
