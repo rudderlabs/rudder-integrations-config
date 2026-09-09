@@ -3,7 +3,28 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "required": [],
     "type": "object",
-    "properties": {},
+    "properties": {
+      "rudderAccountId": {
+        "type": "string",
+        "pattern": "^.{1,100}$"
+      }
+    },
+    "oneOf": [
+      {
+        "not": {
+          "required": ["rudderAccountId"]
+        }
+      },
+      {
+        "required": ["rudderAccountId"],
+        "allOf": [
+          { "not": { "required": ["password"] } },
+          { "not": { "required": ["roleARN"] } },
+          { "not": { "required": ["clusterIdentifier"] } },
+          { "not": { "required": ["region"] } }
+        ]
+      }
+    ],
     "allOf": [
       {
         "if": {
@@ -12,7 +33,10 @@
               "const": "password"
             }
           },
-          "required": ["authenticationType"]
+          "required": ["authenticationType"],
+          "not": {
+            "required": ["rudderAccountId"]
+          }
         },
         "then": {
           "properties": {
@@ -31,11 +55,14 @@
               "const": "iam"
             }
           },
-          "required": ["authenticationType"]
+          "required": ["authenticationType"],
+          "not": {
+            "required": ["rudderAccountId"]
+          }
         },
         "then": {
           "properties": {
-            "iamRoleArn": {
+            "roleARN": {
               "type": "string",
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
             },
@@ -48,7 +75,7 @@
               "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|.*"
             }
           },
-          "required": ["iamRoleArn", "clusterIdentifier", "region"]
+          "required": ["roleARN", "clusterIdentifier", "region"]
         }
       }
     ]

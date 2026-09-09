@@ -42,3 +42,9 @@
 
 - For GCS Datalake `jsonPaths`, use a plain catch-all regex/schema pattern (`^(.*)$`) for literal JSON path strings; do not copy Snowflake's explicit dynamic-config `{{...||...}}` or `env.*` alternatives unless a reviewer asks for that support.
 - Reviewer guidance for the GCS Datalake `jsonPaths` UI field: label it `JSON columns`, use label note `Specify required JSON paths in dot notation separated by commas`, and use placeholder `e.g: testMap.nestedMap,testMap.testProperties`.
+
+## INT-7102 — OpenAI Ads Event Filtering Review Guidance
+
+- Reviewer clarified that OpenAI Ads event-filtering config should be destination-wide for delivery, but the dashboard event-filtering UI group should remain client-side/web-device-only and use `eventFilteringOption` without a `.web` prerequisite key.
+- Do not expose the OpenAI Ads dashboard event-filtering controls for cloud-mode connections unless product explicitly changes the UI scope.
+- For OpenAI Ads event-filtering schema/config changes, rely on existing `test/data/validation/destinations/openai_ads.json` fixture cases for accepted/rejected config shape coverage; do not add duplicate one-off assertions in `test/validation.test.ts` for the same behavior.
