@@ -154,6 +154,12 @@
 - Keep `apiVersion` optional for CustomerIO so migrated legacy configs with explicit `apiVersion: "v1"` remain valid, while newly created configs that omit `apiVersion` are defaulted by AJV (`useDefaults: true`) to `"v2"`.
 - Omitted-`apiVersion` validation fixtures should represent new v2-style configs and include `userIdIdentifierType`/`userIdMapping` as required by the v2 contract; legacy compatibility fixtures should be explicit `apiVersion: "v1"`, not raw omission.
 
+## INT-7024 — ClickHouse JSON Columns Docs Link
+
+- Warehouse `jsonPaths` UI documentation links should target each warehouse destination page's `#advanced-settings` anchor, where the JSON Columns setting is documented, rather than older configuration-section anchors or a standalone ClickHouse `#json-columns` anchor.
+- Keep `footerURL.text` copy for warehouse `jsonPaths` / JSON Columns fields consistent across warehouse destination UI configs; use `Instructions for setting up the JSON columns` unless product explicitly requests different copy.
+- Treat ClickHouse `jsonPaths` docs linking as a UI/footer documentation change only; runtime server-version enforcement and schema behavior remain outside this integrations-config change.
+
 ## INT-7092 — GAEC Adjustment Type GA Scope
 
 - Google Ads Enhanced Conversions `adjustmentType` is generally available through `src/configurations/destinations/google_adwords_enhanced_conversions/ui-config.json`; do not reintroduce the removed UI `conditions` gate for `AMP_enable-gaec-adjustment-type`.
