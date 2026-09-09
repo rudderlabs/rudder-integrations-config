@@ -238,7 +238,67 @@
     "result": false,
     "err": [
       "eventMapping.0 Custom event name is required when an OpenAI Ads event mapping uses Custom.",
-      "eventMapping.0 must match \"then\" schema"
+      "eventMapping.0 This event mapping row is not valid for the selected OpenAI Ads event."
+    ]
+  },
+  {
+    "testTitle": "invalid custom event name on a standard event mapping",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventMapping": [
+        {
+          "from": "Order Completed",
+          "to": "order_created",
+          "customEventName": "My Order Event"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventMapping.0 Custom event name can only be configured when the OpenAI Ads event is Custom.",
+      "eventMapping.0 This event mapping row is not valid for the selected OpenAI Ads event."
+    ]
+  },
+  {
+    "testTitle": "invalid custom event name alongside a deduplication key on a standard event mapping",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventMapping": [
+        {
+          "from": "Order Completed",
+          "to": "order_created",
+          "customEventName": "My Order Event",
+          "deduplicationKey": "properties.orderId"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventMapping.0 Custom event name can only be configured when the OpenAI Ads event is Custom.",
+      "eventMapping.0 This event mapping row is not valid for the selected OpenAI Ads event."
+    ]
+  },
+  {
+    "testTitle": "invalid custom event name on only the second event mapping row",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventMapping": [
+        {
+          "from": "Trial Started",
+          "to": "custom",
+          "customEventName": "Trial Started"
+        },
+        {
+          "from": "Order Completed",
+          "to": "page_viewed",
+          "customEventName": "My Order Event"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventMapping.1 Custom event name can only be configured when the OpenAI Ads event is Custom.",
+      "eventMapping.1 This event mapping row is not valid for the selected OpenAI Ads event."
     ]
   },
   {

@@ -510,14 +510,55 @@ def build_condition_match(visible_values):
     return {"enum": sorted(visible_values)}
 
 
+def build_forbidden_while_hidden_schema(fields, schema_field_name):
+    """Builds the `else` schema forbidding fields that must not be set while hidden.
+
+    Only `includeWhenConditional` fields need this. Every other conditionally
+    visible field is already absent from the parent's unconditional `properties`,
+    so `additionalProperties: false` rejects it on its own.
+
+    Args:
+        fields (list): `includeWhenConditional` fields sharing one condition.
+        schema_field_name (string): For old schema types, it is 'value' else
+            'configKey'.
+
+    Returns:
+        object|None: the `else` subschema, or None when there is nothing to forbid.
+    """
+    subschemas = []
+    for field in fields:
+        subschema = {"not": {"required": [field[schema_field_name]]}}
+        if "notAllowedErrorMessage" in field:
+            subschema["errorMessage"] = {"not": field["notAllowedErrorMessage"]}
+        subschemas.append(subschema)
+
+    if not subschemas:
+        return None
+    if len(subschemas) == 1:
+        return subschemas[0]
+    return {"allOf": subschemas}
+
+
 def generate_schema_for_conditions_allOf(customFields, dbConfig, schema_field_name):
-    """Builds allOf if/then blocks for fields shown via a `conditions` block.
+    """Builds allOf if/then/else blocks for fields shown via a `conditions` block.
 
     A field whose action:'hide' condition hides it for some values of its
     dependency is required only while visible. Its schema and (optional)
     requirement are emitted inside an `if`/`then` keyed on the dependency
     value(s) that reveal it - mirroring how `preRequisites` fields are handled.
     Fields revealed by the same condition are grouped into a single block.
+
+    A field marked `includeWhenConditional` is additionally declared in the
+    parent's unconditional `properties`, because `additionalProperties: false`
+    only sees properties declared alongside it and would otherwise reject the
+    field even while it is visible. That declaration on its own makes the field
+    settable for *every* dependency value, defeating the condition, so such
+    fields are forbidden again in an `else` branch.
+
+    Per CONVENTIONS.md a failing `if`/`then` (or `if`/`else`) emits a second,
+    field-less `must match "then" schema` error on top of the message from the
+    keyword that actually failed. A field's optional `conditionErrorMessage`
+    supplies the outer `errorMessage.if` that replaces it.
 
     Args:
         customFields (collection): child fields from ui-config.json.
@@ -551,6 +592,8 @@ def generate_schema_for_conditions_allOf(customFields, dbConfig, schema_field_na
             "required": [key],
         }
         thenObj = {"properties": {}, "required": []}
+        forbiddenWhileHidden = []
+        conditionErrorMessage = None
         for field in conditionGroups[groupKey]:
             thenObj["properties"][field[schema_field_name]] = uiTypetoSchemaFn.get(
                 field["type"]
@@ -562,7 +605,20 @@ def generate_schema_for_conditions_allOf(customFields, dbConfig, schema_field_na
                     thenObj["errorMessage"]["required"][field[schema_field_name]] = (
                         field["requiredErrorMessage"]
                     )
-        allOfItemList.append({"if": ifObj, "then": thenObj})
+            if field.get("includeWhenConditional") == True:
+                forbiddenWhileHidden.append(field)
+            if not conditionErrorMessage:
+                conditionErrorMessage = field.get("conditionErrorMessage")
+
+        allOfItem = {"if": ifObj, "then": thenObj}
+        elseObj = build_forbidden_while_hidden_schema(
+            forbiddenWhileHidden, schema_field_name
+        )
+        if elseObj:
+            allOfItem["else"] = elseObj
+        if conditionErrorMessage:
+            allOfItem["errorMessage"] = {"if": conditionErrorMessage}
+        allOfItemList.append(allOfItem)
     return allOfItemList
 
 

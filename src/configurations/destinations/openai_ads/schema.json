@@ -84,6 +84,17 @@
                     "customEventName": "Custom event name is required when an OpenAI Ads event mapping uses Custom."
                   }
                 }
+              },
+              "else": {
+                "not": {
+                  "required": ["customEventName"]
+                },
+                "errorMessage": {
+                  "not": "Custom event name can only be configured when the OpenAI Ads event is Custom."
+                }
+              },
+              "errorMessage": {
+                "if": "This event mapping row is not valid for the selected OpenAI Ads event."
               }
             }
           ],
