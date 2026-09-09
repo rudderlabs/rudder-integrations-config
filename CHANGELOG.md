@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.176.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.175.0...v1.176.0) (2026-09-09)
+
+
+### Features
+
+* add json paths config for gcs datalake ([#2707](https://github.com/rudderlabs/rudder-config-schema/issues/2707)) ([d77e572](https://github.com/rudderlabs/rudder-config-schema/commit/d77e57250d6bb432d1230f4a5cbe85ba3e2d1102))
+* **sources:** add Redshift and Databricks source account definitions (AI-1370) ([#2718](https://github.com/rudderlabs/rudder-config-schema/issues/2718)) ([15df328](https://github.com/rudderlabs/rudder-config-schema/commit/15df3281a371eca27de2dad653034b93e1eacec0))
+
+
+### Bug Fixes
+
+* mark OpenAI Ads destination as beta ([#2720](https://github.com/rudderlabs/rudder-config-schema/issues/2720)) ([66dfa6c](https://github.com/rudderlabs/rudder-config-schema/commit/66dfa6c4727ba2f67fc6f205dc413102b0c0d4cb))
+* move OpenAI Ads event filtering to default config ([#2714](https://github.com/rudderlabs/rudder-config-schema/issues/2714)) ([86ca5a5](https://github.com/rudderlabs/rudder-config-schema/commit/86ca5a56568e6fbc8623f9d245c2e86321c53caa))
+* **slack:** carry dynamicCustomForm defaults into the generated schema ([#2713](https://github.com/rudderlabs/rudder-config-schema/issues/2713)) ([c0c1a79](https://github.com/rudderlabs/rudder-config-schema/commit/c0c1a799eb52166b14b29c1d590b9b8f12fb7d9f))
+
 ## [1.175.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.174.0...v1.175.0) (2026-09-07)
 
 
