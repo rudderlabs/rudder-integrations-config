@@ -48,3 +48,8 @@
 - Reviewer clarified that OpenAI Ads event-filtering config should be destination-wide for delivery, but the dashboard event-filtering UI group should remain client-side/web-device-only and use `eventFilteringOption` without a `.web` prerequisite key.
 - Do not expose the OpenAI Ads dashboard event-filtering controls for cloud-mode connections unless product explicitly changes the UI scope.
 - For OpenAI Ads event-filtering schema/config changes, rely on existing `test/data/validation/destinations/openai_ads.json` fixture cases for accepted/rejected config shape coverage; do not add duplicate one-off assertions in `test/validation.test.ts` for the same behavior.
+
+## INT-7024 — Warehouse JSON Columns Docs Link Review Guidance
+
+- Reviewer clarified that warehouse destination `jsonPaths` / JSON Columns UI footer links should target each destination page's `#advanced-settings` anchor where the setting is documented, rather than older configuration anchors, the shared JSON Column Support page, or a ClickHouse-specific `#json-columns` anchor.
+- Keep `footerURL.text` copy consistent across warehouse JSON Columns fields: use `Instructions for setting up the JSON columns` unless product explicitly requests different copy.
