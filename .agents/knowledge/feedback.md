@@ -38,6 +38,11 @@
 - Optional OpenAI Ads text fields that can be cleared in the UI must accept the empty string in both `ui-config.json` regexes and generated `schema.json` patterns; for `defaultCurrency`, use `^$|^[A-Z]{3}$` rather than a non-empty-only currency regex.
 - OpenAI Ads `eventMapping[].deduplicationKey` is optional and must allow an empty string when cleared; keep the UI regex and generated schema pattern as `^$|^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)*$`, while still rejecting JSONPath, brackets, wildcards, filters, numeric index segments, and malformed dot paths.
 
+## AI-1394 — GCS Datalake JSON Paths Review Guidance
+
+- For GCS Datalake `jsonPaths`, use a plain catch-all regex/schema pattern (`^(.*)$`) for literal JSON path strings; do not copy Snowflake's explicit dynamic-config `{{...||...}}` or `env.*` alternatives unless a reviewer asks for that support.
+- Reviewer guidance for the GCS Datalake `jsonPaths` UI field: label it `JSON columns`, use label note `Specify required JSON paths in dot notation separated by commas`, and use placeholder `e.g: testMap.nestedMap,testMap.testProperties`.
+
 ## INT-7102 — OpenAI Ads Event Filtering Review Guidance
 
 - Reviewer clarified that OpenAI Ads event-filtering config should be destination-wide for delivery, but the dashboard event-filtering UI group should remain client-side/web-device-only and use `eventFilteringOption` without a `.web` prerequisite key.

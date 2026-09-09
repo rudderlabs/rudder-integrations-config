@@ -689,6 +689,14 @@ def generate_schema_for_dynamic_custom_form(field, dbConfig, schema_field_name):
             newDynamicCustomFormObj["additionalProperties"] = False
         dynamicCustomFormObj = newDynamicCustomFormObj
 
+    # An optional dynamic custom form the user never filled in is otherwise persisted with
+    # the key absent, leaving consumers to iterate an undefined value. Carrying a default
+    # declared in ui-config lets the config validator populate it on write. Only applies to
+    # the array form: when the field is source dependent the schema is an object keyed by
+    # source type, where an array default would be meaningless.
+    if not isSourceDependent and "default" in field:
+        dynamicCustomFormObj["default"] = field["default"]
+
     return dynamicCustomFormObj
 
 
