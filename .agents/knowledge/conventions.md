@@ -158,3 +158,13 @@
 
 - Google Ads Enhanced Conversions `adjustmentType` is generally available through `src/configurations/destinations/google_adwords_enhanced_conversions/ui-config.json`; do not reintroduce the removed UI `conditions` gate for `AMP_enable-gaec-adjustment-type`.
 - Keep the existing GAEC `adjustmentType` default as `ENHANCEMENT` and options as `ENHANCEMENT`/`RESTATEMENT`; `schema.json` and `db-config.json` already expose the setting unconditionally and should not need changes for this GA rollout.
+
+## INT-7102 — OpenAI Ads Event Filtering Scope
+
+- OpenAI Ads event filtering is destination-wide, not web-device-only: keep `eventFilteringOption`, `whitelistedEvents`, and `blacklistedEvents` in `src/configurations/destinations/openai_ads/db-config.json` `config.destConfig.defaultConfig`, not `config.destConfig.web`.
+- OpenAI Ads event-filtering schema and validation fixtures should use the flat top-level shape for those three keys, not the obsolete nested `{ web: ... }` shape.
+- OpenAI Ads event-filtering UI prerequisites should reference `eventFilteringOption` without a `.web` qualifier, but the dashboard group is client-side only and should remain visible only for `connectionModes.webDevice`.
+
+## INT-7117 — OpenAI Ads Beta Visibility Metadata
+
+- OpenAI Ads remains a gated beta destination: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` alongside the existing `options.hidden.gate` hide-when-false flag `AMP_enable-openai-ads-destination` so the webapp can show the Beta badge while feature gating the destination card.
