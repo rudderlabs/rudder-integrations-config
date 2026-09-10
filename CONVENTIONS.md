@@ -9,6 +9,7 @@ This document captures naming and structural conventions used across this reposi
 - [**Optional fields must accept the empty string**](#optional-fields-must-accept-the-empty-string)
 - [**Where account credential fields live**](#where-account-credential-fields-live)
 - [**Deduplication / event-id config key (`deduplicationKey`)**](#deduplication--event-id-config-key-deduplicationkey)
+- [**Event name mapping**](#event-name-mapping)
 - [**Restricting a field by connection mode**](#restricting-a-field-by-connection-mode)
 
 ## AccountDefinition naming (`accountDefinitionName`)
@@ -235,6 +236,130 @@ transformer — the config key and UI field stay the same either way.
 
 `snapchat_conversion` and `snap_pixel` both gate the field on a separate `enableDeduplication`
 checkbox — only add that toggle if the partner's id field is genuinely optional.
+
+## Event name mapping
+
+When a destination lets the customer map RudderStack event names onto the partner's own event
+vocabulary, that mapping gets **its own top-level block in `baseTemplate` containing nothing
+but a `redirect`**, and the mapping itself is declared under `redirectGroups` as a
+`type: "mapping"` field. It does not go inline in `Configuration settings`.
+
+```jsonc
+// in baseTemplate — the whole block
+{
+  "title": "Event mapping",
+  "note": "Map RudderStack to Acme events",
+  "hideEditIcon": true,
+  "sections": [
+    {
+      "groups": [
+        {
+          "title": "RudderStack to Acme event mappings",
+          "fields": [
+            {
+              "type": "redirect",
+              "redirectGroupKey": "customEventMapping",
+              "label": "Event mappings",
+              "note": "Map RudderStack event names to Acme events"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+```jsonc
+// top-level, a sibling of baseTemplate
+"redirectGroups": {
+  "customEventMapping": {
+    "fields": [
+      {
+        "type": "mapping",
+        "label": "Map your RudderStack events to Acme events",
+        "configKey": "eventMapping",
+        "default": [],
+        "addButtonLabel": "Add event mapping",
+        "uniqueRowFields": ["from"],
+        "columns": [
+          { "type": "textInput", "configKey": "from", "label": "RudderStack event name",
+            "regex": "^(.{1,100})$", "regexErrorMessage": "Enter a non-empty event name.",
+            "required": true },
+          { "type": "singleSelect", "configKey": "to", "label": "Acme event",
+            "options": [], "required": true }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Do not reach for `dynamicCustomForm`
+
+The webapp's base-template field switch (`collapsibleForm/formGroup.tsx`) has a
+`dynamicCustomForm` case and **no `mapping` case**. So an inline `dynamicCustomForm` renders,
+while an inline `mapping` renders nothing at all — the wrong choice is the one that appears to
+work. That is exactly how `openai_ads` first shipped its event mapping, and it was the only
+destination in the tree doing so.
+
+An inline `dynamicCustomForm` also renders each mapping as a stacked card in the settings
+panel rather than as a table, so a destination with a dozen mappings becomes a dozen cards the
+customer scrolls past to reach the rest of the settings.
+
+`dynamicCustomForm` remains correct for genuinely nested, non-tabular row config —
+`consentManagement` is the canonical example.
+
+### Rules for the block
+
+| Rule                                                                       | Adherence    |
+| -------------------------------------------------------------------------- | ------------ |
+| `"hideEditIcon": true` on the block                                        | 24/24 — hard |
+| Exactly one section, untitled and iconless — just `{ "groups": [...] }`    | 24/24 — hard |
+| The group holds **only** `redirect` fields — never mixed with input fields | 24/24 — hard |
+| Block title is `Event mapping` (or `Mappings`)                             | convention   |
+| It is the last block in `baseTemplate`                                     | convention   |
+
+`hideEditIcon` correlates perfectly in both directions: all 24 of its occurrences in the tree
+are on one of these blocks, and every such block carries it. The block has no editable fields
+of its own, so the section-level edit pencil would do nothing — editing happens on the
+redirect screen.
+
+Like the pattern counts above, these move as destinations are added. To recompute:
+
+```bash
+grep -o 'hideEditIcon' src/configurations/destinations/*/ui-config.json | wc -l
+```
+
+A destination may have several of these blocks, one per logical mapping, each with its own
+`redirectGroupKey` (`emarsys`, `ortto`, `optimizely_fullstack`, `adobe_analytics`).
+
+### What a `mapping` column supports
+
+Columns may be `textInput`, `singleSelect`, `autoComplete`, or `dynamicDataSelect`, and carry
+`regex` + `regexErrorMessage`, `required`, and `conditions` / `preRequisites` evaluated
+**per row** against that row's own values. `uniqueRowFields` on the field itself mirrors the
+backend's `uniqueItemProperties` check. A column hidden by its `conditions` has its value
+dropped before save, so a key the schema forbids while hidden cannot survive in the config.
+
+> Everything except `regex` needs rudder-webapp ≥ the release carrying
+> [rudderlabs/rudder-webapp#10099](https://github.com/rudderlabs/rudder-webapp/pull/10099).
+> Before that the grid honoured only `regex`, which is why the capability gap pushed
+> destinations toward `dynamicCustomForm` in the first place.
+
+### The schema entry is hand-maintained
+
+`scripts/schemaGenerator.py` walks `baseTemplate`, `sdkTemplate`, and
+`consentSettingsTemplate` — **never `redirectGroups`**. A mapping declared there produces no
+`schema.json` entry, so write the property by hand and keep it in step with the columns. Most
+destinations with a redirect mapping simply have no schema for it at all — `facebook_pixel`
+(`eventsToEvents`) is the one carrying a hand-written property, and it is worth copying the
+shape from rather than shipping an unvalidated mapping.
+
+The check is silent about the drift: `npm run check:schema:destination <dir>` emits no
+_warning_, and `scripts/run-schema-validation.sh` — what CI greps — exits 0 either way.
+`update:schema:destination` (`--skip-deletions`) preserves the hand-written block;
+**`update:schema:destination:force` deletes it.**
 
 ## Restricting a field by connection mode
 

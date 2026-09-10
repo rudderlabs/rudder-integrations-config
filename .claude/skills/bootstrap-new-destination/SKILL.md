@@ -57,7 +57,7 @@ Copy field shapes, the `schema.json` consent / `connectionMode` blocks, and `sdk
 - `scripts/template-db-config.json`, `scripts/template-ui-config.json` — the canonical starting templates. **Copy these as your base**; they already carry `version: "1.0"`, the standard structure, and the consent block.
 - `src/schemas/destinations/db-config-schema.json` — authoritative meta-schema for `db-config.json`. `config.additionalProperties` is `false`; an unknown key fails validation.
 
-- [`CONVENTIONS.md`](../../../CONVENTIONS.md) — naming and structural conventions that apply across the repo (`accountDefinitionName`, string `pattern`s, `deduplicationKey`, mode-conditional validation). **Where an existing destination and CONVENTIONS.md disagree, CONVENTIONS.md is current** — most files predate it.
+- [`CONVENTIONS.md`](../../../CONVENTIONS.md) — naming and structural conventions that apply across the repo (`accountDefinitionName`, string `pattern`s, `deduplicationKey`, event mapping, mode-conditional validation). **Where an existing destination and CONVENTIONS.md disagree, CONVENTIONS.md is current** — most files predate it.
 
 The templates do **not** produce `schema.json` — author it by hand (step 3).
 
@@ -151,6 +151,10 @@ Copy the template as-is — it already includes the standard consent block. Add 
 
 When real fields are introduced, replace it — add each to the "Connection settings" group (page 1) if required, else "Configure settings" (page 2), using the same shape. `type` ∈ `textInput | checkbox | singleSelect | multiSelect | tagInput`; omit `required` to make a field required, set `"required": false` for optional, and mark secrets with `"secret": true`.
 
+**Event mapping is not one of these fields.** If the destination maps RudderStack event names onto the partner's own event vocabulary, it goes in its own top-level block holding a single `redirect`, with the mapping declared under `redirectGroups` as `type: "mapping"` — not as a `dynamicCustomForm` in the settings groups above. Copy the shape from [CONVENTIONS.md](../../../CONVENTIONS.md#event-name-mapping).
+
+> The trap is that the wrong answer looks like it works. The base-template field switch has a `dynamicCustomForm` case and no `mapping` case, so an inline `dynamicCustomForm` renders while an inline `mapping` renders **nothing**. Reaching for `dynamicCustomForm` because "the other one didn't show up" is how `openai_ads` shipped the only inline event mapping in the tree. Keep `dynamicCustomForm` for genuinely nested row config such as `consentManagement`.
+
 - Device/hybrid: populate `sdkTemplate.fields` with the web SDK settings from the example destination. Cloud-only: leave it `[]`.
 - Keep `regex` **plain**, exactly as in the placeholder field above, and give **every** string field one — `scripts/template-ui-config.json` ships no fields, so there is nothing to copy. Omitting `regex` never gives you a permissive pattern: on `textInput` / `textareaInput` it generates no `pattern` at all, so the value goes unvalidated on save, and on `dynamicForm` / `dynamicCustomForm` / `tagInput` it generates the deprecated prefix. Don't carry that prefix over from an existing destination either. Both rules and the reasoning: [CONVENTIONS.md](../../../CONVENTIONS.md#string-pattern-and-regex).
 - An **optional** field's `regex` must match `""`, or the customer can fill it but never clear it — the `^(.{0,100})$` form above allows it, a constrained shape needs an explicit empty branch. [CONVENTIONS.md](../../../CONVENTIONS.md#optional-fields-must-accept-the-empty-string) covers `dynamicForm` rows and `singleSelect`.
@@ -182,6 +186,7 @@ A `configSchema` (JSON Schema draft-07) whose `required`/`properties` mirror the
 - Do **not** add `oneTrustCookieCategories` / `ketchConsentPurposes` properties.
 - **A value valid in one connection mode but not another** (e.g. the partner's browser SDK supports fewer events than its server API) goes in `schema.json` as an `allOf` / `if` / `then` block keyed on `connectionMode.<sourceType>`, with `ajv-errors` `errorMessage`s on **both** the `then` and the `if` so the customer sees a readable reason and no raw schema failure. Don't add a second mode-specific config field for it, and don't push the rule into the transformer or the SDK. Full shape: [CONVENTIONS.md](../../../CONVENTIONS.md#restricting-a-field-by-connection-mode).
 - **A customer-chosen dedupe/event-id field** is named `deduplicationKey` — see [CONVENTIONS.md](../../../CONVENTIONS.md#deduplication--event-id-config-key-deduplicationkey).
+- **An event mapping's property is hand-written.** `scripts/schemaGenerator.py` never walks `redirectGroups`, so the mapping you declared in step 2 generates no schema at all — author the array property yourself and keep it in step with the columns. Nothing warns you if the two drift, and `update:schema:destination:force` deletes the block outright. [CONVENTIONS.md](../../../CONVENTIONS.md#the-schema-entry-is-hand-maintained).
 
 ### 4. Test data — `test/data/validation/destinations/<dir>.json`
 
@@ -211,6 +216,7 @@ Prettier matches repo style (lint-staged runs it on commit). Jest runs the defin
 - [ ] Every secret field is in `secretKeys` **and** has `secret: true` in ui-config.
 - [ ] Mode wired consistently across `supportedConnectionModes`, `supportedMessageTypes`, `includeKeys`, `sdkTemplate` (cloud-only: `includeKeys`/`excludeKeys` deleted).
 - [ ] Every string field has an explicit `regex`; no `regex`/`pattern` carries the deprecated prefix or a redundant lookahead.
+- [ ] Any event mapping is a `type: "mapping"` under `redirectGroups`, reached from its own `hideEditIcon: true` block holding only a `redirect` — no `dynamicCustomForm` mapping in the settings groups, and its `schema.json` property is written by hand.
 - [ ] Every `"required": false` field matches `""` — in both the ui-config `regex` and the schema `pattern`.
 - [ ] `supportedSourceTypes` claims only what this destination genuinely accepts — `warehouse` only if it is rETL-capable.
 - [ ] No file under `scripts/` was modified to get this destination through a check.
