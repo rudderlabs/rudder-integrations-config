@@ -675,6 +675,46 @@ rather than hand-writing it — the provider list and resolution-strategy logic
 are standardised, and `test/consentManagementFieldsIntegrity.test.ts` asserts
 against it.
 
+**First decide whether the destination supports consent at all.** The gate is
+`consentManagement` under `destConfig.<sourceType>` in `db-config.json` — not the
+destination's category, and not what the old ui-config happened to render. Split
+that way, the v2 corpus is unambiguous:
+
+| `consentManagement` in `destConfig` | `consentSettingsTemplate` | Count |
+| ----------------------------------- | ------------------------- | ----- |
+| yes                                 | present                   | 75    |
+| yes                                 | absent                    | **0** |
+| no                                  | present — **dead config** | 3     |
+| no                                  | absent                    | 3     |
+
+So: if the destination supports consent the template is **mandatory** — 75 for,
+zero against — and `test/consentManagementFieldsIntegrity.test.ts` enforces it.
+If it does not, **omit the template**; adding one gives you fields with nowhere
+to persist.
+
+`custom_audience`, `linkedin_audience` and `tiktok_audience` are the three
+carrying a dead template: no `consentManagement` in `destConfig`, absent from
+`includeKeys`, and no `consentManagement` property in `schema.json`. They are on
+the test's `skipDestinations` list, so nothing catches it. Do not copy them.
+
+Audience destinations are **not** a category exemption — 8 of the 14 audience
+destinations do support consent and are enforced (`amazon_audience`,
+`fb_custom_audience`, `x_audience`, `customerio_audience`,
+`launchdarkly_audience`, and the v1 `bingads_audience`, `criteo_audience`,
+`snapchat_custom_audience`). Check `destConfig`, not the name.
+
+The template and the `"id": "consentSettings"` section are a pair — the framework
+injects the template's fields into that section (`util.ts:510`), which is why the
+section is an empty `groups: []` shell in every shipped config.
+
+**Expect it to surface an `items.required` tightening.** The block marks
+`provider` `required: true`, so the generator wants
+`items.required: ["provider"]` on every source type — and 234 of the 241 schemas
+defining `consentManagement` do not carry it (2026-09-10; the count falls by one
+per migration). That is a pre-existing gap you inherit, and it is a
+breaking change for a saved row with no `provider`. See the SKILL's Step 2
+(`items.required`) before you accept it.
+
 ---
 
 ## 8. `db-config.json` checklist
@@ -709,6 +749,24 @@ npx jest test/validation.test.ts
 emit generator warnings at HEAD (`facebook_pixel`'s `consentManagement`,
 `braze` per `.agents/knowledge/concerns.md`). Without a before-image you cannot
 tell a warning you introduced from one that was already there.
+
+**But a baseline warning is not a warning you get to keep.** It only tells you
+whose it is. `run-schema-validation.sh` iterates over the files a PR **changes**,
+which is why the warning has sat there unnoticed — nobody was touching that
+destination. Your migration changes it, so every warning it already carried turns
+fatal on your PR. Plan on fixing the inherited ones, and report them to the user
+as scope the migration picked up rather than created: they are usually a schema
+tightening against already-saved configs, which is the user's call to accept.
+
+> **The `$delete` trap.** `get_json_diff` is called with inverted arguments at 2
+> of its 5 call sites: `consentSettingsTemplate` (`:1676`) and
+> `sdkTemplate.groups[].fields` (`:1651`) pass `(new, cur)`; the old format
+> (`:1526`), `baseTemplate` (`:1578`) and `sdkTemplate.fields` (`:1624`) pass
+> `(cur, new)`. Consent fields cross that boundary during migration, so the same
+> untouched discrepancy prints as an additive `required: ["provider"]` block
+> before and as `{'$delete': ['required']}` after. Both say the committed
+> `schema.json` is **missing** the key. Do not diff warning bodies across the
+> migration — compare which fields warn.
 
 **`update:schema:destination` is not safe to run blindly.** On `facebook_pixel`
 it narrowed `testEventCode`'s pattern from
@@ -800,6 +858,8 @@ one form builder should be added to the other until the old one is retired.
 - [ ] Event mapping is its own collapsible block with `hideEditIcon: true`, one untitled section, and a redirect-only group (step 6)
 - [ ] `db-config.json` checklist complete (step 8)
 - [ ] `schema.json` regenerated; `npm run test:silent` green
+- [ ] **Zero** generator warnings for this destination — inherited ones fixed, not baselined away
+- [ ] Any `required` the regeneration added, at top level or inside a `dynamicCustomForm`, called out and approved
 - [ ] Verified in the webapp for every supported source type, including the round-trip check
 - [ ] Lossy substitutions (step 4) called out explicitly in the PR description
 - [ ] Design/PM sign-off — this ships to all users of the destination at once
