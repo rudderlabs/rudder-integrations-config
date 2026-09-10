@@ -47,7 +47,7 @@
             "groups": [
               {
                 "title": "Event settings",
-                "note": "Configure optional OpenAI Ads event fallbacks and mappings",
+                "note": "Configure optional OpenAI Ads event fallbacks",
                 "icon": "settings",
                 "fields": [
                   {
@@ -92,121 +92,6 @@
                       {
                         "label": "other",
                         "value": "other"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "dynamicCustomForm",
-                    "label": "Event mappings",
-                    "note": "Map RudderStack event names to OpenAI Ads standard events, or choose Custom and provide the custom event name.",
-                    "configKey": "eventMapping",
-                    "default": [],
-                    "uniqueRowFields": ["from"],
-                    "uniqueRowFieldsErrorMessage": "Only one OpenAI Ads event mapping can be configured per RudderStack event name.",
-                    "itemAdditionalProperties": false,
-                    "rowFields": [
-                      {
-                        "type": "textInput",
-                        "label": "RudderStack event name",
-                        "configKey": "from",
-                        "regex": "^(.{1,100})$",
-                        "regexErrorMessage": "Enter a non-empty RudderStack event name.",
-                        "placeholder": "e.g: Product Viewed",
-                        "required": true
-                      },
-                      {
-                        "type": "singleSelect",
-                        "label": "OpenAI Ads event",
-                        "configKey": "to",
-                        "options": [
-                          {
-                            "label": "app_installed",
-                            "value": "app_installed"
-                          },
-                          {
-                            "label": "app_opened",
-                            "value": "app_opened"
-                          },
-                          {
-                            "label": "appointment_scheduled",
-                            "value": "appointment_scheduled"
-                          },
-                          {
-                            "label": "checkout_started",
-                            "value": "checkout_started"
-                          },
-                          {
-                            "label": "contents_viewed",
-                            "value": "contents_viewed"
-                          },
-                          {
-                            "label": "items_added",
-                            "value": "items_added"
-                          },
-                          {
-                            "label": "lead_created",
-                            "value": "lead_created"
-                          },
-                          {
-                            "label": "order_created",
-                            "value": "order_created"
-                          },
-                          {
-                            "label": "page_viewed",
-                            "value": "page_viewed"
-                          },
-                          {
-                            "label": "registration_completed",
-                            "value": "registration_completed"
-                          },
-                          {
-                            "label": "subscription_created",
-                            "value": "subscription_created"
-                          },
-                          {
-                            "label": "trial_started",
-                            "value": "trial_started"
-                          },
-                          {
-                            "label": "Custom",
-                            "value": "custom"
-                          }
-                        ],
-                        "required": true
-                      },
-                      {
-                        "type": "textInput",
-                        "label": "Custom event name",
-                        "note": "Required when the OpenAI Ads event is Custom.",
-                        "configKey": "customEventName",
-                        "regex": "^(.{1,100})$",
-                        "regexErrorMessage": "Enter a non-empty custom event name.",
-                        "placeholder": "e.g: Trial Started",
-                        "required": true,
-                        "requiredErrorMessage": "Custom event name is required when an OpenAI Ads event mapping uses Custom.",
-                        "includeWhenConditional": true,
-                        "conditions": {
-                          "expression": {
-                            "operator": "OR",
-                            "operands": [
-                              {
-                                "type": "configuration",
-                                "key": "to",
-                                "value": "custom"
-                              }
-                            ]
-                          },
-                          "action": "hide"
-                        }
-                      },
-                      {
-                        "type": "textInput",
-                        "label": "Deduplication key dot path",
-                        "note": "Optional simple dot path evaluated against the full RudderStack message, such as properties.orderId. JSONPath syntax is not supported.",
-                        "configKey": "deduplicationKey",
-                        "regex": "^$|^[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)*$",
-                        "regexErrorMessage": "Enter a simple dot path such as properties.orderId. Do not use JSONPath, brackets, wildcards, filters, numeric indexes, or leading/trailing dots.",
-                        "placeholder": "e.g: properties.orderId"
                       }
                     ]
                   }
@@ -311,12 +196,157 @@
             ]
           }
         ]
+      },
+      {
+        "title": "Event mapping",
+        "note": "Map RudderStack to OpenAI Ads events",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "RudderStack to OpenAI Ads event mappings",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "customEventMapping",
+                    "label": "Event mappings",
+                    "note": "Map RudderStack event names to OpenAI Ads standard or custom events"
+                  }
+                ],
+                "callout": {
+                  "message": "Only events with a mapping are delivered to OpenAI Ads.",
+                  "type": "info"
+                }
+              }
+            ]
+          }
+        ]
       }
     ],
     "sdkTemplate": {
       "title": "Web SDK settings",
       "note": "not visible in the ui",
       "fields": []
+    },
+    "redirectGroups": {
+      "customEventMapping": {
+        "fields": [
+          {
+            "type": "mapping",
+            "label": "Map your RudderStack events to OpenAI Ads events",
+            "note": "Map RudderStack event names to OpenAI Ads standard events, or choose Custom and provide the custom event name.",
+            "configKey": "eventMapping",
+            "default": [],
+            "addButtonLabel": "Add event mapping",
+            "uniqueRowFields": ["from"],
+            "uniqueRowFieldsErrorMessage": "Only one OpenAI Ads event mapping can be configured per RudderStack event name.",
+            "columns": [
+              {
+                "type": "textInput",
+                "label": "RudderStack event name",
+                "configKey": "from",
+                "regex": "^(.{1,100})$",
+                "regexErrorMessage": "Enter a non-empty RudderStack event name.",
+                "placeholder": "e.g: Product Viewed",
+                "required": true
+              },
+              {
+                "type": "singleSelect",
+                "label": "OpenAI Ads event",
+                "configKey": "to",
+                "options": [
+                  {
+                    "label": "app_installed",
+                    "value": "app_installed"
+                  },
+                  {
+                    "label": "app_opened",
+                    "value": "app_opened"
+                  },
+                  {
+                    "label": "appointment_scheduled",
+                    "value": "appointment_scheduled"
+                  },
+                  {
+                    "label": "checkout_started",
+                    "value": "checkout_started"
+                  },
+                  {
+                    "label": "contents_viewed",
+                    "value": "contents_viewed"
+                  },
+                  {
+                    "label": "items_added",
+                    "value": "items_added"
+                  },
+                  {
+                    "label": "lead_created",
+                    "value": "lead_created"
+                  },
+                  {
+                    "label": "order_created",
+                    "value": "order_created"
+                  },
+                  {
+                    "label": "page_viewed",
+                    "value": "page_viewed"
+                  },
+                  {
+                    "label": "registration_completed",
+                    "value": "registration_completed"
+                  },
+                  {
+                    "label": "subscription_created",
+                    "value": "subscription_created"
+                  },
+                  {
+                    "label": "trial_started",
+                    "value": "trial_started"
+                  },
+                  {
+                    "label": "Custom",
+                    "value": "custom"
+                  }
+                ],
+                "required": true
+              },
+              {
+                "type": "textInput",
+                "label": "Custom event name",
+                "configKey": "customEventName",
+                "regex": "^(.{1,100})$",
+                "regexErrorMessage": "Enter a non-empty custom event name.",
+                "placeholder": "e.g: Trial Started",
+                "required": true,
+                "requiredErrorMessage": "Custom event name is required when an OpenAI Ads event mapping uses Custom.",
+                "includeWhenConditional": true,
+                "conditions": {
+                  "expression": {
+                    "operator": "OR",
+                    "operands": [
+                      {
+                        "type": "configuration",
+                        "key": "to",
+                        "value": "custom"
+                      }
+                    ]
+                  },
+                  "action": "hide"
+                }
+              },
+              {
+                "type": "textInput",
+                "label": "Deduplication key dot path",
+                "configKey": "deduplicationKey",
+                "regex": "^$|^[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)*$",
+                "regexErrorMessage": "Enter a simple dot path such as properties.orderId. Do not use JSONPath, brackets, wildcards, filters, numeric indexes, or leading/trailing dots.",
+                "placeholder": "e.g: properties.orderId"
+              }
+            ]
+          }
+        ]
+      }
     },
     "consentSettingsTemplate": {
       "title": "Consent settings",
