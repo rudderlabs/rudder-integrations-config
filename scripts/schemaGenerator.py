@@ -510,27 +510,66 @@ def build_condition_match(visible_values):
     return {"enum": sorted(visible_values)}
 
 
-def build_forbidden_while_hidden_schema(fields, schema_field_name):
+def describe_revealing_values(dependency, visible_values):
+    """The dependency's option *labels* for the values that reveal a field, as prose.
+
+    Labels rather than raw values, so the message quotes what the customer sees in
+    the dropdown ("Custom") rather than the stored value ("custom").
+
+    Args:
+        dependency (object): the ui-config field the condition keys on.
+        visible_values (collection): values of that field which reveal the field.
+
+    Returns:
+        string: e.g. "Custom", or "Custom or Ketch".
+    """
+    labelByValue = {
+        option.get("value"): option.get("label", option.get("value"))
+        for option in dependency.get("options", [])
+    }
+    labels = [labelByValue.get(value, value) for value in sorted(visible_values)]
+    if len(labels) == 1:
+        return labels[0]
+    return " or ".join([", ".join(labels[:-1]), labels[-1]])
+
+
+def build_forbidden_while_hidden_schema(
+    fields, schema_field_name, dependency_label, revealing_values
+):
     """Builds the `else` schema forbidding fields that must not be set while hidden.
 
     Only `includeWhenConditional` fields need this. Every other conditionally
     visible field is already absent from the parent's unconditional `properties`,
     so `additionalProperties: false` rejects it on its own.
 
+    The message is derived from the field's own label and its dependency's, so a
+    destination gets a readable sentence without declaring one in ui-config.json --
+    that file is the webapp's contract and carries no generator-only keys.
+
     Args:
         fields (list): `includeWhenConditional` fields sharing one condition.
         schema_field_name (string): For old schema types, it is 'value' else
             'configKey'.
+        dependency_label (string): label of the field the condition keys on.
+        revealing_values (string): prose form of the values that reveal the fields.
 
     Returns:
         object|None: the `else` subschema, or None when there is nothing to forbid.
     """
     subschemas = []
     for field in fields:
-        subschema = {"not": {"required": [field[schema_field_name]]}}
-        if "notAllowedErrorMessage" in field:
-            subschema["errorMessage"] = {"not": field["notAllowedErrorMessage"]}
-        subschemas.append(subschema)
+        subschemas.append(
+            {
+                "not": {"required": [field[schema_field_name]]},
+                "errorMessage": {
+                    "not": "{} can only be configured when {} is {}.".format(
+                        field.get("label", field[schema_field_name]),
+                        dependency_label,
+                        revealing_values,
+                    )
+                },
+            }
+        )
 
     if not subschemas:
         return None
@@ -557,8 +596,9 @@ def generate_schema_for_conditions_allOf(customFields, dbConfig, schema_field_na
 
     Per CONVENTIONS.md a failing `if`/`then` (or `if`/`else`) emits a second,
     field-less `must match "then" schema` error on top of the message from the
-    keyword that actually failed. A field's optional `conditionErrorMessage`
-    supplies the outer `errorMessage.if` that replaces it.
+    keyword that actually failed. Those groups also get an outer `errorMessage.if`
+    that replaces it. Both messages are derived from the ui-config labels, so no
+    generator-only key is added to ui-config.json.
 
     Args:
         customFields (collection): child fields from ui-config.json.
@@ -593,7 +633,6 @@ def generate_schema_for_conditions_allOf(customFields, dbConfig, schema_field_na
         }
         thenObj = {"properties": {}, "required": []}
         forbiddenWhileHidden = []
-        conditionErrorMessage = None
         for field in conditionGroups[groupKey]:
             thenObj["properties"][field[schema_field_name]] = uiTypetoSchemaFn.get(
                 field["type"]
@@ -607,17 +646,29 @@ def generate_schema_for_conditions_allOf(customFields, dbConfig, schema_field_na
                     )
             if field.get("includeWhenConditional") == True:
                 forbiddenWhileHidden.append(field)
-            if not conditionErrorMessage:
-                conditionErrorMessage = field.get("conditionErrorMessage")
 
         allOfItem = {"if": ifObj, "then": thenObj}
+        dependency = next(
+            (f for f in customFields if f.get(schema_field_name) == key), {}
+        )
+        dependencyLabel = dependency.get("label", key)
         elseObj = build_forbidden_while_hidden_schema(
-            forbiddenWhileHidden, schema_field_name
+            forbiddenWhileHidden,
+            schema_field_name,
+            dependencyLabel,
+            describe_revealing_values(dependency, visible_values),
         )
         if elseObj:
             allOfItem["else"] = elseObj
-        if conditionErrorMessage:
-            allOfItem["errorMessage"] = {"if": conditionErrorMessage}
+            # Only the `else` groups get the outer message. A failing if/then emits a second,
+            # field-less `must match "then"/"else" schema` error on top of the one from the
+            # keyword that actually failed (CONVENTIONS.md); this replaces it. Scoped to these
+            # groups so no existing destination's generated schema shifts.
+            allOfItem["errorMessage"] = {
+                "if": "This value is not valid for the selected {}.".format(
+                    dependencyLabel
+                )
+            }
         allOfItemList.append(allOfItem)
     return allOfItemList
 
