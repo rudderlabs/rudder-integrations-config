@@ -1,111 +1,170 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "accountManagementInput",
-          "label": "Event delivery account",
-          "value": "rudderAccountId",
-          "required": true
-        },
-        {
-          "type": "textInput",
-          "label": "Profile ID",
-          "value": "profileId",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,50})$",
-          "regexErrorMessage": "Length of Profile ID must be below 50 characters.",
-          "required": true,
-          "secret": false,
-          "placeholder": "e.g: 64XX34",
-          "footerNote": "User profile ID associated with request."
-        },
-        {
-          "type": "checkbox",
-          "label": "Limit ad tracking",
-          "value": "limitAdTracking",
-          "required": false,
-          "default": false,
-          "footerNote": "When set to true, the conversion will be used for reporting but not targeting. This will prevent remarketing."
-        },
-        {
-          "type": "checkbox",
-          "label": "Child directed treatment",
-          "value": "childDirectedTreatment",
-          "required": false,
-          "default": false,
-          "footerNote": "Whether this particular request may come from a user under the age of 13, under COPPA compliance."
-        },
-        {
-          "type": "checkbox",
-          "label": "Non personalized ad",
-          "value": "nonPersonalizedAd",
-          "required": false,
-          "default": false,
-          "footerNote": "Whether the conversion was for a non personalized ad."
-        },
-        {
-          "type": "checkbox",
-          "label": "Treatment for underage",
-          "value": "treatmentForUnderage",
-          "required": false,
-          "default": false,
-          "footerNote": "Whether this particular request may come from a user under the age of 16 (may differ by country), under compliance with the European Union's General Data Protection Regulation (GDPR)."
-        },
-        {
-          "type": "checkbox",
-          "label": "Enhanced Conversions",
-          "value": "enableEnhancedConversions",
-          "required": false,
-          "default": false,
-          "footerNote": "Enable this toggle to enhanced the conversions."
-        },
-        {
-          "type": "checkbox",
-          "label": "Hash user identifiers",
-          "value": "isHashingRequired",
-          "required": false,
-          "default": true,
-          "footerNote": "RudderStack will hash your user identifiers by default. Switch this off if you are already sending hashed data.",
-          "preRequisites": {
-            "fields": [
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
               {
-                "configKey": "enableEnhancedConversions",
-                "value": true
+                "title": "Connection Settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "accountManagementInput",
+                    "label": "Event delivery account",
+                    "configKey": "rudderAccountId"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Profile ID",
+                    "configKey": "profileId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,50})$",
+                    "regexErrorMessage": "Length of Profile ID must be below 50 characters.",
+                    "required": true,
+                    "secret": false,
+                    "placeholder": "e.g: 64XX34",
+                    "note": "User profile ID associated with request."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
               }
             ]
           }
-        }
-      ]
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Conversion settings",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Limit ad tracking",
+                    "configKey": "limitAdTracking",
+                    "required": false,
+                    "default": false,
+                    "note": "When set to true, the conversion will be used for reporting but not targeting. This will prevent remarketing."
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Child directed treatment",
+                    "configKey": "childDirectedTreatment",
+                    "required": false,
+                    "default": false,
+                    "note": "Whether this particular request may come from a user under the age of 13, under COPPA compliance."
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Non personalized ad",
+                    "configKey": "nonPersonalizedAd",
+                    "required": false,
+                    "default": false,
+                    "note": "Whether the conversion was for a non personalized ad."
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Treatment for underage",
+                    "configKey": "treatmentForUnderage",
+                    "required": false,
+                    "default": false,
+                    "note": "Whether this particular request may come from a user under the age of 16 (may differ by country), under compliance with the European Union's General Data Protection Regulation (GDPR)."
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Enhanced Conversions",
+                    "configKey": "enableEnhancedConversions",
+                    "required": false,
+                    "default": false,
+                    "note": "Enable this toggle to enhance the conversions."
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Hash user identifiers",
+                    "configKey": "isHashingRequired",
+                    "required": false,
+                    "default": true,
+                    "note": "RudderStack will hash your user identifiers by default. Switch this off if you are already sending hashed data.",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "enableEnhancedConversions",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     },
-    {
-      "title": "Consent Settings",
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
       "fields": [
         {
           "type": "dynamicCustomForm",
-          "value": "consentManagement",
-          "label": "Consent management settings",
-          "footerNote": "We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
             {
               "type": "singleSelect",
               "label": "Consent management provider",
-              "value": "provider",
+              "configKey": "provider",
               "options": [
                 {
-                  "name": "Custom",
+                  "label": "Custom",
                   "value": "custom"
                 },
                 {
-                  "name": "iubenda",
+                  "label": "iubenda",
                   "value": "iubenda"
                 },
                 {
-                  "name": "Ketch",
+                  "label": "Ketch",
                   "value": "ketch"
                 },
                 {
-                  "name": "OneTrust",
+                  "label": "OneTrust",
                   "value": "oneTrust"
                 }
               ],
@@ -114,14 +173,14 @@
             {
               "type": "singleSelect",
               "label": "the required consent logic",
-              "value": "resolutionStrategy",
+              "configKey": "resolutionStrategy",
               "options": [
                 {
-                  "name": "AND",
+                  "label": "AND",
                   "value": "and"
                 },
                 {
-                  "name": "OR",
+                  "label": "OR",
                   "value": "or"
                 }
               ],
@@ -137,16 +196,15 @@
               }
             },
             {
-              "type": "dynamicCustomForm",
-              "value": "consents",
+              "type": "tagInput",
               "label": "Enter consent category IDs",
-              "customFields": [
+              "note": "Input your consent category IDs by pressing 'Enter' after each entry. We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
                 {
-                  "type": "textInput",
-                  "placeholder": "Marketing",
-                  "value": "consent",
-                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "required": false
+                  "consent": ""
                 }
               ]
             }
@@ -155,5 +213,5 @@
         }
       ]
     }
-  ]
+  }
 }
