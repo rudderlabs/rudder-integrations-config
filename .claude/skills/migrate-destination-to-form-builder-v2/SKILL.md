@@ -30,7 +30,7 @@ argument-hint: <destination-name> (e.g. "adj" or "clevertap")
 - [ ] Step 7: Safety gate — compare against Step 0
 - [ ] Step 8: Verify in the webapp
 
-**The migration is one-way and ungated.** v2 activates purely because `uiConfig` stops being a JSON array (`rudder-webapp` `components/common/util/util.ts:195`). There is no feature flag. Merging ships the new form to every workspace using the destination.
+**The migration is one-way and ungated.** v2 activates purely because `uiConfig` stops being a JSON array — the webapp picks the renderer on that one test. There is no feature flag. Merging ships the new form to every workspace using the destination.
 
 ---
 

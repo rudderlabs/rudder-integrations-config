@@ -10,7 +10,7 @@ legacy array format to the v2 template format.
 **Background reading (do this first):**
 
 - [New Form Builder Framework](https://app.notion.com/p/rudderstacks/New-Form-Builder-Framework-a9aa1dd580b84ebabf56e693868efbe6) — terminology and structure.
-- [`configurationV2/formComponents/types.ts`](https://github.com/rudderlabs/rudder-webapp/blob/master/src/components/destinations/destination-view/configurationV2/formComponents/types.ts) — the authoritative type definitions. **Read the actual file, not this doc's tables, when in doubt.**
+- The webapp's form-component type definitions are the ultimate authority on field shapes. They live in the webapp repo; the tables in §3 and §4 below mirror them. Where a shipped `ui-config.json` and these tables disagree, prefer the shipped configs — and ask the webapp team if a field type is not covered here.
 
 **Canonical reference configs:**
 
@@ -24,12 +24,10 @@ legacy array format to the v2 template format.
 
 ## 0. Understand what you are shipping
 
-**v2 is switched on solely by `uiConfig` no longer being a JSON array.**
-
-```ts
-// rudder-webapp/src/components/common/util/util.ts:195
-const isDestUIConfigV2 = (destDef: IDestDefinition) => !Array.isArray(destDef.uiConfig);
-```
+**v2 is switched on solely by `uiConfig` no longer being a JSON array.** The
+webapp picks the renderer on that one test: an array gets the legacy form, an
+object gets v2. You can see the split in this repo — 167 destinations still ship
+an array, 80 ship an object.
 
 There is **no feature flag and no gradual rollout**. The moment your config
 reaches production, every workspace using that destination sees the new form —
@@ -71,17 +69,19 @@ the form renders with no error — the affected section is simply missing.
 
 Start from [`scripts/template-ui-config.json`](../../../../scripts/template-ui-config.json) and honour all of the following:
 
-| Contract                                                                                                            | What breaks if you ignore it                             | Evidence                                                                                          |
-| ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `baseTemplate[0]` is the **Initial setup** collapsible — the create flow renders only this one                      | Fields you expect during creation never appear           | `workflows/steps/destinationSettings/hooks.ts:146`                                                |
-| The first collapsible is titled **exactly** `Initial setup`                                                         | Fields in it never enter `schema.required` (see step 2a) | `schemaGenerator.py:1376` — all 80 v2 configs use this exact string                               |
-| `baseTemplate[0].sections[0].groups[*]` = connection settings, i.e. the mandatory fields                            | —                                                        | `hooks.ts:146`                                                                                    |
-| `baseTemplate[0].sections[1].groups[0]` = **connection mode slot**. Leave `fields: []`; the framework overwrites it | Connection mode picker never renders                     | `formComponents/util.ts:498` — `uiTemplateCopy[0].sections[1].groups[0].fields = connectionModes` |
-| `baseTemplate[0].sections[2].groups[0]` = immutable-fields group (optional)                                         | Immutable info panel missing in create flow              | `destinationSettingsV2.tsx:211`, `hooks.ts:169`                                                   |
-| A collapsible titled **exactly** `Configuration settings`                                                           | `sdkTemplate` and consent fields are never injected      | `util.ts:505`                                                                                     |
-| Inside it, a section titled **exactly** `Destination settings`                                                      | `sdkTemplate` groups are never injected                  | `util.ts:507`                                                                                     |
-| For consent, a section with `"id": "consentSettings"`                                                               | Consent groups are never injected                        | `util.ts:510`                                                                                     |
-| Group titled **exactly** `Connection mode`                                                                          | The explanatory connection-mode info block is not shown  | `collapsibleForm/formGroup.tsx:282`                                                               |
+| Contract                                                                                                            | What breaks if you ignore it                             |
+| ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `baseTemplate[0]` is the **Initial setup** collapsible — the create flow renders only this one                      | Fields you expect during creation never appear           |
+| The first collapsible is titled **exactly** `Initial setup`                                                         | Fields in it never enter `schema.required` (see step 2a) |
+| `baseTemplate[0].sections[0].groups[*]` = connection settings, i.e. the mandatory fields                            | —                                                        |
+| `baseTemplate[0].sections[1].groups[0]` = **connection mode slot**. Leave `fields: []`; the framework overwrites it | Connection mode picker never renders                     |
+| `baseTemplate[0].sections[2].groups[0]` = immutable-fields group (optional)                                         | Immutable info panel missing in create flow              |
+| A collapsible titled **exactly** `Configuration settings`                                                           | `sdkTemplate` and consent fields are never injected      |
+| Inside it, a section titled **exactly** `Destination settings`                                                      | `sdkTemplate` groups are never injected                  |
+| For consent, a section with `"id": "consentSettings"`                                                               | Consent groups are never injected                        |
+| Group titled **exactly** `Connection mode`                                                                          | The explanatory connection-mode info block is not shown  |
+
+Every one of these holds in all 80 migrated destination configs. If a config you are copying from disagrees with this table, the config is wrong — check it against a recently migrated destination rather than an old one.
 
 Beyond those fixed slots you are free: any number of collapsible sections after
 the first, any number of sections and groups within them.
@@ -195,12 +195,12 @@ Skeleton:
 Keep the connection-mode section even for cloud-only destinations. The
 framework populates it from `db-config.json`'s `supportedConnectionModes`; the
 only case where it is skipped is warehouse-category destinations and RETL
-connections (`util.ts:493-497`).
+connections.
 
 **Valid `icon` values:** `settings`, `sliders`, `file`, `magnifyingGlass`,
-`rightToLine`, `otherSettings` (`formComponents/headingDiv/index.tsx:24-29`).
-Note the `Icon` union in `types.ts` is stale and omits `otherSettings`, which is
-in active use — trust `headingDiv`.
+`rightToLine`, `otherSettings`.
+The webapp's published type for `icon` is stale and omits `otherSettings`, which
+is in active use — trust the shipped configs.
 
 ---
 
@@ -208,25 +208,24 @@ in active use — trust `headingDiv`.
 
 These apply to every field regardless of type:
 
-| Old                                                    | New                                                                        | Notes                                                                                                                                          |
-| ------------------------------------------------------ | -------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `value`                                                | `configKey`                                                                | The single most common rename                                                                                                                  |
-| `label`                                                | `label`                                                                    | unchanged, but now **required** on input fields — write a real one                                                                             |
-| `footerNote`                                           | `note`                                                                     |                                                                                                                                                |
-| `sectionNote`                                          | `note` on the enclosing section/group                                      |                                                                                                                                                |
-| `labelNote`                                            | `note`                                                                     | Merge into `note`; if the field had both `labelNote` and `footerNote`, combine them into one crisp sentence                                    |
-| `footerURL: { text, link }`                            | `note` as an array                                                         | `["Some text ", { "text": "link text", "link": "https://..." }]`                                                                               |
-| `options: [{ name, value }]`                           | `options: [{ label, value }]`                                              | `name` → `label`                                                                                                                               |
-| `defaultOption: { name, value }`                       | `default: "<value>"`                                                       | Just the value string                                                                                                                          |
-| `preRequisiteField: [{ name, selectedValue }]`         | `preRequisites: { fields: [{ configKey, value }] }`                        | Add `"condition": "or"` when any-of semantics are wanted; default is AND                                                                       |
-| `featureFlag: "AMP_..."`                               | `preRequisites: { featureFlags: [{ configKey: "AMP_...", value: true }] }` |                                                                                                                                                |
-| `immutable: true`                                      | _(no ui-config equivalent)_                                                | Move the key into `db-config.json` → `config.immutableKeys: [...]`; v2 reads `destinationDefinition.config.immutableKeys` (`formGroup.tsx:69`) |
-| `required`                                             | `required`                                                                 | unchanged                                                                                                                                      |
-| `secret`                                               | `secret`                                                                   | unchanged (`textInput` only)                                                                                                                   |
-| `regex`, `regexErrorMessage`, `placeholder`, `default` | unchanged                                                                  |                                                                                                                                                |
+| Old                                                    | New                                                                        | Notes                                                                                                                     |
+| ------------------------------------------------------ | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `value`                                                | `configKey`                                                                | The single most common rename                                                                                             |
+| `label`                                                | `label`                                                                    | unchanged, but now **required** on input fields — write a real one                                                        |
+| `footerNote`                                           | `note`                                                                     |                                                                                                                           |
+| `sectionNote`                                          | `note` on the enclosing section/group                                      |                                                                                                                           |
+| `labelNote`                                            | `note`                                                                     | Merge into `note`; if the field had both `labelNote` and `footerNote`, combine them into one crisp sentence               |
+| `footerURL: { text, link }`                            | `note` as an array                                                         | `["Some text ", { "text": "link text", "link": "https://..." }]`                                                          |
+| `options: [{ name, value }]`                           | `options: [{ label, value }]`                                              | `name` → `label`                                                                                                          |
+| `defaultOption: { name, value }`                       | `default: "<value>"`                                                       | Just the value string                                                                                                     |
+| `preRequisiteField: [{ name, selectedValue }]`         | `preRequisites: { fields: [{ configKey, value }] }`                        | Add `"condition": "or"` when any-of semantics are wanted; default is AND                                                  |
+| `featureFlag: "AMP_..."`                               | `preRequisites: { featureFlags: [{ configKey: "AMP_...", value: true }] }` |                                                                                                                           |
+| `immutable: true`                                      | _(no ui-config equivalent)_                                                | Move the key into `db-config.json` → `config.immutableKeys: [...]`; v2 reads `destinationDefinition.config.immutableKeys` |
+| `required`                                             | `required`                                                                 | unchanged                                                                                                                 |
+| `secret`                                               | `secret`                                                                   | unchanged (`textInput` only)                                                                                              |
+| `regex`, `regexErrorMessage`, `placeholder`, `default` | unchanged                                                                  |                                                                                                                           |
 
-`preRequisites` is shared between both builders (it lives in
-`components/common/formSchema/types.ts`), so if the old config already uses
+`preRequisites` is shared between both builders, so if the old config already uses
 `preRequisites` rather than `preRequisiteField`, copy it across as-is.
 
 ---
@@ -263,18 +262,21 @@ switch. There is no v2 field for it. Instead, ensure `db-config.json` →
 `config.supportedConnectionModes` lists only `device` for the relevant source
 types; the connection-mode component then renders the correct single option.
 You can also pin the default via `defaultConnectionModes` on the connection-mode
-group (`types.ts` → `Group.defaultConnectionModes`).
+group.
 
 **`useNativeSDK` / `useNativeSDKToSend`** must never be migrated as checkboxes.
 v2 derives them from the connection mode:
 
-```ts
-// rudder-webapp/src/components/common/util/util.ts:24-33
-if (connectionMode && sourceTypeKey === 'useNativeSDK')
-  updatedConfigValue = connectionMode !== 'cloud';
-else if (connectionMode && sourceTypeKey === 'useNativeSDKToSend')
-  updatedConfigValue = connectionMode === 'device';
-```
+| Connection mode | `useNativeSDK` | `useNativeSDKToSend` |
+| --------------- | -------------- | -------------------- |
+| `cloud`         | `false`        | `false`              |
+| `device`        | `true`         | `true`               |
+| `hybrid`        | `true`         | `false`              |
+
+The webapp writes these on save from the picked mode, for every key the
+destination declares in `destConfig.<sourceType>`. It does the same in reverse
+for legacy destinations, deriving `connectionMode` from a stored `useNativeSDK`
+— which is what keeps both form builders writing an identical backend config.
 
 ### v2-only components (no old counterpart)
 
@@ -289,7 +291,7 @@ Reach for these when they fit better than a literal translation:
 | `autoComplete`                       | Type-ahead over API-provided options                                                                                                                     |
 | `mappingRow`                         | A fixed pair of columns inside a `dynamicCustomForm` row                                                                                                 |
 | `audienceDeliveryApiBuilder`         | Audience delivery destinations only; owns multiple top-level config keys                                                                                 |
-| `customComponent`                    | Last resort; requires a matching component registered in `configurationV2/customComponents`                                                              |
+| `customComponent`                    | Last resort; requires a matching component to exist in the webapp — coordinate with that team before using it                                            |
 
 ### No exact equivalent — substitute and flag
 
@@ -312,20 +314,19 @@ the reviewer can accept or reject the lost behaviour.
 
 All device-mode fields go in `sdkTemplate`, never in `baseTemplate`. The
 framework injects them into the `Destination settings` section, once per
-connected source type, gated behind `connectionMode` being `device` or `hybrid`
-(`util.ts:362-398`).
+connected source type, gated behind `connectionMode` being `device` or `hybrid`.
 
 **Which template a field belongs in is decided by source scoping, not by
-`defaultConfig` membership.** `getConfigTemplateFields` (`util.ts:292-300`)
+`defaultConfig` membership.** `getConfigTemplateFields`
 checks _both_ `destConfig[<sourceType>]` and `destConfig.defaultConfig` when
 building sdkTemplate groups, so sdkTemplate accepts either. `baseTemplate` is
 `cloneDeep`d and never source-scoped, so it can only carry flat keys:
 
-| The `configKey` is listed in…             | Put the field in              | Why                                                                                                               |
-| ----------------------------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `destConfig.<sourceType>` (source-scoped) | **`sdkTemplate` — mandatory** | In `baseTemplate` it never populates: `transformFromBEtoFE` writes it as `<sourceType>-<key>` (`util.ts:537-568`) |
-| `destConfig.defaultConfig` (flat)         | either — judgement            | `baseTemplate` normally; `sdkTemplate` when it is device-mode-only behaviour                                      |
-| neither                                   | **nothing renders**           | Generator warns `defined in ui-config.json but not in db-config.json`                                             |
+| The `configKey` is listed in…             | Put the field in              | Why                                                                                           |
+| ----------------------------------------- | ----------------------------- | --------------------------------------------------------------------------------------------- |
+| `destConfig.<sourceType>` (source-scoped) | **`sdkTemplate` — mandatory** | In `baseTemplate` it never populates: `transformFromBEtoFE` writes it as `<sourceType>-<key>` |
+| `destConfig.defaultConfig` (flat)         | either — judgement            | `baseTemplate` normally; `sdkTemplate` when it is device-mode-only behaviour                  |
+| neither                                   | **nothing renders**           | Generator warns `defined in ui-config.json but not in db-config.json`                         |
 
 Across the 80 v2 destinations this holds without exception: 430 baseTemplate
 fields, every one of them flat, **zero** source-scoped. 64 sdkTemplate fields
@@ -334,28 +335,21 @@ the rule is one-directional — "flat" does not imply `baseTemplate`.
 
 **The trap:** a field placed in `sdkTemplate` renders **only if its `configKey`
 is listed in `db-config.json`** under `config.destConfig.<sourceType>` or
-`config.destConfig.defaultConfig`:
-
-```ts
-// formComponents/util.ts:292-297
-const isSourceSpecific = destDef.config.destConfig[sourceType]?.includes(field.configKey);
-const isDefault = destDef.config.destConfig.defaultConfig?.includes(field.configKey);
-```
+`config.destConfig.defaultConfig`.
 
 If the key is missing from `destConfig`, the field silently does not appear.
 Check every `sdkTemplate` field against `db-config.json` before you conclude
 something is broken in the JSON.
 
 Source-specific fields are also rewritten to `<sourceType>-<configKey>` in the
-form state (`util.ts:303`), and read back from `config.<configKey>.<sourceType>`.
+form state, and read back from `config.<configKey>.<sourceType>`.
 This is why `preRequisites` inside `sdkTemplate` are injected by the framework
 rather than written by you.
 
 **Sub-groups.** `sdkTemplate.groups[]` (`SdkTemplateSubGroup`) lets you split
 SDK settings into titled sub-groups instead of one flat list. Each non-empty
 sub-group becomes an indented group inside `Destination settings`; empty ones
-are omitted per source type. See `am`'s `sdkTemplate` and
-`formComponents/sdkTemplateSubGroups.ts`.
+are omitted per source type. See `am`'s `sdkTemplate`.
 
 ### Client-side event filtering
 
@@ -381,7 +375,7 @@ and `defaultOption` became `"default": "disable"`.
 **Why `baseTemplate` and not `sdkTemplate`.** 24 of 26 declare these three keys
 in `db-config.json` → `destConfig.defaultConfig`, i.e. flat top-level config
 keys. Putting them in `sdkTemplate` would source-scope them and rewrite the keys
-to `web-whitelistedEvents` (`util.ts:292-303`), changing the saved shape. So
+to `web-whitelistedEvents`, changing the saved shape. So
 device-mode visibility is done manually, with a group-level `preRequisites`.
 
 Copy `am`'s block and adjust the source types — it goes in the `Configuration
@@ -461,7 +455,7 @@ uniform across all 26, but the gate is not — there are four idioms in the wild
 
 `connectionModes.web` is not a key the app ever writes — only
 `connectionModes.cloud`, `connectionModes.webDevice` and
-`connectionModes.mobileDevice` exist (`util.ts:577-588`). So in `intercom`,
+`connectionModes.mobileDevice` exist. So in `intercom`,
 `rockerbox` and `spotifyPixel` the web arm of the gate can never match. The
 clause is `"condition": "or"`, so it fails open via the mobile arms rather than
 hiding wrongly, but it is dead config.
@@ -469,8 +463,8 @@ hiding wrongly, but it is dead config.
 Two destinations, `iterable` and `openai_ads`, declare the three keys under
 `destConfig.web` rather than `defaultConfig` while their ui-config uses flat
 `configKey`s in `baseTemplate`. `transformFromBEtoFE` only copies `defaultConfig`
-keys under their flat name — `web` keys arrive as `web-eventFilteringOption`
-(`util.ts:537-568`) — so a saved value would not populate the field on edit. The
+keys under their flat name — `web` keys arrive as `web-eventFilteringOption` — so
+a saved value would not populate the field on edit. The
 two files disagree with each other and with the other 24; confirm the intended
 shape with the webapp team before copying either.
 
@@ -546,7 +540,7 @@ Optionally add a group `callout` when mappings override transformations:
 ### Why a redirect at all
 
 A `mapping` field **cannot be placed directly in a base-template group.** The
-base-template field switch (`collapsibleForm/formGroup.tsx:124-240`) has no
+base-template field switch has no
 `mapping` case — it would render nothing. Confirmed empirically: across all 80
 already-migrated destinations there is not a single `mapping` field outside
 `redirectGroups`.
@@ -648,20 +642,20 @@ Translating the old field:
 | `options` (on `dynamicSelectForm`)        | `columns[1]` becomes `type: "singleSelect"` with those options |
 
 Columns may be `textInput`, `singleSelect`, `dynamicDataSelect`, or
-`autoComplete` (`types.ts` → `MappingColumn`). `separatorIcon` defaults to an
+`autoComplete`. `separatorIcon` defaults to an
 arrow; only `http` sets `"colon"`, because its pairs are key:value rather than a
 mapping.
 
 > **Trap: use `configKey`, never `key`, on a mapping column.** Both are accepted
 > on the top-level redirect screen, because `DynamicMapper` normalises `key` →
-> `configKey` (`mappingComponents/dynamicMapper.tsx:36-38`). A `mapping` nested
+> `configKey`. A `mapping` nested
 > inside a `dynamicCustomForm` row renders through `VisualMapper` **directly**
-> (`dynamicCustomForm.tsx:415`), skipping that normalisation — rows are then
+> , skipping that normalisation — rows are then
 > keyed `undefined`. Nothing hits this today (`http` and `topsort` use `key`, but
 > both are top-level), so it is latent rather than broken.
 
 `mapping` is also valid inside `dynamicCustomForm.rowFields` — that path _is_
-handled (`mappingComponents/dynamicCustomForm.tsx:411`).
+handled.
 
 ---
 
@@ -704,7 +698,7 @@ destinations do support consent and are enforced (`amazon_audience`,
 `snapchat_custom_audience`). Check `destConfig`, not the name.
 
 The template and the `"id": "consentSettings"` section are a pair — the framework
-injects the template's fields into that section (`util.ts:510`), which is why the
+injects the template's fields into that section, which is why the
 section is an empty `groups: []` shell in every shipped config.
 
 **Expect it to surface an `items.required` tightening.** The block marks
@@ -827,7 +821,7 @@ not error — it silently drops the user's saved value.
 
 **Two shapes for connection mode.** Saved config uses
 `connectionMode.<sourceType>`; the form's working state uses
-`<sourceType>-connectionMode` (`util.ts:537-568`). `preRequisites` you write by
+`<sourceType>-connectionMode`. `preRequisites` you write by
 hand in `baseTemplate` use the dotted form (`connectionMode.web`); the framework
 injects the hyphenated form into `sdkTemplate` groups. Copy the dotted form when
 writing your own gates.
@@ -837,7 +831,7 @@ from `destConfig`, or a `mapping` field in the wrong place all produce a form
 that renders _without_ the affected part and without any console error. When
 something is missing, check the structural contract in step 2 first.
 
-**`types.ts` drifts from reality.** The `Icon` union omits `otherSettings`;
+**The webapp's type definitions drift from reality.** Its `icon` type omits `otherSettings`;
 `MappingField` declares `separatorIcon` and `addButtonLabel` as required though
 most shipped configs omit them. Where the type and the shipped configs disagree,
 follow the shipped configs and the renderer.
