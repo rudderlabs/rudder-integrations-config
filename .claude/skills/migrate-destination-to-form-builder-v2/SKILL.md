@@ -9,12 +9,9 @@ argument-hint: <destination-name> (e.g. "adj" or "clevertap")
 **Reference files — read before starting:**
 
 - [`references/migrating-destination-to-form-builder-v2.md`](references/migrating-destination-to-form-builder-v2.md) — the full runbook. **This skill is the procedure; that file is the detail.** Load the section you need, when you need it:
-  - **§2 + §2a** before Step 3 — the structural contract and the `schema.required` rule
-  - **§9** before Step 6 — regeneration, and which warnings block the merge
-  - **§3 + §4** while translating fields — attribute renames and the per-type table
-  - **§5** if the destination has device-mode fields or client-side event filtering
-  - **§6** if it has any mapping, plus the `key` vs `configKey` trap
-  - **§Gotchas** if something renders blank and you cannot see why
+  - **§1 + §2** while translating fields — attribute renames and the per-type table
+  - **§3** if the destination has device-mode fields or client-side event filtering
+  - **§4** if it has any mapping, plus the `key` vs `configKey` trap
 - [`CONVENTIONS.md`](../../../CONVENTIONS.md) — [String `pattern` / `regex`](../../../CONVENTIONS.md#string-pattern-and-regex), [Optional fields must accept the empty string](../../../CONVENTIONS.md#optional-fields-must-accept-the-empty-string), [Restricting a field by connection mode](../../../CONVENTIONS.md#restricting-a-field-by-connection-mode) all apply.
 - `am` (device mode, sdkTemplate, event filtering) and `adobe_analytics` (redirect + redirectGroups) are the reference configs.
 
@@ -29,6 +26,7 @@ argument-hint: <destination-name> (e.g. "adj" or "clevertap")
 - [ ] Step 6: Regenerate `schema.json`
 - [ ] Step 7: Safety gate — compare against Step 0
 - [ ] Step 8: Verify in the webapp
+- [ ] Step 9: Get design/PM sign-off before merging
 
 **The migration is one-way and ungated.** v2 activates purely because `uiConfig` stops being a JSON array — the webapp picks the renderer on that one test. There is no feature flag. Merging ships the new form to every workspace using the destination.
 
@@ -39,10 +37,10 @@ argument-hint: <destination-name> (e.g. "adj" or "clevertap")
 Environment facts that defy the obvious assumption. Read these before Step 0.
 
 - **Generator warnings print to unbuffered stderr, which appears _before_ the buffered `Schema diff for ...` banner.** Filtering from that banner onward (`sed '/Schema diff/,$p'`) hides every warning you are looking for, including the `required` one.
-- **`schemaGenerator.py` always exits 0 on a schema diff.** Only a missing folder exits non-zero. Locally the check is advisory — you must read the output. In CI, `.github/workflows/test.yml` pipes changed files to `scripts/run-schema-validation.sh`, which treats any line containing "warning" as fatal. It is **not** a pre-commit hook.
+- **`schemaGenerator.py`'s exit code tells you nothing.** It exits 0 on a schema diff _and_ on a destination name that does not exist — a typo in `<dest>` looks exactly like a clean run. Confirm the directory exists before trusting silence. Locally the check is advisory — you must read the output. In CI, `.github/workflows/test.yml` pipes changed files to `scripts/run-schema-validation.sh`, which treats any line containing "warning" as fatal. It is **not** a pre-commit hook.
 - **Several destinations already emit warnings at HEAD** — `facebook_pixel` and `adj` (consentManagement), `braze` (per `.agents/knowledge/concerns.md`). This is why Step 0 exists: without a baseline you cannot tell your warning from theirs.
-- **A pre-existing warning on the destination you are migrating is _your_ blocker, not background noise.** It is dormant at HEAD only because `run-schema-validation.sh` loops over **changed** files — nobody is touching that destination. Your migration is what makes it changed, so every warning it already carried becomes fatal in CI on your PR. Baseline the warning to prove you did not cause it; then fix it anyway. The merge gate is **zero warnings for this destination**, not "no new warnings" — see Step 7.
-- **A `$delete` in a consentSettingsTemplate warning means the committed schema is _missing_ that key, not that it has a spare one.** `get_json_diff` is called with inverted arguments at 2 of its 5 call sites — `consentSettingsTemplate` (`schemaGenerator.py:1676`) and `sdkTemplate.groups[].fields` (`:1651`) use `(new, cur)`, while the old format (`:1526`), `baseTemplate` (`:1578`) and `sdkTemplate.fields` (`:1624`) use `(cur, new)`. Consent fields cross that boundary during migration, so **one unchanged discrepancy prints as an addition before and as `$delete` after**. Both mean "add it to `schema.json`".
+- **A pre-existing warning on the destination you are migrating is _your_ blocker, not background noise.** It is dormant at HEAD only because `run-schema-validation.sh` runs over files a PR **changes** — nobody is touching that destination. (That wrapper reads only `$1`, so on a PR touching several destinations it validates just the first; do not rely on CI to catch the others — check each one locally.) Your migration is what makes it changed, so every warning it already carried becomes fatal in CI on your PR. Baseline the warning to prove you did not cause it; then fix it anyway. The merge gate is **zero warnings for this destination**, not "no new warnings" — see Step 7.
+- **A `$delete` in a consentSettingsTemplate warning means the committed schema is _missing_ that key, not that it has a spare one.** `get_json_diff` is called with inverted arguments at 2 of its 5 call sites — `consentSettingsTemplate` (`schemaGenerator.py:1676`) and the second `sdkTemplate.fields` pass (`:1651`) use `(new, cur)`, while the old format (`:1526`), `baseTemplate` (`:1578`) and the first `sdkTemplate.fields` pass (`:1624`) use `(cur, new)`. Consent fields cross that boundary during migration, so **one unchanged discrepancy prints as an addition before and as `$delete` after**. Both mean "add it to `schema.json`".
 - **A `mapping` field placed directly in a `baseTemplate` group renders nothing.** The base-template switch has no `mapping` case; mappings only render behind a `redirect`, or inside `dynamicCustomForm.rowFields`.
 - **An `sdkTemplate` field whose `configKey` is absent from `destConfig` silently does not appear.** No error, no warning in the form — just a missing field.
 - **`connectionModes.web` is not a key the app ever writes.** Only `connectionModes.cloud`, `.webDevice` and `.mobileDevice` exist. Three shipped destinations gate on it, so that clause is dead — do not copy it.
@@ -97,9 +95,22 @@ Do not infer device-mode from old section titles ("Native SDK", "Client-side Eve
 
 **STOP and think here. This is where this migration has already shipped a production bug.**
 
-A field enters `schema.required` by **placement**, not because it is marked required (`schemaGenerator.py:1376-1385`): title is exactly `Initial setup` AND `configKey` is in `defaultConfig` AND (no `preRequisites` OR `required: true`).
+Three separate paths append to the schema's top-level `required`, and only the
+first is about placement:
 
-The old format's rule is the opposite — `required: true` and placement irrelevant. **So migration changes the meaning of "required."**
+| Source                                          | Condition                                                                                                                              |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `baseTemplate` (`schemaGenerator.py:1376-1385`) | collapsible titled exactly `Initial setup` **and** `configKey` in `defaultConfig` **and** (no `preRequisites` **or** `required: true`) |
+| `sdkTemplate.fields` (`:1403-1408`)             | `required: true` **and** `configKey` in `defaultConfig` — **placement irrelevant**                                                     |
+| `consentSettingsTemplate.fields` (`:1414-1420`) | `required: true` **and** `configKey` in `defaultConfig` — **placement irrelevant**                                                     |
+
+So Initial setup is the path that catches people out, but it is not the only
+one: marking a device-mode or consent field `required: true` tightens the schema
+just as hard, from outside Initial setup entirely.
+
+The old format's rule is `required: true` with placement irrelevant. **So
+migration changes the meaning of "required" for `baseTemplate` fields**, while
+leaving the other two paths behaving as before.
 
 **The generator is the authority on this — do not hand-compute it.** Running the
 generator prints an authoritative warning whenever the required set would change:
@@ -144,10 +155,13 @@ has its own required set with the same consequences, and the `For required field
 check above **will not report it** — it arrives as a `For type:dynamicCustomForm
 field:<name>` warning instead, which is easy to read as cosmetic drift.
 
-The rule (`schemaGenerator.py:633`, `:663`): a `rowField` with `required: true`
-and no `preRequisites` is added to the form's `items.required`. A conditional one
-(consent's `resolutionStrategy`) is folded into an `allOf`/`if`/`then` branch
-instead.
+The rule (`schemaGenerator.py:630-633`, `:663`): a `rowField` with
+`required: true` is added to the form's `items.required` only if
+`is_always_visible(...)` also holds — absence of `preRequisites` is necessary
+but **not** sufficient, since a row can be conditional on a sibling's value. A
+conditional one (consent's `resolutionStrategy`) is folded into an
+`allOf`/`if`/`then` branch instead. As above, read the generator's warning
+rather than deciding this by eye.
 
 This bites hardest on consent — when the destination supports it — because the standard block marks `provider`
 `required: true` — so the generator wants `items.required: ["provider"]` on every
@@ -183,7 +197,7 @@ Start from [`scripts/template-ui-config.json`](../../../scripts/template-ui-conf
 - `baseTemplate[0].sections[1].groups[0]` = connection mode slot, `fields: []` (framework overwrites)
 - `baseTemplate[0].sections[2].groups[0]` = immutable fields (optional)
 - a collapsible titled exactly `Configuration settings`, containing a section titled exactly `Destination settings`
-- consent, **only if `destConfig.<sourceType>` lists `consentManagement`**, needs a section with `"id": "consentSettings"` plus a `consentSettingsTemplate`. Gate on `db-config.json`, not on the destination's category: all 75 v2 destinations that support consent have the template and none lack it, but 3 that do not support it (`custom_audience`, `linkedin_audience`, `tiktok_audience`) ship a dead one — fields with nowhere to persist. Do not copy those. See §7.
+- consent, **only if `destConfig.<sourceType>` lists `consentManagement`**, needs a section with `"id": "consentSettings"` plus a `consentSettingsTemplate`. Gate on `db-config.json`, not on the destination's category: all 75 v2 destinations that support consent have the template and none lack it, but 3 that do not support it (`custom_audience`, `linkedin_audience`, `tiktok_audience`) ship a dead one — fields with nowhere to persist. Do not copy those. Copy the consent block from `scripts/template-ui-config.json`, which carries the standardised provider list.
 
 Apply the attribute renames and per-type mapping from the runbook (`value`→`configKey`, `options[].name`→`label`, `defaultOption`→`default`, `preRequisiteField`→`preRequisites`, `dynamicForm`/`dynamicSelectForm`→`mapping`, `useNativeSDK`/`defaultCheckbox`→delete).
 
@@ -263,6 +277,16 @@ For each connected source type (web, android, ios, cloud, warehouse as applicabl
 - **Create flow** — only mandatory fields appear; connection mode picker renders; validation fires
 - **Edit flow** — sections render in order; SDK group appears on `device`/`hybrid` and vanishes on `cloud`; each `redirect` navigates and saves; conditional fields toggle correctly
 - **Round-trip** — open a destination created on the **old** form, confirm every saved value renders, save without changes and diff the resulting config against the original
+
+---
+
+### Step 9: Get design/PM sign-off
+
+The migration is one-way and reaches every workspace using the destination the
+moment it merges, and it rewrites labels, grouping and which fields a user sees
+at creation. That is a product change, not only a config change. Get a
+design/PM review of the labels and grouping before merging, not just a code
+review.
 
 ---
 
