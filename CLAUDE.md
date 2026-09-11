@@ -29,11 +29,12 @@ Copy the _shape_ of a neighbouring destination. Take the individual rules from `
 
 Invoke the matching skill before starting; each one links the relevant `CONVENTIONS.md` sections.
 
-| Task                                               | Skill                           |
-| -------------------------------------------------- | ------------------------------- |
-| New cloud / device / hybrid / warehouse definition | `bootstrap-new-destination`     |
-| New Visual Data Mapper destination                 | `vdm-next-integration`          |
-| Move a destination onto the accounts framework     | `migrate-to-accounts-framework` |
+| Task                                               | Skill                                    |
+| -------------------------------------------------- | ---------------------------------------- |
+| New cloud / device / hybrid / warehouse definition | `bootstrap-new-destination`              |
+| New Visual Data Mapper destination                 | `vdm-next-integration`                   |
+| Move a destination onto the accounts framework     | `migrate-to-accounts-framework`          |
+| Move a destination onto form builder v2            | `migrate-destination-to-form-builder-v2` |
 
 ## Shared scripts are repo-wide contracts
 
