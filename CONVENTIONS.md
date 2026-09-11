@@ -331,7 +331,10 @@ Like the pattern counts above, these move as destinations are added. To recomput
 grep -o 'hideEditIcon' src/configurations/destinations/*/ui-config.json | wc -l
 ```
 
-A destination may have several of these blocks, one per logical mapping, each with its own `redirectGroupKey` — for example, `fieldMapping` / `eventsMapping` in `emarsys`, `eventAndPropertyMapping` / `traitsMapping` in `ortto`, and `customEventMapping` / `pageEventMapping` in `optimizely_fullstack`.
+A destination may have several of these blocks, one per logical mapping, each with its own
+`redirectGroupKey` — for example, `fieldMapping` / `eventsMapping` in `emarsys`,
+`eventAndPropertyMapping` / `traitsMapping` in `ortto`, and `customEventMapping` /
+`pageEventMapping` in `optimizely_fullstack`.
 
 ### What a `mapping` column supports
 
