@@ -174,3 +174,9 @@
 ## INT-7117 — OpenAI Ads Beta Visibility Metadata
 
 - OpenAI Ads remains a gated beta destination: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` alongside the existing `options.hidden.gate` hide-when-false flag `AMP_enable-openai-ads-destination` so the webapp can show the Beta badge while feature gating the destination card.
+
+## DEX-852 — Connection Mode Schema Source Coverage
+
+- For CLI-onboarded destination parity work, upstream `schema.json` `connectionMode` properties in this repo should follow the destination's full `db-config.json` `supportedSourceTypes`/`supportedConnectionModes` coverage, not the CLI-safe subset of source tokens.
+- `scripts/schemaGenerator.py::generate_connection_mode` builds `connectionMode` from full upstream `dbConfig.supportedSourceTypes` and `supportedConnectionModes` for old-format destinations that already carry `connectionMode` in schema, so narrowing schema coverage to CLI-represented source tokens can fight generator checks.
+- Keep unsupported CLI source-token omissions in the companion CLI definition layer instead of adding destination-specific branches or subset behavior to this repo's shared schema generator.
