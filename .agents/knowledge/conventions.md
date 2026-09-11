@@ -174,3 +174,8 @@
 ## INT-7117 — OpenAI Ads Beta Visibility Metadata
 
 - OpenAI Ads remains a gated beta destination: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` alongside the existing `options.hidden.gate` hide-when-false flag `AMP_enable-openai-ads-destination` so the webapp can show the Beta badge while feature gating the destination card.
+
+## INT-7136 — Campaign Manager V2 Migration Compatibility
+
+- For Campaign Manager 360 form-builder-v2 migration, keep existing persisted config keys and validation semantics intact: preserve the legacy `profileId` regex/pattern `(^\{\{.*\|\|(.*)\}\}$)|(^env[.].+)|^(.{1,50})$` rather than narrowing it during a UI-container migration, so saved templated/env values remain valid.
+- Campaign Manager 360 consent-management schema should align with the standard V2 consent template by requiring `provider` on every consent row (`items.required: ["provider"]` under each consentManagement source branch); although this tightens validation for non-empty rows missing a provider, the UI already marks provider as required and uses it as the unique row key.
