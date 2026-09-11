@@ -791,5 +791,30 @@
     },
     "result": false,
     "err": ["whitelistedEvents must be array", "blacklistedEvents.0.eventName must be string"]
+  },
+  {
+    "testTitle": "With valid device-only connection modes",
+    "config": {
+      "connectionMode": {
+        "android": "device",
+        "androidKotlin": "device",
+        "ios": "device",
+        "iosSwift": "device",
+        "unity": "device",
+        "reactnative": "device",
+        "flutter": "device"
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With unsupported cloud connection mode",
+    "config": {
+      "connectionMode": {
+        "android": "cloud"
+      }
+    },
+    "result": false,
+    "err": ["connectionMode.android must be equal to one of the allowed values"]
   }
 ]
