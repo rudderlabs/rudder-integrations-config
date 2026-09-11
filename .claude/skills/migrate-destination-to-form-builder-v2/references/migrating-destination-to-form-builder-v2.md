@@ -134,11 +134,23 @@ This has already shipped once:
 alone did it. The bug lived for ~4 months. `mp` #1733 did the same thing with
 `dataResidency` and `identityMergeApi`.
 
-**Before you finish, compute the expected `required` set yourself** by applying
-the three conditions to your new `ui-config.json` + `db-config.json`, and
-compare it to the old `schema.json`. Any field the migration adds is a breaking
-change for saved destinations and needs an explicit decision, not a silent
-commit.
+**Do not hand-compute the expected `required` set from these three conditions.**
+They explain _why_ a field became required; they are not a reliable way to work
+out _whether_ it did. A faithful-looking reimplementation disagrees with 44 of
+the 247 shipped schemas, because the generator also skips conditional fields,
+folds some requirements into `allOf`/`oneOf` branches, and several schemas carry
+hand-added entries.
+
+The generator is the authority. Run it before editing and again after, and
+compare:
+
+```bash
+python3 scripts/schemaGenerator.py destination -name <dest> 2>&1 | grep -A12 "For required field"
+```
+
+A `$insert` that was not there at baseline is a field your migration made
+mandatory — a breaking change for saved destinations, needing an explicit
+decision rather than a silent commit. No output is the pass case.
 
 **The escape hatch**, when a field belongs in Initial setup but must stay
 optional for existing configs: give it `preRequisites` and do not set
@@ -851,7 +863,7 @@ one form builder should be added to the other until the old one is retired.
 - [ ] Client-side event filtering, if present, uses `tagInput` with `tagKey: "eventName"` and a `connectionMode.<sourceType>` gate (step 5)
 - [ ] Event mapping is its own collapsible block with `hideEditIcon: true`, one untitled section, and a redirect-only group (step 6)
 - [ ] `db-config.json` checklist complete (step 8)
-- [ ] `schema.json` regenerated; `npm run test:silent` green
+- [ ] `schema.json` regenerated; `npx jest test/validation.test.ts` green
 - [ ] **Zero** generator warnings for this destination — inherited ones fixed, not baselined away
 - [ ] Any `required` the regeneration added, at top level or inside a `dynamicCustomForm`, called out and approved
 - [ ] Verified in the webapp for every supported source type, including the round-trip check
