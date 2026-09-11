@@ -174,3 +174,8 @@
 ## INT-7117 — OpenAI Ads Beta Visibility Metadata
 
 - OpenAI Ads remains a gated beta destination: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` alongside the existing `options.hidden.gate` hide-when-false flag `AMP_enable-openai-ads-destination` so the webapp can show the Beta badge while feature gating the destination card.
+
+## DEX-848 — Braze Legacy SDK Field Removal Scope
+
+- Removing Braze legacy `use_native_sdk`/`useNativeSDK` exposure should be scoped to destination metadata, schema, and validation fixtures: remove the key from source-specific `config.destConfig` entries in `src/configurations/destinations/braze/db-config.json`, remove `configSchema.properties.useNativeSDK` from `src/configurations/destinations/braze/schema.json`, and omit it from Braze validation fixtures.
+- Do not add top-level `additionalProperties: false` to Braze `schema.json` solely to make removed legacy keys strictly invalid; that folds in known Braze schema-generator baseline drift and broadens persisted-config compatibility changes beyond exposure cleanup.
