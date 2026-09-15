@@ -70,4 +70,4 @@
 
 ## INT-7144 — Form Builder V2 Conditional Required Schema Pattern
 
-- For Form Builder V2 destination migrations, `scripts/schemaGenerator.py` should avoid adding Initial Setup fields with `preRequisites` to the top-level schema `required` array; required conditional fields should remain enforced through existing/manual conditional schema branches so hidden dependent fields such as Google Ads Offline Conversions `subAccount`/`loginCustomerId` do not become unconditionally required.
+- For Google Ads Offline Conversions, keep the `subAccount` to `loginCustomerId` requiredness rule scoped to the destination schema. Do not add a shared `scripts/schemaGenerator.py` workaround for this migration unless a broader Form Builder V2 generator change is explicitly requested.
