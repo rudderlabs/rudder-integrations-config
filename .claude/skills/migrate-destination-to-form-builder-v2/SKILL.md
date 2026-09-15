@@ -194,6 +194,7 @@ decision before committing.**
 
 Start from [`scripts/template-ui-config.json`](../../../scripts/template-ui-config.json). Honour the structural contract in the runbook — positional and exact-title dependencies that fail **silently** when wrong:
 
+- `baseTemplate[0]` = the collapsible titled exactly `Initial setup`; any mapping collapsible follows it at `baseTemplate[1..n]`, then `Configuration settings` (Step 4)
 - `baseTemplate[0].sections[1].groups[0]` = connection mode slot, `fields: []` (framework overwrites)
 - `baseTemplate[0].sections[2].groups[0]` = immutable fields (optional)
 - a collapsible titled exactly `Configuration settings`, containing a section titled exactly `Destination settings`
@@ -214,6 +215,8 @@ Three patterns with fixed shapes — copy them from the runbook rather than inve
 **Client-side event filtering** → stays in `baseTemplate`, in `Configuration settings` → section `Other settings` (`icon: "otherSettings"`). `singleSelect(eventFilteringOption)` plus two **`tagInput`s** with `tagKey: "eventName"` — the `tagKey` is what preserves the stored `[{"eventName": "..."}]` shape. Gate the group on `connectionMode.<sourceType>: "device"` OR'd across exactly the source types that support device. Do not copy the gate from another destination — four idioms exist and one is dead (see Gotchas).
 
 **Event mapping** → its own top-level collapsible with `hideEditIcon: true`, one untitled section, and a group holding **only** `redirect` fields. The mapping itself goes in `redirectGroups`.
+
+**Order it at `baseTemplate[1]` — immediately after `Initial setup`, before `Configuration settings`.** With several mapping collapsibles, they occupy `baseTemplate[1..n]` contiguously. Mappings are what a user configures right after connecting, so they must not sit below `Configuration settings`. Most shipped configs still have it last (22 of 24 as of 2026-09-15) — that is pre-rule history, not a counter-convention, so **do not copy the position from a neighbouring destination**. The move is layout-only and must leave `schema.json` byte-identical; see runbook §4.
 
 Keep a mapping's companion fields (the ones that change how it is read — a prefix, a delimiter, an "is default" toggle) on the **same tab** as that mapping, not in `Configuration settings`.
 
@@ -298,6 +301,8 @@ review.
 - A warning waved through as "pre-existing" — on the destination you are migrating, that makes it yours to fix
 - A `$delete` in a consent warning read as "the schema has something extra" rather than "the schema is missing it"
 - A `mapping` field placed directly in a `baseTemplate` group
+- A mapping collapsible left after `Configuration settings` because that is where the neighbouring destination has it
+- A mapping reorder that shows up in the `schema.json` diff — the move alone cannot change the schema, so something else did
 - Event-filtering gate copied verbatim from another destination
 - Schema diff reported as "regenerated the schema" rather than as a classified list
 - `--no-verify` used to get past the pre-commit hook

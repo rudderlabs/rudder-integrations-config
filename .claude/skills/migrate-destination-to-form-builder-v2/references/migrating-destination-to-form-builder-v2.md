@@ -338,7 +338,36 @@ rename:
 | Exactly one section, untitled and iconless — just `{ "groups": [...] }`                         | 24/24 — **hard**                 |
 | The group holds **only** `redirect` fields; never mix a redirect into a group with input fields | 24/24 — **hard**                 |
 | Collapsible title is `Event mapping` (or `Mappings`)                                            | 18/24 — convention               |
-| It is the last collapsible in `baseTemplate`                                                    | 19/24 — convention               |
+| It sits **immediately after `Initial setup`** — `baseTemplate[1]`                               | **required going forward**       |
+
+### Where the block goes: position 2, right after `Initial setup`
+
+**Put every mapping collapsible immediately after `Initial setup`, before
+`Configuration settings`** — `baseTemplate[1]` when there is one mapping, and
+`baseTemplate[1..n]` (contiguous, in logical order) when there are several.
+
+```
+baseTemplate[0]  Initial setup
+baseTemplate[1]  Event mapping          <- here
+baseTemplate[2]  Configuration settings
+```
+
+Mappings are the thing a user configures right after connecting; burying them
+below `Configuration settings` puts the most-edited screen last. `dub` and
+`ga4_v2` already ship this order.
+
+**Most shipped configs do not follow this** — as of 2026-09-15, 22 of the 24
+destinations with a mapping collapsible still have it last. That is history, not
+a counter-convention: they were migrated before this rule and are not being
+backfilled. Do not copy the position from a neighbouring destination, and do not
+reorder a destination you are not otherwise migrating.
+
+Reordering is layout-only and **cannot** change `schema.json`: every one of the
+generator's `required` paths keys on the collapsible titled exactly
+`Initial setup` (`schemaGenerator.py:1376-1385`) or on `required: true` with
+placement irrelevant — none of them care where the mapping block sits. So Step
+7's schema diff must stay empty from the move alone; if it does not, you changed
+something else too.
 
 `hideEditIcon` correlates perfectly in both directions: every occurrence of it in
 the whole corpus is on one of these blocks, and every one of these blocks has it.
