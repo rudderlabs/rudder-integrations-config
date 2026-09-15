@@ -1,7 +1,7 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["apiKey", "siteID", "datacenter"],
+    "required": ["datacenter"],
     "type": "object",
     "properties": {
       "siteID": {
@@ -1103,6 +1103,23 @@
             }
           }
         }
+      },
+      "writeKey": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+      },
+      "sdkVersion": {
+        "type": "string",
+        "enum": ["v1", "v2"],
+        "default": "v2"
+      },
+      "anonymousInApp": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
       }
     },
     "allOf": [
@@ -1117,6 +1134,255 @@
         },
         "then": {
           "required": ["userIdIdentifierType"]
+        }
+      },
+      {
+        "if": {
+          "anyOf": [
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "web": {
+                      "const": "cloud"
+                    }
+                  },
+                  "required": ["web"]
+                }
+              },
+              "required": ["connectionMode"]
+            },
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "android": {
+                      "const": "cloud"
+                    }
+                  },
+                  "required": ["android"]
+                }
+              },
+              "required": ["connectionMode"]
+            },
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "androidKotlin": {
+                      "const": "cloud"
+                    }
+                  },
+                  "required": ["androidKotlin"]
+                }
+              },
+              "required": ["connectionMode"]
+            },
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "ios": {
+                      "const": "cloud"
+                    }
+                  },
+                  "required": ["ios"]
+                }
+              },
+              "required": ["connectionMode"]
+            },
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "iosSwift": {
+                      "const": "cloud"
+                    }
+                  },
+                  "required": ["iosSwift"]
+                }
+              },
+              "required": ["connectionMode"]
+            },
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "unity": {
+                      "const": "cloud"
+                    }
+                  },
+                  "required": ["unity"]
+                }
+              },
+              "required": ["connectionMode"]
+            },
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "amp": {
+                      "const": "cloud"
+                    }
+                  },
+                  "required": ["amp"]
+                }
+              },
+              "required": ["connectionMode"]
+            },
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "cloud": {
+                      "const": "cloud"
+                    }
+                  },
+                  "required": ["cloud"]
+                }
+              },
+              "required": ["connectionMode"]
+            },
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "warehouse": {
+                      "const": "cloud"
+                    }
+                  },
+                  "required": ["warehouse"]
+                }
+              },
+              "required": ["connectionMode"]
+            },
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "reactnative": {
+                      "const": "cloud"
+                    }
+                  },
+                  "required": ["reactnative"]
+                }
+              },
+              "required": ["connectionMode"]
+            },
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "flutter": {
+                      "const": "cloud"
+                    }
+                  },
+                  "required": ["flutter"]
+                }
+              },
+              "required": ["connectionMode"]
+            },
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "cordova": {
+                      "const": "cloud"
+                    }
+                  },
+                  "required": ["cordova"]
+                }
+              },
+              "required": ["connectionMode"]
+            },
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "shopify": {
+                      "const": "cloud"
+                    }
+                  },
+                  "required": ["shopify"]
+                }
+              },
+              "required": ["connectionMode"]
+            },
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "android": {
+                      "const": "device"
+                    }
+                  },
+                  "required": ["android"]
+                }
+              },
+              "required": ["connectionMode"]
+            },
+            {
+              "properties": {
+                "connectionMode": {
+                  "type": "object",
+                  "properties": {
+                    "ios": {
+                      "const": "device"
+                    }
+                  },
+                  "required": ["ios"]
+                }
+              },
+              "required": ["connectionMode"]
+            },
+            {
+              "properties": {
+                "sdkVersion": {
+                  "const": "v1"
+                }
+              },
+              "required": ["sdkVersion"]
+            }
+          ]
+        },
+        "then": {
+          "required": ["siteID", "apiKey"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "properties": {
+                "web": {
+                  "const": "device"
+                }
+              },
+              "required": ["web"]
+            },
+            "sdkVersion": {
+              "const": "v2"
+            }
+          },
+          "required": ["connectionMode", "sdkVersion"]
+        },
+        "then": {
+          "required": ["writeKey"]
         }
       }
     ]

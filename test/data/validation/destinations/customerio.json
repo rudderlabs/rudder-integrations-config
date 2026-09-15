@@ -56,7 +56,7 @@
       }
     },
     "result": false,
-    "err": [" must have required property 'siteID'"]
+    "err": [" must have required property 'siteID'", " must match \"then\" schema"]
   },
   {
     "config": {
@@ -1083,5 +1083,177 @@
     },
     "result": false,
     "err": ["userIdIdentifierType must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "web device mode on SDK 2.x needs only a write key (no siteID/apiKey)",
+    "config": {
+      "writeKey": "cio_wk_XXXXXXXXXXXXXXXX",
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "device"
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "sdkVersion": "v2",
+      "sendPageNameInSDK": {
+        "web": true
+      },
+      "anonymousInApp": {
+        "web": true
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "web device mode on SDK 2.x without a write key is invalid",
+    "config": {
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "device"
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "sdkVersion": "v2",
+      "sendPageNameInSDK": {
+        "web": true
+      },
+      "anonymousInApp": {
+        "web": true
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'writeKey'", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "web device mode on SDK 1.x still requires siteID and apiKey",
+    "config": {
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "device"
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "sdkVersion": "v1",
+      "sendPageNameInSDK": {
+        "web": true
+      },
+      "dataUseInApp": {
+        "web": true
+      }
+    },
+    "result": false,
+    "err": [
+      " must have required property 'siteID'",
+      " must have required property 'apiKey'",
+      " must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "web device mode on SDK 2.x plus a cloud-mode source requires siteID and apiKey",
+    "config": {
+      "writeKey": "cio_wk_XXXXXXXXXXXXXXXX",
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "device",
+        "android": "cloud"
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "sdkVersion": "v2",
+      "sendPageNameInSDK": {
+        "web": true
+      },
+      "anonymousInApp": {
+        "web": true
+      }
+    },
+    "result": false,
+    "err": [
+      " must have required property 'siteID'",
+      " must have required property 'apiKey'",
+      " must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "web device mode on SDK 2.x plus a cloud-mode source is valid with all credentials",
+    "config": {
+      "writeKey": "cio_wk_XXXXXXXXXXXXXXXX",
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "device",
+        "android": "cloud"
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "sdkVersion": "v2",
+      "sendPageNameInSDK": {
+        "web": true
+      },
+      "anonymousInApp": {
+        "web": true
+      },
+      "siteID": "95bd13XXXX29XXi0ff9b",
+      "apiKey": "95bd13XXXX29XXi0ff9b"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "unsupported SDK version is rejected",
+    "config": {
+      "writeKey": "cio_wk_XXXXXXXXXXXXXXXX",
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "device"
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "sdkVersion": "v3",
+      "sendPageNameInSDK": {
+        "web": true
+      },
+      "anonymousInApp": {
+        "web": true
+      }
+    },
+    "result": false,
+    "err": ["sdkVersion must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "web cloud mode without siteID is invalid",
+    "config": {
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "useNativeSDK": {
+        "web": false
+      },
+      "sendPageNameInSDK": {
+        "web": true
+      },
+      "apiKey": "95bd13XXXX29XXi0ff9b"
+    },
+    "result": false,
+    "err": [" must have required property 'siteID'", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "web cloud mode with a stale 2.x sdkVersion needs no write key",
+    "config": {
+      "siteID": "95bd13XXXX29XXi0ff9b",
+      "apiKey": "95bd13XXXX29XXi0ff9b",
+      "datacenter": "US",
+      "sdkVersion": "v2",
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "eventFilteringOption": "disable"
+    },
+    "result": true
   }
 ]
