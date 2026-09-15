@@ -1486,10 +1486,8 @@ def generate_schema_properties(
                                 and is_field_present_in_default_config(
                                     field, dbConfig, "configKey"
                                 )
-                                and (
-                                    "preRequisites" not in field
-                                    or field.get("required")
-                                )
+                                and "preRequisites" not in field
+                                and field.get("required") is not False
                             ):
                                 schemaObject["required"].append(field["configKey"])
 

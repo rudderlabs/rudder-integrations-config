@@ -174,3 +174,8 @@
 ## INT-7117 — OpenAI Ads Beta Visibility Metadata
 
 - OpenAI Ads remains a gated beta destination: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` alongside the existing `options.hidden.gate` hide-when-false flag `AMP_enable-openai-ads-destination` so the webapp can show the Beta badge while feature gating the destination card.
+
+## INT-7144 — Google Ads Offline Conversions V2 Migration Compatibility
+
+- For Google Ads Offline Conversions Form Builder V2 migrations, preserve existing `configKey` names and legacy regex/pattern compatibility for Customer ID, Login Customer ID, and mapping columns; these fields historically accepted `{{...}}`/`env.` dynamic-config values, so regex cleanup should be treated as a separate persisted-config compatibility change.
+- Google Ads Offline Conversions is cloud-only in Form Builder V2: keep `sdkTemplate` empty, move consent UI into `consentSettingsTemplate`, and keep connection settings under Initial Setup while event mappings and conversion options live under Configuration Settings / Event settings.

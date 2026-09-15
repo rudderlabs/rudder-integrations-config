@@ -67,3 +67,7 @@
 - OpenAI Ads destination config stays within the repository's declarative JSON validation model: `src/configurations/destinations/openai_ads/schema.json` enforces flat destination-wide event-filtering fields, duplicate event mappings with `uniqueItemProperties: ["from"]`, and `customEventName` only when an event mapping's `to` value is `custom`.
 - The OpenAI Ads `eventMapping.from` uniqueness rule only catches exact duplicate values. AJV keywords used in this repo do not provide trim/lowercase uniqueness for array item properties, so normalized lookup semantics should be handled outside the destination schema unless a broader custom validator path is introduced.
 - OpenAI Ads is account-backed, but account option/secret fields are mirrored in destination metadata for generic account validation; avoid destination-specific validator exemptions and keep non-device account plumbing out of `config.includeKeys`.
+
+## INT-7144 — Form Builder V2 Conditional Required Schema Pattern
+
+- For Form Builder V2 destination migrations, `scripts/schemaGenerator.py` should avoid adding Initial Setup fields with `preRequisites` to the top-level schema `required` array; required conditional fields should remain enforced through existing/manual conditional schema branches so hidden dependent fields such as Google Ads Offline Conversions `subAccount`/`loginCustomerId` do not become unconditionally required.
