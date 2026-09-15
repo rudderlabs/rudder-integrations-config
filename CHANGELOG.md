@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.176.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.176.0...v1.176.1) (2026-09-15)
+
+
+### Bug Fixes
+
+* **openai_ads:** allow customEventName only when the mapped event is Custom ([#2723](https://github.com/rudderlabs/rudder-config-schema/issues/2723)) ([3659234](https://github.com/rudderlabs/rudder-config-schema/commit/3659234c0922fd130534aab676c46d568b670456))
+* remove screen from openai ads web device events ([#2724](https://github.com/rudderlabs/rudder-config-schema/issues/2724)) ([60e7dde](https://github.com/rudderlabs/rudder-config-schema/commit/60e7dde40fe3eae42fec365e54a35ccc1d267140))
+
 ## [1.176.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.175.0...v1.176.0) (2026-09-09)
 
 
