@@ -182,3 +182,8 @@
 - Keep `subAccount` in the Initial Setup / Connection Settings group with its `false` default, but preserve the legacy schema contract where it is not top-level required.
 - Keep `loginCustomerId` visible only behind the `subAccount` prerequisite and enforce it with a destination-specific conditional schema branch when `subAccount` is true; do not make it unconditionally required at the top level and do not change shared schema-generator requiredness for this destination-specific rule.
 - Keep `loginCustomerId` out of top-level `configSchema.properties`; define and validate it only inside the conditional `allOf` branch where `subAccount` is true.
+
+## INT-7150 — OpenAI Ads Event Mapping Column Contract
+
+- OpenAI Ads `customEventName` belongs as the last column in `src/configurations/destinations/openai_ads/ui-config.json` `uiConfig.redirectGroups.customEventMapping.fields[0].columns`, after `deduplicationKey`; its `conditions` hide-on-`to == custom` block remains the visibility mechanism.
+- Do not add `includeWhenConditional` back to this `redirectGroups` column: schema generation does not traverse `redirectGroups`, so the key is inert there, while it should not be treated as globally obsolete for `baseTemplate` fields.
