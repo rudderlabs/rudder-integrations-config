@@ -48,3 +48,7 @@
 - Reviewer clarified that OpenAI Ads event-filtering config should be destination-wide for delivery, but the dashboard event-filtering UI group should remain client-side/web-device-only and use `eventFilteringOption` without a `.web` prerequisite key.
 - Do not expose the OpenAI Ads dashboard event-filtering controls for cloud-mode connections unless product explicitly changes the UI scope.
 - For OpenAI Ads event-filtering schema/config changes, rely on existing `test/data/validation/destinations/openai_ads.json` fixture cases for accepted/rejected config shape coverage; do not add duplicate one-off assertions in `test/validation.test.ts` for the same behavior.
+
+## INT-7150 — OpenAI Ads Conditional UI Cleanup Guidance
+
+- Reviewer guidance confirmed `includeWhenConditional` should not be preserved or reintroduced in `scripts/schemaGenerator.py` unless a new ui-config field actually needs it; after INT-7150, conditionally visible dynamic custom form fields are emitted only inside conditional `if`/`then` schema and omitted from unconditional item properties.
