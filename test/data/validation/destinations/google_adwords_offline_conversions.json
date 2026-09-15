@@ -45,11 +45,22 @@
     "result": true
   },
   {
-    "testTitle": "Allows Login Customer ID to be omitted when subAccount is true",
+    "testTitle": "Requires Login Customer ID when subAccount is true",
     "config": {
       "customerId": "962-000-2972",
       "rudderAccountId": "test-host",
       "subAccount": true
+    },
+    "result": false,
+    "err": [" must have required property 'loginCustomerId'", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "Allows Login Customer ID when subAccount is true",
+    "config": {
+      "customerId": "962-000-2972",
+      "rudderAccountId": "test-host",
+      "subAccount": true,
+      "loginCustomerId": "123-456-7890"
     },
     "result": true
   },

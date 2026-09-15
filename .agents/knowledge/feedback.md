@@ -53,4 +53,4 @@
 
 - Reviewer guidance for `src/configurations/destinations/google_adwords_offline_conversions/ui-config.json`: keep the three mapping fields behind a single Form Builder V2 `redirect` screen using tabs.
 - Put `eventsToConversionsNamesMapping` and `eventsToOfflineConversionsTypeMapping` in the first tab, put `customVariables` in the second tab, and preserve the existing persisted mapping config keys.
-- Keep `loginCustomerId` optional even when `subAccount` is true; do not add schema-generator support or schema `anyOf` branches solely to make this field conditionally required.
+- Latest reviewer direction for `loginCustomerId` supersedes the earlier optional-only note: enforce `loginCustomerId` through conditional schema validation when `subAccount` is true, while avoiding unconditional top-level required validation.
