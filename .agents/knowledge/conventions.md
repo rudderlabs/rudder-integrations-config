@@ -179,3 +179,9 @@
 
 - OpenAI Ads `customEventName` belongs as the last column in `src/configurations/destinations/openai_ads/ui-config.json` `uiConfig.redirectGroups.customEventMapping.fields[0].columns`, after `deduplicationKey`; its `conditions` hide-on-`to == custom` block remains the visibility mechanism.
 - Do not add `includeWhenConditional` back to this `redirectGroups` column: schema generation does not traverse `redirectGroups`, so the key is inert there, while it should not be treated as globally obsolete for `baseTemplate` fields.
+
+## INT-7151 — OpenAI Ads Event Mapping Block Order
+
+- OpenAI Ads `baseTemplate` UI ordering in `src/configurations/destinations/openai_ads/ui-config.json` should place `Event mapping` before `Configuration settings`, yielding `Initial setup` → `Event mapping` → `Configuration settings`.
+- Treat this OpenAI Ads reorder as config-only and schema-neutral: do not change `schema.json`, validation fixtures, `redirectGroups`, `sdkTemplate`, or `consentSettingsTemplate` when only moving the block order.
+- The webapp auto-expand index fix and `CONVENTIONS.md` wording updates are independent follow-ups; they are not blockers for shipping the OpenAI Ads config-only reorder.
