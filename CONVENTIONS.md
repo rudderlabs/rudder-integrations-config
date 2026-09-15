@@ -320,6 +320,11 @@ customer scrolls past to reach the rest of the settings.
 | Block title is `Event mapping` (or `Mappings`)                             | convention   |
 | It is the last block in `baseTemplate`                                     | convention   |
 
+The last-block order is a convention, not a hard rule. Configuration V2 in
+rudder-webapp resolves the Initial setup / Event mapping / Configuration settings block indexes
+by title, so a destination may place Event mapping earlier when product UX requires it. Keep the
+shape rules above intact when doing so.
+
 `hideEditIcon` correlates perfectly in both directions: all 24 of its occurrences in the tree
 are on one of these blocks, and every such block carries it. The block has no editable fields
 of its own, so the section-level edit pencil would do nothing — editing happens on the

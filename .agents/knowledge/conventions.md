@@ -174,3 +174,9 @@
 ## INT-7117 — OpenAI Ads Beta Visibility Metadata
 
 - OpenAI Ads remains a gated beta destination: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` alongside the existing `options.hidden.gate` hide-when-false flag `AMP_enable-openai-ads-destination` so the webapp can show the Beta badge while feature gating the destination card.
+
+## INT-7145 — OpenAI Ads Event Mapping UI Layout
+
+- OpenAI Ads `redirectGroups.customEventMapping.columns` in `src/configurations/destinations/openai_ads/ui-config.json` is UI-only layout metadata: reordering columns such as moving `customEventName` last does not require a schema change when column properties, required-ness, regexes, and conditions remain unchanged.
+- Keep the server-side OpenAI Ads `eventMapping` `customEventName` enforcement in the hand-written `schema.json` `allOf` if/then/else guard; `schemaGenerator.py` walks `baseTemplate`, `sdkTemplate`, and `consentSettingsTemplate`, not `redirectGroups`, so redirect-group-only keys such as `includeWhenConditional` do not generate that guard.
+- For OpenAI Ads post-setup UX, the `Event mapping` baseTemplate block may intentionally appear before `Configuration settings`; webapp expansion behavior should resolve blocks by title rather than relying on the conventional positional order.
