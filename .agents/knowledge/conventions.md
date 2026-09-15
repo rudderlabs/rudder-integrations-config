@@ -174,3 +174,7 @@
 ## INT-7117 — OpenAI Ads Beta Visibility Metadata
 
 - OpenAI Ads remains a gated beta destination: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` alongside the existing `options.hidden.gate` hide-when-false flag `AMP_enable-openai-ads-destination` so the webapp can show the Beta badge while feature gating the destination card.
+
+## INT-7147 — DCM Floodlight V2 Compatibility Boundaries
+
+- DCM Floodlight consent provider rows remain backward-compatible after the V2 form-builder migration: keep the V2 consent provider UI field non-required, leave `schema.json` consent-management item `required` arrays absent, and keep the provider enum accepting the empty string.

@@ -76,9 +76,7 @@
       ]
     },
     "result": false,
-    "err": [
-      "advertiserId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$\""
-    ]
+    "err": ["advertiserId must match pattern \"^([0-9]{0,100})$\""]
   },
   {
     "config": {
@@ -310,6 +308,26 @@
         "android": [
           {
             "provider": "oneTrust"
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With consent management row missing provider for backward compatibility",
+    "config": {
+      "advertiserId": "00000000",
+      "activityTag": "",
+      "groupTag": "",
+      "consentManagement": {
+        "web": [
+          {
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
           }
         ]
       }

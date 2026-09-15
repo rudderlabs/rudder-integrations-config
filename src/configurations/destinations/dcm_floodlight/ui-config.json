@@ -1,264 +1,305 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "DoubleClick Advertiser ID",
+                    "configKey": "advertiserId",
+                    "regex": "^([0-9]{0,100})$",
+                    "required": true,
+                    "placeholder": "e.g. 22XXX552",
+                    "secret": false,
+                    "note": "Enter your Floodlight advertiser ID by going to the Campaigns or Activities tab in your dashboard."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Floodlight tag defaults",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Activity Tag",
+                    "configKey": "activityTag",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "required": false,
+                    "placeholder": "e.g. signu0",
+                    "secret": false,
+                    "note": "Use this setting to define the same parameter value across all the conversion events. Alternatively, you can define this value for each conversion event mapping in the Floodlight Activity Tag field below."
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Group Tag",
+                    "configKey": "groupTag",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "required": false,
+                    "placeholder": "e.g. conv01",
+                    "secret": false,
+                    "note": "Use this setting to define the same parameter value across all the conversion events. Alternatively, you can define this value for each conversion event in the Floodlight Group Tag field below."
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Counting Method",
+                    "configKey": "countingMethod",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "required": false,
+                    "placeholder": "e.g. standard",
+                    "secret": false,
+                    "note": "Use this setting to define the same parameter value across all the conversion events. Alternatively, you can define this value for each conversion event in the Floodlight Counting Method field below."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Client-side event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionMode.web",
+                      "value": "device"
+                    }
+                  ]
+                },
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on events filtering:",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
+                      {
+                        "label": "Disabled",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input separate events by pressing 'Enter'.\nInput the events you want to allowlist.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "placeholder": "e.g: Anonymous Page Visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input separate events by pressing 'Enter'.\nInput the events you want to denylist.",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "placeholder": "e.g: Credit Card Added",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Event mapping",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Conversion events",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "conversionEvents",
+                    "label": "Conversion events",
+                    "note": "Map RudderStack events to Floodlight tags and custom variables"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
       "fields": [
-        {
-          "type": "textInput",
-          "label": "DoubleClick Advertiser ID",
-          "value": "advertiserId",
-          "regex": "^([0-9]{0,100})$",
-          "required": true,
-          "placeholder": "e.g. 22XXX552",
-          "secret": true,
-          "footerNote": "Enter your Floodlight advertiser ID by going to the Campaigns or Activities tab in your dashboard."
-        },
-        {
-          "type": "textInput",
-          "label": "Activity Tag",
-          "value": "activityTag",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-          "required": false,
-          "placeholder": "e.g. signu0",
-          "secret": false,
-          "footerNote": "Use this setting to define the same parameter value across all the conversion events. Alternatively, you can define this value for each conversion event mapping in the Floodlight Activity Tag field below."
-        },
-        {
-          "type": "textInput",
-          "label": "Group Tag",
-          "value": "groupTag",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-          "required": false,
-          "placeholder": "e.g. conv01",
-          "secret": false,
-          "footerNote": "Use this setting to define the same parameter value across all the conversion events. Alternatively, you can define this value for each conversion event in the Floodlight Group Tag field below."
-        },
-        {
-          "type": "textInput",
-          "label": "Counting Method",
-          "value": "countingMethod",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-          "required": false,
-          "placeholder": "e.g. standard",
-          "secret": false,
-          "footerNote": "Use this setting to define the same parameter value across all the conversion events. Alternatively, you can define this value for each conversion event in the Floodlight Counting Method field below."
-        },
-        {
-          "type": "dynamicCustomForm",
-          "label": "Conversion events",
-          "value": "conversionEvents",
-          "customFields": [
-            {
-              "type": "textInput",
-              "label": "Rudderstack Event Name",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Product Viewed",
-              "footerNote": "This integration lets you map the RudderStack event name to the Floodlight tags."
-            },
-            {
-              "type": "textInput",
-              "label": "Floodlight Activity Tag",
-              "value": "floodlightActivityTag",
-              "required": false,
-              "placeholder": "e.g: signu0",
-              "footerNote": "This should be the (cat) of your tag string. If left blank, RudderStack will pick the value defined in the Activity Tag field above."
-            },
-            {
-              "type": "textInput",
-              "label": "Floodlight Group Tag",
-              "value": "floodlightGroupTag",
-              "required": false,
-              "placeholder": "e.g: conv01",
-              "footerNote": "This should be the (type) of your tag string. If left blank, RudderStack will pick the value defined in the Group Tag field above."
-            },
-            {
-              "type": "textInput",
-              "label": "Floodlight Counting Method",
-              "value": "floodlightCountingMethod",
-              "required": false,
-              "placeholder": "e.g: standard",
-              "footerNote": "Enter the counting method for this conversion event, RudderStack will use this as a fallback value if 'properties.countingMethod' is empty"
-            },
-            {
-              "type": "checkbox",
-              "label": "Fire as Sales Tag",
-              "value": "salesTag",
-              "default": false,
-              "footerNote": "Enable this toggle if the tag is a Sales tag. Keep it disabled if the tag is a Counter tag."
-            },
-            {
-              "type": "dynamicForm",
-              "label": "Use this section to map the RudderStack event properties to custom Floodlight variables.",
-              "labelLeft": "Rudderstack properties",
-              "labelRight": "Floodlight Custom Variables",
-              "keyLeft": "from",
-              "keyRight": "to",
-              "placeholderLeft": "e.g. Rudderstack property",
-              "placeholderRight": "eg: 1",
-              "value": "customVariables",
-              "footerNote": "Rudderstack properties (on the left) and Floodlight Custom Variables like 1, 2, 3, 4, etc. (on the right)"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Native SDK",
-      "fields": [
-        {
-          "type": "checkbox",
-          "label": "Use device-mode to send events",
-          "value": "useNativeSDK",
-          "default": false
-        },
         {
           "type": "singleSelect",
           "label": "Tag Format",
-          "value": "tagFormat",
+          "configKey": "tagFormat",
           "required": false,
           "options": [
             {
-              "name": "Global site tag",
+              "label": "Global site tag",
               "value": "globalSiteTag"
             },
             {
-              "name": "Iframe tag",
+              "label": "Iframe tag",
               "value": "iframeTag"
             }
           ],
-          "defaultOption": {
-            "name": "Global site tag",
-            "value": "globalSiteTag"
-          }
+          "default": "globalSiteTag"
         },
         {
           "type": "checkbox",
           "label": "Conversion Linker",
-          "value": "conversionLinker",
+          "configKey": "conversionLinker",
           "default": true
         },
         {
           "type": "checkbox",
           "label": "Allow ad personalization signals",
-          "value": "allowAdPersonalizationSignals",
+          "configKey": "allowAdPersonalizationSignals",
           "default": true
         },
         {
           "type": "checkbox",
           "label": "DoubleClick Id",
-          "value": "doubleclickId",
+          "configKey": "doubleclickId",
           "default": false
         },
         {
           "type": "textInput",
           "label": "Google Network Id",
-          "value": "googleNetworkId",
+          "configKey": "googleNetworkId",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
           "required": false,
-          "footerNote": "Network ID (NID) for the bidder account"
+          "note": "Network ID (NID) for the bidder account"
         }
       ]
     },
-    {
-      "title": "Client-side Events Filtering",
-      "sectionNote": "Applicable only for device-mode integrations. If enabled, it works only with either allowlisted or denylisted events",
-      "fields": [
-        {
-          "type": "singleSelect",
-          "value": "eventFilteringOption",
-          "required": false,
-          "options": [
-            {
-              "name": "Disable",
-              "value": "disable"
-            },
-            {
-              "name": "Allowlist",
-              "value": "whitelistedEvents"
-            },
-            {
-              "name": "Denylist",
-              "value": "blacklistedEvents"
-            }
-          ],
-          "defaultOption": {
-            "name": "Disable",
-            "value": "disable"
-          }
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "whitelistedEvents",
-          "label": "Allowlist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Anonymous Page Visit"
-            }
-          ]
-        },
-        {
-          "type": "dynamicCustomForm",
-          "value": "blacklistedEvents",
-          "label": "Denylist",
-          "customFields": [
-            {
-              "type": "textInput",
-              "value": "eventName",
-              "required": false,
-              "placeholder": "e.g: Credit Card Added"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Consent Settings",
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
       "fields": [
         {
           "type": "dynamicCustomForm",
-          "value": "consentManagement",
-          "label": "Consent management settings",
-          "footerNote": "We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
             {
               "type": "singleSelect",
               "label": "Consent management provider",
-              "value": "provider",
+              "configKey": "provider",
               "options": [
                 {
-                  "name": "Custom",
+                  "label": "Custom",
                   "value": "custom"
                 },
                 {
-                  "name": "iubenda",
-                  "value": "iubenda"
-                },
-                {
-                  "name": "Ketch",
+                  "label": "Ketch",
                   "value": "ketch"
                 },
                 {
-                  "name": "OneTrust",
+                  "label": "OneTrust",
                   "value": "oneTrust"
+                },
+                {
+                  "label": "iubenda",
+                  "value": "iubenda"
                 }
               ],
-              "required": true
+              "required": false
             },
             {
               "type": "singleSelect",
               "label": "the required consent logic",
-              "value": "resolutionStrategy",
+              "configKey": "resolutionStrategy",
               "options": [
                 {
-                  "name": "AND",
+                  "label": "AND",
                   "value": "and"
                 },
                 {
-                  "name": "OR",
+                  "label": "OR",
                   "value": "or"
                 }
               ],
@@ -274,16 +315,16 @@
               }
             },
             {
-              "type": "dynamicCustomForm",
-              "value": "consents",
+              "type": "tagInput",
               "label": "Enter consent category IDs",
-              "customFields": [
+              "note": "Input your consent category IDs by pressing 'Enter' after each entry. We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "placeholder": "e.g: Marketing",
+              "default": [
                 {
-                  "type": "textInput",
-                  "placeholder": "Marketing",
-                  "value": "consent",
-                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "required": false
+                  "consent": ""
                 }
               ]
             }
@@ -291,6 +332,86 @@
           "uniqueRowFields": ["provider"]
         }
       ]
+    },
+    "redirectGroups": {
+      "conversionEvents": {
+        "fields": [
+          {
+            "type": "dynamicCustomForm",
+            "label": "Conversion events",
+            "configKey": "conversionEvents",
+            "default": [],
+            "addButtonLabel": "Add conversion event",
+            "rowFields": [
+              {
+                "type": "textInput",
+                "label": "Rudderstack Event Name",
+                "configKey": "eventName",
+                "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                "required": false,
+                "placeholder": "e.g: Product Viewed",
+                "note": "This integration lets you map the RudderStack event name to the Floodlight tags."
+              },
+              {
+                "type": "textInput",
+                "label": "Floodlight Activity Tag",
+                "configKey": "floodlightActivityTag",
+                "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                "required": false,
+                "placeholder": "e.g: signu0",
+                "note": "This should be the (cat) of your tag string. If left blank, RudderStack will pick the value defined in the Activity Tag field above."
+              },
+              {
+                "type": "textInput",
+                "label": "Floodlight Group Tag",
+                "configKey": "floodlightGroupTag",
+                "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                "required": false,
+                "placeholder": "e.g: conv01",
+                "note": "This should be the (type) of your tag string. If left blank, RudderStack will pick the value defined in the Group Tag field above."
+              },
+              {
+                "type": "textInput",
+                "label": "Floodlight Counting Method",
+                "configKey": "floodlightCountingMethod",
+                "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                "required": false,
+                "placeholder": "e.g: standard",
+                "note": "Enter the counting method for this conversion event, RudderStack will use this as a fallback value if 'properties.countingMethod' is empty"
+              },
+              {
+                "type": "checkbox",
+                "label": "Fire as Sales Tag",
+                "configKey": "salesTag",
+                "default": false,
+                "note": "Enable this toggle if the tag is a Sales tag. Keep it disabled if the tag is a Counter tag."
+              },
+              {
+                "type": "mapping",
+                "label": "Use this section to map the RudderStack event properties to custom Floodlight variables.",
+                "configKey": "customVariables",
+                "note": "Rudderstack properties (on the left) and Floodlight Custom Variables like 1, 2, 3, 4, etc. (on the right)",
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "label": "Rudderstack properties",
+                    "configKey": "from",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "placeholder": "e.g. Rudderstack property"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Floodlight Custom Variables",
+                    "configKey": "to",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "placeholder": "eg: 1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     }
-  ]
+  }
 }
