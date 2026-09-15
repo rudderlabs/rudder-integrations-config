@@ -48,3 +48,8 @@
 - Reviewer clarified that OpenAI Ads event-filtering config should be destination-wide for delivery, but the dashboard event-filtering UI group should remain client-side/web-device-only and use `eventFilteringOption` without a `.web` prerequisite key.
 - Do not expose the OpenAI Ads dashboard event-filtering controls for cloud-mode connections unless product explicitly changes the UI scope.
 - For OpenAI Ads event-filtering schema/config changes, rely on existing `test/data/validation/destinations/openai_ads.json` fixture cases for accepted/rejected config shape coverage; do not add duplicate one-off assertions in `test/validation.test.ts` for the same behavior.
+
+## INT-7147 — DCM Floodlight V2 Consent Review Guidance
+
+- Reviewer guidance for DCM Floodlight V2 form-builder migration: keep the consent `provider` row field required like the standard V2 consent template.
+- Do not preserve provider-less consent rows by making `provider` optional or by keeping an empty string in the generated provider enum unless product explicitly asks for legacy compatibility.
