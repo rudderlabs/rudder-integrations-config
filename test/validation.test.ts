@@ -181,6 +181,13 @@ function getAccountDefinitionSchema(integrationName: string, accountName: string
   return JSON.parse(fs.readFileSync(schemaPath, 'utf-8'));
 }
 
+function getAccountDefinitionUiConfig(integrationName: string, accountName: string, type: string) {
+  const uiConfigPath = path.resolve(
+    `src/configurations/${type}/${integrationName}/accounts/${accountName}/ui-config.json`,
+  );
+  return JSON.parse(fs.readFileSync(uiConfigPath, 'utf-8'));
+}
+
 // Mirrors the ajv configuration config-backend uses when validating an account
 // payload against an account definition's schema. Deliberately no `coerceTypes`,
 // so a stringified port stays a type error here exactly as it is in production.
@@ -1309,6 +1316,191 @@ describe('Account Definition validation tests', () => {
     });
   });
 
+  const mcpIntegrationAccounts = getAccountNames('mcp-integrations');
+  const expectedMcpAccountNames = [
+    'MCP_AMPLITUDE_API_KEY',
+    'MCP_AMPLITUDE_OAUTH',
+    'MCP_CUSTOMERIO_API_KEY',
+    'MCP_CUSTOMERIO_OAUTH',
+    'MCP_MIXPANEL_API_KEY',
+    'MCP_MIXPANEL_OAUTH',
+  ];
+
+  it('discovers all Integrations MCP account definitions', () => {
+    expect(mcpIntegrationAccounts.map((account) => account.split('/')[1]).sort()).toEqual(
+      expectedMcpAccountNames,
+    );
+  });
+
+  mcpIntegrationAccounts.forEach((account) => {
+    const [integration, accountName] = account.split('/');
+    it(`${integration}/${accountName} - MCP account definition test`, async () => {
+      const accDefConfig = await getAccountDefinitionConfig(
+        integration,
+        accountName,
+        'mcp-integrations',
+      );
+      await expect(validateAccountDefinitions(accDefConfig)).resolves.toEqual(true);
+      expect(accDefConfig.category).toBe('mcpIntegration');
+      expect(accDefConfig.displayOptions).toMatchObject({
+        isBeta: true,
+        hidden: {
+          gate: {
+            flags: [{ name: 'enable-mcp-integrations', value: false }],
+          },
+        },
+      });
+    });
+  });
+
+  it('MCP account schemas and UI configs are valid against account metaschemas', () => {
+    const accountSchemaMetaSchema = JSON.parse(
+      fs.readFileSync(accountSchemaMetaSchemaPath, 'utf-8'),
+    );
+    const accountUiConfigMetaSchema = JSON.parse(
+      fs.readFileSync(path.resolve('src/schemas/account/account-ui-config-schema.json'), 'utf-8'),
+    );
+    const validateAccountSchema = compileAccountSchema(accountSchemaMetaSchema);
+    const validateAccountUiConfig = compileAccountSchema(accountUiConfigMetaSchema);
+
+    mcpIntegrationAccounts.forEach((account) => {
+      const [integration, accountName] = account.split('/');
+      const accountSchema = getAccountDefinitionSchema(
+        integration,
+        accountName,
+        'mcp-integrations',
+      );
+      const accountUiConfig = getAccountDefinitionUiConfig(
+        integration,
+        accountName,
+        'mcp-integrations',
+      );
+
+      expect(validateAccountSchema(accountSchema)).toBe(true);
+      expect(validateAccountSchema.errors ?? []).toEqual([]);
+      expect(validateAccountUiConfig(accountUiConfig)).toBe(true);
+      expect(validateAccountUiConfig.errors ?? []).toEqual([]);
+    });
+  });
+
+  it('MCP account field declarations match schema properties and UI secret markers', async () => {
+    await Promise.all(
+      mcpIntegrationAccounts.map(async (account) => {
+        const [integration, accountName] = account.split('/');
+        const accountConfig = await getAccountDefinitionConfig(
+          integration,
+          accountName,
+          'mcp-integrations',
+        );
+        const accountSchema = getAccountDefinitionSchema(
+          integration,
+          accountName,
+          'mcp-integrations',
+        );
+        const accountUiConfig = getAccountDefinitionUiConfig(
+          integration,
+          accountName,
+          'mcp-integrations',
+        );
+        const optionFields = accountConfig.config.optionFields ?? [];
+        const secretFields = accountConfig.config.secretFields ?? [];
+        const uiFields = accountUiConfig.uiConfig.form.fields;
+
+        expect([...optionFields].sort()).toEqual(
+          Object.keys(accountSchema.optionsSchema.properties).sort(),
+        );
+        if (accountSchema.secretSchema) {
+          expect([...secretFields].sort()).toEqual(
+            Object.keys(accountSchema.secretSchema.properties).sort(),
+          );
+        } else {
+          expect(secretFields).toEqual([]);
+        }
+
+        secretFields.forEach((fieldName: string) => {
+          const uiField = uiFields.find(
+            (field: Record<string, unknown>) =>
+              JSON.stringify(field.key) === JSON.stringify(['options', fieldName]),
+          );
+          expect(uiField?.secret).toBe(true);
+        });
+      }),
+    );
+  });
+
+  it('MCP API-key schemas require credentials and reject empty or misplaced secrets', () => {
+    const apiKeyCases = [
+      {
+        integration: 'amplitude',
+        accountName: 'MCP_AMPLITUDE_API_KEY',
+        options: { region: 'US' },
+        secret: { apiKey: 'amp-api-key' },
+        invalidOptions: { region: 'APAC' },
+        optionsWithSecret: { region: 'US', apiKey: 'amp-api-key' },
+        secretWithOption: { apiKey: 'amp-api-key', region: 'US' },
+      },
+      {
+        integration: 'mixpanel',
+        accountName: 'MCP_MIXPANEL_API_KEY',
+        options: { projectId: '1234567', region: 'EU' },
+        secret: {
+          serviceAccountUsername: 'svc-user',
+          serviceAccountSecret: 'svc-secret',
+        },
+        invalidOptions: { projectId: 'abc', region: 'EU' },
+        optionsWithSecret: {
+          projectId: '1234567',
+          region: 'EU',
+          serviceAccountSecret: 'svc-secret',
+        },
+        secretWithOption: {
+          serviceAccountUsername: 'svc-user',
+          serviceAccountSecret: 'svc-secret',
+          projectId: '1234567',
+        },
+      },
+      {
+        integration: 'customerio',
+        accountName: 'MCP_CUSTOMERIO_API_KEY',
+        options: { siteId: 'site-123', region: 'US' },
+        secret: { apiKey: 'cio-api-key' },
+        invalidOptions: { siteId: 'site-123', region: 'APAC' },
+        optionsWithSecret: { siteId: 'site-123', region: 'US', apiKey: 'cio-api-key' },
+        secretWithOption: { apiKey: 'cio-api-key', siteId: 'site-123' },
+      },
+    ];
+
+    apiKeyCases.forEach(
+      ({
+        integration,
+        accountName,
+        options,
+        secret,
+        invalidOptions,
+        optionsWithSecret,
+        secretWithOption,
+      }) => {
+        const accountSchema = getAccountDefinitionSchema(
+          integration,
+          accountName,
+          'mcp-integrations',
+        );
+        const validateOptions = compileAccountSchema(accountSchema.optionsSchema);
+        const validateSecrets = compileAccountSchema(accountSchema.secretSchema);
+        const emptySecret = Object.fromEntries(Object.keys(secret).map((key) => [key, '']));
+
+        expect(accountSchema.optionsSchema.additionalProperties).toBe(false);
+        expect(accountSchema.secretSchema.additionalProperties).toBe(false);
+        expect(validateOptions(options)).toBe(true);
+        expect(validateSecrets(secret)).toBe(true);
+        expect(validateOptions(invalidOptions)).toBe(false);
+        expect(validateSecrets(emptySecret)).toBe(false);
+        expect(validateOptions(optionsWithSecret)).toBe(false);
+        expect(validateSecrets(secretWithOption)).toBe(false);
+      },
+    );
+  });
+
   const malformedAccountDefConfigs = [
     {
       description: 'missing required properties',
@@ -1411,6 +1603,43 @@ describe('Account Definition validation tests', () => {
   it.each(malformedAccountDefConfigs)('$description', async (testCase) => {
     await expect(validateAccountDefinitions(testCase.input)).rejects.toThrow(
       new Error(testCase.expected),
+    );
+  });
+
+  it('rejects mcpIntegration account definitions without the MCP feature gate', async () => {
+    await expectValidationError(
+      validateAccountDefinitions({
+        name: 'MCP_TEST_API_KEY',
+        type: 'Test',
+        category: 'mcpIntegration',
+        authenticationType: 'api_key',
+        config: { optionFields: ['region'] },
+        displayOptions: { isBeta: true },
+      }),
+      "must have required property 'hidden'",
+      false,
+    );
+  });
+
+  it('rejects mcpIntegration account definitions gated by a non-MCP flag', async () => {
+    await expectValidationError(
+      validateAccountDefinitions({
+        name: 'MCP_TEST_API_KEY',
+        type: 'Test',
+        category: 'mcpIntegration',
+        authenticationType: 'api_key',
+        config: { optionFields: ['region'] },
+        displayOptions: {
+          isBeta: true,
+          hidden: {
+            gate: {
+              flags: [{ name: 'AMP_TEST_FLAG', value: false }],
+            },
+          },
+        },
+      }),
+      'must contain at least 1 valid item(s)',
+      false,
     );
   });
 

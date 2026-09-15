@@ -100,3 +100,9 @@
 
 - OpenAI Ads is a standalone account-backed destination under `src/configurations/destinations/openai_ads/`; credential field definitions live under `accounts/openai_ads_api_key/`.
 - Account-backed credential metadata still participates in the generic destination/account validation boundary: OpenAI Ads account option/secret fields should be represented in destination `config.destConfig.defaultConfig`, and secret fields such as `apiKey` should be listed in `config.secretKeys`, rather than bypassing `scripts/validate_account_definitions.py` with a destination-specific exemption.
+
+## INT-7139 — Integrations MCP AccountDefinition Boundary
+
+- Integrations MCP account definitions are standalone account definitions under `src/configurations/mcp-integrations/<provider>/accounts/<accountDefinitionName>/`, not destination/source account definitions.
+- MCP definitions use `category: "mcpIntegration"` to keep control-plane MCP accounts distinct from destination/source accounts for the same provider and to avoid destination account coverage rules that do not apply to MCP-only credentials.
+- Supporting this new top-level configuration group requires account definition deploy/test discovery to include `mcp-integrations` in addition to existing `destinations`, `sources`, and `data-retention` account definition locations.

@@ -24,11 +24,11 @@ The `[_{AUTH_QUALIFIER}]` segment is optional — include it only when it is nee
 
 ### Segments
 
-| Segment          | Required | Description                                                                                                                                                                  |
-| ---------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CATEGORY`       | Yes      | The kind of integration the account belongs to. One of `SOURCE`, `DESTINATION`, or `DATA_RETENTION` (storage accounts, whose db-config `category` value is `dataRetention`). |
-| `TYPE`           | Yes      | The integration key in `SCREAMING_SNAKE_CASE` (the uppercase form of the integration `type`), e.g. `BIGQUERY`, `HUBSPOT`, `SALESFORCE`, `FACEBOOK_LEAD_ADS_NATIVE`.          |
-| `AUTH_QUALIFIER` | No       | A qualifier describing the authentication / credential variant, e.g. `OAUTH`, `NATIVE_OAUTH`. Use it to distinguish multiple account definitions for the same integration.   |
+| Segment          | Required | Description                                                                                                                                                                                                                                                           |
+| ---------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CATEGORY`       | Yes      | The kind of integration the account belongs to. One of `SOURCE`, `DESTINATION`, `DATA_RETENTION` (storage accounts, whose db-config `category` value is `dataRetention`), or `MCP` (Integrations MCP accounts, whose db-config `category` value is `mcpIntegration`). |
+| `TYPE`           | Yes      | The integration key in `SCREAMING_SNAKE_CASE` (the uppercase form of the integration `type`), e.g. `BIGQUERY`, `HUBSPOT`, `SALESFORCE`, `FACEBOOK_LEAD_ADS_NATIVE`.                                                                                                   |
+| `AUTH_QUALIFIER` | No       | A qualifier describing the authentication / credential variant, e.g. `OAUTH`, `NATIVE_OAUTH`. Use it to distinguish multiple account definitions for the same integration.                                                                                            |
 
 ### Examples
 
@@ -41,6 +41,8 @@ The `[_{AUTH_QUALIFIER}]` segment is optional — include it only when it is nee
 | `DATA_RETENTION_S3_ACCESS_KEYS`         | `DATA_RETENTION` | `S3`                       | `ACCESS_KEYS`  |
 | `DATA_RETENTION_S3_IAM_ROLE`            | `DATA_RETENTION` | `S3`                       | `IAM_ROLE`     |
 | `DATA_RETENTION_GCS`                    | `DATA_RETENTION` | `GCS`                      | _(none)_       |
+| `MCP_AMPLITUDE_OAUTH`                   | `MCP`            | `AMPLITUDE`                | `OAUTH`        |
+| `MCP_MIXPANEL_API_KEY`                  | `MCP`            | `MIXPANEL`                 | `API_KEY`      |
 
 ### Enforcement
 

@@ -174,3 +174,11 @@
 ## INT-7117 — OpenAI Ads Beta Visibility Metadata
 
 - OpenAI Ads remains a gated beta destination: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` alongside the existing `options.hidden.gate` hide-when-false flag `AMP_enable-openai-ads-destination` so the webapp can show the Beta badge while feature gating the destination card.
+
+## INT-7139 — Integrations MCP AccountDefinition Conventions
+
+- Integrations MCP AccountDefinition primary keys use the `MCP_<PROVIDER>_<AUTH_TYPE>` shape, with separate OAuth and API-key definitions for each provider (for example `MCP_AMPLITUDE_OAUTH` and `MCP_AMPLITUDE_API_KEY`).
+- MCP API-key account definitions keep sensitive credentials in `config.secretFields`/`secretSchema` rather than option fields: Amplitude uses secret `apiKey` plus non-secret `region`; Mixpanel uses non-secret `projectId`/`region` plus secrets `serviceAccountUsername`/`serviceAccountSecret`; Customer.io uses non-secret `siteId`/`region` plus secret `apiKey`.
+- OAuth MCP account definitions should have empty `optionFields` and an empty `optionsSchema`.
+- MCP account schemas should set both `optionsSchema.additionalProperties` and `secretSchema.additionalProperties` to `false` so credentials cannot be saved in the wrong option/secret bucket.
+- MCP account definitions should carry `displayOptions.isBeta: true` plus `displayOptions.hidden.gate` using the `enable-mcp-integrations` flag with hide-when-false semantics, allowing `GET /web/account-definitions` consumers to hide them until the feature is enabled.

@@ -14,7 +14,7 @@
     },
     "category": {
       "type": "string",
-      "enum": ["destination", "source", "dataRetention"]
+      "enum": ["destination", "source", "dataRetention", "mcpIntegration"]
     },
     "authenticationType": {
       "type": "string",
@@ -148,9 +148,60 @@
           "description": "The deprecation label for the account type.",
           "$comment": "This is used to display a deprecation label in the UI when displayOptions.deprecated is 'true'.",
           "default": "Deprecated"
+        },
+        "isBeta": {
+          "type": "boolean",
+          "title": "Beta",
+          "description": "Whether the account type should display as beta in the UI.",
+          "$comment": "This is used to display a beta badge in the UI.",
+          "default": false
         }
       }
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "category": { "const": "mcpIntegration" }
+        },
+        "required": ["category"]
+      },
+      "then": {
+        "required": ["displayOptions"],
+        "properties": {
+          "displayOptions": {
+            "type": "object",
+            "required": ["hidden"],
+            "properties": {
+              "hidden": {
+                "type": "object",
+                "required": ["gate"],
+                "properties": {
+                  "gate": {
+                    "type": "object",
+                    "required": ["flags"],
+                    "properties": {
+                      "flags": {
+                        "type": "array",
+                        "contains": {
+                          "type": "object",
+                          "required": ["name", "value"],
+                          "properties": {
+                            "name": { "const": "enable-mcp-integrations" },
+                            "value": { "const": false }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
   "additionalProperties": false
 }

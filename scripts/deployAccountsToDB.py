@@ -41,7 +41,10 @@ def get_command_line_arguments():
     parser.add_argument("username", nargs="?", help="Control plane admin username")
     parser.add_argument("password", nargs="?", help="Control plane admin password")
     parser.add_argument(
-        "definition_name", nargs="?", help="Specific item name to update.", default=None
+        "definition_name",
+        nargs="?",
+        help="Specific provider directory or AccountDefinition name to update.",
+        default=None,
     )
     parser.add_argument(
         "--dry-run",
@@ -124,7 +127,7 @@ def log_execution_plan(
     print(f"Username: {username}")
     print(f"Password: {'*' * len(password)}")
     if definition_name:
-        print(f"Specific account: {definition_name}")
+        print(f"Specific provider/account: {definition_name}")
     else:
         print("Processing: ALL account configurations")
 
@@ -135,6 +138,7 @@ def log_execution_plan(
     print("   - ./src/configurations/destinations/*/accounts/*")
     print("   - ./src/configurations/sources/*/accounts/*")
     print("   - ./src/configurations/data-retention/*/accounts/*")
+    print("   - ./src/configurations/mcp-integrations/*/accounts/*")
     print("4. For each account configuration found:")
     print("   a) Compare local vs remote configurations")
     print("   b) If differences found: UPDATE the database record")
@@ -248,22 +252,29 @@ def update_account_db(
     # Determine which categories to process. These are the top-level
     # configuration group directories under `src/configurations`, not the
     # db-config `category` VALUES. The `data-retention` group holds storage
-    # account definitions (db-config `category` = `dataRetention`).
-    supported_categories = ["destinations", "sources", "data-retention"]
+    # account definitions (db-config `category` = `dataRetention`), and the
+    # `mcp-integrations` group holds standalone MCP account definitions
+    # (db-config `category` = `mcpIntegration`).
+    supported_categories = [
+        "destinations",
+        "sources",
+        "data-retention",
+        "mcp-integrations",
+    ]
 
     # Process each category
     for category in supported_categories:
-        # Determine which items to process
-        if definition_name:
-            current_items = [definition_name]
-        else:
-            try:
-                current_items = os.listdir(f"./{CONFIG_DIR}/{category}")
-            except FileNotFoundError:
-                print(
-                    f"Warning :: Directory ./{CONFIG_DIR}/{category} not found. Skipping."
-                )
-                continue
+        # Scan provider/integration directories for the category. Scoped deploys
+        # are filtered after reading each account db-config so the argument can
+        # be either a provider directory (legacy behavior) or an AccountDefinition
+        # primary key such as MCP_AMPLITUDE_API_KEY.
+        try:
+            current_items = os.listdir(f"./{CONFIG_DIR}/{category}")
+        except FileNotFoundError:
+            print(
+                f"Warning :: Directory ./{CONFIG_DIR}/{category} not found. Skipping."
+            )
+            continue
 
         # Process each item
         for item in current_items:
@@ -307,6 +318,9 @@ def update_account_db(
                         continue
 
                     account_name = updated_data["name"]
+                    if definition_name and definition_name not in [item, account_name]:
+                        continue
+
                     # Check if account already exists
                     if account_name in account_map:
                         # Update existing account if there are changes
@@ -364,6 +378,13 @@ def update_account_db(
                 except Exception as e:
                     print(f"Error processing {auth_type_path}: {str(e)}")
                     sys.exit(1)
+
+    if definition_name and not final_report:
+        print(
+            f"Error: No account definitions matched '{definition_name}'. "
+            "Pass a provider directory name or an AccountDefinition name."
+        )
+        sys.exit(1)
 
     return final_report
 

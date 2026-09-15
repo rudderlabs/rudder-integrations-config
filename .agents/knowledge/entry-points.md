@@ -47,3 +47,8 @@
 
 - PR #2555 removed `config.isAudienceSupported: true` from these seven destination definitions: `src/configurations/destinations/custom_audience/db-config.json`, `src/configurations/destinations/customerio_audience/db-config.json`, `src/configurations/destinations/fb_custom_audience/db-config.json`, `src/configurations/destinations/google_adwords_remarketing_lists/db-config.json`, `src/configurations/destinations/linkedin_audience/db-config.json`, `src/configurations/destinations/tiktok_audience/db-config.json`, and `src/configurations/destinations/zoho/db-config.json`.
 - The paired schema change in that PR was in `src/schemas/destinations/db-config-schema.json`, where the destination config schema began rejecting `config.isAudienceSupported` in combination with `config.supportsVisualMapperV2`.
+
+## INT-7139 — Integrations MCP Definition Entrypoints
+
+- Integrations MCP account definitions are rooted at `src/configurations/mcp-integrations/<provider>/accounts/<MCP_*>/`; start there for MCP provider credential-definition changes instead of existing destination directories.
+- `scripts/deployAccountsToDB.py` is the account-definition publishing entry point for MCP definitions; scoped mode accepts either provider directory names or AccountDefinition primary keys such as `MCP_AMPLITUDE_API_KEY`.
