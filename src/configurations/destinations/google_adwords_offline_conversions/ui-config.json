@@ -199,21 +199,9 @@
                 "fields": [
                   {
                     "type": "redirect",
-                    "redirectGroupKey": "offlineConversionTypeMapping",
-                    "label": "Offline conversion type mapping",
-                    "note": "Map RudderStack event names to Google Ads offline conversion types."
-                  },
-                  {
-                    "type": "redirect",
-                    "redirectGroupKey": "conversionNameMapping",
-                    "label": "Conversion name mapping",
-                    "note": "Map RudderStack event names to Google Ads conversion names."
-                  },
-                  {
-                    "type": "redirect",
-                    "redirectGroupKey": "customVariableMapping",
-                    "label": "Custom variable mapping",
-                    "note": "Map custom variable names to Google Ads custom variables."
+                    "redirectGroupKey": "eventMapping",
+                    "label": "Event mapping",
+                    "note": "Map RudderStack events and variables to Google Ads Offline Conversions."
                   }
                 ]
               }
@@ -228,91 +216,93 @@
       "fields": []
     },
     "redirectGroups": {
-      "offlineConversionTypeMapping": {
-        "fields": [
+      "eventMapping": {
+        "tabs": [
           {
-            "type": "mapping",
-            "label": "Map your events with Google Ads Offline Conversions",
-            "configKey": "eventsToOfflineConversionsTypeMapping",
-            "default": [],
-            "columns": [
+            "name": "Conversion mappings",
+            "fields": [
               {
-                "type": "textInput",
-                "configKey": "from",
-                "label": "RudderStack event names",
-                "placeholder": "e.g: Sign up completed",
-                "regex": "^(.{0,100})$"
+                "type": "mapping",
+                "label": "Map your Google Ads Conversions Names",
+                "configKey": "eventsToConversionsNamesMapping",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "configKey": "from",
+                    "label": "RudderStack event names",
+                    "placeholder": "e.g: Sign up completed",
+                    "regex": "^(.{0,100})$"
+                  },
+                  {
+                    "type": "textInput",
+                    "configKey": "to",
+                    "label": "Google Ads conversion names",
+                    "placeholder": "e.g: App Sign-up",
+                    "regex": "^(.{0,100})$"
+                  }
+                ]
               },
               {
-                "type": "singleSelect",
-                "configKey": "to",
-                "label": "Google Ads offline conversions",
-                "options": [
+                "type": "mapping",
+                "label": "Map your events with Google Ads Offline Conversions",
+                "configKey": "eventsToOfflineConversionsTypeMapping",
+                "default": [],
+                "columns": [
                   {
-                    "label": "Click",
-                    "value": "click"
+                    "type": "textInput",
+                    "configKey": "from",
+                    "label": "RudderStack event names",
+                    "placeholder": "e.g: Sign up completed",
+                    "regex": "^(.{0,100})$"
                   },
                   {
-                    "label": "Call",
-                    "value": "call"
-                  },
-                  {
-                    "label": "Store",
-                    "value": "store"
+                    "type": "singleSelect",
+                    "configKey": "to",
+                    "label": "Google Ads offline conversions",
+                    "options": [
+                      {
+                        "label": "Click",
+                        "value": "click"
+                      },
+                      {
+                        "label": "Call",
+                        "value": "call"
+                      },
+                      {
+                        "label": "Store",
+                        "value": "store"
+                      }
+                    ]
                   }
                 ]
               }
             ]
-          }
-        ]
-      },
-      "conversionNameMapping": {
-        "fields": [
+          },
           {
-            "type": "mapping",
-            "label": "Map your Google Ads Conversions Names",
-            "configKey": "eventsToConversionsNamesMapping",
-            "default": [],
-            "columns": [
+            "name": "Custom variable mapping",
+            "fields": [
               {
-                "type": "textInput",
-                "configKey": "from",
-                "label": "RudderStack event names",
-                "placeholder": "e.g: Sign up completed",
-                "regex": "^(.{0,100})$"
-              },
-              {
-                "type": "textInput",
-                "configKey": "to",
-                "label": "Google Ads conversion names",
-                "placeholder": "e.g: App Sign-up",
-                "regex": "^(.{0,100})$"
-              }
-            ]
-          }
-        ]
-      },
-      "customVariableMapping": {
-        "fields": [
-          {
-            "type": "mapping",
-            "label": "Map your variable names to custom Google Ads variables",
-            "configKey": "customVariables",
-            "default": [],
-            "columns": [
-              {
-                "type": "textInput",
-                "configKey": "from",
-                "label": "Custom variable names",
-                "placeholder": "e.g: value",
-                "regex": "^(.{0,100})$"
-              },
-              {
-                "type": "textInput",
-                "configKey": "to",
-                "label": "Google Ads custom variables",
-                "placeholder": "e.g: revenue",
-                "regex": "^(.{0,100})$"
+                "type": "mapping",
+                "label": "Map your variable names to custom Google Ads variables",
+                "configKey": "customVariables",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "configKey": "from",
+                    "label": "Custom variable names",
+                    "placeholder": "e.g: value",
+                    "regex": "^(.{0,100})$"
+                  },
+                  {
+                    "type": "textInput",
+                    "configKey": "to",
+                    "label": "Google Ads custom variables",
+                    "placeholder": "e.g: revenue",
+                    "regex": "^(.{0,100})$"
+                  }
+                ]
               }
             ]
           }
