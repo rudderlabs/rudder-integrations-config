@@ -175,6 +175,6 @@
 
 - OpenAI Ads remains a gated beta destination: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` alongside the existing `options.hidden.gate` hide-when-false flag `AMP_enable-openai-ads-destination` so the webapp can show the Beta badge while feature gating the destination card.
 
-## INT-7147 — DCM Floodlight V2 Compatibility Boundaries
+## INT-7147 — DCM Floodlight V2 Consent Provider Requirement
 
-- DCM Floodlight consent provider rows remain backward-compatible after the V2 form-builder migration: keep the V2 consent provider UI field non-required, leave `schema.json` consent-management item `required` arrays absent, and keep the provider enum accepting the empty string.
+- DCM Floodlight follows the standard V2 consent template: the `provider` row field in `src/configurations/destinations/dcm_floodlight/ui-config.json` is required, each `consentManagement.<source>.items` schema has `required: ["provider"]`, and the provider enum does not include the empty string.
