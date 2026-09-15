@@ -183,7 +183,18 @@
 - Keep `loginCustomerId` visible only behind the `subAccount` prerequisite and enforce it with a destination-specific conditional schema branch when `subAccount` is true; do not make it unconditionally required at the top level and do not change shared schema-generator requiredness for this destination-specific rule.
 - Keep `loginCustomerId` out of top-level `configSchema.properties`; define and validate it only inside the conditional `allOf` branch where `subAccount` is true.
 
+## INT-7136 — Campaign Manager V2 Migration Compatibility
+
+- For Campaign Manager 360 form-builder-v2 migration, keep existing persisted config keys and validation semantics intact: preserve the legacy `profileId` regex/pattern `(^\{\{.*\|\|(.*)\}\}$)|(^env[.].+)|^(.{1,50})$` rather than narrowing it during a UI-container migration, so saved templated/env values remain valid.
+- Campaign Manager 360 consent-management schema should align with the standard V2 consent template by requiring `provider` on every consent row (`items.required: ["provider"]` under each consentManagement source branch); although this tightens validation for non-empty rows missing a provider, the UI already marks provider as required and uses it as the unique row key.
+
 ## INT-7150 — OpenAI Ads Event Mapping Column Contract
 
 - OpenAI Ads `customEventName` belongs as the last column in `src/configurations/destinations/openai_ads/ui-config.json` `uiConfig.redirectGroups.customEventMapping.fields[0].columns`, after `deduplicationKey`; its `conditions` hide-on-`to == custom` block remains the visibility mechanism.
 - Do not add `includeWhenConditional` back to this `redirectGroups` column: schema generation does not traverse `redirectGroups`, so the key is inert there, while it should not be treated as globally obsolete for `baseTemplate` fields.
+
+## INT-7151 — OpenAI Ads Event Mapping Block Order
+
+- OpenAI Ads `baseTemplate` UI ordering in `src/configurations/destinations/openai_ads/ui-config.json` should place `Event mapping` before `Configuration settings`, yielding `Initial setup` → `Event mapping` → `Configuration settings`.
+- Treat this OpenAI Ads reorder as config-only and schema-neutral: do not change `schema.json`, validation fixtures, `redirectGroups`, `sdkTemplate`, or `consentSettingsTemplate` when only moving the block order.
+- The webapp auto-expand index fix and `CONVENTIONS.md` wording updates are independent follow-ups; they are not blockers for shipping the OpenAI Ads config-only reorder.
