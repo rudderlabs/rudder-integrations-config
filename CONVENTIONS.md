@@ -318,12 +318,18 @@ customer scrolls past to reach the rest of the settings.
 | Exactly one section, untitled and iconless — just `{ "groups": [...] }`    | 24/24 — hard |
 | The group holds **only** `redirect` fields — never mixed with input fields | 24/24 — hard |
 | Block title is `Event mapping` (or `Mappings`)                             | convention   |
-| It is the last block in `baseTemplate`                                     | convention   |
+| It is usually the last block in `baseTemplate`                             | convention   |
 
 `hideEditIcon` correlates perfectly in both directions: all 24 of its occurrences in the tree
 are on one of these blocks, and every such block carries it. The block has no editable fields
 of its own, so the section-level edit pencil would do nothing — editing happens on the
 redirect screen.
+
+Most destinations still place event-mapping blocks last, but position is not load-bearing:
+rudder-webapp should resolve Initial setup, Configuration settings, and Event mapping blocks by
+title (accepting both `Event mapping` and `Mappings` for mapping blocks) rather than by fixed
+indexes. `openai_ads` intentionally places Event mapping before Configuration settings so users
+land on the mapping step immediately after initial setup.
 
 Like the pattern counts above, these move as destinations are added. To recompute:
 
