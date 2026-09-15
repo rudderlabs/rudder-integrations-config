@@ -67,3 +67,8 @@
 - OpenAI Ads destination config stays within the repository's declarative JSON validation model: `src/configurations/destinations/openai_ads/schema.json` enforces flat destination-wide event-filtering fields, duplicate event mappings with `uniqueItemProperties: ["from"]`, and `customEventName` only when an event mapping's `to` value is `custom`.
 - The OpenAI Ads `eventMapping.from` uniqueness rule only catches exact duplicate values. AJV keywords used in this repo do not provide trim/lowercase uniqueness for array item properties, so normalized lookup semantics should be handled outside the destination schema unless a broader custom validator path is introduced.
 - OpenAI Ads is account-backed, but account option/secret fields are mirrored in destination metadata for generic account validation; avoid destination-specific validator exemptions and keep non-device account plumbing out of `config.includeKeys`.
+
+## INT-7143 — Redirect Group Mapping Schema Preservation
+
+- During Form Builder V2 migrations, mapping fields moved into `redirectGroups` may no longer be traversed by `scripts/schemaGenerator.py`; for Google Ads Offline Conversions this affects `eventsToOfflineConversionsTypeMapping`, `eventsToConversionsNamesMapping`, and `customVariables`.
+- Do not remove existing hand-authored mapping schemas solely to silence generator deletion diffs. Preserve those mapping schemas with the skip-deletions schema-update flow so persisted mapping config remains validated even when the generator prints a diff banner without warnings.

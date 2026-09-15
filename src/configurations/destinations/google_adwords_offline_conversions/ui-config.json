@@ -1,225 +1,343 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "accountManagementInput",
-          "label": "Event delivery account",
-          "value": "rudderAccountId",
-          "required": true
-        },
-        {
-          "type": "textInput",
-          "label": "Customer ID",
-          "value": "customerId",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "regexErrorMessage": "Invalid Customer Id",
-          "required": true,
-          "placeholder": "e.g: 6293X29833"
-        },
-        {
-          "type": "checkbox",
-          "label": "Sub Account",
-          "value": "subAccount",
-          "required": false,
-          "default": false
-        },
-        {
-          "type": "textInput",
-          "label": "Login Customer ID",
-          "preRequisiteField": [
-            {
-              "name": "subAccount",
-              "selectedValue": true
-            }
-          ],
-          "value": "loginCustomerId",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "required": true,
-          "footerNote": "If Customer-Id is from a sub account then provide customerId of manager account"
-        }
-      ]
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection Settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "accountManagementInput",
+                    "label": "Event delivery account",
+                    "configKey": "rudderAccountId"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Customer ID",
+                    "configKey": "customerId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Customer Id",
+                    "placeholder": "e.g: 6293X29833"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Sub Account",
+                    "configKey": "subAccount",
+                    "default": false
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Login Customer ID",
+                    "configKey": "loginCustomerId",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "note": "If Customer-Id is from a sub account then provide customerId of manager account",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "subAccount",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Event settings",
+            "note": "Configure your event level settings",
+            "groups": [
+              {
+                "title": "Conversion settings",
+                "note": "Configure how conversions and identifiers are sent to Google Ads",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "User Identifier Source",
+                    "configKey": "UserIdentifierSource",
+                    "note": "Source of the user identifier",
+                    "options": [
+                      {
+                        "label": "None",
+                        "value": "none"
+                      },
+                      {
+                        "label": "UNSPECIFIED",
+                        "value": "UNSPECIFIED"
+                      },
+                      {
+                        "label": "UNKNOWN",
+                        "value": "UNKNOWN"
+                      },
+                      {
+                        "label": "FIRST_PARTY",
+                        "value": "FIRST_PARTY"
+                      },
+                      {
+                        "label": "THIRD_PARTY",
+                        "value": "THIRD_PARTY"
+                      }
+                    ],
+                    "default": "none"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Conversion Environment",
+                    "configKey": "conversionEnvironment",
+                    "note": "The environment this conversion was recorded on. e.g. App or Web.",
+                    "options": [
+                      {
+                        "label": "None",
+                        "value": "none"
+                      },
+                      {
+                        "label": "UNSPECIFIED",
+                        "value": "UNSPECIFIED"
+                      },
+                      {
+                        "label": "UNKNOWN",
+                        "value": "UNKNOWN"
+                      },
+                      {
+                        "label": "APP",
+                        "value": "APP"
+                      },
+                      {
+                        "label": "WEB",
+                        "value": "WEB"
+                      }
+                    ],
+                    "default": "none"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "The user identifier for store and click conversions ",
+                    "configKey": "defaultUserIdentifier",
+                    "options": [
+                      {
+                        "label": "Email",
+                        "value": "email"
+                      },
+                      {
+                        "label": "Phone number",
+                        "value": "phone"
+                      }
+                    ],
+                    "default": "email"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Hash User Identifying Information (SHA-256)",
+                    "configKey": "hashUserIdentifier",
+                    "default": true,
+                    "note": "To hash User identifying information like email, phone number, first name, last name and address using SHA-256."
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Validate Only",
+                    "configKey": "validateOnly",
+                    "default": false,
+                    "note": "Enable this option to only validate the request"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          }
+        ]
+      },
+      {
+        "title": "Mappings",
+        "note": "Map RudderStack events and variables to Google Ads offline conversions",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Google Ads Offline Conversions mappings",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "offlineConversionsMappings",
+                    "label": "Event and variable mappings",
+                    "note": "Map RudderStack events and variables to Google Ads offline conversions"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
     },
-    {
-      "title": "Event Settings",
-      "fields": [
-        {
-          "type": "dynamicSelectForm",
-          "label": "Map your events with Google Ads Offline Conversions",
-          "labelLeft": "RudderStack event names",
-          "labelRight": "Google ads offline conversions",
-          "value": "eventsToOfflineConversionsTypeMapping",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "required": false,
-          "placeholderLeft": "e.g: Sign up completed",
-          "options": [
-            {
-              "name": "Click",
-              "value": "click"
-            },
-            {
-              "name": "Call",
-              "value": "call"
-            },
-            {
-              "name": "Store",
-              "value": "store"
-            }
-          ]
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Map your Google Ads Conversions Names",
-          "labelLeft": "RudderStack event names",
-          "labelRight": "Google Ads conversion names",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g: Sign up completed",
-          "placeholderRight": "e.g: App Sign-up",
-          "value": "eventsToConversionsNamesMapping"
-        },
-        {
-          "type": "dynamicForm",
-          "label": "Map your variable names to custom Google Ads variables.",
-          "labelLeft": "custom variable names",
-          "labelRight": "Google Ads custom variables",
-          "keyLeft": "from",
-          "keyRight": "to",
-          "placeholderLeft": "e.g. value",
-          "placeholderRight": "eg: revenue",
-          "value": "customVariables"
-        },
-        {
-          "type": "singleSelect",
-          "label": "User Identifier Source",
-          "value": "UserIdentifierSource",
-          "required": false,
-          "footerNote": "Source of the user identifier",
-          "options": [
-            {
-              "name": "None",
-              "value": "none"
-            },
-            {
-              "name": "UNSPECIFIED",
-              "value": "UNSPECIFIED"
-            },
-            {
-              "name": "UNKNOWN",
-              "value": "UNKNOWN"
-            },
-            {
-              "name": "FIRST_PARTY",
-              "value": "FIRST_PARTY"
-            },
-            {
-              "name": "THIRD_PARTY",
-              "value": "THIRD_PARTY"
-            }
-          ],
-          "defaultOption": {
-            "name": "None",
-            "value": "none"
+    "redirectGroups": {
+      "offlineConversionsMappings": {
+        "tabs": [
+          {
+            "name": "Conversion type mappings",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map your events with Google Ads Offline Conversions",
+                "configKey": "eventsToOfflineConversionsTypeMapping",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "configKey": "from",
+                    "label": "RudderStack event names",
+                    "placeholder": "e.g: Sign up completed",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "configKey": "to",
+                    "label": "Google ads offline conversions",
+                    "options": [
+                      {
+                        "label": "Click",
+                        "value": "click"
+                      },
+                      {
+                        "label": "Call",
+                        "value": "call"
+                      },
+                      {
+                        "label": "Store",
+                        "value": "store"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Conversion name mappings",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map your Google Ads Conversions Names",
+                "configKey": "eventsToConversionsNamesMapping",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "configKey": "from",
+                    "label": "RudderStack event names",
+                    "placeholder": "e.g: Sign up completed",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  },
+                  {
+                    "type": "textInput",
+                    "configKey": "to",
+                    "label": "Google Ads conversion names",
+                    "placeholder": "e.g: App Sign-up",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Custom variable mappings",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map your variable names to custom Google Ads variables.",
+                "configKey": "customVariables",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "configKey": "from",
+                    "label": "custom variable names",
+                    "placeholder": "e.g. value",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  },
+                  {
+                    "type": "textInput",
+                    "configKey": "to",
+                    "label": "Google Ads custom variables",
+                    "placeholder": "eg: revenue",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+                  }
+                ]
+              }
+            ]
           }
-        },
-        {
-          "type": "singleSelect",
-          "label": "Conversion Environment",
-          "value": "conversionEnvironment",
-          "required": false,
-          "footerNote": "The environment this conversion was recorded on. e.g. App or Web.",
-          "options": [
-            {
-              "name": "None",
-              "value": "none"
-            },
-            {
-              "name": "UNSPECIFIED",
-              "value": "UNSPECIFIED"
-            },
-            {
-              "name": "UNKNOWN",
-              "value": "UNKNOWN"
-            },
-            {
-              "name": "APP",
-              "value": "APP"
-            },
-            {
-              "name": "WEB",
-              "value": "WEB"
-            }
-          ],
-          "defaultOption": {
-            "name": "None",
-            "value": "none"
-          }
-        },
-        {
-          "type": "singleSelect",
-          "label": "The user identifier for store and click conversions ",
-          "value": "defaultUserIdentifier",
-          "options": [
-            {
-              "name": "Email",
-              "value": "email"
-            },
-            {
-              "name": "Phone number",
-              "value": "phone"
-            }
-          ],
-          "defaultOption": {
-            "name": "Email",
-            "value": "email"
-          }
-        },
-        {
-          "type": "checkbox",
-          "label": "Hash User Identifying Information (SHA-256)",
-          "value": "hashUserIdentifier",
-          "default": true,
-          "footerNote": "To hash User identifying information like email, phone number, first name, last name and address using SHA-256."
-        },
-        {
-          "type": "checkbox",
-          "label": "Validate Only",
-          "value": "validateOnly",
-          "default": false,
-          "footerNote": "Enable this option to only validate the request"
-        }
-      ]
+        ]
+      }
     },
-    {
-      "title": "Consent Settings",
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
       "fields": [
         {
           "type": "dynamicCustomForm",
-          "value": "consentManagement",
+          "configKey": "consentManagement",
           "label": "Consent management settings",
-          "footerNote": "We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
+          "note": "We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "default": [],
+          "rowFields": [
             {
               "type": "singleSelect",
               "label": "Consent management provider",
-              "value": "provider",
+              "configKey": "provider",
               "options": [
                 {
-                  "name": "Custom",
+                  "label": "Custom",
                   "value": "custom"
                 },
                 {
-                  "name": "iubenda",
+                  "label": "iubenda",
                   "value": "iubenda"
                 },
                 {
-                  "name": "Ketch",
+                  "label": "Ketch",
                   "value": "ketch"
                 },
                 {
-                  "name": "OneTrust",
+                  "label": "OneTrust",
                   "value": "oneTrust"
                 }
               ],
@@ -228,14 +346,14 @@
             {
               "type": "singleSelect",
               "label": "the required consent logic",
-              "value": "resolutionStrategy",
+              "configKey": "resolutionStrategy",
               "options": [
                 {
-                  "name": "AND",
+                  "label": "AND",
                   "value": "and"
                 },
                 {
-                  "name": "OR",
+                  "label": "OR",
                   "value": "or"
                 }
               ],
@@ -251,16 +369,15 @@
               }
             },
             {
-              "type": "dynamicCustomForm",
-              "value": "consents",
+              "type": "tagInput",
               "label": "Enter consent category IDs",
-              "customFields": [
+              "configKey": "consents",
+              "tagKey": "consent",
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+              "placeholder": "Marketing",
+              "default": [
                 {
-                  "type": "textInput",
-                  "placeholder": "Marketing",
-                  "value": "consent",
-                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "required": false
+                  "consent": ""
                 }
               ]
             }
@@ -269,5 +386,5 @@
         }
       ]
     }
-  ]
+  }
 }

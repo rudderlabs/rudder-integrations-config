@@ -174,3 +174,10 @@
 ## INT-7117 — OpenAI Ads Beta Visibility Metadata
 
 - OpenAI Ads remains a gated beta destination: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` alongside the existing `options.hidden.gate` hide-when-false flag `AMP_enable-openai-ads-destination` so the webapp can show the Beta badge while feature gating the destination card.
+
+## INT-7143 — Google Ads Offline Conversions V2 Migration Contract
+
+- Google Ads Offline Conversions is a cloud-only Form Builder V2 destination: keep `sdkTemplate` empty, put account/customer/sub-account fields in Initial Setup, and keep event mappings plus identifier/environment toggles in Configuration Settings.
+- Preserve config keys exactly when migrating this destination from V1 to V2 field shapes; for example `loginCustomerId` remains gated by `subAccount` using V2 `preRequisites.fields[{ configKey: "subAccount", value: true }]` rather than the V1 `preRequisiteField` array.
+- For its consent migration, preserve the V1 provider option labels/order (`Custom`, `iubenda`, `Ketch`, `OneTrust`) while moving the block into `consentSettingsTemplate`; use the shared template for V2 shape guidance, not as a reason to reorder provider metadata.
+- Placing `subAccount` in V2 Initial Setup causes schema generation to add it to top-level `configSchema.required`; that is acceptable for this destination because the field has `default: false` and matches the Google Ads Enhanced Conversions V2 reference pattern.
