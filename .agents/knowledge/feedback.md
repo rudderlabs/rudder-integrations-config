@@ -48,3 +48,8 @@
 - Reviewer clarified that OpenAI Ads event-filtering config should be destination-wide for delivery, but the dashboard event-filtering UI group should remain client-side/web-device-only and use `eventFilteringOption` without a `.web` prerequisite key.
 - Do not expose the OpenAI Ads dashboard event-filtering controls for cloud-mode connections unless product explicitly changes the UI scope.
 - For OpenAI Ads event-filtering schema/config changes, rely on existing `test/data/validation/destinations/openai_ads.json` fixture cases for accepted/rejected config shape coverage; do not add duplicate one-off assertions in `test/validation.test.ts` for the same behavior.
+
+## INT-7144 — Google Ads Offline Conversions Mapping Layout
+
+- Reviewer guidance for `src/configurations/destinations/google_adwords_offline_conversions/ui-config.json`: keep the three mapping fields behind a single Form Builder V2 `redirect` screen using tabs.
+- Put `eventsToConversionsNamesMapping` and `eventsToOfflineConversionsTypeMapping` in the first tab, put `customVariables` in the second tab, and preserve the existing persisted mapping config keys.
