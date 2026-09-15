@@ -174,3 +174,8 @@
 ## INT-7117 — OpenAI Ads Beta Visibility Metadata
 
 - OpenAI Ads remains a gated beta destination: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` alongside the existing `options.hidden.gate` hide-when-false flag `AMP_enable-openai-ads-destination` so the webapp can show the Beta badge while feature gating the destination card.
+
+## INT-7150 — OpenAI Ads Event Mapping Column Contract
+
+- OpenAI Ads `customEventName` belongs as the last column in `src/configurations/destinations/openai_ads/ui-config.json` `uiConfig.redirectGroups.customEventMapping.fields[0].columns`, after `deduplicationKey`; its `conditions` hide-on-`to == custom` block remains the visibility mechanism.
+- Do not add `includeWhenConditional` back to this `redirectGroups` column: schema generation does not traverse `redirectGroups`, so the key is inert there, while it should not be treated as globally obsolete for `baseTemplate` fields.
