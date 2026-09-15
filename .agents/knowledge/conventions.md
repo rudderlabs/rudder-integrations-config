@@ -179,3 +179,4 @@
 
 - For Google Ads Offline Conversions Form Builder V2 migrations, preserve existing `configKey` names and legacy regex/pattern compatibility for Customer ID, Login Customer ID, and mapping columns; these fields historically accepted `{{...}}`/`env.` dynamic-config values, so regex cleanup should be treated as a separate persisted-config compatibility change.
 - Google Ads Offline Conversions is cloud-only in Form Builder V2: keep `sdkTemplate` empty, move consent UI into `consentSettingsTemplate`, and keep connection settings under Initial Setup while event mappings and conversion options live under Configuration Settings / Event settings.
+- Keep `loginCustomerId` optional even when it is shown by the `subAccount` prerequisite; conditional required validation for that field should not be reintroduced without explicit product direction.
