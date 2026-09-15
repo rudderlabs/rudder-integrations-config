@@ -174,3 +174,9 @@
 ## INT-7117 — OpenAI Ads Beta Visibility Metadata
 
 - OpenAI Ads remains a gated beta destination: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` alongside the existing `options.hidden.gate` hide-when-false flag `AMP_enable-openai-ads-destination` so the webapp can show the Beta badge while feature gating the destination card.
+
+## INT-7151 — OpenAI Ads Event Mapping Block Order
+
+- OpenAI Ads `baseTemplate` UI ordering in `src/configurations/destinations/openai_ads/ui-config.json` should place `Event mapping` before `Configuration settings`, yielding `Initial setup` → `Event mapping` → `Configuration settings`.
+- Treat this OpenAI Ads reorder as config-only and schema-neutral: do not change `schema.json`, validation fixtures, `redirectGroups`, `sdkTemplate`, or `consentSettingsTemplate` when only moving the block order.
+- The webapp auto-expand index fix and `CONVENTIONS.md` wording updates are independent follow-ups; they are not blockers for shipping the OpenAI Ads config-only reorder.
