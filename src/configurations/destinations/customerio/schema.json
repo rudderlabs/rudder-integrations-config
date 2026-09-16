@@ -6,11 +6,11 @@
     "properties": {
       "siteID": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "apiKey": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "deviceTokenEventName": {
         "type": "string",
@@ -1106,7 +1106,7 @@
       },
       "writeKey": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "pattern": "^(.{0,100})$"
       },
       "sdkVersion": {
         "type": "string",
@@ -1360,7 +1360,17 @@
           ]
         },
         "then": {
-          "required": ["siteID", "apiKey"]
+          "required": ["siteID", "apiKey"],
+          "properties": {
+            "siteID": {
+              "type": "string",
+              "minLength": 1
+            },
+            "apiKey": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
         }
       },
       {
@@ -1382,7 +1392,13 @@
           "required": ["connectionMode", "sdkVersion"]
         },
         "then": {
-          "required": ["writeKey"]
+          "required": ["writeKey"],
+          "properties": {
+            "writeKey": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
         }
       }
     ]
