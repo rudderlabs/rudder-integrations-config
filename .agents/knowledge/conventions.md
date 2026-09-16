@@ -204,3 +204,10 @@
 - Salesforce OAuth v2 account type `DESTINATION_SALESFORCE_OAUTH_V2` is available by default; do not reintroduce the `AMP_enable-salesforce-oauth-v2-account` `displayOptions.hidden` gate when editing `src/configurations/destinations/salesforce_oauth/accounts/salesforce_oauth_v2/db-config.json`.
 - The legacy Salesforce OAuth account type `DESTINATION_SALESFORCE_OAUTH` remains present for existing account compatibility but should be marked `displayOptions.deprecated: true`, with its deprecation tooltip directing new account creation to the v2 `OAuth (ECA)` option.
 - Salesforce OAuth v2 account UI copy should use Salesforce's current `External Client App` terminology rather than `connected app`; its card name should be `OAuth (External Client App)` and its description should be `Grant access using the latest Salesforce External Client App (ECA)`. The legacy Connected App card name should be `OAuth (Connected App - Legacy)`, with description `Grant access using the legacy Salesforce Connected App`.
+
+## INT-7155 — Google Ads V2 Form Builder Scope
+
+- Google Ads (`src/configurations/destinations/googleads/`) is web device-mode only for this migration; keep `sdkTemplate.fields` empty after deleting the legacy `useNativeSDK` defaultCheckbox, and do not add SDK-template fields whose config keys are absent from `db-config.json` `config.destConfig.web`.
+- Keep Google Ads client-side event filtering in Configuration settings / Other settings without adding a redundant `connectionMode.web == device` gate, because this destination has no cloud mode and the PRD/task explicitly made the group unconditional.
+- Keep Google Ads Event mapping after Configuration settings per the PRD/task order (`Initial setup` → `Configuration settings` → `Event mapping`), even though the generic V2 migration runbook may place mapping collapsibles earlier.
+- Do not invent a visible Google Ads `dynamicRemarketing` field during the V2 migration: it is an existing orphan metadata/schema key with no V1 UI field, and adding new customer-visible fields is out of scope.

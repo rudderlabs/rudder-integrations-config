@@ -72,3 +72,9 @@
 
 - For Google Ads Offline Conversions, keep the `subAccount` to `loginCustomerId` requiredness rule scoped to the destination schema. Do not add a shared `scripts/schemaGenerator.py` workaround for this migration unless a broader Form Builder V2 generator change is explicitly requested.
 - Form Builder V2 schema generation intentionally avoids adding Initial setup fields that have `preRequisites` to the top-level schema `required` array; conditional requiredness for hidden/gated fields should stay in destination-specific conditional schema branches instead of becoming unconditional required fields.
+
+## INT-7155 — Google Ads Redirect Mapping Schema Preservation
+
+- Google Ads V2 event mappings should live behind `uiConfig.redirectGroups`: `eventNameMappings` contains `eventMappingFromConfig`, `pageLoadConversionMapping` contains `pageLoadConversions` plus companion `defaultPageConversion` on the same screen, and `clickEventConversionMapping` contains `clickEventConversions`.
+- `scripts/schemaGenerator.py` does not traverse `redirectGroups`, so generated-schema refreshes for Google Ads must preserve existing schema properties for redirect-only mapping keys manually, typically by using the skip-deletions flow and then classifying the retained diff.
+- After moving Google Ads V1 prerequisite chains to V2 top-level optional properties, remove stale chain-specific conditional `allOf` branches for those fields instead of carrying dead V1 prerequisite schema forward.
