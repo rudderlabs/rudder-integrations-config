@@ -177,7 +177,7 @@
 
 ## INT-7147 — DCM Floodlight V2 Migration Contract
 
-- DCM Floodlight `advertiserId` remains a required secret UI field in this V2 migration, matching the pre-migration `ui-config.json` and PRD blueprint. The inherited mismatch where `src/configurations/destinations/dcm_floodlight/db-config.json` has empty `secretKeys`/`excludeKeys` should remain unchanged unless an explicit exposure-semantics change is approved.
+- DCM Floodlight `advertiserId` is not treated as a secret in this V2 migration: keep `src/configurations/destinations/dcm_floodlight/ui-config.json` `secret: false`, and keep `src/configurations/destinations/dcm_floodlight/db-config.json` without `advertiserId` in `secretKeys` or `excludeKeys`.
 - Keep DCM Floodlight consent provider rows backward-compatible for this V2 migration: the `provider` row field remains non-required, `consentManagement.<source>.items` schemas should not gain `required: ["provider"]`, and the provider enum should continue allowing the empty string unless product explicitly approves validation tightening.
 - Place DCM Floodlight `Event mapping` immediately after `Initial setup` in `uiConfig.baseTemplate`, before `Configuration settings`; treat that ordering as layout-only and do not change `redirectGroups`, `schema.json`, or validation fixtures just because of the reorder.
 

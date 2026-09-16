@@ -88,4 +88,4 @@
 
 <!-- session: 2026-09-15 -->
 
-- DCM Floodlight `advertiserId` is `secret: true` in `src/configurations/destinations/dcm_floodlight/ui-config.json`, matching the pre-migration UI and V2 blueprint, while `db-config.json` still has `secretKeys: []` and no `excludeKeys`. This inherited metadata mismatch was left unchanged during INT-7147 because adding `advertiserId` to `secretKeys`/`excludeKeys` changes exposure semantics and needs explicit approval.
+- Human review clarified that DCM Floodlight `advertiserId` should not be treated as a secret despite the pre-migration UI flag. Keep `src/configurations/destinations/dcm_floodlight/ui-config.json` `secret: false`, and keep `src/configurations/destinations/dcm_floodlight/db-config.json` without `advertiserId` in `secretKeys` or `excludeKeys`.
