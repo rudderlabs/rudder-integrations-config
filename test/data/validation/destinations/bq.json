@@ -1137,5 +1137,138 @@
     "err": [
       "consentManagement.iosSwift Only one consent management block can be configured per provider."
     ]
+  },
+  {
+    "testTitle": "With workload identity federation and no credentials",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.iam.gserviceaccount.com"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With workload identity federation and a missing pool id",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.iam.gserviceaccount.com"
+    },
+    "result": false,
+    "err": [
+      " Required when the authentication method is Workload Identity Federation.",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and an invalid target service account",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "not-an-email"
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityTargetServiceAccount must match pattern \"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.iam\\.gserviceaccount\\.com$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With the service account key method and no credentials",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "serviceAccountKey"
+    },
+    "result": false,
+    "err": [
+      " Credentials are required when the authentication method is Service Account Key.",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "Without authMethod, credentials stay required",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30"
+    },
+    "result": false,
+    "err": [
+      " Credentials are required when the authentication method is Service Account Key.",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With an unsupported authentication method",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "oauth",
+      "credentials": "{}"
+    },
+    "result": false,
+    "err": ["authMethod must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With workload identity federation and an empty hidden credentials field",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "credentials": "",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.iam.gserviceaccount.com"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With the service account key method and empty hidden workload identity fields",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "serviceAccountKey",
+      "credentials": "{}",
+      "workloadIdentityProjectNumber": "",
+      "workloadIdentityPoolId": "",
+      "workloadIdentityProviderId": "",
+      "workloadIdentityTargetServiceAccount": ""
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With the service account key method and empty credentials",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "serviceAccountKey",
+      "credentials": ""
+    },
+    "result": false,
+    "err": [
+      "credentials must match pattern \"(^env[.].+)|.+\"",
+      " This value is not valid for the selected authentication method."
+    ]
   }
 ]

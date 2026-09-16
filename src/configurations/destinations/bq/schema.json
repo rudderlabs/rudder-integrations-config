@@ -2,7 +2,7 @@
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema",
     "type": "object",
-    "required": ["project", "bucketName", "credentials", "syncFrequency"],
+    "required": ["project", "bucketName", "syncFrequency"],
     "properties": {
       "project": {
         "type": "string",
@@ -26,8 +26,24 @@
         "rs-immutable": true
       },
       "credentials": {
+        "type": "string"
+      },
+      "authMethod": {
         "type": "string",
-        "pattern": "(^env[.].+)|.+"
+        "enum": ["serviceAccountKey", "workloadIdentityFederation"],
+        "default": "serviceAccountKey"
+      },
+      "workloadIdentityProjectNumber": {
+        "type": "string"
+      },
+      "workloadIdentityPoolId": {
+        "type": "string"
+      },
+      "workloadIdentityProviderId": {
+        "type": "string"
+      },
+      "workloadIdentityTargetServiceAccount": {
+        "type": "string"
       },
       "syncFrequency": {
         "type": "string",
@@ -1068,6 +1084,69 @@
         }
       }
     },
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "authMethod": {
+              "const": "workloadIdentityFederation"
+            }
+          },
+          "required": ["authMethod"]
+        },
+        "then": {
+          "properties": {
+            "workloadIdentityProjectNumber": {
+              "type": "string",
+              "pattern": "^[0-9]{1,20}$"
+            },
+            "workloadIdentityPoolId": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]{4,32}$"
+            },
+            "workloadIdentityProviderId": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]{4,32}$"
+            },
+            "workloadIdentityTargetServiceAccount": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.iam\\.gserviceaccount\\.com$"
+            }
+          },
+          "required": [
+            "workloadIdentityProjectNumber",
+            "workloadIdentityPoolId",
+            "workloadIdentityProviderId",
+            "workloadIdentityTargetServiceAccount"
+          ],
+          "errorMessage": {
+            "required": {
+              "workloadIdentityProjectNumber": "Required when the authentication method is Workload Identity Federation.",
+              "workloadIdentityPoolId": "Required when the authentication method is Workload Identity Federation.",
+              "workloadIdentityProviderId": "Required when the authentication method is Workload Identity Federation.",
+              "workloadIdentityTargetServiceAccount": "Required when the authentication method is Workload Identity Federation."
+            }
+          }
+        },
+        "else": {
+          "properties": {
+            "credentials": {
+              "type": "string",
+              "pattern": "(^env[.].+)|.+"
+            }
+          },
+          "required": ["credentials"],
+          "errorMessage": {
+            "required": {
+              "credentials": "Credentials are required when the authentication method is Service Account Key."
+            }
+          }
+        },
+        "errorMessage": {
+          "if": "This value is not valid for the selected authentication method."
+        }
+      }
+    ],
     "additionalProperties": true
   }
 }
