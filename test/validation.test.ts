@@ -357,6 +357,40 @@ describe('Validation Tests', () => {
   });
 });
 
+describe('OpenAI Ads UI shape regression tests', () => {
+  it('keeps Event mapping as the second redirect-only baseTemplate block', () => {
+    type UiField = Record<string, unknown>;
+    type UiGroup = { fields?: UiField[]; callout?: Record<string, unknown> };
+    type UiSection = { groups?: UiGroup[] };
+    type UiBlock = { title?: string; hideEditIcon?: boolean; sections?: UiSection[] };
+    type OpenAiAdsUiConfig = { uiConfig: { baseTemplate: UiBlock[] } };
+
+    const uiConfigPath = path.resolve('src/configurations/destinations/openai_ads/ui-config.json');
+    const uiConfig = JSON.parse(fs.readFileSync(uiConfigPath, 'utf-8')) as OpenAiAdsUiConfig;
+    const { baseTemplate } = uiConfig.uiConfig;
+
+    expect(baseTemplate.map((block) => block.title)).toEqual([
+      'Initial setup',
+      'Event mapping',
+      'Configuration settings',
+    ]);
+
+    const eventMappingBlock = baseTemplate[1];
+    const eventMappingGroup = eventMappingBlock.sections?.[0].groups?.[0];
+
+    expect(eventMappingBlock.hideEditIcon).toBe(true);
+    expect(eventMappingGroup?.callout).toEqual({
+      message: 'Only events with a mapping are delivered to OpenAI Ads.',
+      type: 'info',
+    });
+    expect(eventMappingGroup?.fields).toHaveLength(1);
+    expect(eventMappingGroup?.fields?.[0]).toMatchObject({
+      type: 'redirect',
+      redirectGroupKey: 'customEventMapping',
+    });
+  });
+});
+
 describe('Destination Definition validation tests', () => {
   dests.forEach((dest) => {
     it(`${dest} - destination definition test`, async () => {

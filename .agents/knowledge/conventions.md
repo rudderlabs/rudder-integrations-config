@@ -190,3 +190,9 @@
 - OpenAI Ads `baseTemplate` UI ordering in `src/configurations/destinations/openai_ads/ui-config.json` should place `Event mapping` before `Configuration settings`, yielding `Initial setup` → `Event mapping` → `Configuration settings`.
 - Treat this OpenAI Ads reorder as config-only and schema-neutral: do not change `schema.json`, validation fixtures, `redirectGroups`, `sdkTemplate`, or `consentSettingsTemplate` when only moving the block order.
 - The webapp auto-expand index fix and `CONVENTIONS.md` wording updates are independent follow-ups; they are not blockers for shipping the OpenAI Ads config-only reorder.
+
+## INT-7153 — OpenAI Ads Post-Create Auto-Edit Boundary
+
+- Keep the OpenAI Ads `baseTemplate` order from INT-7151 (`Initial setup` → `Event mapping` → `Configuration settings`); do not roll it back to work around rudder-webapp's post-create auto-edit bug.
+- This repository does not currently have a supported `ui-config.json` metadata contract for suppressing auto-edit on redirect-only blocks. Do not add unsupported keys or misuse capability flags such as `supportsCustomMappings` to influence renderer edit-mode behavior.
+- The functional fix for the post-create block-index auto-edit issue belongs in rudder-webapp; integrations-config should preserve and verify the existing OpenAI Ads shape unless the webapp later defines a consumed metadata flag.
