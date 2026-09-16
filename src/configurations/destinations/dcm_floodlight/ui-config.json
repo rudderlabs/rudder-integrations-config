@@ -17,7 +17,7 @@
                     "label": "DoubleClick Advertiser ID",
                     "configKey": "advertiserId",
                     "regex": "^([0-9]{0,100})$",
-                    "regexErrorMessage": "Invalid DoubleClick Advertiser ID",
+                    "regexErrorMessage": "Enter an advertiser ID using numbers only",
                     "required": true,
                     "placeholder": "e.g. 22XXX552",
                     "secret": false,
@@ -47,7 +47,7 @@
       },
       {
         "title": "Event mapping",
-        "note": "Map RudderStack events to Floodlight tags and custom variables",
+        "note": "Map RudderStack events to Floodlight conversions",
         "hideEditIcon": true,
         "sections": [
           {
@@ -78,36 +78,40 @@
             "groups": [
               {
                 "title": "Floodlight tag defaults",
+                "note": "Fallback tag values used when a conversion event mapping leaves them blank",
                 "fields": [
                   {
                     "type": "textInput",
                     "label": "Activity Tag",
                     "configKey": "activityTag",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Activity tag must be 100 characters or less",
                     "required": false,
                     "placeholder": "e.g. signu0",
                     "secret": false,
-                    "note": "Use this setting to define the same parameter value across all the conversion events. Alternatively, you can define this value for each conversion event mapping in the Floodlight Activity Tag field below."
+                    "note": "Default Floodlight activity tag (cat) for all conversion events. A Floodlight Activity Tag set on a conversion event mapping takes precedence."
                   },
                   {
                     "type": "textInput",
                     "label": "Group Tag",
                     "configKey": "groupTag",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Group tag must be 100 characters or less",
                     "required": false,
                     "placeholder": "e.g. conv01",
                     "secret": false,
-                    "note": "Use this setting to define the same parameter value across all the conversion events. Alternatively, you can define this value for each conversion event in the Floodlight Group Tag field below."
+                    "note": "Default Floodlight group tag (type) for all conversion events. A Floodlight Group Tag set on a conversion event mapping takes precedence."
                   },
                   {
                     "type": "textInput",
                     "label": "Counting Method",
                     "configKey": "countingMethod",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Counting method must be 100 characters or less",
                     "required": false,
                     "placeholder": "e.g. standard",
                     "secret": false,
-                    "note": "Use this setting to define the same parameter value across all the conversion events. Alternatively, you can define this value for each conversion event in the Floodlight Counting Method field below."
+                    "note": "Default Floodlight counting method for all conversion events. A Floodlight Counting Method set on a conversion event mapping takes precedence."
                   }
                 ]
               }
@@ -216,6 +220,7 @@
         {
           "type": "singleSelect",
           "label": "Tag Format",
+          "note": "Choose how the Floodlight tag loads on your site: the global site tag (gtag.js) or an iframe tag.",
           "configKey": "tagFormat",
           "required": false,
           "options": [
@@ -233,18 +238,21 @@
         {
           "type": "checkbox",
           "label": "Conversion Linker",
+          "note": "Store ad click information in first-party cookies so conversions can be attributed to ad clicks. Applies to the global site tag only.",
           "configKey": "conversionLinker",
           "default": true
         },
         {
           "type": "checkbox",
           "label": "Allow ad personalization signals",
+          "note": "Turn off to stop data from this site being used for ad personalization. Applies to the global site tag only.",
           "configKey": "allowAdPersonalizationSignals",
           "default": true
         },
         {
           "type": "checkbox",
           "label": "DoubleClick Id",
+          "note": "Enable Google cookie matching using the RudderStack anonymous ID. Requires Google Network ID.",
           "configKey": "doubleclickId",
           "default": false
         },
@@ -253,8 +261,9 @@
           "label": "Google Network Id",
           "configKey": "googleNetworkId",
           "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+          "regexErrorMessage": "Network ID must be 100 characters or less",
           "required": false,
-          "note": "Network ID (NID) for the bidder account"
+          "note": "Network ID (NID) for the bidder account. Required for cookie matching when DoubleClick Id is enabled."
         }
       ]
     },
@@ -341,6 +350,7 @@
           {
             "type": "dynamicCustomForm",
             "label": "Conversion events",
+            "note": "Only events with a conversion event mapping are sent to Floodlight in cloud mode.",
             "configKey": "conversionEvents",
             "default": [],
             "addButtonLabel": "Add conversion event",
@@ -350,36 +360,40 @@
                 "label": "Rudderstack Event Name",
                 "configKey": "eventName",
                 "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                "regexErrorMessage": "Event name must be 100 characters or less",
                 "required": false,
                 "placeholder": "e.g: Product Viewed",
-                "note": "This integration lets you map the RudderStack event name to the Floodlight tags."
+                "note": "RudderStack event name to send as this conversion, matched case-insensitively. For page calls, use the form 'Viewed <category> <name> Page'."
               },
               {
                 "type": "textInput",
                 "label": "Floodlight Activity Tag",
                 "configKey": "floodlightActivityTag",
                 "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                "regexErrorMessage": "Activity tag must be 100 characters or less",
                 "required": false,
                 "placeholder": "e.g: signu0",
-                "note": "This should be the (cat) of your tag string. If left blank, RudderStack will pick the value defined in the Activity Tag field above."
+                "note": "The activity tag (cat) of your tag string. If blank, RudderStack uses the Activity Tag from Configuration settings."
               },
               {
                 "type": "textInput",
                 "label": "Floodlight Group Tag",
                 "configKey": "floodlightGroupTag",
                 "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                "regexErrorMessage": "Group tag must be 100 characters or less",
                 "required": false,
                 "placeholder": "e.g: conv01",
-                "note": "This should be the (type) of your tag string. If left blank, RudderStack will pick the value defined in the Group Tag field above."
+                "note": "The group tag (type) of your tag string. If blank, RudderStack uses the Group Tag from Configuration settings."
               },
               {
                 "type": "textInput",
                 "label": "Floodlight Counting Method",
                 "configKey": "floodlightCountingMethod",
                 "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                "regexErrorMessage": "Counting method must be 100 characters or less",
                 "required": false,
                 "placeholder": "e.g: standard",
-                "note": "Enter the counting method for this conversion event, RudderStack will use this as a fallback value if 'properties.countingMethod' is empty"
+                "note": "Counting method for this conversion event. RudderStack uses it as a fallback when properties.countingMethod is empty."
               },
               {
                 "type": "checkbox",
@@ -392,13 +406,14 @@
                 "type": "mapping",
                 "label": "Use this section to map the RudderStack event properties to custom Floodlight variables.",
                 "configKey": "customVariables",
-                "note": "Rudderstack properties (on the left) and Floodlight Custom Variables like 1, 2, 3, 4, etc. (on the right)",
+                "note": "Map RudderStack event properties (left) to Floodlight custom variable numbers such as 1, 2, 3 (right).",
                 "columns": [
                   {
                     "type": "textInput",
                     "label": "Rudderstack properties",
                     "configKey": "from",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Property name must be 100 characters or less",
                     "placeholder": "e.g. Rudderstack property"
                   },
                   {
@@ -406,6 +421,7 @@
                     "label": "Floodlight Custom Variables",
                     "configKey": "to",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Custom variable must be 100 characters or less",
                     "placeholder": "eg: 1"
                   }
                 ]
