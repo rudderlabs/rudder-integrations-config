@@ -52,3 +52,7 @@
 ## INT-7150 — OpenAI Ads Conditional UI Cleanup Guidance
 
 - Reviewer guidance confirmed `includeWhenConditional` should not be preserved or reintroduced in `scripts/schemaGenerator.py` unless a new ui-config field actually needs it; after INT-7150, conditionally visible dynamic custom form fields are emitted only inside conditional `if`/`then` schema and omitted from unconditional item properties.
+
+## INT-7154 — Salesforce OAuth Account Naming Guidance
+
+- Reviewer clarified the customer-facing Salesforce OAuth account card names: v2 External Client App should be named `OAuth(ECA)`, legacy Connected App should be named `OAuth(Connected App)`, and legacy-to-v2 tooltip/copy should point users to `OAuth(ECA)`.
