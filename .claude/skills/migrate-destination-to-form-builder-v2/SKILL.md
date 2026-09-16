@@ -215,6 +215,8 @@ Three patterns with fixed shapes — copy them from the runbook rather than inve
 
 **Event mapping** → its own top-level collapsible with `hideEditIcon: true`, one untitled section, and a group holding **only** `redirect` fields. The mapping itself goes in `redirectGroups`.
 
+**It goes at `baseTemplate[1]`, immediately after `Initial setup`** — several mappings occupy `baseTemplate[1..n]`. Most shipped configs still have it last; that is pre-rule history, so do not copy the position from a neighbouring destination. Runbook §4 has the why and the schema-invariance argument.
+
 Keep a mapping's companion fields (the ones that change how it is read — a prefix, a delimiter, an "is default" toggle) on the **same tab** as that mapping, not in `Configuration settings`.
 
 ---
@@ -298,6 +300,8 @@ review.
 - A warning waved through as "pre-existing" — on the destination you are migrating, that makes it yours to fix
 - A `$delete` in a consent warning read as "the schema has something extra" rather than "the schema is missing it"
 - A `mapping` field placed directly in a `baseTemplate` group
+- A mapping collapsible left after `Configuration settings` because that is where the neighbouring destination has it
+- A mapping reorder that shows up in the `schema.json` diff
 - Event-filtering gate copied verbatim from another destination
 - Schema diff reported as "regenerated the schema" rather than as a classified list
 - `--no-verify` used to get past the pre-commit hook
