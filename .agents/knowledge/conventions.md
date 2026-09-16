@@ -175,9 +175,11 @@
 
 - OpenAI Ads remains a gated beta destination: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` alongside the existing `options.hidden.gate` hide-when-false flag `AMP_enable-openai-ads-destination` so the webapp can show the Beta badge while feature gating the destination card.
 
-## INT-7147 — DCM Floodlight V2 Consent Provider Requirement
+## INT-7147 — DCM Floodlight V2 Migration Contract
 
-- DCM Floodlight follows the standard V2 consent template: the `provider` row field in `src/configurations/destinations/dcm_floodlight/ui-config.json` is required, each `consentManagement.<source>.items` schema has `required: ["provider"]`, and the provider enum does not include the empty string.
+- DCM Floodlight `advertiserId` is public device-mode metadata in this migration: keep `src/configurations/destinations/dcm_floodlight/ui-config.json` `secret: false`, preserve the original numeric-only regex `^([0-9]{0,100})$`, and leave `db-config.json` `secretKeys`/`excludeKeys` empty unless an explicit exposure-semantics change is approved.
+- Keep DCM Floodlight consent provider rows backward-compatible for this V2 migration: the `provider` row field remains non-required, `consentManagement.<source>.items` schemas should not gain `required: ["provider"]`, and the provider enum should continue allowing the empty string unless product explicitly approves validation tightening.
+- Place DCM Floodlight `Event mapping` immediately after `Initial setup` in `uiConfig.baseTemplate`, before `Configuration settings`; treat that ordering as layout-only and do not change `redirectGroups`, `schema.json`, or validation fixtures just because of the reorder.
 
 ## INT-7144 — Google Ads Offline Conversions V2 Migration Compatibility
 

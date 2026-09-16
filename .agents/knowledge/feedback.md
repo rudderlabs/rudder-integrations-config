@@ -53,6 +53,8 @@
 
 - Reviewer guidance for DCM Floodlight V2 form-builder migration: keep the consent `provider` row field required like the standard V2 consent template.
 - Do not preserve provider-less consent rows by making `provider` optional or by keeping an empty string in the generated provider enum unless product explicitly asks for legacy compatibility.
+- Later review-fix guidance for DCM Floodlight superseded the stricter provider requirement for this migration: keep consent provider rows backward-compatible (non-required, with the empty string still in the provider enum) unless product explicitly approves a validation tightening.
+- Reviewer guidance for Form Builder V2 migrations with event mappings: place the `Event mapping` collapsible immediately after `Initial setup`, before `Configuration settings`; for DCM Floodlight this ordering move is layout-only and should not force `redirectGroups`, `schema.json`, or validation-fixture changes.
 
 ## INT-7144 — Google Ads Offline Conversions Mapping Layout
 
