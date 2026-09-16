@@ -55,5 +55,5 @@
 
 ## INT-7154 — Salesforce OAuth Account Naming Guidance
 
-- Reviewer clarified the customer-facing Salesforce OAuth account card names: v2 External Client App should be named `OAuth(ECA)` and legacy Connected App should be named `OAuth (Connected App - Legacy)`.
+- Reviewer clarified the customer-facing Salesforce OAuth account card names: v2 External Client App should be named `OAuth (External Client App)` and legacy Connected App should be named `OAuth (Connected App - Legacy)`.
 - The legacy Salesforce OAuth account `displayOptions.deprecationLabel` should use the exact spaced option wording: `Create a new account using the 'OAuth (ECA)' option.`
