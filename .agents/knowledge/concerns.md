@@ -88,4 +88,4 @@
 
 <!-- session: 2026-09-15 -->
 
-- Review-fix classified DCM Floodlight `advertiserId` as public device-mode metadata by setting `src/configurations/destinations/dcm_floodlight/ui-config.json` `secret: false`; `db-config.json` keeps `secretKeys: []` and no `excludeKeys`, so future changes should not re-mark the UI field secret without an explicit exposure-semantics decision.
+- DCM Floodlight `advertiserId` is `secret: true` in `src/configurations/destinations/dcm_floodlight/ui-config.json`, matching the pre-migration UI and V2 blueprint, while `db-config.json` still has `secretKeys: []` and no `excludeKeys`. This inherited metadata mismatch was left unchanged during INT-7147 because adding `advertiserId` to `secretKeys`/`excludeKeys` changes exposure semantics and needs explicit approval.
