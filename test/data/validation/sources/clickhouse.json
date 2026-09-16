@@ -1,0 +1,102 @@
+[
+  {
+    "testTitle": "Account reference only",
+    "config": {
+      "rudderAccountId": "acc123"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Account reference with non-secret connection fields",
+    "config": {
+      "host": "clickhouse.example.test",
+      "port": 9440,
+      "database": "analytics",
+      "user": "rudder",
+      "secure": true,
+      "skipVerify": false,
+      "rudderAccountId": "acc123"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Legacy config with password",
+    "config": {
+      "host": "clickhouse.example.test",
+      "port": 9440,
+      "database": "analytics",
+      "user": "rudder",
+      "secure": true,
+      "skipVerify": false,
+      "password": "secret"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Legacy config without password",
+    "config": {
+      "host": "clickhouse.example.test",
+      "port": 9440,
+      "database": "analytics",
+      "user": "rudder",
+      "secure": true,
+      "skipVerify": false
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Legacy config with empty password",
+    "config": {
+      "host": "clickhouse.example.test",
+      "port": 9440,
+      "database": "analytics",
+      "user": "rudder",
+      "secure": true,
+      "skipVerify": false,
+      "password": ""
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Account reference with password",
+    "config": {
+      "rudderAccountId": "acc123",
+      "password": "secret"
+    },
+    "result": false,
+    "err": [" must NOT be valid", " must NOT be valid", " must match exactly one schema in oneOf"]
+  },
+  {
+    "testTitle": "Account reference with empty password",
+    "config": {
+      "rudderAccountId": "acc123",
+      "password": ""
+    },
+    "result": false,
+    "err": [" must NOT be valid", " must NOT be valid", " must match exactly one schema in oneOf"]
+  },
+  {
+    "testTitle": "Empty account reference",
+    "config": {
+      "rudderAccountId": ""
+    },
+    "result": false,
+    "err": ["rudderAccountId must match pattern \"^.{1,100}$\""]
+  },
+  {
+    "testTitle": "Account reference of 101 characters",
+    "config": {
+      "rudderAccountId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "result": false,
+    "err": ["rudderAccountId must match pattern \"^.{1,100}$\""]
+  },
+  {
+    "testTitle": "Numeric account reference",
+    "config": {
+      "rudderAccountId": 123
+    },
+    "result": false,
+    "err": ["rudderAccountId must be string"]
+  }
+]

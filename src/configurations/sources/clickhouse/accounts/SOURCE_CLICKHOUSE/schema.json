@@ -1,0 +1,50 @@
+{
+  "optionsSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["host", "database", "user", "scratchDatabase"],
+    "properties": {
+      "host": {
+        "type": "string",
+        "pattern": "^(.{0,100})$"
+      },
+      "port": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 65535,
+        "default": 9440
+      },
+      "database": {
+        "type": "string",
+        "pattern": "^(.{0,100})$"
+      },
+      "user": {
+        "type": "string",
+        "pattern": "^(.{0,100})$"
+      },
+      "secure": {
+        "type": "boolean",
+        "default": true
+      },
+      "skipVerify": {
+        "type": "boolean",
+        "default": false
+      },
+      "scratchDatabase": {
+        "type": "string",
+        "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,127}$"
+      }
+    }
+  },
+  "secretSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [],
+    "properties": {
+      "password": {
+        "type": "string",
+        "pattern": "^[\\s\\S]*$"
+      }
+    }
+  }
+}

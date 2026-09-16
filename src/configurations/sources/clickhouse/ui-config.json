@@ -24,14 +24,15 @@
           "label": "Port",
           "inputFieldType": "number",
           "value": "port",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Value",
-          "required": true
+          "regex": "^([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$",
+          "regexErrorMessage": "Enter an integer from 1 to 65535.",
+          "required": true,
+          "default": 9440
         },
         {
           "type": "textInput",
           "label": "Database",
-          "value": "dbname",
+          "value": "database",
           "regex": "^(.{0,100})$",
           "regexErrorMessage": "Invalid Value",
           "required": true,
@@ -52,7 +53,7 @@
           "label": "Password",
           "value": "password",
           "inputFieldType": "password",
-          "regex": ".*",
+          "regex": "^[\\s\\S]*$",
           "required": false,
           "secret": true
         },
@@ -60,7 +61,7 @@
           "type": "checkbox",
           "label": "Secure",
           "value": "secure",
-          "default": false
+          "default": true
         },
         {
           "type": "checkbox",
@@ -71,22 +72,21 @@
           "label": "Skip verify",
           "value": "skipVerify",
           "default": false,
-          "footerNote": "If you are using self signed certificates set this field to true"
+          "footerNote": "This option disables server certificate verification. Use a certificate trusted by the deployment."
         },
         {
-          "type": "textareaInput",
-          "preRequisiteField": {
-            "name": "secure",
-            "selectedValue": true
-          },
-          "label": "CA certificate",
-          "value": "caCertificate",
-          "regex": ".*",
-          "required": false,
-          "placeholder": "CA Certificate",
-          "trim": true
+          "type": "textInput",
+          "label": "Scratch database",
+          "value": "scratchDatabase",
+          "regex": "^[A-Za-z_][A-Za-z0-9_]{0,127}$",
+          "regexErrorMessage": "Use 1 to 128 letters, digits, or underscores, starting with a letter or underscore.",
+          "required": true,
+          "addInAccountSummary": true,
+          "trim": true,
+          "footerNote": "Create this database before connecting. RudderStack writes only to this scratch database."
         }
-      ]
+      ],
+      "schemaAlias": "Database"
     }
   ]
 }

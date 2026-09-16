@@ -1196,6 +1196,116 @@ describe('Account Definition validation tests', () => {
     );
   });
 
+  const clickhouseOptions = (): Record<string, unknown> => ({
+    host: 'clickhouse.mini.test',
+    port: 9440,
+    database: 'mini_retl',
+    user: 'rudder',
+    secure: true,
+    skipVerify: false,
+    scratchDatabase: '_rudderstack',
+  });
+
+  it('SOURCE_CLICKHOUSE account schema is valid against the account schema meta-schema', () => {
+    const accountSchema = getAccountDefinitionSchema('clickhouse', 'SOURCE_CLICKHOUSE', 'sources');
+    const metaSchema = JSON.parse(fs.readFileSync(accountSchemaMetaSchemaPath, 'utf-8'));
+    const validate = compileAccountSchema(metaSchema);
+
+    expect(validate(accountSchema)).toBe(true);
+    expect(validate.errors ?? []).toEqual([]);
+    expect(accountSchema.combinedSchema).toBeUndefined();
+  });
+
+  it('SOURCE_CLICKHOUSE db-config option and secret fields match its schema properties', async () => {
+    const accountConfig = await getAccountDefinitionConfig(
+      'clickhouse',
+      'SOURCE_CLICKHOUSE',
+      'sources',
+    );
+    const accountSchema = getAccountDefinitionSchema('clickhouse', 'SOURCE_CLICKHOUSE', 'sources');
+
+    expect([...accountConfig.config.optionFields].sort()).toEqual(
+      Object.keys(accountSchema.optionsSchema.properties).sort(),
+    );
+    expect(accountConfig.config.secretFields).toEqual(['password']);
+    expect(accountConfig.config.secretFields).toEqual(
+      Object.keys(accountSchema.secretSchema.properties),
+    );
+  });
+
+  it('SOURCE_CLICKHOUSE accepts port boundaries and TLS booleans and applies native TLS defaults', () => {
+    const accountSchema = getAccountDefinitionSchema('clickhouse', 'SOURCE_CLICKHOUSE', 'sources');
+    const validate = compileAccountSchema(accountSchema.optionsSchema);
+
+    expect(validate(clickhouseOptions())).toBe(true);
+    [1, 65535].forEach((port) => {
+      expect(validate({ ...clickhouseOptions(), port })).toBe(true);
+    });
+    [true, false].forEach((secure) => {
+      [true, false].forEach((skipVerify) => {
+        expect(validate({ ...clickhouseOptions(), secure, skipVerify })).toBe(true);
+      });
+    });
+    Object.entries({ port: 9440, secure: true, skipVerify: false }).forEach(([key, value]) => {
+      const options = clickhouseOptions();
+      delete options[key];
+      expect(validate(options)).toBe(true);
+      expect(options[key]).toBe(value);
+    });
+  });
+
+  it('SOURCE_CLICKHOUSE rejects missing required options and invalid ports without coercion', () => {
+    const accountSchema = getAccountDefinitionSchema('clickhouse', 'SOURCE_CLICKHOUSE', 'sources');
+    const validate = compileAccountSchema(accountSchema.optionsSchema);
+
+    ['host', 'database', 'user', 'scratchDatabase'].forEach((key) => {
+      const options = clickhouseOptions();
+      delete options[key];
+      expect(validate(options)).toBe(false);
+    });
+    ['9440', 1.5, 0, -1, 65536].forEach((port) => {
+      const options = { ...clickhouseOptions(), port };
+      expect(validate(options)).toBe(false);
+      expect(options.port).toBe(port);
+    });
+  });
+
+  it('SOURCE_CLICKHOUSE validates TLS and scratch identifiers while retaining undeclared options', () => {
+    const accountSchema = getAccountDefinitionSchema('clickhouse', 'SOURCE_CLICKHOUSE', 'sources');
+    const validate = compileAccountSchema(accountSchema.optionsSchema);
+
+    ['secure', 'skipVerify'].forEach((key) => {
+      ['true', 'false', 0, 1, null].forEach((value) => {
+        expect(validate({ ...clickhouseOptions(), [key]: value })).toBe(false);
+      });
+    });
+    ['', '1scratch', 'scratch-db', 'scratch.db', 'a'.repeat(129)].forEach((scratchDatabase) => {
+      expect(validate({ ...clickhouseOptions(), scratchDatabase })).toBe(false);
+    });
+    expect(validate({ ...clickhouseOptions(), scratchDatabase: 'a'.repeat(128) })).toBe(true);
+
+    // The backend owns the option-name guard; the standalone schema stays open.
+    const options = { ...clickhouseOptions(), protocol: 'http' };
+    expect(validate(options)).toBe(true);
+    expect(options.protocol).toBe('http');
+  });
+
+  it('SOURCE_CLICKHOUSE accepts absent, empty and multiline passwords and retains extra secret fields', () => {
+    const accountSchema = getAccountDefinitionSchema('clickhouse', 'SOURCE_CLICKHOUSE', 'sources');
+    const validate = compileAccountSchema(accountSchema.secretSchema);
+
+    expect(validate({})).toBe(true);
+    ['', 'password', 'first\nsecond'].forEach((password) => {
+      expect(validate({ password })).toBe(true);
+    });
+    [123, false, null].forEach((password) => {
+      expect(validate({ password })).toBe(false);
+    });
+    const secret = { unknown: 'retained' };
+    expect(validate(secret)).toBe(true);
+    expect(secret.unknown).toBe('retained');
+  });
+
   const databricksPatPayload = () => ({
     options: {
       host: 'dbc-abc12345-6789.cloud.databricks.com',
