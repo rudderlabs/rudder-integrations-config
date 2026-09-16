@@ -204,3 +204,9 @@
 - OpenAI Ads `baseTemplate` UI ordering in `src/configurations/destinations/openai_ads/ui-config.json` should place `Event mapping` before `Configuration settings`, yielding `Initial setup` → `Event mapping` → `Configuration settings`.
 - Treat this OpenAI Ads reorder as config-only and schema-neutral: do not change `schema.json`, validation fixtures, `redirectGroups`, `sdkTemplate`, or `consentSettingsTemplate` when only moving the block order.
 - The webapp auto-expand index fix and `CONVENTIONS.md` wording updates are independent follow-ups; they are not blockers for shipping the OpenAI Ads config-only reorder.
+
+## INT-7154 — Salesforce OAuth Account Type Visibility
+
+- Salesforce OAuth v2 account type `DESTINATION_SALESFORCE_OAUTH_V2` is available by default; do not reintroduce the `AMP_enable-salesforce-oauth-v2-account` `displayOptions.hidden` gate when editing `src/configurations/destinations/salesforce_oauth/accounts/salesforce_oauth_v2/db-config.json`.
+- The legacy Salesforce OAuth account type `DESTINATION_SALESFORCE_OAUTH` remains present for existing account compatibility but should be marked `displayOptions.deprecated: true`, with its deprecation tooltip directing new account creation to the v2 `OAuth (ECA)` option.
+- Salesforce OAuth v2 account UI copy should use Salesforce's current `External Client App` terminology rather than `connected app`; its card name should be `OAuth (External Client App)` and its description should be `Grant access using the latest Salesforce External Client App (ECA)`. The legacy Connected App card name should be `OAuth (Connected App - Legacy)`, with description `Grant access using the legacy Salesforce Connected App`.
