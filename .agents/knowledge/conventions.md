@@ -175,6 +175,14 @@
 
 - OpenAI Ads remains a gated beta destination: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` alongside the existing `options.hidden.gate` hide-when-false flag `AMP_enable-openai-ads-destination` so the webapp can show the Beta badge while feature gating the destination card.
 
+## INT-7144 — Google Ads Offline Conversions V2 Migration Compatibility
+
+- For Google Ads Offline Conversions Form Builder V2 migrations, preserve existing `configKey` names and legacy regex/pattern compatibility for Customer ID, Login Customer ID, and mapping columns; these fields historically accepted `{{...}}`/`env.` dynamic-config values, so regex cleanup should be treated as a separate persisted-config compatibility change.
+- Google Ads Offline Conversions is cloud-only in Form Builder V2: keep `sdkTemplate` empty, move consent UI into `consentSettingsTemplate`, and keep connection settings under Initial Setup while event mappings and conversion options live under Configuration Settings / Event settings.
+- Keep `subAccount` in the Initial Setup / Connection Settings group with its `false` default, but preserve the legacy schema contract where it is not top-level required.
+- Keep `loginCustomerId` visible only behind the `subAccount` prerequisite and enforce it with a destination-specific conditional schema branch when `subAccount` is true; do not make it unconditionally required at the top level and do not change shared schema-generator requiredness for this destination-specific rule.
+- Keep `loginCustomerId` out of top-level `configSchema.properties`; define and validate it only inside the conditional `allOf` branch where `subAccount` is true.
+
 ## INT-7136 — Campaign Manager V2 Migration Compatibility
 
 - For Campaign Manager 360 form-builder-v2 migration, keep existing persisted config keys and validation semantics intact: preserve the legacy `profileId` regex/pattern `(^\{\{.*\|\|(.*)\}\}$)|(^env[.].+)|^(.{1,50})$` rather than narrowing it during a UI-container migration, so saved templated/env values remain valid.

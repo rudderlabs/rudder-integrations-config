@@ -1,7 +1,7 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["rudderAccountId", "customerId"],
+    "required": ["rudderAccountId", "customerId", "subAccount"],
     "type": "object",
     "properties": {
       "rudderAccountId": {
@@ -22,7 +22,7 @@
           "properties": {
             "from": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+              "pattern": "^(.{0,100})$"
             },
             "to": {
               "type": "string",
@@ -38,11 +38,11 @@
           "properties": {
             "from": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+              "pattern": "^(.{0,100})$"
             },
             "to": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+              "pattern": "^(.{0,100})$"
             }
           }
         }
@@ -54,11 +54,11 @@
           "properties": {
             "from": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+              "pattern": "^(.{0,100})$"
             },
             "to": {
               "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
+              "pattern": "^(.{0,100})$"
             }
           }
         }
@@ -268,7 +268,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -317,7 +318,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -366,7 +368,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -415,7 +418,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -464,7 +468,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -513,7 +518,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -562,7 +568,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -611,7 +618,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -660,7 +668,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -709,7 +718,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -758,7 +768,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -807,7 +818,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -856,7 +868,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -1058,9 +1071,13 @@
             }
           }
         }
+      },
+      "loginCustomerId": {
+        "type": "string",
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       }
     },
-    "anyOf": [
+    "allOf": [
       {
         "if": {
           "properties": {

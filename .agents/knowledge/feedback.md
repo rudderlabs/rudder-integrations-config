@@ -49,6 +49,14 @@
 - Do not expose the OpenAI Ads dashboard event-filtering controls for cloud-mode connections unless product explicitly changes the UI scope.
 - For OpenAI Ads event-filtering schema/config changes, rely on existing `test/data/validation/destinations/openai_ads.json` fixture cases for accepted/rejected config shape coverage; do not add duplicate one-off assertions in `test/validation.test.ts` for the same behavior.
 
+## INT-7144 — Google Ads Offline Conversions Mapping Layout
+
+- Reviewer guidance for `src/configurations/destinations/google_adwords_offline_conversions/ui-config.json`: keep the three mapping fields behind a single Form Builder V2 `redirect` screen using tabs.
+- Put `eventsToConversionsNamesMapping` and `eventsToOfflineConversionsTypeMapping` in the first tab, put `customVariables` in the second tab, and preserve the existing persisted mapping config keys.
+- Latest reviewer direction for `loginCustomerId` supersedes the earlier optional-only note: enforce `loginCustomerId` through conditional schema validation when `subAccount` is true, while avoiding unconditional top-level required validation.
+- Reviewer clarified the preferred `schema.json` shape: do not keep `loginCustomerId` in top-level `configSchema.properties`; define and validate it only inside the conditional `allOf` branch where `subAccount` is true.
+- Reviewer clarified that the shared `scripts/schemaGenerator.py` required-field change is not needed for this migration; keep the `loginCustomerId` rule in the destination schema instead.
+
 ## INT-7150 — OpenAI Ads Conditional UI Cleanup Guidance
 
 - Reviewer guidance confirmed `includeWhenConditional` should not be preserved or reintroduced in `scripts/schemaGenerator.py` unless a new ui-config field actually needs it; after INT-7150, conditionally visible dynamic custom form fields are emitted only inside conditional `if`/`then` schema and omitted from unconditional item properties.
