@@ -16,6 +16,7 @@ Exempt: `accountManagementInput`, `mapping` columns (the column label is the cop
 `preRequisites`, and the standard consent block copied from
 scripts/template-ui-config.json. Exits 1 when anything is reported.
 """
+
 import json
 import re
 import sys
