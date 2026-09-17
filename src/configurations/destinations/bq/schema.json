@@ -1102,29 +1102,27 @@
             },
             "workloadIdentityPoolId": {
               "type": "string",
-              "pattern": "^[a-z0-9-]{4,32}$"
+              "pattern": "^(?!gcp-)[a-z0-9-]{4,32}$"
             },
             "workloadIdentityProviderId": {
               "type": "string",
-              "pattern": "^[a-z0-9-]{4,32}$"
+              "pattern": "^(?!gcp-)[a-z0-9-]{4,32}$"
             },
             "workloadIdentityTargetServiceAccount": {
               "type": "string",
-              "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.iam\\.gserviceaccount\\.com$"
+              "pattern": "^$|^[a-z][a-z0-9-]{4,28}[a-z0-9]@[a-z][a-z0-9-]{4,28}[a-z0-9]\\.iam\\.gserviceaccount\\.com$"
             }
           },
           "required": [
             "workloadIdentityProjectNumber",
             "workloadIdentityPoolId",
-            "workloadIdentityProviderId",
-            "workloadIdentityTargetServiceAccount"
+            "workloadIdentityProviderId"
           ],
           "errorMessage": {
             "required": {
-              "workloadIdentityProjectNumber": "Required when the authentication method is Workload Identity Federation.",
-              "workloadIdentityPoolId": "Required when the authentication method is Workload Identity Federation.",
-              "workloadIdentityProviderId": "Required when the authentication method is Workload Identity Federation.",
-              "workloadIdentityTargetServiceAccount": "Required when the authentication method is Workload Identity Federation."
+              "workloadIdentityProjectNumber": "Workload identity pool project number is required for Workload Identity Federation.",
+              "workloadIdentityPoolId": "Workload identity pool ID is required for Workload Identity Federation.",
+              "workloadIdentityProviderId": "Workload identity provider ID is required for Workload Identity Federation."
             }
           }
         },

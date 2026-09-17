@@ -104,7 +104,7 @@
           "label": "Workload Identity Pool Project Number",
           "value": "workloadIdentityProjectNumber",
           "regex": "^[0-9]{1,20}$",
-          "regexErrorMessage": "Invalid Workload Identity Pool Project Number",
+          "regexErrorMessage": "Project number must contain only digits. Use the project number, not the project ID.",
           "placeholder": "e.g: 123456789012",
           "required": true
         },
@@ -118,8 +118,8 @@
           ],
           "label": "Workload Identity Pool ID",
           "value": "workloadIdentityPoolId",
-          "regex": "^[a-z0-9-]{4,32}$",
-          "regexErrorMessage": "Invalid Workload Identity Pool ID",
+          "regex": "^(?!gcp-)[a-z0-9-]{4,32}$",
+          "regexErrorMessage": "Pool ID must be 4-32 lowercase letters, numbers or hyphens, and cannot start with gcp-.",
           "placeholder": "e.g: rudderstack-pool",
           "required": true
         },
@@ -133,8 +133,8 @@
           ],
           "label": "Workload Identity Provider ID",
           "value": "workloadIdentityProviderId",
-          "regex": "^[a-z0-9-]{4,32}$",
-          "regexErrorMessage": "Invalid Workload Identity Provider ID",
+          "regex": "^(?!gcp-)[a-z0-9-]{4,32}$",
+          "regexErrorMessage": "Provider ID must be 4-32 lowercase letters, numbers or hyphens, and cannot start with gcp-.",
           "placeholder": "e.g: rudderstack-aws",
           "required": true
         },
@@ -148,10 +148,11 @@
           ],
           "label": "Target Service Account",
           "value": "workloadIdentityTargetServiceAccount",
-          "regex": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.iam\\.gserviceaccount\\.com$",
-          "regexErrorMessage": "Invalid Target Service Account",
+          "regex": "^$|^[a-z][a-z0-9-]{4,28}[a-z0-9]@[a-z][a-z0-9-]{4,28}[a-z0-9]\\.iam\\.gserviceaccount\\.com$",
+          "regexErrorMessage": "Target service account must be a service account email ending in .iam.gserviceaccount.com.",
           "placeholder": "e.g: rudderstack@my-project.iam.gserviceaccount.com",
-          "required": true
+          "required": false,
+          "footerNote": "Optional. Service account for RudderStack to impersonate. Leave empty if you granted BigQuery and Cloud Storage roles directly to the workload identity pool principal."
         },
         {
           "type": "checkbox",

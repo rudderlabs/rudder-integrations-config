@@ -1153,6 +1153,33 @@
     "result": true
   },
   {
+    "testTitle": "With workload identity federation and no target service account (direct federated access)",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityProviderId": "rudderstack-aws"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With workload identity federation and an empty target service account",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": ""
+    },
+    "result": true
+  },
+  {
     "testTitle": "With workload identity federation and a missing pool id",
     "config": {
       "project": "test-gcs-project",
@@ -1165,7 +1192,7 @@
     },
     "result": false,
     "err": [
-      " Required when the authentication method is Workload Identity Federation.",
+      " Workload identity pool ID is required for Workload Identity Federation.",
       " This value is not valid for the selected authentication method."
     ]
   },
@@ -1183,7 +1210,7 @@
     },
     "result": false,
     "err": [
-      "workloadIdentityTargetServiceAccount must match pattern \"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.iam\\.gserviceaccount\\.com$\"",
+      "workloadIdentityTargetServiceAccount must match pattern \"^$|^[a-z][a-z0-9-]{4,28}[a-z0-9]@[a-z][a-z0-9-]{4,28}[a-z0-9]\\.iam\\.gserviceaccount\\.com$\"",
       " This value is not valid for the selected authentication method."
     ]
   },
@@ -1270,5 +1297,552 @@
       "credentials must match pattern \"(^env[.].+)|.+\"",
       " This value is not valid for the selected authentication method."
     ]
+  },
+  {
+    "testTitle": "With workload identity federation and a pool id using the reserved gcp- prefix",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "gcp-rudderstack",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.iam.gserviceaccount.com"
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityPoolId must match pattern \"^(?!gcp-)[a-z0-9-]{4,32}$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and a too-short provider id",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityProviderId": "aws",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.iam.gserviceaccount.com"
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityProviderId must match pattern \"^(?!gcp-)[a-z0-9-]{4,32}$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and an uppercase target service account",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "RudderStack@my-project.iam.gserviceaccount.com"
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityTargetServiceAccount must match pattern \"^$|^[a-z][a-z0-9-]{4,28}[a-z0-9]@[a-z][a-z0-9-]{4,28}[a-z0-9]\\.iam\\.gserviceaccount\\.com$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and a project id instead of the project number",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "my-project",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.iam.gserviceaccount.com"
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityProjectNumber must match pattern \"^[0-9]{1,20}$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and a missing project number",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.iam.gserviceaccount.com",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "skipUsersTable": true,
+      "cleanupObjectStorageFiles": false,
+      "allowUsersContextTraits": false,
+      "underscoreDivideNumbers": false
+    },
+    "result": false,
+    "err": [
+      " Workload identity pool project number is required for Workload Identity Federation.",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and a missing provider id",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.iam.gserviceaccount.com",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "skipUsersTable": true,
+      "cleanupObjectStorageFiles": false,
+      "allowUsersContextTraits": false,
+      "underscoreDivideNumbers": false
+    },
+    "result": false,
+    "err": [
+      " Workload identity provider ID is required for Workload Identity Federation.",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and all workload identity fields missing",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "skipUsersTable": true,
+      "cleanupObjectStorageFiles": false,
+      "allowUsersContextTraits": false,
+      "underscoreDivideNumbers": false
+    },
+    "result": false,
+    "err": [
+      " Workload identity pool project number is required for Workload Identity Federation.",
+      " Workload identity pool ID is required for Workload Identity Federation.",
+      " Workload identity provider ID is required for Workload Identity Federation.",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and an empty project number",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.iam.gserviceaccount.com",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "skipUsersTable": true,
+      "cleanupObjectStorageFiles": false,
+      "allowUsersContextTraits": false,
+      "underscoreDivideNumbers": false
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityProjectNumber must match pattern \"^[0-9]{1,20}$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and an empty pool id",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.iam.gserviceaccount.com",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "skipUsersTable": true,
+      "cleanupObjectStorageFiles": false,
+      "allowUsersContextTraits": false,
+      "underscoreDivideNumbers": false
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityPoolId must match pattern \"^(?!gcp-)[a-z0-9-]{4,32}$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and an empty provider id",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityProviderId": "",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.iam.gserviceaccount.com",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "skipUsersTable": true,
+      "cleanupObjectStorageFiles": false,
+      "allowUsersContextTraits": false,
+      "underscoreDivideNumbers": false
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityProviderId must match pattern \"^(?!gcp-)[a-z0-9-]{4,32}$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and a project number longer than 20 digits",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "123456789012345678901",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.iam.gserviceaccount.com",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "skipUsersTable": true,
+      "cleanupObjectStorageFiles": false,
+      "allowUsersContextTraits": false,
+      "underscoreDivideNumbers": false
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityProjectNumber must match pattern \"^[0-9]{1,20}$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and a too-short pool id",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "abc",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.iam.gserviceaccount.com",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "skipUsersTable": true,
+      "cleanupObjectStorageFiles": false,
+      "allowUsersContextTraits": false,
+      "underscoreDivideNumbers": false
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityPoolId must match pattern \"^(?!gcp-)[a-z0-9-]{4,32}$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and a pool id longer than 32 characters",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.iam.gserviceaccount.com",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "skipUsersTable": true,
+      "cleanupObjectStorageFiles": false,
+      "allowUsersContextTraits": false,
+      "underscoreDivideNumbers": false
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityPoolId must match pattern \"^(?!gcp-)[a-z0-9-]{4,32}$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and an uppercase pool id",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "RudderStack-pool",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.iam.gserviceaccount.com",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "skipUsersTable": true,
+      "cleanupObjectStorageFiles": false,
+      "allowUsersContextTraits": false,
+      "underscoreDivideNumbers": false
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityPoolId must match pattern \"^(?!gcp-)[a-z0-9-]{4,32}$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and a pool id with an underscore",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "rudderstack_pool",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.iam.gserviceaccount.com",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "skipUsersTable": true,
+      "cleanupObjectStorageFiles": false,
+      "allowUsersContextTraits": false,
+      "underscoreDivideNumbers": false
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityPoolId must match pattern \"^(?!gcp-)[a-z0-9-]{4,32}$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and a provider id using the reserved gcp- prefix",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityProviderId": "gcp-aws",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.iam.gserviceaccount.com",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "skipUsersTable": true,
+      "cleanupObjectStorageFiles": false,
+      "allowUsersContextTraits": false,
+      "underscoreDivideNumbers": false
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityProviderId must match pattern \"^(?!gcp-)[a-z0-9-]{4,32}$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and a provider id longer than 32 characters",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityProviderId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.iam.gserviceaccount.com",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "skipUsersTable": true,
+      "cleanupObjectStorageFiles": false,
+      "allowUsersContextTraits": false,
+      "underscoreDivideNumbers": false
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityProviderId must match pattern \"^(?!gcp-)[a-z0-9-]{4,32}$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and a target service account outside iam.gserviceaccount.com",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "rudderstack@my-project.gserviceaccount.com",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "skipUsersTable": true,
+      "cleanupObjectStorageFiles": false,
+      "allowUsersContextTraits": false,
+      "underscoreDivideNumbers": false
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityTargetServiceAccount must match pattern \"^$|^[a-z][a-z0-9-]{4,28}[a-z0-9]@[a-z][a-z0-9-]{4,28}[a-z0-9]\\.iam\\.gserviceaccount\\.com$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and a target service account id shorter than 6 characters",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "rs@my-project.iam.gserviceaccount.com",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "skipUsersTable": true,
+      "cleanupObjectStorageFiles": false,
+      "allowUsersContextTraits": false,
+      "underscoreDivideNumbers": false
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityTargetServiceAccount must match pattern \"^$|^[a-z][a-z0-9-]{4,28}[a-z0-9]@[a-z][a-z0-9-]{4,28}[a-z0-9]\\.iam\\.gserviceaccount\\.com$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and a target service account id ending with a hyphen",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "rudderstack-@my-project.iam.gserviceaccount.com",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "skipUsersTable": true,
+      "cleanupObjectStorageFiles": false,
+      "allowUsersContextTraits": false,
+      "underscoreDivideNumbers": false
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityTargetServiceAccount must match pattern \"^$|^[a-z][a-z0-9-]{4,28}[a-z0-9]@[a-z][a-z0-9-]{4,28}[a-z0-9]\\.iam\\.gserviceaccount\\.com$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation and a target service account in a project id starting with a digit",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "rudderstack-pool",
+      "workloadIdentityProviderId": "rudderstack-aws",
+      "workloadIdentityTargetServiceAccount": "rudderstack@1my-project.iam.gserviceaccount.com",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "skipUsersTable": true,
+      "cleanupObjectStorageFiles": false,
+      "allowUsersContextTraits": false,
+      "underscoreDivideNumbers": false
+    },
+    "result": false,
+    "err": [
+      "workloadIdentityTargetServiceAccount must match pattern \"^$|^[a-z][a-z0-9-]{4,28}[a-z0-9]@[a-z][a-z0-9-]{4,28}[a-z0-9]\\.iam\\.gserviceaccount\\.com$\"",
+      " This value is not valid for the selected authentication method."
+    ]
+  },
+  {
+    "testTitle": "With workload identity federation, boundary-length pool and provider ids and a 30-character service account id",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "workloadIdentityFederation",
+      "workloadIdentityProjectNumber": "799415897419",
+      "workloadIdentityPoolId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "workloadIdentityProviderId": "abcd",
+      "workloadIdentityTargetServiceAccount": "abbbbbbbbbbbbbbbbbbbbbbbbbbbbc@my-project.iam.gserviceaccount.com",
+      "partitionColumn": "_PARTITIONTIME",
+      "partitionType": "day",
+      "skipTracksTable": false,
+      "skipViews": false,
+      "skipUsersTable": true,
+      "cleanupObjectStorageFiles": false,
+      "allowUsersContextTraits": false,
+      "underscoreDivideNumbers": false
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With the service account key method, workload identity fields are not validated",
+    "config": {
+      "project": "test-gcs-project",
+      "bucketName": "test-bucket",
+      "syncFrequency": "30",
+      "authMethod": "serviceAccountKey",
+      "credentials": "{}",
+      "workloadIdentityProjectNumber": "my-project",
+      "workloadIdentityPoolId": "gcp-pool",
+      "workloadIdentityProviderId": "aws",
+      "workloadIdentityTargetServiceAccount": "not-an-email"
+    },
+    "result": true
   }
 ]
