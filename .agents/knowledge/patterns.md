@@ -78,3 +78,8 @@
 - Google Ads V2 event mappings should live behind `uiConfig.redirectGroups`: `eventNameMappings` contains `eventMappingFromConfig`, `pageLoadConversionMapping` contains `pageLoadConversions` plus companion `defaultPageConversion` on the same screen, and `clickEventConversionMapping` contains `clickEventConversions`.
 - `scripts/schemaGenerator.py` does not traverse `redirectGroups`, so generated-schema refreshes for Google Ads must preserve existing schema properties for redirect-only mapping keys manually, typically by using the skip-deletions flow and then classifying the retained diff.
 - After moving Google Ads V1 prerequisite chains to V2 top-level optional properties, remove stale chain-specific conditional `allOf` branches for those fields instead of carrying dead V1 prerequisite schema forward.
+
+## ANA-134 — Destination Definition Guardrails
+
+- Destination-definition custom rules in `src/validator/index.ts` are the right layer for cross-key `db-config.json` constraints that the JSON Schema cannot express through `destConfig` pattern properties, such as forbidding event-filtering fields in non-`defaultConfig` source sections.
+- `test/validator/validator.test.ts` should cover these custom rules with minimal destination definitions passed to `validateDestinationDefinitions()`, including positive cases for absent optional structures and negative cases that assert the offending field names and `destConfig.<section>` path in the error.

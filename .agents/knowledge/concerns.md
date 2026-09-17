@@ -88,3 +88,9 @@
 
 - During the Google Ads Form Builder V2 migration, task context claimed `consentManagement.web.items.required: ["provider"]` was already present, but the checkout's schema-generator output reported that nested required entry as missing.
 - For changed Google Ads V2 UI/schema work, align the consent-management schema with the standard V2 `consentSettingsTemplate` and generator by retaining `items.required: ["provider"]`; removing it can leave a fatal changed-destination schema-generator warning.
+
+## INT-7147 — DCM Floodlight Advertiser Secret Metadata Mismatch
+
+<!-- session: 2026-09-15 -->
+
+- Human review clarified that DCM Floodlight `advertiserId` should not be treated as a secret despite the pre-migration UI flag. Keep `src/configurations/destinations/dcm_floodlight/ui-config.json` `secret: false`, and keep `src/configurations/destinations/dcm_floodlight/db-config.json` without `advertiserId` in `secretKeys` or `excludeKeys`.
