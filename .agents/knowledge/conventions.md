@@ -175,6 +175,13 @@
 
 - OpenAI Ads remains a gated beta destination: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` alongside the existing `options.hidden.gate` hide-when-false flag `AMP_enable-openai-ads-destination` so the webapp can show the Beta badge while feature gating the destination card.
 
+## INT-7147 — DCM Floodlight V2 Migration Contract
+
+- DCM Floodlight `advertiserId` is not treated as a secret in this V2 migration: keep `src/configurations/destinations/dcm_floodlight/ui-config.json` `secret: false`, and keep `src/configurations/destinations/dcm_floodlight/db-config.json` without `advertiserId` in `secretKeys` or `excludeKeys`.
+- Keep DCM Floodlight `advertiserId` exposed as public web device-mode metadata through the existing `includeKeys` path, and preserve the original numeric-only UI regex `^([0-9]{0,100})$` unless product explicitly changes that field contract.
+- Keep DCM Floodlight consent provider rows backward-compatible for this V2 migration: the `provider` row field remains non-required, `consentManagement.<source>.items` schemas should not gain `required: ["provider"]`, and the provider enum should continue allowing the empty string unless product explicitly approves validation tightening.
+- Place DCM Floodlight `Event mapping` immediately after `Initial setup` in `uiConfig.baseTemplate`, before `Configuration settings`; treat that ordering as layout-only and do not change `redirectGroups`, `schema.json`, or validation fixtures just because of the reorder.
+
 ## INT-7144 — Google Ads Offline Conversions V2 Migration Compatibility
 
 - For Google Ads Offline Conversions Form Builder V2 migrations, preserve existing `configKey` names and legacy regex/pattern compatibility for Customer ID, Login Customer ID, and mapping columns; these fields historically accepted `{{...}}`/`env.` dynamic-config values, so regex cleanup should be treated as a separate persisted-config compatibility change.

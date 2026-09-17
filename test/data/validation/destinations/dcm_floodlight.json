@@ -76,9 +76,7 @@
       ]
     },
     "result": false,
-    "err": [
-      "advertiserId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^([0-9]{0,100})$\""
-    ]
+    "err": ["advertiserId must match pattern \"^([0-9]{0,100})$\""]
   },
   {
     "config": {
@@ -315,6 +313,27 @@
       }
     },
     "result": true
+  },
+  {
+    "testTitle": "With consent management row missing provider",
+    "config": {
+      "advertiserId": "00000000",
+      "activityTag": "",
+      "groupTag": "",
+      "consentManagement": {
+        "web": [
+          {
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.web.0 must have required property 'provider'"]
   },
   {
     "testTitle": "With consent management custom provider config invalid provider value",

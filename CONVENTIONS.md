@@ -118,6 +118,57 @@ Write the smallest expression that describes the accepted value. Two habits to a
   `[`, `]`, `*`, `?`, `(`, `)`, or a leading-digit segment, so a `(?!…)` guarding against any of
   those adds nothing but review load.
 
+### Pair every `regex` with a `regexErrorMessage`
+
+A ui-config field that has a `regex` also needs a `regexErrorMessage`. The v2 form builder
+shows only that string when a value fails the regex. In rudder-webapp,
+`configurationV2/formComponents/textInput/index.tsx` passes
+`errorMessage={isError ? field.regexErrorMessage : undefined}`, so without it the field is
+marked invalid with no explanation.
+
+This applies to every **`textInput`** with a `regex`, wherever it sits: `baseTemplate`,
+`sdkTemplate`, `dynamicCustomForm` `rowFields` and `mapping` `columns`. It also covers a regex
+that is inherited or kept for compatibility.
+
+**Exception: don't add one to `tagInput`.** The v2 `TagInput` component
+(`formComponents/tagInput/index.tsx`) never runs the regex and never shows
+`regexErrorMessage`, whether the tagInput is a top-level field or a row field. The consent
+`consents` tagInput is one example. On a tagInput the regex only reaches the schema `pattern`,
+so config-backend enforces it when the config is saved. A message there would be config that
+never renders.
+
+The message appears below the field when the value fails the regex. It is written for the
+customer filling in the form, not for an engineer:
+
+- **Say what the user should do**, not what went wrong internally.
+- **Keep it under 8 words** when possible.
+- **Use plain words.** No technical terms, field paths, codes, regex syntax, or "invalid input".
+- **Don't repeat the value the user typed.**
+- **Don't blame the user or apologise.**
+- **Use sentence case, with no full stop at the end.**
+- **Describe only what the regex checks.** If it only limits length, the message is about
+  length. A message about format would mislead a user whose only mistake was typing too much.
+
+Good examples:
+
+```text
+Enter a valid email address
+Password must be at least 8 characters
+Age must be between 0 and 150
+Choose a date in the future
+This field is required
+```
+
+| Avoid                                                                    | Write                                         |
+| ------------------------------------------------------------------------ | --------------------------------------------- |
+| `Invalid Api Key`                                                        | `Enter a valid API key`                       |
+| `Value must match ^[0-9]{0,100}$`                                        | `Enter an advertiser ID using numbers only`   |
+| `Enter a simple dot path. Do not use JSONPath, brackets, wildcards, ...` | `Enter a path such as properties.orderId`     |
+| `Activity tag must be 100 characters or fewer.`                          | `Activity tag must be 100 characters or less` |
+
+Most of the tree uses `"Invalid <field>"`. Don't copy it.
+`schemaGenerator.py` ignores `regexErrorMessage`, so adding one never changes `schema.json`.
+
 ## Optional fields must accept the empty string
 
 A field marked `"required": false` in `ui-config.json` whose `regex` cannot match `""` is a
