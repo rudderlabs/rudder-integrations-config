@@ -57,7 +57,7 @@ Copy field shapes, the `schema.json` consent / `connectionMode` blocks, and `sdk
 - `scripts/template-db-config.json`, `scripts/template-ui-config.json` — the canonical starting templates. **Copy these as your base**; they already carry `version: "1.0"`, the standard structure, and the consent block.
 - `src/schemas/destinations/db-config-schema.json` — authoritative meta-schema for `db-config.json`. `config.additionalProperties` is `false`; an unknown key fails validation.
 
-- [`CONVENTIONS.md`](../../../CONVENTIONS.md) — naming and structural conventions that apply across the repo (`accountDefinitionName`, string `pattern`s, `deduplicationKey`, event mapping, mode-conditional validation). **Where an existing destination and CONVENTIONS.md disagree, CONVENTIONS.md is current** — most files predate it.
+- [`CONVENTIONS.md`](../../../CONVENTIONS.md) — naming and structural conventions that apply across the repo (`accountDefinitionName`, string `pattern`s, event-filtering fields, `deduplicationKey`, event mapping, mode-conditional validation). **Where an existing destination and CONVENTIONS.md disagree, CONVENTIONS.md is current** — most files predate it.
 
 The templates do **not** produce `schema.json` — author it by hand (step 3).
 
@@ -214,6 +214,7 @@ Prettier matches repo style (lint-staged runs it on commit). Jest runs the defin
 - [ ] Directory = lowercased display name; `name` = uppercased; `displayName` verbatim (brand casing confirmed); `version` = `"1.0"`.
 - [ ] `placeholderKey` present in `destConfig.defaultConfig`, ui-config `fields`, and schema `properties` (until real fields replace it).
 - [ ] Every connection field appears in: ui-config `fields`, schema `properties`, and `destConfig.defaultConfig`.
+- [ ] Event-filtering keys, if present, are in `destConfig.defaultConfig` and not in any `destConfig.<sourceType>` array.
 - [ ] Every secret field is in `secretKeys` **and** has `secret: true` in ui-config.
 - [ ] Mode wired consistently across `supportedConnectionModes`, `supportedMessageTypes`, `includeKeys`, `sdkTemplate` (cloud-only: `includeKeys`/`excludeKeys` deleted).
 - [ ] Every string field has an explicit `regex`; no `regex`/`pattern` carries the deprecated prefix or a redundant lookahead.
