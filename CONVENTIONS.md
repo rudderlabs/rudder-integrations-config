@@ -10,6 +10,7 @@ This document captures naming and structural conventions used across this reposi
 - [**Where account credential fields live**](#where-account-credential-fields-live)
 - [**Deduplication / event-id config key (`deduplicationKey`)**](#deduplication--event-id-config-key-deduplicationkey)
 - [**Event name mapping**](#event-name-mapping)
+- [**Client-side event filtering keys**](#client-side-event-filtering-keys)
 - [**Restricting a field by connection mode**](#restricting-a-field-by-connection-mode)
 
 ## AccountDefinition naming (`accountDefinitionName`)
@@ -362,6 +363,26 @@ The check is silent about the drift: `npm run check:schema:destination <dir>` em
 _warning_, and `scripts/run-schema-validation.sh` — what CI greps — exits 0 either way.
 `update:schema:destination` (`--skip-deletions`) preserves the hand-written block;
 **`update:schema:destination:force` deletes it.**
+
+## Client-side event filtering keys
+
+`eventFilteringOption`, `whitelistedEvents`, and `blacklistedEvents` go in
+`config.destConfig.defaultConfig` — never in a source-type array such as `destConfig.web` or
+`destConfig.android`, even when the filtering only takes effect in a web device-mode SDK.
+
+`transformFromBEtoFE` copies `defaultConfig` keys under their flat name; a key listed under
+`web` arrives as `web-eventFilteringOption` instead, so a saved filter does not populate the
+field when the customer reopens the destination. The ui-config uses the flat `configKey` in
+`baseTemplate` either way, which is what makes the mismatch silent.
+
+Scope the field's _visibility_, not its storage: gate the group on
+`connectionMode.<sourceType>` (see [Restricting a field by connection
+mode](#restricting-a-field-by-connection-mode)).
+
+### Enforcement
+
+`src/validator/index.ts` rejects any destination definition listing one of the three keys
+outside `defaultConfig`, naming the keys and the `destConfig.<section>` path.
 
 ## Restricting a field by connection mode
 

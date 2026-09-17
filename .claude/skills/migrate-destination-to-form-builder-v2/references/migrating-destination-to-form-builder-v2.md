@@ -283,13 +283,12 @@ uniform across all 26, but the gate is not — there are four idioms in the wild
 clause is `"condition": "or"`, so it fails open via the mobile arms rather than
 hiding wrongly, but it is dead config.
 
-Two destinations, `iterable` and `openai_ads`, declare the three keys under
-`destConfig.web` rather than `defaultConfig` while their ui-config uses flat
-`configKey`s in `baseTemplate`. `transformFromBEtoFE` only copies `defaultConfig`
-keys under their flat name — `web` keys arrive as `web-eventFilteringOption` — so
-a saved value would not populate the field on edit. The
-two files disagree with each other and with the other 24; confirm the intended
-shape with the webapp team before copying either.
+The three keys go in `destConfig.defaultConfig`, never under `destConfig.web`.
+`transformFromBEtoFE` only copies `defaultConfig` keys under their flat name —
+`web` keys arrive as `web-eventFilteringOption` — so a source-scoped key leaves
+the field empty on edit while the ui-config still uses the flat `configKey` in
+`baseTemplate`. `src/validator/index.ts` now rejects the source-scoped placement;
+`iterable` and `openai_ads` carried it and have been corrected.
 
 ---
 

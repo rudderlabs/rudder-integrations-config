@@ -89,6 +89,61 @@ const destinationDefinitionRules: ValidationRule[] = [
       return { isValid: true };
     },
   },
+  {
+    description: 'Event filtering fields must be defined only in destConfig.defaultConfig',
+    validate: (destDefConfig) => {
+      const { config } = destDefConfig;
+
+      if (!config || typeof config !== 'object' || Array.isArray(config)) {
+        return { isValid: true };
+      }
+
+      const { destConfig } = config as Record<string, unknown>;
+
+      if (!destConfig || typeof destConfig !== 'object' || Array.isArray(destConfig)) {
+        return { isValid: true };
+      }
+
+      const eventFilteringFields = [
+        'eventFilteringOption',
+        'whitelistedEvents',
+        'blacklistedEvents',
+      ];
+
+      const violations = Object.entries(destConfig as Record<string, unknown>).flatMap(
+        ([section, sectionConfig]) => {
+          if (section === 'defaultConfig' || !Array.isArray(sectionConfig)) {
+            return [];
+          }
+
+          const fieldsInSourceConfig = eventFilteringFields.filter((field) =>
+            sectionConfig.includes(field),
+          );
+
+          if (fieldsInSourceConfig.length === 0) {
+            return [];
+          }
+
+          return [
+            `Found ${fieldsInSourceConfig
+              .map((field) => `'${field}'`)
+              .join(', ')} in destConfig.${section}`,
+          ];
+        },
+      );
+
+      if (violations.length > 0) {
+        return {
+          isValid: false,
+          errorMessage: `Event filtering fields must be in destConfig.defaultConfig, not in source-type sections. ${violations.join(
+            '; ',
+          )}`,
+        };
+      }
+
+      return { isValid: true };
+    },
+  },
   // TODO: Uncomment once we have cleaned up all the destination definitions
   // {
   //   description: 'includeKeys must not be defined when the destination only supports cloud mode',
