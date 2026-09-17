@@ -90,6 +90,7 @@ Copy the template, then:
 - `supportedSourceTypes` ← Form 1.
 - `destConfig.defaultConfig` = `["placeholderKey"]` — a neutral placeholder field (also added to ui-config and schema, below) so the scaffold validates (`defaultConfig` can't be empty per the meta-schema). Replace it with the real config keys as fields are added.
 - For **each** source type in `supportedSourceTypes`, add a `destConfig.<sourceType>` array containing at least `["connectionMode", "consentManagement"]`.
+- Client-side event filtering keys (`eventFilteringOption`, `whitelistedEvents`, `blacklistedEvents`) belong in `destConfig.defaultConfig`, never in a source-type array — see [client-side event filtering keys](../../../CONVENTIONS.md#client-side-event-filtering-keys); the validator rejects the source-scoped placement.
 - `secretKeys` — secret config keys (mirrors `secret: true` in ui-config); the scaffold leaves this `[]`.
 - Never define `oneTrustCookieCategories` / `ketchConsentPurposes` anywhere (db-config, schema, ui-config) — they are deprecated and only carried by pre-existing destinations.
 
