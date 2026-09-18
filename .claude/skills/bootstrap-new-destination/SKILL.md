@@ -85,10 +85,18 @@ Before creating any files:
 Copy the template, then:
 
 - Set `name` = `<DEFINITION_NAME>`, `displayName` = `<Display Name>`. Keep `version` = `"1.0"`.
-- `transformAtV1` stays `router` (template default). Every destination added since 2025 is `router`, and a
-  new cloud destination's transform lives in `routerTransform.ts` on the transformer's batching framework,
-  which only runs on the router path. `processor` is a legacy setting — 136 destinations carry it, none of
-  them new. Don't pick it for a net-new destination.
+- `transformAtV1` depends on category (Form 2). The template default is `router`, which is right for
+  everything except warehouse:
+  - **Non-warehouse** (cloud / device / hybrid) — keep `router`. Every destination added since 2025 is
+    `router`, and a new cloud destination's transform lives in `routerTransform.ts` on the transformer's
+    batching framework, which only runs on the router path. `processor` is a legacy setting — 121
+    non-warehouse destinations carry it, none of them new. Don't pick it for a net-new destination.
+  - **Warehouse** — change it to `processor`. All 11 `category: "warehouse"` destinations are `processor`
+    with no exceptions, and it isn't a style choice: a warehouse destination's transformer entry point
+    (`src/v0/destinations/<dir>/transform.js` in rudder-transformer) exports only `process()` and delegates
+    to `processWarehouseMessage` — there is no `routerTransform` for the router path to call. Copying
+    `postgres`/`bq` per the warehouse step below gives you this; just don't carry the template's `router`
+    over it.
 - `saveDestinationResponse` stays `true` (template default) — 222 of 247 destinations are `true`. It controls
   one thing: rudder-server blanks the destination's response body on **successful** deliveries when it is
   `false` (`router/worker.go`, `prepareRouterJobResponses`); failure bodies are always kept either way. So
@@ -97,7 +105,7 @@ Copy the template, then:
   tracking pixel (`ga`, `gtm`, `firebase`, `pinterest_tag` are all `false` for this reason; the flag was
   introduced in 2021 precisely because GA's GIF response broke the DB write), or an arbitrary customer
   endpoint (`webhook`).
-- If category (Form 2) = `warehouse`: add top-level `"category": "warehouse"` (sibling of `name`), and copy `postgres`/`bq` wholesale.
+- If category (Form 2) = `warehouse`: add top-level `"category": "warehouse"` (sibling of `name`), set `transformAtV1` to `processor` (above), and copy `postgres`/`bq` wholesale.
 - `supportedSourceTypes` ← Form 1.
 - `destConfig.defaultConfig` = `["placeholderKey"]` — a neutral placeholder field (also added to ui-config and schema, below) so the scaffold validates (`defaultConfig` can't be empty per the meta-schema). Replace it with the real config keys as fields are added.
 - For **each** source type in `supportedSourceTypes`, add a `destConfig.<sourceType>` array containing at least `["connectionMode", "consentManagement"]`.
@@ -223,7 +231,7 @@ Prettier matches repo style (lint-staged runs it on commit). Jest runs the defin
 ## Checklist before done
 
 - [ ] Directory = lowercased display name; `name` = uppercased; `displayName` verbatim (brand casing confirmed); `version` = `"1.0"`.
-- [ ] `transformAtV1` is `router`; `saveDestinationResponse` is `true` (both template defaults) — `false`/`processor` only with a stated reason.
+- [ ] `transformAtV1` matches the category — `router` for non-warehouse (template default), `processor` for `category: "warehouse"`; `saveDestinationResponse` is `true` (template default). Departing from either needs a stated reason.
 - [ ] `placeholderKey` present in `destConfig.defaultConfig`, ui-config `fields`, and schema `properties` (until real fields replace it).
 - [ ] Every connection field appears in: ui-config `fields`, schema `properties`, and `destConfig.defaultConfig`.
 - [ ] Event-filtering keys, if present, are in `destConfig.defaultConfig` and not in any `destConfig.<sourceType>` array.
