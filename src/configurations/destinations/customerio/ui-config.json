@@ -13,22 +13,257 @@
                 "icon": "settings",
                 "fields": [
                   {
+                    "type": "singleSelect",
+                    "label": "Web SDK Version",
+                    "configKey": "sdkVersion",
+                    "note": [
+                      "Selects the Customer.io JavaScript client for web device mode. 1.x loads the legacy snippet and uses your Site ID. 2.x loads the Customer.io Data Pipelines JavaScript client, uses a Data Pipelines write key, and supports in-app messages for anonymous users. Switching an existing destination to 2.x changes where your web events land. For more information, visit the ",
+                      {
+                        "text": "documentation",
+                        "link": "https://www.rudderstack.com/docs/destinations/streaming-destinations/customer.io/"
+                      }
+                    ],
+                    "options": [
+                      {
+                        "label": "1.x",
+                        "value": "v1"
+                      },
+                      {
+                        "label": "2.x",
+                        "value": "v2"
+                      }
+                    ],
+                    "default": "v1",
+                    "conditions": {
+                      "expression": {
+                        "operator": "AND",
+                        "operands": [
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.web",
+                            "value": "device"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
                     "type": "textInput",
                     "label": "API Key",
                     "configKey": "apiKey",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
                     "regexErrorMessage": "Invalid Api Key",
                     "placeholder": "e.g: ABCDEFG",
-                    "note": "Enter your Customer.io API Key"
+                    "note": "Enter your Customer.io Tracking API Key. Required for cloud mode, mobile device mode, and web device mode with SDK version 1.x.",
+                    "conditions": {
+                      "expression": {
+                        "operator": "OR",
+                        "operands": [
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.web",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.android",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.androidKotlin",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.ios",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.iosSwift",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.unity",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.amp",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.cloud",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.warehouse",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.reactnative",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.flutter",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.cordova",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.shopify",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.android",
+                            "value": "device"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.ios",
+                            "value": "device"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "sdkVersion",
+                            "value": "v1"
+                          }
+                        ]
+                      }
+                    }
                   },
                   {
                     "type": "textInput",
                     "label": "Site ID",
                     "configKey": "siteID",
-                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
                     "regexErrorMessage": "Invalid Site ID",
                     "placeholder": "e.g: ABCDEFG",
-                    "note": "Enter your Customer.io Site ID"
+                    "note": "Enter your Customer.io Site ID. Required for cloud mode, mobile device mode, and web device mode with SDK version 1.x.",
+                    "conditions": {
+                      "expression": {
+                        "operator": "OR",
+                        "operands": [
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.web",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.android",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.androidKotlin",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.ios",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.iosSwift",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.unity",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.amp",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.cloud",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.warehouse",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.reactnative",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.flutter",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.cordova",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.shopify",
+                            "value": "cloud"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.android",
+                            "value": "device"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.ios",
+                            "value": "device"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "sdkVersion",
+                            "value": "v1"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Data Pipelines Write Key",
+                    "configKey": "writeKey",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Write Key",
+                    "placeholder": "e.g: ABCDEFG",
+                    "note": "Enter the write key of your Customer.io Data Pipelines JavaScript source (Data Pipelines > Connections > Sources). Required for web device mode with SDK version 2.x; web events are sent to this source instead of the Journeys Track API.",
+                    "conditions": {
+                      "expression": {
+                        "operator": "AND",
+                        "operands": [
+                          {
+                            "type": "configuration",
+                            "key": "connectionMode.web",
+                            "value": "device"
+                          },
+                          {
+                            "type": "configuration",
+                            "key": "sdkVersion",
+                            "value": "v2"
+                          }
+                        ]
+                      }
+                    }
                   },
                   {
                     "type": "singleSelect",
@@ -268,9 +503,50 @@
         {
           "type": "checkbox",
           "label": "Enable in-app message support",
-          "note": "Turn it ON if you want to send in-app messages to your website.",
+          "note": "Applies to SDK version 1.x. Turn it ON if you want to send in-app messages to your website.",
           "configKey": "dataUseInApp",
-          "default": false
+          "default": false,
+          "conditions": {
+            "expression": {
+              "operator": "AND",
+              "operands": [
+                {
+                  "type": "configuration",
+                  "key": "connectionMode.web",
+                  "value": "device"
+                },
+                {
+                  "type": "configuration",
+                  "key": "sdkVersion",
+                  "value": "v1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "checkbox",
+          "label": "Enable in-app messages for anonymous users",
+          "note": "Applies to SDK version 2.x. Turn it ON to show in-app messages to website visitors you have not identified yet. Requires in-app messaging to be enabled in your Customer.io workspace and a Customer.io plan that supports anonymous in-app messages. In-app messages for identified users need no setting on 2.x.",
+          "configKey": "anonymousInApp",
+          "default": false,
+          "conditions": {
+            "expression": {
+              "operator": "AND",
+              "operands": [
+                {
+                  "type": "configuration",
+                  "key": "connectionMode.web",
+                  "value": "device"
+                },
+                {
+                  "type": "configuration",
+                  "key": "sdkVersion",
+                  "value": "v2"
+                }
+              ]
+            }
+          }
         },
         {
           "type": "checkbox",
