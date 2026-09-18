@@ -495,8 +495,8 @@ source type is read as `<field>.<sourceType>`, so an already-stored flat scalar 
 no default. Changing it needs a data migration plus a regenerated `schema.json`. Decide at
 creation time.
 
-For device mode, a field must additionally be in `config.includeKeys` to reach the browser
-SDK; `destConfig` alone gets it only as far as config-backend (see
+For device mode, a field must additionally be in `config.includeKeys` to reach the client-side
+SDKs; `destConfig` alone gets it only as far as config-backend (see
 [Account fields in device mode](#account-fields-in-device-mode)).
 
 ## Restricting a field by connection mode
