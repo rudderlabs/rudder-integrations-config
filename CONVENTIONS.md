@@ -11,6 +11,7 @@ This document captures naming and structural conventions used across this reposi
 - [**Deduplication / event-id config key (`deduplicationKey`)**](#deduplication--event-id-config-key-deduplicationkey)
 - [**Event name mapping**](#event-name-mapping)
 - [**Client-side event filtering keys**](#client-side-event-filtering-keys)
+- [**Where a field goes in `destConfig` (`defaultConfig` vs a source type)**](#where-a-field-goes-in-destconfig-defaultconfig-vs-a-source-type)
 - [**Restricting a field by connection mode**](#restricting-a-field-by-connection-mode)
 
 ## AccountDefinition naming (`accountDefinitionName`)
@@ -434,6 +435,69 @@ mode](#restricting-a-field-by-connection-mode)).
 
 `src/validator/index.ts` rejects any destination definition listing one of the three keys
 outside `defaultConfig`, naming the keys and the `destConfig.<section>` path.
+
+## Where a field goes in `destConfig` (`defaultConfig` vs a source type)
+
+`config.destConfig` has one `defaultConfig` array plus one array per entry in
+`supportedSourceTypes`. Which one a field is listed under decides **the shape its value is
+stored in, and whether the customer sets one value for the destination or one per connected
+source type**.
+
+| Placement       | Stored as                                                                         | Rendered                       |
+| --------------- | --------------------------------------------------------------------------------- | ------------------------------ |
+| `defaultConfig` | flat scalar — `"apiVersion": "v2"`                                                | once, globally                 |
+| A source type   | object keyed by source type — `"useNativeSDK": { "web": true, "android": false }` | once per connected source type |
+
+**The rule:** list a field under source types when **its value is scoped to a source type** —
+either because a customer needs different values per platform (`connectionMode`,
+`useNativeSDK`, `autoTrackDeviceAttributes`), or because the setting only exists on one
+(`sendPageNameInSDK` on web, `backgroundQueueSecondsDelay` on android). Everything the
+customer sets once for the destination as a whole — credentials, endpoints, API versions,
+event filtering — belongs in `defaultConfig`, even if a `ui-config.json` condition means it is
+only shown for some sources. Consent fields (`consentManagement`, `oneTrustCookieCategories`,
+`ketchConsentPurposes`) go under every source type by convention, enforced by
+[`test/consentManagementFieldsIntegrity.test.ts`](test/consentManagementFieldsIntegrity.test.ts).
+
+Only list the source types that actually support the field: `autoTrackDeviceAttributes` goes
+under android and ios, not web.
+
+### `cloud` the source type is not `cloud` the connection mode
+
+The word appears on both axes, in the same file:
+
+```jsonc
+"supportedSourceTypes": ["web", "android", "cloud", ...],   // cloud = server-side SDK / HTTP API source
+"supportedConnectionModes": { "web": ["cloud", "device"] }  // cloud = connection mode
+```
+
+**`destConfig` keys on the source type axis only — it has no notion of connection mode.** A
+JavaScript source reads `destConfig.web` whether it is connected in cloud or device mode; it
+never reads `destConfig.cloud`. So `destConfig.cloud` means "server-side SDK sources", and
+putting a field there restricts it to Node/Python/Go/HTTP sources — not to cloud-mode
+connections.
+
+A field that should only apply in cloud mode therefore never moves to `destConfig.cloud`. Gate
+it in `ui-config.json` (`conditions` or `preRequisites` on `connectionMode.<sourceType>`), and
+enforce it in `schema.json` — see
+[Restricting a field by connection mode](#restricting-a-field-by-connection-mode).
+
+### Both files must agree, and moving a field later is breaking
+
+A field is rendered in the dashboard form only if it appears in `destConfig` — under
+`defaultConfig` or the connected source type. **A field defined in `ui-config.json` but
+missing from `destConfig` silently does not render**, whatever its conditions say. The
+`ui-config.json` conditions then decide whether that rendered instance is visible.
+
+Because placement fixes the storage shape, **moving a field between `defaultConfig` and a
+source type is a breaking change** for every existing destination: a field listed under a
+source type is read as `<field>.<sourceType>`, so an already-stored flat scalar resolves to
+`undefined` and the field is dropped from the workspace config — silently, with no error and
+no default. Changing it needs a data migration plus a regenerated `schema.json`. Decide at
+creation time.
+
+For device mode, a field must additionally be in `config.includeKeys` to reach the browser
+SDK; `destConfig` alone gets it only as far as config-backend (see
+[Account fields in device mode](#account-fields-in-device-mode)).
 
 ## Restricting a field by connection mode
 
