@@ -85,7 +85,18 @@ Before creating any files:
 Copy the template, then:
 
 - Set `name` = `<DEFINITION_NAME>`, `displayName` = `<Display Name>`. Keep `version` = `"1.0"`.
-- `transformAtV1` stays `processor` (template default); use `router` for destinations that make intermediate API calls during transformation.
+- `transformAtV1` stays `router` (template default). Every destination added since 2025 is `router`, and a
+  new cloud destination's transform lives in `routerTransform.ts` on the transformer's batching framework,
+  which only runs on the router path. `processor` is a legacy setting — 136 destinations carry it, none of
+  them new. Don't pick it for a net-new destination.
+- `saveDestinationResponse` stays `true` (template default) — 222 of 247 destinations are `true`. It controls
+  one thing: rudder-server blanks the destination's response body on **successful** deliveries when it is
+  `false` (`router/worker.go`, `prepareRouterJobResponses`); failure bodies are always kept either way. So
+  `true` costs a stored body per delivered event and buys being able to debug a "we got a 200 but the data
+  never landed" report. Set it to `false` only when the success response is worthless or unbounded — a
+  tracking pixel (`ga`, `gtm`, `firebase`, `pinterest_tag` are all `false` for this reason; the flag was
+  introduced in 2021 precisely because GA's GIF response broke the DB write), or an arbitrary customer
+  endpoint (`webhook`).
 - If category (Form 2) = `warehouse`: add top-level `"category": "warehouse"` (sibling of `name`), and copy `postgres`/`bq` wholesale.
 - `supportedSourceTypes` ← Form 1.
 - `destConfig.defaultConfig` = `["placeholderKey"]` — a neutral placeholder field (also added to ui-config and schema, below) so the scaffold validates (`defaultConfig` can't be empty per the meta-schema). Replace it with the real config keys as fields are added.
@@ -111,8 +122,8 @@ Strictly-cloud skeleton (all source types in cloud mode):
   "displayName": "Acme CRM",
   "version": "1.0",
   "config": {
-    "transformAtV1": "processor",
-    "saveDestinationResponse": false,
+    "transformAtV1": "router",
+    "saveDestinationResponse": true,
     "supportedSourceTypes": ["android", "ios", "web", "cloud", "warehouse", "..."],
     "supportedMessageTypes": { "cloud": ["identify", "track", "page", "screen", "group", "alias"] },
     "supportedConnectionModes": {
@@ -212,6 +223,7 @@ Prettier matches repo style (lint-staged runs it on commit). Jest runs the defin
 ## Checklist before done
 
 - [ ] Directory = lowercased display name; `name` = uppercased; `displayName` verbatim (brand casing confirmed); `version` = `"1.0"`.
+- [ ] `transformAtV1` is `router`; `saveDestinationResponse` is `true` (both template defaults) — `false`/`processor` only with a stated reason.
 - [ ] `placeholderKey` present in `destConfig.defaultConfig`, ui-config `fields`, and schema `properties` (until real fields replace it).
 - [ ] Every connection field appears in: ui-config `fields`, schema `properties`, and `destConfig.defaultConfig`.
 - [ ] Event-filtering keys, if present, are in `destConfig.defaultConfig` and not in any `destConfig.<sourceType>` array.
