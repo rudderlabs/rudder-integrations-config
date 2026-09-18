@@ -66,8 +66,7 @@
             },
             {
               "name": "Workload Identity Federation",
-              "value": "workloadIdentityFederation",
-              "featureFlag": "AMP_bigquery-workload-identity-federation"
+              "value": "workloadIdentityFederation"
             }
           ],
           "defaultOption": {
@@ -75,16 +74,11 @@
             "value": "serviceAccountKey"
           },
           "required": false,
-          "footerNote": "Workload Identity Federation authenticates through a pool in your GCP project that trusts RudderStack's AWS account, and optionally impersonates your service account, so no key is stored"
+          "footerNote": "Workload Identity Federation authenticates through a pool in your GCP project that trusts RudderStack's AWS account, and optionally impersonates your service account, so no key is stored",
+          "preRequisiteFeatureFlag": "AMP_bigquery-workload-identity-federation"
         },
         {
           "type": "textareaInput",
-          "preRequisiteField": [
-            {
-              "name": "authMethod",
-              "selectedValue": "serviceAccountKey"
-            }
-          ],
           "subType": "JSON",
           "label": "Credentials",
           "labelNote": "GCP Service Account credentials JSON for RudderStack to use in loading data into your BigQuery database",
@@ -92,7 +86,21 @@
           "regex": ".*",
           "required": true,
           "footerNote": "Create a service account in your GCP Project for RudderStack with roles of 'BigQuery User'",
-          "secret": true
+          "secret": true,
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "authMethod",
+                "value": "serviceAccountKey"
+              }
+            ],
+            "featureFlags": [
+              {
+                "configKey": "AMP_bigquery-workload-identity-federation"
+              }
+            ],
+            "prerequisitesCondition": "or"
+          }
         },
         {
           "type": "textInput",
