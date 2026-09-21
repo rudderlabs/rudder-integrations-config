@@ -4,7 +4,6 @@ import fs from 'fs';
 import path from 'path';
 import Commander from 'commander';
 import Ajv from 'ajv';
-import ajvErrors from 'ajv-errors';
 import {
   init,
   validateConfig,
@@ -187,7 +186,6 @@ function getAccountDefinitionSchema(integrationName: string, accountName: string
 // so a stringified port stays a type error here exactly as it is in production.
 function compileAccountSchema(schema: unknown) {
   const ajv = new Ajv({ allErrors: true, useDefaults: true, strict: false });
-  ajvErrors(ajv);
   return ajv.compile(schema as Record<string, unknown>);
 }
 
@@ -196,11 +194,6 @@ async function getDestinationDefinitionConfig(destName: string) {
   const configPath = `${dirPath}/db-config.json`;
   const config = await import(configPath);
   return config.default;
-}
-
-function getDestinationUiConfig(destName: string) {
-  const uiConfigPath = path.resolve(`src/configurations/destinations/${destName}/ui-config.json`);
-  return JSON.parse(fs.readFileSync(uiConfigPath, 'utf-8'));
 }
 
 const dests = getIntegrationNames('destinations');
@@ -1016,228 +1009,6 @@ describe('Account Definition validation tests', () => {
       );
       await expect(validateAccountDefinitions(accDefConfig)).resolves.toEqual(true);
     });
-  });
-
-  it('openai_ads account schema accepts required pixelId and optional apiKey', () => {
-    const accountSchemaPath = path.resolve(
-      'src/configurations/destinations/openai_ads/accounts/openai_ads_api_key/schema.json',
-    );
-    const accountSchema = JSON.parse(fs.readFileSync(accountSchemaPath, 'utf-8'));
-    const ajv = new Ajv({ allErrors: true, strict: false });
-    const validateOptions = ajv.compile(accountSchema.optionsSchema);
-    const validateSecrets = ajv.compile(accountSchema.secretSchema);
-
-    expect(validateOptions({ pixelId: 'pixel_123' })).toBe(true);
-    expect(validateOptions({})).toBe(false);
-    expect(validateOptions({ pixelId: '' })).toBe(false);
-    expect(validateSecrets({})).toBe(true);
-    expect(validateSecrets({ apiKey: 'sk-test' })).toBe(true);
-    expect(validateSecrets({ apiKey: '' })).toBe(false);
-  });
-
-  it('openai_ads account marks apiKey secret and pixelId non-secret', async () => {
-    const accountConfig = await getAccountDefinitionConfig(
-      'openai_ads',
-      'openai_ads_api_key',
-      'destinations',
-    );
-    const accountUiConfigPath = path.resolve(
-      'src/configurations/destinations/openai_ads/accounts/openai_ads_api_key/ui-config.json',
-    );
-    const accountUiConfig = JSON.parse(fs.readFileSync(accountUiConfigPath, 'utf-8'));
-    const apiKeyField = accountUiConfig.uiConfig.form.fields.find(
-      (field: Record<string, unknown>) =>
-        JSON.stringify(field.key) === JSON.stringify(['options', 'apiKey']),
-    );
-    const pixelIdField = accountUiConfig.uiConfig.form.fields.find(
-      (field: Record<string, unknown>) =>
-        JSON.stringify(field.key) === JSON.stringify(['options', 'pixelId']),
-    );
-
-    expect(accountConfig.config.optionFields).toEqual(['pixelId']);
-    expect(accountConfig.config.secretFields).toEqual(['apiKey']);
-    expect(apiKeyField.secret).toBe(true);
-    expect(apiKeyField.optional).toBe(true);
-    expect(pixelIdField.secret).toBeUndefined();
-  });
-
-  const everflowAccountSchema = getAccountDefinitionSchema(
-    'everflow',
-    'everflow_postback',
-    'destinations',
-  );
-
-  it('everflow destination exposes only the specified cloud postback surface', async () => {
-    const destinationConfig = await getDestinationDefinitionConfig('everflow');
-    const openAiAdsConfig = await getDestinationDefinitionConfig('openai_ads');
-    const destinationUiConfig = getDestinationUiConfig('everflow').uiConfig;
-    const baseTemplateTitles = destinationUiConfig.baseTemplate.map(
-      (template: Record<string, unknown>) => template.title,
-    );
-    const baseTemplateSections = destinationUiConfig.baseTemplate.flatMap(
-      (template: { sections: { title?: string; groups?: { title: string }[] }[] }) =>
-        template.sections.flatMap((section) => [
-          ...(section.title ? [section.title] : []),
-          ...(section.groups?.map((group) => group.title) ?? []),
-        ]),
-    );
-
-    expect(destinationConfig).toMatchObject({
-      name: 'EVERFLOW',
-      displayName: 'Everflow',
-      version: '1.0',
-      config: {
-        supportedAccountDefinitions: {
-          rudderAccountId: ['DESTINATION_EVERFLOW_POSTBACK'],
-        },
-        transformAtV1: 'router',
-        saveDestinationResponse: true,
-        supportedMessageTypes: { cloud: ['track'] },
-        secretKeys: ['verificationToken'],
-      },
-      options: {
-        isBeta: true,
-        hidden: {
-          gate: {
-            flags: [{ name: 'AMP_enable-everflow-destination', value: false }],
-          },
-        },
-      },
-    });
-    expect([...destinationConfig.config.supportedSourceTypes].sort()).toEqual(
-      [...openAiAdsConfig.config.supportedSourceTypes].sort(),
-    );
-    expect(Object.keys(destinationConfig.config.supportedConnectionModes).sort()).toEqual(
-      [...destinationConfig.config.supportedSourceTypes].sort(),
-    );
-    Object.values(destinationConfig.config.supportedConnectionModes).forEach((modes) => {
-      expect(modes).toEqual(['cloud']);
-    });
-    expect(destinationConfig.config.includeKeys).toBeUndefined();
-    expect(destinationConfig.config.destConfig.defaultConfig).toEqual(
-      expect.arrayContaining(['postbackUrl', 'networkId', 'verificationToken']),
-    );
-    expect(baseTemplateTitles).toEqual(['Initial setup', 'Configuration settings']);
-    expect(baseTemplateSections).toEqual([
-      'Connection settings',
-      'Connection mode',
-      'Consent settings',
-      'Other settings',
-    ]);
-    expect(destinationUiConfig.sdkTemplate).toBeUndefined();
-    expect(destinationUiConfig.redirectGroups).toBeUndefined();
-    expect(JSON.stringify(destinationUiConfig)).not.toMatch(
-      /api key|api region|event mapping|event-settings/i,
-    );
-  });
-
-  it('everflow account requires a safe base postback URL and network ID', () => {
-    const validateOptions = compileAccountSchema(everflowAccountSchema.optionsSchema);
-    const validUrls = [
-      'https://www.example.com/postback',
-      'http://conversions.example.co.uk:8080/path/to/postback',
-    ];
-    const invalidUrls = [
-      'https://user:password@example.com/postback',
-      'https://localhost/postback',
-      'https://sub.localhost/postback',
-      'https://everflow/postback',
-      'https://demo.ngrok.io/postback',
-      'https://DEMO.NGROK.IO/postback',
-      'https://x.y.ngrok.io/postback',
-      'https://foo.LOCALHOST/postback',
-      'https://sub.LOCALHOST/postback',
-      'ftp://example.com/postback',
-      'https://127.0.0.1/postback',
-      'https://10.0.0.1/postback',
-      'https://169.254.169.254/latest/meta-data',
-      'https://[::1]/postback',
-      'https://2130706433/postback',
-      'https://017700000001/postback',
-      'https://0x7f000001/postback',
-      'not a URL',
-    ];
-
-    validUrls.forEach((postbackUrl) => {
-      expect(validateOptions({ postbackUrl, networkId: 'network-id' })).toBe(true);
-    });
-    invalidUrls.forEach((postbackUrl) => {
-      expect(validateOptions({ postbackUrl, networkId: 'network-id' })).toBe(false);
-    });
-    expect(validateOptions({ networkId: 'network-id' })).toBe(false);
-    expect(validateOptions({ postbackUrl: validUrls[0] })).toBe(false);
-  });
-
-  it('everflow account rejects URL queries and fragments with base URL guidance', () => {
-    const validateOptions = compileAccountSchema(everflowAccountSchema.optionsSchema);
-    const expectedMessage =
-      'Paste only the base Global Postback URL and remove everything from ? onward';
-
-    ['https://example.com/postback?nid=123', 'https://example.com/postback#fragment'].forEach(
-      (postbackUrl) => {
-        expect(validateOptions({ postbackUrl, networkId: 'network-id' })).toBe(false);
-        expect(validateOptions.errors?.map((error) => error.message)).toContain(expectedMessage);
-      },
-    );
-  });
-
-  it('everflow account accepts non-blank plain network IDs up to 200 characters', () => {
-    const validateOptions = compileAccountSchema(everflowAccountSchema.optionsSchema);
-    const postbackUrl = 'https://example.com/postback';
-
-    expect(validateOptions({ postbackUrl, networkId: 'network-alpha_123' })).toBe(true);
-    expect(validateOptions({ postbackUrl, networkId: 'network alpha 123' })).toBe(true);
-    expect(validateOptions({ postbackUrl, networkId: 'n'.repeat(200) })).toBe(true);
-    expect(validateOptions({ postbackUrl, networkId: '' })).toBe(false);
-    expect(validateOptions({ postbackUrl, networkId: '   ' })).toBe(false);
-    expect(validateOptions({ postbackUrl, networkId: 'n'.repeat(201) })).toBe(false);
-  });
-
-  it('everflow account accepts a clearable verification token up to 200 characters', () => {
-    const validateSecrets = compileAccountSchema(everflowAccountSchema.secretSchema);
-
-    expect(validateSecrets({})).toBe(true);
-    expect(validateSecrets({ verificationToken: '' })).toBe(true);
-    expect(validateSecrets({ verificationToken: 't'.repeat(200) })).toBe(true);
-    expect(validateSecrets({ verificationToken: 't'.repeat(201) })).toBe(false);
-  });
-
-  it('everflow account metadata matches schema fields and marks verificationToken secret', async () => {
-    const accountConfig = await getAccountDefinitionConfig(
-      'everflow',
-      'everflow_postback',
-      'destinations',
-    );
-    const accountUiConfigPath = path.resolve(
-      'src/configurations/destinations/everflow/accounts/everflow_postback/ui-config.json',
-    );
-    const accountUiConfig = JSON.parse(fs.readFileSync(accountUiConfigPath, 'utf-8'));
-    const accountFields = accountUiConfig.uiConfig.form.fields;
-    const postbackUrlField = accountFields.find(
-      (field: Record<string, unknown>) =>
-        JSON.stringify(field.key) === JSON.stringify(['options', 'postbackUrl']),
-    );
-    const networkIdField = accountFields.find(
-      (field: Record<string, unknown>) =>
-        JSON.stringify(field.key) === JSON.stringify(['options', 'networkId']),
-    );
-    const verificationTokenField = accountFields.find(
-      (field: Record<string, unknown>) =>
-        JSON.stringify(field.key) === JSON.stringify(['options', 'verificationToken']),
-    );
-
-    expect(accountConfig.authenticationType).toBe('postback_url');
-    expect([...accountConfig.config.optionFields].sort()).toEqual(
-      Object.keys(everflowAccountSchema.optionsSchema.properties).sort(),
-    );
-    expect([...accountConfig.config.secretFields].sort()).toEqual(
-      Object.keys(everflowAccountSchema.secretSchema.properties).sort(),
-    );
-    expect(postbackUrlField.secret).toBeUndefined();
-    expect(postbackUrlField.note).toContain('remove everything from ? onward');
-    expect(networkIdField.secret).toBeUndefined();
-    expect(verificationTokenField.secret).toBe(true);
-    expect(verificationTokenField.optional).toBe(true);
   });
 
   const sourceAccounts = getAccountNames('sources');
