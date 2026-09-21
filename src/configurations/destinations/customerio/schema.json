@@ -1372,6 +1372,64 @@
                 }
               },
               "required": ["sdkVersion"]
+            },
+            {
+              "allOf": [
+                {
+                  "not": {
+                    "properties": {
+                      "sdkVersion": {
+                        "type": "object",
+                        "properties": {
+                          "web": {
+                            "const": "v2"
+                          }
+                        },
+                        "required": ["web"]
+                      }
+                    },
+                    "required": ["sdkVersion"]
+                  }
+                },
+                {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "connectionMode": {
+                          "type": "object",
+                          "properties": {
+                            "web": {
+                              "const": "device"
+                            }
+                          },
+                          "required": ["web"]
+                        }
+                      },
+                      "required": ["connectionMode"]
+                    },
+                    {
+                      "properties": {
+                        "connectionMode": {
+                          "not": {
+                            "type": "object",
+                            "required": ["web"]
+                          }
+                        },
+                        "useNativeSDK": {
+                          "type": "object",
+                          "properties": {
+                            "web": {
+                              "const": true
+                            }
+                          },
+                          "required": ["web"]
+                        }
+                      },
+                      "required": ["useNativeSDK"]
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },

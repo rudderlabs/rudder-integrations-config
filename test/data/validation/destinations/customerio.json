@@ -1242,7 +1242,12 @@
       }
     },
     "result": false,
-    "err": ["sdkVersion.web must be equal to one of the allowed values"]
+    "err": [
+      " must have required property 'siteID'",
+      " must have required property 'apiKey'",
+      " must match \"then\" schema",
+      "sdkVersion.web must be equal to one of the allowed values"
+    ]
   },
   {
     "testTitle": "web cloud mode without siteID is invalid",
@@ -1321,6 +1326,70 @@
       "useNativeSDK": {
         "ios": true
       }
+    },
+    "result": false,
+    "err": [
+      " must have required property 'siteID'",
+      " must have required property 'apiKey'",
+      " must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "web device mode without sdkVersion requires siteID and apiKey",
+    "config": {
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "device"
+      },
+      "useNativeSDK": {
+        "web": true
+      }
+    },
+    "result": false,
+    "err": [
+      " must have required property 'siteID'",
+      " must have required property 'apiKey'",
+      " must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "web device mode without sdkVersion is valid with siteID and apiKey",
+    "config": {
+      "siteID": "95bd13XXXX29XXi0ff9b",
+      "apiKey": "95bd13XXXX29XXi0ff9b",
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "device"
+      },
+      "useNativeSDK": {
+        "web": true
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "legacy web native SDK without connectionMode or sdkVersion requires siteID and apiKey",
+    "config": {
+      "datacenter": "US",
+      "useNativeSDK": {
+        "web": true
+      }
+    },
+    "result": false,
+    "err": [
+      " must have required property 'siteID'",
+      " must have required property 'apiKey'",
+      " must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "web device mode with an empty sdkVersion requires siteID and apiKey",
+    "config": {
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "device"
+      },
+      "sdkVersion": {}
     },
     "result": false,
     "err": [
