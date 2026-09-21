@@ -100,3 +100,9 @@
 
 - OpenAI Ads is a standalone account-backed destination under `src/configurations/destinations/openai_ads/`; credential field definitions live under `accounts/openai_ads_api_key/`.
 - Account-backed credential metadata still participates in the generic destination/account validation boundary: OpenAI Ads account option/secret fields should be represented in destination `config.destConfig.defaultConfig`, and secret fields such as `apiKey` should be listed in `config.secretKeys`, rather than bypassing `scripts/validate_account_definitions.py` with a destination-specific exemption.
+
+## INT-7182 — Everflow Account-Backed Destination Boundary
+
+- Everflow is a hand-authored account-backed destination under `src/configurations/destinations/everflow/`, with its Everflow Postback account definition under `accounts/everflow_postback/`.
+- The destination is cloud-only and Track-only, remains beta and hidden behind the `AMP_enable-everflow-destination` gate, and intentionally has no device-mode `includeKeys`, `sdkTemplate`, `redirectGroups`, event mapping, event filtering, or API configuration surface.
+- All three account fields must be mirrored in destination `config.destConfig.defaultConfig`; omitting one causes workspace-config filtering to drop it before runtime consumers receive the destination config.

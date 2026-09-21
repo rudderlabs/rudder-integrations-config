@@ -215,3 +215,9 @@
 ## ANA-134 — Event Filtering DestConfig Scope
 
 - Destination event-filtering fields `eventFilteringOption`, `whitelistedEvents`, and `blacklistedEvents` must be listed in `config.destConfig.defaultConfig`, not in source-type arrays such as `config.destConfig.web`, `android`, or `cloud`; the destination-definition custom validator rejects those fields outside `defaultConfig`.
+
+## INT-7182 — Everflow Postback Account Validation Contract
+
+- Everflow `postbackUrl` must be an HTTP(S) URL with a DNS-style host, no query string or fragment, and case-insensitive rejection of unsafe localhost/ngrok host classes, including nested ngrok subdomains; its validation message should direct customers to trim the URL from `?` onward.
+- Everflow `networkId` is not numeric-only: accept a plain string containing at least one non-whitespace character, capped at 200 characters.
+- Everflow `verificationToken` is optional, clearable, secret, and capped at 200 characters.
