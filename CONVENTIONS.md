@@ -10,6 +10,8 @@ This document captures naming and structural conventions used across this reposi
 - [**Where account credential fields live**](#where-account-credential-fields-live)
 - [**Deduplication / event-id config key (`deduplicationKey`)**](#deduplication--event-id-config-key-deduplicationkey)
 - [**Event name mapping**](#event-name-mapping)
+- [**Client-side event filtering keys**](#client-side-event-filtering-keys)
+- [**Where a field goes in `destConfig` (`defaultConfig` vs a source type)**](#where-a-field-goes-in-destconfig-defaultconfig-vs-a-source-type)
 - [**Restricting a field by connection mode**](#restricting-a-field-by-connection-mode)
 
 ## AccountDefinition naming (`accountDefinitionName`)
@@ -116,6 +118,57 @@ Write the smallest expression that describes the accepted value. Two habits to a
   pattern such as `^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)*$` cannot match `$`, `..`,
   `[`, `]`, `*`, `?`, `(`, `)`, or a leading-digit segment, so a `(?!…)` guarding against any of
   those adds nothing but review load.
+
+### Pair every `regex` with a `regexErrorMessage`
+
+A ui-config field that has a `regex` also needs a `regexErrorMessage`. The v2 form builder
+shows only that string when a value fails the regex. In rudder-webapp,
+`configurationV2/formComponents/textInput/index.tsx` passes
+`errorMessage={isError ? field.regexErrorMessage : undefined}`, so without it the field is
+marked invalid with no explanation.
+
+This applies to every **`textInput`** with a `regex`, wherever it sits: `baseTemplate`,
+`sdkTemplate`, `dynamicCustomForm` `rowFields` and `mapping` `columns`. It also covers a regex
+that is inherited or kept for compatibility.
+
+**Exception: don't add one to `tagInput`.** The v2 `TagInput` component
+(`formComponents/tagInput/index.tsx`) never runs the regex and never shows
+`regexErrorMessage`, whether the tagInput is a top-level field or a row field. The consent
+`consents` tagInput is one example. On a tagInput the regex only reaches the schema `pattern`,
+so config-backend enforces it when the config is saved. A message there would be config that
+never renders.
+
+The message appears below the field when the value fails the regex. It is written for the
+customer filling in the form, not for an engineer:
+
+- **Say what the user should do**, not what went wrong internally.
+- **Keep it under 8 words** when possible.
+- **Use plain words.** No technical terms, field paths, codes, regex syntax, or "invalid input".
+- **Don't repeat the value the user typed.**
+- **Don't blame the user or apologise.**
+- **Use sentence case, with no full stop at the end.**
+- **Describe only what the regex checks.** If it only limits length, the message is about
+  length. A message about format would mislead a user whose only mistake was typing too much.
+
+Good examples:
+
+```text
+Enter a valid email address
+Password must be at least 8 characters
+Age must be between 0 and 150
+Choose a date in the future
+This field is required
+```
+
+| Avoid                                                                    | Write                                         |
+| ------------------------------------------------------------------------ | --------------------------------------------- |
+| `Invalid Api Key`                                                        | `Enter a valid API key`                       |
+| `Value must match ^[0-9]{0,100}$`                                        | `Enter an advertiser ID using numbers only`   |
+| `Enter a simple dot path. Do not use JSONPath, brackets, wildcards, ...` | `Enter a path such as properties.orderId`     |
+| `Activity tag must be 100 characters or fewer.`                          | `Activity tag must be 100 characters or less` |
+
+Most of the tree uses `"Invalid <field>"`. Don't copy it.
+`schemaGenerator.py` ignores `regexErrorMessage`, so adding one never changes `schema.json`.
 
 ## Optional fields must accept the empty string
 
@@ -362,6 +415,89 @@ The check is silent about the drift: `npm run check:schema:destination <dir>` em
 _warning_, and `scripts/run-schema-validation.sh` — what CI greps — exits 0 either way.
 `update:schema:destination` (`--skip-deletions`) preserves the hand-written block;
 **`update:schema:destination:force` deletes it.**
+
+## Client-side event filtering keys
+
+`eventFilteringOption`, `whitelistedEvents`, and `blacklistedEvents` go in
+`config.destConfig.defaultConfig` — never in a source-type array such as `destConfig.web` or
+`destConfig.android`, even when the filtering only takes effect in a web device-mode SDK.
+
+`transformFromBEtoFE` copies `defaultConfig` keys under their flat name; a key listed under
+`web` arrives as `web-eventFilteringOption` instead, so a saved filter does not populate the
+field when the customer reopens the destination. The ui-config uses the flat `configKey` in
+`baseTemplate` either way, which is what makes the mismatch silent.
+
+Scope the field's _visibility_, not its storage: gate the group on
+`connectionMode.<sourceType>` (see [Restricting a field by connection
+mode](#restricting-a-field-by-connection-mode)).
+
+### Enforcement
+
+`src/validator/index.ts` rejects any destination definition listing one of the three keys
+outside `defaultConfig`, naming the keys and the `destConfig.<section>` path.
+
+## Where a field goes in `destConfig` (`defaultConfig` vs a source type)
+
+`config.destConfig` has one `defaultConfig` array plus one array per entry in
+`supportedSourceTypes`. Which one a field is listed under decides **the shape its value is
+stored in, and whether the customer sets one value for the destination or one per connected
+source type**.
+
+| Placement       | Stored as                                                                         | Rendered                       |
+| --------------- | --------------------------------------------------------------------------------- | ------------------------------ |
+| `defaultConfig` | flat scalar — `"apiVersion": "v2"`                                                | once, globally                 |
+| A source type   | object keyed by source type — `"useNativeSDK": { "web": true, "android": false }` | once per connected source type |
+
+**The rule:** list a field under source types when **its value is scoped to a source type** —
+either because a customer needs different values per platform (`connectionMode`,
+`useNativeSDK`, `autoTrackDeviceAttributes`), or because the setting only exists on one
+(`sendPageNameInSDK` on web, `backgroundQueueSecondsDelay` on android). Everything the
+customer sets once for the destination as a whole — credentials, endpoints, API versions,
+event filtering — belongs in `defaultConfig`, even if a `ui-config.json` condition means it is
+only shown for some sources. Consent fields (`consentManagement`, `oneTrustCookieCategories`,
+`ketchConsentPurposes`) go under every source type by convention, enforced by
+[`test/consentManagementFieldsIntegrity.test.ts`](test/consentManagementFieldsIntegrity.test.ts).
+
+Only list the source types that actually support the field: `autoTrackDeviceAttributes` goes
+under android and ios, not web.
+
+### `cloud` the source type is not `cloud` the connection mode
+
+The word appears on both axes, in the same file:
+
+```jsonc
+"supportedSourceTypes": ["web", "android", "cloud", ...],   // cloud = server-side SDK / HTTP API source
+"supportedConnectionModes": { "web": ["cloud", "device"] }  // cloud = connection mode
+```
+
+**`destConfig` keys on the source type axis only — it has no notion of connection mode.** A
+JavaScript source reads `destConfig.web` whether it is connected in cloud or device mode; it
+never reads `destConfig.cloud`. So `destConfig.cloud` means "server-side SDK sources", and
+putting a field there restricts it to Node/Python/Go/HTTP sources — not to cloud-mode
+connections.
+
+A field that should only apply in cloud mode therefore never moves to `destConfig.cloud`. Gate
+it in `ui-config.json` (`conditions` or `preRequisites` on `connectionMode.<sourceType>`), and
+enforce it in `schema.json` — see
+[Restricting a field by connection mode](#restricting-a-field-by-connection-mode).
+
+### Both files must agree, and moving a field later is breaking
+
+A field is rendered in the dashboard form only if it appears in `destConfig` — under
+`defaultConfig` or the connected source type. **A field defined in `ui-config.json` but
+missing from `destConfig` silently does not render**, whatever its conditions say. The
+`ui-config.json` conditions then decide whether that rendered instance is visible.
+
+Because placement fixes the storage shape, **moving a field between `defaultConfig` and a
+source type is a breaking change** for every existing destination: a field listed under a
+source type is read as `<field>.<sourceType>`, so an already-stored flat scalar resolves to
+`undefined` and the field is dropped from the workspace config — silently, with no error and
+no default. Changing it needs a data migration plus a regenerated `schema.json`. Decide at
+creation time.
+
+For device mode, a field must additionally be in `config.includeKeys` to reach the client-side
+SDKs; `destConfig` alone gets it only as far as config-backend (see
+[Account fields in device mode](#account-fields-in-device-mode)).
 
 ## Restricting a field by connection mode
 

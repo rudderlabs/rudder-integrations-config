@@ -175,6 +175,13 @@
 
 - OpenAI Ads remains a gated beta destination: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` alongside the existing `options.hidden.gate` hide-when-false flag `AMP_enable-openai-ads-destination` so the webapp can show the Beta badge while feature gating the destination card.
 
+## INT-7147 — DCM Floodlight V2 Migration Contract
+
+- DCM Floodlight `advertiserId` is not treated as a secret in this V2 migration: keep `src/configurations/destinations/dcm_floodlight/ui-config.json` `secret: false`, and keep `src/configurations/destinations/dcm_floodlight/db-config.json` without `advertiserId` in `secretKeys` or `excludeKeys`.
+- Keep DCM Floodlight `advertiserId` exposed as public web device-mode metadata through the existing `includeKeys` path, and preserve the original numeric-only UI regex `^([0-9]{0,100})$` unless product explicitly changes that field contract.
+- Keep DCM Floodlight consent provider rows backward-compatible for this V2 migration: the `provider` row field remains non-required, `consentManagement.<source>.items` schemas should not gain `required: ["provider"]`, and the provider enum should continue allowing the empty string unless product explicitly approves validation tightening.
+- Place DCM Floodlight `Event mapping` immediately after `Initial setup` in `uiConfig.baseTemplate`, before `Configuration settings`; treat that ordering as layout-only and do not change `redirectGroups`, `schema.json`, or validation fixtures just because of the reorder.
+
 ## INT-7144 — Google Ads Offline Conversions V2 Migration Compatibility
 
 - For Google Ads Offline Conversions Form Builder V2 migrations, preserve existing `configKey` names and legacy regex/pattern compatibility for Customer ID, Login Customer ID, and mapping columns; these fields historically accepted `{{...}}`/`env.` dynamic-config values, so regex cleanup should be treated as a separate persisted-config compatibility change.
@@ -204,3 +211,7 @@
 - Salesforce OAuth v2 account type `DESTINATION_SALESFORCE_OAUTH_V2` is available by default; do not reintroduce the `AMP_enable-salesforce-oauth-v2-account` `displayOptions.hidden` gate when editing `src/configurations/destinations/salesforce_oauth/accounts/salesforce_oauth_v2/db-config.json`.
 - The legacy Salesforce OAuth account type `DESTINATION_SALESFORCE_OAUTH` remains present for existing account compatibility but should be marked `displayOptions.deprecated: true`, with its deprecation tooltip directing new account creation to the v2 `OAuth (ECA)` option.
 - Salesforce OAuth v2 account UI copy should use Salesforce's current `External Client App` terminology rather than `connected app`; its card name should be `OAuth (External Client App)` and its description should be `Grant access using the latest Salesforce External Client App (ECA)`. The legacy Connected App card name should be `OAuth (Connected App - Legacy)`, with description `Grant access using the legacy Salesforce Connected App`.
+
+## ANA-134 — Event Filtering DestConfig Scope
+
+- Destination event-filtering fields `eventFilteringOption`, `whitelistedEvents`, and `blacklistedEvents` must be listed in `config.destConfig.defaultConfig`, not in source-type arrays such as `config.destConfig.web`, `android`, or `cloud`; the destination-definition custom validator rejects those fields outside `defaultConfig`.

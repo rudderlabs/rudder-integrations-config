@@ -203,6 +203,8 @@ Apply the attribute renames and per-type mapping from the runbook (`value`→`co
 
 Every field needs a real `label` and a crisp `note`. For `regex` on every field and what an optional field's regex must accept, follow [String `pattern` / `regex`](../../../CONVENTIONS.md#string-pattern-and-regex) and [Optional fields must accept the empty string](../../../CONVENTIONS.md#optional-fields-must-accept-the-empty-string) — do not copy a regex from a neighbouring destination, most of the tree predates those rules.
 
+Old configs have little copy, so add what's missing. Give every `textInput` `regex` a [`regexErrorMessage`](../../../CONVENTIONS.md#pair-every-regex-with-a-regexerrormessage), but never a `tagInput`. Give every field and new group a `note`, including `sdkTemplate` and `redirectGroups`, and write it from the transformer or SDK code. Reword any "above"/"below".
+
 ---
 
 ### Step 4: `sdkTemplate`, event filtering, event mapping

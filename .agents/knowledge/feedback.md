@@ -49,6 +49,13 @@
 - Do not expose the OpenAI Ads dashboard event-filtering controls for cloud-mode connections unless product explicitly changes the UI scope.
 - For OpenAI Ads event-filtering schema/config changes, rely on existing `test/data/validation/destinations/openai_ads.json` fixture cases for accepted/rejected config shape coverage; do not add duplicate one-off assertions in `test/validation.test.ts` for the same behavior.
 
+## INT-7147 — DCM Floodlight V2 Consent Review Guidance
+
+- Reviewer guidance for DCM Floodlight V2 form-builder migration: keep the consent `provider` row field required like the standard V2 consent template.
+- Do not preserve provider-less consent rows by making `provider` optional or by keeping an empty string in the generated provider enum unless product explicitly asks for legacy compatibility.
+- Later review-fix guidance for DCM Floodlight superseded the stricter provider requirement for this migration: keep consent provider rows backward-compatible (non-required, with the empty string still in the provider enum) unless product explicitly approves a validation tightening.
+- Reviewer guidance for Form Builder V2 migrations with event mappings: place the `Event mapping` collapsible immediately after `Initial setup`, before `Configuration settings`; for DCM Floodlight this ordering move is layout-only and should not force `redirectGroups`, `schema.json`, or validation-fixture changes.
+
 ## INT-7144 — Google Ads Offline Conversions Mapping Layout
 
 - Reviewer guidance for `src/configurations/destinations/google_adwords_offline_conversions/ui-config.json`: keep the three mapping fields behind a single Form Builder V2 `redirect` screen using tabs.
