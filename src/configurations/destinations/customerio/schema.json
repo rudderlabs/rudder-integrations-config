@@ -1105,13 +1105,23 @@
         }
       },
       "writeKey": {
-        "type": "string",
-        "pattern": "^(.{0,100})$"
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "^(.{0,100})$"
+          }
+        }
       },
       "sdkVersion": {
-        "type": "string",
-        "enum": ["v1", "v2"],
-        "default": "v1"
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "enum": ["v1", "v2"],
+            "default": "v1"
+          }
+        }
       },
       "anonymousInApp": {
         "type": "object",
@@ -1352,7 +1362,13 @@
             {
               "properties": {
                 "sdkVersion": {
-                  "const": "v1"
+                  "type": "object",
+                  "properties": {
+                    "web": {
+                      "const": "v1"
+                    }
+                  },
+                  "required": ["web"]
                 }
               },
               "required": ["sdkVersion"]
@@ -1386,7 +1402,13 @@
               "required": ["web"]
             },
             "sdkVersion": {
-              "const": "v2"
+              "type": "object",
+              "properties": {
+                "web": {
+                  "const": "v2"
+                }
+              },
+              "required": ["web"]
             }
           },
           "required": ["connectionMode", "sdkVersion"]
@@ -1395,8 +1417,14 @@
           "required": ["writeKey"],
           "properties": {
             "writeKey": {
-              "type": "string",
-              "minLength": 1
+              "type": "object",
+              "required": ["web"],
+              "properties": {
+                "web": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
             }
           }
         }

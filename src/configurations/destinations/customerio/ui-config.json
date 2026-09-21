@@ -17,7 +17,7 @@
                     "label": "Web SDK Version",
                     "configKey": "sdkVersion",
                     "note": [
-                      "Selects the Customer.io JavaScript client for web device mode. 1.x loads the legacy snippet and uses your Site ID. 2.x loads the Customer.io Data Pipelines JavaScript client, uses a Data Pipelines write key, and supports in-app messages for anonymous users. Switching an existing destination to 2.x changes where your web events land. For more information, visit the ",
+                      "Selects the Customer.io JavaScript client for web device mode. v1 loads the legacy snippet and uses your Site ID. v2 loads the Customer.io Data Pipelines JavaScript client, uses a Data Pipelines write key, and supports in-app messages for anonymous users. Switching an existing destination to v2 changes where your web events land. For more information, visit the ",
                       {
                         "text": "documentation",
                         "link": "https://www.rudderstack.com/docs/destinations/streaming-destinations/customer.io/"
@@ -25,11 +25,11 @@
                     ],
                     "options": [
                       {
-                        "label": "1.x",
+                        "label": "v1",
                         "value": "v1"
                       },
                       {
-                        "label": "2.x",
+                        "label": "v2",
                         "value": "v2"
                       }
                     ],
@@ -54,7 +54,7 @@
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
                     "regexErrorMessage": "Invalid Api Key",
                     "placeholder": "e.g: ABCDEFG",
-                    "note": "Enter your Customer.io Tracking API Key. Required for cloud mode, mobile device mode, and web device mode with SDK version 1.x.",
+                    "note": "Enter your Customer.io Tracking API Key. Required for cloud mode, mobile device mode, and web device mode with SDK version v1.",
                     "conditions": {
                       "expression": {
                         "operator": "OR",
@@ -136,7 +136,7 @@
                           },
                           {
                             "type": "configuration",
-                            "key": "sdkVersion",
+                            "key": "sdkVersion.web",
                             "value": "v1"
                           }
                         ]
@@ -150,7 +150,7 @@
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
                     "regexErrorMessage": "Invalid Site ID",
                     "placeholder": "e.g: ABCDEFG",
-                    "note": "Enter your Customer.io Site ID. Required for cloud mode, mobile device mode, and web device mode with SDK version 1.x.",
+                    "note": "Enter your Customer.io Site ID. Required for cloud mode, mobile device mode, and web device mode with SDK version v1.",
                     "conditions": {
                       "expression": {
                         "operator": "OR",
@@ -232,7 +232,7 @@
                           },
                           {
                             "type": "configuration",
-                            "key": "sdkVersion",
+                            "key": "sdkVersion.web",
                             "value": "v1"
                           }
                         ]
@@ -246,7 +246,7 @@
                     "regex": "^(.{0,100})$",
                     "regexErrorMessage": "Invalid Write Key",
                     "placeholder": "e.g: ABCDEFG",
-                    "note": "Enter the write key of your Customer.io Data Pipelines JavaScript source (Data Pipelines > Connections > Sources). Required for web device mode with SDK version 2.x; web events are sent to this source instead of the Journeys Track API.",
+                    "note": "Enter the write key of your Customer.io Data Pipelines JavaScript source (Data Pipelines > Connections > Sources). Required for web device mode with SDK version v2; web events are sent to this source instead of the Journeys Track API.",
                     "conditions": {
                       "expression": {
                         "operator": "AND",
@@ -258,7 +258,7 @@
                           },
                           {
                             "type": "configuration",
-                            "key": "sdkVersion",
+                            "key": "sdkVersion.web",
                             "value": "v2"
                           }
                         ]
@@ -503,7 +503,7 @@
         {
           "type": "checkbox",
           "label": "Enable in-app message support",
-          "note": "Applies to SDK version 1.x. Turn it ON if you want to send in-app messages to your website.",
+          "note": "Applies to SDK version v1. Turn it ON if you want to send in-app messages to your website.",
           "configKey": "dataUseInApp",
           "default": false,
           "conditions": {
@@ -517,7 +517,7 @@
                 },
                 {
                   "type": "configuration",
-                  "key": "sdkVersion",
+                  "key": "sdkVersion.web",
                   "value": "v1"
                 }
               ]
@@ -527,7 +527,7 @@
         {
           "type": "checkbox",
           "label": "Enable in-app messages for anonymous users",
-          "note": "Applies to SDK version 2.x. Turn it ON to show in-app messages to website visitors you have not identified yet. Requires in-app messaging to be enabled in your Customer.io workspace and a Customer.io plan that supports anonymous in-app messages. In-app messages for identified users need no setting on 2.x.",
+          "note": "Applies to SDK version v2. Turn it ON to show in-app messages to website visitors you have not identified yet. Requires in-app messaging to be enabled in your Customer.io workspace and a Customer.io plan that supports anonymous in-app messages. In-app messages for identified users need no setting on v2.",
           "configKey": "anonymousInApp",
           "default": false,
           "conditions": {
@@ -541,7 +541,7 @@
                 },
                 {
                   "type": "configuration",
-                  "key": "sdkVersion",
+                  "key": "sdkVersion.web",
                   "value": "v2"
                 }
               ]
