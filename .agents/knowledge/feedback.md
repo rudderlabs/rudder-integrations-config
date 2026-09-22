@@ -73,3 +73,7 @@
 - Reviewer clarified the customer-facing Salesforce OAuth account card names: v2 External Client App should be named `OAuth (External Client App)` and legacy Connected App should be named `OAuth (Connected App - Legacy)`.
 - The legacy Salesforce OAuth account `displayOptions.deprecationLabel` should use the exact spaced option wording: `Create a new account using the 'OAuth (ECA)' option.`
 - The Salesforce OAuth v2 account `uiConfig.description` should use the exact wording `Grant access using the latest Salesforce External Client App (ECA)`.
+
+## INT-7182 — Everflow Review Artifact Guidance
+
+- Do not commit Everflow browser E2E screenshots, recordings, or run reports under `e2e-artifacts`; those generated review artifacts should be removed from the configuration PR.
