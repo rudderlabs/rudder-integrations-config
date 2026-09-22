@@ -1439,5 +1439,181 @@
       " must have required property 'apiKey'",
       " must match \"then\" schema"
     ]
+  },
+  {
+    "testTitle": "web device mode on SDK v2 is valid with the empty siteID/apiKey the webapp submits for hidden fields",
+    "config": {
+      "siteID": "",
+      "apiKey": "",
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "device"
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "sdkVersion": {
+        "web": "v2"
+      },
+      "writeKey": {
+        "web": "cio_wk_XXXXXXXXXXXXXXXX"
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "web device mode on SDK v1 rejects empty siteID/apiKey",
+    "config": {
+      "siteID": "",
+      "apiKey": "",
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "device"
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "sdkVersion": {
+        "web": "v1"
+      }
+    },
+    "result": false,
+    "err": [
+      "siteID must NOT have fewer than 1 characters",
+      "apiKey must NOT have fewer than 1 characters",
+      " must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "web cloud mode rejects empty siteID/apiKey",
+    "config": {
+      "siteID": "",
+      "apiKey": "",
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "useNativeSDK": {
+        "web": false
+      }
+    },
+    "result": false,
+    "err": [
+      "siteID must NOT have fewer than 1 characters",
+      "apiKey must NOT have fewer than 1 characters",
+      " must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "web device mode on SDK v2 plus a cloud-mode source rejects empty siteID/apiKey",
+    "config": {
+      "siteID": "",
+      "apiKey": "",
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "device",
+        "android": "cloud"
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "sdkVersion": {
+        "web": "v2"
+      },
+      "writeKey": {
+        "web": "cio_wk_XXXXXXXXXXXXXXXX"
+      }
+    },
+    "result": false,
+    "err": [
+      "siteID must NOT have fewer than 1 characters",
+      "apiKey must NOT have fewer than 1 characters",
+      " must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "web device mode on SDK v2 rejects an empty write key",
+    "config": {
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "device"
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "sdkVersion": {
+        "web": "v2"
+      },
+      "writeKey": {
+        "web": ""
+      }
+    },
+    "result": false,
+    "err": ["writeKey.web must NOT have fewer than 1 characters", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "web device mode on SDK v2 plus ios device mode requires siteID and apiKey",
+    "config": {
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "device",
+        "ios": "device"
+      },
+      "useNativeSDK": {
+        "web": true,
+        "ios": true
+      },
+      "sdkVersion": {
+        "web": "v2"
+      },
+      "writeKey": {
+        "web": "cio_wk_XXXXXXXXXXXXXXXX"
+      }
+    },
+    "result": false,
+    "err": [
+      " must have required property 'siteID'",
+      " must have required property 'apiKey'",
+      " must match \"then\" schema"
+    ]
+  },
+  {
+    "testTitle": "web device mode on SDK v1 is valid with siteID and apiKey",
+    "config": {
+      "siteID": "95bd13XXXX29XXi0ff9b",
+      "apiKey": "95bd13XXXX29XXi0ff9b",
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "device"
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "sdkVersion": {
+        "web": "v1"
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "web device mode on SDK v2 is valid with a write key plus siteID and apiKey",
+    "config": {
+      "siteID": "95bd13XXXX29XXi0ff9b",
+      "apiKey": "95bd13XXXX29XXi0ff9b",
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "device"
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "sdkVersion": {
+        "web": "v2"
+      },
+      "writeKey": {
+        "web": "cio_wk_XXXXXXXXXXXXXXXX"
+      }
+    },
+    "result": true
   }
 ]
