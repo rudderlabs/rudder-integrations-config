@@ -1133,7 +1133,7 @@
     "err": [" must have required property 'writeKey'", " must match \"then\" schema"]
   },
   {
-    "testTitle": "web device mode on SDK v1 still requires siteID and apiKey",
+    "testTitle": "web device mode on SDK v1 requires siteID but not apiKey",
     "config": {
       "datacenter": "US",
       "connectionMode": {
@@ -1153,11 +1153,7 @@
       }
     },
     "result": false,
-    "err": [
-      " must have required property 'siteID'",
-      " must have required property 'apiKey'",
-      " must match \"then\" schema"
-    ]
+    "err": [" must have required property 'siteID'", " must match \"then\" schema"]
   },
   {
     "testTitle": "web device mode on SDK v2 plus a cloud-mode source requires siteID and apiKey",
@@ -1186,6 +1182,7 @@
     "result": false,
     "err": [
       " must have required property 'siteID'",
+      " must match \"then\" schema",
       " must have required property 'apiKey'",
       " must match \"then\" schema"
     ]
@@ -1244,7 +1241,6 @@
     "result": false,
     "err": [
       " must have required property 'siteID'",
-      " must have required property 'apiKey'",
       " must match \"then\" schema",
       "sdkVersion.web must be equal to one of the allowed values"
     ]
@@ -1312,6 +1308,7 @@
     "result": false,
     "err": [
       " must have required property 'siteID'",
+      " must match \"then\" schema",
       " must have required property 'apiKey'",
       " must match \"then\" schema"
     ]
@@ -1330,12 +1327,13 @@
     "result": false,
     "err": [
       " must have required property 'siteID'",
+      " must match \"then\" schema",
       " must have required property 'apiKey'",
       " must match \"then\" schema"
     ]
   },
   {
-    "testTitle": "web device mode without sdkVersion requires siteID and apiKey",
+    "testTitle": "web device mode without sdkVersion requires siteID but not apiKey",
     "config": {
       "datacenter": "US",
       "connectionMode": {
@@ -1346,11 +1344,7 @@
       }
     },
     "result": false,
-    "err": [
-      " must have required property 'siteID'",
-      " must have required property 'apiKey'",
-      " must match \"then\" schema"
-    ]
+    "err": [" must have required property 'siteID'", " must match \"then\" schema"]
   },
   {
     "testTitle": "web device mode without sdkVersion is valid with siteID and apiKey",
@@ -1378,12 +1372,13 @@
     "result": false,
     "err": [
       " must have required property 'siteID'",
+      " must match \"then\" schema",
       " must have required property 'apiKey'",
       " must match \"then\" schema"
     ]
   },
   {
-    "testTitle": "web device mode with an empty sdkVersion requires siteID and apiKey",
+    "testTitle": "web device mode with an empty sdkVersion requires siteID but not apiKey",
     "config": {
       "datacenter": "US",
       "connectionMode": {
@@ -1392,11 +1387,7 @@
       "sdkVersion": {}
     },
     "result": false,
-    "err": [
-      " must have required property 'siteID'",
-      " must have required property 'apiKey'",
-      " must match \"then\" schema"
-    ]
+    "err": [" must have required property 'siteID'", " must match \"then\" schema"]
   },
   {
     "testTitle": "legacy web cloud (useNativeSDK.web false) without connectionMode requires siteID and apiKey",
@@ -1409,6 +1400,7 @@
     "result": false,
     "err": [
       " must have required property 'siteID'",
+      " must match \"then\" schema",
       " must have required property 'apiKey'",
       " must match \"then\" schema"
     ]
@@ -1424,6 +1416,7 @@
     "result": false,
     "err": [
       " must have required property 'siteID'",
+      " must match \"then\" schema",
       " must have required property 'apiKey'",
       " must match \"then\" schema"
     ]
@@ -1436,6 +1429,7 @@
     "result": false,
     "err": [
       " must have required property 'siteID'",
+      " must match \"then\" schema",
       " must have required property 'apiKey'",
       " must match \"then\" schema"
     ]
@@ -1462,7 +1456,7 @@
     "result": true
   },
   {
-    "testTitle": "web device mode on SDK v1 rejects empty siteID/apiKey",
+    "testTitle": "web device mode on SDK v1 rejects an empty siteID",
     "config": {
       "siteID": "",
       "apiKey": "",
@@ -1478,11 +1472,7 @@
       }
     },
     "result": false,
-    "err": [
-      "siteID must NOT have fewer than 1 characters",
-      "apiKey must NOT have fewer than 1 characters",
-      " must match \"then\" schema"
-    ]
+    "err": ["siteID must NOT have fewer than 1 characters", " must match \"then\" schema"]
   },
   {
     "testTitle": "web cloud mode rejects empty siteID/apiKey",
@@ -1500,6 +1490,7 @@
     "result": false,
     "err": [
       "siteID must NOT have fewer than 1 characters",
+      " must match \"then\" schema",
       "apiKey must NOT have fewer than 1 characters",
       " must match \"then\" schema"
     ]
@@ -1527,6 +1518,7 @@
     "result": false,
     "err": [
       "siteID must NOT have fewer than 1 characters",
+      " must match \"then\" schema",
       "apiKey must NOT have fewer than 1 characters",
       " must match \"then\" schema"
     ]
@@ -1573,6 +1565,7 @@
     "result": false,
     "err": [
       " must have required property 'siteID'",
+      " must match \"then\" schema",
       " must have required property 'apiKey'",
       " must match \"then\" schema"
     ]
@@ -1629,6 +1622,70 @@
       },
       "sdkVersion": {
         "web": "v2"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'apiKey'", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "web device mode on SDK v1 is valid with siteID and no apiKey",
+    "config": {
+      "siteID": "95bd13XXXX29XXi0ff9b",
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "device"
+      },
+      "useNativeSDK": {
+        "web": true
+      },
+      "sdkVersion": {
+        "web": "v1"
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "web device mode without sdkVersion is valid with siteID and no apiKey",
+    "config": {
+      "siteID": "95bd13XXXX29XXi0ff9b",
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "device"
+      },
+      "useNativeSDK": {
+        "web": true
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "web cloud mode on SDK v1 requires apiKey",
+    "config": {
+      "siteID": "95bd13XXXX29XXi0ff9b",
+      "datacenter": "US",
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "useNativeSDK": {
+        "web": false
+      },
+      "sdkVersion": {
+        "web": "v1"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'apiKey'", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "mobile (android) device mode requires apiKey",
+    "config": {
+      "siteID": "95bd13XXXX29XXi0ff9b",
+      "datacenter": "US",
+      "connectionMode": {
+        "android": "device"
+      },
+      "useNativeSDK": {
+        "android": true
       }
     },
     "result": false,

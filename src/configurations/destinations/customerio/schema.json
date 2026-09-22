@@ -1174,13 +1174,9 @@
           }
         },
         "then": {
-          "required": ["siteID", "apiKey"],
+          "required": ["siteID"],
           "properties": {
             "siteID": {
-              "type": "string",
-              "minLength": 1
-            },
-            "apiKey": {
               "type": "string",
               "minLength": 1
             }
@@ -1223,6 +1219,34 @@
                   "minLength": 1
                 }
               }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "not": {
+            "properties": {
+              "connectionMode": {
+                "type": "object",
+                "properties": {
+                  "web": {
+                    "const": "device"
+                  }
+                },
+                "required": ["web"],
+                "additionalProperties": false
+              }
+            },
+            "required": ["connectionMode"]
+          }
+        },
+        "then": {
+          "required": ["apiKey"],
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "minLength": 1
             }
           }
         }
