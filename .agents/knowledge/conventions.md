@@ -174,3 +174,44 @@
 ## INT-7117 — OpenAI Ads Beta Visibility Metadata
 
 - OpenAI Ads remains a gated beta destination: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` alongside the existing `options.hidden.gate` hide-when-false flag `AMP_enable-openai-ads-destination` so the webapp can show the Beta badge while feature gating the destination card.
+
+## INT-7147 — DCM Floodlight V2 Migration Contract
+
+- DCM Floodlight `advertiserId` is not treated as a secret in this V2 migration: keep `src/configurations/destinations/dcm_floodlight/ui-config.json` `secret: false`, and keep `src/configurations/destinations/dcm_floodlight/db-config.json` without `advertiserId` in `secretKeys` or `excludeKeys`.
+- Keep DCM Floodlight `advertiserId` exposed as public web device-mode metadata through the existing `includeKeys` path, and preserve the original numeric-only UI regex `^([0-9]{0,100})$` unless product explicitly changes that field contract.
+- Keep DCM Floodlight consent provider rows backward-compatible for this V2 migration: the `provider` row field remains non-required, `consentManagement.<source>.items` schemas should not gain `required: ["provider"]`, and the provider enum should continue allowing the empty string unless product explicitly approves validation tightening.
+- Place DCM Floodlight `Event mapping` immediately after `Initial setup` in `uiConfig.baseTemplate`, before `Configuration settings`; treat that ordering as layout-only and do not change `redirectGroups`, `schema.json`, or validation fixtures just because of the reorder.
+
+## INT-7144 — Google Ads Offline Conversions V2 Migration Compatibility
+
+- For Google Ads Offline Conversions Form Builder V2 migrations, preserve existing `configKey` names and legacy regex/pattern compatibility for Customer ID, Login Customer ID, and mapping columns; these fields historically accepted `{{...}}`/`env.` dynamic-config values, so regex cleanup should be treated as a separate persisted-config compatibility change.
+- Google Ads Offline Conversions is cloud-only in Form Builder V2: keep `sdkTemplate` empty, move consent UI into `consentSettingsTemplate`, and keep connection settings under Initial Setup while event mappings and conversion options live under Configuration Settings / Event settings.
+- Keep `subAccount` in the Initial Setup / Connection Settings group with its `false` default, but preserve the legacy schema contract where it is not top-level required.
+- Keep `loginCustomerId` visible only behind the `subAccount` prerequisite and enforce it with a destination-specific conditional schema branch when `subAccount` is true; do not make it unconditionally required at the top level and do not change shared schema-generator requiredness for this destination-specific rule.
+- Keep `loginCustomerId` out of top-level `configSchema.properties`; define and validate it only inside the conditional `allOf` branch where `subAccount` is true.
+
+## INT-7136 — Campaign Manager V2 Migration Compatibility
+
+- For Campaign Manager 360 form-builder-v2 migration, keep existing persisted config keys and validation semantics intact: preserve the legacy `profileId` regex/pattern `(^\{\{.*\|\|(.*)\}\}$)|(^env[.].+)|^(.{1,50})$` rather than narrowing it during a UI-container migration, so saved templated/env values remain valid.
+- Campaign Manager 360 consent-management schema should align with the standard V2 consent template by requiring `provider` on every consent row (`items.required: ["provider"]` under each consentManagement source branch); although this tightens validation for non-empty rows missing a provider, the UI already marks provider as required and uses it as the unique row key.
+
+## INT-7150 — OpenAI Ads Event Mapping Column Contract
+
+- OpenAI Ads `customEventName` belongs as the last column in `src/configurations/destinations/openai_ads/ui-config.json` `uiConfig.redirectGroups.customEventMapping.fields[0].columns`, after `deduplicationKey`; its `conditions` hide-on-`to == custom` block remains the visibility mechanism.
+- Do not add `includeWhenConditional` back to this `redirectGroups` column: schema generation does not traverse `redirectGroups`, so the key is inert there, while it should not be treated as globally obsolete for `baseTemplate` fields.
+
+## INT-7151 — OpenAI Ads Event Mapping Block Order
+
+- OpenAI Ads `baseTemplate` UI ordering in `src/configurations/destinations/openai_ads/ui-config.json` should place `Event mapping` before `Configuration settings`, yielding `Initial setup` → `Event mapping` → `Configuration settings`.
+- Treat this OpenAI Ads reorder as config-only and schema-neutral: do not change `schema.json`, validation fixtures, `redirectGroups`, `sdkTemplate`, or `consentSettingsTemplate` when only moving the block order.
+- The webapp auto-expand index fix and `CONVENTIONS.md` wording updates are independent follow-ups; they are not blockers for shipping the OpenAI Ads config-only reorder.
+
+## INT-7154 — Salesforce OAuth Account Type Visibility
+
+- Salesforce OAuth v2 account type `DESTINATION_SALESFORCE_OAUTH_V2` is available by default; do not reintroduce the `AMP_enable-salesforce-oauth-v2-account` `displayOptions.hidden` gate when editing `src/configurations/destinations/salesforce_oauth/accounts/salesforce_oauth_v2/db-config.json`.
+- The legacy Salesforce OAuth account type `DESTINATION_SALESFORCE_OAUTH` remains present for existing account compatibility but should be marked `displayOptions.deprecated: true`, with its deprecation tooltip directing new account creation to the v2 `OAuth (ECA)` option.
+- Salesforce OAuth v2 account UI copy should use Salesforce's current `External Client App` terminology rather than `connected app`; its card name should be `OAuth (External Client App)` and its description should be `Grant access using the latest Salesforce External Client App (ECA)`. The legacy Connected App card name should be `OAuth (Connected App - Legacy)`, with description `Grant access using the legacy Salesforce Connected App`.
+
+## ANA-134 — Event Filtering DestConfig Scope
+
+- Destination event-filtering fields `eventFilteringOption`, `whitelistedEvents`, and `blacklistedEvents` must be listed in `config.destConfig.defaultConfig`, not in source-type arrays such as `config.destConfig.web`, `android`, or `cloud`; the destination-definition custom validator rejects those fields outside `defaultConfig`.

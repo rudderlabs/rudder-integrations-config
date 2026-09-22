@@ -67,3 +67,13 @@
 - OpenAI Ads destination config stays within the repository's declarative JSON validation model: `src/configurations/destinations/openai_ads/schema.json` enforces flat destination-wide event-filtering fields, duplicate event mappings with `uniqueItemProperties: ["from"]`, and `customEventName` only when an event mapping's `to` value is `custom`.
 - The OpenAI Ads `eventMapping.from` uniqueness rule only catches exact duplicate values. AJV keywords used in this repo do not provide trim/lowercase uniqueness for array item properties, so normalized lookup semantics should be handled outside the destination schema unless a broader custom validator path is introduced.
 - OpenAI Ads is account-backed, but account option/secret fields are mirrored in destination metadata for generic account validation; avoid destination-specific validator exemptions and keep non-device account plumbing out of `config.includeKeys`.
+
+## INT-7144 — Form Builder V2 Conditional Required Schema Pattern
+
+- For Google Ads Offline Conversions, keep the `subAccount` to `loginCustomerId` requiredness rule scoped to the destination schema. Do not add a shared `scripts/schemaGenerator.py` workaround for this migration unless a broader Form Builder V2 generator change is explicitly requested.
+- Form Builder V2 schema generation intentionally avoids adding Initial setup fields that have `preRequisites` to the top-level schema `required` array; conditional requiredness for hidden/gated fields should stay in destination-specific conditional schema branches instead of becoming unconditional required fields.
+
+## ANA-134 — Destination Definition Guardrails
+
+- Destination-definition custom rules in `src/validator/index.ts` are the right layer for cross-key `db-config.json` constraints that the JSON Schema cannot express through `destConfig` pattern properties, such as forbidding event-filtering fields in non-`defaultConfig` source sections.
+- `test/validator/validator.test.ts` should cover these custom rules with minimal destination definitions passed to `validateDestinationDefinitions()`, including positive cases for absent optional structures and negative cases that assert the offending field names and `destConfig.<section>` path in the error.

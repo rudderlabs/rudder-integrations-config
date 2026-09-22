@@ -41,3 +41,8 @@
 - For `gcs_datalake`, schema generation warned that `schema.json` was missing `namespace.rs-immutable: true` and `required: ["provider"]` on each `consentManagement` source item, plus it recommended top-level `additionalProperties: false`.
 - When adding GCS Datalake UI fields such as `jsonPaths`, CI's schema-generator alignment can require schema details beyond the task-provided snippet; for `jsonPaths`, the generated `schema.json` pattern is the plain catch-all `^(.*)$`.
 - Corrective rule: when CI validates a changed destination schema, align the changed destination schema with generator output instead of dismissing generator warnings as pre-existing drift.
+
+## INT-7147 — Format Skill Helper Scripts Before Push
+
+- CI Code quality checks failed because `.claude/skills/migrate-destination-to-form-builder-v2/scripts/audit_ui_copy.py` was added without Black formatting; the workflow's `psf/black` check discovers Python files outside normal source directories, including skill directories.
+- Corrective rule: run Black on any Python helper script added anywhere in this repository before push, not only files under application or validation script paths.

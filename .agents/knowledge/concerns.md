@@ -83,3 +83,9 @@
 
 - After removing `legacyApiKey` from HubSpot `ui-config.json` Authorization Type options while keeping it in `schema.json` for persisted-config compatibility, `python3 scripts/schemaGenerator.py destination -name hs` succeeds but recommends removing `legacyApiKey` from the `authorizationType` enum. That diff is intentional for INT-6707 and should not be applied unless legacy persisted HubSpot configs no longer need schema-valid rendering.
 - The same HubSpot schema-generator run can also emit baseline/noisy output for `redirect`, `additionalProperties: false`, and consent-management `provider` requirements; distinguish those pre-existing generator recommendations from the scoped legacy API-key UI removal.
+
+## INT-7147 — DCM Floodlight Advertiser Secret Metadata Mismatch
+
+<!-- session: 2026-09-15 -->
+
+- Human review clarified that DCM Floodlight `advertiserId` should not be treated as a secret despite the pre-migration UI flag. Keep `src/configurations/destinations/dcm_floodlight/ui-config.json` `secret: false`, and keep `src/configurations/destinations/dcm_floodlight/db-config.json` without `advertiserId` in `secretKeys` or `excludeKeys`.
