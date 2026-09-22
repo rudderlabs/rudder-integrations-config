@@ -216,7 +216,7 @@
 
 - Google Ads (`src/configurations/destinations/googleads/`) is web device-mode only for this migration; keep `sdkTemplate.fields` empty after deleting the legacy `useNativeSDK` defaultCheckbox, and do not add SDK-template fields whose config keys are absent from `db-config.json` `config.destConfig.web`.
 - Keep Google Ads client-side event filtering in Configuration settings / Other settings without adding a redundant `connectionMode.web == device` gate, because this destination has no cloud mode and the PRD/task explicitly made the group unconditional.
-- Keep Google Ads Event mapping after Configuration settings per the PRD/task order (`Initial setup` → `Configuration settings` → `Event mapping`), even though the generic V2 migration runbook may place mapping collapsibles earlier.
+- Google Ads review direction supersedes the original PRD/task ordering: place Event mapping immediately after Initial setup, yielding `Initial setup` → `Event mapping` → `Configuration settings`, consistent with the generic V2 navigation order.
 - Do not invent a visible Google Ads `dynamicRemarketing` field during the V2 migration: it is an existing orphan metadata/schema key with no V1 UI field, and adding new customer-visible fields is out of scope.
 
 ## ANA-134 — Event Filtering DestConfig Scope
