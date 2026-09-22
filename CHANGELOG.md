@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.177.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.176.1...v1.177.0) (2026-09-22)
+
+
+### Features
+
+* **bq:** add authentication method toggle for workload identity federation ([#2740](https://github.com/rudderlabs/rudder-config-schema/issues/2740)) ([0a61f58](https://github.com/rudderlabs/rudder-config-schema/commit/0a61f582b0b7815eae8d91893088f2328224fed2))
+* migrate Campaign Manager 360 to form builder v2 ([#2728](https://github.com/rudderlabs/rudder-config-schema/issues/2728)) ([ae18f4e](https://github.com/rudderlabs/rudder-config-schema/commit/ae18f4eeb2082f6daab8dd1187ab02e1fee6494d))
+* migrate DCM Floodlight to form builder v2 ([#2739](https://github.com/rudderlabs/rudder-config-schema/issues/2739)) ([2057926](https://github.com/rudderlabs/rudder-config-schema/commit/2057926739703e0104a46a286f860fb37912baf2))
+* migrate google ads offline conversions to form builder v2 ([#2736](https://github.com/rudderlabs/rudder-config-schema/issues/2736)) ([54de3d4](https://github.com/rudderlabs/rudder-config-schema/commit/54de3d4aca23867ddf2a93d79993d9affa5c27d4))
+
+
+### Bug Fixes
+
+* move OpenAI Ads column and cleanup generator ([#2738](https://github.com/rudderlabs/rudder-config-schema/issues/2738)) ([e205589](https://github.com/rudderlabs/rudder-config-schema/commit/e205589911909fc4839d7bdb021da90bd33155e3))
+* reorder OpenAI Ads event mapping settings ([#2742](https://github.com/rudderlabs/rudder-config-schema/issues/2742)) ([97b16a1](https://github.com/rudderlabs/rudder-config-schema/commit/97b16a1b3f60570562c9545dab07d6b969039587))
+* update Salesforce OAuth account visibility ([#2744](https://github.com/rudderlabs/rudder-config-schema/issues/2744)) ([33810f9](https://github.com/rudderlabs/rudder-config-schema/commit/33810f93c3cb647bc9dbbebf12963576332fdd3a))
+* validate event filtering destConfig placement ([#2715](https://github.com/rudderlabs/rudder-config-schema/issues/2715)) ([4d7d10b](https://github.com/rudderlabs/rudder-config-schema/commit/4d7d10b5510e1c45aa9edb0465601fd17384e523))
+
 ### [1.176.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.176.0...v1.176.1) (2026-09-15)
 
 
