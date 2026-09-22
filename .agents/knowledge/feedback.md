@@ -77,3 +77,4 @@
 ## INT-7182 — Everflow Review Artifact Guidance
 
 - Do not commit Everflow browser E2E screenshots, recordings, or run reports under `e2e-artifacts`; those generated review artifacts should be removed from the configuration PR.
+- Omit an `Other settings` section from Everflow `ui-config.json` when its groups array is empty; retain only sections backed by actual fields or templates.

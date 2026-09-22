@@ -220,6 +220,7 @@
 
 - Everflow `postbackUrl` must be an HTTP(S) URL with a DNS-style host, no query string or fragment, and case-insensitive rejection of unsafe localhost/ngrok host classes, including nested ngrok subdomains; its validation message should direct customers to trim the URL from `?` onward.
 - For account URL schemas, reuse the shared HTTP/Webhook scheme, DNS-host, and port regex and adjust only the path suffix for integration-specific query/fragment rejection; encode length bounds in the regex rather than adding a redundant `maxLength`.
+- Keep DNS-alias, redirect, rebinding, and egress SSRF enforcement out of the Everflow configuration schema; those runtime URL-safety protections belong to the transformer/delivery layer.
 - Everflow `networkId` is not numeric-only: accept a plain string containing at least one non-whitespace character, capped at 200 characters.
 - Everflow `verificationToken` is optional, clearable, secret, and capped at 200 characters.
 - For destinations that are cloud-only across every source type, express the mode matrix in `supportedConnectionModes` without adding redundant per-source `connectionMode` entries to `config.destConfig`; omit an empty `Configuration settings` base-template section when it has no fields.
