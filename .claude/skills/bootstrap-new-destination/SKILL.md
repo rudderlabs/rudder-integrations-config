@@ -118,7 +118,7 @@ Then fill the rest from the form answers:
 - `supportedConnectionModes` ← Form 3/4; `supportedMessageTypes` ← Form 5.
 - `includeKeys` / `excludeKeys`: if **any** source type has `device` or `hybrid`, define `includeKeys` (must include `consentManagement` and `connectionMode`); if every source type is cloud-only, **delete both**.
 - `hybridModeCloudEventsFilter`: required if any source type includes `hybrid`.
-- `sdkTemplate` (ui-config): **always present.** Populate `fields` for `device`/`hybrid`; for cloud-only keep the object with `fields: []` — see step 2.
+- `sdkTemplate` (ui-config): **always present** — `fields` populated for `device`/`hybrid`, `[]` for cloud-only. See step 2.
 
 > A present-but-empty `includeKeys: []` is read as device mode and fails the consent-integrity test — for an all-cloud destination, delete it (don't leave the template's empty array).
 >
@@ -173,69 +173,19 @@ Copy the template as-is — it already includes the standard consent block. Add 
 
 When real fields are introduced, replace it — add each to the "Connection settings" group (page 1) if required, else "Configure settings" (page 2), using the same shape. `type` ∈ `textInput | checkbox | singleSelect | multiSelect | tagInput`; omit `required` to make a field required, set `"required": false` for optional, and mark secrets with `"secret": true`.
 
-#### Don't invent sections — and don't strip the consent surface to tidy up
+A destination whose whole configuration is a linked account and two connection fields ends up with very little on page 2. Two opposite mistakes follow:
 
-A destination whose whole configuration is a linked account and two connection fields ends up with
-very little on page 2. Two opposite mistakes follow, and the second is much more expensive:
-
-- **Don't add sections the template doesn't ship.** The template's `baseTemplate` is exactly two
-  blocks — "Initial setup" (groups "Connection settings" and "Connection mode") and "Configuration
-  settings" (section "Destination settings" → group "Configure settings"). An extra "Other settings"
-  or similar, carrying an empty `groups` array, renders as a heading with nothing under it. Add a
-  section when you have fields for it, not in anticipation.
-- **Don't delete the consent surface.** `consentSettingsTemplate` in the ui-config, the
-  `consentManagement` property in `schema.json`, and a `destConfig.<sourceType>` entry containing
-  `consentManagement` for **every** supported source type are required of an ordinary destination
-  even when it has no product settings at all. This is test-enforced, not stylistic:
-  `test/consentManagementFieldsIntegrity.test.ts` asserts that the `destConfig` source-type keys
-  **exactly equal** `supportedSourceTypes` (`:116-118`) and that each one includes
-  `consentManagement` (`:101-108`). Drop a source type's entry and the test doesn't just fail, it
-  throws on `undefined.includes` — which reads like a broken test rather than a missing key.
-
-The two settle a question that looks the same from the outside. "This section has no fields" is a
-reason to remove a section **you added**; it is never a reason to remove the standard consent
-blocks, and an empty "Configuration settings" block is the normal shape for an account-backed
-cloud-only destination rather than something to clean up.
+- **Don't add sections the template doesn't ship.** Its `baseTemplate` is exactly two blocks — "Initial setup" (groups "Connection settings" and "Connection mode") and "Configuration settings" (section "Destination settings" → group "Configure settings"). An extra section carrying an empty `groups` array renders as a heading with nothing under it. Add one when you have fields for it, not in anticipation.
+- **Don't delete the consent surface to tidy up.** An empty "Configuration settings" block is the normal shape for an account-backed cloud-only destination. `consentSettingsTemplate`, the schema `consentManagement` property, and a `destConfig.<sourceType>` entry per supported source type stay regardless — test-enforced, and it throws rather than failing cleanly: [CONVENTIONS.md](../../../CONVENTIONS.md#where-a-field-goes-in-destconfig-defaultconfig-vs-a-source-type).
 
 **Event mapping is not one of these fields.** If the destination maps RudderStack event names onto the partner's own event vocabulary, it goes in its own top-level block holding a single `redirect`, with the mapping declared under `redirectGroups` as `type: "mapping"` — not as a `dynamicCustomForm` in the settings groups above. Copy the shape from [CONVENTIONS.md](../../../CONVENTIONS.md#event-name-mapping).
 
 > The trap is that the wrong answer looks like it works. The base-template field switch has a `dynamicCustomForm` case and no `mapping` case, so an inline `dynamicCustomForm` renders while an inline `mapping` renders **nothing**. Reaching for `dynamicCustomForm` because "the other one didn't show up" is how `openai_ads` shipped the only inline event mapping in the tree. Keep `dynamicCustomForm` for genuinely nested row config such as `consentManagement`.
 
-- **`sdkTemplate` — keep the object, whatever the connection mode.** Device/hybrid: populate `sdkTemplate.fields` with the web SDK settings from the example destination. Cloud-only: leave the object exactly as the template ships it, with `fields: []`. Deleting it is a shipped-destination outage — see below.
+- **`sdkTemplate`** — device/hybrid: populate `fields` with the web SDK settings from the example destination; cloud-only: leave the object exactly as the template ships it. **Never delete it.** Doing so ships a destination that connects fine and then crashes its own Configuration page, and nothing here catches it: [CONVENTIONS.md](../../../CONVENTIONS.md#sdktemplate-is-required-even-on-a-cloud-only-destination).
 - Keep `regex` **plain**, exactly as in the placeholder field above, and give **every** string field one — `scripts/template-ui-config.json` ships no fields, so there is nothing to copy. Omitting `regex` never gives you a permissive pattern: on `textInput` / `textareaInput` it generates no `pattern` at all, so the value goes unvalidated on save, and on `dynamicForm` / `dynamicCustomForm` / `tagInput` it generates the deprecated prefix. Don't carry that prefix over from an existing destination either. Both rules and the reasoning: [CONVENTIONS.md](../../../CONVENTIONS.md#string-pattern-and-regex).
 - An **optional** field's `regex` must match `""`, or the customer can fill it but never clear it — the `^(.{0,100})$` form above allows it, a constrained shape needs an explicit empty branch. [CONVENTIONS.md](../../../CONVENTIONS.md#optional-fields-must-accept-the-empty-string) covers `dynamicForm` rows and `singleSelect`.
 - Do not add any `oneTrustCookieCategories` / `ketchConsentPurposes` fields.
-
-#### Never delete `sdkTemplate` because the destination is cloud-only
-
-It reads like dead weight on a cloud-only destination — no device-mode fields to put in it, and the
-`note` the template ships literally says "not visible in the ui". Deleting it produces a destination
-that **is created and connected without complaint and then crashes its own Configuration page** the
-first time anyone reopens it.
-
-In rudder-webapp, `configurationV2/formComponents/types.ts` declares `sdkTemplate` as a **required**
-member of `DestUIConfigV2` — note that `consentSettingsTemplate?` right beside it is optional, so
-this is a deliberate contract, not an oversight. `configurationV2/formComponents/util.ts` destructures
-it and passes it straight into `getConfigTemplateFields` and
-`getFormGroupsFromSdkTemplateSubGroups`, which dereferences `sdkTemplate.groups` with no guard. The
-create/connect path is the one that optional-chains it (`workflows/steps/destinationSettings/util.ts`
-uses `sdkTemplate?.fields`), which is exactly why the failure shows up after creation rather than
-during it.
-
-Nothing in this repo catches it — `npx jest test/validation.test.ts` stays green, because
-`sdkTemplate` is not what the destination meta-schema validates. All 84 form-builder-v2 destinations
-carry the object, 70 of them with `fields: []`, so there is no precedent to copy in the other
-direction. To confirm (a plain `grep -L` is no good here — it would also list every legacy non-v2
-ui-config, which has no `sdkTemplate` by design):
-
-```bash
-python3 -c "
-import json, glob
-bad = [f for f in glob.glob('src/configurations/destinations/*/ui-config.json')
-       if 'baseTemplate' in json.load(open(f))['uiConfig']
-       and 'sdkTemplate' not in json.load(open(f))['uiConfig']]
-print(bad or 'all form-builder-v2 destinations carry sdkTemplate')"
-```
 
 ### 3. `schema.json` (author by hand — no template)
 
@@ -294,7 +244,7 @@ Prettier matches repo style (lint-staged runs it on commit). Jest runs the defin
 - [ ] Event-filtering keys, if present, are in `destConfig.defaultConfig` and not in any `destConfig.<sourceType>` array.
 - [ ] Every secret field is in `secretKeys` **and** has `secret: true` in ui-config.
 - [ ] Mode wired consistently across `supportedConnectionModes`, `supportedMessageTypes`, `includeKeys`, `sdkTemplate` (cloud-only: `includeKeys`/`excludeKeys` deleted).
-- [ ] `uiConfig.sdkTemplate` is **present** — with `fields: []` if cloud-only. Deleting it ships a destination that crashes its own Configuration page after create, and no test here catches it.
+- [ ] `uiConfig.sdkTemplate` is **present** (never deleted), with `fields: []` if cloud-only.
 - [ ] `consentSettingsTemplate`, the schema `consentManagement` property, and a `destConfig.<sourceType>` entry containing `consentManagement` exist for **every** `supportedSourceTypes` entry; no `baseTemplate` section was added beyond the template's two blocks.
 - [ ] Every string field has an explicit `regex`; no `regex`/`pattern` carries the deprecated prefix or a redundant lookahead.
 - [ ] No `pattern` has a sibling `maxLength`/`minLength` — the length bound lives in the expression.

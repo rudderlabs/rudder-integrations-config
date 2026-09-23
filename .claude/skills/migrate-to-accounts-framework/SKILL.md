@@ -43,65 +43,14 @@ Create: `src/configurations/destinations/<destination>/accounts/<account_definit
 Use the schema files as the source of truth for structure. Use the existing account definitions under `src/configurations/destinations/*/accounts/` as reference for real-world patterns.
 
 - **`db-config.json`** — follow `account-db-config-schema.json`; use `[]` for `optionFields` if there are none
-- **`schema.json`** — follow `account-schema-schema.json`; the `required` array in both `secretSchema` and `optionsSchema` must mirror which fields are required in the destination's `schema.json`. **This file is where all account field validation lives** — see below.
-- **`ui-config.json`** — follow `account-ui-config-schema.json`; copy labels, placeholders, and notes from the destination's `ui-config.json`. **Rendering metadata only — it takes no `regex`** — see below.
+- **`schema.json`** — follow `account-schema-schema.json`; the `required` array in both `secretSchema` and `optionsSchema` must mirror which fields are required in the destination's `schema.json`. **This file is where all account field validation lives.**
+- **`ui-config.json`** — follow `account-ui-config-schema.json`; copy labels, placeholders, and notes from the destination's `ui-config.json`. **Rendering metadata only — it takes no `regex`.**
 
-#### Validation goes in `schema.json`, never in the account `ui-config.json`
+Three rules for the `schema.json` patterns, each inverting a destination-level habit:
 
-At the destination level, [CONVENTIONS.md](../../../CONVENTIONS.md#always-give-a-ui-config-field-an-explicit-regex)
-tells you to put a `regex` on every ui-config string field and let `schemaGenerator.py` derive the
-`schema.json` `pattern` from it. **Account definitions invert this, and nothing warns you.**
-
-- The account ui-config field contract in `account-ui-config-schema.json` is
-  `component | label | placeholder | key | secret | optional | note | options | default`. There is
-  no `regex`, and none of the account definitions in the tree uses one. Nothing reads such a key,
-  and the schema generator does not walk account definitions at all.
-- The authoritative validation is the account `schema.json`. `account-schema-schema.json` makes
-  `type` + `pattern` **required** on every `secretSchema` property, so a secret field cannot be
-  declared without one. `optionsSchema` properties are not held to that by the meta-schema — give
-  them a `pattern` anyway; an option field with none is validated against nothing on save.
-- Attach an `errorMessage` next to the `pattern` for anything a customer can plausibly get wrong.
-  Neither sub-schema restricts additional keys, so `ajv-errors` `errorMessage` passes validation,
-  and it is the only way the customer sees a readable reason instead of a raw schema failure. It
-  is the account-level counterpart of
-  [`regexErrorMessage`](../../../CONVENTIONS.md#pair-every-regex-with-a-regexerrormessage).
-
-> **Do not take the pattern from the meta-schema's own description.** The `secretSchema.properties`
-> description in `account-schema-schema.json` suggests `(^\{\{.*\|\|(.*)\}\}$)|^(.{1,500})$` for
-> required fields and `(^\{\{.*\|\|(.*)\}\}$)|^(.{0,200})$` for optional ones. Both carry the
-> deprecated `{{ }}` / `env.` prefix that
-> [CONVENTIONS.md](../../../CONVENTIONS.md#string-pattern-and-regex) rules out for new fields. Take
-> the length bound, drop the alternation: `^.{1,500}$` and `^(.{0,200})$`.
-
-Encode length bounds in the `pattern` itself — never add a sibling `maxLength`. `^(?=.{1,200}$).*\S.*$`
-is the idiom for "at most 200 characters and not all whitespace". Full reasoning:
-[CONVENTIONS.md — keep the expression to what the value is](../../../CONVENTIONS.md#keep-the-expression-to-what-the-value-is).
-
-#### URL-valued account fields
-
-A field holding a delivery endpoint reuses the shared expression rather than inventing one. Copy it
-from **`src/configurations/destinations/http/schema.json`** (`apiUrl`) — that is the clean copy,
-matching scheme, DNS-style host, optional port, and optional path, and rejecting the `localhost` and
-`ngrok` host classes:
-
-```text
-^(https?://)(?![a-zA-Z0-9-]*\.ngrok\.io)(?!localhost|.*\.localhost)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,}(:(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5]\d{4}|[1-9]\d{1,3}))?(/.*)?$
-```
-
-`webhook`'s `webhookUrl` is the same expression but prefixed with the deprecated `{{ }}` / `env.`
-alternation — if you copy from there, strip the prefix.
-
-**Vary only the trailing path group** for an integration-specific restriction, and leave the rest
-byte-identical so a reviewer can diff the two at a glance. To reject a query string or fragment —
-appropriate when the partner expects a base URL that the transformer appends its own parameters to —
-change `(/.*)?$` to `(/[^?#\s]*)?$` and say so in the `errorMessage`.
-
-**Where the boundary is.** A JSON Schema pattern is a syntactic check on a stored string. It cannot
-resolve DNS, so it cannot stop a name that resolves to a link-local or private address, and it has
-no view of redirects, DNS rebinding, or egress. Those are runtime concerns owned by the
-transformer/delivery layer — **do not try to encode them here**, and do not widen the host lookaheads
-in pursuit of them. The host-class lookaheads above are there to catch obvious misconfiguration, not
-to serve as an SSRF control.
+- **All account field validation lives in `schema.json`.** The account `ui-config.json` takes no `regex` — it is rendering metadata only, a stray key is silently unread, and the schema generator never walks account definitions. Put the `pattern` in `secretSchema` / `optionsSchema` and pair it with an `errorMessage`. Don't copy the patterns from the meta-schema's own description; they carry the deprecated `{{ }}` / `env.` prefix. Full rules and evidence: [CONVENTIONS.md](../../../CONVENTIONS.md#account-field-validation-lives-in-the-account-schemajson).
+- **Encode length bounds in the `pattern`**, never as a sibling `maxLength` — `^(?=.{1,200}$).*\S.*$` is the idiom for "at most 200 characters, not all whitespace": [CONVENTIONS.md](../../../CONVENTIONS.md#keep-the-expression-to-what-the-value-is).
+- **A URL-valued field reuses the shared expression** from `http/schema.json` (`apiUrl`), varying only the trailing path group — and that expression is a syntax check, not an SSRF control: [CONVENTIONS.md](../../../CONVENTIONS.md#url-valued-fields-reuse-the-shared-expression).
 
 ---
 
