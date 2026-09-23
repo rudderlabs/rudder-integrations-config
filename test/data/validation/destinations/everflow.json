@@ -1,0 +1,98 @@
+[
+  {
+    "testTitle": "valid minimal config with linked account",
+    "config": {
+      "rudderAccountId": "account_123"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid cloud connection mode and consent management",
+    "config": {
+      "rudderAccountId": "account_123",
+      "connectionMode": {
+        "web": "cloud",
+        "androidKotlin": "cloud",
+        "cloud": "cloud"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "and",
+            "consents": [{ "consent": "Marketing" }]
+          }
+        ],
+        "cloud": [
+          {
+            "provider": "oneTrust",
+            "consents": [{ "consent": "C0001" }]
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "invalid missing linked account",
+    "config": {},
+    "result": false,
+    "err": [" must have required property 'rudderAccountId'"]
+  },
+  {
+    "testTitle": "invalid destination-level API key",
+    "config": {
+      "rudderAccountId": "account_123",
+      "apiKey": "not-a-real-key"
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid API region",
+    "config": {
+      "rudderAccountId": "account_123",
+      "apiRegion": "us"
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid event mapping",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventMapping": []
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid custom parameter mapping",
+    "config": {
+      "rudderAccountId": "account_123",
+      "customParams": []
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid event filtering",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventFilteringOption": "disable"
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid device connection mode",
+    "config": {
+      "rudderAccountId": "account_123",
+      "connectionMode": {
+        "web": "device"
+      }
+    },
+    "result": false,
+    "err": ["connectionMode.web must be equal to one of the allowed values"]
+  }
+]

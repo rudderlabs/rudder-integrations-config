@@ -89,3 +89,7 @@
 <!-- session: 2026-09-15 -->
 
 - Human review clarified that DCM Floodlight `advertiserId` should not be treated as a secret despite the pre-migration UI flag. Keep `src/configurations/destinations/dcm_floodlight/ui-config.json` `secret: false`, and keep `src/configurations/destinations/dcm_floodlight/db-config.json` without `advertiserId` in `secretKeys` or `excludeKeys`.
+
+## INT-7182 — Cloud-Only SDK Template Runtime Assumption
+
+- The webapp V2 configuration builder assumes `uiConfig.sdkTemplate` exists even for cloud-only destinations. Omitting it lets Everflow be created and connected but crashes the post-create Configuration page when downstream code reads the missing template fields' length; retain the canonical empty object with `fields: []`.

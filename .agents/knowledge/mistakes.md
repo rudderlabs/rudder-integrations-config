@@ -46,3 +46,8 @@
 
 - CI Code quality checks failed because `.claude/skills/migrate-destination-to-form-builder-v2/scripts/audit_ui_copy.py` was added without Black formatting; the workflow's `psf/black` check discovers Python files outside normal source directories, including skill directories.
 - Corrective rule: run Black on any Python helper script added anywhere in this repository before push, not only files under application or validation script paths.
+
+## INT-7182 — Preserve the Repository-Wide Consent Contract
+
+- Simplifying Everflow's UI by removing optional product settings also removed `config.destConfig.<sourceType>.consentManagement`, `configSchema.properties.consentManagement`, and `uiConfig.consentSettingsTemplate`, causing six failures in `test/consentManagementFieldsIntegrity.test.ts`, including an undefined `.includes` access.
+- Corrective rule: ordinary destinations must retain `consentManagement` for every supported source type, the standard Consent settings and Other settings UI sections, and the corresponding generated schema even when the destination otherwise has no configurable product settings.
