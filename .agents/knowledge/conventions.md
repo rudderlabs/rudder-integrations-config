@@ -225,3 +225,12 @@
 - Everflow `verificationToken` is optional, clearable, secret, and capped at 200 characters.
 - For destinations that are cloud-only across every source type, express the mode matrix in `supportedConnectionModes` without adding redundant per-source `connectionMode` entries to `config.destConfig`; omit an empty `Configuration settings` base-template section when it has no fields.
 - Keep destination-specific schema cases in `test/data/validation/destinations/<destination>.json` and rely on the generic account-definition validators; do not add destination-specific test blocks to shared `test/validation.test.ts` infrastructure.
+
+## session-2026-09-23 — Custom Audience GA: Removing A Hidden Gate
+
+<!-- session: 2026-09-23 -->
+
+- Taking a gated definition GA means deleting `options.hidden` (and `options.isBeta`, which only adds the Beta badge) from its `db-config.json`; `src/configurations/destinations/custom_audience/db-config.json` was made GA this way, leaving `options.createFlow` as the only key. `fb_custom_audience/db-config.json` (no `hidden`, no `isBeta`) is the GA reference shape.
+- `options.hidden.gate` is enforced in two places, not only the catalog UI: rudder-webapp hides the definition in catalog/pickers (`src/components/directory/utils.ts::isResourceHidden`) and rudder-config-backend rejects destination CREATE with a 403 "is not available for your account" (`src/services/destination.service.ts` → `src/utils/resourceGate.ts::throwIfResourceGated`; update path is not gated). Removing the gate from the definition unblocks both; no backend code change is needed.
+- The flag `AMP_enable-data-graph-audiences` gates `custom_audience`, `braze_audience` and `reddit_audience` definitions AND the webapp Data Graph Audiences product. Decision: to GA one destination, remove the gate from that one definition — never flip the Flagsmith flag globally, which would release all three destinations plus Data Graph Audiences.
+- Removals propagate on deploy: `scripts/deployToDB.py::update_diff_db` sends the full file-built definition when `jsondiff` finds any change, and `options` is a whole nullable column, so deleted nested keys are dropped from the stored definition.
