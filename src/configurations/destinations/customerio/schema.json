@@ -1,16 +1,16 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["apiKey", "siteID", "datacenter"],
+    "required": ["datacenter"],
     "type": "object",
     "properties": {
       "siteID": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "apiKey": {
         "type": "string",
-        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$"
+        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
       },
       "deviceTokenEventName": {
         "type": "string",
@@ -1103,6 +1103,33 @@
             }
           }
         }
+      },
+      "writeKey": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "pattern": "^(.{0,100})$"
+          }
+        }
+      },
+      "sdkVersion": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "string",
+            "enum": ["v1", "v2"],
+            "default": "v1"
+          }
+        }
+      },
+      "anonymousInApp": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "boolean"
+          }
+        }
       }
     },
     "allOf": [
@@ -1117,6 +1144,111 @@
         },
         "then": {
           "required": ["userIdIdentifierType"]
+        }
+      },
+      {
+        "if": {
+          "not": {
+            "properties": {
+              "connectionMode": {
+                "type": "object",
+                "properties": {
+                  "web": {
+                    "const": "device"
+                  }
+                },
+                "required": ["web"],
+                "additionalProperties": false
+              },
+              "sdkVersion": {
+                "type": "object",
+                "properties": {
+                  "web": {
+                    "const": "v2"
+                  }
+                },
+                "required": ["web"]
+              }
+            },
+            "required": ["connectionMode", "sdkVersion"]
+          }
+        },
+        "then": {
+          "required": ["siteID"],
+          "properties": {
+            "siteID": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "connectionMode": {
+              "type": "object",
+              "properties": {
+                "web": {
+                  "const": "device"
+                }
+              },
+              "required": ["web"]
+            },
+            "sdkVersion": {
+              "type": "object",
+              "properties": {
+                "web": {
+                  "const": "v2"
+                }
+              },
+              "required": ["web"]
+            }
+          },
+          "required": ["connectionMode", "sdkVersion"]
+        },
+        "then": {
+          "required": ["writeKey"],
+          "properties": {
+            "writeKey": {
+              "type": "object",
+              "required": ["web"],
+              "properties": {
+                "web": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "not": {
+            "properties": {
+              "connectionMode": {
+                "type": "object",
+                "properties": {
+                  "web": {
+                    "const": "device"
+                  }
+                },
+                "required": ["web"],
+                "additionalProperties": false
+              }
+            },
+            "required": ["connectionMode"]
+          }
+        },
+        "then": {
+          "required": ["apiKey"],
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
         }
       }
     ]
