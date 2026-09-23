@@ -109,7 +109,8 @@ Give every string field an explicit `regex`, then regenerate.
 
 ### Keep the expression to what the value is
 
-Write the smallest expression that describes the accepted value. Two habits to avoid:
+Write the smallest expression that describes the accepted value, and let it carry the whole
+constraint. Three habits to avoid:
 
 - **Alternations for `{{ }}` / `env.` values** — deprecated, per the section above. Note also that
   a trailing `^(.{0,100})$` branch already matches those strings, so the alternation is dead
@@ -118,6 +119,27 @@ Write the smallest expression that describes the accepted value. Two habits to a
   pattern such as `^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)*$` cannot match `$`, `..`,
   `[`, `]`, `*`, `?`, `(`, `)`, or a leading-digit segment, so a `(?!…)` guarding against any of
   those adds nothing but review load.
+- **A sibling `maxLength` / `minLength` next to a `pattern`.** Encode the bound in the expression
+  instead — `^.{1,200}$` for a required field, or a lookahead when the bound has to compose with a
+  shape constraint, as in `^(?=.{1,200}$).*\S.*$` for "at most 200 characters, not all whitespace".
+
+The length keywords are not merely redundant next to a `pattern`, they are outside the generated
+contract. **No schema in this repository pairs them**: `maxLength` does not appear anywhere, and
+`minLength` appears in exactly two destinations (`custom_audience`, `customerio`), always as a
+standalone `minLength: 1` on a field that declares no `pattern` at all.
+
+That is because [`scripts/schemaGenerator.py`](scripts/schemaGenerator.py) never emits either
+keyword — a string field generates `type` and `pattern` and nothing else. A hand-added length bound
+therefore has no counterpart in the ui-config `regex` the generator reads from, so the two files
+disagree by construction and `npm run update:schema:destination:force` drops it. It also splits one
+constraint across two AJV keywords, so the `err` string a validation fixture has to match depends
+on which keyword happens to fail first.
+
+To confirm the convention still holds:
+
+```bash
+grep -rn 'maxLength' src/configurations/ | wc -l   # expected: 0
+```
 
 ### Pair every `regex` with a `regexErrorMessage`
 
