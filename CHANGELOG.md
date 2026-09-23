@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.178.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.177.0...v1.178.0) (2026-09-23)
+
+
+### Features
+
+* **custom_audience:** make Custom Audience destination GA ([#2753](https://github.com/rudderlabs/rudder-config-schema/issues/2753)) ([bb1c6d1](https://github.com/rudderlabs/rudder-config-schema/commit/bb1c6d1acb44d92c121a3ecbce3012d5e8b238d5))
+
 ## [1.177.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.176.1...v1.177.0) (2026-09-22)
 
 
