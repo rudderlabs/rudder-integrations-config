@@ -77,3 +77,8 @@
 
 - Destination-definition custom rules in `src/validator/index.ts` are the right layer for cross-key `db-config.json` constraints that the JSON Schema cannot express through `destConfig` pattern properties, such as forbidding event-filtering fields in non-`defaultConfig` source sections.
 - `test/validator/validator.test.ts` should cover these custom rules with minimal destination definitions passed to `validateDestinationDefinitions()`, including positive cases for absent optional structures and negative cases that assert the offending field names and `destConfig.<section>` path in the error.
+
+## ACT2-860 — Backward-Compatible Account Auth Branching
+
+- BigQuery source account `combinedSchema` must put `required: ["authMethod"]` inside the WIF branch's `if.options` predicate rather than requiring the discriminator globally. This prevents a missing discriminator from matching vacuously: legacy accounts without `authMethod` fall through to the service-account branch and still require `secret.credentials`.
+- In the WIF branch, allow `secret` to be absent or empty but set `secret.additionalProperties: false` so branch-mismatched stale `credentials` cannot persist; require only the three pool identifiers, leaving target-service-account impersonation optional.

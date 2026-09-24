@@ -12,18 +12,131 @@
       "location": {
         "type": "string",
         "description": "BigQuery dataset location (e.g., US, EU)"
+      },
+      "authMethod": {
+        "type": "string",
+        "enum": ["serviceAccountKey", "workloadIdentityFederation"],
+        "default": "serviceAccountKey",
+        "$comment": "config-backend runs `combinedSchema` on the account create/edit path, so this default does not fire there. `combinedSchema` deliberately treats a missing discriminator as service account key authentication for legacy accounts. The default remains for consumers that validate `optionsSchema` standalone.",
+        "description": "Authentication method discriminator"
+      },
+      "workloadIdentityProjectNumber": {
+        "type": "string",
+        "pattern": "^[0-9]{1,20}$",
+        "description": "GCP project number containing the workload identity pool"
+      },
+      "workloadIdentityPoolId": {
+        "type": "string",
+        "pattern": "^(?!gcp-)[a-z0-9-]{4,32}$",
+        "description": "Workload identity pool ID"
+      },
+      "workloadIdentityProviderId": {
+        "type": "string",
+        "pattern": "^(?!gcp-)[a-z0-9-]{4,32}$",
+        "description": "Workload identity provider ID"
+      },
+      "workloadIdentityTargetServiceAccount": {
+        "type": "string",
+        "pattern": "^$|^[a-z][a-z0-9-]{4,28}[a-z0-9]@[a-z][a-z0-9-]{4,28}[a-z0-9]\\.iam\\.gserviceaccount\\.com$",
+        "description": "Optional service account to impersonate"
       }
     }
   },
   "secretSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "required": ["credentials"],
     "properties": {
       "credentials": {
         "type": "string",
         "pattern": "^[\\s\\S]+$",
         "description": "GCP service account key JSON"
+      }
+    }
+  },
+  "combinedSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$comment": "config-backend validates this combined options/secret document on account create and edit, where optionsSchema defaults do not apply. A missing authMethod therefore follows the service account key branch for backwards compatibility.",
+    "type": "object",
+    "required": ["options"],
+    "properties": {
+      "options": {
+        "type": "object",
+        "required": ["project"],
+        "properties": {
+          "project": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9.:-]{4,28}[a-z0-9]$"
+          },
+          "location": {
+            "type": "string"
+          },
+          "authMethod": {
+            "type": "string",
+            "enum": ["serviceAccountKey", "workloadIdentityFederation"]
+          },
+          "workloadIdentityProjectNumber": {
+            "type": "string",
+            "pattern": "^[0-9]{1,20}$"
+          },
+          "workloadIdentityPoolId": {
+            "type": "string",
+            "pattern": "^(?!gcp-)[a-z0-9-]{4,32}$"
+          },
+          "workloadIdentityProviderId": {
+            "type": "string",
+            "pattern": "^(?!gcp-)[a-z0-9-]{4,32}$"
+          },
+          "workloadIdentityTargetServiceAccount": {
+            "type": "string",
+            "pattern": "^$|^[a-z][a-z0-9-]{4,28}[a-z0-9]@[a-z][a-z0-9-]{4,28}[a-z0-9]\\.iam\\.gserviceaccount\\.com$"
+          }
+        }
+      },
+      "secret": {
+        "type": "object"
+      }
+    },
+    "if": {
+      "properties": {
+        "options": {
+          "required": ["authMethod"],
+          "properties": {
+            "authMethod": {
+              "const": "workloadIdentityFederation"
+            }
+          }
+        }
+      }
+    },
+    "then": {
+      "properties": {
+        "options": {
+          "required": [
+            "workloadIdentityProjectNumber",
+            "workloadIdentityPoolId",
+            "workloadIdentityProviderId"
+          ]
+        },
+        "secret": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        }
+      }
+    },
+    "else": {
+      "required": ["secret"],
+      "properties": {
+        "secret": {
+          "type": "object",
+          "required": ["credentials"],
+          "properties": {
+            "credentials": {
+              "type": "string",
+              "pattern": "^[\\s\\S]+$"
+            }
+          }
+        }
       }
     }
   }

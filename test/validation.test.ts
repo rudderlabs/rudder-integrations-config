@@ -1153,6 +1153,72 @@ describe('Account Definition validation tests', () => {
     );
   });
 
+  const bigqueryWifPayload = () => ({
+    options: {
+      project: 'analytics-prod',
+      authMethod: 'workloadIdentityFederation',
+      workloadIdentityProjectNumber: '123456789012',
+      workloadIdentityPoolId: 'rudderstack-pool',
+      workloadIdentityProviderId: 'rudderstack-aws',
+    },
+  });
+
+  it('SOURCE_BIGQUERY combinedSchema accepts WIF without credentials', () => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    expect(validateCombined(bigqueryWifPayload())).toBe(true);
+  });
+
+  it('SOURCE_BIGQUERY combinedSchema accepts explicit service account key authentication', () => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    expect(
+      validateCombined({
+        options: {
+          project: 'analytics-prod',
+          authMethod: 'serviceAccountKey',
+        },
+        secret: { credentials: '{"type":"service_account"}' },
+      }),
+    ).toBe(true);
+  });
+
+  it('SOURCE_BIGQUERY combinedSchema accepts legacy keyed accounts without authMethod', () => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    expect(
+      validateCombined({
+        options: { project: 'analytics-prod' },
+        secret: { credentials: '{"type":"service_account"}' },
+      }),
+    ).toBe(true);
+  });
+
+  it('SOURCE_BIGQUERY combinedSchema rejects WIF missing a required pool field', () => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+    const payload = bigqueryWifPayload();
+    const { options }: { options: Record<string, unknown> } = payload;
+    delete options.workloadIdentityProviderId;
+
+    expect(validateCombined(payload)).toBe(false);
+  });
+
+  it('SOURCE_BIGQUERY combinedSchema rejects credentials submitted with WIF', () => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    expect(
+      validateCombined({
+        ...bigqueryWifPayload(),
+        secret: { credentials: '{"type":"service_account"}' },
+      }),
+    ).toBe(false);
+  });
+
   const databricksPatPayload = () => ({
     options: {
       host: 'dbc-abc12345-6789.cloud.databricks.com',
