@@ -6,6 +6,7 @@ This document captures naming and structural conventions used across this reposi
 
 - [**AccountDefinition naming (`accountDefinitionName`)**](#accountdefinition-naming-accountdefinitionname)
 - [**String `pattern` and `regex`**](#string-pattern-and-regex)
+- [**`sdkTemplate` is required, even on a cloud-only destination**](#sdktemplate-is-required-even-on-a-cloud-only-destination)
 - [**Optional fields must accept the empty string**](#optional-fields-must-accept-the-empty-string)
 - [**Where account credential fields live**](#where-account-credential-fields-live)
 - [**Deduplication / event-id config key (`deduplicationKey`)**](#deduplication--event-id-config-key-deduplicationkey)
@@ -109,7 +110,8 @@ Give every string field an explicit `regex`, then regenerate.
 
 ### Keep the expression to what the value is
 
-Write the smallest expression that describes the accepted value. Two habits to avoid:
+Write the smallest expression that describes the accepted value, and let it carry the whole
+constraint. Three habits to avoid:
 
 - **Alternations for `{{ }}` / `env.` values** — deprecated, per the section above. Note also that
   a trailing `^(.{0,100})$` branch already matches those strings, so the alternation is dead
@@ -118,6 +120,53 @@ Write the smallest expression that describes the accepted value. Two habits to a
   pattern such as `^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)*$` cannot match `$`, `..`,
   `[`, `]`, `*`, `?`, `(`, `)`, or a leading-digit segment, so a `(?!…)` guarding against any of
   those adds nothing but review load.
+- **A sibling `maxLength` / `minLength` next to a `pattern`.** Encode the bound in the expression
+  instead — `^.{1,200}$` for a required field, or a lookahead when the bound has to compose with a
+  shape constraint, as in `^(?=.{1,200}$).*\S.*$` for "at most 200 characters, not all whitespace".
+
+The length keywords are not merely redundant next to a `pattern`, they are outside the generated
+contract. **No schema in this repository pairs them**: `maxLength` does not appear anywhere, and
+`minLength` appears in exactly two destinations (`custom_audience`, `customerio`), always as a
+standalone `minLength: 1` on a field that declares no `pattern` at all.
+
+That is because [`scripts/schemaGenerator.py`](scripts/schemaGenerator.py) never emits either
+keyword — a string field generates `type` and `pattern` and nothing else. A hand-added length bound
+therefore has no counterpart in the ui-config `regex` the generator reads from, so the two files
+disagree by construction and `npm run update:schema:destination:force` drops it. It also splits one
+constraint across two AJV keywords, so the `err` string a validation fixture has to match depends
+on which keyword happens to fail first.
+
+To confirm the convention still holds:
+
+```bash
+grep -rn 'maxLength' src/configurations/ | wc -l   # expected: 0
+```
+
+### URL-valued fields reuse the shared expression
+
+A field holding a delivery endpoint — a destination `schema.json` property or an account
+`optionsSchema` one — reuses the shared expression rather than inventing its own. Copy it from
+[`src/configurations/destinations/http/schema.json`](src/configurations/destinations/http/schema.json)
+(`apiUrl`), which is the clean copy: scheme, DNS-style host, optional port, optional path, with the
+`localhost` and `ngrok` host classes rejected.
+
+```text
+^(https?://)(?![a-zA-Z0-9-]*\.ngrok\.io)(?!localhost|.*\.localhost)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,}(:(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5]\d{4}|[1-9]\d{1,3}))?(/.*)?$
+```
+
+`webhook`'s `webhookUrl` is the same expression behind the deprecated `{{ }}` / `env.` alternation —
+if you copy from there, strip the prefix.
+
+**Vary only the trailing path group**, and leave the rest byte-identical so a reviewer can diff the
+two at a glance. To reject a query string or fragment — appropriate when the partner expects a base
+URL that the transformer appends its own parameters to — change `(/.*)?$` to `(/[^?#\s]*)?$` and say
+so in the `errorMessage`.
+
+**Know what this expression is and isn't.** It is a syntactic check on a stored string. It cannot
+resolve DNS, so it cannot stop a hostname that resolves to a link-local or private address, and it
+has no view of redirects, DNS rebinding, or egress. Those are runtime concerns owned by the
+transformer/delivery layer. Do not try to encode them here, and do not widen the host lookaheads in
+pursuit of them — they exist to catch obvious misconfiguration, not to serve as an SSRF control.
 
 ### Pair every `regex` with a `regexErrorMessage`
 
@@ -169,6 +218,43 @@ This field is required
 
 Most of the tree uses `"Invalid <field>"`. Don't copy it.
 `schemaGenerator.py` ignores `regexErrorMessage`, so adding one never changes `schema.json`.
+
+## `sdkTemplate` is required, even on a cloud-only destination
+
+Every form-builder-v2 `ui-config.json` carries a `uiConfig.sdkTemplate` object. On a cloud-only
+destination it holds `fields: []` and nothing else — and it must still be there. This applies
+wherever a v2 ui-config is authored or edited: a new destination, a migration onto the form builder,
+or a hand-edit of an existing one.
+
+It reads like dead weight — there are no device-mode fields to put in it, and the `note` the
+template ships literally says "not visible in the ui". Deleting it produces a destination that **is
+created and connected without complaint and then crashes its own Configuration page** the first time
+anyone reopens it.
+
+In rudder-webapp, `configurationV2/formComponents/types.ts` declares `sdkTemplate` as a **required**
+member of `DestUIConfigV2` — `consentSettingsTemplate?` beside it is optional, so this is a
+deliberate contract rather than an oversight. `configurationV2/formComponents/util.ts` destructures
+it and passes it straight into `getConfigTemplateFields` and `getFormGroupsFromSdkTemplateSubGroups`,
+which dereferences `sdkTemplate.groups` with no guard. The create/connect path is the one that
+optional-chains it (`workflows/steps/destinationSettings/util.ts` uses `sdkTemplate?.fields`), which
+is exactly why the failure surfaces after creation rather than during it.
+
+Nothing in this repo catches it. There is no meta-schema for destination `ui-config.json` at all —
+`src/schemas/destinations/` holds only `db-config-schema.json` — so `npx jest test/validation.test.ts`
+stays green. All 84 form-builder-v2 destinations carry the object, 70 of them with `fields: []`, so
+there is no precedent to copy in the other direction. To confirm (a plain `grep -L` would also list
+every legacy non-v2 ui-config, which has no `sdkTemplate` by design):
+
+```bash
+python3 -c "
+import json, glob
+bad = []
+for f in glob.glob('src/configurations/destinations/*/ui-config.json'):
+    ui = json.load(open(f))['uiConfig']
+    if 'baseTemplate' in ui and 'sdkTemplate' not in ui:
+        bad.append(f)
+print(bad or 'all form-builder-v2 destinations carry sdkTemplate')"
+```
 
 ## Optional fields must accept the empty string
 
@@ -243,6 +329,35 @@ carry none.
 **Account credential fields do not belong in the destination `schema.json`.** They are validated
 by the account's own `secretSchema` / `optionsSchema` and are not part of the persisted
 destination config. Only `rudderAccountId` is declared at the destination level.
+
+### Account field validation lives in the account `schema.json`
+
+At the destination level the rule is
+[give every ui-config string field a `regex`](#always-give-a-ui-config-field-an-explicit-regex) and
+let `schemaGenerator.py` derive the `pattern` from it. **Account definitions invert this, and
+nothing warns you.**
+
+- The account ui-config field contract in
+  [`src/schemas/account/account-ui-config-schema.json`](src/schemas/account/account-ui-config-schema.json)
+  is `component | label | placeholder | key | secret | optional | note | options | default`. There
+  is no `regex`. A stray one is not _rejected_ — the field items set no `additionalProperties:
+false` — it is simply never read, and the schema generator does not walk account definitions at
+  all. It will sit there looking like validation and doing nothing.
+- The authoritative validation is the account `schema.json`.
+  [`account-schema-schema.json`](src/schemas/account/account-schema-schema.json) makes `type` +
+  `pattern` **required** on every `secretSchema` property, so a secret field cannot be declared
+  without one. `optionsSchema` properties are not held to that — give them a `pattern` anyway; an
+  option field without one is validated against nothing on save.
+- Attach an `errorMessage` beside the `pattern` for anything a customer can plausibly get wrong.
+  Neither sub-schema restricts additional keys, so `ajv-errors` `errorMessage` passes validation. It
+  is the account-level counterpart of [`regexErrorMessage`](#pair-every-regex-with-a-regexerrormessage),
+  and the only way the customer sees a readable reason instead of a raw schema failure.
+
+> **Do not take the pattern from the meta-schema's own description.** The `secretSchema.properties`
+> description suggests `(^\{\{.*\|\|(.*)\}\}$)|^(.{1,500})$` for required fields and
+> `(^\{\{.*\|\|(.*)\}\}$)|^(.{0,200})$` for optional ones. Both carry the deprecated `{{ }}` /
+> `env.` prefix that [String `pattern` and `regex`](#string-pattern-and-regex) rules out for new
+> fields. Take the length bound, drop the alternation: `^.{1,500}$` and `^(.{0,200})$`.
 
 ### Account fields in device mode
 
@@ -457,6 +572,12 @@ event filtering — belongs in `defaultConfig`, even if a `ui-config.json` condi
 only shown for some sources. Consent fields (`consentManagement`, `oneTrustCookieCategories`,
 `ketchConsentPurposes`) go under every source type by convention, enforced by
 [`test/consentManagementFieldsIntegrity.test.ts`](test/consentManagementFieldsIntegrity.test.ts).
+
+That test asserts the `destConfig` source-type keys **exactly equal** `supportedSourceTypes`
+(`:116-118`) and that each one includes `consentManagement` (`:101-108`), so this holds even for a
+destination with no configurable product settings at all — there is no "it has nothing to configure"
+exemption. Drop a source type's entry and the test doesn't fail cleanly, it throws on
+`undefined.includes`, which reads like a broken test rather than a missing key.
 
 Only list the source types that actually support the field: `autoTrackDeviceAttributes` goes
 under android and ios, not web.

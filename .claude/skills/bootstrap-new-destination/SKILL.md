@@ -118,9 +118,11 @@ Then fill the rest from the form answers:
 - `supportedConnectionModes` ← Form 3/4; `supportedMessageTypes` ← Form 5.
 - `includeKeys` / `excludeKeys`: if **any** source type has `device` or `hybrid`, define `includeKeys` (must include `consentManagement` and `connectionMode`); if every source type is cloud-only, **delete both**.
 - `hybridModeCloudEventsFilter`: required if any source type includes `hybrid`.
-- `sdkTemplate.fields` (ui-config): populate for `device`/`hybrid`, else `[]`.
+- `sdkTemplate` (ui-config): **always present** — `fields` populated for `device`/`hybrid`, `[]` for cloud-only. See step 2.
 
 > A present-but-empty `includeKeys: []` is read as device mode and fails the consent-integrity test — for an all-cloud destination, delete it (don't leave the template's empty array).
+>
+> `sdkTemplate` is the opposite case, and the two are easy to conflate: `includeKeys` must be **deleted** when empty, `sdkTemplate` must be **kept** when empty.
 
 Strictly-cloud skeleton (all source types in cloud mode):
 
@@ -171,11 +173,16 @@ Copy the template as-is — it already includes the standard consent block. Add 
 
 When real fields are introduced, replace it — add each to the "Connection settings" group (page 1) if required, else "Configure settings" (page 2), using the same shape. `type` ∈ `textInput | checkbox | singleSelect | multiSelect | tagInput`; omit `required` to make a field required, set `"required": false` for optional, and mark secrets with `"secret": true`.
 
+A destination whose whole configuration is a linked account and two connection fields ends up with very little on page 2. Two opposite mistakes follow:
+
+- **Don't add sections the template doesn't ship.** Its `baseTemplate` is exactly two blocks — "Initial setup" (groups "Connection settings" and "Connection mode") and "Configuration settings" (section "Destination settings" → group "Configure settings"). An extra section carrying an empty `groups` array renders as a heading with nothing under it. Add one when you have fields for it, not in anticipation.
+- **Don't delete the consent surface to tidy up.** An empty "Configuration settings" block is the normal shape for an account-backed cloud-only destination. `consentSettingsTemplate`, the schema `consentManagement` property, and a `destConfig.<sourceType>` entry per supported source type stay regardless — test-enforced, and it throws rather than failing cleanly: [CONVENTIONS.md](../../../CONVENTIONS.md#where-a-field-goes-in-destconfig-defaultconfig-vs-a-source-type).
+
 **Event mapping is not one of these fields.** If the destination maps RudderStack event names onto the partner's own event vocabulary, it goes in its own top-level block holding a single `redirect`, with the mapping declared under `redirectGroups` as `type: "mapping"` — not as a `dynamicCustomForm` in the settings groups above. Copy the shape from [CONVENTIONS.md](../../../CONVENTIONS.md#event-name-mapping).
 
 > The trap is that the wrong answer looks like it works. The base-template field switch has a `dynamicCustomForm` case and no `mapping` case, so an inline `dynamicCustomForm` renders while an inline `mapping` renders **nothing**. Reaching for `dynamicCustomForm` because "the other one didn't show up" is how `openai_ads` shipped the only inline event mapping in the tree. Keep `dynamicCustomForm` for genuinely nested row config such as `consentManagement`.
 
-- Device/hybrid: populate `sdkTemplate.fields` with the web SDK settings from the example destination. Cloud-only: leave it `[]`.
+- **`sdkTemplate`** — device/hybrid: populate `fields` with the web SDK settings from the example destination; cloud-only: leave the object exactly as the template ships it. **Never delete it.** Doing so ships a destination that connects fine and then crashes its own Configuration page, and nothing here catches it: [CONVENTIONS.md](../../../CONVENTIONS.md#sdktemplate-is-required-even-on-a-cloud-only-destination).
 - Keep `regex` **plain**, exactly as in the placeholder field above, and give **every** string field one — `scripts/template-ui-config.json` ships no fields, so there is nothing to copy. Omitting `regex` never gives you a permissive pattern: on `textInput` / `textareaInput` it generates no `pattern` at all, so the value goes unvalidated on save, and on `dynamicForm` / `dynamicCustomForm` / `tagInput` it generates the deprecated prefix. Don't carry that prefix over from an existing destination either. Both rules and the reasoning: [CONVENTIONS.md](../../../CONVENTIONS.md#string-pattern-and-regex).
 - An **optional** field's `regex` must match `""`, or the customer can fill it but never clear it — the `^(.{0,100})$` form above allows it, a constrained shape needs an explicit empty branch. [CONVENTIONS.md](../../../CONVENTIONS.md#optional-fields-must-accept-the-empty-string) covers `dynamicForm` rows and `singleSelect`.
 - Do not add any `oneTrustCookieCategories` / `ketchConsentPurposes` fields.
@@ -201,7 +208,7 @@ A `configSchema` (JSON Schema draft-07) whose `required`/`properties` mirror the
 }
 ```
 
-- Use a **plain** string `pattern` — just the field's own regex, copied verbatim from that field's ui-config `regex` so the two files agree: `"^.{1,100}$"` for a required field, `"^(.{0,100})$"` as in the block above for an optional one. **Do not prefix it with the deprecated `(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|`,** which nearly every existing schema carries, and don't add lookaheads restating what the expression already rejects. Which schemas are clean to copy from: [CONVENTIONS.md](../../../CONVENTIONS.md#string-pattern-and-regex).
+- Use a **plain** string `pattern` — just the field's own regex, copied verbatim from that field's ui-config `regex` so the two files agree: `"^.{1,100}$"` for a required field, `"^(.{0,100})$"` as in the block above for an optional one. **Do not prefix it with the deprecated `(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|`,** which nearly every existing schema carries, and don't add lookaheads restating what the expression already rejects. Keep length bounds inside the expression too — a sibling `maxLength` is drift the generator neither emits nor preserves ([CONVENTIONS.md](../../../CONVENTIONS.md#keep-the-expression-to-what-the-value-is)). Which schemas are clean to copy from: [CONVENTIONS.md](../../../CONVENTIONS.md#string-pattern-and-regex).
 - Copy the `consentManagement` and `connectionMode` property blocks from the example destination. The `consentManagement.properties` keys must **exactly equal** `supportedSourceTypes`; each is an array with `uniqueItemProperties: ["provider"]` and the standard `errorMessage`. Replicate the per-source-type pattern for any source type the example lacks (e.g. `cloudSource`).
 - Do **not** add `oneTrustCookieCategories` / `ketchConsentPurposes` properties.
 - **A value valid in one connection mode but not another** (e.g. the partner's browser SDK supports fewer events than its server API) goes in `schema.json` as an `allOf` / `if` / `then` block keyed on `connectionMode.<sourceType>`, with `ajv-errors` `errorMessage`s on **both** the `then` and the `if` so the customer sees a readable reason and no raw schema failure. Don't add a second mode-specific config field for it, and don't push the rule into the transformer or the SDK. Full shape: [CONVENTIONS.md](../../../CONVENTIONS.md#restricting-a-field-by-connection-mode).
@@ -237,7 +244,10 @@ Prettier matches repo style (lint-staged runs it on commit). Jest runs the defin
 - [ ] Event-filtering keys, if present, are in `destConfig.defaultConfig` and not in any `destConfig.<sourceType>` array.
 - [ ] Every secret field is in `secretKeys` **and** has `secret: true` in ui-config.
 - [ ] Mode wired consistently across `supportedConnectionModes`, `supportedMessageTypes`, `includeKeys`, `sdkTemplate` (cloud-only: `includeKeys`/`excludeKeys` deleted).
+- [ ] `uiConfig.sdkTemplate` is **present** (never deleted), with `fields: []` if cloud-only.
+- [ ] `consentSettingsTemplate`, the schema `consentManagement` property, and a `destConfig.<sourceType>` entry containing `consentManagement` exist for **every** `supportedSourceTypes` entry; no `baseTemplate` section was added beyond the template's two blocks.
 - [ ] Every string field has an explicit `regex`; no `regex`/`pattern` carries the deprecated prefix or a redundant lookahead.
+- [ ] No `pattern` has a sibling `maxLength`/`minLength` — the length bound lives in the expression.
 - [ ] Any event mapping is a `type: "mapping"` under `redirectGroups`, reached from its own `hideEditIcon: true` block holding only a `redirect` — no `dynamicCustomForm` mapping in the settings groups, and its `schema.json` property is written by hand.
 - [ ] Every `"required": false` field matches `""` — in both the ui-config `regex` and the schema `pattern`.
 - [ ] `supportedSourceTypes` claims only what this destination genuinely accepts — `warehouse` only if it is rETL-capable.
