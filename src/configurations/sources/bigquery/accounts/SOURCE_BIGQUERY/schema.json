@@ -12,18 +12,129 @@
       "location": {
         "type": "string",
         "description": "BigQuery dataset location (e.g., US, EU)"
+      },
+      "authMethod": {
+        "type": "string",
+        "enum": ["serviceAccountKey", "workloadIdentityFederation"],
+        "default": "serviceAccountKey",
+        "$comment": "config-backend runs `combinedSchema` on the account create/edit path, not this schema, so this default never fires there. The field remains optional for legacy accounts, and `combinedSchema` routes a missing discriminator through the service-account-key branch.",
+        "description": "Authentication method used to connect to BigQuery"
+      },
+      "workloadIdentityProjectNumber": {
+        "type": "string",
+        "pattern": "^[0-9]{1,20}$",
+        "description": "GCP project number containing the workload identity pool"
+      },
+      "workloadIdentityPoolId": {
+        "type": "string",
+        "pattern": "^(?!gcp-)[a-z0-9-]{4,32}$",
+        "description": "Workload identity pool ID"
+      },
+      "workloadIdentityProviderId": {
+        "type": "string",
+        "pattern": "^(?!gcp-)[a-z0-9-]{4,32}$",
+        "description": "Workload identity provider ID"
+      },
+      "workloadIdentityTargetServiceAccount": {
+        "type": "string",
+        "pattern": "^$|^[a-z][a-z0-9-]{4,28}[a-z0-9]@[a-z][a-z0-9-]{4,28}[a-z0-9]\\.iam\\.gserviceaccount\\.com$",
+        "description": "Optional service account to impersonate after federation"
       }
     }
   },
   "secretSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "required": ["credentials"],
     "properties": {
       "credentials": {
         "type": "string",
         "pattern": "^[\\s\\S]+$",
         "description": "GCP service account key JSON"
+      }
+    }
+  },
+  "combinedSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["options", "secret"],
+    "properties": {
+      "options": {
+        "type": "object",
+        "required": ["project"],
+        "properties": {
+          "project": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9.:-]{4,28}[a-z0-9]$"
+          },
+          "location": { "type": "string" },
+          "authMethod": {
+            "type": "string",
+            "enum": ["serviceAccountKey", "workloadIdentityFederation"]
+          },
+          "workloadIdentityProjectNumber": {
+            "type": "string",
+            "pattern": "^[0-9]{1,20}$"
+          },
+          "workloadIdentityPoolId": {
+            "type": "string",
+            "pattern": "^(?!gcp-)[a-z0-9-]{4,32}$"
+          },
+          "workloadIdentityProviderId": {
+            "type": "string",
+            "pattern": "^(?!gcp-)[a-z0-9-]{4,32}$"
+          },
+          "workloadIdentityTargetServiceAccount": {
+            "type": "string",
+            "pattern": "^$|^[a-z][a-z0-9-]{4,28}[a-z0-9]@[a-z][a-z0-9-]{4,28}[a-z0-9]\\.iam\\.gserviceaccount\\.com$"
+          }
+        }
+      },
+      "secret": { "type": "object" }
+    },
+    "if": {
+      "type": "object",
+      "properties": {
+        "options": {
+          "type": "object",
+          "required": ["authMethod"],
+          "properties": {
+            "authMethod": { "const": "workloadIdentityFederation" }
+          }
+        }
+      }
+    },
+    "then": {
+      "type": "object",
+      "properties": {
+        "options": {
+          "type": "object",
+          "required": [
+            "workloadIdentityProjectNumber",
+            "workloadIdentityPoolId",
+            "workloadIdentityProviderId"
+          ]
+        },
+        "secret": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        }
+      }
+    },
+    "else": {
+      "type": "object",
+      "properties": {
+        "secret": {
+          "type": "object",
+          "required": ["credentials"],
+          "properties": {
+            "credentials": {
+              "type": "string",
+              "pattern": "^[\\s\\S]+$"
+            }
+          },
+          "additionalProperties": false
+        }
       }
     }
   }

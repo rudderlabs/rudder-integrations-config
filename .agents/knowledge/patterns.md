@@ -77,3 +77,14 @@
 
 - Destination-definition custom rules in `src/validator/index.ts` are the right layer for cross-key `db-config.json` constraints that the JSON Schema cannot express through `destConfig` pattern properties, such as forbidding event-filtering fields in non-`defaultConfig` source sections.
 - `test/validator/validator.test.ts` should cover these custom rules with minimal destination definitions passed to `validateDestinationDefinitions()`, including positive cases for absent optional structures and negative cases that assert the offending field names and `destConfig.<section>` path in the error.
+
+## ACT2-855 — Source Account Conditional Authentication
+
+<!-- session: 2026-09-24 -->
+
+- In account `combinedSchema` conditionals such as `src/configurations/sources/bigquery/accounts/SOURCE_BIGQUERY/schema.json`, put `required: ["authMethod"]` inside the `if.properties.options` branch. Without that nested requirement, JSON Schema treats a missing discriminator as a match and can route legacy accounts into the new authentication branch.
+- Keep authentication-specific requiredness in `combinedSchema`, not the standalone `secretSchema`: keyed accounts require `secret.credentials`, while keyless WIF accounts require their non-secret federation identifiers under `options`.
+- In the WIF branch, define `secret` with empty `properties` and `additionalProperties: false` so changing an account from keyed authentication cannot retain encrypted service-account credentials.
+- BigQuery source WIF reuses the existing `project` UI field but makes it editable while preserving credential-derived population for keyed accounts; gate the derived `serviceAccount` summary to the key path rather than duplicating the `project` config key in conditional fields.
+- Keep `combinedSchema.options` open to additional properties because the BigQuery source UI can round-trip the derived, display-only `serviceAccount` value even though it is not an authored runtime account option.
+- WIF setup copy must instruct customers to scope GCP trust to `assumed-role/data-plane-service-account/<workspaceID>`, not to the entire RudderStack AWS role.
