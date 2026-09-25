@@ -88,4 +88,5 @@
 - BigQuery source WIF reuses the existing editable `project` UI field and deliberately omits `obtainValueFromField`. `WarehouseAccountForm.onChange` writes `''` to derived fields when credentials are empty, which would erase a manually entered WIF project; keyed accounts therefore enter the project explicitly too.
 - Gate the derived `serviceAccount` summary field to the service-account-key path so keyless WIF accounts are not blocked by a credential-derived display field.
 - Keep `combinedSchema.options` open to additional properties because the BigQuery source UI can round-trip the derived, display-only `serviceAccount` value even though it is not an authored runtime account option.
+- Keep authentication-specific regex constraints in the active `combinedSchema` branch rather than the standalone options schema, because legacy account paths may validate the standalone schema without regard to the selected authentication method.
 - WIF setup copy must instruct customers to scope GCP trust to `assumed-role/data-plane-service-account/<workspaceID>`, not to the entire RudderStack AWS role.
