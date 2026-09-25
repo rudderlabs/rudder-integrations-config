@@ -1097,6 +1097,42 @@ describe('Account Definition validation tests', () => {
     expect(validateCombined({ ...bigQueryKeyPayload(), secret: { credentials: '' } })).toBe(false);
   });
 
+  it('SOURCE_BIGQUERY combinedSchema rejects unknown authentication methods', () => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    expect(
+      validateCombined({
+        ...bigQueryKeyPayload(),
+        options: { ...bigQueryKeyPayload().options, authMethod: 'workloadIdentity' },
+      }),
+    ).toBe(false);
+  });
+
+  it('SOURCE_BIGQUERY combinedSchema ignores inactive WIF values on keyed and legacy accounts', () => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+    const inactiveWifValues = {
+      workloadIdentityProjectNumber: 'not-a-number',
+      workloadIdentityPoolId: 'INVALID POOL',
+      workloadIdentityProviderId: 'INVALID PROVIDER',
+      workloadIdentityTargetServiceAccount: 'not-a-service-account',
+    };
+
+    expect(
+      validateCombined({
+        ...bigQueryKeyPayload(),
+        options: { ...bigQueryKeyPayload().options, ...inactiveWifValues },
+      }),
+    ).toBe(true);
+    expect(
+      validateCombined({
+        options: { project: 'legacy-project', ...inactiveWifValues },
+        secret: { credentials: '{"type":"service_account"}' },
+      }),
+    ).toBe(true);
+  });
+
   it('SOURCE_BIGQUERY combinedSchema rejects stored service-account credentials for WIF accounts', () => {
     const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
     const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
@@ -1191,17 +1227,28 @@ describe('Account Definition validation tests', () => {
     );
     const featureFlag = 'AMP_enable-bigquery-workload-identity-federation';
 
-    expect(fieldByValue.authMethod.preRequisiteFeatureFlag).toBe(featureFlag);
+    const enabledFeatureFlag = [{ configKey: featureFlag, value: true }];
+    const disabledFeatureFlag = [{ configKey: featureFlag, value: false }];
+    const wifFieldPrerequisites = {
+      fields: [{ configKey: 'authMethod', value: 'workloadIdentityFederation' }],
+      featureFlags: enabledFeatureFlag,
+    };
+    const keyFieldPrerequisites = {
+      fields: [{ configKey: 'authMethod', value: 'serviceAccountKey' }],
+      featureFlags: disabledFeatureFlag,
+      prerequisitesCondition: 'or',
+    };
+
+    expect(fieldByValue.authMethod.preRequisites).toEqual({
+      featureFlags: enabledFeatureFlag,
+    });
+    expect(fieldByValue.authMethod.preRequisiteFeatureFlag).toBeUndefined();
     expect(fieldByValue.authMethod.defaultOption.value).toBe('serviceAccountKey');
     expect(fieldByValue.authMethod.footerNote).toContain(
       'assumed-role/data-plane-service-account/<workspaceID>',
     );
     expect(fieldByValue.authMethod.footerNote).toContain('not the whole role');
-    expect(fieldByValue.credentials.preRequisites).toEqual({
-      fields: [{ configKey: 'authMethod', value: 'serviceAccountKey' }],
-      featureFlags: [{ configKey: featureFlag }],
-      prerequisitesCondition: 'or',
-    });
+    expect(fieldByValue.credentials.preRequisites).toEqual(keyFieldPrerequisites);
     expect(fieldByValue.serviceAccount.preRequisites).toEqual(
       fieldByValue.credentials.preRequisites,
     );
@@ -1212,13 +1259,69 @@ describe('Account Definition validation tests', () => {
       'workloadIdentityProviderId',
       'workloadIdentityTargetServiceAccount',
     ].forEach((fieldName) => {
-      expect(fieldByValue[fieldName].preRequisiteFeatureFlag).toBe(featureFlag);
-      expect(fieldByValue[fieldName].preRequisiteField).toEqual([
-        { name: 'authMethod', selectedValue: 'workloadIdentityFederation' },
-      ]);
+      expect(fieldByValue[fieldName].preRequisites).toEqual(wifFieldPrerequisites);
+      expect(fieldByValue[fieldName].preRequisiteFeatureFlag).toBeUndefined();
+      expect(fieldByValue[fieldName].preRequisiteField).toBeUndefined();
     });
     expect(fieldByValue.workloadIdentityTargetServiceAccount.required).toBe(false);
     expect(fieldByValue.project.readOnly).not.toBe(true);
+    expect(fieldByValue.project.regex).toBe('^[a-z][a-z0-9.:-]{4,28}[a-z0-9]$');
+    expect(fieldByValue.project.obtainValueFromField).toBeUndefined();
+
+    const isVisible = (
+      field: {
+        preRequisites?: {
+          fields?: Array<{ configKey: string; value: unknown }>;
+          featureFlags?: Array<{ configKey: string; value: unknown }>;
+          prerequisitesCondition?: string;
+        };
+      },
+      authMethod: string,
+      featureEnabled: boolean,
+    ) => {
+      if (!field.preRequisites) return true;
+      const checks = [
+        ...(field.preRequisites.fields ?? []).map(
+          ({ configKey, value }) => configKey === 'authMethod' && value === authMethod,
+        ),
+        ...(field.preRequisites.featureFlags ?? []).map(
+          ({ configKey, value }) => configKey === featureFlag && value === featureEnabled,
+        ),
+      ];
+      return field.preRequisites.prerequisitesCondition === 'or'
+        ? checks.some(Boolean)
+        : checks.every(Boolean);
+    };
+    const visibleFields = (authMethod: string, featureEnabled: boolean) =>
+      Object.entries(fieldByValue)
+        .filter(([, field]) => isVisible(field, authMethod, featureEnabled))
+        .map(([name]) => name);
+
+    expect(visibleFields('serviceAccountKey', false)).toEqual(
+      expect.arrayContaining(['credentials', 'project', 'serviceAccount']),
+    );
+    expect(visibleFields('serviceAccountKey', false)).not.toEqual(
+      expect.arrayContaining(['authMethod', 'workloadIdentityPoolId']),
+    );
+    expect(visibleFields('serviceAccountKey', true)).toEqual(
+      expect.arrayContaining(['authMethod', 'credentials', 'project', 'serviceAccount']),
+    );
+    expect(visibleFields('serviceAccountKey', true)).not.toEqual(
+      expect.arrayContaining(['workloadIdentityPoolId']),
+    );
+    expect(visibleFields('workloadIdentityFederation', true)).toEqual(
+      expect.arrayContaining([
+        'authMethod',
+        'project',
+        'workloadIdentityProjectNumber',
+        'workloadIdentityPoolId',
+        'workloadIdentityProviderId',
+        'workloadIdentityTargetServiceAccount',
+      ]),
+    );
+    expect(visibleFields('workloadIdentityFederation', true)).not.toEqual(
+      expect.arrayContaining(['credentials', 'serviceAccount']),
+    );
   });
 
   // sqlconnect-go unmarshals the port into `Port int`, so the integer form is the only

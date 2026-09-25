@@ -32,7 +32,14 @@
           },
           "required": false,
           "footerNote": "Workload Identity Federation authenticates through a pool in your GCP project that trusts RudderStack's AWS account. Scope the GCP trust grant to assumed-role/data-plane-service-account/<workspaceID> (replace <workspaceID> with your RudderStack workspace ID), not the whole role. You can optionally impersonate your service account, so no key is stored",
-          "preRequisiteFeatureFlag": "AMP_enable-bigquery-workload-identity-federation"
+          "preRequisites": {
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-bigquery-workload-identity-federation",
+                "value": true
+              }
+            ]
+          }
         },
         {
           "type": "textareaInput",
@@ -52,7 +59,8 @@
             ],
             "featureFlags": [
               {
-                "configKey": "AMP_enable-bigquery-workload-identity-federation"
+                "configKey": "AMP_enable-bigquery-workload-identity-federation",
+                "value": false
               }
             ],
             "prerequisitesCondition": "or"
@@ -63,8 +71,8 @@
           "label": "Project ID",
           "labelNote": "GCP Project ID where your BigQuery database is located.",
           "value": "project",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Value",
+          "regex": "^[a-z][a-z0-9.:-]{4,28}[a-z0-9]$",
+          "regexErrorMessage": "Enter a valid GCP project ID",
           "required": true,
           "infoTooltip": "The project_id of the GCP project that holds your BigQuery data.",
           "addInAccountSummary": true
@@ -92,7 +100,8 @@
             ],
             "featureFlags": [
               {
-                "configKey": "AMP_enable-bigquery-workload-identity-federation"
+                "configKey": "AMP_enable-bigquery-workload-identity-federation",
+                "value": false
               }
             ],
             "prerequisitesCondition": "or"
@@ -100,15 +109,22 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "authMethod",
-              "selectedValue": "workloadIdentityFederation"
-            }
-          ],
           "label": "Workload Identity Pool Project Number",
           "value": "workloadIdentityProjectNumber",
-          "preRequisiteFeatureFlag": "AMP_enable-bigquery-workload-identity-federation",
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "authMethod",
+                "value": "workloadIdentityFederation"
+              }
+            ],
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-bigquery-workload-identity-federation",
+                "value": true
+              }
+            ]
+          },
           "regex": "^[0-9]{1,20}$",
           "regexErrorMessage": "Project number must contain only digits. Use the project number, not the project ID.",
           "placeholder": "e.g: 123456789012",
@@ -116,15 +132,22 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "authMethod",
-              "selectedValue": "workloadIdentityFederation"
-            }
-          ],
           "label": "Workload Identity Pool ID",
           "value": "workloadIdentityPoolId",
-          "preRequisiteFeatureFlag": "AMP_enable-bigquery-workload-identity-federation",
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "authMethod",
+                "value": "workloadIdentityFederation"
+              }
+            ],
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-bigquery-workload-identity-federation",
+                "value": true
+              }
+            ]
+          },
           "regex": "^(?!gcp-)[a-z0-9-]{4,32}$",
           "regexErrorMessage": "Pool ID must be 4-32 lowercase letters, numbers or hyphens, and cannot start with gcp-.",
           "placeholder": "e.g: rudderstack-pool",
@@ -132,15 +155,22 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "authMethod",
-              "selectedValue": "workloadIdentityFederation"
-            }
-          ],
           "label": "Workload Identity Provider ID",
           "value": "workloadIdentityProviderId",
-          "preRequisiteFeatureFlag": "AMP_enable-bigquery-workload-identity-federation",
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "authMethod",
+                "value": "workloadIdentityFederation"
+              }
+            ],
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-bigquery-workload-identity-federation",
+                "value": true
+              }
+            ]
+          },
           "regex": "^(?!gcp-)[a-z0-9-]{4,32}$",
           "regexErrorMessage": "Provider ID must be 4-32 lowercase letters, numbers or hyphens, and cannot start with gcp-.",
           "placeholder": "e.g: rudderstack-aws",
@@ -148,15 +178,22 @@
         },
         {
           "type": "textInput",
-          "preRequisiteField": [
-            {
-              "name": "authMethod",
-              "selectedValue": "workloadIdentityFederation"
-            }
-          ],
           "label": "Target Service Account",
           "value": "workloadIdentityTargetServiceAccount",
-          "preRequisiteFeatureFlag": "AMP_enable-bigquery-workload-identity-federation",
+          "preRequisites": {
+            "fields": [
+              {
+                "configKey": "authMethod",
+                "value": "workloadIdentityFederation"
+              }
+            ],
+            "featureFlags": [
+              {
+                "configKey": "AMP_enable-bigquery-workload-identity-federation",
+                "value": true
+              }
+            ]
+          },
           "regex": "^$|^[a-z][a-z0-9-]{4,28}[a-z0-9]@[a-z][a-z0-9-]{4,28}[a-z0-9]\\.iam\\.gserviceaccount\\.com$",
           "regexErrorMessage": "Target service account must be a service account email ending in .iam.gserviceaccount.com.",
           "placeholder": "e.g: rudderstack@my-project.iam.gserviceaccount.com",
