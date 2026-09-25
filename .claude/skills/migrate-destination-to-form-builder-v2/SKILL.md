@@ -213,6 +213,8 @@ Three patterns with fixed shapes — copy them from the runbook rather than inve
 
 **Device-mode fields** → `sdkTemplate`. A field renders only if its `configKey` is in `destConfig` for that source type; otherwise it silently disappears.
 
+> **Keep the `sdkTemplate` object even if the destination is cloud-only** and it ends up holding nothing but `fields: []`. Deleting it because there is nothing to put in it ships a destination that connects fine and then crashes its own Configuration page on reopen; no test here catches it. [CONVENTIONS.md](../../../CONVENTIONS.md#sdktemplate-is-required-even-on-a-cloud-only-destination)
+
 **Client-side event filtering** → stays in `baseTemplate`, in `Configuration settings` → section `Other settings` (`icon: "otherSettings"`). `singleSelect(eventFilteringOption)` plus two **`tagInput`s** with `tagKey: "eventName"` — the `tagKey` is what preserves the stored `[{"eventName": "..."}]` shape. Gate the group on `connectionMode.<sourceType>: "device"` OR'd across exactly the source types that support device. Do not copy the gate from another destination — four idioms exist and one is dead (see Gotchas).
 
 **Event mapping** → its own top-level collapsible with `hideEditIcon: true`, one untitled section, and a group holding **only** `redirect` fields. The mapping itself goes in `redirectGroups`.

@@ -43,8 +43,14 @@ Create: `src/configurations/destinations/<destination>/accounts/<account_definit
 Use the schema files as the source of truth for structure. Use the existing account definitions under `src/configurations/destinations/*/accounts/` as reference for real-world patterns.
 
 - **`db-config.json`** — follow `account-db-config-schema.json`; use `[]` for `optionFields` if there are none
-- **`schema.json`** — follow `account-schema-schema.json`; the `required` array in both `secretSchema` and `optionsSchema` must mirror which fields are required in the destination's `schema.json`
-- **`ui-config.json`** — follow `account-ui-config-schema.json`; copy labels, placeholders, and notes from the destination's `ui-config.json`
+- **`schema.json`** — follow `account-schema-schema.json`; the `required` array in both `secretSchema` and `optionsSchema` must mirror which fields are required in the destination's `schema.json`. **This file is where all account field validation lives.**
+- **`ui-config.json`** — follow `account-ui-config-schema.json`; copy labels, placeholders, and notes from the destination's `ui-config.json`. **Rendering metadata only — it takes no `regex`.**
+
+Three rules for the `schema.json` patterns, each inverting a destination-level habit:
+
+- **All account field validation lives in `schema.json`.** The account `ui-config.json` takes no `regex` — it is rendering metadata only, a stray key is silently unread, and the schema generator never walks account definitions. Put the `pattern` in `secretSchema` / `optionsSchema` and pair it with an `errorMessage`. Don't copy the patterns from the meta-schema's own description; they carry the deprecated `{{ }}` / `env.` prefix. Full rules and evidence: [CONVENTIONS.md](../../../CONVENTIONS.md#account-field-validation-lives-in-the-account-schemajson).
+- **Encode length bounds in the `pattern`**, never as a sibling `maxLength` — `^(?=.{1,200}$).*\S.*$` is the idiom for "at most 200 characters, not all whitespace": [CONVENTIONS.md](../../../CONVENTIONS.md#keep-the-expression-to-what-the-value-is).
+- **A URL-valued field reuses the shared expression** from `http/schema.json` (`apiUrl`), varying only the trailing path group — and that expression is a syntax check, not an SSRF control: [CONVENTIONS.md](../../../CONVENTIONS.md#url-valued-fields-reuse-the-shared-expression).
 
 ---
 
