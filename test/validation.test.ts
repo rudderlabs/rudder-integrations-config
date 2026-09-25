@@ -1063,6 +1063,12 @@ describe('Account Definition validation tests', () => {
     const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
 
     expect(validateCombined(bigQueryWifPayload())).toBe(true);
+    expect(
+      validateCombined({
+        ...bigQueryWifPayload(),
+        secret: { credentials: '' },
+      }),
+    ).toBe(true);
     expect(validateCombined(bigQueryKeyPayload())).toBe(true);
     expect(
       validateCombined({
@@ -1112,6 +1118,7 @@ describe('Account Definition validation tests', () => {
   it('SOURCE_BIGQUERY combinedSchema ignores inactive WIF values on keyed and legacy accounts', () => {
     const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
     const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+    const validateOptions = compileAccountSchema(accountSchema.optionsSchema);
     const inactiveWifValues = {
       workloadIdentityProjectNumber: 'not-a-number',
       workloadIdentityPoolId: 'INVALID POOL',
@@ -1123,6 +1130,12 @@ describe('Account Definition validation tests', () => {
       validateCombined({
         ...bigQueryKeyPayload(),
         options: { ...bigQueryKeyPayload().options, ...inactiveWifValues },
+      }),
+    ).toBe(true);
+    expect(
+      validateOptions({
+        ...bigQueryKeyPayload().options,
+        ...inactiveWifValues,
       }),
     ).toBe(true);
     expect(
@@ -1228,7 +1241,7 @@ describe('Account Definition validation tests', () => {
     const featureFlag = 'AMP_enable-bigquery-workload-identity-federation';
 
     const enabledFeatureFlag = [{ configKey: featureFlag, value: true }];
-    const disabledFeatureFlag = [{ configKey: featureFlag, value: false }];
+    const disabledFeatureFlag = [{ configKey: featureFlag }];
     const wifFieldPrerequisites = {
       fields: [{ configKey: 'authMethod', value: 'workloadIdentityFederation' }],
       featureFlags: enabledFeatureFlag,
@@ -1276,52 +1289,67 @@ describe('Account Definition validation tests', () => {
           prerequisitesCondition?: string;
         };
       },
-      authMethod: string,
-      featureEnabled: boolean,
+      authMethod: string | undefined,
+      featureEnabled: boolean | undefined,
     ) => {
       if (!field.preRequisites) return true;
       const checks = [
         ...(field.preRequisites.fields ?? []).map(
           ({ configKey, value }) => configKey === 'authMethod' && value === authMethod,
         ),
-        ...(field.preRequisites.featureFlags ?? []).map(
-          ({ configKey, value }) => configKey === featureFlag && value === featureEnabled,
-        ),
+        ...(field.preRequisites.featureFlags ?? []).map(({ configKey, value }) => {
+          if (configKey !== featureFlag) return false;
+          return value === undefined ? !featureEnabled : value === featureEnabled;
+        }),
       ];
       return field.preRequisites.prerequisitesCondition === 'or'
         ? checks.some(Boolean)
         : checks.every(Boolean);
     };
-    const visibleFields = (authMethod: string, featureEnabled: boolean) =>
+    const visibleFields = (authMethod: string | undefined, featureEnabled: boolean | undefined) =>
       Object.entries(fieldByValue)
         .filter(([, field]) => isVisible(field, authMethod, featureEnabled))
         .map(([name]) => name);
 
-    expect(visibleFields('serviceAccountKey', false)).toEqual(
-      expect.arrayContaining(['credentials', 'project', 'serviceAccount']),
+    expect(visibleFields(undefined, false)).toEqual(['credentials', 'project', 'serviceAccount']);
+    expect(visibleFields(undefined, undefined)).toEqual([
+      'credentials',
+      'project',
+      'serviceAccount',
+    ]);
+    expect(visibleFields('serviceAccountKey', true)).toEqual([
+      'authMethod',
+      'credentials',
+      'project',
+      'serviceAccount',
+    ]);
+    expect(visibleFields('workloadIdentityFederation', true)).toEqual([
+      'authMethod',
+      'project',
+      'workloadIdentityProjectNumber',
+      'workloadIdentityPoolId',
+      'workloadIdentityProviderId',
+      'workloadIdentityTargetServiceAccount',
+    ]);
+  });
+
+  it('SOURCE_BIGQUERY WIF UI regexes match the combined schema patterns', () => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const uiConfigPath = path.resolve('src/configurations/sources/bigquery/ui-config.json');
+    const uiConfig = JSON.parse(fs.readFileSync(uiConfigPath, 'utf-8'));
+    const fieldByValue = Object.fromEntries(
+      uiConfig.uiConfig[0].fields.map((field: { value: string }) => [field.value, field]),
     );
-    expect(visibleFields('serviceAccountKey', false)).not.toEqual(
-      expect.arrayContaining(['authMethod', 'workloadIdentityPoolId']),
-    );
-    expect(visibleFields('serviceAccountKey', true)).toEqual(
-      expect.arrayContaining(['authMethod', 'credentials', 'project', 'serviceAccount']),
-    );
-    expect(visibleFields('serviceAccountKey', true)).not.toEqual(
-      expect.arrayContaining(['workloadIdentityPoolId']),
-    );
-    expect(visibleFields('workloadIdentityFederation', true)).toEqual(
-      expect.arrayContaining([
-        'authMethod',
-        'project',
-        'workloadIdentityProjectNumber',
-        'workloadIdentityPoolId',
-        'workloadIdentityProviderId',
-        'workloadIdentityTargetServiceAccount',
-      ]),
-    );
-    expect(visibleFields('workloadIdentityFederation', true)).not.toEqual(
-      expect.arrayContaining(['credentials', 'serviceAccount']),
-    );
+    const wifProperties = accountSchema.combinedSchema.then.properties.options.properties;
+
+    [
+      'workloadIdentityProjectNumber',
+      'workloadIdentityPoolId',
+      'workloadIdentityProviderId',
+      'workloadIdentityTargetServiceAccount',
+    ].forEach((fieldName) => {
+      expect(fieldByValue[fieldName].regex).toBe(wifProperties[fieldName].pattern);
+    });
   });
 
   // sqlconnect-go unmarshals the port into `Port int`, so the integer form is the only

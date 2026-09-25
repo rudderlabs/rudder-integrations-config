@@ -22,22 +22,18 @@
       },
       "workloadIdentityProjectNumber": {
         "type": "string",
-        "pattern": "^[0-9]{1,20}$",
         "description": "GCP project number containing the workload identity pool"
       },
       "workloadIdentityPoolId": {
         "type": "string",
-        "pattern": "^(?!gcp-)[a-z0-9-]{4,32}$",
         "description": "Workload identity pool ID"
       },
       "workloadIdentityProviderId": {
         "type": "string",
-        "pattern": "^(?!gcp-)[a-z0-9-]{4,32}$",
         "description": "Workload identity provider ID"
       },
       "workloadIdentityTargetServiceAccount": {
         "type": "string",
-        "pattern": "^$|^[a-z][a-z0-9-]{4,28}[a-z0-9]@[a-z][a-z0-9-]{4,28}[a-z0-9]\\.iam\\.gserviceaccount\\.com$",
         "description": "Optional service account to impersonate after federation"
       }
     }
@@ -118,7 +114,12 @@
         },
         "secret": {
           "type": "object",
-          "properties": {},
+          "properties": {
+            "credentials": {
+              "type": "string",
+              "const": ""
+            }
+          },
           "additionalProperties": false
         }
       }
