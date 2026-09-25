@@ -234,3 +234,7 @@
 - `options.hidden.gate` is enforced in two places, not only the catalog UI: rudder-webapp hides the definition in catalog/pickers (`src/components/directory/utils.ts::isResourceHidden`) and rudder-config-backend rejects destination CREATE with a 403 "is not available for your account" (`src/services/destination.service.ts` → `src/utils/resourceGate.ts::throwIfResourceGated`; update path is not gated). Removing the gate from the definition unblocks both; no backend code change is needed.
 - The flag `AMP_enable-data-graph-audiences` gates `custom_audience`, `braze_audience` and `reddit_audience` definitions AND the webapp Data Graph Audiences product. Decision: to GA one destination, remove the gate from that one definition — never flip the Flagsmith flag globally, which would release all three destinations plus Data Graph Audiences.
 - Removals propagate on deploy: `scripts/deployToDB.py::update_diff_db` sends the full file-built definition when `jsondiff` finds any change, and `options` is a whole nullable column, so deleted nested keys are dropped from the stored definition.
+
+## ACT2-855 — BigQuery Source WIF Compatibility
+
+- Preserve the BigQuery source `project` UI regex `^(.{0,100})$` when making the field editable for WIF. Its stricter account-schema pattern predates WIF, and tightening browser-side validation as part of an authentication-mode change can reject legacy values before account save.
