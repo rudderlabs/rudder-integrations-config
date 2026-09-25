@@ -227,7 +227,8 @@
                     "required": ["resolutionStrategy"]
                   }
                 }
-              ]
+              ],
+              "required": ["provider"]
             },
             "uniqueItemProperties": ["provider"],
             "errorMessage": {
@@ -252,107 +253,39 @@
             }
           }
         }
-      }
-    },
-    "allOf": [
-      {
-        "if": {
+      },
+      "enableConversionEventsFiltering": {
+        "type": "boolean",
+        "default": false
+      },
+      "eventsToTrackConversions": {
+        "type": "array",
+        "items": {
+          "type": "object",
           "properties": {
-            "trackConversions": {
-              "const": true
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
-          },
-          "required": ["trackConversions"]
-        },
-        "then": {
-          "properties": {
-            "enableConversionEventsFiltering": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          "required": []
+          }
         }
       },
-      {
-        "if": {
-          "properties": {
-            "trackConversions": {
-              "const": true
-            },
-            "enableConversionEventsFiltering": {
-              "const": true
-            }
-          },
-          "required": ["trackConversions", "enableConversionEventsFiltering"]
-        },
-        "then": {
-          "properties": {
-            "eventsToTrackConversions": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "eventName": {
-                    "type": "string",
-                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                  }
-                }
-              }
-            }
-          },
-          "required": []
-        }
+      "enableDynamicRemarketingEventsFiltering": {
+        "type": "boolean",
+        "default": false
       },
-      {
-        "if": {
+      "eventsToTrackDynamicRemarketing": {
+        "type": "array",
+        "items": {
+          "type": "object",
           "properties": {
-            "trackDynamicRemarketing": {
-              "const": true
+            "eventName": {
+              "type": "string",
+              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
-          },
-          "required": ["trackDynamicRemarketing"]
-        },
-        "then": {
-          "properties": {
-            "enableDynamicRemarketingEventsFiltering": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          "required": []
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "trackDynamicRemarketing": {
-              "const": true
-            },
-            "enableDynamicRemarketingEventsFiltering": {
-              "const": true
-            }
-          },
-          "required": ["trackDynamicRemarketing", "enableDynamicRemarketingEventsFiltering"]
-        },
-        "then": {
-          "properties": {
-            "eventsToTrackDynamicRemarketing": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "eventName": {
-                    "type": "string",
-                    "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                  }
-                }
-              }
-            }
-          },
-          "required": []
+          }
         }
       }
-    ]
+    }
   }
 }
