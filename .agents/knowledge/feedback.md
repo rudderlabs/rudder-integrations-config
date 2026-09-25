@@ -82,4 +82,4 @@
 ## ACT2-855 — BigQuery Source WIF UI Review Guidance
 
 - In legacy RETL source account forms, use the unified `preRequisites` object for both feature flags and field conditions; do not mix it with `preRequisiteField` or `preRequisiteFeatureFlag`.
-- When a key-auth field must remain visible while WIF is feature-gated off, express the visibility rule as `authMethod == serviceAccountKey OR feature flag == false`.
+- When a key-auth field must remain visible while WIF is feature-gated off, express the visibility rule as `authMethod == serviceAccountKey OR feature flag is falsy/missing`. In the unified `preRequisites.featureFlags` shape, omit `value`; an explicit `value: false` does not match a missing flag.

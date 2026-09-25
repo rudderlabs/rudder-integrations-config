@@ -237,4 +237,4 @@
 
 ## ACT2-855 — BigQuery Source WIF Compatibility
 
-- Preserve the BigQuery source `project` UI regex `^(.{0,100})$` when making the field editable for WIF. Its stricter account-schema pattern predates WIF, and tightening browser-side validation as part of an authentication-mode change can reject legacy values before account save.
+- Keep the BigQuery source `project` as a plain editable input without `obtainValueFromField`: `WarehouseAccountForm.onChange` overwrites derived fields with `''` when credentials are empty, which breaks keyless WIF. Treat any project-regex change as a separate compatibility decision that accounts for legacy and domain-scoped project IDs.
