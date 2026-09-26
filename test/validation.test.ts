@@ -1028,6 +1028,459 @@ describe('Account Definition validation tests', () => {
     'src/schemas/account/account-schema-schema.json',
   );
 
+  const bigQueryWifPayload = () => ({
+    options: {
+      project: 'customer-project',
+      authMethod: 'workloadIdentityFederation',
+      workloadIdentityProjectNumber: '123456789012',
+      workloadIdentityPoolId: 'rudderstack-pool',
+      workloadIdentityProviderId: 'rudderstack-aws',
+    },
+    secret: {},
+  });
+
+  const bigQueryKeyPayload = () => ({
+    options: {
+      project: 'customer-project',
+      authMethod: 'serviceAccountKey',
+    },
+    secret: { credentials: '{"type":"service_account"}' },
+  });
+
+  it('SOURCE_BIGQUERY account schema is valid against the account schema meta-schema', () => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const metaSchema = JSON.parse(fs.readFileSync(accountSchemaMetaSchemaPath, 'utf-8'));
+    const validateAccountSchema = compileAccountSchema(metaSchema);
+
+    const isValid = validateAccountSchema(accountSchema);
+    expect(validateAccountSchema.errors ?? []).toEqual([]);
+    expect(isValid).toBe(true);
+    expect(accountSchema.combinedSchema).toBeDefined();
+  });
+
+  it('SOURCE_BIGQUERY combinedSchema accepts WIF, keyed, and legacy accounts', () => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+    const validateOptions = compileAccountSchema(accountSchema.optionsSchema);
+    const domainScopedWifOptions = {
+      ...bigQueryWifPayload().options,
+      project: 'example.com:analytics-prod-123456',
+    };
+
+    expect(validateCombined(bigQueryWifPayload())).toBe(true);
+    expect(
+      validateCombined({
+        ...bigQueryWifPayload(),
+        secret: { credentials: '' },
+      }),
+    ).toBe(true);
+    expect(validateCombined(bigQueryKeyPayload())).toBe(true);
+    expect(
+      validateCombined({
+        ...bigQueryWifPayload(),
+        options: domainScopedWifOptions,
+      }),
+    ).toBe(true);
+    expect(validateOptions(domainScopedWifOptions)).toBe(true);
+    expect(
+      validateCombined({
+        options: {
+          project: 'legacy-project',
+          serviceAccount: 'legacy@legacy-project.iam.gserviceaccount.com',
+        },
+        secret: { credentials: '{"type":"service_account"}' },
+      }),
+    ).toBe(true);
+  });
+
+  it.each([
+    'workloadIdentityProjectNumber',
+    'workloadIdentityPoolId',
+    'workloadIdentityProviderId',
+  ])('SOURCE_BIGQUERY WIF requires %s', (field) => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+    const payload = bigQueryWifPayload();
+    delete payload.options[field as keyof typeof payload.options];
+
+    expect(validateCombined(payload)).toBe(false);
+  });
+
+  it('SOURCE_BIGQUERY combinedSchema requires non-empty credentials on keyed and legacy accounts', () => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    expect(validateCombined({ ...bigQueryKeyPayload(), secret: {} })).toBe(false);
+    expect(validateCombined({ options: { project: 'legacy-project' }, secret: {} })).toBe(false);
+    expect(validateCombined({ ...bigQueryKeyPayload(), secret: { credentials: '' } })).toBe(false);
+  });
+
+  it('SOURCE_BIGQUERY combinedSchema rejects unknown authentication methods', () => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    expect(
+      validateCombined({
+        ...bigQueryKeyPayload(),
+        options: { ...bigQueryKeyPayload().options, authMethod: 'workloadIdentity' },
+      }),
+    ).toBe(false);
+  });
+
+  it('SOURCE_BIGQUERY combinedSchema ignores inactive WIF values on keyed and legacy accounts', () => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+    const validateOptions = compileAccountSchema(accountSchema.optionsSchema);
+    const inactiveWifValues = {
+      workloadIdentityProjectNumber: 'not-a-number',
+      workloadIdentityPoolId: 'INVALID POOL',
+      workloadIdentityProviderId: 'INVALID PROVIDER',
+      workloadIdentityTargetServiceAccount: 'not-a-service-account',
+    };
+
+    expect(
+      validateCombined({
+        ...bigQueryKeyPayload(),
+        options: { ...bigQueryKeyPayload().options, ...inactiveWifValues },
+      }),
+    ).toBe(true);
+    expect(
+      validateOptions({
+        ...bigQueryKeyPayload().options,
+        ...inactiveWifValues,
+      }),
+    ).toBe(true);
+    expect(
+      validateCombined({
+        options: { project: 'legacy-project', ...inactiveWifValues },
+        secret: { credentials: '{"type":"service_account"}' },
+      }),
+    ).toBe(true);
+  });
+
+  it('SOURCE_BIGQUERY combinedSchema rejects stored service-account credentials for WIF accounts', () => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    expect(
+      validateCombined({
+        ...bigQueryWifPayload(),
+        options: {
+          ...bigQueryWifPayload().options,
+          serviceAccount: 'stale@customer-project.iam.gserviceaccount.com',
+        },
+        secret: { credentials: '{"type":"service_account"}' },
+      }),
+    ).toBe(false);
+  });
+
+  it('SOURCE_BIGQUERY WIF fields use the destination-compatible identifier patterns', () => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    expect(
+      validateCombined({
+        ...bigQueryWifPayload(),
+        options: {
+          ...bigQueryWifPayload().options,
+          workloadIdentityProviderId: '1234',
+          workloadIdentityTargetServiceAccount:
+            'rudderstack@customer-project.iam.gserviceaccount.com',
+        },
+      }),
+    ).toBe(true);
+    expect(
+      validateCombined({
+        ...bigQueryWifPayload(),
+        options: {
+          ...bigQueryWifPayload().options,
+          workloadIdentityTargetServiceAccount: '',
+        },
+      }),
+    ).toBe(true);
+    expect(
+      validateCombined({
+        ...bigQueryWifPayload(),
+        options: {
+          ...bigQueryWifPayload().options,
+          workloadIdentityProviderId: 'gcp-provider',
+        },
+      }),
+    ).toBe(false);
+    expect(
+      validateCombined({
+        ...bigQueryWifPayload(),
+        options: {
+          ...bigQueryWifPayload().options,
+          workloadIdentityProjectNumber: 'project-number',
+        },
+      }),
+    ).toBe(false);
+    expect(
+      validateCombined({
+        ...bigQueryWifPayload(),
+        options: {
+          ...bigQueryWifPayload().options,
+          workloadIdentityPoolId: 'gcp-pool',
+        },
+      }),
+    ).toBe(false);
+  });
+
+  it('SOURCE_BIGQUERY db-config option and secret fields match its schema properties', async () => {
+    const accountConfig = await getAccountDefinitionConfig(
+      'bigquery',
+      'SOURCE_BIGQUERY',
+      'sources',
+    );
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+
+    expect([...accountConfig.config.optionFields].sort()).toEqual(
+      Object.keys(accountSchema.optionsSchema.properties).sort(),
+    );
+    expect([...accountConfig.config.secretFields].sort()).toEqual(
+      Object.keys(accountSchema.secretSchema.properties).sort(),
+    );
+  });
+
+  it('SOURCE_BIGQUERY UI gates WIF fields while retaining key fields when the flag is off', () => {
+    const uiConfigPath = path.resolve('src/configurations/sources/bigquery/ui-config.json');
+    const uiConfig = JSON.parse(fs.readFileSync(uiConfigPath, 'utf-8'));
+    const { fields } = uiConfig.uiConfig[0];
+    const fieldByValue = Object.fromEntries(
+      fields
+        .filter((field: { value: string }) => field.value !== 'project')
+        .map((field: { value: string }) => [field.value, field]),
+    );
+    const projectFields = fields.filter((field: { value: string }) => field.value === 'project');
+    expect(projectFields).toHaveLength(2);
+    const keyProjectField = projectFields.find((field: { readOnly?: boolean }) => field.readOnly);
+    const wifProjectField = projectFields.find(
+      (field: { readOnly?: boolean }) => field.readOnly !== true,
+    );
+    expect(keyProjectField).toBeDefined();
+    expect(wifProjectField).toBeDefined();
+    const featureFlag = 'AMP_enable-bigquery-workload-identity-federation';
+
+    const enabledFeatureFlag = [{ configKey: featureFlag, value: true }];
+    const disabledFeatureFlag = [{ configKey: featureFlag }];
+    const wifFieldPrerequisites = {
+      fields: [{ configKey: 'authMethod', value: 'workloadIdentityFederation' }],
+      featureFlags: enabledFeatureFlag,
+    };
+    const keyFieldPrerequisites = {
+      fields: [{ configKey: 'authMethod', value: 'serviceAccountKey' }],
+      featureFlags: disabledFeatureFlag,
+      prerequisitesCondition: 'or',
+    };
+
+    expect(fieldByValue.authMethod.preRequisites).toEqual({
+      featureFlags: enabledFeatureFlag,
+    });
+    expect(fieldByValue.authMethod.preRequisiteFeatureFlag).toBeUndefined();
+    expect(fieldByValue.authMethod.defaultOption.value).toBe('serviceAccountKey');
+    expect(fieldByValue.authMethod.footerNote).not.toContain('Workload Identity Federation');
+    expect(fieldByValue.authMethod.footerNote).not.toContain(
+      'assumed-role/data-plane-service-account/<workspaceID>',
+    );
+    expect(fieldByValue.workloadIdentityProjectNumber.footerNote).toContain(
+      'Workload Identity Federation',
+    );
+    expect(fieldByValue.workloadIdentityProjectNumber.footerNote).toContain(
+      'assumed-role/data-plane-service-account/<workspaceID>',
+    );
+    expect(fieldByValue.workloadIdentityProjectNumber.footerNote).toContain('not the whole role');
+    expect(fieldByValue.workloadIdentityProjectNumber.footerNote).toContain(
+      'optionally impersonate your service account',
+    );
+    expect(fieldByValue.credentials.preRequisites).toEqual(keyFieldPrerequisites);
+    expect(fieldByValue.serviceAccount.preRequisites).toEqual(
+      fieldByValue.credentials.preRequisites,
+    );
+    expect(keyProjectField.preRequisites).toEqual(keyFieldPrerequisites);
+    expect(wifProjectField.preRequisites).toEqual(wifFieldPrerequisites);
+
+    const { preRequisites: _keyProjectPrerequisites, ...keyProjectDevelopShape } = keyProjectField;
+    expect(JSON.stringify(keyProjectDevelopShape)).toBe(
+      JSON.stringify({
+        type: 'textInput',
+        label: 'Project ID',
+        labelNote: 'GCP Project ID where your BigQuery database is located.',
+        value: 'project',
+        regex: '^(.{0,100})$',
+        regexErrorMessage: 'Invalid Value',
+        required: true,
+        infoTooltip: 'Inferred from project_id field in the credentials settings.',
+        addInAccountSummary: true,
+        readOnly: true,
+        obtainValueFromField: {
+          name: 'credentials',
+          key: 'project_id',
+        },
+      }),
+    );
+    expect(wifProjectField).toMatchObject({
+      type: 'textInput',
+      value: 'project',
+      required: true,
+      regex: '^(?:[a-z][a-z0-9.-]*[a-z0-9]:)?[a-z][a-z0-9-]{4,28}[a-z0-9]$',
+    });
+
+    [
+      'workloadIdentityProjectNumber',
+      'workloadIdentityPoolId',
+      'workloadIdentityProviderId',
+      'workloadIdentityTargetServiceAccount',
+    ].forEach((fieldName) => {
+      expect(fieldByValue[fieldName].preRequisites).toEqual(wifFieldPrerequisites);
+      expect(fieldByValue[fieldName].preRequisiteFeatureFlag).toBeUndefined();
+      expect(fieldByValue[fieldName].preRequisiteField).toBeUndefined();
+    });
+    expect(fieldByValue.workloadIdentityTargetServiceAccount.required).toBe(false);
+
+    const isVisible = (
+      field: {
+        preRequisites?: {
+          fields?: Array<{ configKey: string; value: unknown }>;
+          featureFlags?: Array<{ configKey: string; value?: unknown }>;
+          prerequisitesCondition?: string;
+        };
+      },
+      authMethod: string | undefined,
+      featureEnabled: boolean | undefined,
+    ) => {
+      if (!field.preRequisites) return true;
+      const checks = [
+        ...(field.preRequisites.fields ?? []).map(
+          ({ configKey, value }) => configKey === 'authMethod' && value === authMethod,
+        ),
+        ...(field.preRequisites.featureFlags ?? []).map(({ configKey, value }) => {
+          if (configKey !== featureFlag) return false;
+          return value === undefined ? !featureEnabled : value === featureEnabled;
+        }),
+      ];
+      return field.preRequisites.prerequisitesCondition === 'or'
+        ? checks.some(Boolean)
+        : checks.every(Boolean);
+    };
+    const visibleFields = (authMethod: string | undefined, featureEnabled: boolean | undefined) =>
+      fields
+        .filter((field: { value: string }) => isVisible(field, authMethod, featureEnabled))
+        .map((field: { value: string; readOnly?: boolean }) => {
+          if (field.value !== 'project') return field.value;
+          return field.readOnly ? 'keyProject' : 'wifProject';
+        });
+
+    const states = [
+      {
+        name: 'missing flag with service account key',
+        authMethod: 'serviceAccountKey',
+        featureEnabled: undefined,
+        expected: ['credentials', 'keyProject', 'serviceAccount'],
+      },
+      {
+        name: 'missing flag with workload identity federation',
+        authMethod: 'workloadIdentityFederation',
+        featureEnabled: undefined,
+        expected: ['credentials', 'keyProject', 'serviceAccount'],
+      },
+      {
+        name: 'disabled flag with service account key',
+        authMethod: 'serviceAccountKey',
+        featureEnabled: false,
+        expected: ['credentials', 'keyProject', 'serviceAccount'],
+      },
+      {
+        name: 'disabled flag with workload identity federation',
+        authMethod: 'workloadIdentityFederation',
+        featureEnabled: false,
+        expected: ['credentials', 'keyProject', 'serviceAccount'],
+      },
+      {
+        name: 'enabled flag with service account key',
+        authMethod: 'serviceAccountKey',
+        featureEnabled: true,
+        expected: ['authMethod', 'credentials', 'keyProject', 'serviceAccount'],
+      },
+      {
+        name: 'enabled flag with workload identity federation',
+        authMethod: 'workloadIdentityFederation',
+        featureEnabled: true,
+        expected: [
+          'authMethod',
+          'wifProject',
+          'workloadIdentityProjectNumber',
+          'workloadIdentityPoolId',
+          'workloadIdentityProviderId',
+          'workloadIdentityTargetServiceAccount',
+        ],
+      },
+      {
+        name: 'legacy edit without auth method or feature flag',
+        authMethod: undefined,
+        featureEnabled: undefined,
+        expected: ['credentials', 'keyProject', 'serviceAccount'],
+      },
+    ];
+    states.forEach(({ name, authMethod, featureEnabled, expected }) => {
+      const visible = visibleFields(authMethod, featureEnabled);
+      expect({ name, visible }).toEqual({ name, visible: expected });
+      const visibleWifExplanations = fields.filter(
+        (field: { footerNote?: string }) =>
+          isVisible(field, authMethod, featureEnabled) &&
+          field.footerNote?.includes('assumed-role/data-plane-service-account/<workspaceID>'),
+      );
+      expect({ name, wifExplanationCount: visibleWifExplanations.length }).toEqual({
+        name,
+        wifExplanationCount:
+          authMethod === 'workloadIdentityFederation' && featureEnabled === true ? 1 : 0,
+      });
+      const visibleProjectFields = projectFields.filter((field: { value: string }) =>
+        isVisible(field, authMethod, featureEnabled),
+      );
+      expect({ name, projectFieldCount: visibleProjectFields.length }).toEqual({
+        name,
+        projectFieldCount: 1,
+      });
+      expect({ name, projectRequired: visibleProjectFields[0].required }).toEqual({
+        name,
+        projectRequired: true,
+      });
+    });
+  });
+
+  it('SOURCE_BIGQUERY WIF UI regexes match the combined schema patterns', () => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const uiConfigPath = path.resolve('src/configurations/sources/bigquery/ui-config.json');
+    const uiConfig = JSON.parse(fs.readFileSync(uiConfigPath, 'utf-8'));
+    const projectFields = uiConfig.uiConfig[0].fields.filter(
+      (field: { value: string }) => field.value === 'project',
+    );
+    const fieldByValue = Object.fromEntries(
+      uiConfig.uiConfig[0].fields
+        .filter((field: { value: string }) => field.value !== 'project')
+        .map((field: { value: string }) => [field.value, field]),
+    );
+    const wifProperties = accountSchema.combinedSchema.then.properties.options.properties;
+    const wifProjectField = projectFields.find(
+      (field: { readOnly?: boolean }) => field.readOnly !== true,
+    );
+
+    expect(wifProjectField.regex).toBe(accountSchema.optionsSchema.properties.project.pattern);
+    expect(wifProjectField.regex).toBe(
+      accountSchema.combinedSchema.properties.options.properties.project.pattern,
+    );
+
+    [
+      'workloadIdentityProjectNumber',
+      'workloadIdentityPoolId',
+      'workloadIdentityProviderId',
+      'workloadIdentityTargetServiceAccount',
+    ].forEach((fieldName) => {
+      expect(fieldByValue[fieldName].regex).toBe(wifProperties[fieldName].pattern);
+    });
+  });
+
   // sqlconnect-go unmarshals the port into `Port int`, so the integer form is the only
   // one that survives a sync. The string form is a transitional allowance for the
   // rudder-iac fixture; a follow-up PR drops it once rudderlabs/rudder-iac#827 has merged.
