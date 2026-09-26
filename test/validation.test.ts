@@ -1279,10 +1279,20 @@ describe('Account Definition validation tests', () => {
     });
     expect(fieldByValue.authMethod.preRequisiteFeatureFlag).toBeUndefined();
     expect(fieldByValue.authMethod.defaultOption.value).toBe('serviceAccountKey');
-    expect(fieldByValue.authMethod.footerNote).toContain(
+    expect(fieldByValue.authMethod.footerNote).not.toContain('Workload Identity Federation');
+    expect(fieldByValue.authMethod.footerNote).not.toContain(
       'assumed-role/data-plane-service-account/<workspaceID>',
     );
-    expect(fieldByValue.authMethod.footerNote).toContain('not the whole role');
+    expect(fieldByValue.workloadIdentityProjectNumber.footerNote).toContain(
+      'Workload Identity Federation',
+    );
+    expect(fieldByValue.workloadIdentityProjectNumber.footerNote).toContain(
+      'assumed-role/data-plane-service-account/<workspaceID>',
+    );
+    expect(fieldByValue.workloadIdentityProjectNumber.footerNote).toContain('not the whole role');
+    expect(fieldByValue.workloadIdentityProjectNumber.footerNote).toContain(
+      'optionally impersonate your service account',
+    );
     expect(fieldByValue.credentials.preRequisites).toEqual(keyFieldPrerequisites);
     expect(fieldByValue.serviceAccount.preRequisites).toEqual(
       fieldByValue.credentials.preRequisites,
@@ -1415,6 +1425,16 @@ describe('Account Definition validation tests', () => {
     states.forEach(({ name, authMethod, featureEnabled, expected }) => {
       const visible = visibleFields(authMethod, featureEnabled);
       expect({ name, visible }).toEqual({ name, visible: expected });
+      const visibleWifExplanations = fields.filter(
+        (field: { footerNote?: string }) =>
+          isVisible(field, authMethod, featureEnabled) &&
+          field.footerNote?.includes('assumed-role/data-plane-service-account/<workspaceID>'),
+      );
+      expect({ name, wifExplanationCount: visibleWifExplanations.length }).toEqual({
+        name,
+        wifExplanationCount:
+          authMethod === 'workloadIdentityFederation' && featureEnabled === true ? 1 : 0,
+      });
       const visibleProjectFields = projectFields.filter((field: { value: string }) =>
         isVisible(field, authMethod, featureEnabled),
       );

@@ -83,3 +83,4 @@
 
 - In legacy RETL source account forms, use the unified `preRequisites` object for both feature flags and field conditions; do not mix it with `preRequisiteField` or `preRequisiteFeatureFlag`.
 - When a key-auth field must remain visible while WIF is feature-gated off, express the visibility rule as `authMethod == serviceAccountKey OR feature flag is falsy/missing`. In the unified `preRequisites.featureFlags` shape, omit `value`; an explicit `value: false` does not match a missing flag.
+- Keep an authentication selector's help text neutral. Put WIF setup and security guidance on a WIF-only field with the same `authMethod == workloadIdentityFederation` and enabled-feature-flag prerequisites, so key-auth users never see irrelevant federation instructions.
