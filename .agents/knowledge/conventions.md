@@ -237,4 +237,4 @@
 
 ## ACT2-855 — BigQuery Source WIF Compatibility
 
-- Keep the BigQuery source `project` as a plain editable input without `obtainValueFromField`: `WarehouseAccountForm.onChange` overwrites derived fields with `''` when credentials are empty, which breaks keyless WIF. Treat any project-regex change as a separate compatibility decision that accounts for legacy and domain-scoped project IDs.
+- Keep separate BigQuery source UI fields bound to `project`: the key-mode field must preserve the legacy read-only `credentials.project_id` autofill and length-only regex, while the WIF-mode field is editable and accepts domain-scoped project IDs. Do not enable the WIF feature flag until rudder-webapp ACT2-870 makes autofill operate only on visible fields, or the hidden key-mode field will erase the WIF value.
