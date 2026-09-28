@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.179.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.178.0...v1.179.0) (2026-09-28)
+
+
+### Features
+
+* add Everflow destination configuration ([#2748](https://github.com/rudderlabs/rudder-config-schema/issues/2748)) ([e52b33f](https://github.com/rudderlabs/rudder-config-schema/commit/e52b33f72b9993f37560f1c82c5f53d6505ba7f3))
+* **custom_audience:** make Custom Audience destination GA ([#2753](https://github.com/rudderlabs/rudder-config-schema/issues/2753)) ([7c55d24](https://github.com/rudderlabs/rudder-config-schema/commit/7c55d2449ff0b18d27c284055a5819d6a95e640b))
+* **custom_audience:** rename display name to Custom Activation ([405ebf9](https://github.com/rudderlabs/rudder-config-schema/commit/405ebf972524a861949c64e22526b241d52c2cdc))
+* **custom_audience:** rename display name to Custom Activation ([#2762](https://github.com/rudderlabs/rudder-config-schema/issues/2762)) ([ec670b3](https://github.com/rudderlabs/rudder-config-schema/commit/ec670b324ea2f98e702ec3dd0b1809ec02b394d6))
+* **customerio:** add web SDK version, write key, anonymous in-app ([#2734](https://github.com/rudderlabs/rudder-config-schema/issues/2734)) ([7bdc1b7](https://github.com/rudderlabs/rudder-config-schema/commit/7bdc1b7713ce567c6aeaf9993abd9bfc70f25ddb))
+* migrate google ads to form builder v2 ([#2745](https://github.com/rudderlabs/rudder-config-schema/issues/2745)) ([020a939](https://github.com/rudderlabs/rudder-config-schema/commit/020a939b34640519f30790ef274ea6d135917b0f))
+
+
+### Bug Fixes
+
+* **everflow:** correct verification token field note ([#2761](https://github.com/rudderlabs/rudder-config-schema/issues/2761)) ([1bc2b76](https://github.com/rudderlabs/rudder-config-schema/commit/1bc2b76958fb8bd90d583c12af7b1641336e23af))
+
 ## [1.178.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.177.0...v1.178.0) (2026-09-23)
 
 
