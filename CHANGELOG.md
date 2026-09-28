@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.179.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.178.0...v1.179.0) (2026-09-28)
+
+
+### Features
+
+* **custom_audience:** rename display name to Custom Activation ([b6f9a8d](https://github.com/rudderlabs/rudder-config-schema/commit/b6f9a8dd40471bab5ee2358768688acf2f0c4815))
+
 ## [1.178.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.177.0...v1.178.0) (2026-09-23)
 
 
