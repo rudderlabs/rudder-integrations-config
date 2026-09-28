@@ -98,3 +98,7 @@
 ## INT-7182 — Cloud-Only SDK Template Runtime Assumption
 
 - The webapp V2 configuration builder assumes `uiConfig.sdkTemplate` exists even for cloud-only destinations. Omitting it lets Everflow be created and connected but crashes the post-create Configuration page when downstream code reads the missing template fields' length; retain the canonical empty object with `fields: []`.
+
+## INT-7237 — Warehouse Schema Generator Baseline Drift
+
+- After synchronizing `syncFrequency` option and enum order, changed-destination schema validation still reports unrelated pre-existing warnings for `azure_datalake`, `gcs_datalake`, `mssql`, `rs`, `s3_datalake`, and `snowflake`, including legacy regex/conditional shapes, consent-provider requiredness, and `additionalProperties` drift. Distinguish those baseline warnings from this option-order change; `azure_synapse`, `bq`, `clickhouse`, `deltalake`, and `postgres` were warning-free.

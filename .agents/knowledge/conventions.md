@@ -241,3 +241,9 @@
 - `options.hidden.gate` is enforced in two places, not only the catalog UI: rudder-webapp hides the definition in catalog/pickers (`src/components/directory/utils.ts::isResourceHidden`) and rudder-config-backend rejects destination CREATE with a 403 "is not available for your account" (`src/services/destination.service.ts` → `src/utils/resourceGate.ts::throwIfResourceGated`; update path is not gated). Removing the gate from the definition unblocks both; no backend code change is needed.
 - The flag `AMP_enable-data-graph-audiences` gates `custom_audience`, `braze_audience` and `reddit_audience` definitions AND the webapp Data Graph Audiences product. Decision: to GA one destination, remove the gate from that one definition — never flip the Flagsmith flag globally, which would release all three destinations plus Data Graph Audiences.
 - Removals propagate on deploy: `scripts/deployToDB.py::update_diff_db` sends the full file-built definition when `jsondiff` finds any change, and `options` is a whole nullable column, so deleted nested keys are dropped from the stored definition.
+
+## INT-7237 — Warehouse V2 Sync Frequency Default Ordering
+
+- For Form Builder V2 warehouse `syncFrequency` single-select fields, list the intended ungated default value `"180"` first; V2 create-time fallback uses option order, while legacy `defaultOption` remains necessary for V1 compatibility and should continue to point to `"180"`.
+- Keep the persisted schema default at `"180"`. When a destination's `syncFrequency` schema uses an enum, mirror the reordered UI option order in that enum to avoid schema-generator drift; destinations using order-insensitive regex patterns need no schema change.
+- Do not add a UI `default` key solely for this compatibility fix: option filtering and create-time default selection are runtime concerns owned by `rudder-webapp`, while integrations config supplies an ungated first-option fallback.

@@ -7,6 +7,7 @@ This document captures naming and structural conventions used across this reposi
 - [**AccountDefinition naming (`accountDefinitionName`)**](#accountdefinition-naming-accountdefinitionname)
 - [**String `pattern` and `regex`**](#string-pattern-and-regex)
 - [**`sdkTemplate` is required, even on a cloud-only destination**](#sdktemplate-is-required-even-on-a-cloud-only-destination)
+- [**Form Builder V2 `singleSelect` defaults with gated options**](#form-builder-v2-singleselect-defaults-with-gated-options)
 - [**Optional fields must accept the empty string**](#optional-fields-must-accept-the-empty-string)
 - [**Where account credential fields live**](#where-account-credential-fields-live)
 - [**Deduplication / event-id config key (`deduplicationKey`)**](#deduplication--event-id-config-key-deduplicationkey)
@@ -255,6 +256,17 @@ for f in glob.glob('src/configurations/destinations/*/ui-config.json'):
         bad.append(f)
 print(bad or 'all form-builder-v2 destinations carry sdkTemplate')"
 ```
+
+## Form Builder V2 `singleSelect` defaults with gated options
+
+Form Builder V2 uses the first available option as the create-time fallback when a `singleSelect`
+field has no explicit `default`. Therefore, when options carry per-option `featureFlag` gates, put
+the intended ungated default first. A gated option must not precede it: workspaces without that flag
+could otherwise receive a value they cannot select.
+
+Keep `defaultOption` aligned with that first option when the definition still supports the legacy form
+builder, and keep the corresponding `schema.json` `default` aligned as well. Reordering options does
+not change which values are accepted; preserve gated options and their feature flags after the default.
 
 ## Optional fields must accept the empty string
 
