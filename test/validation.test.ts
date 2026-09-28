@@ -1081,7 +1081,12 @@ describe('Account Definition validation tests', () => {
         options: domainScopedWifOptions,
       }),
     ).toBe(true);
-    expect(validateOptions(domainScopedWifOptions)).toBe(true);
+    expect(
+      validateOptions({
+        ...bigQueryKeyPayload().options,
+        project: 'google.com:abc',
+      }),
+    ).toBe(true);
     expect(
       validateCombined({
         options: {
@@ -1089,6 +1094,12 @@ describe('Account Definition validation tests', () => {
           serviceAccount: 'legacy@legacy-project.iam.gserviceaccount.com',
         },
         secret: { credentials: '{"type":"service_account"}' },
+      }),
+    ).toBe(true);
+    expect(
+      validateCombined({
+        ...bigQueryKeyPayload(),
+        options: { ...bigQueryKeyPayload().options, project: 'google.com:abc' },
       }),
     ).toBe(true);
   });
@@ -1104,6 +1115,22 @@ describe('Account Definition validation tests', () => {
     delete payload.options[field as keyof typeof payload.options];
 
     expect(validateCombined(payload)).toBe(false);
+  });
+
+  it.each([
+    'workloadIdentityProjectNumber',
+    'workloadIdentityPoolId',
+    'workloadIdentityProviderId',
+  ])('SOURCE_BIGQUERY WIF rejects an empty %s', (field) => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    expect(
+      validateCombined({
+        ...bigQueryWifPayload(),
+        options: { ...bigQueryWifPayload().options, [field]: '' },
+      }),
+    ).toBe(false);
   });
 
   it('SOURCE_BIGQUERY combinedSchema requires non-empty credentials on keyed and legacy accounts', () => {
@@ -1172,6 +1199,12 @@ describe('Account Definition validation tests', () => {
         secret: { credentials: '{"type":"service_account"}' },
       }),
     ).toBe(false);
+    expect(
+      validateCombined({
+        ...bigQueryWifPayload(),
+        secret: { unexpectedSecret: 'must-not-be-stored' },
+      }),
+    ).toBe(false);
   });
 
   it('SOURCE_BIGQUERY WIF fields use the destination-compatible identifier patterns', () => {
@@ -1184,17 +1217,6 @@ describe('Account Definition validation tests', () => {
         options: {
           ...bigQueryWifPayload().options,
           workloadIdentityProviderId: '1234',
-          workloadIdentityTargetServiceAccount:
-            'rudderstack@customer-project.iam.gserviceaccount.com',
-        },
-      }),
-    ).toBe(true);
-    expect(
-      validateCombined({
-        ...bigQueryWifPayload(),
-        options: {
-          ...bigQueryWifPayload().options,
-          workloadIdentityTargetServiceAccount: '',
         },
       }),
     ).toBe(true);
@@ -1222,6 +1244,48 @@ describe('Account Definition validation tests', () => {
         options: {
           ...bigQueryWifPayload().options,
           workloadIdentityPoolId: 'gcp-pool',
+        },
+      }),
+    ).toBe(false);
+  });
+
+  it.each([
+    'rudderstack@customer-project.iam.gserviceaccount.com',
+    'sa@proj.example.com.iam.gserviceaccount.com',
+    '123-compute@developer.gserviceaccount.com',
+    'app@appspot.gserviceaccount.com',
+  ])('SOURCE_BIGQUERY WIF accepts target service account %s', (targetServiceAccount) => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    expect(
+      validateCombined({
+        ...bigQueryWifPayload(),
+        options: {
+          ...bigQueryWifPayload().options,
+          workloadIdentityTargetServiceAccount: targetServiceAccount,
+        },
+      }),
+    ).toBe(true);
+  });
+
+  it.each([
+    '',
+    'sa@proj:evil.iam.gserviceaccount.com',
+    'sa@proj/evil.iam.gserviceaccount.com',
+    'sa@proj.iam.gserviceaccount.com?audience=attacker',
+    'sa@proj.iam.gserviceaccount.com#fragment',
+    'sa @proj.iam.gserviceaccount.com',
+  ])('SOURCE_BIGQUERY WIF rejects invalid target service account %p', (targetServiceAccount) => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    expect(
+      validateCombined({
+        ...bigQueryWifPayload(),
+        options: {
+          ...bigQueryWifPayload().options,
+          workloadIdentityTargetServiceAccount: targetServiceAccount,
         },
       }),
     ).toBe(false);
@@ -1466,9 +1530,14 @@ describe('Account Definition validation tests', () => {
       (field: { readOnly?: boolean }) => field.readOnly !== true,
     );
 
-    expect(wifProjectField.regex).toBe(accountSchema.optionsSchema.properties.project.pattern);
+    expect(accountSchema.optionsSchema.properties.project.pattern).toBe(
+      '^[a-z][a-z0-9.:-]{4,28}[a-z0-9]$',
+    );
+    expect(accountSchema.combinedSchema.else.properties.options.properties.project.pattern).toBe(
+      accountSchema.optionsSchema.properties.project.pattern,
+    );
     expect(wifProjectField.regex).toBe(
-      accountSchema.combinedSchema.properties.options.properties.project.pattern,
+      accountSchema.combinedSchema.then.properties.options.properties.project.pattern,
     );
 
     [
