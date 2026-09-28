@@ -107,3 +107,9 @@
 - The destination is cloud-only and Track-only, remains beta and hidden behind the `AMP_enable-everflow-destination` gate, and intentionally has no device-mode `includeKeys`, `redirectGroups`, event mapping, event filtering, or API configuration surface.
 - All three account fields must be mirrored in destination `config.destConfig.defaultConfig`; omitting one causes workspace-config filtering to drop it before runtime consumers receive the destination config.
 - Later webapp review superseded the initial no-`sdkTemplate` decision: even cloud-only Everflow needs the canonical empty `uiConfig.sdkTemplate` object with `fields: []`, because the V2 configuration builder assumes the object exists when opening a saved destination's Configuration page.
+
+## INT-7234 — Microsoft Fabric Account-Backed Warehouse Boundary
+
+- Microsoft Fabric is a hand-authored, account-backed warehouse destination under `src/configurations/destinations/microsoft_fabric/`, using destination type `MICROSOFT_FABRIC` and account type `DESTINATION_MICROSOFT_FABRIC_SERVICE_PRINCIPAL`.
+- Customer-owned OneLake staging is configured through workspace and Lakehouse identifiers; the destination intentionally has no generic object-storage or bucket configuration surface.
+- Service-principal credentials are validated by the account schema, while all account fields are mirrored in destination `config.destConfig.defaultConfig`; `clientSecret` is the only destination `secretKeys` entry.

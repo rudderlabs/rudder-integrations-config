@@ -268,6 +268,7 @@ describe('Validation Tests', () => {
     'clickhouse',
     'deltalake',
     'gcs_datalake',
+    'microsoft_fabric',
     'mssql',
     'postgres',
     'rs',
@@ -284,7 +285,11 @@ describe('Validation Tests', () => {
   };
 
   describe('Warehouse sync frequency validation', () => {
-    warehouseDestinationNames.forEach((dest) => {
+    const highGranularityWarehouseDestinationNames = warehouseDestinationNames.filter(
+      (dest) => dest !== 'microsoft_fabric',
+    );
+
+    highGranularityWarehouseDestinationNames.forEach((dest) => {
       it(`${dest} accepts 10-minute sync frequency and rejects invalid frequency`, () => {
         const baseConfig = getWarehouseBaseConfig(dest);
         expect(() => {

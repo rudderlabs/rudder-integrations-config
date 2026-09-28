@@ -241,3 +241,10 @@
 - `options.hidden.gate` is enforced in two places, not only the catalog UI: rudder-webapp hides the definition in catalog/pickers (`src/components/directory/utils.ts::isResourceHidden`) and rudder-config-backend rejects destination CREATE with a 403 "is not available for your account" (`src/services/destination.service.ts` → `src/utils/resourceGate.ts::throwIfResourceGated`; update path is not gated). Removing the gate from the definition unblocks both; no backend code change is needed.
 - The flag `AMP_enable-data-graph-audiences` gates `custom_audience`, `braze_audience` and `reddit_audience` definitions AND the webapp Data Graph Audiences product. Decision: to GA one destination, remove the gate from that one definition — never flip the Flagsmith flag globally, which would release all three destinations plus Data Graph Audiences.
 - Removals propagate on deploy: `scripts/deployToDB.py::update_diff_db` sends the full file-built definition when `jsondiff` finds any change, and `options` is a whole nullable column, so deleted nested keys are dropped from the stored definition.
+
+## INT-7234 — Microsoft Fabric Definition Contract
+
+- Microsoft Fabric host validation accepts any non-empty 1–255 character value and passes it through unchanged; do not add Fabric-only DNS suffix rewriting or a host allowlist. `workspaceId` and `lakehouseId` require canonical 8-4-4-4-12 hexadecimal GUIDs.
+- Keep the SQL port as a string defaulting to `1433`, with a 1–5 digit pattern rather than restricting it to a single hard-coded port.
+- Microsoft Fabric follows the standard 13-source warehouse matrix (`android`, `androidKotlin`, `ios`, `iosSwift`, `web`, `unity`, `amp`, `cloud`, `reactnative`, `cloudSource`, `flutter`, `cordova`, `shopify`) in cloud mode and does not declare destination-specific `supportedMessageTypes`.
+- Its Form Builder V2 UI uses the canonical account-management input, an empty `sdkTemplate`, and the standard `consentSettingsTemplate`, while grouping the destination-specific Warehouse and OneLake settings.

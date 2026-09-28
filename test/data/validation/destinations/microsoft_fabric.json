@@ -1,0 +1,263 @@
+[
+  {
+    "testTitle": "With the required account-linked Microsoft Fabric configuration",
+    "config": {
+      "rudderAccountId": "account-test-id",
+      "host": "onelake.dfs.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-1234-123456789abc",
+      "lakehouseId": "abcdef12-3456-7890-abcd-ef1234567890"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With optional warehouse settings",
+    "config": {
+      "rudderAccountId": "account-test-id",
+      "host": "onelake.dfs.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-1234-123456789abc",
+      "lakehouseId": "abcdef12-3456-7890-abcd-ef1234567890",
+      "namespace": "rudderstack",
+      "syncFrequency": "30",
+      "syncStartAt": "16:30",
+      "excludeWindow": {
+        "excludeWindowStartTime": "01:00",
+        "excludeWindowEndTime": "02:00"
+      },
+      "preferAppend": false,
+      "skipUsersTable": false,
+      "skipTracksTable": true,
+      "underscoreDivideNumbers": true,
+      "allowUsersContextTraits": true,
+      "cleanupObjectStorageFiles": true
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With an explicitly cleared optional namespace",
+    "config": {
+      "rudderAccountId": "account-test-id",
+      "host": "onelake.dfs.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-1234-123456789abc",
+      "lakehouseId": "abcdef12-3456-7890-abcd-ef1234567890",
+      "namespace": ""
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Without the required linked account",
+    "config": {
+      "host": "onelake.dfs.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-1234-123456789abc",
+      "lakehouseId": "abcdef12-3456-7890-abcd-ef1234567890"
+    },
+    "result": false,
+    "err": [" must have required property 'rudderAccountId'"]
+  },
+  {
+    "testTitle": "With an invalid workspace ID",
+    "config": {
+      "rudderAccountId": "account-test-id",
+      "host": "onelake.dfs.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "workspace-friendly-name",
+      "lakehouseId": "abcdef12-3456-7890-abcd-ef1234567890"
+    },
+    "result": false,
+    "err": [
+      "fabricWorkspaceId must match pattern \"^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$\""
+    ]
+  },
+  {
+    "testTitle": "With an invalid Lakehouse ID",
+    "config": {
+      "rudderAccountId": "account-test-id",
+      "host": "onelake.dfs.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-1234-123456789abc",
+      "lakehouseId": "lakehouse-friendly-name"
+    },
+    "result": false,
+    "err": [
+      "lakehouseId must match pattern \"^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$\""
+    ]
+  },
+  {
+    "testTitle": "With an attacker-controlled host",
+    "config": {
+      "rudderAccountId": "account-test-id",
+      "host": "attacker.example.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-1234-123456789abc",
+      "lakehouseId": "abcdef12-3456-7890-abcd-ef1234567890"
+    },
+    "result": false,
+    "err": [
+      "host must match pattern \"^(?=.{1,255}$)([A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])\\.)+[Ff][Aa][Bb][Rr][Ii][Cc]\\.[Mm][Ii][Cc][Rr][Oo][Ss][Oo][Ff][Tt]\\.[Cc][Oo][Mm]$\""
+    ]
+  },
+  {
+    "testTitle": "With a URL instead of a host name",
+    "config": {
+      "rudderAccountId": "account-test-id",
+      "host": "https://onelake.dfs.fabric.microsoft.com/path",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-1234-123456789abc",
+      "lakehouseId": "abcdef12-3456-7890-abcd-ef1234567890"
+    },
+    "result": false,
+    "err": [
+      "host must match pattern \"^(?=.{1,255}$)([A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])\\.)+[Ff][Aa][Bb][Rr][Ii][Cc]\\.[Mm][Ii][Cc][Rr][Oo][Ss][Oo][Ff][Tt]\\.[Cc][Oo][Mm]$\""
+    ]
+  },
+  {
+    "testTitle": "With a nonnumeric SQL port",
+    "config": {
+      "rudderAccountId": "account-test-id",
+      "host": "onelake.dfs.fabric.microsoft.com",
+      "port": "sql",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-1234-123456789abc",
+      "lakehouseId": "abcdef12-3456-7890-abcd-ef1234567890"
+    },
+    "result": false,
+    "err": ["port must match pattern \"^[0-9]{1,5}$\""]
+  },
+  {
+    "testTitle": "With an invalid sync frequency",
+    "config": {
+      "rudderAccountId": "account-test-id",
+      "host": "onelake.dfs.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-1234-123456789abc",
+      "lakehouseId": "abcdef12-3456-7890-abcd-ef1234567890",
+      "syncFrequency": "11"
+    },
+    "result": false,
+    "err": ["syncFrequency must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With ungated high-granularity sync frequency",
+    "config": {
+      "rudderAccountId": "account-test-id",
+      "host": "onelake.dfs.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-1234-123456789abc",
+      "lakehouseId": "abcdef12-3456-7890-abcd-ef1234567890",
+      "syncFrequency": "10"
+    },
+    "result": false,
+    "err": ["syncFrequency must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "With a nonboolean warehouse behavior setting",
+    "config": {
+      "rudderAccountId": "account-test-id",
+      "host": "onelake.dfs.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-1234-123456789abc",
+      "lakehouseId": "abcdef12-3456-7890-abcd-ef1234567890",
+      "preferAppend": "true"
+    },
+    "result": false,
+    "err": ["preferAppend must be boolean"]
+  },
+  {
+    "testTitle": "With destination-level tenantId",
+    "config": {
+      "rudderAccountId": "account-test-id",
+      "host": "onelake.dfs.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-1234-123456789abc",
+      "lakehouseId": "abcdef12-3456-7890-abcd-ef1234567890",
+      "tenantId": "11111111-1111-1111-1111-111111111111"
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "With destination-level clientId",
+    "config": {
+      "rudderAccountId": "account-test-id",
+      "host": "onelake.dfs.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-1234-123456789abc",
+      "lakehouseId": "abcdef12-3456-7890-abcd-ef1234567890",
+      "clientId": "22222222-2222-2222-2222-222222222222"
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "With destination-level clientSecret",
+    "config": {
+      "rudderAccountId": "account-test-id",
+      "host": "onelake.dfs.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-1234-123456789abc",
+      "lakehouseId": "abcdef12-3456-7890-abcd-ef1234567890",
+      "clientSecret": "masked-client-secret"
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "With a generic bucket provider setting",
+    "config": {
+      "rudderAccountId": "account-test-id",
+      "host": "onelake.dfs.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-1234-123456789abc",
+      "lakehouseId": "abcdef12-3456-7890-abcd-ef1234567890",
+      "bucketProvider": "S3"
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "With RudderStack-managed storage enabled",
+    "config": {
+      "rudderAccountId": "account-test-id",
+      "host": "onelake.dfs.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-1234-123456789abc",
+      "lakehouseId": "abcdef12-3456-7890-abcd-ef1234567890",
+      "useRudderStorage": true
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "With generic storage credentials",
+    "config": {
+      "rudderAccountId": "account-test-id",
+      "host": "onelake.dfs.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-1234-123456789abc",
+      "lakehouseId": "abcdef12-3456-7890-abcd-ef1234567890",
+      "accessKeyID": "AKIAEXAMPLE"
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  }
+]

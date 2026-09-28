@@ -1,0 +1,324 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Configure the Microsoft Fabric Warehouse connection",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "accountManagementInput",
+                    "label": "Microsoft Fabric account",
+                    "configKey": "rudderAccountId"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Host",
+                    "labelNote": "Enter the complete host used for Fabric SQL and OneLake access",
+                    "configKey": "host",
+                    "regex": "^(?=.{1,255}$)([A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])\\.)+[Ff][Aa][Bb][Rr][Ii][Cc]\\.[Mm][Ii][Cc][Rr][Oo][Ss][Oo][Ff][Tt]\\.[Cc][Oo][Mm]$",
+                    "regexErrorMessage": "Enter a Fabric hostname",
+                    "placeholder": "e.g: onelake.dfs.fabric.microsoft.com",
+                    "required": true,
+                    "note": "RudderStack uses this value unchanged and does not append or rewrite a host suffix."
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Port",
+                    "configKey": "port",
+                    "regex": "^[0-9]{1,5}$",
+                    "regexErrorMessage": "Enter a valid SQL port",
+                    "placeholder": "1433",
+                    "default": "1433",
+                    "required": true
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Database",
+                    "labelNote": "Fabric Warehouse database or item name",
+                    "configKey": "database",
+                    "regex": "^.{1,128}$",
+                    "regexErrorMessage": "Enter a Warehouse database name",
+                    "placeholder": "e.g: analytics_warehouse",
+                    "required": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "OneLake staging",
+                "note": "Configure the customer-owned Lakehouse used to stage Parquet files",
+                "icon": "storage",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Fabric workspace ID",
+                    "labelNote": "Source workspace GUID containing the staging Lakehouse",
+                    "configKey": "fabricWorkspaceId",
+                    "regex": "^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$",
+                    "regexErrorMessage": "Enter a valid workspace GUID",
+                    "placeholder": "e.g: 12345678-1234-1234-1234-123456789abc",
+                    "required": true,
+                    "note": "Use the workspace GUID, not its display name. The Lakehouse and target Warehouse must be in the same region."
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Lakehouse ID",
+                    "labelNote": "GUID of the customer-owned staging Lakehouse",
+                    "configKey": "lakehouseId",
+                    "regex": "^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$",
+                    "regexErrorMessage": "Enter a valid Lakehouse GUID",
+                    "placeholder": "e.g: abcdef12-3456-7890-abcd-ef1234567890",
+                    "required": true,
+                    "note": "Use the Lakehouse GUID, not its display name. Grant the service principal Contributor or higher on both the Lakehouse source workspace and Warehouse target workspace."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure Microsoft Fabric sync and warehouse behavior",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Warehouse settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Namespace",
+                    "labelNote": "Schema name in the Warehouse where RudderStack creates tables",
+                    "configKey": "namespace",
+                    "regex": "^.{0,128}$",
+                    "regexErrorMessage": "Namespace must be 128 characters or less",
+                    "placeholder": "e.g: rudderstack",
+                    "required": false,
+                    "immutable": true,
+                    "note": "If omitted, RudderStack uses the source name. This setting cannot be changed after creation."
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Sync frequency",
+                    "configKey": "syncFrequency",
+                    "options": [
+                      {
+                        "label": "Every 30 minutes",
+                        "value": "30"
+                      },
+                      {
+                        "label": "Every 1 hour",
+                        "value": "60"
+                      },
+                      {
+                        "label": "Every 3 hours",
+                        "value": "180"
+                      },
+                      {
+                        "label": "Every 6 hours",
+                        "value": "360"
+                      },
+                      {
+                        "label": "Every 12 hours",
+                        "value": "720"
+                      },
+                      {
+                        "label": "Every 24 hours",
+                        "value": "1440"
+                      }
+                    ],
+                    "default": "180",
+                    "required": false
+                  },
+                  {
+                    "type": "timePicker",
+                    "label": "Sync starting at (Optional)",
+                    "configKey": "syncStartAt",
+                    "options": {
+                      "omitSeconds": true,
+                      "minuteStep": 15
+                    },
+                    "required": false,
+                    "note": "Specify the time in UTC."
+                  },
+                  {
+                    "type": "timeRangePicker",
+                    "label": "Exclude window (Optional)",
+                    "configKey": "excludeWindow",
+                    "startTime": {
+                      "label": "Start time",
+                      "value": "excludeWindowStartTime"
+                    },
+                    "endTime": {
+                      "label": "End time",
+                      "value": "excludeWindowEndTime"
+                    },
+                    "options": {
+                      "omitSeconds": true,
+                      "minuteStep": 1
+                    },
+                    "required": false,
+                    "note": "Specify the time range in UTC."
+                  }
+                ]
+              },
+              {
+                "title": "Warehouse behavior",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Warehouse append",
+                    "configKey": "preferAppend",
+                    "note": "When supported by the upload, append directly to ordinary tables. Disable to use merge and preserve deduplication for all uploads.",
+                    "default": true
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Skip users table",
+                    "configKey": "skipUsersTable",
+                    "note": "Skip creating and updating the users table.",
+                    "default": true
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Skip tracks table",
+                    "configKey": "skipTracksTable",
+                    "note": "Skip sending event data to the tracks table.",
+                    "default": false
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Clean up staging files after successful sync",
+                    "configKey": "cleanupObjectStorageFiles",
+                    "note": "Delete OneLake staging files after a successful sync. The service principal must have delete permission when enabled.",
+                    "default": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "additionalProperties": false,
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "iubenda",
+                  "value": "iubenda"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category IDs",
+              "note": "Input your consent category IDs by pressing 'Enter' after each entry. We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "regex": "^(.{0,100})$",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ],
+          "uniqueRowFields": ["provider"]
+        }
+      ]
+    }
+  }
+}
