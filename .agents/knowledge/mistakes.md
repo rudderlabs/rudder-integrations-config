@@ -46,3 +46,15 @@
 
 - CI Code quality checks failed because `.claude/skills/migrate-destination-to-form-builder-v2/scripts/audit_ui_copy.py` was added without Black formatting; the workflow's `psf/black` check discovers Python files outside normal source directories, including skill directories.
 - Corrective rule: run Black on any Python helper script added anywhere in this repository before push, not only files under application or validation script paths.
+
+## INT-7182 — Preserve the Repository-Wide Consent Contract
+
+- Simplifying Everflow's UI by removing optional product settings also removed `config.destConfig.<sourceType>.consentManagement`, `configSchema.properties.consentManagement`, and `uiConfig.consentSettingsTemplate`, causing six failures in `test/consentManagementFieldsIntegrity.test.ts`, including an undefined `.includes` access.
+- Corrective rule: ordinary destinations must retain `consentManagement` for every supported source type, the standard Consent settings and Other settings UI sections, and the corresponding generated schema even when the destination otherwise has no configurable product settings.
+
+## session-2026-09-23 — Worktree Symlinked To A Stale Main node_modules
+
+<!-- session: 2026-09-23 -->
+
+- Symlinking a `.claude/worktrees/<name>` worktree's `node_modules` to the main checkout's made `test/validation.test.ts` and `test/validator/validator.test.ts` fail to load with "Cannot find module 'ajv-keywords' from 'src/validator/index.ts'" (2 of 4 suites), which looks like broken code but is a stale main install.
+- Corrective rule: in a worktree run `npm ci --ignore-scripts` inside the worktree (all 4 suites then pass), then `npx husky install` before committing — with `--ignore-scripts` the `.husky/_/husky.sh` shim is missing and `git commit` fails at `.husky/pre-commit` line 2. Do not bypass the hook with `--no-verify`.

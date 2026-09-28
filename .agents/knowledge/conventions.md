@@ -212,6 +212,32 @@
 - The legacy Salesforce OAuth account type `DESTINATION_SALESFORCE_OAUTH` remains present for existing account compatibility but should be marked `displayOptions.deprecated: true`, with its deprecation tooltip directing new account creation to the v2 `OAuth (ECA)` option.
 - Salesforce OAuth v2 account UI copy should use Salesforce's current `External Client App` terminology rather than `connected app`; its card name should be `OAuth (External Client App)` and its description should be `Grant access using the latest Salesforce External Client App (ECA)`. The legacy Connected App card name should be `OAuth (Connected App - Legacy)`, with description `Grant access using the legacy Salesforce Connected App`.
 
+## INT-7155 — Google Ads V2 Form Builder Scope
+
+- Google Ads (`src/configurations/destinations/googleads/`) is web device-mode only for this migration; keep `sdkTemplate.fields` empty after deleting the legacy `useNativeSDK` defaultCheckbox, and do not add SDK-template fields whose config keys are absent from `db-config.json` `config.destConfig.web`.
+- Keep Google Ads client-side event filtering in Configuration settings / Other settings without adding a redundant `connectionMode.web == device` gate, because this destination has no cloud mode and the PRD/task explicitly made the group unconditional.
+- Google Ads review direction supersedes the original PRD/task ordering: place Event mapping immediately after Initial setup, yielding `Initial setup` → `Event mapping` → `Configuration settings`, consistent with the generic V2 navigation order.
+- Do not invent a visible Google Ads `dynamicRemarketing` field during the V2 migration: it is an existing orphan metadata/schema key with no V1 UI field, and adding new customer-visible fields is out of scope.
+
 ## ANA-134 — Event Filtering DestConfig Scope
 
 - Destination event-filtering fields `eventFilteringOption`, `whitelistedEvents`, and `blacklistedEvents` must be listed in `config.destConfig.defaultConfig`, not in source-type arrays such as `config.destConfig.web`, `android`, or `cloud`; the destination-definition custom validator rejects those fields outside `defaultConfig`.
+
+## INT-7182 — Everflow Postback Account Validation Contract
+
+- Everflow `postbackUrl` must be an HTTP(S) URL with a DNS-style host, no query string or fragment, and case-insensitive rejection of unsafe localhost/ngrok host classes, including nested ngrok subdomains; its validation message should direct customers to trim the URL from `?` onward.
+- For account URL schemas, reuse the shared HTTP/Webhook scheme, DNS-host, and port regex and adjust only the path suffix for integration-specific query/fragment rejection; encode length bounds in the regex rather than adding a redundant `maxLength`.
+- Keep DNS-alias, redirect, rebinding, and egress SSRF enforcement out of the Everflow configuration schema; those runtime URL-safety protections belong to the transformer/delivery layer.
+- Everflow `networkId` is not numeric-only: accept a plain string containing at least one non-whitespace character, capped at 200 characters.
+- Everflow `verificationToken` is optional, clearable, secret, and capped at 200 characters.
+- For destinations that are cloud-only across every source type, express the mode matrix in `supportedConnectionModes` without adding redundant per-source `connectionMode` entries to `config.destConfig`; omit an empty `Configuration settings` base-template section when it has no fields.
+- Keep destination-specific schema cases in `test/data/validation/destinations/<destination>.json` and rely on the generic account-definition validators; do not add destination-specific test blocks to shared `test/validation.test.ts` infrastructure.
+
+## session-2026-09-23 — Custom Audience GA: Removing A Hidden Gate
+
+<!-- session: 2026-09-23 -->
+
+- Taking a gated definition GA means deleting `options.hidden` (and `options.isBeta`, which only adds the Beta badge) from its `db-config.json`; `src/configurations/destinations/custom_audience/db-config.json` was made GA this way, leaving `options.createFlow` as the only key. `fb_custom_audience/db-config.json` (no `hidden`, no `isBeta`) is the GA reference shape.
+- `options.hidden.gate` is enforced in two places, not only the catalog UI: rudder-webapp hides the definition in catalog/pickers (`src/components/directory/utils.ts::isResourceHidden`) and rudder-config-backend rejects destination CREATE with a 403 "is not available for your account" (`src/services/destination.service.ts` → `src/utils/resourceGate.ts::throwIfResourceGated`; update path is not gated). Removing the gate from the definition unblocks both; no backend code change is needed.
+- The flag `AMP_enable-data-graph-audiences` gates `custom_audience`, `braze_audience` and `reddit_audience` definitions AND the webapp Data Graph Audiences product. Decision: to GA one destination, remove the gate from that one definition — never flip the Flagsmith flag globally, which would release all three destinations plus Data Graph Audiences.
+- Removals propagate on deploy: `scripts/deployToDB.py::update_diff_db` sends the full file-built definition when `jsondiff` finds any change, and `options` is a whole nullable column, so deleted nested keys are dropped from the stored definition.
