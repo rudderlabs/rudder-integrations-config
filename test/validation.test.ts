@@ -1269,8 +1269,22 @@ describe('Account Definition validation tests', () => {
     ).toBe(true);
   });
 
+  it('SOURCE_BIGQUERY WIF accepts an empty target service account for direct federation', () => {
+    const accountSchema = getAccountDefinitionSchema('bigquery', 'SOURCE_BIGQUERY', 'sources');
+    const validateCombined = compileAccountSchema(accountSchema.combinedSchema);
+
+    expect(
+      validateCombined({
+        ...bigQueryWifPayload(),
+        options: {
+          ...bigQueryWifPayload().options,
+          workloadIdentityTargetServiceAccount: '',
+        },
+      }),
+    ).toBe(true);
+  });
+
   it.each([
-    '',
     'sa@proj:evil.iam.gserviceaccount.com',
     'sa@proj/evil.iam.gserviceaccount.com',
     'sa@proj.iam.gserviceaccount.com?audience=attacker',
