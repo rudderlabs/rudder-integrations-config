@@ -245,3 +245,12 @@
 ## ACT2-855 — BigQuery Source WIF Compatibility
 
 - Keep separate BigQuery source UI fields bound to `project`: the key-mode field must preserve the legacy read-only `credentials.project_id` autofill and length-only regex, while the WIF-mode field is editable and accepts domain-scoped project IDs. Do not enable the WIF feature flag until rudder-webapp ACT2-870 makes autofill operate only on visible fields, or the hidden key-mode field will erase the WIF value.
+
+## options.icon — definition → icon name (PR #2769)
+
+<!-- pr:2769 -->
+
+- Every source and destination definition names its logo in `options.icon`: a kebab-case icon name (`^[a-z0-9]+(-[a-z0-9]+)*$`) from the RudderStack Integration Icons Figma library, published as `@rudderlabs/icons` (rudderlabs/rudder-icons). The property is declared, optional, in both `src/schemas/{destinations,sources}/db-config-schema.json`; destinations' `options` is `additionalProperties: false`, so a new options key always needs the schema property first.
+- Several definitions share one icon (`BRAZE` and `BRAZE_AUDIENCE` → `braze`; `FB`, `FB_CUSTOM_AUDIENCE` → `meta`); the icon name is independent of the definition name. `TEST_DESTINATION` deliberately has none.
+- A NEW definition must set `options.icon` to an icon that exists in Figma / `@rudderlabs/icons` — add the artwork to the Figma library first (component name = icon name). rudder-icons' `make check` fails on a definition without `options.icon` (allowlist aside) and on an `options.icon` naming a missing icon; renaming or removing an icon is a breaking change there.
+- Adding keys under `options` is safe for downstream readers (verified 2026-09-29): rudder-api `/v2/definitions/*` whitelists fields and never forwards `options` (rudder-control-plane `apps/rudder-api/src/services/definitions.ts` @ 1f60d07d92), config-backend stores/returns `options` as an untyped JSON column (rudder-config-backend `src/entities/destinationDefinition.ts:186` @ 181599a729), rudder-server decodes with lenient `encoding/json` (no `DisallowUnknownFields`, `backend-config/types.go` @ 52d2b551c0).
