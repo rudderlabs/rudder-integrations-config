@@ -1338,7 +1338,7 @@ describe('Account Definition validation tests', () => {
     );
     expect(keyProjectField).toBeDefined();
     expect(wifProjectField).toBeDefined();
-    const featureFlag = 'AMP_enable-bigquery-workload-identity-federation';
+    const featureFlag = 'AMP_enable-bigquery-source-workload-identity-federation';
 
     const enabledFeatureFlag = [{ configKey: featureFlag, value: true }];
     const disabledFeatureFlag = [{ configKey: featureFlag }];
