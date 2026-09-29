@@ -1,0 +1,226 @@
+[
+  {
+    "testTitle": "valid minimal linked-account warehouse config",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "abc123.datawarehouse.fabric.microsoft.com",
+      "port": "1433",
+      "database": "AnalyticsWarehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-9234-123456789abc",
+      "lakehouseId": "87654321-4321-4321-a321-cba987654321"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid optional warehouse settings and consent config",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "abc123.datawarehouse.fabric.microsoft.com",
+      "port": "1433",
+      "database": "AnalyticsWarehouse",
+      "fabricWorkspaceId": "AAAAAAAA-BBBB-4CCC-8DDD-EEEEEEEEEEEE",
+      "lakehouseId": "11111111-2222-4333-A444-555555555555",
+      "namespace": "rudder_events",
+      "syncFrequency": "10",
+      "syncStartAt": "01:15",
+      "excludeWindow": {
+        "excludeWindowStartTime": "02:00",
+        "excludeWindowEndTime": "03:00"
+      },
+      "preferAppend": false,
+      "skipTracksTable": true,
+      "skipUsersTable": false,
+      "underscoreDivideNumbers": true,
+      "cleanupObjectStorageFiles": true,
+      "allowUsersContextTraits": true,
+      "connectionMode": {
+        "web": "cloud",
+        "androidKotlin": "cloud",
+        "cloudSource": "cloud"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "and",
+            "consents": [{ "consent": "Marketing" }]
+          }
+        ],
+        "cloudSource": [
+          {
+            "provider": "oneTrust",
+            "consents": [{ "consent": "C0001" }]
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "invalid missing linked account",
+    "config": {
+      "host": "abc123.datawarehouse.fabric.microsoft.com",
+      "port": "1433",
+      "database": "AnalyticsWarehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-9234-123456789abc",
+      "lakehouseId": "87654321-4321-4321-a321-cba987654321"
+    },
+    "result": false,
+    "err": [" must have required property 'rudderAccountId'"]
+  },
+  {
+    "testTitle": "invalid missing host",
+    "config": {
+      "rudderAccountId": "account_123",
+      "port": "1433",
+      "database": "AnalyticsWarehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-9234-123456789abc",
+      "lakehouseId": "87654321-4321-4321-a321-cba987654321"
+    },
+    "result": false,
+    "err": [" must have required property 'host'"]
+  },
+  {
+    "testTitle": "invalid empty host",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "",
+      "port": "1433",
+      "database": "AnalyticsWarehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-9234-123456789abc",
+      "lakehouseId": "87654321-4321-4321-a321-cba987654321"
+    },
+    "result": false,
+    "err": ["host must match pattern \"^.{1,500}$\""]
+  },
+  {
+    "testTitle": "invalid SQL port",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "abc123.datawarehouse.fabric.microsoft.com",
+      "port": "70000",
+      "database": "AnalyticsWarehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-9234-123456789abc",
+      "lakehouseId": "87654321-4321-4321-a321-cba987654321"
+    },
+    "result": false,
+    "err": [
+      "port must match pattern \"^(?:[1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$\""
+    ]
+  },
+  {
+    "testTitle": "invalid empty database",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "abc123.datawarehouse.fabric.microsoft.com",
+      "port": "1433",
+      "database": "",
+      "fabricWorkspaceId": "12345678-1234-1234-9234-123456789abc",
+      "lakehouseId": "87654321-4321-4321-a321-cba987654321"
+    },
+    "result": false,
+    "err": ["database must match pattern \"^.{1,200}$\""]
+  },
+  {
+    "testTitle": "invalid Fabric workspace ID",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "abc123.datawarehouse.fabric.microsoft.com",
+      "port": "1433",
+      "database": "AnalyticsWarehouse",
+      "fabricWorkspaceId": "workspace-name",
+      "lakehouseId": "87654321-4321-4321-a321-cba987654321"
+    },
+    "result": false,
+    "err": [
+      "fabricWorkspaceId must match pattern \"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$\""
+    ]
+  },
+  {
+    "testTitle": "invalid Lakehouse ID",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "abc123.datawarehouse.fabric.microsoft.com",
+      "port": "1433",
+      "database": "AnalyticsWarehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-9234-123456789abc",
+      "lakehouseId": "lakehouse-name"
+    },
+    "result": false,
+    "err": [
+      "lakehouseId must match pattern \"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$\""
+    ]
+  },
+  {
+    "testTitle": "invalid device connection mode",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "abc123.datawarehouse.fabric.microsoft.com",
+      "port": "1433",
+      "database": "AnalyticsWarehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-9234-123456789abc",
+      "lakehouseId": "87654321-4321-4321-a321-cba987654321",
+      "connectionMode": {
+        "web": "device"
+      }
+    },
+    "result": false,
+    "err": ["connectionMode.web must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "invalid generic storage field",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "abc123.datawarehouse.fabric.microsoft.com",
+      "port": "1433",
+      "database": "AnalyticsWarehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-9234-123456789abc",
+      "lakehouseId": "87654321-4321-4321-a321-cba987654321",
+      "bucketProvider": "AZURE_BLOB"
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid RudderStack-managed storage field",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "abc123.datawarehouse.fabric.microsoft.com",
+      "port": "1433",
+      "database": "AnalyticsWarehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-9234-123456789abc",
+      "lakehouseId": "87654321-4321-4321-a321-cba987654321",
+      "useRudderStorage": true
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid persisted account option fields",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "abc123.datawarehouse.fabric.microsoft.com",
+      "port": "1433",
+      "database": "AnalyticsWarehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-9234-123456789abc",
+      "lakehouseId": "87654321-4321-4321-a321-cba987654321",
+      "tenantId": "12345678-1234-1234-9234-123456789abc"
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid persisted account secret field",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "abc123.datawarehouse.fabric.microsoft.com",
+      "port": "1433",
+      "database": "AnalyticsWarehouse",
+      "fabricWorkspaceId": "12345678-1234-1234-9234-123456789abc",
+      "lakehouseId": "87654321-4321-4321-a321-cba987654321",
+      "clientSecret": "do-not-persist-here"
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  }
+]

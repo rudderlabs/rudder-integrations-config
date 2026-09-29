@@ -268,6 +268,7 @@ describe('Validation Tests', () => {
     'clickhouse',
     'deltalake',
     'gcs_datalake',
+    'microsoft_fabric',
     'mssql',
     'postgres',
     'rs',
