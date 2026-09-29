@@ -1,0 +1,94 @@
+[
+  {
+    "testTitle": "valid minimal config with linked account",
+    "config": { "rudderAccountId": "account_123" },
+    "result": true
+  },
+  {
+    "testTitle": "valid cloud connection mode and consent management",
+    "config": {
+      "rudderAccountId": "account_123",
+      "connectionMode": {
+        "web": "cloud",
+        "androidKotlin": "cloud",
+        "cloud": "cloud"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "and",
+            "consents": [{ "consent": "Marketing" }]
+          }
+        ],
+        "cloud": [
+          {
+            "provider": "oneTrust",
+            "consents": [{ "consent": "C0001" }]
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "invalid missing linked account",
+    "config": {},
+    "result": false,
+    "err": [" must have required property 'rudderAccountId'"]
+  },
+  {
+    "testTitle": "invalid device connection mode",
+    "config": {
+      "rudderAccountId": "account_123",
+      "connectionMode": { "web": "device" }
+    },
+    "result": false,
+    "err": ["connectionMode.web must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "invalid destination-level account credentials",
+    "config": {
+      "rudderAccountId": "account_123",
+      "apiEndpoint": "https://s2s.mparticle.com",
+      "serverToServerKey": "synthetic-key",
+      "serverToServerSecret": "synthetic-secret"
+    },
+    "result": false,
+    "err": [
+      " must NOT have additional properties",
+      " must NOT have additional properties",
+      " must NOT have additional properties"
+    ]
+  },
+  {
+    "testTitle": "invalid event mapping setting",
+    "config": { "rudderAccountId": "account_123", "eventMapping": [] },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid event filtering setting",
+    "config": { "rudderAccountId": "account_123", "eventFilteringOption": "disable" },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid environment setting",
+    "config": { "rudderAccountId": "account_123", "environment": "production" },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid region setting",
+    "config": { "rudderAccountId": "account_123", "region": "US1" },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid device SDK setting",
+    "config": { "rudderAccountId": "account_123", "useNativeSDK": true },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  }
+]
