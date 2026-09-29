@@ -1,0 +1,256 @@
+[
+  {
+    "testTitle": "valid minimal Fabric config with linked account",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "contoso.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-4123-8123-123456789abc",
+      "lakehouseId": "87654321-4321-4321-8321-cba987654321"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid Fabric config with warehouse settings",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "contoso.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "namespace": "rudderstack",
+      "fabricWorkspaceId": "12345678-1234-4123-8123-123456789abc",
+      "lakehouseId": "87654321-4321-4321-8321-cba987654321",
+      "syncFrequency": "10",
+      "syncStartAt": "00:15",
+      "excludeWindow": {
+        "excludeWindowStartTime": "01:00",
+        "excludeWindowEndTime": "02:00"
+      },
+      "preferAppend": true,
+      "skipTracksTable": false,
+      "skipUsersTable": true,
+      "underscoreDivideNumbers": false,
+      "allowUsersContextTraits": false,
+      "cleanupObjectStorageFiles": true,
+      "connectionMode": {
+        "web": "cloud",
+        "androidKotlin": "cloud",
+        "cloudSource": "cloud"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "and",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          }
+        ],
+        "cloudSource": [
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "C0001"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "invalid config missing linked account",
+    "config": {
+      "host": "contoso.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-4123-8123-123456789abc",
+      "lakehouseId": "87654321-4321-4321-8321-cba987654321"
+    },
+    "result": false,
+    "err": [" must have required property 'rudderAccountId'"]
+  },
+  {
+    "testTitle": "invalid config missing host",
+    "config": {
+      "rudderAccountId": "account_123",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-4123-8123-123456789abc",
+      "lakehouseId": "87654321-4321-4321-8321-cba987654321"
+    },
+    "result": false,
+    "err": [" must have required property 'host'"]
+  },
+  {
+    "testTitle": "invalid config missing port",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "contoso.fabric.microsoft.com",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-4123-8123-123456789abc",
+      "lakehouseId": "87654321-4321-4321-8321-cba987654321"
+    },
+    "result": false,
+    "err": [" must have required property 'port'"]
+  },
+  {
+    "testTitle": "invalid config missing database",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "contoso.fabric.microsoft.com",
+      "port": "1433",
+      "fabricWorkspaceId": "12345678-1234-4123-8123-123456789abc",
+      "lakehouseId": "87654321-4321-4321-8321-cba987654321"
+    },
+    "result": false,
+    "err": [" must have required property 'database'"]
+  },
+  {
+    "testTitle": "invalid config missing Fabric workspace ID",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "contoso.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "lakehouseId": "87654321-4321-4321-8321-cba987654321"
+    },
+    "result": false,
+    "err": [" must have required property 'fabricWorkspaceId'"]
+  },
+  {
+    "testTitle": "invalid config missing Lakehouse ID",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "contoso.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-4123-8123-123456789abc"
+    },
+    "result": false,
+    "err": [" must have required property 'lakehouseId'"]
+  },
+  {
+    "testTitle": "invalid Fabric workspace ID",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "contoso.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "workspace-name",
+      "lakehouseId": "87654321-4321-4321-8321-cba987654321"
+    },
+    "result": false,
+    "err": [
+      "fabricWorkspaceId must match pattern \"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$\""
+    ]
+  },
+  {
+    "testTitle": "invalid Lakehouse ID",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "contoso.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-4123-8123-123456789abc",
+      "lakehouseId": "lakehouse-name"
+    },
+    "result": false,
+    "err": [
+      "lakehouseId must match pattern \"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$\""
+    ]
+  },
+  {
+    "testTitle": "invalid device connection mode",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "contoso.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-4123-8123-123456789abc",
+      "lakehouseId": "87654321-4321-4321-8321-cba987654321",
+      "connectionMode": {
+        "web": "device"
+      }
+    },
+    "result": false,
+    "err": ["connectionMode.web must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "invalid generic bucket provider",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "contoso.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-4123-8123-123456789abc",
+      "lakehouseId": "87654321-4321-4321-8321-cba987654321",
+      "bucketProvider": "AZURE_BLOB"
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid RudderStack-managed storage choice",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "contoso.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-4123-8123-123456789abc",
+      "lakehouseId": "87654321-4321-4321-8321-cba987654321",
+      "useRudderStorage": true
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid unknown destination property",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "contoso.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-4123-8123-123456789abc",
+      "lakehouseId": "87654321-4321-4321-8321-cba987654321",
+      "unknownSetting": true
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid namespace with uppercase reserved prefix",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "contoso.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "namespace": "PG_internal",
+      "fabricWorkspaceId": "12345678-1234-4123-8123-123456789abc",
+      "lakehouseId": "87654321-4321-4321-8321-cba987654321"
+    },
+    "result": false,
+    "err": ["namespace must match pattern \"^((?!pg_|PG_|pG_|Pg_).{0,64})$\""]
+  },
+  {
+    "testTitle": "valid post-inlining Fabric config with account credentials",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "contoso.fabric.microsoft.com",
+      "port": "1433",
+      "database": "analytics_warehouse",
+      "fabricWorkspaceId": "12345678-1234-4123-8123-123456789abc",
+      "lakehouseId": "87654321-4321-4321-8321-cba987654321",
+      "tenantId": "12345678-1234-4123-8123-123456789abc",
+      "clientId": "87654321-4321-4321-8321-cba987654321",
+      "clientSecret": "dummy-client-secret"
+    },
+    "result": true
+  }
+]
