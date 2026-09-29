@@ -74,6 +74,11 @@
 - The legacy Salesforce OAuth account `displayOptions.deprecationLabel` should use the exact spaced option wording: `Create a new account using the 'OAuth (ECA)' option.`
 - The Salesforce OAuth v2 account `uiConfig.description` should use the exact wording `Grant access using the latest Salesforce External Client App (ECA)`.
 
+## INT-7155 — Consent Provider Ordering Guidance
+
+- When adding the standard Form Builder V2 `consentSettingsTemplate`, preserve the provider option order from `scripts/template-ui-config.json`: Custom, iubenda, Ketch, OneTrust. Keep the generated consent-provider schema enum in the same order for consistent dashboard presentation and schema output.
+- The Google Ads team later superseded the original PRD ordering during review: in `src/configurations/destinations/googleads/ui-config.json`, place `Event mapping` immediately after `Initial setup` and before `Configuration settings`.
+
 ## INT-7182 — Everflow Review Artifact Guidance
 
 - Do not commit Everflow browser E2E screenshots, recordings, or run reports under `e2e-artifacts`; those generated review artifacts should be removed from the configuration PR.
