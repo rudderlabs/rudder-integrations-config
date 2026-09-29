@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.179.1](https://github.com/rudderlabs/rudder-config-schema/compare/v1.179.0...v1.179.1) (2026-09-29)
+
+
+### Bug Fixes
+
+* **topsort:** transform at router ([#2763](https://github.com/rudderlabs/rudder-config-schema/issues/2763)) ([04ced55](https://github.com/rudderlabs/rudder-config-schema/commit/04ced55b6d024079e6ca9160b9bc580094206893))
+
 ## [1.179.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.178.0...v1.179.0) (2026-09-28)
 
 
