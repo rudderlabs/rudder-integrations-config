@@ -83,3 +83,16 @@
 
 - Destination-definition custom rules in `src/validator/index.ts` are the right layer for cross-key `db-config.json` constraints that the JSON Schema cannot express through `destConfig` pattern properties, such as forbidding event-filtering fields in non-`defaultConfig` source sections.
 - `test/validator/validator.test.ts` should cover these custom rules with minimal destination definitions passed to `validateDestinationDefinitions()`, including positive cases for absent optional structures and negative cases that assert the offending field names and `destConfig.<section>` path in the error.
+
+## ACT2-855 — Source Account Conditional Authentication
+
+<!-- session: 2026-09-24 -->
+
+- In account `combinedSchema` conditionals such as `src/configurations/sources/bigquery/accounts/SOURCE_BIGQUERY/schema.json`, put `required: ["authMethod"]` inside the `if.properties.options` branch. Without that nested requirement, JSON Schema treats a missing discriminator as a match and can route legacy accounts into the new authentication branch.
+- Keep authentication-specific requiredness in `combinedSchema`, not the standalone `secretSchema`: keyed accounts require `secret.credentials`, while keyless WIF accounts require their non-secret federation identifiers under `options`.
+- `combinedSchema` runs on config-backend account API Merge edits, not the webapp's initial account-save route. Because the webapp retains hidden values, let the WIF branch accept absent credentials or `credentials: ""`, while rejecting a non-empty service-account key when combined validation runs.
+- BigQuery source UI uses two fields bound to the same `project` value. The service-account-key field preserves the legacy read-only `credentials.project_id` autofill, while the feature-gated WIF field is editable and accepts domain-scoped project IDs. Enabling WIF depends on rudder-webapp ACT2-870 so `WarehouseAccountForm.onChange` autofills only visible fields; otherwise the hidden key field can overwrite the typed WIF project with `''`.
+- Gate the derived `serviceAccount` summary field to the service-account-key path so keyless WIF accounts are not blocked by a credential-derived display field.
+- Keep `combinedSchema.options` open to additional properties because the BigQuery source UI can round-trip the derived, display-only `serviceAccount` value even though it is not an authored runtime account option.
+- Keep authentication-specific regex constraints in the active `combinedSchema` branch rather than the standalone options schema, because legacy account paths may validate the standalone schema without regard to the selected authentication method.
+- WIF setup copy must instruct customers to scope GCP trust to `assumed-role/data-plane-service-account/<workspaceID>`, not to the entire RudderStack AWS role.
