@@ -139,8 +139,10 @@ on which keyword happens to fail first.
 To confirm the convention still holds:
 
 ```bash
-grep -rn 'maxLength' src/configurations/ | wc -l   # expected: 0
+grep -rn 'maxLength' src/configurations/ | wc -l   # expected: 1
 ```
+
+The one exception is the `SOURCE_CLICKHOUSE` `host` option (`maxLength: 253`). rudder-sources reads that pattern with Go RE2, which has no lookahead, so the length bound cannot live inside the pattern.
 
 ### URL-valued fields reuse the shared expression
 
