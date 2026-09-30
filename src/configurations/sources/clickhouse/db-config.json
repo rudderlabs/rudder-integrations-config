@@ -2,10 +2,23 @@
   "name": "clickhouse",
   "category": "warehouse",
   "displayName": "ClickHouse",
+  "config": {
+    "supportedAccountDefinitions": {
+      "rudderAccountId": ["SOURCE_CLICKHOUSE"]
+    }
+  },
   "options": {
     "isCredentialsValidationSupported": true,
-    "hidden": true,
-    "supportsSyncSettings": false,
+    "hidden": {
+      "gate": {
+        "flags": [{ "name": "AMP_enable-clickhouse-retl-source", "value": false }]
+      }
+    },
+    "syncBehaviours": ["mirror"],
+    "isSqlModelSupported": false,
+    "isAudienceSupported": false,
+    "isDataGraphSupported": false,
+    "supportsSyncSettings": true,
     "icon": "clickhouse"
   },
   "type": "warehouse"

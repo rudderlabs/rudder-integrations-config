@@ -2509,3 +2509,49 @@ describe('SOURCE_CLICKHOUSE secretSchema', () => {
     ).toBe(false);
   });
 });
+
+describe('clickhouse source definition', () => {
+  const loadSource = async () => (await getSourceDefinitionConfig('clickhouse')).default;
+
+  it('IC17 links SOURCE_CLICKHOUSE and declares mirror as the only sync behaviour', async () => {
+    const srcDefConfig = await loadSource();
+    await expect(validateSourceDefinitions(srcDefConfig)).resolves.toEqual(true);
+    expect(srcDefConfig).toMatchObject({
+      name: 'clickhouse',
+      category: 'warehouse',
+      type: 'warehouse',
+      displayName: 'ClickHouse',
+    });
+    expect(srcDefConfig.config.supportedAccountDefinitions.rudderAccountId).toEqual([
+      'SOURCE_CLICKHOUSE',
+    ]);
+    expect(srcDefConfig.options).toMatchObject({
+      syncBehaviours: ['mirror'],
+      supportsSyncSettings: true,
+      isCredentialsValidationSupported: true,
+      isSqlModelSupported: false,
+      isAudienceSupported: false,
+      isDataGraphSupported: false,
+      icon: 'clickhouse',
+    });
+  });
+
+  it('IC18 options.hidden is the creation gate object', async () => {
+    expectClickHouseGate((await loadSource()).options.hidden);
+  });
+
+  it('IC18 validateSourceDefinitions refuses a legacy feature-flag hidden on clickhouse', async () => {
+    const srcDefConfig = await loadSource();
+    await expectValidationError(
+      validateSourceDefinitions({
+        ...srcDefConfig,
+        options: {
+          ...srcDefConfig.options,
+          hidden: { featureFlagName: 'AMP_enable-clickhouse-retl-source', featureFlagValue: false },
+        },
+      }),
+      "must have required property 'gate'",
+      false,
+    );
+  });
+});
