@@ -1,0 +1,40 @@
+{
+  "uiConfig": {
+    "name": "Service Principal",
+    "icon": "key",
+    "description": "Authenticate Microsoft Fabric Warehouse and OneLake using a Microsoft Entra service principal",
+    "recommended": true,
+    "form": {
+      "title": "Connect your Microsoft Fabric account",
+      "fields": [
+        {
+          "component": "textField",
+          "label": "Account name",
+          "placeholder": "e.g: Microsoft Fabric production",
+          "key": "name"
+        },
+        {
+          "component": "textField",
+          "label": "Tenant ID",
+          "placeholder": "e.g: 12345678-1234-4123-8123-123456789abc",
+          "key": ["options", "tenantId"],
+          "note": "Create a Microsoft Entra service principal and enable the Fabric/Power BI tenant setting that allows service principals to use Fabric APIs."
+        },
+        {
+          "component": "textField",
+          "label": "Client ID",
+          "placeholder": "e.g: 12345678-1234-4123-8123-123456789abc",
+          "key": ["options", "clientId"],
+          "note": "Grant the service principal Contributor or higher on both the source Lakehouse workspace and the target Warehouse workspace."
+        },
+        {
+          "component": "textField",
+          "label": "Client Secret",
+          "placeholder": "Enter the service principal client secret",
+          "key": ["options", "clientSecret"],
+          "secret": true
+        }
+      ]
+    }
+  }
+}
