@@ -74,7 +74,19 @@
 - The legacy Salesforce OAuth account `displayOptions.deprecationLabel` should use the exact spaced option wording: `Create a new account using the 'OAuth (ECA)' option.`
 - The Salesforce OAuth v2 account `uiConfig.description` should use the exact wording `Grant access using the latest Salesforce External Client App (ECA)`.
 
+## INT-7155 — Consent Provider Ordering Guidance
+
+- When adding the standard Form Builder V2 `consentSettingsTemplate`, preserve the provider option order from `scripts/template-ui-config.json`: Custom, iubenda, Ketch, OneTrust. Keep the generated consent-provider schema enum in the same order for consistent dashboard presentation and schema output.
+- The Google Ads team later superseded the original PRD ordering during review: in `src/configurations/destinations/googleads/ui-config.json`, place `Event mapping` immediately after `Initial setup` and before `Configuration settings`.
+
 ## INT-7182 — Everflow Review Artifact Guidance
 
 - Do not commit Everflow browser E2E screenshots, recordings, or run reports under `e2e-artifacts`; those generated review artifacts should be removed from the configuration PR.
 - Omit an `Other settings` section from Everflow `ui-config.json` when its groups array is empty; retain only sections backed by actual fields or templates.
+
+## ACT2-855 — BigQuery Source WIF UI Review Guidance
+
+- In legacy RETL source account forms, use the unified `preRequisites` object for both feature flags and field conditions; do not mix it with `preRequisiteField` or `preRequisiteFeatureFlag`.
+- When a key-auth field must remain visible while WIF is feature-gated off, express the visibility rule as `authMethod == serviceAccountKey OR feature flag is falsy/missing`. In the unified `preRequisites.featureFlags` shape, omit `value`; an explicit `value: false` does not match a missing flag.
+- Keep an authentication selector's help text neutral. Put WIF setup and security guidance on a WIF-only field with the same `authMethod == workloadIdentityFederation` and enabled-feature-flag prerequisites, so key-auth users never see irrelevant federation instructions.
+- Keep BigQuery WIF target-service-account validation byte-for-byte aligned between the source UI, the WIF branch of `combinedSchema`, and the `rudder-sources` runtime allow-list. The accepted runtime forms include IAM service accounts with domain-scoped projects, Compute Engine default service accounts, and App Engine service accounts.

@@ -212,6 +212,13 @@
 - The legacy Salesforce OAuth account type `DESTINATION_SALESFORCE_OAUTH` remains present for existing account compatibility but should be marked `displayOptions.deprecated: true`, with its deprecation tooltip directing new account creation to the v2 `OAuth (ECA)` option.
 - Salesforce OAuth v2 account UI copy should use Salesforce's current `External Client App` terminology rather than `connected app`; its card name should be `OAuth (External Client App)` and its description should be `Grant access using the latest Salesforce External Client App (ECA)`. The legacy Connected App card name should be `OAuth (Connected App - Legacy)`, with description `Grant access using the legacy Salesforce Connected App`.
 
+## INT-7155 — Google Ads V2 Form Builder Scope
+
+- Google Ads (`src/configurations/destinations/googleads/`) is web device-mode only for this migration; keep `sdkTemplate.fields` empty after deleting the legacy `useNativeSDK` defaultCheckbox, and do not add SDK-template fields whose config keys are absent from `db-config.json` `config.destConfig.web`.
+- Keep Google Ads client-side event filtering in Configuration settings / Other settings without adding a redundant `connectionMode.web == device` gate, because this destination has no cloud mode and the PRD/task explicitly made the group unconditional.
+- Google Ads review direction supersedes the original PRD/task ordering: place Event mapping immediately after Initial setup, yielding `Initial setup` → `Event mapping` → `Configuration settings`, consistent with the generic V2 navigation order.
+- Do not invent a visible Google Ads `dynamicRemarketing` field during the V2 migration: it is an existing orphan metadata/schema key with no V1 UI field, and adding new customer-visible fields is out of scope.
+
 ## ANA-134 — Event Filtering DestConfig Scope
 
 - Destination event-filtering fields `eventFilteringOption`, `whitelistedEvents`, and `blacklistedEvents` must be listed in `config.destConfig.defaultConfig`, not in source-type arrays such as `config.destConfig.web`, `android`, or `cloud`; the destination-definition custom validator rejects those fields outside `defaultConfig`.
@@ -234,3 +241,16 @@
 - `options.hidden.gate` is enforced in two places, not only the catalog UI: rudder-webapp hides the definition in catalog/pickers (`src/components/directory/utils.ts::isResourceHidden`) and rudder-config-backend rejects destination CREATE with a 403 "is not available for your account" (`src/services/destination.service.ts` → `src/utils/resourceGate.ts::throwIfResourceGated`; update path is not gated). Removing the gate from the definition unblocks both; no backend code change is needed.
 - The flag `AMP_enable-data-graph-audiences` gates `custom_audience`, `braze_audience` and `reddit_audience` definitions AND the webapp Data Graph Audiences product. Decision: to GA one destination, remove the gate from that one definition — never flip the Flagsmith flag globally, which would release all three destinations plus Data Graph Audiences.
 - Removals propagate on deploy: `scripts/deployToDB.py::update_diff_db` sends the full file-built definition when `jsondiff` finds any change, and `options` is a whole nullable column, so deleted nested keys are dropped from the stored definition.
+
+## ACT2-855 — BigQuery Source WIF Compatibility
+
+- Keep separate BigQuery source UI fields bound to `project`: the key-mode field must preserve the legacy read-only `credentials.project_id` autofill and length-only regex, while the WIF-mode field is editable and accepts domain-scoped project IDs. Do not enable the WIF feature flag until rudder-webapp ACT2-870 makes autofill operate only on visible fields, or the hidden key-mode field will erase the WIF value.
+
+## options.icon — definition → icon name (PR #2769)
+
+<!-- pr:2769 -->
+
+- Every source and destination definition names its logo in `options.icon`: a kebab-case icon name (`^[a-z0-9]+(-[a-z0-9]+)*$`) from the RudderStack Integration Icons Figma library, published as `@rudderlabs/icons` (rudderlabs/rudder-icons). The property is declared, optional, in both `src/schemas/{destinations,sources}/db-config-schema.json`; destinations' `options` is `additionalProperties: false`, so a new options key always needs the schema property first.
+- Several definitions share one icon (`BRAZE` and `BRAZE_AUDIENCE` → `braze`; `FB`, `FB_CUSTOM_AUDIENCE` → `meta`); the icon name is independent of the definition name. `TEST_DESTINATION` deliberately has none.
+- A NEW definition must set `options.icon` to an icon that exists in Figma / `@rudderlabs/icons` — add the artwork to the Figma library first (component name = icon name). rudder-icons' `make check` fails on a definition without `options.icon` (allowlist aside) and on an `options.icon` naming a missing icon; renaming or removing an icon is a breaking change there.
+- Adding keys under `options` is safe for downstream readers (verified 2026-09-29): rudder-api `/v2/definitions/*` whitelists fields and never forwards `options` (rudder-control-plane `apps/rudder-api/src/services/definitions.ts` @ 1f60d07d92), config-backend stores/returns `options` as an untyped JSON column (rudder-config-backend `src/entities/destinationDefinition.ts:186` @ 181599a729), rudder-server decodes with lenient `encoding/json` (no `DisallowUnknownFields`, `backend-config/types.go` @ 52d2b551c0).

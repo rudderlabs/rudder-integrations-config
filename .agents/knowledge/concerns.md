@@ -84,6 +84,11 @@
 - After removing `legacyApiKey` from HubSpot `ui-config.json` Authorization Type options while keeping it in `schema.json` for persisted-config compatibility, `python3 scripts/schemaGenerator.py destination -name hs` succeeds but recommends removing `legacyApiKey` from the `authorizationType` enum. That diff is intentional for INT-6707 and should not be applied unless legacy persisted HubSpot configs no longer need schema-valid rendering.
 - The same HubSpot schema-generator run can also emit baseline/noisy output for `redirect`, `additionalProperties: false`, and consent-management `provider` requirements; distinguish those pre-existing generator recommendations from the scoped legacy API-key UI removal.
 
+## INT-7155 — Google Ads Consent Schema Generator Drift
+
+- During the Google Ads Form Builder V2 migration, task context claimed `consentManagement.web.items.required: ["provider"]` was already present, but the checkout's schema-generator output reported that nested required entry as missing.
+- For changed Google Ads V2 UI/schema work, align the consent-management schema with the standard V2 `consentSettingsTemplate` and generator by retaining `items.required: ["provider"]`; removing it can leave a fatal changed-destination schema-generator warning.
+
 ## INT-7147 — DCM Floodlight Advertiser Secret Metadata Mismatch
 
 <!-- session: 2026-09-15 -->
@@ -93,3 +98,7 @@
 ## INT-7182 — Cloud-Only SDK Template Runtime Assumption
 
 - The webapp V2 configuration builder assumes `uiConfig.sdkTemplate` exists even for cloud-only destinations. Omitting it lets Everflow be created and connected but crashes the post-create Configuration page when downstream code reads the missing template fields' length; retain the canonical empty object with `fields: []`.
+
+## ACT2-855 — BigQuery Source Schema Generator Incompatibility
+
+- `npm run check:schema:source bigquery` crashes in `scripts/schemaGenerator.py::is_dest_field_dependent_on_source` with `KeyError: 'supportedSourceTypes'` when source UI fields use destination-style `preRequisites`; the source generator incorrectly assumes destination db-config shape for this field form, so this failure is a tooling incompatibility rather than evidence of a generated source-schema diff.
