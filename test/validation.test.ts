@@ -2438,3 +2438,74 @@ describe('SOURCE_CLICKHOUSE optionsSchema', () => {
     expect(properties.scratchDatabase.pattern).toBe(properties.database.pattern);
   });
 });
+
+describe('SOURCE_CLICKHOUSE secretSchema', () => {
+  const validateSecret = () =>
+    compileAccountSchemaWithErrorMessages(clickHouseAccountSchema().secretSchema);
+
+  it('IC8 secretFields equal the secretSchema property names', async () => {
+    const accountConfig = await getAccountDefinitionConfig(
+      'clickhouse',
+      'SOURCE_CLICKHOUSE',
+      'sources',
+    );
+    expect(accountConfig.config.secretFields).toEqual(
+      Object.keys(clickHouseAccountSchema().secretSchema.properties),
+    );
+  });
+
+  it('IC15 password cases from the shared fixture file', () => {
+    const validate = validateSecret();
+    clickHouseFieldCases()
+      .filter((c) => c.field === 'password')
+      .forEach((c) => {
+        const valid = validate({ password: c.input });
+        expect({ id: c.id, verdict: valid ? 'pass' : 'fail' }).toEqual({
+          id: c.id,
+          verdict: c.verdict,
+        });
+        if (!valid) {
+          expect({ id: c.id, messages: (validate.errors ?? []).map((e) => e.message) }).toEqual({
+            id: c.id,
+            messages: [c.error],
+          });
+        }
+      });
+  });
+
+  it('IC15 an absent, empty or non-string password fails', () => {
+    const validate = validateSecret();
+    expect(validate({})).toBe(false);
+    expect((validate.errors ?? []).map((e) => e.message)).toEqual([
+      "must have required property 'password'",
+    ]);
+    [{ password: '' }, { password: 5 }, { password: null }].forEach((secret) => {
+      expect({ secret, valid: validate(secret) }).toEqual({ secret, valid: false });
+    });
+  });
+
+  it('IC15 the password is never trimmed by validation', () => {
+    const validate = validateSecret();
+    const secret = { password: 'p w' };
+    expect(validate(secret)).toBe(true);
+    expect(secret.password).toBe('p w');
+  });
+
+  it('IC16 the secret schema accepts and keeps an undeclared secret; the config-backend guard refuses it', () => {
+    const validate = validateSecret();
+    const secret = { password: 'secret', unexpected: 1 };
+    expect(validate(secret)).toBe(true);
+    expect(secret.unexpected).toBe(1);
+    expect(clickHouseAccountSchema().secretSchema.additionalProperties).toBeUndefined();
+  });
+
+  it('schema.json is pure ASCII, so the password escapes survive', () => {
+    expectAsciiOnly('src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json');
+  });
+
+  it('IC15 the password pattern uses no lookaround, \\s or \\p{}', () => {
+    expect(
+      RE2_UNSAFE_PATTERN.test(clickHouseAccountSchema().secretSchema.properties.password.pattern),
+    ).toBe(false);
+  });
+});

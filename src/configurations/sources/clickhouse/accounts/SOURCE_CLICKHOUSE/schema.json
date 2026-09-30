@@ -29,5 +29,17 @@
         "errorMessage": "Use letters, digits and underscores, start with a letter or underscore, at most 128 characters."
       }
     }
+  },
+  "secretSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["password"],
+    "properties": {
+      "password": {
+        "type": "string",
+        "pattern": "^[^\\x00-\\x20\\x7F-\\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]([^\\x00-\\x1F\\x7F-\\x9F]*[^\\x00-\\x20\\x7F-\\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])?$",
+        "errorMessage": "The password cannot contain control characters or start or end with whitespace."
+      }
+    }
   }
 }
