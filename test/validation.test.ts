@@ -2582,3 +2582,111 @@ describe('clickhouse source compatibility fixtures', () => {
       );
   });
 });
+
+describe('clickhouse ui-config', () => {
+  const PORT_REGEX =
+    '^([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$';
+  const loadUiConfig = () =>
+    JSON.parse(
+      fs.readFileSync(
+        path.resolve('src/configurations/sources/clickhouse/ui-config.json'),
+        'utf-8',
+      ),
+    ).uiConfig[0];
+  const field = (value: string) =>
+    loadUiConfig().fields.find((f: { value: string }) => f.value === value);
+
+  it('ui-config.json is pure ASCII, so the password regex escapes survive', () => {
+    expectAsciiOnly('src/configurations/sources/clickhouse/ui-config.json');
+  });
+
+  it('renders the six account inputs in order and no secure, skipVerify, dbname or CA input', () => {
+    expect(loadUiConfig().fields.map((f: { value: string }) => f.value)).toEqual([
+      'host',
+      'port',
+      'database',
+      'user',
+      'password',
+      'scratchDatabase',
+    ]);
+  });
+
+  it('ui-config string field regexes equal the account schema patterns', () => {
+    const { optionsSchema, secretSchema } = clickHouseAccountSchema();
+    ['host', 'database', 'user', 'scratchDatabase'].forEach((key) => {
+      expect({ key, regex: field(key).regex }).toEqual({
+        key,
+        regex: optionsSchema.properties[key].pattern,
+      });
+    });
+    expect(field('password').regex).toBe(secretSchema.properties.password.pattern);
+  });
+
+  it('ui-config port regex accepts 1 to 65535 only', () => {
+    expect(field('port').regex).toBe(PORT_REGEX);
+    const port = new RegExp(field('port').regex);
+    [
+      '1',
+      '443',
+      '8123',
+      '8443',
+      '9999',
+      '10000',
+      '59999',
+      '64999',
+      '65499',
+      '65529',
+      '65535',
+    ].forEach((v) => expect({ v, ok: port.test(v) }).toEqual({ v, ok: true }));
+    ['', '0', '00001', '65536', '70000', '99999', '8443a', '-1', '1.5'].forEach((v) =>
+      expect({ v, ok: port.test(v) }).toEqual({ v, ok: false }),
+    );
+    // A number, not a string: TextInputField sends `field.default` unchanged on mount (textInput.tsx:84),
+    // and the account schema port is an integer.
+    expect(field('port')).toMatchObject({
+      inputFieldType: 'number',
+      required: true,
+      default: 8443,
+    });
+  });
+
+  it('every regex has a regexErrorMessage, and required flags match the account schema', () => {
+    loadUiConfig().fields.forEach(
+      (f: { value: string; regex?: string; regexErrorMessage?: string; required?: boolean }) => {
+        expect({ value: f.value, hasMessage: typeof f.regexErrorMessage === 'string' }).toEqual({
+          value: f.value,
+          hasMessage: true,
+        });
+        expect({ value: f.value, required: f.required }).toEqual({
+          value: f.value,
+          required: true,
+        });
+      },
+    );
+  });
+
+  it('keeps the account summary, secret and doc link contract', () => {
+    const ui = loadUiConfig();
+    expect(ui.schemaAlias).toBe('Database');
+    expect(ui.nameField).toBe('user');
+    expect(ui.secretFields).toEqual(['password']);
+    expect(field('password')).toMatchObject({ secret: true, inputFieldType: 'password' });
+    expect(field('password').trim).toBeUndefined();
+    expect(field('scratchDatabase')).toMatchObject({
+      label: 'Scratch database',
+      addInAccountSummary: true,
+    });
+    expect(Object.keys(ui.docLinks).sort()).toEqual([
+      'grantPermissions',
+      'jsonMapperUseInstructions',
+      'setupInstructions',
+      'verifyingCredentials',
+    ]);
+    expect(ui.docLinks.setupInstructions).toBe(
+      'https://docs.rudderstack.com/reverse-etl/clickhouse',
+    );
+    expect(ui.docLinks.jsonMapperUseInstructions).toBe(
+      'https://docs.rudderstack.com/reverse-etl/clickhouse/#specifying-the-data-to-import',
+    );
+  });
+});
