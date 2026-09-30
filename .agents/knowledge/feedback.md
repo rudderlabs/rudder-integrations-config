@@ -93,5 +93,5 @@
 
 ## INT-7247 — Rokt Endpoint Review Guidance
 
-- Reviewer guidance rejected enumerating the current mParticle regional hosts for Rokt `apiEndpoint`; use the repository's generic HTTPS endpoint validation so future host, port, and path formats do not require a schema release.
-- Preserve syntactic safeguards for a valid DNS-style HTTPS URL and rejection of localhost/ngrok hosts, query strings, and fragments.
+- Reviewer guidance rejected enumerating the current mParticle regional hosts for Rokt `apiEndpoint`; accept HTTPS endpoints on `mparticle.com` and any `.mparticle.com` subdomain so future mParticle subdomains do not require a schema release.
+- Do not broaden this into generic endpoint validation: reject lookalike/non-mParticle domains, userinfo, query strings, fragments, ports, and paths, while permitting at most one trailing slash.
