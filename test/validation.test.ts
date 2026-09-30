@@ -2156,3 +2156,66 @@ describe('ClickHouse shared field fixtures', () => {
       });
   });
 });
+
+const CLICKHOUSE_GATE = {
+  gate: { flags: [{ name: 'AMP_enable-clickhouse-retl-source', value: false }] },
+};
+
+// A bare boolean never consults a flag, and config-backend refuses every workspace with `true`.
+function expectClickHouseGate(hidden: unknown): void {
+  expect(hidden).toEqual(CLICKHOUSE_GATE);
+}
+
+describe('SOURCE_CLICKHOUSE account definition', () => {
+  const loadAccount = () =>
+    getAccountDefinitionConfig('clickhouse', 'SOURCE_CLICKHOUSE', 'sources');
+
+  it('IC7 declares a password source account of type clickhouse that passes the account meta-schema', async () => {
+    const accountConfig = await loadAccount();
+    await expect(validateAccountDefinitions(accountConfig)).resolves.toEqual(true);
+    expect(accountConfig).toMatchObject({
+      name: 'SOURCE_CLICKHOUSE',
+      type: 'clickhouse',
+      category: 'source',
+      authenticationType: 'password',
+    });
+  });
+
+  it('IC9 has exactly seven options and the one secret password, with no CA or transport option', async () => {
+    const accountConfig = await loadAccount();
+    expect(accountConfig.config.optionFields).toEqual([
+      'host',
+      'port',
+      'database',
+      'user',
+      'secure',
+      'skipVerify',
+      'scratchDatabase',
+    ]);
+    expect(accountConfig.config.secretFields).toEqual(['password']);
+    ['caCertificate', 'protocol', 'nativePort', 'authenticationType'].forEach((field) => {
+      expect(accountConfig.config.optionFields).not.toContain(field);
+    });
+  });
+
+  it('IC18 displayOptions.hidden is the creation gate object', async () => {
+    const accountConfig = await loadAccount();
+    expectClickHouseGate(accountConfig.displayOptions.hidden);
+  });
+
+  it('IC18 the ClickHouse gate check refuses a bare boolean and the meta-schema refuses a legacy flag object', async () => {
+    expect(() => expectClickHouseGate(true)).toThrow();
+    expect(() => expectClickHouseGate(false)).toThrow();
+    const legacy = {
+      featureFlagName: 'AMP_enable-clickhouse-retl-source',
+      featureFlagValue: false,
+    };
+    expect(() => expectClickHouseGate(legacy)).toThrow();
+    const accountConfig = await loadAccount();
+    await expectValidationError(
+      validateAccountDefinitions({ ...accountConfig, displayOptions: { hidden: legacy } }),
+      "must have required property 'gate'",
+      false,
+    );
+  });
+});
