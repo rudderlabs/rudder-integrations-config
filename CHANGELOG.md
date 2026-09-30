@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.180.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.179.0...v1.180.0) (2026-09-29)
+
+
+### Features
+
+* point every definition at its icon with options.icon ([befb88c](https://github.com/rudderlabs/rudder-config-schema/commit/befb88cf56b8e06010e38eaaf6fe9b2bb6837838))
+* point every definition at its icon with options.icon ([#2769](https://github.com/rudderlabs/rudder-config-schema/issues/2769)) ([1a74683](https://github.com/rudderlabs/rudder-config-schema/commit/1a74683f539ba859fb44561c71dcbb0e0009e2cb))
+* **sources:** add BigQuery WIF account configuration ([#2759](https://github.com/rudderlabs/rudder-config-schema/issues/2759)) ([3b758a6](https://github.com/rudderlabs/rudder-config-schema/commit/3b758a6d829089144c8a41333af1b508e76f1fec))
+
+
+### Bug Fixes
+
+* **topsort:** transform at router ([#2763](https://github.com/rudderlabs/rudder-config-schema/issues/2763)) ([04ced55](https://github.com/rudderlabs/rudder-config-schema/commit/04ced55b6d024079e6ca9160b9bc580094206893))
+
 ## [1.179.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.178.0...v1.179.0) (2026-09-28)
 
 

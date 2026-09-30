@@ -98,3 +98,7 @@
 ## INT-7182 — Cloud-Only SDK Template Runtime Assumption
 
 - The webapp V2 configuration builder assumes `uiConfig.sdkTemplate` exists even for cloud-only destinations. Omitting it lets Everflow be created and connected but crashes the post-create Configuration page when downstream code reads the missing template fields' length; retain the canonical empty object with `fields: []`.
+
+## ACT2-855 — BigQuery Source Schema Generator Incompatibility
+
+- `npm run check:schema:source bigquery` crashes in `scripts/schemaGenerator.py::is_dest_field_dependent_on_source` with `KeyError: 'supportedSourceTypes'` when source UI fields use destination-style `preRequisites`; the source generator incorrectly assumes destination db-config shape for this field form, so this failure is a tooling incompatibility rather than evidence of a generated source-schema diff.
