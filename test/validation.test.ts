@@ -3,7 +3,9 @@
 import fs from 'fs';
 import path from 'path';
 import Commander from 'commander';
-import Ajv from 'ajv';
+import Ajv, { ValidateFunction } from 'ajv';
+import addKeywords from 'ajv-keywords';
+import ajvErrors from 'ajv-errors';
 import {
   init,
   validateConfig,
@@ -186,6 +188,24 @@ function getAccountDefinitionSchema(integrationName: string, accountName: string
 // so a stringified port stays a type error here exactly as it is in production.
 function compileAccountSchema(schema: unknown) {
   const ajv = new Ajv({ allErrors: true, useDefaults: true, strict: false });
+  return ajv.compile(schema as Record<string, unknown>);
+}
+
+// Mirrors config-backend `createAjv` (src/validations/configValidationErrors.ts), which loads
+// ajv-errors, so an `errorMessage` asserted here is the text config-backend returns.
+function compileAccountSchemaWithErrorMessages(schema: unknown): ValidateFunction {
+  const ajv = new Ajv({
+    allErrors: true,
+    useDefaults: true,
+    strict: false,
+    strictSchema: false,
+    strictRequired: false,
+    strictNumbers: true,
+    strictTypes: true,
+    strictTuples: true,
+  });
+  addKeywords(ajv, ['uniqueItemProperties']);
+  ajvErrors(ajv);
   return ajv.compile(schema as Record<string, unknown>);
 }
 
@@ -2217,5 +2237,204 @@ describe('SOURCE_CLICKHOUSE account definition', () => {
       "must have required property 'gate'",
       false,
     );
+  });
+});
+
+const clickHouseOptions = (): Record<string, unknown> => ({
+  host: 'ch.example.com',
+  port: 8443,
+  database: 'analytics',
+  user: 'rudder',
+  secure: true,
+  skipVerify: false,
+  scratchDatabase: '_rudderstack_ws1',
+});
+
+const clickHouseAccountSchema = () =>
+  getAccountDefinitionSchema('clickhouse', 'SOURCE_CLICKHOUSE', 'sources');
+
+// Lookaround, \s and \p{} read differently in ECMA-262 and RE2 (catalog LLD section 3.3).
+const RE2_UNSAFE_PATTERN = /\(\?[=!<]|\\s|\\p\{/;
+
+describe('SOURCE_CLICKHOUSE optionsSchema', () => {
+  const validateOptions = () => compileAccountSchema(clickHouseAccountSchema().optionsSchema);
+  const validateWithText = () =>
+    compileAccountSchemaWithErrorMessages(clickHouseAccountSchema().optionsSchema);
+  const messages = (validate: ValidateFunction) => (validate.errors ?? []).map((e) => e.message);
+
+  it('IC7 the account schema is valid against the account meta-schema and has no combinedSchema', () => {
+    const metaSchema = JSON.parse(
+      fs.readFileSync(path.resolve('src/schemas/account/account-schema-schema.json'), 'utf-8'),
+    );
+    const validateAccountSchema = compileAccountSchema(metaSchema);
+    const accountSchema = clickHouseAccountSchema();
+    const isValid = validateAccountSchema(accountSchema);
+    expect(validateAccountSchema.errors ?? []).toEqual([]);
+    expect(isValid).toBe(true);
+    expect(accountSchema.combinedSchema).toBeUndefined();
+    expect(accountSchema.optionsSchema.additionalProperties).toBeUndefined();
+  });
+
+  it('IC8 optionFields equal the optionsSchema property names', async () => {
+    const accountConfig = await getAccountDefinitionConfig(
+      'clickhouse',
+      'SOURCE_CLICKHOUSE',
+      'sources',
+    );
+    expect([...accountConfig.config.optionFields].sort()).toEqual(
+      Object.keys(clickHouseAccountSchema().optionsSchema.properties).sort(),
+    );
+  });
+
+  it('IC11 IC13 a complete option set passes and omitted port, secure and skipVerify take their defaults', () => {
+    const validate = validateOptions();
+    expect(validate(clickHouseOptions())).toBe(true);
+    const options = clickHouseOptions();
+    delete options.port;
+    delete options.secure;
+    delete options.skipVerify;
+    expect(validate(options)).toBe(true);
+    expect(options).toMatchObject({ port: 8443, secure: true, skipVerify: false });
+  });
+
+  it('IC11 port accepts 1, 8123, 8443 and 65535 and rejects 0, 65536, "8443", 1.5 and -1 without coercion', () => {
+    const validate = validateOptions();
+    [1, 8123, 8443, 65535].forEach((port) => {
+      expect({ port, valid: validate({ ...clickHouseOptions(), port }) }).toEqual({
+        port,
+        valid: true,
+      });
+    });
+    [0, 65536, '8443', 1.5, -1].forEach((port) => {
+      const options = { ...clickHouseOptions(), port };
+      expect({ port, valid: validate(options) }).toEqual({ port, valid: false });
+      expect(options.port).toBe(port);
+    });
+  });
+
+  it('IC11 IC13 null option values fail and are not defaulted', () => {
+    const validate = validateOptions();
+    ['port', 'secure', 'skipVerify'].forEach((key) => {
+      const options = { ...clickHouseOptions(), [key]: null };
+      expect({ key, valid: validate(options) }).toEqual({ key, valid: false });
+      expect(options[key]).toBeNull();
+    });
+  });
+
+  it('IC10 each missing required option fails with the AJV required message', () => {
+    const validate = validateWithText();
+    ['host', 'database', 'user', 'scratchDatabase'].forEach((key) => {
+      const options = clickHouseOptions();
+      delete options[key];
+      expect(validate(options)).toBe(false);
+      expect(messages(validate)).toEqual([`must have required property '${key}'`]);
+    });
+  });
+
+  it('IC13 secure is const true and skipVerify is const false; non-boolean TLS values fail', () => {
+    const validate = validateOptions();
+    const schema = clickHouseAccountSchema().optionsSchema;
+    expect(schema.required).not.toContain('secure');
+    expect(schema.properties.secure).toEqual({ type: 'boolean', const: true, default: true });
+    expect(schema.properties.skipVerify).toEqual({ type: 'boolean', const: false, default: false });
+    expect(validate({ ...clickHouseOptions(), secure: false })).toBe(false);
+    expect(validate({ ...clickHouseOptions(), skipVerify: true })).toBe(false);
+    ['secure', 'skipVerify'].forEach((key) => {
+      ['true', 'false', 0, 1].forEach((value) => {
+        expect({ key, value, valid: validate({ ...clickHouseOptions(), [key]: value }) }).toEqual({
+          key,
+          value,
+          valid: false,
+        });
+      });
+    });
+  });
+
+  it('IC12 host cases from the shared fixture file', () => {
+    const validate = validateWithText();
+    clickHouseFieldCases()
+      .filter((c) => c.field === 'host')
+      .forEach((c) => {
+        const valid = validate({ ...clickHouseOptions(), host: c.input });
+        expect({ id: c.id, verdict: valid ? 'pass' : 'fail' }).toEqual({
+          id: c.id,
+          verdict: c.verdict,
+        });
+        if (!valid)
+          expect({ id: c.id, messages: messages(validate) }).toEqual({
+            id: c.id,
+            messages: [c.error],
+          });
+      });
+  });
+
+  it('IC12 name cases apply to database, user and scratchDatabase with one error text', () => {
+    const validate = validateWithText();
+    clickHouseFieldCases()
+      .filter((c) => c.field === 'name')
+      .forEach((c) => {
+        ['database', 'user', 'scratchDatabase'].forEach((key) => {
+          const valid = validate({ ...clickHouseOptions(), [key]: c.input });
+          expect({ id: c.id, key, verdict: valid ? 'pass' : 'fail' }).toEqual({
+            id: c.id,
+            key,
+            verdict: c.verdict,
+          });
+          if (!valid) {
+            expect({ id: c.id, key, messages: messages(validate) }).toEqual({
+              id: c.id,
+              key,
+              messages: [c.error],
+            });
+          }
+        });
+      });
+  });
+
+  it('IC14 scratchDatabase is required with no default, and the schema alone cannot apply the scratch rule', () => {
+    const schema = clickHouseAccountSchema().optionsSchema;
+    expect(schema.required).toContain('scratchDatabase');
+    expect(schema.properties.scratchDatabase.default).toBeUndefined();
+    const validate = validateOptions();
+    clickHouseFieldCases()
+      .filter((c) => c.field === 'scratchDatabase')
+      .forEach((c) => {
+        const expected = c.schemaVerdict ?? c.verdict;
+        const valid = validate({
+          ...clickHouseOptions(),
+          database: c.database,
+          scratchDatabase: c.input,
+        });
+        expect({ id: c.id, verdict: valid ? 'pass' : 'fail' }).toEqual({
+          id: c.id,
+          verdict: expected,
+        });
+      });
+  });
+
+  it('IC16 the options schema accepts and keeps undeclared options; the config-backend guard refuses them', () => {
+    const validate = validateOptions();
+    const options = {
+      ...clickHouseOptions(),
+      protocol: 'http',
+      nativePort: 9440,
+      caCertificate: 'x',
+    };
+    expect(validate(options)).toBe(true);
+    expect(options).toMatchObject({ protocol: 'http', nativePort: 9440, caCertificate: 'x' });
+  });
+
+  it('IC12 every option pattern reads the same in ECMA-262 and RE2, and host keeps maxLength 253', () => {
+    const { properties } = clickHouseAccountSchema().optionsSchema;
+    ['host', 'database', 'user', 'scratchDatabase'].forEach((key) => {
+      expect({ key, unsafe: RE2_UNSAFE_PATTERN.test(properties[key].pattern) }).toEqual({
+        key,
+        unsafe: false,
+      });
+    });
+    expect(properties.host.maxLength).toBe(253);
+    expect(properties.database.pattern).toBe('^[A-Za-z_][A-Za-z0-9_]{0,127}$');
+    expect(properties.user.pattern).toBe(properties.database.pattern);
+    expect(properties.scratchDatabase.pattern).toBe(properties.database.pattern);
   });
 });
