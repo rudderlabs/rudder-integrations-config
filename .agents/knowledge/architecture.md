@@ -111,5 +111,5 @@
 ## INT-7247 — Rokt Account Endpoint Boundary
 
 - Rokt is account-backed under `src/configurations/destinations/rokt/`, with API credentials and the mParticle Events API endpoint defined under `accounts/rokt_api_key/`.
-- The account endpoint allowlist is intentionally limited to the four official mParticle pod bases: `https://s2s.mparticle.com`, `https://s2s.us2.mparticle.com`, `https://s2s.eu1.mparticle.com`, and `https://s2s.au1.mparticle.com`, each with at most one trailing slash.
-- Exact-host anchoring is a security boundary: account validation must reject alternate schemes, ports, paths, userinfo, query strings, fragments, IP literals, and arbitrary/private hosts rather than accepting a generic URL.
+- Later review superseded the fixed four-host mParticle allowlist: `apiEndpoint` uses the repository's generic HTTPS endpoint shape so future valid DNS hosts, ports, and paths do not require a configuration-schema release.
+- Endpoint validation remains a syntactic safety boundary: require a valid DNS-style HTTPS URL and reject localhost/ngrok hosts, query strings, and fragments.

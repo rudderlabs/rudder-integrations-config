@@ -90,3 +90,8 @@
 - When a key-auth field must remain visible while WIF is feature-gated off, express the visibility rule as `authMethod == serviceAccountKey OR feature flag is falsy/missing`. In the unified `preRequisites.featureFlags` shape, omit `value`; an explicit `value: false` does not match a missing flag.
 - Keep an authentication selector's help text neutral. Put WIF setup and security guidance on a WIF-only field with the same `authMethod == workloadIdentityFederation` and enabled-feature-flag prerequisites, so key-auth users never see irrelevant federation instructions.
 - Keep BigQuery WIF target-service-account validation byte-for-byte aligned between the source UI, the WIF branch of `combinedSchema`, and the `rudder-sources` runtime allow-list. The accepted runtime forms include IAM service accounts with domain-scoped projects, Compute Engine default service accounts, and App Engine service accounts.
+
+## INT-7247 — Rokt Endpoint Review Guidance
+
+- Reviewer guidance rejected enumerating the current mParticle regional hosts for Rokt `apiEndpoint`; use the repository's generic HTTPS endpoint validation so future host, port, and path formats do not require a schema release.
+- Preserve syntactic safeguards for a valid DNS-style HTTPS URL and rejection of localhost/ngrok hosts, query strings, and fragments.
