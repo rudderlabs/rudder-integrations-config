@@ -254,3 +254,9 @@
 - Several definitions share one icon (`BRAZE` and `BRAZE_AUDIENCE` → `braze`; `FB`, `FB_CUSTOM_AUDIENCE` → `meta`); the icon name is independent of the definition name. `TEST_DESTINATION` deliberately has none.
 - A NEW definition must set `options.icon` to an icon that exists in Figma / `@rudderlabs/icons` — add the artwork to the Figma library first (component name = icon name). rudder-icons' `make check` fails on a definition without `options.icon` (allowlist aside) and on an `options.icon` naming a missing icon; renaming or removing an icon is a breaking change there.
 - Adding keys under `options` is safe for downstream readers (verified 2026-09-29): rudder-api `/v2/definitions/*` whitelists fields and never forwards `options` (rudder-control-plane `apps/rudder-api/src/services/definitions.ts` @ 1f60d07d92), config-backend stores/returns `options` as an untyped JSON column (rudder-config-backend `src/entities/destinationDefinition.ts:186` @ 181599a729), rudder-server decodes with lenient `encoding/json` (no `DisallowUnknownFields`, `backend-config/types.go` @ 52d2b551c0).
+
+## INT-7234 — Microsoft Fabric Destination Configuration Contract
+
+- Use the cross-repository definition identity `MICROSOFT_FABRIC` and the integrations-config directory `src/configurations/destinations/microsoft_fabric/`; changing either independently would break registration alignment with rudder-server.
+- Microsoft Fabric `namespace` is optional. In Form Builder V2, keep it under Configuration settings > Warehouse settings rather than Initial setup, because the shared schema generator treats unconditional Initial setup fields in `config.destConfig.defaultConfig` as required.
+- Expose the standard warehouse sync-frequency values `5`, `10`, `15`, `30`, `60`, `180`, `360`, `720`, and `1440` in the Microsoft Fabric Form Builder V2 selector. Do not copy legacy option-level feature-flag metadata into this V2 field without a validated renderer/schema pattern.

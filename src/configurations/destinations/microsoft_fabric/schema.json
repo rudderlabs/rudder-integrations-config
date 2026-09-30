@@ -1,0 +1,799 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["rudderAccountId", "host", "port", "database", "fabricWorkspaceId", "lakehouseId"],
+    "type": "object",
+    "properties": {
+      "rudderAccountId": {
+        "type": "string"
+      },
+      "host": {
+        "type": "string",
+        "pattern": "^.{1,500}$"
+      },
+      "port": {
+        "type": "string",
+        "pattern": "^(?:[1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$"
+      },
+      "database": {
+        "type": "string",
+        "pattern": "^.{1,200}$"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+        "rs-immutable": true
+      },
+      "fabricWorkspaceId": {
+        "type": "string",
+        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$"
+      },
+      "lakehouseId": {
+        "type": "string",
+        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$"
+      },
+      "syncFrequency": {
+        "type": "string",
+        "enum": ["5", "10", "15", "30", "60", "180", "360", "720", "1440"],
+        "default": "180"
+      },
+      "syncStartAt": {
+        "type": "string"
+      },
+      "excludeWindow": {
+        "type": "object",
+        "properties": {
+          "excludeWindowStartTime": {
+            "type": "string"
+          },
+          "excludeWindowEndTime": {
+            "type": "string"
+          }
+        },
+        "required": ["excludeWindowStartTime", "excludeWindowEndTime"]
+      },
+      "preferAppend": {
+        "type": "boolean",
+        "default": true
+      },
+      "skipUsersTable": {
+        "type": "boolean",
+        "default": true
+      },
+      "skipTracksTable": {
+        "type": "boolean",
+        "default": false
+      },
+      "cleanupObjectStorageFiles": {
+        "type": "boolean",
+        "default": false
+      },
+      "consentManagement": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ],
+              "required": ["provider"]
+            },
+            "uniqueItemProperties": ["provider"],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
+            }
+          },
+          "androidKotlin": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ],
+              "required": ["provider"]
+            },
+            "uniqueItemProperties": ["provider"],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
+            }
+          },
+          "ios": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ],
+              "required": ["provider"]
+            },
+            "uniqueItemProperties": ["provider"],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
+            }
+          },
+          "iosSwift": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ],
+              "required": ["provider"]
+            },
+            "uniqueItemProperties": ["provider"],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
+            }
+          },
+          "web": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ],
+              "required": ["provider"]
+            },
+            "uniqueItemProperties": ["provider"],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
+            }
+          },
+          "unity": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ],
+              "required": ["provider"]
+            },
+            "uniqueItemProperties": ["provider"],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
+            }
+          },
+          "amp": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ],
+              "required": ["provider"]
+            },
+            "uniqueItemProperties": ["provider"],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
+            }
+          },
+          "cloud": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ],
+              "required": ["provider"]
+            },
+            "uniqueItemProperties": ["provider"],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
+            }
+          },
+          "reactnative": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ],
+              "required": ["provider"]
+            },
+            "uniqueItemProperties": ["provider"],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
+            }
+          },
+          "cloudSource": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ],
+              "required": ["provider"]
+            },
+            "uniqueItemProperties": ["provider"],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
+            }
+          },
+          "flutter": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ],
+              "required": ["provider"]
+            },
+            "uniqueItemProperties": ["provider"],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
+            }
+          },
+          "cordova": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ],
+              "required": ["provider"]
+            },
+            "uniqueItemProperties": ["provider"],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
+            }
+          },
+          "shopify": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
+                },
+                "consents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consent": {
+                        "type": "string",
+                        "pattern": "^(.{0,100})$"
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "custom"
+                      }
+                    },
+                    "required": ["provider"]
+                  },
+                  "then": {
+                    "properties": {
+                      "resolutionStrategy": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      }
+                    },
+                    "required": ["resolutionStrategy"]
+                  }
+                }
+              ],
+              "required": ["provider"]
+            },
+            "uniqueItemProperties": ["provider"],
+            "errorMessage": {
+              "uniqueItemProperties": "Only one consent management block can be configured per provider."
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "allowUsersContextTraits": {
+        "type": "boolean",
+        "description": "Internal, immutable flag retained for backward compatibility. When false, context.traits.* fields are not promoted to top-level traits; they are stored only as context_traits_*.",
+        "default": false,
+        "rs-immutable": true
+      },
+      "underscoreDivideNumbers": {
+        "type": "boolean",
+        "description": "Internal, immutable flag retained for backward compatibility. When false, numeric suffixes in column names are preserved; for example v3 remains v3 instead of being split into v_3.",
+        "default": false,
+        "rs-immutable": true
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "android": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "androidKotlin": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "ios": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "iosSwift": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "web": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "unity": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "amp": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cloud": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "reactnative": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cloudSource": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "flutter": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "cordova": {
+            "type": "string",
+            "enum": ["cloud"]
+          },
+          "shopify": {
+            "type": "string",
+            "enum": ["cloud"]
+          }
+        }
+      }
+    },
+    "additionalProperties": false
+  }
+}
