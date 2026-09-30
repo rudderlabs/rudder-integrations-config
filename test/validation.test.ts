@@ -2555,3 +2555,30 @@ describe('clickhouse source definition', () => {
     );
   });
 });
+
+describe('clickhouse source compatibility fixtures', () => {
+  it('IC5 the fixture file holds exactly the eleven catalog entries, and every refusal carries an err array', () => {
+    const entries = getIntegrationData('clickhouse', 'sources');
+    expect(entries.map((e) => e.testTitle)).toEqual([
+      'Account reference only',
+      'Account reference with non-secret connection fields',
+      'Inline config with password',
+      'Inline config without password',
+      'Inline config with empty password',
+      'Account reference with password',
+      'Account reference with empty password',
+      'Empty account reference',
+      'Account reference of 101 characters',
+      'Numeric account reference',
+      'Account reference with an extra non-secret field',
+    ]);
+    entries
+      .filter((e) => e.result === false)
+      .forEach((e) =>
+        expect({ title: e.testTitle, hasErr: Array.isArray(e.err) }).toEqual({
+          title: e.testTitle,
+          hasErr: true,
+        }),
+      );
+  });
+});
