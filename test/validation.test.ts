@@ -1971,3 +1971,188 @@ describe('Account Definition validation tests', () => {
     );
   });
 });
+
+type ClickHouseFieldCase = {
+  id: string;
+  field: 'host' | 'name' | 'scratchDatabase' | 'password';
+  input: string;
+  verdict: 'pass' | 'fail';
+  error?: string;
+  database?: string;
+  schemaVerdict?: 'pass' | 'fail';
+  configBackendVerdict?: 'pass' | 'fail';
+  configBackendErrorPrefix?: string;
+};
+
+const CLICKHOUSE_ERROR_TEXT = {
+  host: 'Enter a hostname or a dotted-decimal IPv4 address without a scheme, port or path.',
+  name: 'Use letters, digits and underscores, start with a letter or underscore, at most 128 characters.',
+  scratchDatabase:
+    'The scratch database must differ from the customer database, default, system and information_schema.',
+  password: 'The password cannot contain control characters or start or end with whitespace.',
+};
+
+function clickHouseFieldCases(): ClickHouseFieldCase[] {
+  return JSON.parse(
+    fs.readFileSync(
+      path.resolve(__dirname, './data/validation/accounts/clickhouse-fields.json'),
+      'utf-8',
+    ),
+  ).cases;
+}
+
+// Other repositories copy these files byte for byte, and the LLD requires `\u` escapes above U+00FF.
+// An editor that turns an escape into the literal character changes the bytes the copies compare.
+function expectAsciiOnly(relativePath: string): void {
+  const bytes = fs.readFileSync(path.resolve(relativePath));
+  expect({ file: relativePath, firstNonAscii: bytes.findIndex((b) => b > 127) }).toEqual({
+    file: relativePath,
+    firstNonAscii: -1,
+  });
+}
+
+describe('ClickHouse shared field fixtures', () => {
+  it('the fixture file is pure ASCII', () => {
+    expectAsciiOnly('test/data/validation/accounts/clickhouse-fields.json');
+  });
+
+  const inputsOf = (field: ClickHouseFieldCase['field'], verdict: 'pass' | 'fail') =>
+    clickHouseFieldCases()
+      .filter((c) => c.field === field && c.verdict === verdict)
+      .map((c) => c.input);
+
+  it('IC12 IC14 IC15 every case has a unique id, a known field, a verdict and its rule error text', () => {
+    const cases = clickHouseFieldCases();
+    const ids = cases.map((c) => c.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    cases.forEach((c) => {
+      expect(['host', 'name', 'scratchDatabase', 'password']).toContain(c.field);
+      expect(typeof c.input).toBe('string');
+      expect(['pass', 'fail']).toContain(c.verdict);
+      if (c.verdict === 'fail') {
+        expect({ id: c.id, error: c.error }).toEqual({
+          id: c.id,
+          error: CLICKHOUSE_ERROR_TEXT[c.field],
+        });
+      } else {
+        expect({ id: c.id, error: c.error }).toEqual({ id: c.id, error: undefined });
+      }
+      expect({ id: c.id, database: c.database }).toEqual({
+        id: c.id,
+        database: c.field === 'scratchDatabase' ? 'analytics' : undefined,
+      });
+      if (c.schemaVerdict !== undefined) {
+        expect({
+          id: c.id,
+          field: c.field,
+          schemaVerdict: c.schemaVerdict,
+          verdict: c.verdict,
+        }).toEqual({
+          id: c.id,
+          field: 'scratchDatabase',
+          schemaVerdict: 'pass',
+          verdict: 'fail',
+        });
+      }
+      if (c.configBackendVerdict !== undefined) {
+        expect({ id: c.id, field: c.field, prefix: c.configBackendErrorPrefix }).toEqual({
+          id: c.id,
+          field: 'password',
+          prefix: 'Configuration contains syntax errors',
+        });
+      }
+    });
+  });
+
+  it('IC12 carries every host and name input the catalog and test plan name', () => {
+    expect(inputsOf('host', 'pass')).toEqual(
+      expect.arrayContaining(['127.0.0.1', '10.0.0.5', 'ch.example.com', '1password.com']),
+    );
+    expect(inputsOf('host', 'fail')).toEqual(
+      expect.arrayContaining([
+        '1.2.3',
+        '0x7f000001',
+        '010.0.0.1',
+        '256.1.1.1',
+        '::1',
+        'https://ch.example.com',
+        'ch.example.com:8443',
+      ]),
+    );
+    expect(inputsOf('name', 'pass')).toEqual(
+      expect.arrayContaining(['analytics', '_scratch', 'Mixed_Case_1', '_rudderstack_ws1']),
+    );
+    expect(inputsOf('name', 'fail')).toEqual(
+      expect.arrayContaining([
+        'my-db',
+        'analytics.v2',
+        '1db',
+        'analyst@example.com',
+        'a`b',
+        'a b',
+        '',
+        'a'.repeat(129),
+      ]),
+    );
+  });
+
+  it('IC14 carries every reserved scratch name in two letter cases and the customer database', () => {
+    expect(inputsOf('scratchDatabase', 'fail')).toEqual(
+      expect.arrayContaining([
+        'analytics',
+        'ANALYTICS',
+        'default',
+        'DEFAULT',
+        'system',
+        'System',
+        'information_schema',
+        'INFORMATION_SCHEMA',
+      ]),
+    );
+  });
+
+  it('IC15 carries every password parity input of catalog section 3.8', () => {
+    expect(inputsOf('password', 'pass')).toEqual(
+      expect.arrayContaining([
+        'p w',
+        'p\u00A0w',
+        'p\u00E4ssw\u00F6rd',
+        'p\u{1F600}w',
+        'ab{{cd',
+        '{{}}',
+        'env.',
+      ]),
+    );
+    expect(inputsOf('password', 'fail')).toEqual(
+      expect.arrayContaining([
+        '\u00A0pw',
+        'pw\u00A0',
+        '\u2003pw',
+        'pw\u3000',
+        '\uFEFFpw',
+        ' pw',
+        'pw ',
+        'p\u0085w',
+        'p\u009Fw',
+        'p\tw',
+        'p\u0000w',
+        'p\u007Fw',
+      ]),
+    );
+  });
+
+  // Other lanes copy these verdicts, so a wrong verdict here would spread. Re-derive each one.
+  it('IC14 every scratchDatabase verdict follows the scratch rule', () => {
+    const reserved = ['default', 'system', 'information_schema'];
+    clickHouseFieldCases()
+      .filter((c) => c.field === 'scratchDatabase')
+      .forEach((c) => {
+        const name = c.input.toLowerCase();
+        const refused = name === (c.database ?? '').toLowerCase() || reserved.includes(name);
+        expect({ id: c.id, verdict: c.verdict }).toEqual({
+          id: c.id,
+          verdict: refused ? 'fail' : 'pass',
+        });
+      });
+  });
+});
