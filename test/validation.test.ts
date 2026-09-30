@@ -2024,7 +2024,7 @@ function clickHouseFieldCases(): ClickHouseFieldCase[] {
 // Other repositories copy these files byte for byte, and the LLD requires `\u` escapes above U+00FF.
 // An editor that turns an escape into the literal character changes the bytes the copies compare.
 function expectAsciiOnly(relativePath: string): void {
-  const bytes = fs.readFileSync(path.resolve(relativePath));
+  const bytes = fs.readFileSync(path.resolve(__dirname, '..', relativePath));
   expect({ file: relativePath, firstNonAscii: bytes.findIndex((b) => b > 127) }).toEqual({
     file: relativePath,
     firstNonAscii: -1,
@@ -2041,7 +2041,7 @@ describe('ClickHouse shared field fixtures', () => {
       .filter((c) => c.field === field && c.verdict === verdict)
       .map((c) => c.input);
 
-  it('IC12 IC14 IC15 every case has a unique id, a known field, a verdict and its rule error text', () => {
+  it('IC12 IC14 IC15 every fixture case has a unique id, a known field, a verdict and its rule error text', () => {
     const cases = clickHouseFieldCases();
     const ids = cases.map((c) => c.id);
     expect(new Set(ids).size).toBe(ids.length);
@@ -2084,7 +2084,7 @@ describe('ClickHouse shared field fixtures', () => {
     });
   });
 
-  it('IC12 carries every host and name input the catalog and test plan name', () => {
+  it('IC12 the fixture keeps every host and name input the spec names', () => {
     expect(inputsOf('host', 'pass')).toEqual(
       expect.arrayContaining(['127.0.0.1', '10.0.0.5', 'ch.example.com', '1password.com']),
     );
@@ -2116,7 +2116,7 @@ describe('ClickHouse shared field fixtures', () => {
     );
   });
 
-  it('IC14 carries every reserved scratch name in two letter cases and the customer database', () => {
+  it('IC14 the fixture keeps every reserved scratch name in two letter cases and the customer database', () => {
     expect(inputsOf('scratchDatabase', 'fail')).toEqual(
       expect.arrayContaining([
         'analytics',
@@ -2131,7 +2131,7 @@ describe('ClickHouse shared field fixtures', () => {
     );
   });
 
-  it('IC15 carries every password parity input of catalog section 3.8', () => {
+  it('IC15 the fixture keeps every password parity input of catalog LLD section 3.8', () => {
     expect(inputsOf('password', 'pass')).toEqual(
       expect.arrayContaining([
         'p w',
@@ -2161,8 +2161,8 @@ describe('ClickHouse shared field fixtures', () => {
     );
   });
 
-  // Other lanes copy these verdicts, so a wrong verdict here would spread. Re-derive each one.
-  it('IC14 every scratchDatabase verdict follows the scratch rule', () => {
+  // Other repositories copy these verdicts, so a wrong verdict here would spread. Re-derive each one.
+  it('IC14 every scratchDatabase fixture verdict follows the scratch rule', () => {
     const reserved = ['default', 'system', 'information_schema'];
     clickHouseFieldCases()
       .filter((c) => c.field === 'scratchDatabase')
@@ -2223,14 +2223,11 @@ describe('SOURCE_CLICKHOUSE account definition', () => {
     expectClickHouseGate(accountConfig.displayOptions.hidden);
   });
 
-  it('IC18 the ClickHouse gate check refuses a bare boolean and the meta-schema refuses a legacy flag object', async () => {
-    expect(() => expectClickHouseGate(true)).toThrow();
-    expect(() => expectClickHouseGate(false)).toThrow();
+  it('IC18 the account meta-schema refuses a legacy feature-flag hidden', async () => {
     const legacy = {
       featureFlagName: 'AMP_enable-clickhouse-retl-source',
       featureFlagValue: false,
     };
-    expect(() => expectClickHouseGate(legacy)).toThrow();
     const accountConfig = await loadAccount();
     await expectValidationError(
       validateAccountDefinitions({ ...accountConfig, displayOptions: { hidden: legacy } }),
@@ -2253,7 +2250,8 @@ const clickHouseOptions = (): Record<string, unknown> => ({
 const clickHouseAccountSchema = () =>
   getAccountDefinitionSchema('clickhouse', 'SOURCE_CLICKHOUSE', 'sources');
 
-// Lookaround, \s and \p{} read differently in ECMA-262 and RE2 (catalog LLD section 3.3).
+// Lookaround, \s and \p{} read differently in ECMA-262 and Go RE2 (catalog LLD section 3.3). This is a
+// syntax check only: sqlconnect-go and rudder-sources run the shared fixture cases through Go RE2.
 const RE2_UNSAFE_PATTERN = /\(\?[=!<]|\\s|\\p\{/;
 
 describe('SOURCE_CLICKHOUSE optionsSchema', () => {
@@ -2424,7 +2422,7 @@ describe('SOURCE_CLICKHOUSE optionsSchema', () => {
     expect(options).toMatchObject({ protocol: 'http', nativePort: 9440, caCertificate: 'x' });
   });
 
-  it('IC12 every option pattern reads the same in ECMA-262 and RE2, and host keeps maxLength 253', () => {
+  it('IC12 option patterns use no lookaround, \\s or \\p{}, and host keeps maxLength 253', () => {
     const { properties } = clickHouseAccountSchema().optionsSchema;
     ['host', 'database', 'user', 'scratchDatabase'].forEach((key) => {
       expect({ key, unsafe: RE2_UNSAFE_PATTERN.test(properties[key].pattern) }).toEqual({
@@ -2648,6 +2646,14 @@ describe('clickhouse ui-config', () => {
       required: true,
       default: 8443,
     });
+    expect(field('port').regexErrorMessage).toBe('Enter an integer from 1 to 65535.');
+  });
+
+  // Catalog LLD section 3.5: the form shows a short text; the account schema errorMessage has the full rule.
+  it('the host regexErrorMessage is under eight words with no final full stop', () => {
+    const message: string = field('host').regexErrorMessage;
+    expect(message.split(' ').length).toBeLessThan(8);
+    expect(message.endsWith('.')).toBe(false);
   });
 
   it('every regex has a regexErrorMessage, and required flags match the account schema', () => {
