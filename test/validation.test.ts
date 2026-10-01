@@ -2555,7 +2555,7 @@ describe('clickhouse source definition', () => {
 });
 
 describe('clickhouse source compatibility fixtures', () => {
-  it('IC5 the fixture file holds exactly the eleven catalog entries, and every refusal carries an err array', () => {
+  it('IC5 the fixture file holds the eleven catalog entries plus the nested config refusal, and every refusal carries an err array', () => {
     const entries = getIntegrationData('clickhouse', 'sources');
     expect(entries.map((e) => e.testTitle)).toEqual([
       'Account reference only',
@@ -2569,6 +2569,7 @@ describe('clickhouse source compatibility fixtures', () => {
       'Account reference of 101 characters',
       'Numeric account reference',
       'Account reference with an extra non-secret field',
+      'Account reference with a nested config object',
     ]);
     entries
       .filter((e) => e.result === false)
@@ -2654,6 +2655,19 @@ describe('clickhouse ui-config', () => {
     const message: string = field('host').regexErrorMessage;
     expect(message.split(' ').length).toBeLessThan(8);
     expect(message.endsWith('.')).toBe(false);
+  });
+
+  it('the name field hint states the leading-digit rule the regex enforces', () => {
+    ['database', 'user', 'scratchDatabase'].forEach((key) => {
+      expect({ key, refused: !new RegExp(field(key).regex).test('2024_events') }).toEqual({
+        key,
+        refused: true,
+      });
+      expect({ key, message: field(key).regexErrorMessage }).toEqual({
+        key,
+        message: 'Letters, digits, underscores; no leading digit',
+      });
+    });
   });
 
   it('every regex has a regexErrorMessage, and required flags match the account schema', () => {
