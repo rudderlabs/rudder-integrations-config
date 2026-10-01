@@ -102,3 +102,9 @@
 ## ACT2-855 — BigQuery Source Schema Generator Incompatibility
 
 - `npm run check:schema:source bigquery` crashes in `scripts/schemaGenerator.py::is_dest_field_dependent_on_source` with `KeyError: 'supportedSourceTypes'` when source UI fields use destination-style `preRequisites`; the source generator incorrectly assumes destination db-config shape for this field form, so this failure is a tooling incompatibility rather than evidence of a generated source-schema diff.
+
+## RUD-3188 — X Destination Schema Generator Baseline Drift
+
+<!-- session: 2026-10-01 -->
+
+- Direct schema-generator checks for `src/configurations/destinations/xpixel/` and `src/configurations/destinations/x_audience/` complete successfully but report pre-existing `consentManagement` item `required` recommendations; X Audience also reports top-level `additionalProperties` and required-array recommendations. These warnings are unrelated to metadata-only changes in `db-config.json` such as `options.isBeta`, so do not broaden a status-flag change into schema normalization without separate review.
