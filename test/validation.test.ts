@@ -2251,7 +2251,7 @@ const clickHouseAccountSchema = () =>
   getAccountDefinitionSchema('clickhouse', 'SOURCE_CLICKHOUSE', 'sources');
 
 // Lookaround, \s and \p{} read differently in ECMA-262 and Go RE2 (catalog LLD section 3.3). This is a
-// syntax check only: sqlconnect-go and rudder-sources run the shared fixture cases through Go RE2.
+// syntax check only: sqlconnect-go runs the shared fixture cases through Go RE2.
 const RE2_UNSAFE_PATTERN = /\(\?[=!<]|\\s|\\p\{/;
 
 describe('SOURCE_CLICKHOUSE optionsSchema', () => {
