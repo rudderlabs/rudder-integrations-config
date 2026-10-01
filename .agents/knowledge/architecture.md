@@ -113,3 +113,13 @@
 - Rokt is account-backed under `src/configurations/destinations/rokt/`, with API credentials and the mParticle Events API endpoint defined under `accounts/rokt_api_key/`.
 - Later review superseded both the fixed four-host allowlist and the generic arbitrary-host shape: `apiEndpoint` accepts HTTPS endpoints whose hostname is exactly `mparticle.com` or a subdomain ending in `.mparticle.com`, keeping future mParticle subdomains forward-compatible without permitting unrelated domains.
 - Endpoint validation rejects lookalike/non-mParticle domains, userinfo, query strings, fragments, ports, and paths; at most one trailing slash is permitted.
+
+## ACT2-766 — ClickHouse Reverse ETL Source Behind A Flag
+
+<!-- session: 2026-10-01 -->
+
+- The ClickHouse reverse ETL source is two definitions: the source `src/configurations/sources/clickhouse/` and the account `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/`. The source `db-config.json` links the account through `config.supportedAccountDefinitions.rudderAccountId: ["SOURCE_CLICKHOUSE"]`. Credentials live in the account; the source holds only `rudderAccountId`.
+- Both ClickHouse definitions hide behind the flag `AMP_enable-clickhouse-retl-source`: the source uses `options.hidden.gate`, the account uses `displayOptions.hidden.gate`. `SOURCE_CLICKHOUSE` is the first source account with a `displayOptions.hidden` gate. rudder-config-backend honours it in `src/utils/resourceGate.ts`.
+- Owner decision (2026-09-30): the ClickHouse source is new and flag-hidden, so no production data or users exist before the flag turns on. Rollback is "turn the flag off". Do not add rollback workflows, rehearsals, staged rollback runbooks, or production inventories of hidden entries for this source.
+- The ClickHouse source `db-config.json` sets `options.syncBehaviours: ["mirror"]` and `isSqlModelSupported`, `isAudienceSupported`, `isDataGraphSupported` to `false`. Owner decision: Lookout is the only product that uses this source in the first release, and mirror mode with record events is the only sync mode. Do not add `full` or `upsert` behaviours. Creation through the webapp or the public API is out of scope.
+- The ClickHouse source `ui-config.json` renamed the field `dbname` to `database` and removed the `secure`, `skipVerify` and `caCertificate` inputs. The rename breaks no stored data, because the source was `hidden: true` with `configSchema: null` before and no customer could create one.

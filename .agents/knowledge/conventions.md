@@ -269,3 +269,15 @@
 
 - OpenAI Ads is generally available: keep `src/configurations/destinations/openai_ads/db-config.json` without `options.isBeta` and without `options.hidden`, while retaining `options.icon: "openai"` so the required non-empty `options` object remains valid.
 - This supersedes the RUD-3197 beta-badge state. Represent GA by omitting `isBeta`, not by setting it to `false`.
+
+## ACT2-766 — SOURCE_CLICKHOUSE Account Schema Rules
+
+<!-- session: 2026-10-01 -->
+
+- `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json` `optionsSchema.host` is the only `maxLength` in `src/configurations/` (`maxLength: 253`). rudder-sources reads the same pattern with Go RE2. RE2 supports bounded repetition but has no lookahead, so the 253-character total cannot live inside the pattern. The `CONVENTIONS.md` grep check now expects `1`. Do not add other `maxLength` keys on the strength of this exception.
+- `SOURCE_CLICKHOUSE` `optionsSchema` sets `secure` to `const: true` and `skipVerify` to `const: false`. Owner decision: the product supports verified HTTPS only. Do not relax these to plain booleans and do not re-add a `secure` checkbox or a CA certificate field to the source `ui-config.json`.
+- The `SOURCE_CLICKHOUSE` host pattern accepts private and loopback addresses (`10.0.0.5`, `127.0.0.1`, `localhost` pass in the field fixture). Owner decision: address policy is a runtime check in the driver and in Lookout, not a catalog check. Do not add private-range or IP-literal refusals to the schema.
+- `SOURCE_CLICKHOUSE` schemas do not set `additionalProperties: false`. The catalog LLD forbids it. Reviewer findings that ask for it were rejected.
+- ClickHouse `schema.json` and `ui-config.json` patterns must avoid lookaround, `\s` and `\p{}`, because ECMA-262 and Go RE2 read them differently. `test/validation.test.ts` screens every ClickHouse pattern with `RE2_UNSAFE_PATTERN`. The ClickHouse account schema, the ClickHouse `ui-config.json` and `test/data/validation/accounts/clickhouse-fields.json` must stay ASCII-only (the `expectAsciiOnly` test). Write non-ASCII characters in patterns and inputs as JSON `\u` escapes.
+- The ClickHouse source `ui-config.json` regexes are byte-identical to the `SOURCE_CLICKHOUSE` schema patterns. Keep them identical on every change. The form has no total-length bound for `host`; the account schema adds it with `maxLength`.
+- ClickHouse form error texts state the full rule. The name fields (`database`, `user`, `scratchDatabase`) say "Letters, digits, underscores; no leading digit", because the pattern `^[A-Za-z_][A-Za-z0-9_]{0,127}$` also refuses a leading digit (`2024_events` fails). Tests in `test/validation.test.ts` pin these texts.

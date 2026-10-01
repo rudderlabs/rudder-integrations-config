@@ -95,3 +95,12 @@
 
 - Reviewer guidance rejected enumerating the current mParticle regional hosts for Rokt `apiEndpoint`; accept HTTPS endpoints on `mparticle.com` and any `.mparticle.com` subdomain so future mParticle subdomains do not require a schema release.
 - Do not broaden this into generic endpoint validation: reject lookalike/non-mParticle domains, userinfo, query strings, fragments, ports, and paths, while permitting at most one trailing slash.
+
+## ACT2-766 — ClickHouse Source Review Guidance
+
+<!-- session: 2026-10-01 -->
+
+- Reviewer guidance on PR #2777: the ClickHouse source `schema.json` account branch must refuse a nested `config` key beside `rudderAccountId` (`"not": {"anyOf": [{"required": ["password"]}, {"required": ["config"]}]}`). Probe `{rudderAccountId: "acc", config: {password: "x"}}` must be invalid.
+- Reviewer guidance: ClickHouse form error texts must name every rule the pattern enforces. "Use letters, digits and underscores only" was wrong for a pattern that also refuses a leading digit.
+- Reviewer nit, not fixed: about 31 ClickHouse test titles in `test/validation.test.ts` start with plan ids (`IC5` to `IC18`) that a repo reader cannot resolve. Do not add more plan ids to test titles; name what the test checks.
+- Owner rule (2026-09-30): one PR per repository for a feature, with no stacked or follow-up PRs in the same repository. The ClickHouse rollback workflow repair was dropped from this repository because the flag is the rollback.
