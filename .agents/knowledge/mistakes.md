@@ -63,7 +63,6 @@
 
 <!-- session: 2026-10-01 -->
 
-- `npm run check:schema:source clickhouse` printed nothing and exited 0, which was first read as "form and schema agree". The cause is `scripts/schemaGenerator.py` `EXCLUDED_DEST`, which lists `clickhouse`; `get_schema_diff` skips excluded names for sources too. The exit code proves nothing. Verify the hand-written ClickHouse source schema with `test/data/validation/sources/clickhouse.json`. Do not rely on the generator for this source.
-- A review page claimed the ClickHouse tests check regex syntax only. Wrong: `test/validation.test.ts` runs the shared field fixture through AJV. `RE2_UNSAFE_PATTERN` is an additional syntax screen.
-- Under a host load average of 50 to 70, the pre-commit full Jest run produced thousands of 5-second timeouts with no assertion failure. These are not test failures. Run `npx jest test/validation.test.ts --testTimeout=60000` (or the full suite with `--maxWorkers=2 --testTimeout=120000`) to get a real result.
-- `npx eslint` cannot resolve the config in a worktree nested inside the main checkout (`.worktrees/<name>`). A change that touches only JSON and tests needs no local lint; CI lint is the signal.
+- `npm run check:schema:source clickhouse` prints nothing and exits 0, which looks like "form and schema agree". `EXCLUDED_DEST` in `scripts/schemaGenerator.py` lists `clickhouse`, and `get_schema_diff` skips excluded names for sources too. The exit code proves nothing. Verify the hand-written ClickHouse source schema with `test/data/validation/sources/clickhouse.json`. Do not rely on the generator for this source.
+- The ClickHouse tests do more than check regex syntax. `clickHouseFieldCases` in `test/validation.test.ts` runs the shared field fixture through AJV against `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json`. `RE2_UNSAFE_PATTERN` is an additional syntax screen.
+- A pre-commit full Jest run that times out is a failed run, not a pass. Rerun the ClickHouse tests with `npx jest test/validation.test.ts --testTimeout=60000`, or the full suite with `--maxWorkers=2 --testTimeout=120000`, and judge the result from the rerun.
