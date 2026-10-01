@@ -90,3 +90,12 @@
 - When a key-auth field must remain visible while WIF is feature-gated off, express the visibility rule as `authMethod == serviceAccountKey OR feature flag is falsy/missing`. In the unified `preRequisites.featureFlags` shape, omit `value`; an explicit `value: false` does not match a missing flag.
 - Keep an authentication selector's help text neutral. Put WIF setup and security guidance on a WIF-only field with the same `authMethod == workloadIdentityFederation` and enabled-feature-flag prerequisites, so key-auth users never see irrelevant federation instructions.
 - Keep BigQuery WIF target-service-account validation byte-for-byte aligned between the source UI, the WIF branch of `combinedSchema`, and the `rudder-sources` runtime allow-list. The accepted runtime forms include IAM service accounts with domain-scoped projects, Compute Engine default service accounts, and App Engine service accounts.
+
+## ACT2-766 — ClickHouse Source Review Guidance
+
+<!-- session: 2026-10-01 -->
+
+- Reviewer guidance on PR #2777: the ClickHouse source `schema.json` account branch must refuse a nested `config` key beside `rudderAccountId` (`"not": {"anyOf": [{"required": ["password"]}, {"required": ["config"]}]}`). Probe `{rudderAccountId: "acc", config: {password: "x"}}` must be invalid.
+- Reviewer guidance: ClickHouse form error texts must name every rule the pattern enforces. "Use letters, digits and underscores only" was wrong for a pattern that also refuses a leading digit.
+- Reviewer nit, not fixed: about 31 ClickHouse test titles in `test/validation.test.ts` start with plan ids (`IC5` to `IC18`) that a repo reader cannot resolve. Do not add more plan ids to test titles; name what the test checks.
+- Owner rule (2026-09-30): one PR per repository for a feature, with no stacked or follow-up PRs in the same repository. The ClickHouse rollback workflow repair was dropped from this repository because the flag is the rollback.

@@ -96,3 +96,11 @@
 - Keep `combinedSchema.options` open to additional properties because the BigQuery source UI can round-trip the derived, display-only `serviceAccount` value even though it is not an authored runtime account option.
 - Keep authentication-specific regex constraints in the active `combinedSchema` branch rather than the standalone options schema, because legacy account paths may validate the standalone schema without regard to the selected authentication method.
 - WIF setup copy must instruct customers to scope GCP trust to `assumed-role/data-plane-service-account/<workspaceID>`, not to the entire RudderStack AWS role.
+
+## ACT2-766 — Shared Field Fixture Drives ClickHouse Tests
+
+<!-- session: 2026-10-01 -->
+
+- `test/data/validation/accounts/clickhouse-fields.json` is the owner copy of the ClickHouse account field cases (75 cases over `host`, `name`, `scratchDatabase` and `password`). `test/validation.test.ts` runs every case through AJV against `SOURCE_CLICKHOUSE/schema.json` and checks the verdict. The regex screen is an extra check, not the only one. Change a ClickHouse field rule by first changing the fixture case, then the schema.
+- `test/data/validation/sources/clickhouse.json` holds 12 source compatibility fixtures. Fixture 12, "Account reference with a nested config object", pins the refusal of a nested `config` key beside `rudderAccountId`. Add a new fixture for a new rule; do not edit an existing one.
+- The ClickHouse tests are mutation-tight: a revert of the source `db-config.json`, `schema.json` or `ui-config.json`, a dropped `secure` const, a dropped password pattern, or a widened scratch pattern each fails at least two tests. Keep that property: every new product rule needs a test that fails when the rule is removed.

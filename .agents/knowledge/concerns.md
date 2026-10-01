@@ -102,3 +102,11 @@
 ## ACT2-855 — BigQuery Source Schema Generator Incompatibility
 
 - `npm run check:schema:source bigquery` crashes in `scripts/schemaGenerator.py::is_dest_field_dependent_on_source` with `KeyError: 'supportedSourceTypes'` when source UI fields use destination-style `preRequisites`; the source generator incorrectly assumes destination db-config shape for this field form, so this failure is a tooling incompatibility rather than evidence of a generated source-schema diff.
+
+## ACT2-766 — ClickHouse Fixture Copies And Account Reference Gaps
+
+<!-- session: 2026-10-01 -->
+
+- Other repositories keep byte-identical copies of `test/data/validation/accounts/clickhouse-fields.json`: sqlconnect-go, rudder-config-backend and rudder-lookout, each pinned by commit and SHA-256 (for example the rudder-config-backend `UPSTREAM` manifest). Any edit here needs a re-copy and a pin update in each. The file's `$comment` also names rudder-control-plane, but rudder-control-plane copies only `SOURCE_CLICKHOUSE/db-config.json` and `schema.json`, not the field fixture. Fix the `$comment` on the next edit.
+- The ClickHouse source `schema.json` `oneOf` accepts `rudderAccountId` together with other fields, except `password` and `config`. The `config` refusal exists because rudder-config-backend builds the workspace config with `source.config?.config || source.config` (`src/services/workspaceConfig/v1/transformer.ts`), so a nested `config` would replace the whole config and drop the account link. The Redshift source schema refuses `password` and similar keys but not `config`; that sibling gap is a follow-up, not fixed here.
+- The ClickHouse source `ui-config.json` "Scratch database" field has no hint text. Add a `footerNote` that says it is an empty database the customer creates for temporary tables when webapp creation opens.

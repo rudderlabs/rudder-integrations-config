@@ -107,3 +107,13 @@
 - The destination is cloud-only and Track-only, remains beta and hidden behind the `AMP_enable-everflow-destination` gate, and intentionally has no device-mode `includeKeys`, `redirectGroups`, event mapping, event filtering, or API configuration surface.
 - All three account fields must be mirrored in destination `config.destConfig.defaultConfig`; omitting one causes workspace-config filtering to drop it before runtime consumers receive the destination config.
 - Later webapp review superseded the initial no-`sdkTemplate` decision: even cloud-only Everflow needs the canonical empty `uiConfig.sdkTemplate` object with `fields: []`, because the V2 configuration builder assumes the object exists when opening a saved destination's Configuration page.
+
+## ACT2-766 — ClickHouse Reverse ETL Source Behind A Flag
+
+<!-- session: 2026-10-01 -->
+
+- The ClickHouse reverse ETL source is two definitions: the source `src/configurations/sources/clickhouse/` and the account `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/`. The source `db-config.json` links the account through `config.supportedAccountDefinitions.rudderAccountId: ["SOURCE_CLICKHOUSE"]`. Credentials live in the account; the source holds only `rudderAccountId`.
+- Both ClickHouse definitions hide behind the flag `AMP_enable-clickhouse-retl-source`: the source uses `options.hidden.gate`, the account uses `displayOptions.hidden.gate`. `SOURCE_CLICKHOUSE` is the first source account with a `displayOptions.hidden` gate. rudder-config-backend honours it in `src/utils/resourceGate.ts`.
+- Owner decision (2026-09-30): the ClickHouse source is new and flag-hidden, so no production data or users exist before the flag turns on. Rollback is "turn the flag off". Do not add rollback workflows, rehearsals, staged rollback runbooks, or production inventories of hidden entries for this source.
+- The ClickHouse source `db-config.json` sets `options.syncBehaviours: ["mirror"]` and `isSqlModelSupported`, `isAudienceSupported`, `isDataGraphSupported` to `false`. Owner decision: Lookout is the only product that uses this source in the first release, and mirror mode with record events is the only sync mode. Do not add `full` or `upsert` behaviours. Creation through the webapp or the public API is out of scope.
+- The ClickHouse source `ui-config.json` renamed the field `dbname` to `database` and removed the `secure`, `skipVerify` and `caCertificate` inputs. The rename breaks no stored data, because the source was `hidden: true` with `configSchema: null` before and no customer could create one.
