@@ -1994,12 +1994,10 @@ describe('Account Definition validation tests', () => {
 
 type ClickHouseFieldCase = {
   id: string;
-  field: 'host' | 'name' | 'scratchDatabase' | 'password';
+  field: 'host' | 'name' | 'password';
   input: string;
   verdict: 'pass' | 'fail';
   error?: string;
-  database?: string;
-  schemaVerdict?: 'pass' | 'fail';
   configBackendVerdict?: 'pass' | 'fail';
   configBackendErrorPrefix?: string;
 };
@@ -2007,8 +2005,6 @@ type ClickHouseFieldCase = {
 const CLICKHOUSE_ERROR_TEXT = {
   host: 'Enter a hostname or a dotted-decimal IPv4 address without a scheme, port or path.',
   name: 'Use letters, digits and underscores, start with a letter or underscore, at most 128 characters.',
-  scratchDatabase:
-    'The scratch database must differ from the customer database, default, system and information_schema.',
   password: 'The password cannot contain control characters or start or end with whitespace.',
 };
 
@@ -2041,12 +2037,12 @@ describe('ClickHouse shared field fixtures', () => {
       .filter((c) => c.field === field && c.verdict === verdict)
       .map((c) => c.input);
 
-  it('IC12 IC14 IC15 every fixture case has a unique id, a known field, a verdict and its rule error text', () => {
+  it('every fixture case has a unique id, a known field, a verdict and its rule error text', () => {
     const cases = clickHouseFieldCases();
     const ids = cases.map((c) => c.id);
     expect(new Set(ids).size).toBe(ids.length);
     cases.forEach((c) => {
-      expect(['host', 'name', 'scratchDatabase', 'password']).toContain(c.field);
+      expect(['host', 'name', 'password']).toContain(c.field);
       expect(typeof c.input).toBe('string');
       expect(['pass', 'fail']).toContain(c.verdict);
       if (c.verdict === 'fail') {
@@ -2056,23 +2052,6 @@ describe('ClickHouse shared field fixtures', () => {
         });
       } else {
         expect({ id: c.id, error: c.error }).toEqual({ id: c.id, error: undefined });
-      }
-      expect({ id: c.id, database: c.database }).toEqual({
-        id: c.id,
-        database: c.field === 'scratchDatabase' ? 'analytics' : undefined,
-      });
-      if (c.schemaVerdict !== undefined) {
-        expect({
-          id: c.id,
-          field: c.field,
-          schemaVerdict: c.schemaVerdict,
-          verdict: c.verdict,
-        }).toEqual({
-          id: c.id,
-          field: 'scratchDatabase',
-          schemaVerdict: 'pass',
-          verdict: 'fail',
-        });
       }
       if (c.configBackendVerdict !== undefined) {
         expect({ id: c.id, field: c.field, prefix: c.configBackendErrorPrefix }).toEqual({
@@ -2116,21 +2095,6 @@ describe('ClickHouse shared field fixtures', () => {
     );
   });
 
-  it('IC14 the fixture keeps every reserved scratch name in two letter cases and the customer database', () => {
-    expect(inputsOf('scratchDatabase', 'fail')).toEqual(
-      expect.arrayContaining([
-        'analytics',
-        'ANALYTICS',
-        'default',
-        'DEFAULT',
-        'system',
-        'System',
-        'information_schema',
-        'INFORMATION_SCHEMA',
-      ]),
-    );
-  });
-
   it('IC15 the fixture keeps every password parity input of catalog LLD section 3.8', () => {
     expect(inputsOf('password', 'pass')).toEqual(
       expect.arrayContaining([
@@ -2160,21 +2124,6 @@ describe('ClickHouse shared field fixtures', () => {
       ]),
     );
   });
-
-  // Other repositories copy these verdicts, so a wrong verdict here would spread. Re-derive each one.
-  it('IC14 every scratchDatabase fixture verdict follows the scratch rule', () => {
-    const reserved = ['default', 'system', 'information_schema'];
-    clickHouseFieldCases()
-      .filter((c) => c.field === 'scratchDatabase')
-      .forEach((c) => {
-        const name = c.input.toLowerCase();
-        const refused = name === (c.database ?? '').toLowerCase() || reserved.includes(name);
-        expect({ id: c.id, verdict: c.verdict }).toEqual({
-          id: c.id,
-          verdict: refused ? 'fail' : 'pass',
-        });
-      });
-  });
 });
 
 const CLICKHOUSE_GATE = {
@@ -2201,7 +2150,7 @@ describe('SOURCE_CLICKHOUSE account definition', () => {
     });
   });
 
-  it('IC9 has exactly seven options and the one secret password, with no CA or transport option', async () => {
+  it('has exactly six options and the one secret password, with no CA or transport option', async () => {
     const accountConfig = await loadAccount();
     expect(accountConfig.config.optionFields).toEqual([
       'host',
@@ -2210,7 +2159,6 @@ describe('SOURCE_CLICKHOUSE account definition', () => {
       'user',
       'secure',
       'skipVerify',
-      'scratchDatabase',
     ]);
     expect(accountConfig.config.secretFields).toEqual(['password']);
     ['caCertificate', 'protocol', 'nativePort', 'authenticationType'].forEach((field) => {
@@ -2244,7 +2192,6 @@ const clickHouseOptions = (): Record<string, unknown> => ({
   user: 'rudder',
   secure: true,
   skipVerify: false,
-  scratchDatabase: '_rudderstack_ws1',
 });
 
 const clickHouseAccountSchema = () =>
@@ -2321,7 +2268,7 @@ describe('SOURCE_CLICKHOUSE optionsSchema', () => {
 
   it('IC10 each missing required option fails with the AJV required message', () => {
     const validate = validateWithText();
-    ['host', 'database', 'user', 'scratchDatabase'].forEach((key) => {
+    ['host', 'database', 'user'].forEach((key) => {
       const options = clickHouseOptions();
       delete options[key];
       expect(validate(options)).toBe(false);
@@ -2366,12 +2313,12 @@ describe('SOURCE_CLICKHOUSE optionsSchema', () => {
       });
   });
 
-  it('IC12 name cases apply to database, user and scratchDatabase with one error text', () => {
+  it('name cases apply to database and user with one error text', () => {
     const validate = validateWithText();
     clickHouseFieldCases()
       .filter((c) => c.field === 'name')
       .forEach((c) => {
-        ['database', 'user', 'scratchDatabase'].forEach((key) => {
+        ['database', 'user'].forEach((key) => {
           const valid = validate({ ...clickHouseOptions(), [key]: c.input });
           expect({ id: c.id, key, verdict: valid ? 'pass' : 'fail' }).toEqual({
             id: c.id,
@@ -2389,25 +2336,29 @@ describe('SOURCE_CLICKHOUSE optionsSchema', () => {
       });
   });
 
-  it('IC14 scratchDatabase is required with no default, and the schema alone cannot apply the scratch rule', () => {
+  it('requires only host, database and user, without a working database option', () => {
     const schema = clickHouseAccountSchema().optionsSchema;
-    expect(schema.required).toContain('scratchDatabase');
-    expect(schema.properties.scratchDatabase.default).toBeUndefined();
+    expect(schema.required).toEqual(['host', 'database', 'user']);
+    expect(Object.keys(schema.properties)).toEqual([
+      'host',
+      'port',
+      'database',
+      'user',
+      'secure',
+      'skipVerify',
+    ]);
     const validate = validateOptions();
-    clickHouseFieldCases()
-      .filter((c) => c.field === 'scratchDatabase')
-      .forEach((c) => {
-        const expected = c.schemaVerdict ?? c.verdict;
-        const valid = validate({
-          ...clickHouseOptions(),
-          database: c.database,
-          scratchDatabase: c.input,
-        });
-        expect({ id: c.id, verdict: valid ? 'pass' : 'fail' }).toEqual({
-          id: c.id,
-          verdict: expected,
-        });
-      });
+    const options = clickHouseOptions();
+    expect(validate(options)).toBe(true);
+    expect(options).not.toHaveProperty('rudderSchema');
+  });
+
+  it('accepts and preserves a rudderSchema credential override without declaring a form option', () => {
+    const validate = validateOptions();
+    const options = { ...clickHouseOptions(), rudderSchema: 'custom_rudder' };
+    expect(validate(options)).toBe(true);
+    expect(options.rudderSchema).toBe('custom_rudder');
+    expect(clickHouseAccountSchema().optionsSchema.properties.rudderSchema).toBeUndefined();
   });
 
   it('IC16 the options schema accepts and keeps undeclared options; the config-backend guard refuses them', () => {
@@ -2424,7 +2375,7 @@ describe('SOURCE_CLICKHOUSE optionsSchema', () => {
 
   it('IC12 option patterns use no lookaround, \\s or \\p{}, and host keeps maxLength 253', () => {
     const { properties } = clickHouseAccountSchema().optionsSchema;
-    ['host', 'database', 'user', 'scratchDatabase'].forEach((key) => {
+    ['host', 'database', 'user'].forEach((key) => {
       expect({ key, unsafe: RE2_UNSAFE_PATTERN.test(properties[key].pattern) }).toEqual({
         key,
         unsafe: false,
@@ -2433,7 +2384,6 @@ describe('SOURCE_CLICKHOUSE optionsSchema', () => {
     expect(properties.host.maxLength).toBe(253);
     expect(properties.database.pattern).toBe('^[A-Za-z_][A-Za-z0-9_]{0,127}$');
     expect(properties.user.pattern).toBe(properties.database.pattern);
-    expect(properties.scratchDatabase.pattern).toBe(properties.database.pattern);
   });
 });
 
@@ -2599,20 +2549,19 @@ describe('clickhouse ui-config', () => {
     expectAsciiOnly('src/configurations/sources/clickhouse/ui-config.json');
   });
 
-  it('renders the six account inputs in order and no secure, skipVerify, dbname or CA input', () => {
+  it('renders the five account inputs in order and no working database, TLS, dbname or CA input', () => {
     expect(loadUiConfig().fields.map((f: { value: string }) => f.value)).toEqual([
       'host',
       'port',
       'database',
       'user',
       'password',
-      'scratchDatabase',
     ]);
   });
 
   it('ui-config string field regexes equal the account schema patterns', () => {
     const { optionsSchema, secretSchema } = clickHouseAccountSchema();
-    ['host', 'database', 'user', 'scratchDatabase'].forEach((key) => {
+    ['host', 'database', 'user'].forEach((key) => {
       expect({ key, regex: field(key).regex }).toEqual({
         key,
         regex: optionsSchema.properties[key].pattern,
@@ -2658,7 +2607,7 @@ describe('clickhouse ui-config', () => {
   });
 
   it('the name field hint states the leading-digit rule the regex enforces', () => {
-    ['database', 'user', 'scratchDatabase'].forEach((key) => {
+    ['database', 'user'].forEach((key) => {
       expect({ key, refused: !new RegExp(field(key).regex).test('2024_events') }).toEqual({
         key,
         refused: true,
@@ -2692,10 +2641,6 @@ describe('clickhouse ui-config', () => {
     expect(ui.secretFields).toEqual(['password']);
     expect(field('password')).toMatchObject({ secret: true, inputFieldType: 'password' });
     expect(field('password').trim).toBeUndefined();
-    expect(field('scratchDatabase')).toMatchObject({
-      label: 'Scratch database',
-      addInAccountSummary: true,
-    });
     expect(Object.keys(ui.docLinks).sort()).toEqual([
       'grantPermissions',
       'jsonMapperUseInstructions',
