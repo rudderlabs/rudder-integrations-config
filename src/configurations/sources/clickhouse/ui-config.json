@@ -3,7 +3,10 @@
     {
       "title": "Connection Credentials",
       "secretFields": ["password"],
+      "schemaAlias": "Database",
       "docLinks": {
+        "grantPermissions": "https://docs.rudderstack.com/reverse-etl/clickhouse/#granting-permissions",
+        "verifyingCredentials": "https://docs.rudderstack.com/reverse-etl/clickhouse/#verifying-credentials",
         "jsonMapperUseInstructions": "https://docs.rudderstack.com/reverse-etl/clickhouse/#specifying-the-data-to-import",
         "setupInstructions": "https://docs.rudderstack.com/reverse-etl/clickhouse"
       },
@@ -13,8 +16,8 @@
           "type": "textInput",
           "label": "Host",
           "value": "host",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Value",
+          "regex": "^(((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])|([A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?\\.)*[A-Za-z]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)$",
+          "regexErrorMessage": "Hostname without scheme, port or path",
           "required": true,
           "addInAccountSummary": true,
           "trim": true
@@ -22,18 +25,19 @@
         {
           "type": "textInput",
           "label": "Port",
-          "inputFieldType": "number",
           "value": "port",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Value",
-          "required": true
+          "inputFieldType": "number",
+          "regex": "^([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$",
+          "regexErrorMessage": "Enter an integer from 1 to 65535.",
+          "required": true,
+          "default": 8443
         },
         {
           "type": "textInput",
           "label": "Database",
-          "value": "dbname",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Value",
+          "value": "database",
+          "regex": "^[A-Za-z_][A-Za-z0-9_]{0,127}$",
+          "regexErrorMessage": "Letters, digits, underscores; no leading digit",
           "required": true,
           "addInAccountSummary": true,
           "trim": true
@@ -42,8 +46,8 @@
           "type": "textInput",
           "label": "User",
           "value": "user",
-          "regex": "^(.{0,100})$",
-          "regexErrorMessage": "Invalid Value",
+          "regex": "^[A-Za-z_][A-Za-z0-9_]{0,127}$",
+          "regexErrorMessage": "Letters, digits, underscores; no leading digit",
           "required": true,
           "trim": true
         },
@@ -52,39 +56,10 @@
           "label": "Password",
           "value": "password",
           "inputFieldType": "password",
-          "regex": ".*",
-          "required": false,
+          "regex": "^[^\\x00-\\x20\\x7F-\\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]([^\\x00-\\x1F\\x7F-\\x9F]*[^\\x00-\\x20\\x7F-\\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])?$",
+          "regexErrorMessage": "Remove control characters and edge spaces",
+          "required": true,
           "secret": true
-        },
-        {
-          "type": "checkbox",
-          "label": "Secure",
-          "value": "secure",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "preRequisiteField": {
-            "name": "secure",
-            "selectedValue": true
-          },
-          "label": "Skip verify",
-          "value": "skipVerify",
-          "default": false,
-          "footerNote": "If you are using self signed certificates set this field to true"
-        },
-        {
-          "type": "textareaInput",
-          "preRequisiteField": {
-            "name": "secure",
-            "selectedValue": true
-          },
-          "label": "CA certificate",
-          "value": "caCertificate",
-          "regex": ".*",
-          "required": false,
-          "placeholder": "CA Certificate",
-          "trim": true
         }
       ]
     }

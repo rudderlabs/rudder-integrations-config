@@ -107,3 +107,12 @@
 - The destination is cloud-only and Track-only, remains beta and hidden behind the `AMP_enable-everflow-destination` gate, and intentionally has no device-mode `includeKeys`, `redirectGroups`, event mapping, event filtering, or API configuration surface.
 - All three account fields must be mirrored in destination `config.destConfig.defaultConfig`; omitting one causes workspace-config filtering to drop it before runtime consumers receive the destination config.
 - Later webapp review superseded the initial no-`sdkTemplate` decision: even cloud-only Everflow needs the canonical empty `uiConfig.sdkTemplate` object with `fields: []`, because the V2 configuration builder assumes the object exists when opening a saved destination's Configuration page.
+
+## ACT2-766 — ClickHouse Reverse ETL Source Behind A Flag
+
+<!-- session: 2026-10-01 -->
+
+- The ClickHouse reverse ETL source is two definitions: the source in `src/configurations/sources/clickhouse/` and the account in `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/`. `src/configurations/sources/clickhouse/db-config.json` links the account through `config.supportedAccountDefinitions.rudderAccountId: ["SOURCE_CLICKHOUSE"]`. Credentials belong in the account. The source stores a `rudderAccountId` reference. `src/configurations/sources/clickhouse/schema.json` still accepts a configuration without an account reference.
+- Both definitions hide behind the flag `AMP_enable-clickhouse-retl-source`. `src/configurations/sources/clickhouse/db-config.json` declares it at `options.hidden.gate`. `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/db-config.json` declares it at `displayOptions.hidden.gate`. Keep both gates on the same flag name.
+- `src/configurations/sources/clickhouse/db-config.json` sets `options.syncBehaviours` to `["mirror"]` and sets `options.isSqlModelSupported`, `options.isAudienceSupported` and `options.isDataGraphSupported` to `false`.
+- The current form fields in `src/configurations/sources/clickhouse/ui-config.json` (`uiConfig[].fields[].value`) are `host`, `port`, `database`, `user`, `password` and `scratchDatabase`. The form has no `secure`, `skipVerify` or `caCertificate` input.

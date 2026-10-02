@@ -90,3 +90,13 @@
 - When a key-auth field must remain visible while WIF is feature-gated off, express the visibility rule as `authMethod == serviceAccountKey OR feature flag is falsy/missing`. In the unified `preRequisites.featureFlags` shape, omit `value`; an explicit `value: false` does not match a missing flag.
 - Keep an authentication selector's help text neutral. Put WIF setup and security guidance on a WIF-only field with the same `authMethod == workloadIdentityFederation` and enabled-feature-flag prerequisites, so key-auth users never see irrelevant federation instructions.
 - Keep BigQuery WIF target-service-account validation byte-for-byte aligned between the source UI, the WIF branch of `combinedSchema`, and the `rudder-sources` runtime allow-list. The accepted runtime forms include IAM service accounts with domain-scoped projects, Compute Engine default service accounts, and App Engine service accounts.
+
+## ACT2-766 — ClickHouse Source Review Guidance
+
+<!-- session: 2026-10-01 -->
+
+- The `configSchema.oneOf` account branch in `src/configurations/sources/clickhouse/schema.json` must refuse a nested `config` key beside `rudderAccountId` (`"not": {"anyOf": [{"required": ["password"]}, {"required": ["config"]}]}`). The probe `{rudderAccountId: "acc", config: {password: "x"}}` must be invalid.
+- The `regexErrorMessage` of `database`, `user` and `scratchDatabase` in `src/configurations/sources/clickhouse/ui-config.json` must name the leading-digit restriction. "Use letters, digits and underscores only" is wrong for a pattern that also refuses a leading digit.
+- Do not add plan ids such as `IC5` to test titles in `test/validation.test.ts`. A reader of this repository cannot resolve them. Name what the test checks.
+- Owner direction: the ClickHouse source is new and hidden by `options.hidden.gate` in `src/configurations/sources/clickhouse/db-config.json`, so rollback is turning the flag off. Do not add rollback workflows, rehearsals, staged rollback runbooks or inventories of hidden entries for this source.
+- Owner direction: the ClickHouse source supports mirror mode with record events only (`options.syncBehaviours` in `src/configurations/sources/clickhouse/db-config.json`). Do not add `full` or `upsert` behaviours. Creating this source through the webapp or the public API is out of scope for the first release.

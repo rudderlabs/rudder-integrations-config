@@ -102,3 +102,11 @@
 ## ACT2-855 — BigQuery Source Schema Generator Incompatibility
 
 - `npm run check:schema:source bigquery` crashes in `scripts/schemaGenerator.py::is_dest_field_dependent_on_source` with `KeyError: 'supportedSourceTypes'` when source UI fields use destination-style `preRequisites`; the source generator incorrectly assumes destination db-config shape for this field form, so this failure is a tooling incompatibility rather than evidence of a generated source-schema diff.
+
+## ACT2-766 — ClickHouse Fixture Copies And Account Reference Gaps
+
+<!-- session: 2026-10-01 -->
+
+- The `$comment` in `test/data/validation/accounts/clickhouse-fields.json` lists the repositories that keep copies of this file. This repository owns the file. Copies in other repositories are not verifiable from here. Before an edit, check each listed repository for a copy and its pin, and re-copy after the edit.
+- `configSchema.oneOf` in `src/configurations/sources/clickhouse/schema.json` accepts `rudderAccountId` together with other fields, except `password` and `config`. The `config` refusal keeps a nested `config` key from standing in for the account link. `configSchema.oneOf` in `src/configurations/sources/redshift/schema.json` refuses `password`, `roleARN`, `clusterIdentifier` and `region` beside `rudderAccountId`, but not `config`. Add that refusal in a follow-up change.
+- The "Scratch database" field (`uiConfig[].fields[value=scratchDatabase]`) in `src/configurations/sources/clickhouse/ui-config.json` has a `regexErrorMessage` and no `footerNote`. Add a `footerNote` that says it is an empty database the customer creates for temporary tables, when webapp creation opens.
