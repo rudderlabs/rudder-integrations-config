@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.181.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.180.0...v1.181.0) (2026-10-05)
+
+
+### Features
+
+* **customerio:** default web SDK version to v2 ([#2776](https://github.com/rudderlabs/rudder-config-schema/issues/2776)) ([7da9888](https://github.com/rudderlabs/rudder-config-schema/commit/7da98884ad5d47120bc946a7e19651969f6dae05))
+* promote beta integrations to GA ([#2778](https://github.com/rudderlabs/rudder-config-schema/issues/2778)) ([374dd7a](https://github.com/rudderlabs/rudder-config-schema/commit/374dd7a91b3987740e12ad7cd36f26f1b9e8a886))
+
+## [1.180.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.179.0...v1.180.0) (2026-09-29)
+
+
+### Features
+
+* point every definition at its icon with options.icon ([befb88c](https://github.com/rudderlabs/rudder-config-schema/commit/befb88cf56b8e06010e38eaaf6fe9b2bb6837838))
+* point every definition at its icon with options.icon ([#2769](https://github.com/rudderlabs/rudder-config-schema/issues/2769)) ([1a74683](https://github.com/rudderlabs/rudder-config-schema/commit/1a74683f539ba859fb44561c71dcbb0e0009e2cb))
+* **sources:** add BigQuery WIF account configuration ([#2759](https://github.com/rudderlabs/rudder-config-schema/issues/2759)) ([3b758a6](https://github.com/rudderlabs/rudder-config-schema/commit/3b758a6d829089144c8a41333af1b508e76f1fec))
+
+
+### Bug Fixes
+
+* **topsort:** transform at router ([#2763](https://github.com/rudderlabs/rudder-config-schema/issues/2763)) ([04ced55](https://github.com/rudderlabs/rudder-config-schema/commit/04ced55b6d024079e6ca9160b9bc580094206893))
+
 ## [1.179.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.178.0...v1.179.0) (2026-09-28)
 
 

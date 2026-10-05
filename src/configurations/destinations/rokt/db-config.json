@@ -1,11 +1,13 @@
 {
-  "name": "DUB",
-  "displayName": "Dub",
+  "name": "ROKT",
+  "displayName": "Rokt",
   "version": "1.0",
   "config": {
+    "supportedAccountDefinitions": {
+      "rudderAccountId": ["DESTINATION_ROKT"]
+    },
     "transformAtV1": "router",
     "saveDestinationResponse": true,
-    "excludeKeys": [],
     "supportedSourceTypes": [
       "android",
       "androidKotlin",
@@ -21,7 +23,7 @@
       "shopify"
     ],
     "supportedMessageTypes": {
-      "cloud": ["track"]
+      "cloud": ["track", "page", "screen", "identify"]
     },
     "supportedConnectionModes": {
       "android": ["cloud"],
@@ -38,23 +40,34 @@
       "cloud": ["cloud"]
     },
     "destConfig": {
-      "defaultConfig": ["apiKey", "convertAmountToCents", "eventMapping"],
+      "defaultConfig": [
+        "rudderAccountId",
+        "apiEndpoint",
+        "serverToServerKey",
+        "serverToServerSecret"
+      ],
+      "web": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
       "android": ["connectionMode", "consentManagement"],
       "androidKotlin": ["connectionMode", "consentManagement"],
       "ios": ["connectionMode", "consentManagement"],
       "iosSwift": ["connectionMode", "consentManagement"],
-      "web": ["connectionMode", "consentManagement"],
       "unity": ["connectionMode", "consentManagement"],
       "amp": ["connectionMode", "consentManagement"],
       "reactnative": ["connectionMode", "consentManagement"],
       "flutter": ["connectionMode", "consentManagement"],
       "cordova": ["connectionMode", "consentManagement"],
-      "shopify": ["connectionMode", "consentManagement"],
-      "cloud": ["connectionMode", "consentManagement"]
+      "shopify": ["connectionMode", "consentManagement"]
     },
-    "secretKeys": ["apiKey"]
+    "secretKeys": ["serverToServerSecret"]
   },
   "options": {
-    "icon": "dub"
+    "isBeta": true,
+    "hidden": {
+      "gate": {
+        "flags": [{ "name": "AMP_enable-rokt-destination", "value": false }]
+      }
+    },
+    "icon": "rokt"
   }
 }

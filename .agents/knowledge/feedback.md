@@ -100,3 +100,8 @@
 - Default Microsoft Fabric `cleanupObjectStorageFiles` to `true` in both `ui-config.json` and `schema.json`, so successful syncs clean up staged OneLake files by default.
 - Reviewer direction superseded the earlier optional-namespace interpretation: Microsoft Fabric `namespace` is required at creation time. Mark it required in UI and schema, reject empty values with a `{1,64}` pattern, and include it in all positive validation fixtures.
 - Keep `test/validation.test.ts` focused on framework-level and parameterized cross-destination behavior; Microsoft Fabric-specific validation belongs in `test/data/validation/destinations/microsoft_fabric.json` or another dedicated test surface, not one-off shared-suite assertions.
+
+## INT-7247 — Rokt Endpoint Review Guidance
+
+- Reviewer guidance rejected enumerating the current mParticle regional hosts for Rokt `apiEndpoint`; accept HTTPS endpoints on `mparticle.com` and any `.mparticle.com` subdomain so future mParticle subdomains do not require a schema release.
+- Do not broaden this into generic endpoint validation: reject lookalike/non-mParticle domains, userinfo, query strings, fragments, ports, and paths, while permitting at most one trailing slash.
