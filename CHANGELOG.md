@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.181.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.180.0...v1.181.0) (2026-10-05)
+
+
+### Features
+
+* **customerio:** default web SDK version to v2 ([#2776](https://github.com/rudderlabs/rudder-config-schema/issues/2776)) ([7da9888](https://github.com/rudderlabs/rudder-config-schema/commit/7da98884ad5d47120bc946a7e19651969f6dae05))
+* promote beta integrations to GA ([#2778](https://github.com/rudderlabs/rudder-config-schema/issues/2778)) ([374dd7a](https://github.com/rudderlabs/rudder-config-schema/commit/374dd7a91b3987740e12ad7cd36f26f1b9e8a886))
+
 ## [1.180.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.179.0...v1.180.0) (2026-09-29)
 
 
