@@ -107,3 +107,9 @@
 - The destination is cloud-only and Track-only, remains beta and hidden behind the `AMP_enable-everflow-destination` gate, and intentionally has no device-mode `includeKeys`, `redirectGroups`, event mapping, event filtering, or API configuration surface.
 - All three account fields must be mirrored in destination `config.destConfig.defaultConfig`; omitting one causes workspace-config filtering to drop it before runtime consumers receive the destination config.
 - Later webapp review superseded the initial no-`sdkTemplate` decision: even cloud-only Everflow needs the canonical empty `uiConfig.sdkTemplate` object with `fields: []`, because the V2 configuration builder assumes the object exists when opening a saved destination's Configuration page.
+
+## INT-7247 — Rokt Account Endpoint Boundary
+
+- Rokt is account-backed under `src/configurations/destinations/rokt/`, with API credentials and the mParticle Events API endpoint defined under `accounts/rokt_api_key/`.
+- Later review superseded both the fixed four-host allowlist and the generic arbitrary-host shape: `apiEndpoint` accepts HTTPS endpoints whose hostname is exactly `mparticle.com` or a subdomain ending in `.mparticle.com`, keeping future mParticle subdomains forward-compatible without permitting unrelated domains.
+- Endpoint validation rejects lookalike/non-mParticle domains, userinfo, query strings, fragments, ports, and paths; at most one trailing slash is permitted.

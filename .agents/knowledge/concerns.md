@@ -102,3 +102,8 @@
 ## ACT2-855 — BigQuery Source Schema Generator Incompatibility
 
 - `npm run check:schema:source bigquery` crashes in `scripts/schemaGenerator.py::is_dest_field_dependent_on_source` with `KeyError: 'supportedSourceTypes'` when source UI fields use destination-style `preRequisites`; the source generator incorrectly assumes destination db-config shape for this field form, so this failure is a tooling incompatibility rather than evidence of a generated source-schema diff.
+
+## INT-7247 — Rokt Rollout Metadata Confirmation
+
+- The Rokt definition currently uses the proposed hide-when-false rollout flag `AMP_enable-rokt-destination` and `options.icon: "rokt"`, following repository naming conventions and the implementation contract.
+- This repository cannot confirm Flagsmith flag provisioning or icon-library catalog existence. Treat both as external rollout checks; downstream icon verification owns catalog validation, and rollout owners must confirm the flag rather than silently substituting or removing it in repo-local code.

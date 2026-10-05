@@ -259,3 +259,8 @@
 
 - OpenAI Ads is universally visible but remains beta-badged: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` and `options.icon: "openai"`, while omitting `options.hidden` entirely.
 - Do not replace the removed `AMP_enable-openai-ads-destination` Flagsmith gate with a billing-feature gate; this rollout is not plan-gated.
+
+## INT-7247 — Rokt Credential Validation
+
+- Rokt account credentials `serverToServerKey` and `serverToServerSecret` must reject whitespace-only payloads as well as empty and over-limit values; use bounded non-blank patterns of the form `^(?=.{1,N}$).*\\S.*$` in the account schema.
+- Keep explicit account-validation cases for whitespace-only Rokt credentials in `test/validation.test.ts`; required-field checks alone do not enforce meaningful credential content.
