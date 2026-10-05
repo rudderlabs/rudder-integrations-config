@@ -2054,13 +2054,43 @@ describe('ClickHouse shared field fixtures', () => {
         expect({ id: c.id, error: c.error }).toEqual({ id: c.id, error: undefined });
       }
       if (c.configBackendVerdict !== undefined) {
-        expect({ id: c.id, field: c.field, prefix: c.configBackendErrorPrefix }).toEqual({
+        expect({
+          id: c.id,
+          field: c.field,
+          verdict: c.configBackendVerdict,
+          prefix: c.configBackendErrorPrefix,
+        }).toEqual({
           id: c.id,
           field: 'password',
+          verdict: 'fail',
           prefix: 'Configuration contains syntax errors',
         });
       }
     });
+  });
+
+  // A deleted case would silently drop its check in every copy, so pin the exact id set.
+  it('the fixture holds exactly the 65 spec cases, and P40 to P42 carry the config-backend refusal', () => {
+    const idRange = (prefix: string, from: number, to: number) =>
+      Array.from(
+        { length: to - from + 1 },
+        (_, i) => `${prefix}${String(from + i).padStart(2, '0')}`,
+      );
+    const cases = clickHouseFieldCases();
+    expect(cases.map((c) => c.id)).toEqual([
+      ...idRange('H', 1, 8),
+      ...idRange('H', 20, 34),
+      ...idRange('N', 1, 5),
+      ...idRange('N', 20, 27),
+      ...idRange('P', 1, 9),
+      ...idRange('P', 20, 36),
+      ...idRange('P', 40, 42),
+    ]);
+    expect(cases.filter((c) => c.configBackendVerdict !== undefined).map((c) => c.id)).toEqual([
+      'P40',
+      'P41',
+      'P42',
+    ]);
   });
 
   it('the fixture keeps every host and name input the spec names', () => {
@@ -2596,7 +2626,7 @@ describe('clickhouse ui-config', () => {
       required: true,
       default: 8443,
     });
-    expect(field('port').regexErrorMessage).toBe('Enter an integer from 1 to 65535.');
+    expect(field('port').regexErrorMessage).toBe('Enter an integer from 1 to 65535');
   });
 
   // Catalog LLD section 3.5: the form shows a short text; the account schema errorMessage has the full rule.
