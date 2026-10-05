@@ -264,3 +264,8 @@
 
 - Rokt account credentials `serverToServerKey` and `serverToServerSecret` must reject whitespace-only payloads as well as empty and over-limit values; use bounded non-blank patterns of the form `^(?=.{1,N}$).*\\S.*$` in the account schema.
 - Keep explicit account-validation cases for whitespace-only Rokt credentials in `test/validation.test.ts`; required-field checks alone do not enforce meaningful credential content.
+
+## INT-7269 — OpenAI Ads General Availability
+
+- OpenAI Ads is generally available: keep `src/configurations/destinations/openai_ads/db-config.json` without `options.isBeta` and without `options.hidden`, while retaining `options.icon: "openai"` so the required non-empty `options` object remains valid.
+- This supersedes the RUD-3197 beta-badge state. Represent GA by omitting `isBeta`, not by setting it to `false`.
