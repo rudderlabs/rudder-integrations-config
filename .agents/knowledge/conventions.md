@@ -254,3 +254,8 @@
 - Several definitions share one icon (`BRAZE` and `BRAZE_AUDIENCE` → `braze`; `FB`, `FB_CUSTOM_AUDIENCE` → `meta`); the icon name is independent of the definition name. `TEST_DESTINATION` deliberately has none.
 - A NEW definition must set `options.icon` to an icon that exists in Figma / `@rudderlabs/icons` — add the artwork to the Figma library first (component name = icon name). rudder-icons' `make check` fails on a definition without `options.icon` (allowlist aside) and on an `options.icon` naming a missing icon; renaming or removing an icon is a breaking change there.
 - Adding keys under `options` is safe for downstream readers (verified 2026-09-29): rudder-api `/v2/definitions/*` whitelists fields and never forwards `options` (rudder-control-plane `apps/rudder-api/src/services/definitions.ts` @ 1f60d07d92), config-backend stores/returns `options` as an untyped JSON column (rudder-config-backend `src/entities/destinationDefinition.ts:186` @ 181599a729), rudder-server decodes with lenient `encoding/json` (no `DisallowUnknownFields`, `backend-config/types.go` @ 52d2b551c0).
+
+## RUD-3197 — OpenAI Ads Ungated Beta Visibility
+
+- OpenAI Ads is universally visible but remains beta-badged: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` and `options.icon: "openai"`, while omitting `options.hidden` entirely.
+- Do not replace the removed `AMP_enable-openai-ads-destination` Flagsmith gate with a billing-feature gate; this rollout is not plan-gated.
