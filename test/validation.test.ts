@@ -2063,7 +2063,7 @@ describe('ClickHouse shared field fixtures', () => {
     });
   });
 
-  it('IC12 the fixture keeps every host and name input the spec names', () => {
+  it('the fixture keeps every host and name input the spec names', () => {
     expect(inputsOf('host', 'pass')).toEqual(
       expect.arrayContaining(['127.0.0.1', '10.0.0.5', 'ch.example.com', '1password.com']),
     );
@@ -2095,7 +2095,7 @@ describe('ClickHouse shared field fixtures', () => {
     );
   });
 
-  it('IC15 the fixture keeps every password parity input of catalog LLD section 3.8', () => {
+  it('the fixture keeps every password parity input of catalog LLD section 3.8', () => {
     expect(inputsOf('password', 'pass')).toEqual(
       expect.arrayContaining([
         'p w',
@@ -2139,7 +2139,7 @@ describe('SOURCE_CLICKHOUSE account definition', () => {
   const loadAccount = () =>
     getAccountDefinitionConfig('clickhouse', 'SOURCE_CLICKHOUSE', 'sources');
 
-  it('IC7 declares a password source account of type clickhouse that passes the account meta-schema', async () => {
+  it('declares a password source account of type clickhouse that passes the account meta-schema', async () => {
     const accountConfig = await loadAccount();
     await expect(validateAccountDefinitions(accountConfig)).resolves.toEqual(true);
     expect(accountConfig).toMatchObject({
@@ -2166,12 +2166,12 @@ describe('SOURCE_CLICKHOUSE account definition', () => {
     });
   });
 
-  it('IC18 displayOptions.hidden is the creation gate object', async () => {
+  it('displayOptions.hidden is the creation gate object', async () => {
     const accountConfig = await loadAccount();
     expectClickHouseGate(accountConfig.displayOptions.hidden);
   });
 
-  it('IC18 the account meta-schema refuses a legacy feature-flag hidden', async () => {
+  it('the account meta-schema refuses a legacy feature-flag hidden', async () => {
     const legacy = {
       featureFlagName: 'AMP_enable-clickhouse-retl-source',
       featureFlagValue: false,
@@ -2207,7 +2207,7 @@ describe('SOURCE_CLICKHOUSE optionsSchema', () => {
     compileAccountSchemaWithErrorMessages(clickHouseAccountSchema().optionsSchema);
   const messages = (validate: ValidateFunction) => (validate.errors ?? []).map((e) => e.message);
 
-  it('IC7 the account schema is valid against the account meta-schema and has no combinedSchema', () => {
+  it('the account schema is valid against the account meta-schema and has no combinedSchema', () => {
     const metaSchema = JSON.parse(
       fs.readFileSync(path.resolve('src/schemas/account/account-schema-schema.json'), 'utf-8'),
     );
@@ -2220,7 +2220,7 @@ describe('SOURCE_CLICKHOUSE optionsSchema', () => {
     expect(accountSchema.optionsSchema.additionalProperties).toBeUndefined();
   });
 
-  it('IC8 optionFields equal the optionsSchema property names', async () => {
+  it('optionFields equal the optionsSchema property names', async () => {
     const accountConfig = await getAccountDefinitionConfig(
       'clickhouse',
       'SOURCE_CLICKHOUSE',
@@ -2231,7 +2231,7 @@ describe('SOURCE_CLICKHOUSE optionsSchema', () => {
     );
   });
 
-  it('IC11 IC13 a complete option set passes and omitted port, secure and skipVerify take their defaults', () => {
+  it('a complete option set passes and omitted port, secure and skipVerify take their defaults', () => {
     const validate = validateOptions();
     expect(validate(clickHouseOptions())).toBe(true);
     const options = clickHouseOptions();
@@ -2242,7 +2242,7 @@ describe('SOURCE_CLICKHOUSE optionsSchema', () => {
     expect(options).toMatchObject({ port: 8443, secure: true, skipVerify: false });
   });
 
-  it('IC11 port accepts 1, 8123, 8443 and 65535 and rejects 0, 65536, "8443", 1.5 and -1 without coercion', () => {
+  it('port accepts 1, 8123, 8443 and 65535 and rejects 0, 65536, "8443", 1.5 and -1 without coercion', () => {
     const validate = validateOptions();
     [1, 8123, 8443, 65535].forEach((port) => {
       expect({ port, valid: validate({ ...clickHouseOptions(), port }) }).toEqual({
@@ -2257,7 +2257,7 @@ describe('SOURCE_CLICKHOUSE optionsSchema', () => {
     });
   });
 
-  it('IC11 IC13 null option values fail and are not defaulted', () => {
+  it('null option values fail and are not defaulted', () => {
     const validate = validateOptions();
     ['port', 'secure', 'skipVerify'].forEach((key) => {
       const options = { ...clickHouseOptions(), [key]: null };
@@ -2266,7 +2266,7 @@ describe('SOURCE_CLICKHOUSE optionsSchema', () => {
     });
   });
 
-  it('IC10 each missing required option fails with the AJV required message', () => {
+  it('each missing required option fails with the AJV required message', () => {
     const validate = validateWithText();
     ['host', 'database', 'user'].forEach((key) => {
       const options = clickHouseOptions();
@@ -2276,7 +2276,7 @@ describe('SOURCE_CLICKHOUSE optionsSchema', () => {
     });
   });
 
-  it('IC13 secure is const true and skipVerify is const false; non-boolean TLS values fail', () => {
+  it('secure is const true and skipVerify is const false; non-boolean TLS values fail', () => {
     const validate = validateOptions();
     const schema = clickHouseAccountSchema().optionsSchema;
     expect(schema.required).not.toContain('secure');
@@ -2295,7 +2295,7 @@ describe('SOURCE_CLICKHOUSE optionsSchema', () => {
     });
   });
 
-  it('IC12 host cases from the shared fixture file', () => {
+  it('host cases from the shared fixture file', () => {
     const validate = validateWithText();
     clickHouseFieldCases()
       .filter((c) => c.field === 'host')
@@ -2361,7 +2361,7 @@ describe('SOURCE_CLICKHOUSE optionsSchema', () => {
     expect(clickHouseAccountSchema().optionsSchema.properties.rudderSchema).toBeUndefined();
   });
 
-  it('IC16 the options schema accepts and keeps undeclared options; the config-backend guard refuses them', () => {
+  it('the options schema accepts and keeps undeclared options; the config-backend guard refuses them', () => {
     const validate = validateOptions();
     const options = {
       ...clickHouseOptions(),
@@ -2373,7 +2373,7 @@ describe('SOURCE_CLICKHOUSE optionsSchema', () => {
     expect(options).toMatchObject({ protocol: 'http', nativePort: 9440, caCertificate: 'x' });
   });
 
-  it('IC12 option patterns use no lookaround, \\s or \\p{}, and host keeps maxLength 253', () => {
+  it('option patterns use no lookaround, \\s or \\p{}, and host keeps maxLength 253', () => {
     const { properties } = clickHouseAccountSchema().optionsSchema;
     ['host', 'database', 'user'].forEach((key) => {
       expect({ key, unsafe: RE2_UNSAFE_PATTERN.test(properties[key].pattern) }).toEqual({
@@ -2391,7 +2391,7 @@ describe('SOURCE_CLICKHOUSE secretSchema', () => {
   const validateSecret = () =>
     compileAccountSchemaWithErrorMessages(clickHouseAccountSchema().secretSchema);
 
-  it('IC8 secretFields equal the secretSchema property names', async () => {
+  it('secretFields equal the secretSchema property names', async () => {
     const accountConfig = await getAccountDefinitionConfig(
       'clickhouse',
       'SOURCE_CLICKHOUSE',
@@ -2402,7 +2402,7 @@ describe('SOURCE_CLICKHOUSE secretSchema', () => {
     );
   });
 
-  it('IC15 password cases from the shared fixture file', () => {
+  it('password cases from the shared fixture file', () => {
     const validate = validateSecret();
     clickHouseFieldCases()
       .filter((c) => c.field === 'password')
@@ -2421,7 +2421,7 @@ describe('SOURCE_CLICKHOUSE secretSchema', () => {
       });
   });
 
-  it('IC15 an absent, empty or non-string password fails', () => {
+  it('an absent, empty or non-string password fails', () => {
     const validate = validateSecret();
     expect(validate({})).toBe(false);
     expect((validate.errors ?? []).map((e) => e.message)).toEqual([
@@ -2432,14 +2432,14 @@ describe('SOURCE_CLICKHOUSE secretSchema', () => {
     });
   });
 
-  it('IC15 the password is never trimmed by validation', () => {
+  it('the password is never trimmed by validation', () => {
     const validate = validateSecret();
     const secret = { password: 'p w' };
     expect(validate(secret)).toBe(true);
     expect(secret.password).toBe('p w');
   });
 
-  it('IC16 the secret schema accepts and keeps an undeclared secret; the config-backend guard refuses it', () => {
+  it('the secret schema accepts and keeps an undeclared secret; the config-backend guard refuses it', () => {
     const validate = validateSecret();
     const secret = { password: 'secret', unexpected: 1 };
     expect(validate(secret)).toBe(true);
@@ -2451,7 +2451,7 @@ describe('SOURCE_CLICKHOUSE secretSchema', () => {
     expectAsciiOnly('src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json');
   });
 
-  it('IC15 the password pattern uses no lookaround, \\s or \\p{}', () => {
+  it('the password pattern uses no lookaround, \\s or \\p{}', () => {
     expect(
       RE2_UNSAFE_PATTERN.test(clickHouseAccountSchema().secretSchema.properties.password.pattern),
     ).toBe(false);
@@ -2461,7 +2461,7 @@ describe('SOURCE_CLICKHOUSE secretSchema', () => {
 describe('clickhouse source definition', () => {
   const loadSource = async () => (await getSourceDefinitionConfig('clickhouse')).default;
 
-  it('IC17 links SOURCE_CLICKHOUSE and declares mirror as the only sync behaviour', async () => {
+  it('links SOURCE_CLICKHOUSE and declares mirror as the only sync behaviour', async () => {
     const srcDefConfig = await loadSource();
     await expect(validateSourceDefinitions(srcDefConfig)).resolves.toEqual(true);
     expect(srcDefConfig).toMatchObject({
@@ -2484,11 +2484,11 @@ describe('clickhouse source definition', () => {
     });
   });
 
-  it('IC18 options.hidden is the creation gate object', async () => {
+  it('options.hidden is the creation gate object', async () => {
     expectClickHouseGate((await loadSource()).options.hidden);
   });
 
-  it('IC18 validateSourceDefinitions refuses a legacy feature-flag hidden on clickhouse', async () => {
+  it('validateSourceDefinitions refuses a legacy feature-flag hidden on clickhouse', async () => {
     const srcDefConfig = await loadSource();
     await expectValidationError(
       validateSourceDefinitions({
@@ -2505,7 +2505,7 @@ describe('clickhouse source definition', () => {
 });
 
 describe('clickhouse source compatibility fixtures', () => {
-  it('IC5 the fixture file holds the eleven catalog entries plus the nested config refusal, and every refusal carries an err array', () => {
+  it('the fixture file holds the eleven catalog entries plus the nested config refusal, and every refusal carries an err array', () => {
     const entries = getIntegrationData('clickhouse', 'sources');
     expect(entries.map((e) => e.testTitle)).toEqual([
       'Account reference only',
@@ -2620,6 +2620,20 @@ describe('clickhouse ui-config', () => {
   });
 
   it('every regex has a regexErrorMessage, and required flags match the account schema', () => {
+    const { optionsSchema, secretSchema } = clickHouseAccountSchema();
+    const requiredFields = new Set([...optionsSchema.required, ...secretSchema.required]);
+    // The form sends its port default on mount; an API client may omit port and use the schema default.
+    expect(optionsSchema.required).not.toContain('port');
+    expect(optionsSchema.properties.port.default).toBe(8443);
+    expect(field('port')).toMatchObject({ required: true, default: 8443 });
+    expect([...requiredFields].sort()).toEqual(
+      loadUiConfig()
+        .fields.filter(
+          (f: { value: string; required?: boolean }) => f.required && f.value !== 'port',
+        )
+        .map((f: { value: string }) => f.value)
+        .sort(),
+    );
     loadUiConfig().fields.forEach(
       (f: { value: string; regex?: string; regexErrorMessage?: string; required?: boolean }) => {
         expect({ value: f.value, hasMessage: typeof f.regexErrorMessage === 'string' }).toEqual({
@@ -2628,7 +2642,7 @@ describe('clickhouse ui-config', () => {
         });
         expect({ value: f.value, required: f.required }).toEqual({
           value: f.value,
-          required: true,
+          required: requiredFields.has(f.value) || f.value === 'port',
         });
       },
     );

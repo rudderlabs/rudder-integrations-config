@@ -124,10 +124,11 @@ constraint. Three habits to avoid:
   instead — `^.{1,200}$` for a required field, or a lookahead when the bound has to compose with a
   shape constraint, as in `^(?=.{1,200}$).*\S.*$` for "at most 200 characters, not all whitespace".
 
-The length keywords are not merely redundant next to a `pattern`, they are outside the generated
-contract. **No schema in this repository pairs them**: `maxLength` does not appear anywhere, and
-`minLength` appears in exactly two destinations (`custom_audience`, `customerio`), always as a
-standalone `minLength: 1` on a field that declares no `pattern` at all.
+The length keywords are normally redundant next to a `pattern` and are outside the generated
+destination contract. The only schema pairing one with a `pattern` is the `SOURCE_CLICKHOUSE`
+`host` option (`maxLength: 253`); `minLength` appears in exactly two destinations
+(`custom_audience`, `customerio`), always as a standalone `minLength: 1` on a field that declares
+no `pattern` at all.
 
 That is because [`scripts/schemaGenerator.py`](scripts/schemaGenerator.py) never emits either
 keyword — a string field generates `type` and `pattern` and nothing else. A hand-added length bound
@@ -142,7 +143,9 @@ To confirm the convention still holds:
 grep -rn 'maxLength' src/configurations/ | wc -l   # expected: 1
 ```
 
-The one exception is the `SOURCE_CLICKHOUSE` `host` option (`maxLength: 253`). rudder-sources reads that pattern with Go RE2, which has no lookahead, so the length bound cannot live inside the pattern.
+The `SOURCE_CLICKHOUSE` `host` exception is mirrored in sqlconnect-go
+`sqlconnect/internal/clickhouse/config.go` (`hostMaxLen`, `hostPattern`). Go RE2 has no lookahead, so
+the length bound cannot live inside the pattern.
 
 ### URL-valued fields reuse the shared expression
 
