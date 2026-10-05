@@ -90,3 +90,8 @@
 - When a key-auth field must remain visible while WIF is feature-gated off, express the visibility rule as `authMethod == serviceAccountKey OR feature flag is falsy/missing`. In the unified `preRequisites.featureFlags` shape, omit `value`; an explicit `value: false` does not match a missing flag.
 - Keep an authentication selector's help text neutral. Put WIF setup and security guidance on a WIF-only field with the same `authMethod == workloadIdentityFederation` and enabled-feature-flag prerequisites, so key-auth users never see irrelevant federation instructions.
 - Keep BigQuery WIF target-service-account validation byte-for-byte aligned between the source UI, the WIF branch of `combinedSchema`, and the `rudder-sources` runtime allow-list. The accepted runtime forms include IAM service accounts with domain-scoped projects, Compute Engine default service accounts, and App Engine service accounts.
+
+## INT-7234 — Microsoft Fabric Form Builder V2 Review Guidance
+
+- Reviewer-verified webapp behavior requires optional immutable fields that users must set during destination creation to live in `baseTemplate[0].sections[2].groups[0]` under Initial setup. Do not move such a field only to Configuration settings to silence schema generation: the create wizard omits it there and the edit view subsequently renders it read-only.
+- Form Builder V2 `singleSelect` options support per-option `featureFlag` metadata. For Microsoft Fabric sync frequency, gate the `5`, `10`, and `15` minute options with `AMP_enable-high-granularity-wh-syncs`.
