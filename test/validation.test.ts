@@ -298,6 +298,45 @@ describe('Validation Tests', () => {
     });
   });
 
+  describe('Microsoft Fabric UI configuration', () => {
+    type UIOption = Record<string, unknown> & { value?: string };
+    type UIField = Record<string, unknown> & { configKey?: string; options?: UIOption[] };
+    type UISection = { groups: Array<{ fields: UIField[] }> };
+    const uiConfig = JSON.parse(
+      fs.readFileSync(
+        path.resolve('src/configurations/destinations/microsoft_fabric/ui-config.json'),
+        'utf-8',
+      ),
+    ).uiConfig as { baseTemplate: Array<{ sections: UISection[] }> };
+
+    it('places the immutable namespace in the create-time section', () => {
+      const namespaceField = uiConfig.baseTemplate[0].sections[2].groups[0].fields.find(
+        (field: Record<string, unknown>) => field.configKey === 'namespace',
+      );
+
+      expect(namespaceField).toEqual(expect.objectContaining({ immutable: true, required: false }));
+      expect(
+        uiConfig.baseTemplate[1].sections
+          .flatMap((section) => section.groups)
+          .flatMap((group) => group.fields)
+          .find((field) => field.configKey === 'namespace'),
+      ).toBeUndefined();
+    });
+
+    it('gates high-granularity sync frequencies', () => {
+      const syncFrequencyField = uiConfig.baseTemplate[1].sections
+        .flatMap((section) => section.groups)
+        .flatMap((group) => group.fields)
+        .find((field) => field.configKey === 'syncFrequency');
+
+      ['5', '10', '15'].forEach((value) => {
+        expect(syncFrequencyField?.options?.find((option) => option.value === value)).toEqual(
+          expect.objectContaining({ featureFlag: 'AMP_enable-high-granularity-wh-syncs' }),
+        );
+      });
+    });
+  });
+
   describe('Warehouse backward-compatibility flag validation', () => {
     const backwardCompatibilityFlags = ['allowUsersContextTraits', 'underscoreDivideNumbers'];
     // Every destination declaring the flags, not just those with a sync frequency.

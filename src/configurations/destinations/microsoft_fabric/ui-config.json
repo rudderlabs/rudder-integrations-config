@@ -93,6 +93,30 @@
                 "fields": []
               }
             ]
+          },
+          {
+            "title": "Warehouse settings",
+            "note": "Configure the schema used for warehouse tables",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Namespace",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Namespace",
+                    "labelNote": "Schema name for the warehouse where the tables are created",
+                    "configKey": "namespace",
+                    "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
+                    "regexErrorMessage": "Enter a namespace of up to 64 characters that does not start with pg_",
+                    "placeholder": "e.g: rudder_events",
+                    "note": "Defaults to the source name.",
+                    "required": false,
+                    "immutable": true
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -113,9 +137,21 @@
                     "label": "Sync frequency",
                     "configKey": "syncFrequency",
                     "options": [
-                      { "label": "Every 5 minutes", "value": "5" },
-                      { "label": "Every 10 minutes", "value": "10" },
-                      { "label": "Every 15 minutes", "value": "15" },
+                      {
+                        "label": "Every 5 minutes",
+                        "value": "5",
+                        "featureFlag": "AMP_enable-high-granularity-wh-syncs"
+                      },
+                      {
+                        "label": "Every 10 minutes",
+                        "value": "10",
+                        "featureFlag": "AMP_enable-high-granularity-wh-syncs"
+                      },
+                      {
+                        "label": "Every 15 minutes",
+                        "value": "15",
+                        "featureFlag": "AMP_enable-high-granularity-wh-syncs"
+                      },
                       { "label": "Every 30 minutes", "value": "30" },
                       { "label": "Every 1 hour", "value": "60" },
                       { "label": "Every 3 hours", "value": "180" },
@@ -167,17 +203,6 @@
               {
                 "title": "Load behavior",
                 "fields": [
-                  {
-                    "type": "textInput",
-                    "label": "Namespace",
-                    "labelNote": "Schema name for the warehouse where the tables are created",
-                    "configKey": "namespace",
-                    "regex": "^((?!pg_|PG_|pG_|Pg_).{0,64})$",
-                    "regexErrorMessage": "Enter a namespace of up to 64 characters that does not start with pg_",
-                    "placeholder": "e.g: rudder_events",
-                    "note": "Defaults to the source name.",
-                    "immutable": true
-                  },
                   {
                     "type": "checkbox",
                     "label": "Warehouse append",
