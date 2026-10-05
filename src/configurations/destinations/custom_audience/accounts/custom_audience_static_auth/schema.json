@@ -1,0 +1,217 @@
+{
+  "optionsSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["authenticationType"],
+    "properties": {
+      "authenticationType": {
+        "type": "string",
+        "enum": ["noAuth", "basicAuth", "bearerToken", "apiKey"]
+      },
+      "basicAuthUserName": {
+        "type": "string",
+        "pattern": "^(.{0,200})$",
+        "errorMessage": { "pattern": "Enter a username of 200 characters or less" }
+      },
+      "apiKeyName": {
+        "type": "string",
+        "pattern": "^$|^[!#$%&'*+.^_`|~0-9A-Za-z-]{1,100}$",
+        "errorMessage": { "pattern": "Enter a valid HTTP header name, e.g. X-API-Key" }
+      }
+    }
+  },
+  "secretSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "basicAuthPassword": {
+        "type": "string",
+        "pattern": "^(.{0,500})$",
+        "errorMessage": { "pattern": "Enter a password of 500 characters or less" }
+      },
+      "bearerToken": {
+        "type": "string",
+        "pattern": "^(.{0,2000})$",
+        "errorMessage": { "pattern": "Enter a token of 2000 characters or less" }
+      },
+      "apiKeyValue": {
+        "type": "string",
+        "pattern": "^(.{0,500})$",
+        "errorMessage": { "pattern": "Enter an API key value of 500 characters or less" }
+      }
+    }
+  },
+  "combinedSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["options"],
+    "properties": {
+      "options": {
+        "type": "object",
+        "required": ["authenticationType"],
+        "properties": {
+          "authenticationType": {
+            "type": "string",
+            "enum": ["noAuth", "basicAuth", "bearerToken", "apiKey"]
+          },
+          "basicAuthUserName": {
+            "type": "string",
+            "pattern": "^(.{0,200})$",
+            "errorMessage": { "pattern": "Enter a username of 200 characters or less" }
+          },
+          "apiKeyName": {
+            "type": "string",
+            "pattern": "^$|^[!#$%&'*+.^_`|~0-9A-Za-z-]{1,100}$",
+            "errorMessage": { "pattern": "Enter a valid HTTP header name, e.g. X-API-Key" }
+          }
+        }
+      },
+      "secret": {
+        "type": "object",
+        "properties": {
+          "basicAuthPassword": {
+            "type": "string",
+            "pattern": "^(.{0,500})$",
+            "errorMessage": { "pattern": "Enter a password of 500 characters or less" }
+          },
+          "bearerToken": {
+            "type": "string",
+            "pattern": "^(.{0,2000})$",
+            "errorMessage": { "pattern": "Enter a token of 2000 characters or less" }
+          },
+          "apiKeyValue": {
+            "type": "string",
+            "pattern": "^(.{0,500})$",
+            "errorMessage": { "pattern": "Enter an API key value of 500 characters or less" }
+          }
+        }
+      }
+    },
+    "allOf": [
+      {
+        "type": "object",
+        "if": {
+          "type": "object",
+          "properties": {
+            "options": {
+              "type": "object",
+              "properties": {
+                "authenticationType": { "type": "string", "const": "basicAuth" }
+              },
+              "required": ["authenticationType"]
+            }
+          },
+          "required": ["options"]
+        },
+        "then": {
+          "type": "object",
+          "required": ["secret"],
+          "properties": {
+            "options": {
+              "type": "object",
+              "required": ["basicAuthUserName"],
+              "properties": {
+                "basicAuthUserName": {
+                  "type": "string",
+                  "pattern": "^.{1,200}$",
+                  "errorMessage": { "pattern": "Enter a username for Basic auth" }
+                }
+              }
+            },
+            "secret": {
+              "type": "object",
+              "required": ["basicAuthPassword"],
+              "properties": {
+                "basicAuthPassword": {
+                  "type": "string",
+                  "pattern": "^.{1,500}$",
+                  "errorMessage": { "pattern": "Enter a password for Basic auth" }
+                }
+              }
+            }
+          }
+        },
+        "errorMessage": { "if": "Basic auth needs a username and password." }
+      },
+      {
+        "type": "object",
+        "if": {
+          "type": "object",
+          "properties": {
+            "options": {
+              "type": "object",
+              "properties": {
+                "authenticationType": { "type": "string", "const": "bearerToken" }
+              },
+              "required": ["authenticationType"]
+            }
+          },
+          "required": ["options"]
+        },
+        "then": {
+          "type": "object",
+          "required": ["secret"],
+          "properties": {
+            "secret": {
+              "type": "object",
+              "required": ["bearerToken"],
+              "properties": {
+                "bearerToken": {
+                  "type": "string",
+                  "pattern": "^.{1,2000}$",
+                  "errorMessage": { "pattern": "Enter a Bearer token" }
+                }
+              }
+            }
+          }
+        },
+        "errorMessage": { "if": "Bearer token auth needs a token." }
+      },
+      {
+        "type": "object",
+        "if": {
+          "type": "object",
+          "properties": {
+            "options": {
+              "type": "object",
+              "properties": {
+                "authenticationType": { "type": "string", "const": "apiKey" }
+              },
+              "required": ["authenticationType"]
+            }
+          },
+          "required": ["options"]
+        },
+        "then": {
+          "type": "object",
+          "required": ["secret"],
+          "properties": {
+            "options": {
+              "type": "object",
+              "required": ["apiKeyName"],
+              "properties": {
+                "apiKeyName": {
+                  "type": "string",
+                  "pattern": "^[!#$%&'*+.^_`|~0-9A-Za-z-]{1,100}$",
+                  "errorMessage": { "pattern": "Enter a valid HTTP header name, e.g. X-API-Key" }
+                }
+              }
+            },
+            "secret": {
+              "type": "object",
+              "required": ["apiKeyValue"],
+              "properties": {
+                "apiKeyValue": {
+                  "type": "string",
+                  "pattern": "^.{1,500}$",
+                  "errorMessage": { "pattern": "Enter an API key value" }
+                }
+              }
+            }
+          }
+        },
+        "errorMessage": { "if": "API key auth needs a header name and value." }
+      }
+    ]
+  }
+}

@@ -102,3 +102,8 @@
 ## ACT2-855 — BigQuery Source Schema Generator Incompatibility
 
 - `npm run check:schema:source bigquery` crashes in `scripts/schemaGenerator.py::is_dest_field_dependent_on_source` with `KeyError: 'supportedSourceTypes'` when source UI fields use destination-style `preRequisites`; the source generator incorrectly assumes destination db-config shape for this field form, so this failure is a tooling incompatibility rather than evidence of a generated source-schema diff.
+
+## INT-7261 — Custom Activation Account Migration Boundaries
+
+- `npm run check:schema:destination custom_audience` crashes in `scripts/schemaGenerator.py::generate_schema_properties` with `KeyError: 'configKey'` because the unchanged Initial setup contains an `audienceDeliveryApiBuilder` field without `configKey`. This is a pre-existing schema-generator incompatibility, not evidence of schema drift from account migration changes.
+- This repository cannot enforce host/origin binding between a reusable static-auth account and Custom Activation's arbitrary `baseUrl`, because account and destination schemas validate separate objects. Any binding or authorization check requires a runtime control-plane/delivery check or a redesigned account model that stores and validates the allowed origin at use time.

@@ -1,0 +1,81 @@
+{
+  "uiConfig": {
+    "name": "Standard authentication",
+    "icon": "key",
+    "description": "Authenticate Custom Activation API requests with standard HTTP authentication",
+    "recommended": true,
+    "form": {
+      "title": "Connect your Custom Activation account",
+      "fields": [
+        {
+          "component": "textField",
+          "label": "Account name",
+          "placeholder": "e.g: Custom Activation production",
+          "key": "name"
+        },
+        {
+          "component": "selectField",
+          "label": "Authentication type",
+          "key": ["options", "authenticationType"],
+          "options": [
+            { "label": "No authentication", "value": "noAuth" },
+            { "label": "Basic auth", "value": "basicAuth" },
+            { "label": "Bearer token", "value": "bearerToken" },
+            { "label": "API key", "value": "apiKey" }
+          ],
+          "default": "noAuth"
+        },
+        {
+          "component": "textField",
+          "label": "Username",
+          "key": ["options", "basicAuthUserName"],
+          "preRequisiteField": {
+            "key": ["options", "authenticationType"],
+            "value": "basicAuth"
+          }
+        },
+        {
+          "component": "textField",
+          "label": "Password",
+          "key": ["options", "basicAuthPassword"],
+          "secret": true,
+          "preRequisiteField": {
+            "key": ["options", "authenticationType"],
+            "value": "basicAuth"
+          }
+        },
+        {
+          "component": "textField",
+          "label": "Bearer token",
+          "key": ["options", "bearerToken"],
+          "secret": true,
+          "note": "Sent as Authorization: Bearer <token>",
+          "preRequisiteField": {
+            "key": ["options", "authenticationType"],
+            "value": "bearerToken"
+          }
+        },
+        {
+          "component": "textField",
+          "label": "API key header name",
+          "placeholder": "e.g: X-API-Key",
+          "key": ["options", "apiKeyName"],
+          "preRequisiteField": {
+            "key": ["options", "authenticationType"],
+            "value": "apiKey"
+          }
+        },
+        {
+          "component": "textField",
+          "label": "API key value",
+          "key": ["options", "apiKeyValue"],
+          "secret": true,
+          "preRequisiteField": {
+            "key": ["options", "authenticationType"],
+            "value": "apiKey"
+          }
+        }
+      ]
+    }
+  }
+}

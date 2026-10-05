@@ -126,9 +126,11 @@
     "config": {},
     "result": false,
     "err": [
-      " must have required property 'baseUrl'",
+      " must have required property 'rudderAccountId'",
       " must have required property 'authenticationType'",
-      " must have required property 'actions'"
+      " must have required property 'baseUrl'",
+      " must have required property 'actions'",
+      " Set either a linked account or the inline authentication fields, not both."
     ]
   },
   {
@@ -986,5 +988,84 @@
     },
     "result": false,
     "err": ["actions.delete must NOT have additional properties"]
+  },
+  {
+    "testTitle": "valid config with only rudderAccountId and no inline authentication",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "rudderAccountId": "acc123",
+      "actions": {
+        "insert": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/insert",
+          "batchSize": 500
+        },
+        "update": { "useInsertConfig": true },
+        "delete": {
+          "requestBody": "{}",
+          "method": "DELETE",
+          "endpoint": "/delete",
+          "batchSize": 500
+        }
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "invalid config with both rudderAccountId and authenticationType",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "rudderAccountId": "acc123",
+      "authenticationType": "noAuth",
+      "actions": {
+        "insert": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/insert",
+          "batchSize": 500
+        },
+        "update": { "useInsertConfig": true },
+        "delete": {
+          "requestBody": "{}",
+          "method": "DELETE",
+          "endpoint": "/delete",
+          "batchSize": 500
+        }
+      }
+    },
+    "result": false,
+    "err": [
+      " must NOT be valid",
+      " must NOT be valid",
+      " Set either a linked account or the inline authentication fields, not both."
+    ]
+  },
+  {
+    "testTitle": "invalid config with neither rudderAccountId nor authenticationType",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "actions": {
+        "insert": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/insert",
+          "batchSize": 500
+        },
+        "update": { "useInsertConfig": true },
+        "delete": {
+          "requestBody": "{}",
+          "method": "DELETE",
+          "endpoint": "/delete",
+          "batchSize": 500
+        }
+      }
+    },
+    "result": false,
+    "err": [
+      " must have required property 'rudderAccountId'",
+      " must have required property 'authenticationType'",
+      " Set either a linked account or the inline authentication fields, not both."
+    ]
   }
 ]

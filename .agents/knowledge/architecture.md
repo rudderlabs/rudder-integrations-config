@@ -107,3 +107,8 @@
 - The destination is cloud-only and Track-only, remains beta and hidden behind the `AMP_enable-everflow-destination` gate, and intentionally has no device-mode `includeKeys`, `redirectGroups`, event mapping, event filtering, or API configuration surface.
 - All three account fields must be mirrored in destination `config.destConfig.defaultConfig`; omitting one causes workspace-config filtering to drop it before runtime consumers receive the destination config.
 - Later webapp review superseded the initial no-`sdkTemplate` decision: even cloud-only Everflow needs the canonical empty `uiConfig.sdkTemplate` object with `fields: []`, because the V2 configuration builder assumes the object exists when opening a saved destination's Configuration page.
+
+## INT-7261 — Custom Activation Phase A Account Migration
+
+- During Phase A, stored Custom Activation destination configs must contain exactly one authentication discriminator: linked-account `rudderAccountId` or legacy inline `authenticationType`. Preserve the legacy credential properties and conditional `allOf` branches so pre-migration configs remain valid while those branches stay inert for account-backed configs.
+- Do not change the Custom Activation destination UI or bump its version in Phase A: migration removes inline credentials and strictly revalidates existing destinations against their pinned schema slice.
