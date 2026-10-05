@@ -254,8 +254,3 @@
 - Several definitions share one icon (`BRAZE` and `BRAZE_AUDIENCE` → `braze`; `FB`, `FB_CUSTOM_AUDIENCE` → `meta`); the icon name is independent of the definition name. `TEST_DESTINATION` deliberately has none.
 - A NEW definition must set `options.icon` to an icon that exists in Figma / `@rudderlabs/icons` — add the artwork to the Figma library first (component name = icon name). rudder-icons' `make check` fails on a definition without `options.icon` (allowlist aside) and on an `options.icon` naming a missing icon; renaming or removing an icon is a breaking change there.
 - Adding keys under `options` is safe for downstream readers (verified 2026-09-29): rudder-api `/v2/definitions/*` whitelists fields and never forwards `options` (rudder-control-plane `apps/rudder-api/src/services/definitions.ts` @ 1f60d07d92), config-backend stores/returns `options` as an untyped JSON column (rudder-config-backend `src/entities/destinationDefinition.ts:186` @ 181599a729), rudder-server decodes with lenient `encoding/json` (no `DisallowUnknownFields`, `backend-config/types.go` @ 52d2b551c0).
-
-## INT-7247 — Rokt Credential Validation
-
-- Rokt account credentials `serverToServerKey` and `serverToServerSecret` must reject whitespace-only payloads as well as empty and over-limit values; use bounded non-blank patterns of the form `^(?=.{1,N}$).*\\S.*$` in the account schema.
-- Keep explicit account-validation cases for whitespace-only Rokt credentials in `test/validation.test.ts`; required-field checks alone do not enforce meaningful credential content.
