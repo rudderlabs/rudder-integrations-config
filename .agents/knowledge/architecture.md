@@ -110,4 +110,6 @@
 
 ## INT-7247 — Rokt Account Endpoint Boundary
 
-- Rokt's `apiEndpoint` (account `rokt_api_key`) pins the host to `mparticle.com` or any `.mparticle.com` subdomain instead of reusing the shared URL expression from CONVENTIONS.md. Events are delivered only to mParticle, and accepting any subdomain keeps new mParticle pods valid without a schema release.
+- Rokt is account-backed under `src/configurations/destinations/rokt/`, with API credentials and the mParticle Events API endpoint defined under `accounts/rokt_api_key/`.
+- Later review superseded both the fixed four-host allowlist and the generic arbitrary-host shape: `apiEndpoint` accepts HTTPS endpoints whose hostname is exactly `mparticle.com` or a subdomain ending in `.mparticle.com`, keeping future mParticle subdomains forward-compatible without permitting unrelated domains.
+- Endpoint validation rejects lookalike/non-mParticle domains, userinfo, query strings, fragments, ports, and paths; at most one trailing slash is permitted.
