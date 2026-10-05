@@ -258,5 +258,5 @@
 ## INT-7234 — Microsoft Fabric Destination Configuration Contract
 
 - Use the cross-repository definition identity `MICROSOFT_FABRIC` and the integrations-config directory `src/configurations/destinations/microsoft_fabric/`; changing either independently would break registration alignment with rudder-server.
-- Microsoft Fabric `namespace` is optional and immutable. Keep it in `baseTemplate[0].sections[2].groups[0]` under Initial setup so customers can supply it during creation; placing it only under Configuration settings makes it read-only before it can ever be authored.
+- Microsoft Fabric `namespace` is required and immutable. Keep it in `baseTemplate[0].sections[2].groups[0]` under Initial setup so customers can supply it during creation; set the UI field `required: true`, include it in the schema required list, and reject empty values with a `{1,64}` pattern. Placing it only under Configuration settings makes it read-only before it can ever be authored.
 - Expose the standard warehouse sync-frequency values `5`, `10`, `15`, `30`, `60`, `180`, `360`, `720`, and `1440` in the Microsoft Fabric Form Builder V2 selector. Add `featureFlag: AMP_enable-high-granularity-wh-syncs` to the `5`, `10`, and `15` minute options so destination enablement does not bypass the separate high-granularity rollout gate.

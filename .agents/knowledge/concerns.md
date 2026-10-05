@@ -106,4 +106,3 @@
 ## INT-7234 — Microsoft Fabric Icon and Schema Generator Gaps
 
 - The Microsoft Fabric destination currently omits `options.icon` because the webapp's published `@rudderlabs/icons@0.2.0` has Microsoft Clarity, SQL Server, and Teams assets but no confirmed Fabric asset. Do not invent `microsoft-fabric` or reuse `microsoft-sql-server`; coordinate an upstream Fabric icon before adding the metadata.
-- `scripts/schemaGenerator.py::generate_schema_properties` adds every unconditional destination field in a Form Builder V2 `Initial setup` template to `configSchema.required` without consulting explicit `required: false`. This conflicts with Microsoft Fabric's optional-but-immutable `namespace`, which must remain in Initial setup so users can author it during creation; do not resolve the warning by making `namespace` required.
