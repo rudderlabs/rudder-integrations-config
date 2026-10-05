@@ -95,3 +95,4 @@
 
 - Reviewer-verified webapp behavior requires optional immutable fields that users must set during destination creation to live in `baseTemplate[0].sections[2].groups[0]` under Initial setup. Do not move such a field only to Configuration settings to silence schema generation: the create wizard omits it there and the edit view subsequently renders it read-only.
 - Form Builder V2 `singleSelect` options support per-option `featureFlag` metadata. For Microsoft Fabric sync frequency, gate the `5`, `10`, and `15` minute options with `AMP_enable-high-granularity-wh-syncs`.
+- Do not carry legacy warehouse compatibility fields `underscoreDivideNumbers` or `allowUsersContextTraits` into Microsoft Fabric's `db-config.json` `defaultConfig`, persisted schema, validation fixtures, or shared backward-compatibility registration. Its closed destination schema should reject both fields.
