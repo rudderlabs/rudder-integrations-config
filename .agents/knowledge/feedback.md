@@ -95,3 +95,13 @@
 
 - Reviewer guidance rejected enumerating the current mParticle regional hosts for Rokt `apiEndpoint`; accept HTTPS endpoints on `mparticle.com` and any `.mparticle.com` subdomain so future mParticle subdomains do not require a schema release.
 - Do not broaden this into generic endpoint validation: reject lookalike/non-mParticle domains, userinfo, query strings, fragments, ports, and paths, while permitting at most one trailing slash.
+
+## ACT2-766 — ClickHouse Source Review Guidance
+
+<!-- session: 2026-10-01 -->
+
+- The `configSchema.oneOf` account branch in `src/configurations/sources/clickhouse/schema.json` must refuse a nested `config` key beside `rudderAccountId` (`"not": {"anyOf": [{"required": ["password"]}, {"required": ["config"]}]}`). The probe `{rudderAccountId: "acc", config: {password: "x"}}` must be invalid.
+- The `regexErrorMessage` of `database` and `user` in `src/configurations/sources/clickhouse/ui-config.json` must name the leading-digit restriction. "Use letters, digits and underscores only" is wrong for a pattern that also refuses a leading digit.
+- Do not add plan ids such as `IC5` to test titles in `test/validation.test.ts`. A reader of this repository cannot resolve them. Name what the test checks.
+- Owner direction: the ClickHouse source is new and hidden by `options.hidden.gate` in `src/configurations/sources/clickhouse/db-config.json`, so rollback is turning the flag off. Do not add rollback workflows, rehearsals, staged rollback runbooks or inventories of hidden entries for this source.
+- Owner direction: the ClickHouse source supports mirror mode with record events only (`options.syncBehaviours` in `src/configurations/sources/clickhouse/db-config.json`). Do not add `full` or `upsert` behaviours. Creating this source through the webapp or the public API is out of scope for the first release.
