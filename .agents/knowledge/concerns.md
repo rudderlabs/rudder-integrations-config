@@ -107,3 +107,8 @@
 
 - The Rokt definition currently uses the proposed hide-when-false rollout flag `AMP_enable-rokt-destination` and `options.icon: "rokt"`, following repository naming conventions and the implementation contract.
 - This repository cannot confirm Flagsmith flag provisioning or icon-library catalog existence. Treat both as external rollout checks; downstream icon verification owns catalog validation, and rollout owners must confirm the flag rather than silently substituting or removing it in repo-local code.
+
+## RUD-3200 — BigQuery Stream Schema Generator Baseline Drift
+
+- `npm run check:schema:destination bqstream_all_events` succeeds but reports pre-existing schema drift: top-level `additionalProperties: false` and `required: ["provider"]` in consent-management item schemas are missing from the generated expectation.
+- This drift is unrelated to removing `options.hidden` for the destination's public-beta promotion; keep it separate from visibility-only changes unless schema normalization is explicitly in scope.
