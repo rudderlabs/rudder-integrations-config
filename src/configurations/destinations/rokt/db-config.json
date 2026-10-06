@@ -1,11 +1,13 @@
 {
-  "name": "BQSTREAM_ALL_EVENTS",
-  "displayName": "BigQuery Stream (All Events)",
+  "name": "ROKT",
+  "displayName": "Rokt",
   "version": "1.0",
   "config": {
-    "transformAtV1": "processor",
+    "supportedAccountDefinitions": {
+      "rudderAccountId": ["DESTINATION_ROKT"]
+    },
+    "transformAtV1": "router",
     "saveDestinationResponse": true,
-    "excludeKeys": [],
     "supportedSourceTypes": [
       "android",
       "androidKotlin",
@@ -16,11 +18,13 @@
       "amp",
       "cloud",
       "reactnative",
-      "cloudSource",
       "flutter",
       "cordova",
       "shopify"
     ],
+    "supportedMessageTypes": {
+      "cloud": ["track", "page", "screen", "identify"]
+    },
     "supportedConnectionModes": {
       "android": ["cloud"],
       "androidKotlin": ["cloud"],
@@ -33,42 +37,37 @@
       "flutter": ["cloud"],
       "cordova": ["cloud"],
       "shopify": ["cloud"],
-      "cloud": ["cloud"],
-      "cloudSource": ["cloud"]
+      "cloud": ["cloud"]
     },
     "destConfig": {
       "defaultConfig": [
-        "project",
-        "location",
-        "namespace",
-        "credentials",
-        "partitionColumn",
-        "partitionType",
-        "skipTracksTable",
-        "skipViews",
-        "jsonPaths",
-        "underscoreDivideNumbers",
-        "allowUsersContextTraits"
+        "rudderAccountId",
+        "apiEndpoint",
+        "serverToServerKey",
+        "serverToServerSecret"
       ],
+      "web": ["connectionMode", "consentManagement"],
+      "cloud": ["connectionMode", "consentManagement"],
       "android": ["connectionMode", "consentManagement"],
       "androidKotlin": ["connectionMode", "consentManagement"],
       "ios": ["connectionMode", "consentManagement"],
       "iosSwift": ["connectionMode", "consentManagement"],
-      "web": ["connectionMode", "consentManagement"],
       "unity": ["connectionMode", "consentManagement"],
       "amp": ["connectionMode", "consentManagement"],
-      "cloud": ["connectionMode", "consentManagement"],
       "reactnative": ["connectionMode", "consentManagement"],
       "flutter": ["connectionMode", "consentManagement"],
       "cordova": ["connectionMode", "consentManagement"],
-      "cloudSource": ["connectionMode", "consentManagement"],
       "shopify": ["connectionMode", "consentManagement"]
     },
-    "secretKeys": ["credentials"]
+    "secretKeys": ["serverToServerSecret"]
   },
   "options": {
-    "disableLiveEvents": true,
     "isBeta": true,
-    "icon": "bigquery"
+    "hidden": {
+      "gate": {
+        "flags": [{ "name": "AMP_enable-rokt-destination", "value": false }]
+      }
+    },
+    "icon": "rokt"
   }
 }

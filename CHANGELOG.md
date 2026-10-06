@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.182.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.181.0...v1.182.0) (2026-10-06)
+
+
+### Features
+
+* keep custom activation success responses for live events (ACT2-1032) ([d64e99a](https://github.com/rudderlabs/rudder-config-schema/commit/d64e99ae39a7787d99518ec71425854f9bb45758))
+* keep custom activation success responses for live events (ACT2-1032) ([#2791](https://github.com/rudderlabs/rudder-config-schema/issues/2791)) ([a3f0186](https://github.com/rudderlabs/rudder-config-schema/commit/a3f0186eaee591e97b13240687414349b55344c0))
+* make BigQuery Stream All Events public beta ([#2786](https://github.com/rudderlabs/rudder-config-schema/issues/2786)) ([f6766b2](https://github.com/rudderlabs/rudder-config-schema/commit/f6766b22330b3a6c09cd56f55fc44f496ddbcc12))
+* promote OpenAI Ads destination to GA ([#2785](https://github.com/rudderlabs/rudder-config-schema/issues/2785)) ([8bce89c](https://github.com/rudderlabs/rudder-config-schema/commit/8bce89c8171493ff381b1933f410ea3cfc3db0c2))
+* **rokt:** add destination and account definitions ([#2773](https://github.com/rudderlabs/rudder-config-schema/issues/2773)) ([198b0a4](https://github.com/rudderlabs/rudder-config-schema/commit/198b0a4cc79d7c3a0cf754c49c0ffdf0004aee3a))
+
 ## [1.181.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.180.0...v1.181.0) (2026-10-05)
 
 
