@@ -87,8 +87,8 @@
 
 ## AI-1339 — Release Draft Actor Gate Boundary
 
-- `.github/workflows/draft-new-release.yml` should not depend on the reusable `.github/workflows/validate-actor.yml` gate; release draft triggering relies on GitHub `workflow_dispatch` permissions and downstream release PR approval rather than team-name validation.
-- Keep `.github/workflows/validate-actor.yml` available even when draft release no longer uses it, because other workflows such as `create-hotfix-branch.yml` and rollback paths may still reference that reusable actor-validation workflow.
+- The legacy manual draft-release and hotfix workflows were removed when releases moved to release-please on `main`.
+- Keep `.github/workflows/validate-actor.yml` available because `rollback.yml` still uses it to authorize production rollbacks.
 
 ## SDK-5265 — CleverTap Android Kotlin Device-Mode Contract
 

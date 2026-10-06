@@ -29,7 +29,7 @@ on:
         required: true
         type: string
       ref:
-        description: 'Git ref to deploy (branch/tag/commit)'
+        description: 'Git ref to deploy (main, v* tag, or non-production branch/commit)'
         required: true
         type: string
         default: 'main'
@@ -43,13 +43,21 @@ jobs:
   validate:
     name: Validate Deployment
     runs-on: ubuntu-latest
+    outputs:
+      deployment_ref: ${{ steps.validate-deployment.outputs.deployment_ref }}
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
         with:
           egress-policy: audit
 
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 1
+
       - name: Validate Deployment
+        id: validate-deployment
         env:
           ENVIRONMENT: ${{ inputs.environment }}
           DRY_RUN: ${{ inputs.dry_run }}
@@ -61,6 +69,8 @@ jobs:
           PROD_USERNAME: ${{ secrets.PROD_USERNAME }}
           PROD_PASSWORD: ${{ secrets.PROD_PASSWORD }}
         run: |
+          deployment_ref="$REF"
+
           case "$ENVIRONMENT" in
             development) USER_VAR=DEV_USERNAME;     PASS_VAR=DEV_PASSWORD ;;
             staging)    USER_VAR=STAGING_USERNAME; PASS_VAR=STAGING_PASSWORD ;;
@@ -73,19 +83,39 @@ jobs:
           fi
           echo "✅ Credentials present for environment '$ENVIRONMENT'"
 
-          if [[ "$ENVIRONMENT" == "production" && "$DRY_RUN" == "false" ]]; then
-            if [[ "$REF" != "main" ]]; then
-              echo "❌ Error: Production deployments can only be made from the 'main' branch"
-              echo "Current branch: $REF"
+          if [[ "$ENVIRONMENT" == "production" ]]; then
+            if [[ "$REF" == "main" ]]; then
+              deployment_ref="main"
+            elif [[ "$REF" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$ ]]; then
+              if ! git ls-remote --exit-code --tags origin "refs/tags/$REF" > /dev/null 2>&1; then
+                echo "❌ Error: Release tag '$REF' does not exist"
+                exit 1
+              fi
+              deployment_ref="refs/tags/$REF"
+            else
+              echo "❌ Error: Production deployments can only be made from 'main' or an exact semantic-version v* tag name"
+              echo "Current ref: $REF"
               exit 1
             fi
-            echo "✅ Production deployment validation passed - deploying from main branch"
+            echo "✅ Production deployment validation passed - deploying from $deployment_ref"
           else
-            echo "ℹ️  Branch validation skipped (environment=$ENVIRONMENT, dry_run=$DRY_RUN)"
+            echo "ℹ️  Production ref validation skipped (environment=$ENVIRONMENT, dry_run=$DRY_RUN)"
           fi
 
+          echo "deployment_ref=$deployment_ref" >> "$GITHUB_OUTPUT"
+
+  validate-actor:
+    name: Validate Production Actor
+    if: ${{ inputs.environment == 'production' && inputs.dry_run == false }}
+    uses: ./.github/workflows/validate-actor.yml
+    with:
+      team_names: 'integrations,data-management,sdk_team'
+    secrets:
+      RELEASE_PRIVATE_KEY: ${{ secrets.RELEASE_PRIVATE_KEY }}
+
   deploy:
-    needs: validate
+    needs: [validate, validate-actor]
+    if: ${{ always() && needs.validate.result == 'success' && (needs.validate-actor.result == 'success' || needs.validate-actor.result == 'skipped') }}
     uses: ./.github/workflows/deploy.yml
     with:
       environment: ${{ inputs.environment }}
@@ -95,7 +125,7 @@ jobs:
          || 'https://api.dev.rudderlabs.com' }}
       notify: ${{ inputs.notify }}
       version: ${{ inputs.version }}
-      ref: ${{ inputs.ref }}
+      ref: ${{ needs.validate.outputs.deployment_ref }}
       verbose: ${{ inputs.verbose }}
       dry_run: ${{ inputs.dry_run }}
     secrets:

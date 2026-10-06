@@ -9,19 +9,23 @@ on:
     branches:
       - main
 
+concurrency:
+  group: deploy-staging-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
 permissions:
   contents: read
 
 jobs:
   deploy:
     name: Deployment To Staging DB
-    # Only pull requests from release candidate branches must trigger
-    if: (startsWith(github.event.pull_request.head.ref, 'release/') || startsWith(github.event.pull_request.head.ref, 'hotfix-release/'))
+    # Only release-please pull requests deploy to staging.
+    if: startsWith(github.event.pull_request.head.ref, 'release-please--')
     uses: ./.github/workflows/deploy.yml
     with:
       environment: staging
       deploy_url: https://api.staging.rudderlabs.com
-      ref: ${{ github.event.pull_request.head.ref }}
+      ref: ${{ github.event.pull_request.head.sha }}
     secrets:
       API_USERNAME: ${{ secrets.STAGING_USERNAME }}
       API_PASSWORD: ${{ secrets.STAGING_PASSWORD }}

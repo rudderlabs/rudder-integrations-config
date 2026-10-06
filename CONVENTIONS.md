@@ -313,10 +313,10 @@ is covered, and a coverage miss fails the build.
 
 Two caveats, both arguments for running it yourself before you push:
 
-- Nothing runs it locally. There is no npm script, and neither `npm test` nor the pre-commit hook
-  invokes it, so the first failure you see is a red build.
-- The shell wrapper diffs against a hardcoded `origin/develop`, so on a branch cut from `main` (a
-  hotfix) the changed-file list is wrong and the destination you edited may not be picked up.
+- It is not part of `npm test`, but the pre-commit hook invokes it directly. If Husky is not
+  installed or you want to check account metadata before committing, run the wrapper yourself.
+- The shell wrapper diffs against `origin/${GITHUB_BASE_REF:-main}`, so pull requests use their
+  GitHub base branch while local runs default to the `main` trunk.
 
 ```bash
 python3 scripts/validate_account_definitions.py <destination>

@@ -8,7 +8,13 @@ Resolves INT-XXX
 
 ## Please explain the objectives of your changes below
 
-Put down any required details on the broader aspect of your changes. If there are any dependent changes, **mandatorily** mention them here
+Put down any required details on the broader aspect of your changes.
+
+### Runtime dependency
+
+Runtime dependency: none / `<repo>#<PR>`, released in `vX.Y.Z`, rolled out ☐
+
+Config changes that depend on transformer, rudder-server, integrations-info, rudder-auth, webapp, or another runtime must not merge until the dependency is fully rolled out to production in every region. Apply the `blocked: dependency-rollout` label until rollout is complete.
 
 ### Any changes to existing capabilities/behaviour, mention the reason & what are the changes ?
 

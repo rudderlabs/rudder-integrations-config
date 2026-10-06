@@ -6,9 +6,9 @@ Thanks for taking the time and for your help in improving this project!
 
 - [**RudderStack Contributor Agreement**](#rudderstack-contributor-agreement)
 - [**Conventions**](#conventions)
+- [**Merge and release policy**](#merge-and-release-policy)
 - [**UI Configuration Development Requirements**](#ui-configuration-development-requirements)
 - [**How you can contribute to RudderStack**](#how-you-can-contribute-to-rudderstack)
-- [**Committing**](#committing)
 - [**Getting help**](#getting-help)
 
 ## RudderStack Contributor Agreement
@@ -18,6 +18,26 @@ To contribute to this project, we need you to sign the [**Contributor License Ag
 ## Conventions
 
 Before adding new configurations, please review the repository [**conventions**](/CONVENTIONS.md). In particular, account definition names (`accountDefinitionName`) must follow the documented `SCREAMING_SNAKE_CASE` `{CATEGORY}_{TYPE}[_{AUTH_QUALIFIER}]` naming pattern.
+
+## Merge and release policy
+
+This repository uses a single `main` trunk. Every pull request targets `main`, uses a conventional-commit title, and is squash-merged. `main` must remain releasable because every merged change is included in the next release-please release PR.
+
+### Runtime dependencies
+
+A configuration pull request that depends on transformer, rudder-server, integrations-info, rudder-auth, webapp, or another runtime change must wait until that dependency is fully rolled out to production in every region—not merely merged or released. Record the repository, pull request, release version, and rollout status in the pull request template, and apply the `blocked: dependency-rollout` label until rollout is complete.
+
+### Breaking changes
+
+Prefer additive, backward-compatible changes: new fields are optional, have safe defaults, and are ignored by older consumers. Renames and removals use two releases: first add the new field while consumers accept both, then remove the old field only after those consumers are fully deployed. Incompatible definition shapes must use a new versioned definition, following patterns such as `ga4_v2` and `intercom_v2`, rather than mutating the live definition.
+
+### Releases
+
+release-please maintains a standing `chore: release X.Y.Z` pull request. Before merging it, review the CHANGELOG diff and confirm that every runtime dependency is fully rolled out. If an entry is not safe to ship, revert that change on `main` with a `revert:` commit rather than holding the release train. Merging the release pull request creates the version tag and GitHub Release and deploys that tag to production; treat it as a production deployment.
+
+Hotfixes follow the same path: merge an ordinary `fix:` pull request to `main`, then merge the updated release pull request.
+
+For rollback, dispatch the rollback workflow from the known-good `vX.Y.Z` tag (or from `main` when explicitly intended). The manual deployment workflow accepts non-dry-run production deployments only from `main` or an existing semantic-version `v*` tag; use dry run first when verifying a deployment ref.
 
 ## UI Configuration Development Requirements
 
