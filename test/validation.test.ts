@@ -3,7 +3,9 @@
 import fs from 'fs';
 import path from 'path';
 import Commander from 'commander';
-import Ajv from 'ajv';
+import Ajv, { ValidateFunction } from 'ajv';
+import addKeywords from 'ajv-keywords';
+import ajvErrors from 'ajv-errors';
 import {
   init,
   validateConfig,
@@ -186,6 +188,24 @@ function getAccountDefinitionSchema(integrationName: string, accountName: string
 // so a stringified port stays a type error here exactly as it is in production.
 function compileAccountSchema(schema: unknown) {
   const ajv = new Ajv({ allErrors: true, useDefaults: true, strict: false });
+  return ajv.compile(schema as Record<string, unknown>);
+}
+
+// Mirrors config-backend `createAjv` (src/validations/configValidationErrors.ts), which loads
+// ajv-errors, so an `errorMessage` asserted here is the text config-backend returns.
+function compileAccountSchemaWithErrorMessages(schema: unknown): ValidateFunction {
+  const ajv = new Ajv({
+    allErrors: true,
+    useDefaults: true,
+    strict: false,
+    strictSchema: false,
+    strictRequired: false,
+    strictNumbers: true,
+    strictTypes: true,
+    strictTuples: true,
+  });
+  addKeywords(ajv, ['uniqueItemProperties']);
+  ajvErrors(ajv);
   return ajv.compile(schema as Record<string, unknown>);
 }
 
@@ -1969,6 +1989,714 @@ describe('Account Definition validation tests', () => {
       ),
       "must have required property 'gate'",
       false,
+    );
+  });
+});
+
+type ClickHouseFieldCase = {
+  id: string;
+  field: 'host' | 'name' | 'password';
+  input: string;
+  verdict: 'pass' | 'fail';
+  error?: string;
+  configBackendVerdict?: 'pass' | 'fail';
+  configBackendErrorPrefix?: string;
+};
+
+const CLICKHOUSE_ERROR_TEXT = {
+  host: 'Enter a hostname or a dotted-decimal IPv4 address without a scheme, port or path.',
+  name: 'Use letters, digits and underscores, start with a letter or underscore, at most 128 characters.',
+  password: 'The password cannot contain control characters or start or end with whitespace.',
+};
+
+function clickHouseFieldCases(): ClickHouseFieldCase[] {
+  return JSON.parse(
+    fs.readFileSync(
+      path.resolve(__dirname, './data/validation/accounts/clickhouse-fields.json'),
+      'utf-8',
+    ),
+  ).cases;
+}
+
+// Other repositories copy these files byte for byte, and the LLD requires `\u` escapes above U+00FF.
+// An editor that turns an escape into the literal character changes the bytes the copies compare.
+function expectAsciiOnly(relativePath: string): void {
+  const bytes = fs.readFileSync(path.resolve(__dirname, '..', relativePath));
+  expect({ file: relativePath, firstNonAscii: bytes.findIndex((b) => b > 127) }).toEqual({
+    file: relativePath,
+    firstNonAscii: -1,
+  });
+}
+
+describe('ClickHouse shared field fixtures', () => {
+  it('the fixture file is pure ASCII', () => {
+    expectAsciiOnly('test/data/validation/accounts/clickhouse-fields.json');
+  });
+
+  const inputsOf = (field: ClickHouseFieldCase['field'], verdict: 'pass' | 'fail') =>
+    clickHouseFieldCases()
+      .filter((c) => c.field === field && c.verdict === verdict)
+      .map((c) => c.input);
+
+  it('every fixture case has a unique id, a known field, a verdict and its rule error text', () => {
+    const cases = clickHouseFieldCases();
+    const ids = cases.map((c) => c.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    cases.forEach((c) => {
+      expect(['host', 'name', 'password']).toContain(c.field);
+      expect(typeof c.input).toBe('string');
+      expect(['pass', 'fail']).toContain(c.verdict);
+      if (c.verdict === 'fail') {
+        expect({ id: c.id, error: c.error }).toEqual({
+          id: c.id,
+          error: CLICKHOUSE_ERROR_TEXT[c.field],
+        });
+      } else {
+        expect({ id: c.id, error: c.error }).toEqual({ id: c.id, error: undefined });
+      }
+      if (c.configBackendVerdict !== undefined) {
+        expect({
+          id: c.id,
+          field: c.field,
+          verdict: c.configBackendVerdict,
+          prefix: c.configBackendErrorPrefix,
+        }).toEqual({
+          id: c.id,
+          field: 'password',
+          verdict: 'fail',
+          prefix: 'Configuration contains syntax errors',
+        });
+      }
+    });
+  });
+
+  // A deleted case would silently drop its check in every copy, so pin the exact id set.
+  it('the fixture holds exactly the 65 spec cases, and P40 to P42 carry the config-backend refusal', () => {
+    const idRange = (prefix: string, from: number, to: number) =>
+      Array.from(
+        { length: to - from + 1 },
+        (_, i) => `${prefix}${String(from + i).padStart(2, '0')}`,
+      );
+    const cases = clickHouseFieldCases();
+    expect(cases.map((c) => c.id)).toEqual([
+      ...idRange('H', 1, 8),
+      ...idRange('H', 20, 34),
+      ...idRange('N', 1, 5),
+      ...idRange('N', 20, 27),
+      ...idRange('P', 1, 9),
+      ...idRange('P', 20, 36),
+      ...idRange('P', 40, 42),
+    ]);
+    expect(cases.filter((c) => c.configBackendVerdict !== undefined).map((c) => c.id)).toEqual([
+      'P40',
+      'P41',
+      'P42',
+    ]);
+  });
+
+  it('the fixture keeps every host and name input the spec names', () => {
+    expect(inputsOf('host', 'pass')).toEqual(
+      expect.arrayContaining(['127.0.0.1', '10.0.0.5', 'ch.example.com', '1password.com']),
+    );
+    expect(inputsOf('host', 'fail')).toEqual(
+      expect.arrayContaining([
+        '1.2.3',
+        '0x7f000001',
+        '010.0.0.1',
+        '256.1.1.1',
+        '::1',
+        'https://ch.example.com',
+        'ch.example.com:8443',
+      ]),
+    );
+    expect(inputsOf('name', 'pass')).toEqual(
+      expect.arrayContaining(['analytics', '_scratch', 'Mixed_Case_1', '_rudderstack_ws1']),
+    );
+    expect(inputsOf('name', 'fail')).toEqual(
+      expect.arrayContaining([
+        'my-db',
+        'analytics.v2',
+        '1db',
+        'analyst@example.com',
+        'a`b',
+        'a b',
+        '',
+        'a'.repeat(129),
+      ]),
+    );
+  });
+
+  it('the fixture keeps every password parity input of catalog LLD section 3.8', () => {
+    expect(inputsOf('password', 'pass')).toEqual(
+      expect.arrayContaining([
+        'p w',
+        'p\u00A0w',
+        'p\u00E4ssw\u00F6rd',
+        'p\u{1F600}w',
+        'ab{{cd',
+        '{{}}',
+        'env.',
+      ]),
+    );
+    expect(inputsOf('password', 'fail')).toEqual(
+      expect.arrayContaining([
+        '\u00A0pw',
+        'pw\u00A0',
+        '\u2003pw',
+        'pw\u3000',
+        '\uFEFFpw',
+        ' pw',
+        'pw ',
+        'p\u0085w',
+        'p\u009Fw',
+        'p\tw',
+        'p\u0000w',
+        'p\u007Fw',
+      ]),
+    );
+  });
+});
+
+const CLICKHOUSE_GATE = {
+  gate: { flags: [{ name: 'AMP_enable-clickhouse-retl-source', value: false }] },
+};
+
+// A bare boolean never consults a flag, and config-backend refuses every workspace with `true`.
+function expectClickHouseGate(hidden: unknown): void {
+  expect(hidden).toEqual(CLICKHOUSE_GATE);
+}
+
+describe('SOURCE_CLICKHOUSE account definition', () => {
+  const loadAccount = () =>
+    getAccountDefinitionConfig('clickhouse', 'SOURCE_CLICKHOUSE', 'sources');
+
+  it('declares a password source account of type clickhouse that passes the account meta-schema', async () => {
+    const accountConfig = await loadAccount();
+    await expect(validateAccountDefinitions(accountConfig)).resolves.toEqual(true);
+    expect(accountConfig).toMatchObject({
+      name: 'SOURCE_CLICKHOUSE',
+      type: 'clickhouse',
+      category: 'source',
+      authenticationType: 'password',
+    });
+  });
+
+  it('has exactly six options and the one secret password, with no CA or transport option', async () => {
+    const accountConfig = await loadAccount();
+    expect(accountConfig.config.optionFields).toEqual([
+      'host',
+      'port',
+      'database',
+      'user',
+      'secure',
+      'skipVerify',
+    ]);
+    expect(accountConfig.config.secretFields).toEqual(['password']);
+    ['caCertificate', 'protocol', 'nativePort', 'authenticationType'].forEach((field) => {
+      expect(accountConfig.config.optionFields).not.toContain(field);
+    });
+  });
+
+  it('displayOptions.hidden is the creation gate object', async () => {
+    const accountConfig = await loadAccount();
+    expectClickHouseGate(accountConfig.displayOptions.hidden);
+  });
+
+  it('the account meta-schema refuses a legacy feature-flag hidden', async () => {
+    const legacy = {
+      featureFlagName: 'AMP_enable-clickhouse-retl-source',
+      featureFlagValue: false,
+    };
+    const accountConfig = await loadAccount();
+    await expectValidationError(
+      validateAccountDefinitions({ ...accountConfig, displayOptions: { hidden: legacy } }),
+      "must have required property 'gate'",
+      false,
+    );
+  });
+});
+
+const clickHouseOptions = (): Record<string, unknown> => ({
+  host: 'ch.example.com',
+  port: 8443,
+  database: 'analytics',
+  user: 'rudder',
+  secure: true,
+  skipVerify: false,
+});
+
+const clickHouseAccountSchema = () =>
+  getAccountDefinitionSchema('clickhouse', 'SOURCE_CLICKHOUSE', 'sources');
+
+// Lookaround, \s and \p{} read differently in ECMA-262 and Go RE2 (catalog LLD section 3.3). This is a
+// syntax check only: sqlconnect-go runs the shared fixture cases through Go RE2.
+const RE2_UNSAFE_PATTERN = /\(\?[=!<]|\\s|\\p\{/;
+
+describe('SOURCE_CLICKHOUSE optionsSchema', () => {
+  const validateOptions = () => compileAccountSchema(clickHouseAccountSchema().optionsSchema);
+  const validateWithText = () =>
+    compileAccountSchemaWithErrorMessages(clickHouseAccountSchema().optionsSchema);
+  const messages = (validate: ValidateFunction) => (validate.errors ?? []).map((e) => e.message);
+
+  it('the account schema is valid against the account meta-schema and has no combinedSchema', () => {
+    const metaSchema = JSON.parse(
+      fs.readFileSync(path.resolve('src/schemas/account/account-schema-schema.json'), 'utf-8'),
+    );
+    const validateAccountSchema = compileAccountSchema(metaSchema);
+    const accountSchema = clickHouseAccountSchema();
+    const isValid = validateAccountSchema(accountSchema);
+    expect(validateAccountSchema.errors ?? []).toEqual([]);
+    expect(isValid).toBe(true);
+    expect(accountSchema.combinedSchema).toBeUndefined();
+    expect(accountSchema.optionsSchema.additionalProperties).toBeUndefined();
+  });
+
+  it('optionFields equal the optionsSchema property names', async () => {
+    const accountConfig = await getAccountDefinitionConfig(
+      'clickhouse',
+      'SOURCE_CLICKHOUSE',
+      'sources',
+    );
+    expect([...accountConfig.config.optionFields].sort()).toEqual(
+      Object.keys(clickHouseAccountSchema().optionsSchema.properties).sort(),
+    );
+  });
+
+  it('a complete option set passes and omitted port, secure and skipVerify take their defaults', () => {
+    const validate = validateOptions();
+    expect(validate(clickHouseOptions())).toBe(true);
+    const options = clickHouseOptions();
+    delete options.port;
+    delete options.secure;
+    delete options.skipVerify;
+    expect(validate(options)).toBe(true);
+    expect(options).toMatchObject({ port: 8443, secure: true, skipVerify: false });
+  });
+
+  it('port accepts 1, 8123, 8443 and 65535 and rejects 0, 65536, "8443", 1.5 and -1 without coercion', () => {
+    const validate = validateOptions();
+    [1, 8123, 8443, 65535].forEach((port) => {
+      expect({ port, valid: validate({ ...clickHouseOptions(), port }) }).toEqual({
+        port,
+        valid: true,
+      });
+    });
+    [0, 65536, '8443', 1.5, -1].forEach((port) => {
+      const options = { ...clickHouseOptions(), port };
+      expect({ port, valid: validate(options) }).toEqual({ port, valid: false });
+      expect(options.port).toBe(port);
+    });
+  });
+
+  it('null option values fail and are not defaulted', () => {
+    const validate = validateOptions();
+    ['port', 'secure', 'skipVerify'].forEach((key) => {
+      const options = { ...clickHouseOptions(), [key]: null };
+      expect({ key, valid: validate(options) }).toEqual({ key, valid: false });
+      expect(options[key]).toBeNull();
+    });
+  });
+
+  it('each missing required option fails with the AJV required message', () => {
+    const validate = validateWithText();
+    ['host', 'database', 'user'].forEach((key) => {
+      const options = clickHouseOptions();
+      delete options[key];
+      expect(validate(options)).toBe(false);
+      expect(messages(validate)).toEqual([`must have required property '${key}'`]);
+    });
+  });
+
+  it('secure is const true and skipVerify is const false; non-boolean TLS values fail', () => {
+    const validate = validateOptions();
+    const schema = clickHouseAccountSchema().optionsSchema;
+    expect(schema.required).not.toContain('secure');
+    expect(schema.properties.secure).toEqual({ type: 'boolean', const: true, default: true });
+    expect(schema.properties.skipVerify).toEqual({ type: 'boolean', const: false, default: false });
+    expect(validate({ ...clickHouseOptions(), secure: false })).toBe(false);
+    expect(validate({ ...clickHouseOptions(), skipVerify: true })).toBe(false);
+    ['secure', 'skipVerify'].forEach((key) => {
+      ['true', 'false', 0, 1].forEach((value) => {
+        expect({ key, value, valid: validate({ ...clickHouseOptions(), [key]: value }) }).toEqual({
+          key,
+          value,
+          valid: false,
+        });
+      });
+    });
+  });
+
+  it('host cases from the shared fixture file', () => {
+    const validate = validateWithText();
+    clickHouseFieldCases()
+      .filter((c) => c.field === 'host')
+      .forEach((c) => {
+        const valid = validate({ ...clickHouseOptions(), host: c.input });
+        expect({ id: c.id, verdict: valid ? 'pass' : 'fail' }).toEqual({
+          id: c.id,
+          verdict: c.verdict,
+        });
+        if (!valid)
+          expect({ id: c.id, messages: messages(validate) }).toEqual({
+            id: c.id,
+            messages: [c.error],
+          });
+      });
+  });
+
+  it('name cases apply to database and user with one error text', () => {
+    const validate = validateWithText();
+    clickHouseFieldCases()
+      .filter((c) => c.field === 'name')
+      .forEach((c) => {
+        ['database', 'user'].forEach((key) => {
+          const valid = validate({ ...clickHouseOptions(), [key]: c.input });
+          expect({ id: c.id, key, verdict: valid ? 'pass' : 'fail' }).toEqual({
+            id: c.id,
+            key,
+            verdict: c.verdict,
+          });
+          if (!valid) {
+            expect({ id: c.id, key, messages: messages(validate) }).toEqual({
+              id: c.id,
+              key,
+              messages: [c.error],
+            });
+          }
+        });
+      });
+  });
+
+  it('requires only host, database and user, without a working database option', () => {
+    const schema = clickHouseAccountSchema().optionsSchema;
+    expect(schema.required).toEqual(['host', 'database', 'user']);
+    expect(Object.keys(schema.properties)).toEqual([
+      'host',
+      'port',
+      'database',
+      'user',
+      'secure',
+      'skipVerify',
+    ]);
+    const validate = validateOptions();
+    const options = clickHouseOptions();
+    expect(validate(options)).toBe(true);
+    expect(options).not.toHaveProperty('rudderSchema');
+  });
+
+  it('accepts and preserves a rudderSchema credential override without declaring a form option', () => {
+    const validate = validateOptions();
+    const options = { ...clickHouseOptions(), rudderSchema: 'custom_rudder' };
+    expect(validate(options)).toBe(true);
+    expect(options.rudderSchema).toBe('custom_rudder');
+    expect(clickHouseAccountSchema().optionsSchema.properties.rudderSchema).toBeUndefined();
+  });
+
+  it('the options schema accepts and keeps undeclared options; the config-backend guard refuses them', () => {
+    const validate = validateOptions();
+    const options = {
+      ...clickHouseOptions(),
+      protocol: 'http',
+      nativePort: 9440,
+      caCertificate: 'x',
+    };
+    expect(validate(options)).toBe(true);
+    expect(options).toMatchObject({ protocol: 'http', nativePort: 9440, caCertificate: 'x' });
+  });
+
+  it('option patterns use no lookaround, \\s or \\p{}, and host keeps maxLength 253', () => {
+    const { properties } = clickHouseAccountSchema().optionsSchema;
+    ['host', 'database', 'user'].forEach((key) => {
+      expect({ key, unsafe: RE2_UNSAFE_PATTERN.test(properties[key].pattern) }).toEqual({
+        key,
+        unsafe: false,
+      });
+    });
+    expect(properties.host.maxLength).toBe(253);
+    expect(properties.database.pattern).toBe('^[A-Za-z_][A-Za-z0-9_]{0,127}$');
+    expect(properties.user.pattern).toBe(properties.database.pattern);
+  });
+});
+
+describe('SOURCE_CLICKHOUSE secretSchema', () => {
+  const validateSecret = () =>
+    compileAccountSchemaWithErrorMessages(clickHouseAccountSchema().secretSchema);
+
+  it('secretFields equal the secretSchema property names', async () => {
+    const accountConfig = await getAccountDefinitionConfig(
+      'clickhouse',
+      'SOURCE_CLICKHOUSE',
+      'sources',
+    );
+    expect(accountConfig.config.secretFields).toEqual(
+      Object.keys(clickHouseAccountSchema().secretSchema.properties),
+    );
+  });
+
+  it('password cases from the shared fixture file', () => {
+    const validate = validateSecret();
+    clickHouseFieldCases()
+      .filter((c) => c.field === 'password')
+      .forEach((c) => {
+        const valid = validate({ password: c.input });
+        expect({ id: c.id, verdict: valid ? 'pass' : 'fail' }).toEqual({
+          id: c.id,
+          verdict: c.verdict,
+        });
+        if (!valid) {
+          expect({ id: c.id, messages: (validate.errors ?? []).map((e) => e.message) }).toEqual({
+            id: c.id,
+            messages: [c.error],
+          });
+        }
+      });
+  });
+
+  it('an absent, empty or non-string password fails', () => {
+    const validate = validateSecret();
+    expect(validate({})).toBe(false);
+    expect((validate.errors ?? []).map((e) => e.message)).toEqual([
+      "must have required property 'password'",
+    ]);
+    [{ password: '' }, { password: 5 }, { password: null }].forEach((secret) => {
+      expect({ secret, valid: validate(secret) }).toEqual({ secret, valid: false });
+    });
+  });
+
+  it('the password is never trimmed by validation', () => {
+    const validate = validateSecret();
+    const secret = { password: 'p w' };
+    expect(validate(secret)).toBe(true);
+    expect(secret.password).toBe('p w');
+  });
+
+  it('the secret schema accepts and keeps an undeclared secret; the config-backend guard refuses it', () => {
+    const validate = validateSecret();
+    const secret = { password: 'secret', unexpected: 1 };
+    expect(validate(secret)).toBe(true);
+    expect(secret.unexpected).toBe(1);
+    expect(clickHouseAccountSchema().secretSchema.additionalProperties).toBeUndefined();
+  });
+
+  it('schema.json is pure ASCII, so the password escapes survive', () => {
+    expectAsciiOnly('src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json');
+  });
+
+  it('the password pattern uses no lookaround, \\s or \\p{}', () => {
+    expect(
+      RE2_UNSAFE_PATTERN.test(clickHouseAccountSchema().secretSchema.properties.password.pattern),
+    ).toBe(false);
+  });
+});
+
+describe('clickhouse source definition', () => {
+  const loadSource = async () => (await getSourceDefinitionConfig('clickhouse')).default;
+
+  it('links SOURCE_CLICKHOUSE and declares mirror as the only sync behaviour', async () => {
+    const srcDefConfig = await loadSource();
+    await expect(validateSourceDefinitions(srcDefConfig)).resolves.toEqual(true);
+    expect(srcDefConfig).toMatchObject({
+      name: 'clickhouse',
+      category: 'warehouse',
+      type: 'warehouse',
+      displayName: 'ClickHouse',
+    });
+    expect(srcDefConfig.config.supportedAccountDefinitions.rudderAccountId).toEqual([
+      'SOURCE_CLICKHOUSE',
+    ]);
+    expect(srcDefConfig.options).toMatchObject({
+      syncBehaviours: ['mirror'],
+      supportsSyncSettings: true,
+      isCredentialsValidationSupported: true,
+      isSqlModelSupported: false,
+      isAudienceSupported: false,
+      isDataGraphSupported: false,
+      icon: 'clickhouse',
+    });
+  });
+
+  it('options.hidden is the creation gate object', async () => {
+    expectClickHouseGate((await loadSource()).options.hidden);
+  });
+
+  it('validateSourceDefinitions refuses a legacy feature-flag hidden on clickhouse', async () => {
+    const srcDefConfig = await loadSource();
+    await expectValidationError(
+      validateSourceDefinitions({
+        ...srcDefConfig,
+        options: {
+          ...srcDefConfig.options,
+          hidden: { featureFlagName: 'AMP_enable-clickhouse-retl-source', featureFlagValue: false },
+        },
+      }),
+      "must have required property 'gate'",
+      false,
+    );
+  });
+});
+
+describe('clickhouse source compatibility fixtures', () => {
+  it('the fixture file holds the eleven catalog entries plus the nested config refusal, and every refusal carries an err array', () => {
+    const entries = getIntegrationData('clickhouse', 'sources');
+    expect(entries.map((e) => e.testTitle)).toEqual([
+      'Account reference only',
+      'Account reference with non-secret connection fields',
+      'Inline config with password',
+      'Inline config without password',
+      'Inline config with empty password',
+      'Account reference with password',
+      'Account reference with empty password',
+      'Empty account reference',
+      'Account reference of 101 characters',
+      'Numeric account reference',
+      'Account reference with an extra non-secret field',
+      'Account reference with a nested config object',
+    ]);
+    entries
+      .filter((e) => e.result === false)
+      .forEach((e) =>
+        expect({ title: e.testTitle, hasErr: Array.isArray(e.err) }).toEqual({
+          title: e.testTitle,
+          hasErr: true,
+        }),
+      );
+  });
+});
+
+describe('clickhouse ui-config', () => {
+  const PORT_REGEX =
+    '^([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$';
+  const loadUiConfig = () =>
+    JSON.parse(
+      fs.readFileSync(
+        path.resolve('src/configurations/sources/clickhouse/ui-config.json'),
+        'utf-8',
+      ),
+    ).uiConfig[0];
+  const field = (value: string) =>
+    loadUiConfig().fields.find((f: { value: string }) => f.value === value);
+
+  it('ui-config.json is pure ASCII, so the password regex escapes survive', () => {
+    expectAsciiOnly('src/configurations/sources/clickhouse/ui-config.json');
+  });
+
+  it('renders the five account inputs in order and no working database, TLS, dbname or CA input', () => {
+    expect(loadUiConfig().fields.map((f: { value: string }) => f.value)).toEqual([
+      'host',
+      'port',
+      'database',
+      'user',
+      'password',
+    ]);
+  });
+
+  it('ui-config string field regexes equal the account schema patterns', () => {
+    const { optionsSchema, secretSchema } = clickHouseAccountSchema();
+    ['host', 'database', 'user'].forEach((key) => {
+      expect({ key, regex: field(key).regex }).toEqual({
+        key,
+        regex: optionsSchema.properties[key].pattern,
+      });
+    });
+    expect(field('password').regex).toBe(secretSchema.properties.password.pattern);
+  });
+
+  it('ui-config port regex accepts 1 to 65535 only', () => {
+    expect(field('port').regex).toBe(PORT_REGEX);
+    const port = new RegExp(field('port').regex);
+    [
+      '1',
+      '443',
+      '8123',
+      '8443',
+      '9999',
+      '10000',
+      '59999',
+      '64999',
+      '65499',
+      '65529',
+      '65535',
+    ].forEach((v) => expect({ v, ok: port.test(v) }).toEqual({ v, ok: true }));
+    ['', '0', '00001', '65536', '70000', '99999', '8443a', '-1', '1.5'].forEach((v) =>
+      expect({ v, ok: port.test(v) }).toEqual({ v, ok: false }),
+    );
+    // A number, not a string: TextInputField sends `field.default` unchanged on mount (textInput.tsx:84),
+    // and the account schema port is an integer.
+    expect(field('port')).toMatchObject({
+      inputFieldType: 'number',
+      required: true,
+      default: 8443,
+    });
+    expect(field('port').regexErrorMessage).toBe('Enter an integer from 1 to 65535');
+  });
+
+  // Catalog LLD section 3.5: the form shows a short text; the account schema errorMessage has the full rule.
+  it('the host regexErrorMessage is under eight words with no final full stop', () => {
+    const message: string = field('host').regexErrorMessage;
+    expect(message.split(' ').length).toBeLessThan(8);
+    expect(message.endsWith('.')).toBe(false);
+  });
+
+  it('the name field hint states the leading-digit rule the regex enforces', () => {
+    ['database', 'user'].forEach((key) => {
+      expect({ key, refused: !new RegExp(field(key).regex).test('2024_events') }).toEqual({
+        key,
+        refused: true,
+      });
+      expect({ key, message: field(key).regexErrorMessage }).toEqual({
+        key,
+        message: 'Letters, digits, underscores; no leading digit',
+      });
+    });
+  });
+
+  it('every regex has a regexErrorMessage, and required flags match the account schema', () => {
+    const { optionsSchema, secretSchema } = clickHouseAccountSchema();
+    const requiredFields = new Set([...optionsSchema.required, ...secretSchema.required]);
+    // The form sends its port default on mount; an API client may omit port and use the schema default.
+    expect(optionsSchema.required).not.toContain('port');
+    expect(optionsSchema.properties.port.default).toBe(8443);
+    expect(field('port')).toMatchObject({ required: true, default: 8443 });
+    expect([...requiredFields].sort()).toEqual(
+      loadUiConfig()
+        .fields.filter(
+          (f: { value: string; required?: boolean }) => f.required && f.value !== 'port',
+        )
+        .map((f: { value: string }) => f.value)
+        .sort(),
+    );
+    loadUiConfig().fields.forEach(
+      (f: { value: string; regex?: string; regexErrorMessage?: string; required?: boolean }) => {
+        expect({ value: f.value, hasMessage: typeof f.regexErrorMessage === 'string' }).toEqual({
+          value: f.value,
+          hasMessage: true,
+        });
+        expect({ value: f.value, required: f.required }).toEqual({
+          value: f.value,
+          required: requiredFields.has(f.value) || f.value === 'port',
+        });
+      },
+    );
+  });
+
+  it('keeps the account summary, secret and doc link contract', () => {
+    const ui = loadUiConfig();
+    expect(ui.schemaAlias).toBe('Database');
+    expect(ui.nameField).toBe('user');
+    expect(ui.secretFields).toEqual(['password']);
+    expect(field('password')).toMatchObject({ secret: true, inputFieldType: 'password' });
+    expect(field('password').trim).toBeUndefined();
+    expect(Object.keys(ui.docLinks).sort()).toEqual([
+      'grantPermissions',
+      'jsonMapperUseInstructions',
+      'setupInstructions',
+      'verifyingCredentials',
+    ]);
+    expect(ui.docLinks.setupInstructions).toBe(
+      'https://docs.rudderstack.com/reverse-etl/clickhouse',
+    );
+    expect(ui.docLinks.jsonMapperUseInstructions).toBe(
+      'https://docs.rudderstack.com/reverse-etl/clickhouse/#specifying-the-data-to-import',
     );
   });
 });
