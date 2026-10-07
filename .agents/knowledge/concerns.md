@@ -103,6 +103,10 @@
 
 - `npm run check:schema:source bigquery` crashes in `scripts/schemaGenerator.py::is_dest_field_dependent_on_source` with `KeyError: 'supportedSourceTypes'` when source UI fields use destination-style `preRequisites`; the source generator incorrectly assumes destination db-config shape for this field form, so this failure is a tooling incompatibility rather than evidence of a generated source-schema diff.
 
+## INT-7234 — Microsoft Fabric Icon and Schema Generator Gaps
+
+- The Microsoft Fabric destination currently omits `options.icon` because the webapp's published `@rudderlabs/icons@0.2.0` has Microsoft Clarity, SQL Server, and Teams assets but no confirmed Fabric asset. Do not invent `microsoft-fabric` or reuse `microsoft-sql-server`; coordinate an upstream Fabric icon before adding the metadata.
+
 ## INT-7247 — Rokt Rollout Metadata Confirmation
 
 - The Rokt definition currently uses the proposed hide-when-false rollout flag `AMP_enable-rokt-destination` and `options.icon: "rokt"`, following repository naming conventions and the implementation contract.

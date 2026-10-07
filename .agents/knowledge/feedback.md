@@ -91,6 +91,17 @@
 - Keep an authentication selector's help text neutral. Put WIF setup and security guidance on a WIF-only field with the same `authMethod == workloadIdentityFederation` and enabled-feature-flag prerequisites, so key-auth users never see irrelevant federation instructions.
 - Keep BigQuery WIF target-service-account validation byte-for-byte aligned between the source UI, the WIF branch of `combinedSchema`, and the `rudder-sources` runtime allow-list. The accepted runtime forms include IAM service accounts with domain-scoped projects, Compute Engine default service accounts, and App Engine service accounts.
 
+## INT-7234 — Microsoft Fabric Form Builder V2 Review Guidance
+
+- Reviewer-verified webapp behavior requires optional immutable fields that users must set during destination creation to live in `baseTemplate[0].sections[2].groups[0]` under Initial setup. Do not move such a field only to Configuration settings to silence schema generation: the create wizard omits it there and the edit view subsequently renders it read-only.
+- Form Builder V2 `singleSelect` options support per-option `featureFlag` metadata. For Microsoft Fabric sync frequency, gate the `5`, `10`, and `15` minute options with `AMP_enable-high-granularity-wh-syncs`.
+- Do not carry legacy warehouse compatibility fields `underscoreDivideNumbers` or `allowUsersContextTraits` into Microsoft Fabric's `db-config.json` `defaultConfig`, persisted schema, validation fixtures, or shared backward-compatibility registration. Its closed destination schema should reject both fields.
+- Do not model Microsoft Fabric's fixed SQL port `1433` as customer configuration: omit `port` from `config.destConfig.defaultConfig`, Form Builder UI, persisted schema, and valid fixtures, and retain negative fixture coverage showing that the closed schema rejects a submitted `port` as an additional property.
+- Default Microsoft Fabric `cleanupObjectStorageFiles` to `true` in both `ui-config.json` and `schema.json`, so successful syncs clean up staged OneLake files by default.
+- Reviewer direction superseded the earlier optional-namespace interpretation: Microsoft Fabric `namespace` is required at creation time. Mark it required in UI and schema, reject empty values with a `{1,64}` pattern, and include it in all positive validation fixtures.
+- Microsoft Fabric `host` must be a DNS-style hostname ending exactly in `.fabric.microsoft.com`. Keep the UI regex and generated schema pattern identical, and retain a negative fixture for hosts with other suffixes.
+- Keep `test/validation.test.ts` focused on framework-level and parameterized cross-destination behavior; Microsoft Fabric-specific validation belongs in `test/data/validation/destinations/microsoft_fabric.json` or another dedicated test surface, not one-off shared-suite assertions.
+
 ## INT-7247 — Rokt Endpoint Review Guidance
 
 - Reviewer guidance rejected enumerating the current mParticle regional hosts for Rokt `apiEndpoint`; accept HTTPS endpoints on `mparticle.com` and any `.mparticle.com` subdomain so future mParticle subdomains do not require a schema release.

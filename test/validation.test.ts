@@ -288,6 +288,7 @@ describe('Validation Tests', () => {
     'clickhouse',
     'deltalake',
     'gcs_datalake',
+    'microsoft_fabric',
     'mssql',
     'postgres',
     'rs',
@@ -321,7 +322,7 @@ describe('Validation Tests', () => {
     const backwardCompatibilityFlags = ['allowUsersContextTraits', 'underscoreDivideNumbers'];
     // Every destination declaring the flags, not just those with a sync frequency.
     const backwardCompatibilityDestinationNames = [
-      ...warehouseDestinationNames,
+      ...warehouseDestinationNames.filter((dest) => dest !== 'microsoft_fabric'),
       'bqstream_all_events',
       'snowpipe_streaming',
     ];

@@ -1,0 +1,31 @@
+{
+  "secretSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["clientSecret"],
+    "properties": {
+      "clientSecret": {
+        "type": "string",
+        "pattern": "^.{1,500}$",
+        "errorMessage": "Enter a client secret value between 1 and 500 characters"
+      }
+    }
+  },
+  "optionsSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["tenantId", "clientId"],
+    "properties": {
+      "tenantId": {
+        "type": "string",
+        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+        "errorMessage": "Enter a valid Microsoft Entra tenant ID"
+      },
+      "clientId": {
+        "type": "string",
+        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+        "errorMessage": "Enter a valid Microsoft Entra application (client) ID"
+      }
+    }
+  }
+}
