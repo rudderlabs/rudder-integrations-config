@@ -292,3 +292,8 @@
 
 - Microsoft Fabric workspace and Lakehouse `dynamicDataSelect` fields are presented as dropdowns. Keep their customer-facing placeholders and validation errors list-only, and do not mention pasting IDs.
 - In `accounts/microsoft_fabric_service_principal/ui-config.json`, account field notes use the established string shape. When adding the Fabric tenant-settings documentation link, keep it in the string note rather than introducing destination-style rich note arrays unless account-modal renderer support is established.
+
+## INT-7290 — Microsoft Fabric Namespace UI Copy
+
+- Keep the Microsoft Fabric `namespace` field required, immutable, and non-empty in both UI metadata and the persisted schema. Remove the misleading `Defaults to the source name.` note rather than adding redundant copy; the field's purpose-focused `labelNote` is sufficient.
+- Actual create-flow enforcement of the field's `required` and `regex` metadata belongs to `rudder-webapp`; do not weaken or otherwise change the existing backend namespace pattern to compensate for a webapp validation gap.
