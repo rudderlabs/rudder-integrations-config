@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.183.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.182.0...v1.183.0) (2026-10-06)
+
+
+### Features
+
+* **clickhouse:** add the SOURCE_CLICKHOUSE account and gate the ClickHouse rETL source ([#2777](https://github.com/rudderlabs/rudder-config-schema/issues/2777)) ([d169c65](https://github.com/rudderlabs/rudder-config-schema/commit/d169c65301242e483f4eff3347d3a092735ec449))
+
 ## [1.182.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.181.0...v1.182.0) (2026-10-06)
 
 

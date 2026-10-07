@@ -108,6 +108,13 @@
 - The Rokt definition currently uses the proposed hide-when-false rollout flag `AMP_enable-rokt-destination` and `options.icon: "rokt"`, following repository naming conventions and the implementation contract.
 - This repository cannot confirm Flagsmith flag provisioning or icon-library catalog existence. Treat both as external rollout checks; downstream icon verification owns catalog validation, and rollout owners must confirm the flag rather than silently substituting or removing it in repo-local code.
 
+## ACT2-766 — ClickHouse Fixture Copies And Account Reference Gaps
+
+<!-- session: 2026-10-01 -->
+
+- The `$comment` in `test/data/validation/accounts/clickhouse-fields.json` lists the repositories that keep copies of this file. This repository owns the file. Copies in other repositories are not verifiable from here. Before an edit, check each listed repository for a copy and its pin, and re-copy after the edit.
+- `configSchema.oneOf` in `src/configurations/sources/clickhouse/schema.json` accepts `rudderAccountId` together with other fields, except `password` and `config`. The `config` refusal keeps a nested `config` key from standing in for the account link. `configSchema.oneOf` in `src/configurations/sources/redshift/schema.json` refuses `password`, `roleARN`, `clusterIdentifier` and `region` beside `rudderAccountId`, but not `config`. Add that refusal in a follow-up change.
+
 ## RUD-3200 — BigQuery Stream Schema Generator Baseline Drift
 
 - `npm run check:schema:destination bqstream_all_events` succeeds but reports pre-existing schema drift: top-level `additionalProperties: false` and `required: ["provider"]` in consent-management item schemas are missing from the generated expectation.
