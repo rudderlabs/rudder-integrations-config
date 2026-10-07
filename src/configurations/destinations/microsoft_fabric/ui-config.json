@@ -9,7 +9,7 @@
             "groups": [
               {
                 "title": "Warehouse connection",
-                "note": "Configure the Microsoft Fabric Warehouse connection",
+                "note": "Connect to the Fabric Warehouse that RudderStack loads your data into.",
                 "icon": "settings",
                 "fields": [
                   {
@@ -20,7 +20,7 @@
                   {
                     "type": "textInput",
                     "label": "Host",
-                    "note": "Enter the complete Microsoft Fabric host ending in .fabric.microsoft.com.",
+                    "note": "Copy the SQL connection string from your Warehouse's settings in Fabric.",
                     "configKey": "host",
                     "regex": "^(?=.{1,500}$)(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\\.)+fabric\\.microsoft\\.com$",
                     "regexErrorMessage": "Enter a valid host ending in .fabric.microsoft.com",
@@ -29,8 +29,8 @@
                   },
                   {
                     "type": "textInput",
-                    "label": "Database",
-                    "note": "Enter the Fabric Warehouse database or item name used by the SQL connection.",
+                    "label": "Warehouse name",
+                    "note": "Name of the Fabric Warehouse to load data into.",
                     "configKey": "database",
                     "regex": "^.{1,200}$",
                     "regexErrorMessage": "Enter a database name",
@@ -40,20 +40,20 @@
                 ]
               },
               {
-                "title": "OneLake staging",
-                "note": "Configure the customer-owned Lakehouse used to stage Parquet load files",
+                "title": "Staging Lakehouse",
+                "note": "RudderStack temporarily stores data in a Lakehouse in your Fabric account before loading it into your Warehouse.",
                 "icon": "settings",
                 "fields": [
                   {
                     "type": "dynamicDataSelect",
-                    "label": "Workspace ID",
-                    "note": "Select the workspace containing the staging Lakehouse. The workspace region is shown when available.",
+                    "label": "Workspace",
+                    "note": "Select the workspace that contains your staging Lakehouse.",
                     "configKey": "fabricWorkspaceId",
                     "apiName": "fabricWorkspaces",
                     "apiDependencies": ["rudderAccountId"],
                     "regex": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
-                    "regexErrorMessage": "Enter a valid Microsoft Fabric workspace GUID",
-                    "placeholder": "Select or enter a workspace GUID",
+                    "regexErrorMessage": "Select a workspace from the list",
+                    "placeholder": "Select a workspace",
                     "required": true,
                     "preRequisites": {
                       "fields": [{ "configKey": "rudderAccountId", "exists": true }]
@@ -61,14 +61,14 @@
                   },
                   {
                     "type": "dynamicDataSelect",
-                    "label": "Lakehouse ID",
-                    "note": "Select the Lakehouse used for staging. It must be in the same region as the target Warehouse.",
+                    "label": "Lakehouse",
+                    "note": "Select a Lakehouse in the same region as your Warehouse.",
                     "configKey": "lakehouseId",
                     "apiName": "fabricLakehouses",
                     "apiDependencies": ["rudderAccountId", "fabricWorkspaceId"],
                     "regex": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
-                    "regexErrorMessage": "Enter a valid Microsoft Fabric Lakehouse GUID",
-                    "placeholder": "Select or enter a Lakehouse GUID",
+                    "regexErrorMessage": "Select a Lakehouse from the list",
+                    "placeholder": "Select a Lakehouse",
                     "required": true,
                     "preRequisites": {
                       "fields": [

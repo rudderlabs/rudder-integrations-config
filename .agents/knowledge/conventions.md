@@ -288,6 +288,11 @@
 - The `regex` of the `host`, `database` and `user` fields in `src/configurations/sources/clickhouse/ui-config.json` equals the matching `optionsSchema.properties.<name>.pattern` in `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json`. The `password` regex equals `secretSchema.properties.password.pattern`. Keep them identical on every change. The `port` regex has no schema twin, because the schema uses `minimum` and `maximum`. The form has no total-length bound for `host`; the schema adds it with `maxLength`.
 - The `regexErrorMessage` of `database` and `user` in `src/configurations/sources/clickhouse/ui-config.json` is "Letters, digits, underscores; no leading digit". It states the leading-digit rule (`2024_events` fails) and omits the 128-character limit of the pattern. The `errorMessage` in `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json` states the length limit. Tests in `test/validation.test.ts` pin the form texts.
 
+## INT-7291 — Microsoft Fabric Copy-Only UI Contracts
+
+- Microsoft Fabric workspace and Lakehouse `dynamicDataSelect` fields are presented as dropdowns. Keep their customer-facing placeholders and validation errors list-only, and do not mention pasting IDs.
+- In `accounts/microsoft_fabric_service_principal/ui-config.json`, account field notes use the established string shape. When adding the Fabric tenant-settings documentation link, keep it in the string note rather than introducing destination-style rich note arrays unless account-modal renderer support is established.
+
 ## INT-7290 — Microsoft Fabric Namespace UI Copy
 
 - Keep the Microsoft Fabric `namespace` field required, immutable, and non-empty in both UI metadata and the persisted schema. Remove the misleading `Defaults to the source name.` note rather than adding redundant copy; the field's purpose-focused `labelNote` is sufficient.
