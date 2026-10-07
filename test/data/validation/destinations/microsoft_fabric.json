@@ -113,7 +113,24 @@
       "lakehouseId": "87654321-4321-4321-a321-cba987654321"
     },
     "result": false,
-    "err": ["host must match pattern \"^.{1,500}$\""]
+    "err": [
+      "host must match pattern \"^(?=.{1,500}$)(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\\.)+fabric\\.microsoft\\.com$\""
+    ]
+  },
+  {
+    "testTitle": "invalid non-Fabric host suffix",
+    "config": {
+      "rudderAccountId": "account_123",
+      "host": "abc123.datawarehouse.example.com",
+      "database": "AnalyticsWarehouse",
+      "namespace": "rudder_events",
+      "fabricWorkspaceId": "12345678-1234-1234-9234-123456789abc",
+      "lakehouseId": "87654321-4321-4321-a321-cba987654321"
+    },
+    "result": false,
+    "err": [
+      "host must match pattern \"^(?=.{1,500}$)(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\\.)+fabric\\.microsoft\\.com$\""
+    ]
   },
   {
     "testTitle": "invalid fixed SQL port field",
