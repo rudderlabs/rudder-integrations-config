@@ -290,5 +290,5 @@
 
 ## INT-7291 — Microsoft Fabric Copy-Only UI Contracts
 
-- Microsoft Fabric workspace and Lakehouse `dynamicDataSelect` fields remain free-typeable: customers may select an option or paste its ID. Keep placeholders and validation errors compatible with both paths rather than using list-only wording; removing paste support would be a behavior change, not a copy edit.
+- Microsoft Fabric workspace and Lakehouse `dynamicDataSelect` fields are presented as dropdowns. Keep their customer-facing placeholders and validation errors list-only, and do not mention pasting IDs.
 - In `accounts/microsoft_fabric_service_principal/ui-config.json`, account field notes use the established string shape. When adding the Fabric tenant-settings documentation link, keep it in the string note rather than introducing destination-style rich note arrays unless account-modal renderer support is established.
