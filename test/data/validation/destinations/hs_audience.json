@@ -1,0 +1,74 @@
+[
+  {
+    "testTitle": "Valid config with rudderAccountId",
+    "config": {
+      "rudderAccountId": "acc123"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid config with rudderAccountId and connectionMode",
+    "config": {
+      "rudderAccountId": "acc123",
+      "connectionMode": {
+        "warehouse": "cloud"
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Invalid config — missing rudderAccountId",
+    "config": {},
+    "result": false,
+    "err": [" must have required property 'rudderAccountId'"]
+  },
+  {
+    "testTitle": "Invalid config — empty rudderAccountId",
+    "config": {
+      "rudderAccountId": ""
+    },
+    "result": false,
+    "err": ["rudderAccountId must match pattern \"^.{1,100}$\""]
+  },
+  {
+    "testTitle": "Invalid config — rudderAccountId wrong type",
+    "config": {
+      "rudderAccountId": 123
+    },
+    "result": false,
+    "err": ["rudderAccountId must be string"]
+  },
+  {
+    "testTitle": "Invalid config — rudderAccountId beyond 100 characters",
+    "config": {
+      "rudderAccountId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "result": false,
+    "err": ["rudderAccountId must match pattern \"^.{1,100}$\""]
+  },
+  {
+    "testTitle": "Invalid config — unsupported warehouse connection mode",
+    "config": {
+      "rudderAccountId": "acc123",
+      "connectionMode": {
+        "warehouse": "device"
+      }
+    },
+    "result": false,
+    "err": ["connectionMode.warehouse must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "Invalid config — connectionMode.warehouse wrong type",
+    "config": {
+      "rudderAccountId": "acc123",
+      "connectionMode": {
+        "warehouse": 1
+      }
+    },
+    "result": false,
+    "err": [
+      "connectionMode.warehouse must be string",
+      "connectionMode.warehouse must be equal to one of the allowed values"
+    ]
+  }
+]

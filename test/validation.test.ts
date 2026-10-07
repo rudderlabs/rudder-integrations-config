@@ -2699,3 +2699,194 @@ describe('clickhouse ui-config', () => {
     );
   });
 });
+
+const HS_AUDIENCE_GATE = {
+  gate: { flags: [{ name: 'AMP_enable-hs-audience-destination', value: false }] },
+};
+
+function expectHsAudienceGate(hidden: unknown): void {
+  expect(hidden).toEqual(HS_AUDIENCE_GATE);
+}
+
+describe('HS_AUDIENCE destination definition', () => {
+  // Read from disk: validateDestinationDefinitions uses AJV useDefaults and mutates imported
+  // modules (e.g. supportsBlankAudienceCreation), so a second validation of the cached import fails.
+  const loadDestination = () =>
+    JSON.parse(
+      fs.readFileSync(
+        path.resolve('src/configurations/destinations/hs_audience/db-config.json'),
+        'utf-8',
+      ),
+    );
+
+  it('declares HubSpot Audience capabilities, account reference, and accessToken secrets', async () => {
+    const destDefConfig = loadDestination();
+    await expect(validateDestinationDefinitions(destDefConfig)).resolves.toEqual(true);
+    expect(destDefConfig).toMatchObject({
+      name: 'HS_AUDIENCE',
+      displayName: 'HubSpot Audience',
+      version: '1.0',
+    });
+    expect(destDefConfig.config).toMatchObject({
+      supportedAccountDefinitions: {
+        rudderAccountId: ['DESTINATION_HS_AUDIENCE_API_KEY'],
+      },
+      syncBehaviours: ['mirror'],
+      supportsVisualMapperV2: true,
+      isAudienceSupported: true,
+      transformAtV1: 'router',
+      supportedSourceTypes: ['warehouse'],
+      supportedMessageTypes: { cloud: ['record'] },
+      supportedConnectionModes: { warehouse: ['cloud'] },
+      destConfig: {
+        defaultConfig: ['rudderAccountId', 'accessToken'],
+        warehouse: ['connectionMode'],
+      },
+      secretKeys: ['accessToken'],
+    });
+    expect(destDefConfig.options).toMatchObject({
+      isBeta: true,
+      icon: 'hubspot',
+    });
+  });
+
+  it('options.hidden is the temporary destination creation gate', () => {
+    expectHsAudienceGate(loadDestination().options.hidden);
+  });
+});
+
+describe('DESTINATION_HS_AUDIENCE_API_KEY account definition', () => {
+  const loadAccount = () =>
+    JSON.parse(
+      fs.readFileSync(
+        path.resolve(
+          'src/configurations/destinations/hs_audience/accounts/hs_audience_api_key/db-config.json',
+        ),
+        'utf-8',
+      ),
+    );
+
+  it('declares an api_key destination account that passes the account meta-schema', async () => {
+    const accountConfig = loadAccount();
+    await expect(validateAccountDefinitions(accountConfig)).resolves.toEqual(true);
+    expect(accountConfig).toMatchObject({
+      name: 'DESTINATION_HS_AUDIENCE_API_KEY',
+      type: 'hs_audience',
+      category: 'destination',
+      authenticationType: 'api_key',
+    });
+  });
+
+  it('has accessToken as the only secret and no option fields', () => {
+    const accountConfig = loadAccount();
+    expect(accountConfig.config.secretFields).toEqual(['accessToken']);
+    expect(accountConfig.config.optionFields).toEqual([]);
+  });
+
+  it('displayOptions.hidden matches the destination temporary gate', () => {
+    expectHsAudienceGate(loadAccount().displayOptions.hidden);
+  });
+});
+
+const hsAudienceAccountSchema = () =>
+  getAccountDefinitionSchema('hs_audience', 'hs_audience_api_key', 'destinations');
+
+describe('DESTINATION_HS_AUDIENCE_API_KEY secretSchema', () => {
+  const validateSecret = () =>
+    compileAccountSchemaWithErrorMessages(hsAudienceAccountSchema().secretSchema);
+  const messages = (validate: ValidateFunction) => (validate.errors ?? []).map((e) => e.message);
+
+  it('accepts a synthetic Service Key and a legacy private-app token shape', () => {
+    const validate = validateSecret();
+    expect(validate({ accessToken: 'synthetic-service-key' })).toBe(true);
+    expect(validate({ accessToken: 'pat-synthetic-existing-token' })).toBe(true);
+  });
+
+  it('rejects missing, empty, whitespace-only, and non-string accessToken values', () => {
+    const validate = validateSecret();
+    expect(validate({})).toBe(false);
+    expect(messages(validate)).toEqual(["must have required property 'accessToken'"]);
+    expect(validate({ accessToken: '' })).toBe(false);
+    expect(messages(validate)).toEqual(['Enter a HubSpot Service Key']);
+    expect(validate({ accessToken: '   ' })).toBe(false);
+    expect(messages(validate)).toEqual(['Enter a HubSpot Service Key']);
+    expect(validate({ accessToken: 123 })).toBe(false);
+    expect(messages(validate)).toEqual(['must be string']);
+  });
+});
+
+describe('DESTINATION_HS_AUDIENCE_API_KEY optionsSchema', () => {
+  it('accepts an empty options object and has no combinedSchema', () => {
+    const accountSchema = hsAudienceAccountSchema();
+    expect(accountSchema.combinedSchema).toBeUndefined();
+    const validate = compileAccountSchema(accountSchema.optionsSchema);
+    expect(validate({})).toBe(true);
+  });
+});
+
+describe('hs_audience account ui-config', () => {
+  const loadUiConfig = () =>
+    JSON.parse(
+      fs.readFileSync(
+        path.resolve(
+          'src/configurations/destinations/hs_audience/accounts/hs_audience_api_key/ui-config.json',
+        ),
+        'utf-8',
+      ),
+    ).uiConfig;
+
+  it('puts the account name first and the accessToken credential second as a secret', () => {
+    const fields = loadUiConfig().form.fields;
+    expect(fields.map((f: { key: unknown }) => f.key)).toEqual([
+      'name',
+      ['options', 'accessToken'],
+    ]);
+    expect(fields[1]).toMatchObject({
+      key: ['options', 'accessToken'],
+      secret: true,
+      component: 'textField',
+    });
+    expect(loadUiConfig().icon).toBe('key');
+  });
+});
+
+describe('hs_audience destination ui-config', () => {
+  const loadUiConfig = () =>
+    JSON.parse(
+      fs.readFileSync(
+        path.resolve('src/configurations/destinations/hs_audience/ui-config.json'),
+        'utf-8',
+      ),
+    ).uiConfig;
+
+  it('exposes only HubSpot account management and connection mode, with no OAuth hash or list controls', () => {
+    const ui = loadUiConfig();
+    const serialized = JSON.stringify(ui);
+    expect(ui.baseTemplate[0].sections[0].groups[0].fields).toEqual([
+      {
+        type: 'accountManagementInput',
+        label: 'HubSpot account',
+        configKey: 'rudderAccountId',
+      },
+    ]);
+    expect(ui.sdkTemplate).toEqual({
+      title: 'SDK settings',
+      note: 'not visible in the ui',
+      fields: [],
+    });
+    [
+      'audienceId',
+      'identifierMappings',
+      'hash',
+      'oauth',
+      'createList',
+      'accessToken',
+      'redirectGroups',
+    ].forEach((forbidden) => {
+      expect({ key: forbidden, present: serialized.includes(forbidden) }).toEqual({
+        key: forbidden,
+        present: false,
+      });
+    });
+  });
+});
