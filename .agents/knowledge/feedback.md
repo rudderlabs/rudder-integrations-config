@@ -116,3 +116,9 @@
 - Do not add plan ids such as `IC5` to test titles in `test/validation.test.ts`. A reader of this repository cannot resolve them. Name what the test checks.
 - Owner direction: the ClickHouse source is new and hidden by `options.hidden.gate` in `src/configurations/sources/clickhouse/db-config.json`, so rollback is turning the flag off. Do not add rollback workflows, rehearsals, staged rollback runbooks or inventories of hidden entries for this source.
 - Owner direction: the ClickHouse source supports mirror mode with record events only (`options.syncBehaviours` in `src/configurations/sources/clickhouse/db-config.json`). Do not add `full` or `upsert` behaviours. Creating this source through the webapp or the public API is out of scope for the first release.
+
+## RUD-3229 — Dynamic Data Select Schema Generation Guidance
+
+<!-- session: 2026-10-07 -->
+
+- Reviewer direction requires `scripts/schemaGenerator.py::generate_schema_for_dynamic_data_select` to emit a declared UI field `regex` as the generated schema `pattern`. Preserve backend validation through the shared generator and its component fixture rather than hand-maintaining patterns in an individual destination's `schema.json`.

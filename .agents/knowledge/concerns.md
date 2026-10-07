@@ -123,3 +123,9 @@
 
 - `npm run check:schema:destination bqstream_all_events` succeeds but reports pre-existing schema drift: top-level `additionalProperties: false` and `required: ["provider"]` in consent-management item schemas are missing from the generated expectation.
 - This drift is unrelated to removing `options.hidden` for the destination's public-beta promotion; keep it separate from visibility-only changes unless schema normalization is explicitly in scope.
+
+## RUD-3229 — Dynamic Data Select Schema Regex Preservation
+
+<!-- session: 2026-10-07 -->
+
+- Resolved during review: `scripts/schemaGenerator.py::generate_schema_for_dynamic_data_select` now carries a field's `regex` into the generated schema `pattern`, matching `textInput` behavior. Keep regexes in destination `ui-config.json` as the source of truth so both the UI and regenerated backend schema reject malformed free-typed dynamic-select values.
