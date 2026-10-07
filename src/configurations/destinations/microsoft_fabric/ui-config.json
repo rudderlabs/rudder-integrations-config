@@ -45,24 +45,38 @@
                 "icon": "settings",
                 "fields": [
                   {
-                    "type": "textInput",
+                    "type": "dynamicDataSelect",
                     "label": "Workspace ID",
-                    "note": "Enter the GUID of the workspace containing the staging Lakehouse. Display names are not supported.",
+                    "note": "Select the workspace containing the staging Lakehouse. The workspace region is shown when available.",
                     "configKey": "fabricWorkspaceId",
+                    "apiName": "fabricWorkspaces",
+                    "apiDependencies": ["rudderAccountId"],
                     "regex": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
                     "regexErrorMessage": "Enter a valid Microsoft Fabric workspace GUID",
-                    "placeholder": "e.g: 12345678-1234-1234-9234-123456789abc",
-                    "required": true
+                    "placeholder": "Select or enter a workspace GUID",
+                    "required": true,
+                    "preRequisites": {
+                      "fields": [{ "configKey": "rudderAccountId", "exists": true }]
+                    }
                   },
                   {
-                    "type": "textInput",
+                    "type": "dynamicDataSelect",
                     "label": "Lakehouse ID",
-                    "note": "Enter the GUID of the Lakehouse used for staging. The Lakehouse and target Warehouse must be in the same region.",
+                    "note": "Select the Lakehouse used for staging. It must be in the same region as the target Warehouse.",
                     "configKey": "lakehouseId",
+                    "apiName": "fabricLakehouses",
+                    "apiDependencies": ["rudderAccountId", "fabricWorkspaceId"],
                     "regex": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
                     "regexErrorMessage": "Enter a valid Microsoft Fabric Lakehouse GUID",
-                    "placeholder": "e.g: 87654321-4321-4321-a321-cba987654321",
-                    "required": true
+                    "placeholder": "Select or enter a Lakehouse GUID",
+                    "required": true,
+                    "preRequisites": {
+                      "fields": [
+                        { "configKey": "rudderAccountId", "exists": true },
+                        { "configKey": "fabricWorkspaceId", "exists": true }
+                      ],
+                      "condition": "and"
+                    }
                   }
                 ]
               }

@@ -123,3 +123,9 @@
 
 - `npm run check:schema:destination bqstream_all_events` succeeds but reports pre-existing schema drift: top-level `additionalProperties: false` and `required: ["provider"]` in consent-management item schemas are missing from the generated expectation.
 - This drift is unrelated to removing `options.hidden` for the destination's public-beta promotion; keep it separate from visibility-only changes unless schema normalization is explicitly in scope.
+
+## RUD-3229 — Dynamic Data Select Schema Asymmetry
+
+<!-- session: 2026-10-07 -->
+
+- `scripts/schemaGenerator.py::generate_schema_for_dynamic_data_select` emits only a string schema and does not carry a field's `regex` into generated destination schemas. For Microsoft Fabric, keep GUID regexes in `src/configurations/destinations/microsoft_fabric/ui-config.json` to validate free-typed dropdown values, and expect regenerated `schema.json` plus validation fixtures to accept arbitrary strings unless the shared generator is deliberately changed.
