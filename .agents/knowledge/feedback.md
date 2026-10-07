@@ -99,6 +99,7 @@
 - Do not model Microsoft Fabric's fixed SQL port `1433` as customer configuration: omit `port` from `config.destConfig.defaultConfig`, Form Builder UI, persisted schema, and valid fixtures, and retain negative fixture coverage showing that the closed schema rejects a submitted `port` as an additional property.
 - Default Microsoft Fabric `cleanupObjectStorageFiles` to `true` in both `ui-config.json` and `schema.json`, so successful syncs clean up staged OneLake files by default.
 - Reviewer direction superseded the earlier optional-namespace interpretation: Microsoft Fabric `namespace` is required at creation time. Mark it required in UI and schema, reject empty values with a `{1,64}` pattern, and include it in all positive validation fixtures.
+- Microsoft Fabric `host` must be a DNS-style hostname ending exactly in `.fabric.microsoft.com`. Keep the UI regex and generated schema pattern identical, and retain a negative fixture for hosts with other suffixes.
 - Keep `test/validation.test.ts` focused on framework-level and parameterized cross-destination behavior; Microsoft Fabric-specific validation belongs in `test/data/validation/destinations/microsoft_fabric.json` or another dedicated test surface, not one-off shared-suite assertions.
 
 ## INT-7247 — Rokt Endpoint Review Guidance
