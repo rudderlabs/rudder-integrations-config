@@ -32,6 +32,13 @@ argument-hint: <destination-name> (e.g. "amplitude" or "mixpanel")
 
 **Ask the user only:** which fields should move to the account level (secret credential fields and non-secret option fields).
 
+**Net-new destination** (arriving from `bootstrap-new-destination`): there are no existing fields
+to read, because the scaffold holds only `placeholderKey`. Ask the user for each credential field:
+its key, secret or option, required or optional, and its label, placeholder and note. Take these
+from the partner's API docs or the destination spec if one exists. Then derive the auth type and
+account names from them as above. In Steps 3–5, remove `placeholderKey` from `destConfig`,
+`ui-config.json` and `schema.json`, because `rudderAccountId` replaces it.
+
 Do NOT proceed until confirmed.
 
 ---

@@ -15,7 +15,7 @@ Bootstraps the configuration definition from `scripts/template-db-config.json` a
 - **Visual Data Mapper destination** → `vdm-next-integration`
 - **Moving an existing destination's auth onto the accounts framework** → `migrate-to-accounts-framework`
 
-A **net-new account-backed destination** starts here. Scaffold it with this skill, then follow `migrate-to-accounts-framework` Steps 2–6 for the account definition, taking the net-new branch wherever that skill offers one. Two things are easy to miss. The destination `schema.json` declares `rudderAccountId` with `"pattern": "^.{1,100}$"` (not just `required`), so an empty linked-account id is rejected. It has no `oneOf`, because there are no legacy auth fields to stay mutually exclusive with.
+A **net-new account-backed destination** starts here. Scaffold it with this skill, then follow `migrate-to-accounts-framework` Steps 1–6 for the account definition, taking the net-new branch wherever that skill offers one. Its Step 1 is where the account's credential fields are collected, since this skill deliberately gathers none. Two things are easy to miss. The destination `schema.json` declares `rudderAccountId` with `"pattern": "^.{1,100}$"` (not just `required`), so an empty linked-account id is rejected. It has no `oneOf`, because there are no legacy auth fields to stay mutually exclusive with.
 
 ## Inputs
 
