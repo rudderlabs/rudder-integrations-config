@@ -17,80 +17,45 @@ on:
         required: true
       SLACK_ALERTS_INTEGRATIONS_CHANNEL_ID:
         required: true
-      CODECOV_TOKEN:
-        required: false # report-code-coverage only runs on 'push' events, never on workflow_call
-  push:
-    branches:
-      - main
-  pull_request:
-    types:
-      - closed
-    branches:
-      - main
 
 permissions:
   contents: read
 
 jobs:
-  report-code-coverage:
-    name: Report Code Coverage
-    if: github.event_name == 'push'
-    uses: ./.github/workflows/report-code-coverage.yml
-    secrets:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
   extract-version:
     name: Extract Deployment Version
     runs-on: ubuntu-latest
-    # Only merged pull requests from release candidate branches and external workflow calls must trigger
-    if: (((startsWith(github.event.pull_request.head.ref, 'release/') || startsWith(github.event.pull_request.head.ref, 'hotfix-release/')) && github.event.pull_request.merged == true) || github.event_name == 'workflow_call')
     outputs:
-      version: ${{ steps.extract_version.outputs.version }}
-      deploy_ref: ${{ steps.resolve_ref.outputs.deploy_ref }}
+      version: ${{ steps.extract-version.outputs.version }}
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
         with:
           egress-policy: audit
 
-      - name: Resolve Deployment Ref
-        id: resolve_ref
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          DEPLOYMENT_REF: ${{ inputs.deployment_ref }}
-        run: |
-          if [[ "$EVENT_NAME" == "workflow_call" ]]; then
-            deploy_ref="$DEPLOYMENT_REF"
-          else
-            deploy_ref="main"
-          fi
-          echo "deploy_ref=$deploy_ref" >> "$GITHUB_OUTPUT"
-
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ steps.resolve_ref.outputs.deploy_ref }}
+          ref: ${{ inputs.deployment_ref }}
           fetch-depth: 1
 
       - name: Extract Package Version
-        id: extract_version
+        id: extract-version
         run: |
           version=$(jq -r .version package.json)
-          echo $version
-          echo "version=$version" >> $GITHUB_OUTPUT
+          echo "$version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
 
   deploy:
     needs: [extract-version]
     name: Deployment To Production DB
-    # Only merged pull requests from release candidate branches and external workflow calls must trigger
-    if: (((startsWith(github.event.pull_request.head.ref, 'release/') || startsWith(github.event.pull_request.head.ref, 'hotfix-release/')) && github.event.pull_request.merged == true) || github.event_name == 'workflow_call')
     uses: ./.github/workflows/deploy.yml
     with:
       environment: production
       deploy_url: https://api.rudderstack.com
       notify: true
       version: ${{ needs.extract-version.outputs.version }}
-      ref: ${{ needs.extract-version.outputs.deploy_ref }}
+      ref: ${{ inputs.deployment_ref }}
     secrets:
       API_USERNAME: ${{ secrets.PROD_USERNAME }}
       API_PASSWORD: ${{ secrets.PROD_PASSWORD }}

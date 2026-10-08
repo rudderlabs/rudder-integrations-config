@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
 ## [1.183.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.182.0...v1.183.0) (2026-10-06)
 

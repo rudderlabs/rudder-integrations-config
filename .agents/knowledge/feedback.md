@@ -122,3 +122,9 @@
 <!-- session: 2026-10-07 -->
 
 - Reviewer direction requires `scripts/schemaGenerator.py::generate_schema_for_dynamic_data_select` to emit a declared UI field `regex` as the generated schema `pattern`. Preserve backend validation through the shared generator and its component fixture rather than hand-maintaining patterns in an individual destination's `schema.json`.
+
+## INT-7268 — Staging Deployment Trigger
+
+<!-- session: 2026-10-08 -->
+
+- Reviewer direction requires `.github/workflows/deploy-to-staging.yml` to deploy staging after every push/merge to `main`, using the pushed commit SHA. Do not gate privileged staging deployments on a pull-request branch-name prefix.

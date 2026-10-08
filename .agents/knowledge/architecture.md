@@ -60,7 +60,7 @@
 
 - Deployment Slack notifications are implemented in GitHub Actions workflows rather than application code.
 - The reusable deployment workflow `.github/workflows/deploy.yml` owns the Slack notification behavior and declares workflow-call secrets `SLACK_BOT_TOKEN` and `SLACK_RELEASE_CHANNEL_ID`.
-- Caller workflows pass those Slack secrets through deployment wrappers, including `.github/workflows/deploy-to-prod.yml`, `.github/workflows/deploy-to-staging.yml`, `.github/workflows/deploy-to-dev.yml`, `.github/workflows/manual-deploy.yml`, and `.github/workflows/rollback.yml` via the production deploy wrapper.
+- Caller workflows pass those Slack secrets through deployment wrappers, including `.github/workflows/deploy-to-prod.yml`, `.github/workflows/deploy-to-staging.yml`, `.github/workflows/deploy-to-dev.yml`, and `.github/workflows/rollback.yml` via the production deploy wrapper.
 
 ## SDK-5013 — Amplitude Hand-Authored Config Triplet
 
@@ -87,8 +87,8 @@
 
 ## AI-1339 — Release Draft Actor Gate Boundary
 
-- `.github/workflows/draft-new-release.yml` should not depend on the reusable `.github/workflows/validate-actor.yml` gate; release draft triggering relies on GitHub `workflow_dispatch` permissions and downstream release PR approval rather than team-name validation.
-- Keep `.github/workflows/validate-actor.yml` available even when draft release no longer uses it, because other workflows such as `create-hotfix-branch.yml` and rollback paths may still reference that reusable actor-validation workflow.
+- The legacy manual draft-release and hotfix workflows were removed when releases moved to release-please on `main`.
+- Keep `.github/workflows/validate-actor.yml` available because `rollback.yml` still uses it to authorize production rollbacks.
 
 ## SDK-5265 — CleverTap Android Kotlin Device-Mode Contract
 
