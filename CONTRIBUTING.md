@@ -37,7 +37,7 @@ release-please maintains a standing `chore: release X.Y.Z` pull request. Before 
 
 Hotfixes follow the same path: merge an ordinary `fix:` pull request to `main`, then merge the updated release pull request.
 
-For rollback, dispatch the rollback workflow from the known-good `vX.Y.Z` tag (or from `main` when explicitly intended). The manual deployment workflow accepts non-dry-run production deployments only from `main` or an existing semantic-version `v*` tag; use dry run first when verifying a deployment ref.
+For rollback, dispatch the rollback workflow from the known-good `vX.Y.Z` tag (or from `main` when explicitly intended).
 
 ## UI Configuration Development Requirements
 

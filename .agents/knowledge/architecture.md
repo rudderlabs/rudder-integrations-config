@@ -60,7 +60,7 @@
 
 - Deployment Slack notifications are implemented in GitHub Actions workflows rather than application code.
 - The reusable deployment workflow `.github/workflows/deploy.yml` owns the Slack notification behavior and declares workflow-call secrets `SLACK_BOT_TOKEN` and `SLACK_RELEASE_CHANNEL_ID`.
-- Caller workflows pass those Slack secrets through deployment wrappers, including `.github/workflows/deploy-to-prod.yml`, `.github/workflows/deploy-to-staging.yml`, `.github/workflows/deploy-to-dev.yml`, `.github/workflows/manual-deploy.yml`, and `.github/workflows/rollback.yml` via the production deploy wrapper.
+- Caller workflows pass those Slack secrets through deployment wrappers, including `.github/workflows/deploy-to-prod.yml`, `.github/workflows/deploy-to-staging.yml`, `.github/workflows/deploy-to-dev.yml`, and `.github/workflows/rollback.yml` via the production deploy wrapper.
 
 ## SDK-5013 — Amplitude Hand-Authored Config Triplet
 
