@@ -1,16 +1,12 @@
 name: Deploy Configurations To Staging DB
 
 on:
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
+  push:
     branches:
       - main
 
 concurrency:
-  group: deploy-staging-${{ github.event.pull_request.number }}
+  group: deploy-staging
   cancel-in-progress: false
 
 permissions:
@@ -19,13 +15,11 @@ permissions:
 jobs:
   deploy:
     name: Deployment To Staging DB
-    # Only release-please pull requests deploy to staging.
-    if: startsWith(github.event.pull_request.head.ref, 'release-please--')
     uses: ./.github/workflows/deploy.yml
     with:
       environment: staging
       deploy_url: https://api.staging.rudderlabs.com
-      ref: ${{ github.event.pull_request.head.sha }}
+      ref: ${{ github.sha }}
     secrets:
       API_USERNAME: ${{ secrets.STAGING_USERNAME }}
       API_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
