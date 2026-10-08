@@ -52,8 +52,8 @@
 
 ## INT-6593 — Deployment Slack Notification Gates
 
-- In `.github/workflows/deploy.yml`, release-channel success Slack messages remain opt-in: they are gated by `inputs.notify == true && inputs.dry_run == false`.
-- Deployment failure alerts are intentionally broader: the failure alert gate is `failure() && inputs.dry_run == false` and does not include `inputs.notify`, so internal responders are notified for every real deployment failure.
+- In `.github/workflows/deploy.yml`, release-channel success Slack messages remain opt-in: they are gated by `inputs.notify == true`.
+- Deployment failure alerts are intentionally broader: the failure alert gate is `failure()` and does not include `inputs.notify`, so internal responders are notified for every real deployment failure.
 - Dry runs should suppress both success and failure Slack notifications; real deployment failures should notify internal channels even when optional release notifications are disabled.
 
 ## SDK-5013 — Amplitude Browser SDK Version Gating
@@ -104,3 +104,8 @@
 - `test/data/validation/accounts/clickhouse-fields.json` is the owner copy of the ClickHouse account field cases (65 cases over `host`, `name` and `password`). `test/validation.test.ts` runs every case through AJV against `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json`. Host, name and password cases check `verdict`. The regex screen is an extra check, not the only one. Change a ClickHouse field rule by first changing the fixture case, then the schema.
 - `test/data/validation/sources/clickhouse.json` holds 12 source compatibility fixtures. Fixture 12, "Account reference with a nested config object", pins the refusal of a nested `config` key beside `rudderAccountId`. Add a new fixture for a new rule. Do not edit an existing one.
 - Every new ClickHouse product rule needs a test in `test/validation.test.ts` that fails when the rule is removed. This holds for the rules in `src/configurations/sources/clickhouse/db-config.json`, `src/configurations/sources/clickhouse/schema.json`, `src/configurations/sources/clickhouse/ui-config.json` and `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json`.
+
+## RUD-3229 — Account-Backed Dynamic Select Dependencies
+
+- For account-backed `dynamicDataSelect` fields in destination `ui-config.json`, include `rudderAccountId` in both `apiDependencies` and `preRequisites.fields`; this refetches options after account changes and hides the field until account context exists.
+- A dependent dynamic select must include every upstream input consumed by its integrations-info request in both lists. Microsoft Fabric lakehouses therefore depend on both `rudderAccountId` and `fabricWorkspaceId`, so changing either refetches options and the field remains hidden until both are available.
