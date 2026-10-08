@@ -113,3 +113,12 @@
 - Rokt is account-backed under `src/configurations/destinations/rokt/`, with API credentials and the mParticle Events API endpoint defined under `accounts/rokt_api_key/`.
 - Later review superseded both the fixed four-host allowlist and the generic arbitrary-host shape: `apiEndpoint` accepts HTTPS endpoints whose hostname is exactly `mparticle.com` or a subdomain ending in `.mparticle.com`, keeping future mParticle subdomains forward-compatible without permitting unrelated domains.
 - Endpoint validation rejects lookalike/non-mParticle domains, userinfo, query strings, fragments, ports, and paths; at most one trailing slash is permitted.
+
+## ACT2-766 — ClickHouse Reverse ETL Source Behind A Flag
+
+<!-- session: 2026-10-01 -->
+
+- The ClickHouse reverse ETL source is two definitions: the source in `src/configurations/sources/clickhouse/` and the account in `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/`. `src/configurations/sources/clickhouse/db-config.json` links the account through `config.supportedAccountDefinitions.rudderAccountId: ["SOURCE_CLICKHOUSE"]`. Credentials belong in the account. The source stores a `rudderAccountId` reference. `src/configurations/sources/clickhouse/schema.json` still accepts a configuration without an account reference.
+- Both definitions hide behind the flag `AMP_enable-clickhouse-retl-source`. `src/configurations/sources/clickhouse/db-config.json` declares it at `options.hidden.gate`. `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/db-config.json` declares it at `displayOptions.hidden.gate`. Keep both gates on the same flag name.
+- `src/configurations/sources/clickhouse/db-config.json` sets `options.syncBehaviours` to `["mirror"]` and sets `options.isSqlModelSupported`, `options.isAudienceSupported` and `options.isDataGraphSupported` to `false`.
+- The current form fields in `src/configurations/sources/clickhouse/ui-config.json` (`uiConfig[].fields[].value`) are `host`, `port`, `database`, `user` and `password`. The sync keeps its working tables in a `_rudderstack` database the customer creates (owner decision D33), so the form has no field for it. The form has no `secure`, `skipVerify` or `caCertificate` input.

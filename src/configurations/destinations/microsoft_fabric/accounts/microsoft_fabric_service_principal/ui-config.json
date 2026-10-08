@@ -1,0 +1,41 @@
+{
+  "uiConfig": {
+    "name": "Service Principal",
+    "icon": "key",
+    "description": "Connect using a Microsoft Entra app registration (service principal).",
+    "recommended": true,
+    "form": {
+      "title": "Connect your Microsoft Fabric account",
+      "fields": [
+        {
+          "component": "textField",
+          "label": "Account name",
+          "placeholder": "e.g: Microsoft Fabric production",
+          "key": "name"
+        },
+        {
+          "component": "textField",
+          "label": "Tenant ID",
+          "placeholder": "e.g: 12345678-1234-1234-9234-123456789abc",
+          "key": ["options", "tenantId"],
+          "note": "Find this on your app's Overview page in Microsoft Entra. Your Fabric admin must allow service principals to use Fabric APIs. See the setup docs: https://learn.microsoft.com/en-us/fabric/admin/service-admin-portal-developer#service-principals-can-use-fabric-apis"
+        },
+        {
+          "component": "textField",
+          "label": "Client ID",
+          "placeholder": "e.g: 12345678-1234-1234-9234-123456789abc",
+          "key": ["options", "clientId"],
+          "note": "Find this on your app's Overview page in Microsoft Entra. The app needs Contributor access (or higher) to the workspaces that contain your Warehouse and Lakehouse."
+        },
+        {
+          "component": "textField",
+          "label": "Client Secret",
+          "placeholder": "Enter the service principal client secret",
+          "key": ["options", "clientSecret"],
+          "secret": true,
+          "note": "Paste the secret's Value, not its Secret ID."
+        }
+      ]
+    }
+  }
+}

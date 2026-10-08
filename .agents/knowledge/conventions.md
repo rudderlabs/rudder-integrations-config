@@ -255,6 +255,12 @@
 - A NEW definition must set `options.icon` to an icon that exists in Figma / `@rudderlabs/icons` — add the artwork to the Figma library first (component name = icon name). rudder-icons' `make check` fails on a definition without `options.icon` (allowlist aside) and on an `options.icon` naming a missing icon; renaming or removing an icon is a breaking change there.
 - Adding keys under `options` is safe for downstream readers (verified 2026-09-29): rudder-api `/v2/definitions/*` whitelists fields and never forwards `options` (rudder-control-plane `apps/rudder-api/src/services/definitions.ts` @ 1f60d07d92), config-backend stores/returns `options` as an untyped JSON column (rudder-config-backend `src/entities/destinationDefinition.ts:186` @ 181599a729), rudder-server decodes with lenient `encoding/json` (no `DisallowUnknownFields`, `backend-config/types.go` @ 52d2b551c0).
 
+## INT-7234 — Microsoft Fabric Destination Configuration Contract
+
+- Use the cross-repository definition identity `MICROSOFT_FABRIC` and the integrations-config directory `src/configurations/destinations/microsoft_fabric/`; changing either independently would break registration alignment with rudder-server.
+- Microsoft Fabric `namespace` is required and immutable. Keep it in `baseTemplate[0].sections[2].groups[0]` under Initial setup so customers can supply it during creation; set the UI field `required: true`, include it in the schema required list, and reject empty values with a `{1,64}` pattern. Placing it only under Configuration settings makes it read-only before it can ever be authored.
+- Expose the standard warehouse sync-frequency values `5`, `10`, `15`, `30`, `60`, `180`, `360`, `720`, and `1440` in the Microsoft Fabric Form Builder V2 selector. Add `featureFlag: AMP_enable-high-granularity-wh-syncs` to the `5`, `10`, and `15` minute options so destination enablement does not bypass the separate high-granularity rollout gate.
+
 ## RUD-3197 — OpenAI Ads Ungated Beta Visibility
 
 - OpenAI Ads is universally visible but remains beta-badged: keep `src/configurations/destinations/openai_ads/db-config.json` `options.isBeta: true` and `options.icon: "openai"`, while omitting `options.hidden` entirely.
@@ -269,3 +275,25 @@
 
 - OpenAI Ads is generally available: keep `src/configurations/destinations/openai_ads/db-config.json` without `options.isBeta` and without `options.hidden`, while retaining `options.icon: "openai"` so the required non-empty `options` object remains valid.
 - This supersedes the RUD-3197 beta-badge state. Represent GA by omitting `isBeta`, not by setting it to `false`.
+
+## ACT2-766 — SOURCE_CLICKHOUSE Account Schema Rules
+
+<!-- session: 2026-10-01 -->
+
+- `optionsSchema.properties.host.maxLength` (253) in `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json` is the only `maxLength` under `src/configurations/`. `CONVENTIONS.md` records it as the one exception, with a grep that expects `1`. A pattern cannot hold the 253-character total, because the patterns must stay RE2-safe and RE2 has no lookahead. Do not add other `maxLength` keys on the strength of this exception.
+- `optionsSchema.properties.secure` is `const: true` and `optionsSchema.properties.skipVerify` is `const: false` in `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json`. The product supports verified HTTPS only. Do not relax them to plain booleans. Do not add a `secure` checkbox or a CA certificate field to `src/configurations/sources/clickhouse/ui-config.json`.
+- `optionsSchema.properties.host.pattern` in `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json` accepts private and loopback addresses. `10.0.0.5`, `127.0.0.1` and `localhost` pass in `test/data/validation/accounts/clickhouse-fields.json`. Do not add private-range or IP-literal refusals to the catalog schema.
+- `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json` sets no `additionalProperties: false` on `optionsSchema` or `secretSchema`. Undeclared options and secrets stay valid. Tests in `test/validation.test.ts` ("the options schema accepts and keeps undeclared options", "the secret schema accepts and keeps an undeclared secret") pin this.
+- Patterns in `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json` and `src/configurations/sources/clickhouse/ui-config.json` must avoid lookaround, `\s` and `\p{}`, because ECMA-262 and Go RE2 read them differently. `test/validation.test.ts` screens the account schema string patterns with `RE2_UNSAFE_PATTERN`. Separate tests pin the UI string patterns and the port regex. The account schema, `src/configurations/sources/clickhouse/ui-config.json` and `test/data/validation/accounts/clickhouse-fields.json` must stay ASCII-only (`expectAsciiOnly`). Write non-ASCII characters in patterns and inputs as JSON `\u` escapes.
+- The `regex` of the `host`, `database` and `user` fields in `src/configurations/sources/clickhouse/ui-config.json` equals the matching `optionsSchema.properties.<name>.pattern` in `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json`. The `password` regex equals `secretSchema.properties.password.pattern`. Keep them identical on every change. The `port` regex has no schema twin, because the schema uses `minimum` and `maximum`. The form has no total-length bound for `host`; the schema adds it with `maxLength`.
+- The `regexErrorMessage` of `database` and `user` in `src/configurations/sources/clickhouse/ui-config.json` is "Letters, digits, underscores; no leading digit". It states the leading-digit rule (`2024_events` fails) and omits the 128-character limit of the pattern. The `errorMessage` in `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json` states the length limit. Tests in `test/validation.test.ts` pin the form texts.
+
+## INT-7291 — Microsoft Fabric Copy-Only UI Contracts
+
+- Microsoft Fabric workspace and Lakehouse `dynamicDataSelect` fields are presented as dropdowns. Keep their customer-facing placeholders and validation errors list-only, and do not mention pasting IDs.
+- In `accounts/microsoft_fabric_service_principal/ui-config.json`, account field notes use the established string shape. When adding the Fabric tenant-settings documentation link, keep it in the string note rather than introducing destination-style rich note arrays unless account-modal renderer support is established.
+
+## INT-7290 — Microsoft Fabric Namespace UI Copy
+
+- Keep the Microsoft Fabric `namespace` field required, immutable, and non-empty in both UI metadata and the persisted schema. Remove the misleading `Defaults to the source name.` note rather than adding redundant copy; the field's purpose-focused `labelNote` is sufficient.
+- Actual create-flow enforcement of the field's `required` and `regex` metadata belongs to `rudder-webapp`; do not weaken or otherwise change the existing backend namespace pattern to compensate for a webapp validation gap.

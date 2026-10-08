@@ -305,7 +305,10 @@ def generate_schema_for_dynamic_data_select(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    return {"type": FieldTypeEnum.STRING.value}
+    dynamicDataSelectSchemaObj = {"type": FieldTypeEnum.STRING.value}
+    if "regex" in field:
+        dynamicDataSelectSchemaObj["pattern"] = generalize_regex_pattern(field)
+    return dynamicDataSelectSchemaObj
 
 
 def generate_schema_for_account_management_input(field, dbConfig, schema_field_name):

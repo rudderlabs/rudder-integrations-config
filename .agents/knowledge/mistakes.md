@@ -58,3 +58,11 @@
 
 - Symlinking a `.claude/worktrees/<name>` worktree's `node_modules` to the main checkout's made `test/validation.test.ts` and `test/validator/validator.test.ts` fail to load with "Cannot find module 'ajv-keywords' from 'src/validator/index.ts'" (2 of 4 suites), which looks like broken code but is a stale main install.
 - Corrective rule: in a worktree run `npm ci --ignore-scripts` inside the worktree (all 4 suites then pass), then `npx husky install` before committing — with `--ignore-scripts` the `.husky/_/husky.sh` shim is missing and `git commit` fails at `.husky/pre-commit` line 2. Do not bypass the hook with `--no-verify`.
+
+## ACT2-766 — ClickHouse Schema Check And Local Test Traps
+
+<!-- session: 2026-10-01 -->
+
+- `npm run check:schema:source clickhouse` prints nothing and exits 0, which looks like "form and schema agree". `EXCLUDED_DEST` in `scripts/schemaGenerator.py` lists `clickhouse`, and `get_schema_diff` skips excluded names for sources too. The exit code proves nothing. Verify the hand-written ClickHouse source schema with `test/data/validation/sources/clickhouse.json`. Do not rely on the generator for this source.
+- The ClickHouse tests do more than check regex syntax. `clickHouseFieldCases` in `test/validation.test.ts` runs the shared field fixture through AJV against `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json`. `RE2_UNSAFE_PATTERN` is an additional syntax screen.
+- A pre-commit full Jest run that times out is a failed run, not a pass. Rerun the ClickHouse tests with `npx jest test/validation.test.ts --testTimeout=60000`, or the full suite with `--maxWorkers=2 --testTimeout=120000`, and judge the result from the rerun.
