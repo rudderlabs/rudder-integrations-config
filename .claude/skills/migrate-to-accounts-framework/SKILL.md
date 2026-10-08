@@ -106,7 +106,8 @@ the rest.
 
 The `oneOf` in **(b)** below exists because a _migration_ must keep configs valid that still carry
 the legacy destination-level auth fields. A net-new account-backed destination has no legacy
-fields: it declares `rudderAccountId` and no `oneOf` at all.
+fields: it declares `rudderAccountId` with no `oneOf` at all, and adds it to the top-level
+`"required"` array. Without the `oneOf`, nothing else makes the account link mandatory.
 
 **a)** Add `rudderAccountId` to `properties`:
 
