@@ -129,3 +129,7 @@
 <!-- session: 2026-10-07 -->
 
 - Resolved during review: `scripts/schemaGenerator.py::generate_schema_for_dynamic_data_select` now carries a field's `regex` into the generated schema `pattern`, matching `textInput` behavior. Keep regexes in destination `ui-config.json` as the source of truth so both the UI and regenerated backend schema reject malformed free-typed dynamic-select values.
+
+## RUD-3252 — Transformer Receiver Sequencing
+
+- Do not merge the integrations-config dispatcher until rudder-transformer's receiver is live and its `repository_dispatch.types` value is verified byte-for-byte as `regenerate-secret-path-manifest`; dispatches fail visibly while the receiver is absent or mismatched.
