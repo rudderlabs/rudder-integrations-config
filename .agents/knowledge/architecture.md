@@ -122,3 +122,8 @@
 - Both definitions hide behind the flag `AMP_enable-clickhouse-retl-source`. `src/configurations/sources/clickhouse/db-config.json` declares it at `options.hidden.gate`. `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/db-config.json` declares it at `displayOptions.hidden.gate`. Keep both gates on the same flag name.
 - `src/configurations/sources/clickhouse/db-config.json` sets `options.syncBehaviours` to `["mirror"]` and sets `options.isSqlModelSupported`, `options.isAudienceSupported` and `options.isDataGraphSupported` to `false`.
 - The current form fields in `src/configurations/sources/clickhouse/ui-config.json` (`uiConfig[].fields[].value`) are `host`, `port`, `database`, `user` and `password`. The sync keeps its working tables in a `_rudderstack` database the customer creates (owner decision D33), so the form has no field for it. The form has no `secure`, `skipVerify` or `caCertificate` input.
+
+## SecretKeys Synchronization Boundary
+
+- Secret-key change detection compares only canonical root files at `src/configurations/destinations/<destination>/db-config.json`. Nested account definitions are excluded because their secrets are mirrored into root `config.secretKeys`, and archived `versions/*/db-config.json` files belong to a separate deploy-payload contract.
+- Secret-path manifest derivation is owned by rudder-transformer.

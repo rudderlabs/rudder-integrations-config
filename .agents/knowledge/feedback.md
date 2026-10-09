@@ -128,3 +128,7 @@
 <!-- session: 2026-10-08 -->
 
 - Reviewer direction requires `.github/workflows/deploy-to-staging.yml` to deploy staging after every push/merge to `main`, using the pushed commit SHA. Do not gate privileged staging deployments on a pull-request branch-name prefix.
+
+## RUD-3252 — Knowledge Ledger Durability
+
+- Keep `.agents/knowledge/*.md` focused on durable repository rules under topic-based headings; omit temporary rollout or merge-sequencing instructions, and avoid duplicating exact workflow identifiers whose authoritative source is the workflow itself.
