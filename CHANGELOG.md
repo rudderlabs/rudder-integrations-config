@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.184.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.183.0...v1.184.0) (2026-10-09)
+
+
+### Features
+
+* **microsoft-fabric:** add dynamic staging selectors ([#2799](https://github.com/rudderlabs/rudder-integrations-config/issues/2799)) ([ce71096](https://github.com/rudderlabs/rudder-integrations-config/commit/ce710960ec2f84f75216c964fc40926de41bd25d))
+* **microsoft-fabric:** add warehouse destination definition ([#2774](https://github.com/rudderlabs/rudder-integrations-config/issues/2774)) ([aaef750](https://github.com/rudderlabs/rudder-integrations-config/commit/aaef750bdcc35c612809d0df1217f3c677629e79))
+
+
+### Bug Fixes
+
+* **hubspot:** mention service keys in access token help ([#2805](https://github.com/rudderlabs/rudder-integrations-config/issues/2805)) ([c098a15](https://github.com/rudderlabs/rudder-integrations-config/commit/c098a156d5a46913c3aaa00edd5cb50121283267))
+* improve Microsoft Fabric setup copy ([#2800](https://github.com/rudderlabs/rudder-integrations-config/issues/2800)) ([ad90dc1](https://github.com/rudderlabs/rudder-integrations-config/commit/ad90dc190e69a9ba2c925ae59086e3f67e29b006))
+* **microsoft-fabric:** remove misleading namespace default note ([#2801](https://github.com/rudderlabs/rudder-integrations-config/issues/2801)) ([bf866cc](https://github.com/rudderlabs/rudder-integrations-config/commit/bf866cc8191eef3ab01dc9fef9988ea7c621efaa))
+* **rokt:** allow safe API endpoint path prefixes ([#2808](https://github.com/rudderlabs/rudder-integrations-config/issues/2808)) ([a1ebbc7](https://github.com/rudderlabs/rudder-integrations-config/commit/a1ebbc783903e60e9d3e51b60aad545abeb8809b))
+
+
+### Miscellaneous
+
+* dispatch secret path sync on secretKeys changes ([#2804](https://github.com/rudderlabs/rudder-integrations-config/issues/2804)) ([18653de](https://github.com/rudderlabs/rudder-integrations-config/commit/18653dec7bd05ff7486955d477956d2ce98e6fed))
+* merge develop to main ([#2802](https://github.com/rudderlabs/rudder-integrations-config/issues/2802)) ([b96b348](https://github.com/rudderlabs/rudder-integrations-config/commit/b96b348e7d15f96bfe71205aedfac1ddb958eebc))
+* migrate releases to release-please on main ([#2794](https://github.com/rudderlabs/rudder-integrations-config/issues/2794)) ([c998cb9](https://github.com/rudderlabs/rudder-integrations-config/commit/c998cb956b10589dcde53f6996d0578340766539))
+* **release:** pull main into develop post release v1.183.0 ([#2797](https://github.com/rudderlabs/rudder-integrations-config/issues/2797)) ([4277012](https://github.com/rudderlabs/rudder-integrations-config/commit/42770121dda4344cd2624750fdc954a64aeec050))
+
+
+### Documentation
+
+* pin partner-owned endpoints and route net-new account destinations ([#2795](https://github.com/rudderlabs/rudder-integrations-config/issues/2795)) ([3b9c14c](https://github.com/rudderlabs/rudder-integrations-config/commit/3b9c14c1e7fe3b22fc45fade68c3c4585e266050))
+
 ## [1.183.0](https://github.com/rudderlabs/rudder-config-schema/compare/v1.182.0...v1.183.0) (2026-10-06)
 
 
