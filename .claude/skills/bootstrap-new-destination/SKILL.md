@@ -13,7 +13,9 @@ argument-hint: '<Display Name>'
 Bootstraps the configuration definition from `scripts/template-db-config.json` and `scripts/template-ui-config.json`. Handles **strictly cloud, strictly device, hybrid, or warehouse** destinations. Not for:
 
 - **Visual Data Mapper destination** → `vdm-next-integration`
-- **Account-framework auth** → `migrate-to-accounts-framework`
+- **Moving an existing destination's auth onto the accounts framework** → `migrate-to-accounts-framework`
+
+A **net-new account-backed destination** starts here. Scaffold it with this skill, then follow `migrate-to-accounts-framework` Steps 1–6 for the account definition, taking the net-new branch wherever that skill offers one. Its Step 1 is where the account's credential fields are collected, since this skill deliberately gathers none. Two things are easy to miss. The destination `schema.json` declares `rudderAccountId` with `"pattern": "^.{1,100}$"` (not just `required`), so an empty linked-account id is rejected. It has no `oneOf`, because there are no legacy auth fields to stay mutually exclusive with.
 
 ## Inputs
 
@@ -217,7 +219,7 @@ A `configSchema` (JSON Schema draft-07) whose `required`/`properties` mirror the
 
 ### 4. Test data — `test/data/validation/destinations/<dir>.json`
 
-A JSON array of cases run against `schema.json`. The placeholder scaffold (no required fields) just needs `[{ "config": {}, "result": true }]`. As real fields are added, cover a valid config, a missing-required case, and an invalid-pattern case. `err` strings must match AJV output **exactly**.
+A JSON array of cases run against `schema.json`. The placeholder scaffold (no required fields) just needs `[{ "config": {}, "result": true }]`. As real fields are added, cover a valid config, a missing-required case, and an invalid-pattern case. `err` strings must match AJV output **exactly**. Every destination-specific case goes in this file. Don't add the destination's own `describe` / `it` blocks to `test/validation.test.ts`, which is the generic harness that runs these fixtures.
 
 ```json
 [
