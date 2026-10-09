@@ -302,3 +302,8 @@
 
 - HubSpot Service Keys are an alternate bearer credential supplied through the existing `accessToken` field. Supporting them in integrations-config requires only helper-copy changes in `src/configurations/destinations/hs/ui-config.json`; keep the field's `configKey`, placeholder, regex, and `secret: true` metadata unchanged.
 - Do not change the HubSpot destination's `schema.json` or `db-config.json` for Service Keys: their generic access-token validation and secret-handling contracts already support both private app tokens and service keys.
+
+## RUD-3256 — Rokt Endpoint Path Compatibility
+
+- Rokt account `apiEndpoint` accepts the `mparticle.com` apex or its subdomains with an optional path prefix, but path segments must reject exact `.` and `..` values so the account schema cannot admit traversal-like endpoints that the transformer rejects. Preserve config/runtime validation parity when changing this contract.
+- Keep Rokt's existing subdomain-label compatibility class `[a-zA-Z0-9-]{1,63}` when adjusting the endpoint path pattern. Tightening leading or trailing hyphens is a separate persisted-config compatibility change, not part of optional-path support; the hostname must still remain anchored to the apex or subdomains of `mparticle.com`.
