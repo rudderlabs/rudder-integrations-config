@@ -1041,6 +1041,45 @@ describe('Account Definition validation tests', () => {
     });
   });
 
+  it('DESTINATION_ROKT optionsSchema accepts only safe mParticle API base URLs', () => {
+    const accountSchema = getAccountDefinitionSchema('rokt', 'rokt_api_key', 'destinations');
+    const validateOptions = compileAccountSchema(accountSchema.optionsSchema);
+    const options = (apiEndpoint: string) => ({
+      apiEndpoint,
+      serverToServerKey: 'synthetic-key',
+    });
+
+    [
+      'https://inbound.mparticle.com/s2s',
+      'https://inbound.mparticle.com/s2s/',
+      'https://inbound.mparticle.com/s2s/feed-v1_~.x',
+      'https://s2s.mparticle.com',
+      'https://mparticle.com',
+      'https://mparticle.com/',
+    ].forEach((apiEndpoint) => {
+      expect(validateOptions(options(apiEndpoint))).toBe(true);
+    });
+
+    [
+      'http://s2s.mparticle.com',
+      'https://evilmparticle.com',
+      'https://inbound.mparticle.com/.',
+      'https://inbound.mparticle.com/..',
+      'https://inbound.mparticle.com/../etc',
+      'https://inbound.mparticle.com/s2s/./events',
+      'https://inbound.mparticle.com/s2s/../events',
+      'https://inbound.mparticle.com//s2s',
+      'https://inbound.mparticle.com/s2s%2f..',
+      'https://s2s.mparticle.com.attacker.example',
+      'https://user@s2s.mparticle.com',
+      'https://s2s.mparticle.com:8443',
+      'https://s2s.mparticle.com?redirect=1',
+      'https://s2s.mparticle.com#fragment',
+    ].forEach((apiEndpoint) => {
+      expect(validateOptions(options(apiEndpoint))).toBe(false);
+    });
+  });
+
   // The `combinedSchema` if/then/else is the only thing binding an auth branch to the
   // credential it needs: the standalone `secretSchema` of these warehouse source accounts
   // accepts any object, and `scripts/validate_account_definitions.py` only walks
