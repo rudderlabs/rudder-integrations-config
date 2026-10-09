@@ -35,7 +35,7 @@ Gather everything else with explicit **`AskUserQuestion` forms, in this order**.
 
 **Form 2 — Category** (single-select): `warehouse` | `other`.
 
-- `warehouse` → set top-level `"category": "warehouse"`; every source type is `cloud` mode, so **skip Forms 3–4**. Example: `postgres`/`bq` — copy wholesale (distinct shape, excluded from schema generation).
+- `warehouse` → set top-level `"category": "warehouse"`; every source type is `cloud` mode, so **skip Forms 3–4**. Example: `microsoft_fabric` for the form structure, `postgres`/`bq` for the shared warehouse settings — **not** a wholesale copy; see [Warehouse destinations](#warehouse-destinations).
 - `other` → no `category` field. Example: `active_campaign`.
 
 **Form 3 — Connection topology** (single-select, pre-emptive shortcut): **pure cloud** (every source type is cloud mode) or **heterogeneous** (connection mode varies by source type). Auto-set to pure cloud when category = `warehouse` — skip this form.
@@ -96,9 +96,8 @@ Copy the template, then:
   - **Warehouse** — change it to `processor`. All 11 `category: "warehouse"` destinations are `processor`
     with no exceptions, and it isn't a style choice: a warehouse destination's transformer entry point
     (`src/v0/destinations/<dir>/transform.js` in rudder-transformer) exports only `process()` and delegates
-    to `processWarehouseMessage` — there is no `routerTransform` for the router path to call. Copying
-    `postgres`/`bq` per the warehouse step below gives you this; just don't carry the template's `router`
-    over it.
+    to `processWarehouseMessage` — there is no `routerTransform` for the router path to call. Don't carry
+    the template's `router` over it.
 - `saveDestinationResponse` stays `true` (template default) — 222 of 247 destinations are `true`. It controls
   one thing: rudder-server blanks the destination's response body on **successful** deliveries when it is
   `false` (`router/worker.go`, `prepareRouterJobResponses`); failure bodies are always kept either way. So
@@ -107,7 +106,8 @@ Copy the template, then:
   tracking pixel (`ga`, `gtm`, `firebase`, `pinterest_tag` are all `false` for this reason; the flag was
   introduced in 2021 precisely because GA's GIF response broke the DB write), or an arbitrary customer
   endpoint (`webhook`).
-- If category (Form 2) = `warehouse`: add top-level `"category": "warehouse"` (sibling of `name`), set `transformAtV1` to `processor` (above), and copy `postgres`/`bq` wholesale.
+- If category (Form 2) = `warehouse`: add top-level `"category": "warehouse"` (sibling of `name`), set `transformAtV1` to `processor` (above), and follow [Warehouse destinations](#warehouse-destinations).
+- `options.icon` — set it to the destination's kebab-case icon name from the RudderStack Integration Icons Figma library (published as `@rudderlabs/icons`). The template's `options` carries only `isBeta`, so this is easy to miss — and every definition but `test_destination` has one. The icon must already exist upstream: rudder-icons' check fails on a definition with no `options.icon` and on one naming a missing icon. If it doesn't exist yet, say so and get the artwork added — don't borrow a neighbouring brand's icon or invent a name.
 - `supportedSourceTypes` ← Form 1.
 - `destConfig.defaultConfig` = `["placeholderKey"]` — a neutral placeholder field (also added to ui-config and schema, below) so the scaffold validates (`defaultConfig` can't be empty per the meta-schema). Replace it with the real config keys as fields are added.
 - For **each** source type in `supportedSourceTypes`, add a `destConfig.<sourceType>` array containing at least `["connectionMode", "consentManagement"]`.
@@ -153,7 +153,7 @@ Strictly-cloud skeleton (all source types in cloud mode):
     },
     "secretKeys": []
   },
-  "options": { "isBeta": true }
+  "options": { "isBeta": true, "icon": "acme-crm" }
 }
 ```
 
@@ -177,7 +177,7 @@ When real fields are introduced, replace it — add each to the "Connection sett
 
 A destination whose whole configuration is a linked account and two connection fields ends up with very little on page 2. Two opposite mistakes follow:
 
-- **Don't add sections the template doesn't ship.** Its `baseTemplate` is exactly two blocks — "Initial setup" (groups "Connection settings" and "Connection mode") and "Configuration settings" (section "Destination settings" → group "Configure settings"). An extra section carrying an empty `groups` array renders as a heading with nothing under it. Add one when you have fields for it, not in anticipation.
+- **Don't add sections the template doesn't ship.** Its `baseTemplate` is exactly two blocks — "Initial setup" (groups "Connection settings" and "Connection mode") and "Configuration settings" (section "Destination settings" → group "Configure settings"). An extra section carrying an empty `groups` array renders as a heading with nothing under it. Add one when you have fields for it, not in anticipation. The one section you **must** add when it has a field: an `immutable` field goes in a third "Initial setup" section, `baseTemplate[0].sections[2].groups[0]` — the create wizard renders immutable fields from nowhere else, so placed in any other group the field is skipped on create and locked read-only on edit, and the customer can never set it.
 - **Don't delete the consent surface to tidy up.** An empty "Configuration settings" block is the normal shape for an account-backed cloud-only destination. `consentSettingsTemplate`, the schema `consentManagement` property, and a `destConfig.<sourceType>` entry per supported source type stay regardless — test-enforced, and it throws rather than failing cleanly: [CONVENTIONS.md](../../../CONVENTIONS.md#where-a-field-goes-in-destconfig-defaultconfig-vs-a-source-type).
 
 **Event mapping is not one of these fields.** If the destination maps RudderStack event names onto the partner's own event vocabulary, it goes in its own top-level block holding a single `redirect`, with the mapping declared under `redirectGroups` as `type: "mapping"` — not as a `dynamicCustomForm` in the settings groups above. Copy the shape from [CONVENTIONS.md](../../../CONVENTIONS.md#event-name-mapping).
@@ -216,10 +216,21 @@ A `configSchema` (JSON Schema draft-07) whose `required`/`properties` mirror the
 - **A value valid in one connection mode but not another** (e.g. the partner's browser SDK supports fewer events than its server API) goes in `schema.json` as an `allOf` / `if` / `then` block keyed on `connectionMode.<sourceType>`, with `ajv-errors` `errorMessage`s on **both** the `then` and the `if` so the customer sees a readable reason and no raw schema failure. Don't add a second mode-specific config field for it, and don't push the rule into the transformer or the SDK. Full shape: [CONVENTIONS.md](../../../CONVENTIONS.md#restricting-a-field-by-connection-mode).
 - **A customer-chosen dedupe/event-id field** is named `deduplicationKey` — see [CONVENTIONS.md](../../../CONVENTIONS.md#deduplication--event-id-config-key-deduplicationkey).
 - **An event mapping's property is hand-written.** `scripts/schemaGenerator.py` never walks `redirectGroups`, so the mapping you declared in step 2 generates no schema at all — author the array property yourself and keep it in step with the columns. Nothing warns you if the two drift, and `update:schema:destination:force` deletes the block outright. [CONVENTIONS.md](../../../CONVENTIONS.md#the-schema-entry-is-hand-maintained).
+- **If regenerating drops a constraint the UI enforces, fix the generator — don't accept the weaker schema.** When a field's ui-config `regex` produces no schema `pattern` (a field type whose generator branch ignores `regex`), the value goes unvalidated on any API save. Don't loosen the fixtures to match and don't hand-patch `schema.json` past the drift check: fix the generator branch in `scripts/schemaGenerator.py`, add generator test coverage, and regenerate. That is the opposite of editing `scripts/` to get a destination _past_ a check — it makes the check stricter for every destination of that field type.
+
+### Warehouse destinations
+
+`category: "warehouse"` definitions don't follow the steps above field by field, and none of the existing ones is a clean copy source:
+
+- **Structure: copy from `microsoft_fabric`.** It is the only warehouse on Form Builder V2 (`baseTemplate`), which is what `scripts/template-ui-config.json` produces. The other warehouses (`postgres`, `bq`, `snowflake`, …) are legacy array-shaped ui-configs, and `postgres`/`bq` are in the schema generator's `EXCLUDED_DEST`, so their `schema.json` is hand-maintained — don't copy either property onto a new destination. Translate their fields with the `migrate-destination-to-form-builder-v2` skill's field-mapping reference.
+- **Settings: take the shared warehouse settings (sync schedule, object-storage options, …) from `postgres`/`bq`, not their whole `defaultConfig`.** Leave out the legacy `underscoreDivideNumbers` and `allowUsersContextTraits` keys — they exist only for backward compatibility on existing warehouses and a new definition must not accept them. Equally, don't copy a connection field just because another warehouse exposes it: a value the provider fixes (a port, a host suffix) is a constraint in `regex`/`pattern`, or not a customer setting at all.
+- **Sync frequency:** the 5-, 10- and 15-minute options each carry `"featureFlag": "AMP_enable-high-granularity-wh-syncs"` on the option itself. The v2 `singleSelect` filters options on it; don't drop it, and don't move it to `preRequisites.featureFlags` (that hides the whole selector).
+- **`namespace` and any other `immutable` field** goes in `baseTemplate[0].sections[2].groups[0]` — see step 2.
+- **Tests:** add the destination to the shared `warehouseDestinationNames` list in `test/validation.test.ts` (that is the parameterised warehouse coverage) and put everything destination-specific in its fixture file (step 4).
 
 ### 4. Test data — `test/data/validation/destinations/<dir>.json`
 
-A JSON array of cases run against `schema.json`. The placeholder scaffold (no required fields) just needs `[{ "config": {}, "result": true }]`. As real fields are added, cover a valid config, a missing-required case, and an invalid-pattern case. `err` strings must match AJV output **exactly**. Every destination-specific case goes in this file. Don't add the destination's own `describe` / `it` blocks to `test/validation.test.ts`, which is the generic harness that runs these fixtures.
+A JSON array of cases run against `schema.json`. The placeholder scaffold (no required fields) just needs `[{ "config": {}, "result": true }]`. As real fields are added, cover a valid config, a missing-required case, and an invalid-pattern case. `err` strings must match AJV output **exactly**. Every destination-specific case goes in this file. Don't add the destination's own `describe` / `it` blocks to `test/validation.test.ts`, which is the generic harness that runs these fixtures — this holds even when a review bot asks for "UI assertions" on the destination's ui-config. Registering the destination in an existing shared, parameterised list there (e.g. `warehouseDestinationNames`) is fine.
 
 ```json
 [
@@ -247,13 +258,16 @@ Prettier matches repo style (lint-staged runs it on commit). Jest runs the defin
 - [ ] Every secret field is in `secretKeys` **and** has `secret: true` in ui-config.
 - [ ] Mode wired consistently across `supportedConnectionModes`, `supportedMessageTypes`, `includeKeys`, `sdkTemplate` (cloud-only: `includeKeys`/`excludeKeys` deleted).
 - [ ] `uiConfig.sdkTemplate` is **present** (never deleted), with `fields: []` if cloud-only.
-- [ ] `consentSettingsTemplate`, the schema `consentManagement` property, and a `destConfig.<sourceType>` entry containing `consentManagement` exist for **every** `supportedSourceTypes` entry; no `baseTemplate` section was added beyond the template's two blocks.
+- [ ] `consentSettingsTemplate`, the schema `consentManagement` property, and a `destConfig.<sourceType>` entry containing `consentManagement` exist for **every** `supportedSourceTypes` entry; no `baseTemplate` section was added beyond the template's two blocks, other than the Initial setup immutable-fields section when the destination has an immutable field.
 - [ ] Every string field has an explicit `regex`; no `regex`/`pattern` carries the deprecated prefix or a redundant lookahead.
 - [ ] No `pattern` has a sibling `maxLength`/`minLength` — the length bound lives in the expression.
 - [ ] Any event mapping is a `type: "mapping"` under `redirectGroups`, reached from its own `hideEditIcon: true` block holding only a `redirect` — no `dynamicCustomForm` mapping in the settings groups, and its `schema.json` property is written by hand.
 - [ ] Every `"required": false` field matches `""` — in both the ui-config `regex` and the schema `pattern`.
 - [ ] `supportedSourceTypes` claims only what this destination genuinely accepts — `warehouse` only if it is rETL-capable.
-- [ ] No file under `scripts/` was modified to get this destination through a check.
+- [ ] `options.icon` names an icon that exists in `@rudderlabs/icons` — not borrowed from another brand, not invented.
+- [ ] Every `immutable` field sits in `baseTemplate[0].sections[2].groups[0]`.
+- [ ] Warehouse only: Form Builder V2 structure (not a copied legacy ui-config); no `underscoreDivideNumbers` / `allowUsersContextTraits`; the 5/10/15-minute sync options keep their per-option `featureFlag`; listed in `warehouseDestinationNames`.
+- [ ] No file under `scripts/` was modified to get this destination _past_ a check. A generator fix that restores a dropped constraint is the exception, and ships with generator tests.
 - [ ] No `oneTrustCookieCategories` / `ketchConsentPurposes` anywhere.
 - [ ] `npx jest test/validation.test.ts` is green.
 
