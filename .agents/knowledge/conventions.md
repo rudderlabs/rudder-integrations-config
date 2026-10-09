@@ -297,3 +297,8 @@
 
 - Keep the Microsoft Fabric `namespace` field required, immutable, and non-empty in both UI metadata and the persisted schema. Remove the misleading `Defaults to the source name.` note rather than adding redundant copy; the field's purpose-focused `labelNote` is sufficient.
 - Actual create-flow enforcement of the field's `required` and `regex` metadata belongs to `rudder-webapp`; do not weaken or otherwise change the existing backend namespace pattern to compensate for a webapp validation gap.
+
+## RUD-3255 — HubSpot Service Key Credential Compatibility
+
+- HubSpot Service Keys are an alternate bearer credential supplied through the existing `accessToken` field. Supporting them in integrations-config requires only helper-copy changes in `src/configurations/destinations/hs/ui-config.json`; keep the field's `configKey`, placeholder, regex, and `secret: true` metadata unchanged.
+- Do not change the HubSpot destination's `schema.json` or `db-config.json` for Service Keys: their generic access-token validation and secret-handling contracts already support both private app tokens and service keys.
