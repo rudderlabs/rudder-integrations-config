@@ -1,0 +1,37 @@
+[
+  {
+    "config": { "appCode": "ABCDE-12345", "apiToken": "aBcD1234eFgH5678iJkL9012mNoP3456qRsT7890" },
+    "result": true
+  },
+  {
+    "config": { "apiToken": "aBcD1234eFgH5678iJkL9012mNoP3456qRsT7890" },
+    "result": false,
+    "err": [" must have required property 'appCode'"]
+  },
+  {
+    "config": { "appCode": "ABCDE-12345" },
+    "result": false,
+    "err": [" must have required property 'apiToken'"]
+  },
+  {
+    "config": { "appCode": "32a20_3b261", "apiToken": "aBcD1234eFgH5678iJkL9012mNoP3456qRsT7890" },
+    "result": false,
+    "err": ["appCode must match pattern \"^[A-Z0-9]{5}-[A-Z0-9]{5}$\""]
+  },
+  {
+    "config": { "appCode": "ABCDE-12345", "apiToken": "short-token" },
+    "result": false,
+    "err": ["apiToken must match pattern \"^[A-Za-z0-9]{20,100}$\""]
+  },
+  {
+    "config": {
+      "appCode": "ABCDE-12345",
+      "apiToken": "aBcD1234eFgH5678iJkL9012mNoP3456qRsT7890",
+      "connectionMode": { "web": "cloud", "cloud": "cloud" },
+      "consentManagement": {
+        "web": [{ "provider": "oneTrust", "consents": [{ "consent": "C0001" }] }]
+      }
+    },
+    "result": true
+  }
+]

@@ -1,0 +1,157 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Update your connection settings here",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Application Code",
+                    "configKey": "appCode",
+                    "regex": "^[A-Z0-9]{5}-[A-Z0-9]{5}$",
+                    "regexErrorMessage": "Enter a code such as 12345-ABCDE",
+                    "placeholder": "e.g: ABCDE-12345",
+                    "note": "Find it in Pushwoosh Control Panel next to your project name"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "API Token",
+                    "configKey": "apiToken",
+                    "regex": "^[A-Za-z0-9]{20,100}$",
+                    "regexErrorMessage": "Use 20 to 100 letters and numbers",
+                    "placeholder": "e.g: aBcD1234...",
+                    "secret": true,
+                    "note": "Generate it in Pushwoosh Control Panel \u2192 Settings \u2192 API Access, with Device API access"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Configure settings",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "iubenda",
+                  "value": "iubenda"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category IDs",
+              "note": "Input your consent category IDs by pressing 'Enter' after each entry. We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "regex": "^(.{0,100})$",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ],
+          "uniqueRowFields": ["provider"]
+        }
+      ]
+    }
+  }
+}
