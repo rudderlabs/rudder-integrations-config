@@ -132,3 +132,9 @@
 ## RUD-3252 — Knowledge Ledger Durability
 
 - Keep `.agents/knowledge/*.md` focused on durable repository rules under topic-based headings; omit temporary rollout or merge-sequencing instructions, and avoid duplicating exact workflow identifiers whose authoritative source is the workflow itself.
+
+## INT-7258 — GARL Account Picker Review Guidance
+
+<!-- session: 2026-10-12 -->
+
+- In `src/configurations/destinations/google_adwords_remarketing_lists/ui-config.json`, gate the hierarchy `nestedSelect` with `AMP_enable-google-ads-customer-picker` value `true`, but omit `value` from the same flag prerequisite on the legacy `customerId`, `subAccount`, and `loginCustomerId` controls. The webapp treats omitted `value` as falsy or missing; explicit `value: false` does not match a missing flag and can hide every Customer ID control when the flag is unavailable.
