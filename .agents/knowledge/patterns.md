@@ -109,3 +109,7 @@
 
 - For account-backed `dynamicDataSelect` fields in destination `ui-config.json`, include `rudderAccountId` in both `apiDependencies` and `preRequisites.fields`; this refetches options after account changes and hides the field until account context exists.
 - A dependent dynamic select must include every upstream input consumed by its integrations-info request in both lists. Microsoft Fabric lakehouses therefore depend on both `rudderAccountId` and `fabricWorkspaceId`, so changing either refetches options and the field remains hidden until both are available.
+
+## INT-7258 — Idempotent Required Fields for Flagged Replacements
+
+- Form Builder V2 schema generation must add Initial setup required keys idempotently. Mutually exclusive required UI fields may intentionally share one `configKey`—for example, a feature-flagged `nestedSelect` replacing a legacy picker—and must produce only one entry in the generated schema's `required` array.

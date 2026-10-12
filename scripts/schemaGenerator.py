@@ -1388,7 +1388,8 @@ def generate_schema_properties(
                                     or field.get("required")
                                 )
                             ):
-                                schemaObject["required"].append(field["configKey"])
+                                if field["configKey"] not in schemaObject["required"]:
+                                    schemaObject["required"].append(field["configKey"])
 
             for field in sdkTemplate.get("fields", []):
                 generateFunction = uiTypetoSchemaFn.get(field["type"], None)

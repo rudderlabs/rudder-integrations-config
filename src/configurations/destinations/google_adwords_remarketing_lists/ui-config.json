@@ -18,6 +18,29 @@
                     "configKey": "rudderAccountId"
                   },
                   {
+                    "type": "nestedSelect",
+                    "label": "Customer ID",
+                    "configKey": "customerId",
+                    "apiName": "getConfigData",
+                    "apiDependencies": ["rudderAccountId"],
+                    "allowNonLeafSelection": true,
+                    "required": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "rudderAccountId",
+                          "exists": true
+                        }
+                      ],
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-google-ads-customer-picker",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
                     "type": "dynamicDataSelect",
                     "label": "Customer ID",
                     "note": "Select the Customer ID of your Google remarketing list",
@@ -33,6 +56,11 @@
                         {
                           "configKey": "rudderAccountId",
                           "exists": true
+                        }
+                      ],
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-google-ads-customer-picker"
                         }
                       ]
                     }
@@ -58,7 +86,15 @@
                     "type": "checkbox",
                     "label": "Sub Account",
                     "configKey": "subAccount",
-                    "default": false
+                    "default": false,
+                    "required": true,
+                    "preRequisites": {
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-google-ads-customer-picker"
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "textInput",
@@ -72,6 +108,11 @@
                         {
                           "configKey": "subAccount",
                           "value": true
+                        }
+                      ],
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-google-ads-customer-picker"
                         }
                       ]
                     }

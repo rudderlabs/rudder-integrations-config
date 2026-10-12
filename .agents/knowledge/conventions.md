@@ -307,3 +307,8 @@
 
 - Rokt account `apiEndpoint` accepts the `mparticle.com` apex or its subdomains with an optional path prefix, but path segments must reject exact `.` and `..` values so the account schema cannot admit traversal-like endpoints that the transformer rejects. Preserve config/runtime validation parity when changing this contract.
 - Keep Rokt's existing subdomain-label compatibility class `[a-zA-Z0-9-]{1,63}` when adjusting the endpoint path pattern. Tightening leading or trailing hyphens is a separate persisted-config compatibility change, not part of optional-path support; the hostname must still remain anchored to the apex or subdomains of `mparticle.com`.
+
+## INT-7258 — GARL Account Picker Exclusivity
+
+- In Google Ads Remarketing Lists, the feature-flagged hierarchy picker and all three legacy account controls are mutually exclusive UI variants because they write the same persisted `customerId`, `subAccount`, and `loginCustomerId` keys. Gate the hierarchy `nestedSelect` on `AMP_enable-google-ads-customer-picker: true` and inverse-gate the legacy `customerId`, `subAccount`, and `loginCustomerId` controls on the same flag being false.
+- Preserve the legacy controls' existing field prerequisites and metadata inside their inverse gate; hiding only the old customer picker can leave duplicate controls that conflict with the hierarchy picker's patches.

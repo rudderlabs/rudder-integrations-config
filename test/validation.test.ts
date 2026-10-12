@@ -378,6 +378,91 @@ describe('Validation Tests', () => {
   });
 });
 
+describe('Google Ads Remarketing Lists account picker configuration', () => {
+  const destinationPath = path.resolve(
+    'src/configurations/destinations/google_adwords_remarketing_lists',
+  );
+  const uiConfig = JSON.parse(
+    fs.readFileSync(path.join(destinationPath, 'ui-config.json'), 'utf-8'),
+  );
+  const dbConfig = JSON.parse(
+    fs.readFileSync(path.join(destinationPath, 'db-config.json'), 'utf-8'),
+  );
+  const connectionFields = uiConfig.uiConfig.baseTemplate[0].sections[0].groups[0].fields;
+  const customerFields = connectionFields.filter(
+    (field: { configKey: string }) => field.configKey === 'customerId',
+  );
+  const fieldByConfigKey = Object.fromEntries(
+    connectionFields.map((field: { configKey: string }) => [field.configKey, field]),
+  );
+  const featureFlag = 'AMP_enable-google-ads-customer-picker';
+
+  it('uses mutually exclusive hierarchy and flat customer account pickers', () => {
+    expect(customerFields).toHaveLength(2);
+    expect(customerFields.find((field: { type: string }) => field.type === 'nestedSelect')).toEqual(
+      {
+        type: 'nestedSelect',
+        label: 'Customer ID',
+        configKey: 'customerId',
+        apiName: 'getConfigData',
+        apiDependencies: ['rudderAccountId'],
+        allowNonLeafSelection: true,
+        required: true,
+        preRequisites: {
+          fields: [{ configKey: 'rudderAccountId', exists: true }],
+          featureFlags: [{ configKey: featureFlag, value: true }],
+        },
+      },
+    );
+    expect(
+      customerFields.find((field: { apiName: string }) => field.apiName === 'customerAccounts'),
+    ).toEqual({
+      type: 'dynamicDataSelect',
+      label: 'Customer ID',
+      note: 'Select the Customer ID of your Google remarketing list',
+      configKey: 'customerId',
+      apiName: 'customerAccounts',
+      required: true,
+      apiDependencies: ['rudderAccountId'],
+      placeholder: 'Select customer account',
+      regex: '(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$',
+      regexErrorMessage: 'Invalid Customer ID',
+      preRequisites: {
+        fields: [{ configKey: 'rudderAccountId', exists: true }],
+        featureFlags: [{ configKey: featureFlag }],
+      },
+    });
+  });
+
+  it('inverse-gates the manual account controls while preserving login prerequisites', () => {
+    expect(fieldByConfigKey.subAccount.required).toBe(true);
+    expect(fieldByConfigKey.subAccount.preRequisites).toEqual({
+      featureFlags: [{ configKey: featureFlag }],
+    });
+    expect(fieldByConfigKey.loginCustomerId.preRequisites).toEqual({
+      fields: [{ configKey: 'subAccount', value: true }],
+      featureFlags: [{ configKey: featureFlag }],
+    });
+  });
+
+  it('keeps cloud audience and VDM list selection contracts unchanged', () => {
+    expect(fieldByConfigKey.audienceId).toMatchObject({
+      type: 'textInput',
+      configKey: 'audienceId',
+      preRequisites: {
+        fields: [{ configKey: 'connectionMode.cloud', value: 'cloud' }],
+      },
+    });
+    expect(fieldByConfigKey.audienceId.apiName).toBeUndefined();
+    expect(JSON.stringify(uiConfig)).not.toContain('getRemarketingLists');
+    expect(dbConfig.options.destinationFeatures.vdmLabels).toEqual({
+      newAudienceAlternateLabel: 'Create New List',
+      existingAudienceAlternateLabel: 'Use Existing List',
+      audienceAlternateLabel: 'List Id',
+    });
+  });
+});
+
 describe('Destination Definition validation tests', () => {
   dests.forEach((dest) => {
     it(`${dest} - destination definition test`, async () => {
