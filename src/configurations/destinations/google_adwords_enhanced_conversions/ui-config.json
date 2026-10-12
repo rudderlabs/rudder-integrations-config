@@ -18,19 +18,59 @@
                     "configKey": "rudderAccountId"
                   },
                   {
+                    "type": "nestedSelect",
+                    "label": "Customer ID",
+                    "configKey": "customerId",
+                    "apiName": "getConfigData",
+                    "apiDependencies": ["rudderAccountId"],
+                    "allowNonLeafSelection": true,
+                    "required": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "rudderAccountId",
+                          "exists": true
+                        }
+                      ],
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-google-ads-customer-picker",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
                     "type": "textInput",
                     "label": "Customer ID",
                     "note": "Enter the Customer ID",
                     "configKey": "customerId",
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid Customer Id",
-                    "placeholder": "e.g: 9693XX9833"
+                    "placeholder": "e.g: 9693XX9833",
+                    "preRequisites": {
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-google-ads-customer-picker",
+                          "value": false
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "checkbox",
                     "label": "Sub Account",
                     "configKey": "subAccount",
-                    "default": false
+                    "default": false,
+                    "required": true,
+                    "preRequisites": {
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-google-ads-customer-picker",
+                          "value": false
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "textInput",
@@ -44,6 +84,12 @@
                         {
                           "configKey": "subAccount",
                           "value": true
+                        }
+                      ],
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-google-ads-customer-picker",
+                          "value": false
                         }
                       ]
                     }
@@ -93,7 +139,48 @@
                       {
                         "conversions": ""
                       }
-                    ]
+                    ],
+                    "preRequisites": {
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-google-ads-customer-picker",
+                          "value": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "dynamicMultiSelect",
+                    "label": "List of Conversion",
+                    "note": "Select your conversion names",
+                    "configKey": "listOfConversions",
+                    "mode": "multiple",
+                    "valueObjectKey": "conversions",
+                    "apiName": "getConversionId",
+                    "apiDependencies": [
+                      "rudderAccountId",
+                      "customerId",
+                      "subAccount",
+                      "loginCustomerId"
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "rudderAccountId",
+                          "exists": true
+                        },
+                        {
+                          "configKey": "customerId",
+                          "exists": true
+                        }
+                      ],
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-google-ads-customer-picker",
+                          "value": true
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "checkbox",
