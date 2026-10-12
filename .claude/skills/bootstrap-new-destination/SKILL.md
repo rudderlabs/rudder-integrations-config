@@ -90,14 +90,12 @@ Copy the template, then:
 - `transformAtV1` depends on category (Form 2). The template default is `router`, which is right for
   everything except warehouse:
   - **Non-warehouse** (cloud / device / hybrid) — keep `router`. Every destination added since 2025 is
-    `router`, and a new cloud destination's transform lives in `routerTransform.ts` on the transformer's
-    batching framework, which only runs on the router path. `processor` is a legacy setting — 121
-    non-warehouse destinations carry it, none of them new. Don't pick it for a net-new destination.
-  - **Warehouse** — change it to `processor`. All 11 `category: "warehouse"` destinations are `processor`
-    with no exceptions, and it isn't a style choice: a warehouse destination's transformer entry point
-    (`src/v0/destinations/<dir>/transform.js` in rudder-transformer) exports only `process()` and delegates
-    to `processWarehouseMessage` — there is no `routerTransform` for the router path to call. Don't carry
-    the template's `router` over it.
+    `router`, and the transformer's batching framework that new cloud destinations are built on only runs
+    on the router path. `processor` is a legacy setting — 121 non-warehouse destinations carry it, none of
+    them new. Don't pick it for a net-new destination.
+  - **Warehouse** — change it to `processor`. All `category: "warehouse"` destinations are `processor`
+    with no exceptions, and it isn't a style choice: the transformer handles warehouse destinations on the
+    processor path only, with no router transform to call. Don't carry the template's `router` over it.
 - `saveDestinationResponse` stays `true` (template default) — 222 of 247 destinations are `true`. It controls
   one thing: rudder-server blanks the destination's response body on **successful** deliveries when it is
   `false` (`router/worker.go`, `prepareRouterJobResponses`); failure bodies are always kept either way. So
@@ -107,7 +105,7 @@ Copy the template, then:
   introduced in 2021 precisely because GA's GIF response broke the DB write), or an arbitrary customer
   endpoint (`webhook`).
 - If category (Form 2) = `warehouse`: add top-level `"category": "warehouse"` (sibling of `name`), set `transformAtV1` to `processor` (above), and follow [Warehouse destinations](#warehouse-destinations).
-- `options.icon` — set it to the destination's kebab-case icon name from the RudderStack Integration Icons Figma library (published as `@rudderlabs/icons`). The template's `options` carries only `isBeta`, so this is easy to miss — and every definition but `test_destination` has one. The icon must already exist upstream: rudder-icons' check fails on a definition with no `options.icon` and on one naming a missing icon. If it doesn't exist yet, say so and get the artwork added — don't borrow a neighbouring brand's icon or invent a name.
+- `options.icon` — set it to the destination's kebab-case icon name from the RudderStack Integration Icons Figma library (published as `@rudderlabs/icons`). The template's `options` carries only `isBeta`, so this is easy to miss — and every definition but `test_destination` has one. Use the destination's own brand — don't borrow a neighbouring brand's icon.
 - `supportedSourceTypes` ← Form 1.
 - `destConfig.defaultConfig` = `["placeholderKey"]` — a neutral placeholder field (also added to ui-config and schema, below) so the scaffold validates (`defaultConfig` can't be empty per the meta-schema). Replace it with the real config keys as fields are added.
 - For **each** source type in `supportedSourceTypes`, add a `destConfig.<sourceType>` array containing at least `["connectionMode", "consentManagement"]`.
@@ -264,7 +262,7 @@ Prettier matches repo style (lint-staged runs it on commit). Jest runs the defin
 - [ ] Any event mapping is a `type: "mapping"` under `redirectGroups`, reached from its own `hideEditIcon: true` block holding only a `redirect` — no `dynamicCustomForm` mapping in the settings groups, and its `schema.json` property is written by hand.
 - [ ] Every `"required": false` field matches `""` — in both the ui-config `regex` and the schema `pattern`.
 - [ ] `supportedSourceTypes` claims only what this destination genuinely accepts — `warehouse` only if it is rETL-capable.
-- [ ] `options.icon` names an icon that exists in `@rudderlabs/icons` — not borrowed from another brand, not invented.
+- [ ] `options.icon` is set to the destination's own kebab-case icon name — not borrowed from another brand.
 - [ ] Every `immutable` field sits in `baseTemplate[0].sections[2].groups[0]`.
 - [ ] Warehouse only: Form Builder V2 structure (not a copied legacy ui-config); no `underscoreDivideNumbers` / `allowUsersContextTraits`; the 5/10/15-minute sync options keep their per-option `featureFlag`; listed in `warehouseDestinationNames`.
 - [ ] No file under `scripts/` was modified to get this destination _past_ a check. A generator fix that restores a dropped constraint is the exception, and ships with generator tests.
