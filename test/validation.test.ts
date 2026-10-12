@@ -403,11 +403,13 @@ describe('Google Ads Remarketing Lists account picker configuration', () => {
       {
         type: 'nestedSelect',
         label: 'Customer ID',
+        note: 'Select a manager account or descendant account. Selecting the top-level account clears the login customer ID; selecting a descendant uses the top-level account as the login customer ID',
         configKey: 'customerId',
         apiName: 'getConfigData',
         apiDependencies: ['rudderAccountId'],
         allowNonLeafSelection: true,
         required: true,
+        placeholder: 'Select customer account',
         preRequisites: {
           fields: [{ configKey: 'rudderAccountId', exists: true }],
           featureFlags: [{ configKey: featureFlag, value: true }],
