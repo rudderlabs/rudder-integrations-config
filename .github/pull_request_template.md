@@ -16,6 +16,16 @@ Runtime dependency: none / `<repo>#<PR>`, released in `vX.Y.Z`, rolled out ☐
 
 Config changes that depend on transformer, rudder-server, integrations-info, rudder-auth, webapp, or another runtime must not merge until the dependency is fully rolled out to production in every region. Apply the `blocked: dependency-rollout` label until rollout is complete.
 
+### Customer-facing docs
+
+Customer-facing docs: none / `<docs PR link>` / `DOCS-<id>`
+
+Any change that alters what a customer sees or configures — destination settings,
+supported API versions, defaults, field mappings, validation or error behaviour —
+needs a matching update to the customer-facing documentation. Link the docs PR or
+DOCS ticket above, or state `none` with a one-line reason. In-repo docs
+(`README.md`, `docs/*.md`) are not customer-facing and do not satisfy this.
+
 ### Any changes to existing capabilities/behaviour, mention the reason & what are the changes ?
 
 N/A
@@ -36,11 +46,11 @@ N/A
 
 - [ ] **No breaking changes are being introduced.**
 
-- [ ] All related docs linked with the PR?
+- [ ] Customer-facing docs impact declared above (docs PR / DOCS ticket / none)?
 
 - [ ] All changes manually tested?
 
-- [ ] Any documentation changes needed with this change?
+- [ ] In-repo docs (README, docs/*) updated if needed?
 
 - [ ] I have executed schemaGenerator tests and updated schema if needed
 
