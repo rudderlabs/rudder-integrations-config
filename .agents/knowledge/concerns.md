@@ -129,3 +129,8 @@
 <!-- session: 2026-10-07 -->
 
 - Resolved during review: `scripts/schemaGenerator.py::generate_schema_for_dynamic_data_select` now carries a field's `regex` into the generated schema `pattern`, matching `textInput` behavior. Keep regexes in destination `ui-config.json` as the source of truth so both the UI and regenerated backend schema reject malformed free-typed dynamic-select values.
+
+## INT-7257 — GAEC Schema Generator Baseline Drift
+
+- `npm run check:schema:destination google_adwords_enhanced_conversions` exits successfully but reports pre-existing drift that would remove `required: ["provider"]` from each consent-management source's row schema; the same warning occurs against the unchanged baseline and should remain separate from scoped GAEC picker work.
+- The schema generator has no handlers for `nestedSelect` or `dynamicMultiSelect` and emits informational `No schema generator function found` messages for those field types. Do not interpret those messages as evidence that their persisted schema contracts were generated or validated.
