@@ -307,3 +307,9 @@
 
 - Rokt account `apiEndpoint` accepts the `mparticle.com` apex or its subdomains with an optional path prefix, but path segments must reject exact `.` and `..` values so the account schema cannot admit traversal-like endpoints that the transformer rejects. Preserve config/runtime validation parity when changing this contract.
 - Keep Rokt's existing subdomain-label compatibility class `[a-zA-Z0-9-]{1,63}` when adjusting the endpoint path pattern. Tightening leading or trailing hyphens is a separate persisted-config compatibility change, not part of optional-path support; the hostname must still remain anchored to the apex or subdomains of `mparticle.com`.
+
+## RUD-3296 — Rokt Endpoint Ownership
+
+- RUD-3296 supersedes the RUD-3256 endpoint-path guidance: do not add `apiEndpoint` to Rokt account `optionFields`, account `optionsSchema`, account UI fields, or destination `config.destConfig.defaultConfig`.
+- Rokt account metadata should expose only `serverToServerKey` as an option field and `serverToServerSecret` as a secret field; stale stored `options.apiEndpoint` values are not an integrations-config authoring contract.
+- Endpoint host/path validation for Rokt should not be hand-maintained in this repository because the transformer owns the fixed mParticle Events API base URL `https://inbound.mparticle.com/s2s`.
