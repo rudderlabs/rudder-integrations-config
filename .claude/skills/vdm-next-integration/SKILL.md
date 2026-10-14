@@ -113,3 +113,5 @@ script or hook does, so run it locally rather than waiting for the build.
 - `supportedMessageTypes` must be `{ cloud: ["record"] }`
 - Account definition name format: `DESTINATION_{DEST_NAME_UPPER}_{AUTH_TYPE_UPPER}`
 - For OAuth: the `rudder-auth` repo must have a matching passport strategy and refresh token implementation
+- `options.icon` is required on a new definition and must name an icon that exists in `@rudderlabs/icons` — see [bootstrap-new-destination](../bootstrap-new-destination/SKILL.md#1-db-configjson--from-scriptstemplate-db-configjson) for this and the beta `options.hidden.gate`
+- `supportsVisualMapper` and `supportsVisualMapperV2: true` are mutually exclusive — the meta-schema's `config.allOf` rejects the combination (along with `supportsBlankAudienceCreation`); any new `config` key needs its property in `src/schemas/destinations/db-config-schema.json` first

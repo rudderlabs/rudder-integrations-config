@@ -203,6 +203,12 @@ Apply the attribute renames and per-type mapping from the runbook (`value`→`co
 
 Every field needs a real `label` and a crisp `note`. For `regex` on every field and what an optional field's regex must accept, follow [String `pattern` / `regex`](../../../CONVENTIONS.md#string-pattern-and-regex) and [Optional fields must accept the empty string](../../../CONVENTIONS.md#optional-fields-must-accept-the-empty-string) — do not copy a regex from a neighbouring destination, most of the tree predates those rules.
 
+**The migration changes the container, not the persisted contract.** Keep every existing `configKey`, and keep an existing field's regex/pattern even when it carries the deprecated `{{ }}` / `env.` prefix — saved configs hold templated values, so narrowing it is a separate compatibility change with its own review. The CONVENTIONS pattern rules apply to fields the migration _adds_. Likewise, don't add a visible field for an orphan schema/db-config key that had no v1 UI.
+
+- A field that is **immutable** but must be set at creation goes in the `baseTemplate[0].sections[2].groups[0]` slot. Under `Configuration settings` the create wizard omits it and the edit view renders it read-only, so it can never be set. Don't move it there to silence a generator `required` warning.
+- A field required only under a condition (e.g. a login id only when a "sub-account" toggle is on) gets `preRequisites` in the UI and an `allOf`/`if`/`then` in **this destination's** schema, declared only inside the branch. Don't add a top-level `required`, and don't change `schemaGenerator.py` for it.
+- Keep the consent provider options in `scripts/template-ui-config.json` order (Custom, iubenda, Ketch, OneTrust), and the schema enum in the same order.
+
 Old configs have little copy, so add what's missing. Give every `textInput` `regex` a [`regexErrorMessage`](../../../CONVENTIONS.md#pair-every-regex-with-a-regexerrormessage), but never a `tagInput`. Give every field and new group a `note`, including `sdkTemplate` and `redirectGroups`, and write it from the transformer or SDK code. Reword any "above"/"below".
 
 ---

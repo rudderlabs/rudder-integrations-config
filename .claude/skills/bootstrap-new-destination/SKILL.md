@@ -105,7 +105,8 @@ Copy the template, then:
   introduced in 2021 precisely because GA's GIF response broke the DB write), or an arbitrary customer
   endpoint (`webhook`).
 - If category (Form 2) = `warehouse`: add top-level `"category": "warehouse"` (sibling of `name`), set `transformAtV1` to `processor` (above), and follow [Warehouse destinations](#warehouse-destinations).
-- `options.icon` — set it to the destination's kebab-case icon name from the RudderStack Integration Icons Figma library (published as `@rudderlabs/icons`). The template's `options` carries only `isBeta`, so this is easy to miss — and every definition but `test_destination` has one. Use the destination's own brand — don't borrow a neighbouring brand's icon.
+- `options.icon` — set it to the destination's kebab-case icon name from the RudderStack Integration Icons Figma library (published as `@rudderlabs/icons`). The template's `options` carries only `isBeta`, so this is easy to miss — and every definition but `test_destination` has one. Use the destination's own brand — don't borrow a neighbouring brand's icon. The icon must already exist there: rudder-icons' `make check` fails on an unknown name, so if the artwork is missing get it added upstream rather than inventing a name.
+- `options.hidden` — a new destination normally ships beta and hidden behind a hide-when-false gate, `"hidden": { "gate": { "flags": [{ "name": "AMP_enable-<dir>-destination", "value": false }] } }`, next to `isBeta: true`. The flag name is a proposal; the rollout owner provisions it. Taking it GA later: [edit-existing-definition](../edit-existing-definition/SKILL.md#3-visibility-gates-and-ga).
 - `supportedSourceTypes` ← Form 1.
 - `destConfig.defaultConfig` = `["placeholderKey"]` — a neutral placeholder field (also added to ui-config and schema, below) so the scaffold validates (`defaultConfig` can't be empty per the meta-schema). Replace it with the real config keys as fields are added.
 - For **each** source type in `supportedSourceTypes`, add a `destConfig.<sourceType>` array containing at least `["connectionMode", "consentManagement"]`.
@@ -151,7 +152,13 @@ Strictly-cloud skeleton (all source types in cloud mode):
     },
     "secretKeys": []
   },
-  "options": { "isBeta": true, "icon": "acme-crm" }
+  "options": {
+    "isBeta": true,
+    "hidden": {
+      "gate": { "flags": [{ "name": "AMP_enable-acme-crm-destination", "value": false }] }
+    },
+    "icon": "acme-crm"
+  }
 }
 ```
 
@@ -263,6 +270,7 @@ Prettier matches repo style (lint-staged runs it on commit). Jest runs the defin
 - [ ] Every `"required": false` field matches `""` — in both the ui-config `regex` and the schema `pattern`.
 - [ ] `supportedSourceTypes` claims only what this destination genuinely accepts — `warehouse` only if it is rETL-capable.
 - [ ] `options.icon` is set to the destination's own kebab-case icon name — not borrowed from another brand.
+- [ ] `options.hidden.gate` + `isBeta` present unless the destination ships GA.
 - [ ] Every `immutable` field sits in `baseTemplate[0].sections[2].groups[0]`.
 - [ ] Warehouse only: Form Builder V2 structure (not a copied legacy ui-config); no `underscoreDivideNumbers` / `allowUsersContextTraits`; the 5/10/15-minute sync options keep their per-option `featureFlag`; listed in `warehouseDestinationNames`.
 - [ ] No file under `scripts/` was modified to get this destination _past_ a check. A generator fix that restores a dropped constraint is the exception, and ships with generator tests.

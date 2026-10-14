@@ -59,6 +59,11 @@ Three rules for the `schema.json` patterns, each inverting a destination-level h
 - **Encode length bounds in the `pattern`**, never as a sibling `maxLength` — `^(?=.{1,200}$).*\S.*$` is the idiom for "at most 200 characters, not all whitespace": [CONVENTIONS.md](../../../CONVENTIONS.md#keep-the-expression-to-what-the-value-is).
 - **A URL-valued field reuses the shared expression** from `http/schema.json` (`apiUrl`), varying only the trailing path group — and that expression is a syntax check, not an SSRF control: [CONVENTIONS.md](../../../CONVENTIONS.md#url-valued-fields-reuse-the-shared-expression). **Exception:** when the endpoint is always on the partner's own domain and only the host varies (a regional or per-pod host), pin the partner's domain suffix rather than enumerating hosts or accepting any host: [CONVENTIONS.md](../../../CONVENTIONS.md#a-partner-owned-endpoint-pins-the-partners-domain).
 
+Also:
+
+- An optional account ui-config field sets `"optional": true` explicitly; its `pattern` must still accept `""` ([CONVENTIONS.md](../../../CONVENTIONS.md#optional-fields-must-accept-the-empty-string)).
+- **Cross-field rules** (auth method → which credential is required) go in `combinedSchema`, alongside `secretSchema` / `optionsSchema` rather than replacing them; the OAuth path never sees `combinedSchema`. Put method-specific `required` and patterns in the active branch, not the standalone schemas, and put `required: ["<discriminator>"]` **inside** the `if` — otherwise an existing account with no discriminator matches the `if` and lands in the new branch. `sources/bigquery/accounts/SOURCE_BIGQUERY/schema.json` is the reference.
+
 ---
 
 ### Step 3: Update the destination's `db-config.json`
@@ -102,6 +107,12 @@ Add `accountManagementInput` as the **first** field in the group containing the 
   "configKey": "rudderAccountId"
 }
 ```
+
+A `dynamicDataSelect` whose options are fetched with the account's credentials lists
+`rudderAccountId` in **both** `apiDependencies` (refetch when the account changes) and
+`preRequisites.fields` as `{ "configKey": "rudderAccountId", "exists": true }` (hidden until an
+account is picked). A select chained off another select lists every upstream input its request
+uses, in both places, with `"condition": "and"` — `microsoft_fabric`'s `lakehouseId` is the example.
 
 ---
 

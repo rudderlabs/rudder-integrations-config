@@ -35,6 +35,7 @@ Invoke the matching skill before starting; each one links the relevant `CONVENTI
 | New Visual Data Mapper destination                 | `vdm-next-integration`                   |
 | Move a destination onto the accounts framework     | `migrate-to-accounts-framework`          |
 | Move a destination onto form builder v2            | `migrate-destination-to-form-builder-v2` |
+| Change an existing definition in place / take GA   | `edit-existing-definition`               |
 
 ## Shared scripts are repo-wide contracts
 
