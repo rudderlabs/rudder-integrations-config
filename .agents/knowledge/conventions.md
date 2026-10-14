@@ -313,3 +313,8 @@
 - RUD-3296 supersedes the RUD-3256 endpoint-path guidance: do not add `apiEndpoint` to Rokt account `optionFields`, account `optionsSchema`, account UI fields, or destination `config.destConfig.defaultConfig`.
 - Rokt account metadata should expose only `serverToServerKey` as an option field and `serverToServerSecret` as a secret field; stale stored `options.apiEndpoint` values are not an integrations-config authoring contract.
 - Endpoint host/path validation for Rokt should not be hand-maintained in this repository because the transformer owns the fixed mParticle Events API base URL `https://inbound.mparticle.com/s2s`.
+
+## INT-7258 — GARL Account Picker Exclusivity
+
+- In Google Ads Remarketing Lists, the feature-flagged hierarchy picker and all three legacy account controls are mutually exclusive UI variants because they write the same persisted `customerId`, `subAccount`, and `loginCustomerId` keys. Gate the hierarchy `nestedSelect` on `AMP_enable-google-ads-customer-picker: true`, but omit `value` from that flag prerequisite on the legacy controls so the webapp treats the flag as falsy or missing; explicit `value: false` does not match a missing flag and can hide every Customer ID control.
+- Preserve the legacy controls' existing field prerequisites and metadata inside their inverse gate; hiding only the old customer picker can leave duplicate controls that conflict with the hierarchy picker's patches.
