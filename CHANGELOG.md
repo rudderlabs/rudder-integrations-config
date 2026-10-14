@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.185.1](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.185.0...v1.185.1) (2026-10-14)
+
+
+### Bug Fixes
+
+* **rokt:** remove account API endpoint setting ([#2826](https://github.com/rudderlabs/rudder-integrations-config/issues/2826)) ([f501e4e](https://github.com/rudderlabs/rudder-integrations-config/commit/f501e4ef7f03c114691c70c77091897b36439863))
+
 ## [1.185.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.184.0...v1.185.0) (2026-10-14)
 
 

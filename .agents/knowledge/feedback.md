@@ -107,6 +107,11 @@
 - Reviewer guidance rejected enumerating the current mParticle regional hosts for Rokt `apiEndpoint`; accept HTTPS endpoints on `mparticle.com` and any `.mparticle.com` subdomain so future mParticle subdomains do not require a schema release.
 - Do not broaden this into generic endpoint validation: reject lookalike/non-mParticle domains, userinfo, query strings, fragments, ports, and paths, while permitting at most one trailing slash.
 
+## RUD-3296 — Rokt Endpoint Removal Guidance
+
+- Reviewer direction for RUD-3296 supersedes the older Rokt endpoint-review guidance: Rokt no longer asks customers for `options.apiEndpoint` and integrations-config should not preserve account UI, account schema, destination `defaultConfig`, or tests for that field.
+- The Rokt account keeps only `serverToServerKey` and `serverToServerSecret`; the transformer uses the fixed mParticle Events API base URL `https://inbound.mparticle.com/s2s` and appends its bulk-events path.
+
 ## ACT2-766 — ClickHouse Source Review Guidance
 
 <!-- session: 2026-10-01 -->
