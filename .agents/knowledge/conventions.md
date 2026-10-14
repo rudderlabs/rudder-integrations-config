@@ -307,3 +307,8 @@
 
 - Rokt account `apiEndpoint` accepts the `mparticle.com` apex or its subdomains with an optional path prefix, but path segments must reject exact `.` and `..` values so the account schema cannot admit traversal-like endpoints that the transformer rejects. Preserve config/runtime validation parity when changing this contract.
 - Keep Rokt's existing subdomain-label compatibility class `[a-zA-Z0-9-]{1,63}` when adjusting the endpoint path pattern. Tightening leading or trailing hyphens is a separate persisted-config compatibility change, not part of optional-path support; the hostname must still remain anchored to the apex or subdomains of `mparticle.com`.
+
+## INT-7367 — Custom Activation Credential Validation
+
+- Custom Activation reusable account credentials reject all-whitespace values while enforcing field-specific bounds. Use bounded non-blank patterns `^(?=.{1,200}$).*\\S.*$` for `basicAuthUserName` and `apiKeyName`, and `^(?=.{1,500}$).*\\S.*$` for `basicAuthPassword`, `bearerToken`, and `apiKeyValue`.
+- The Basic auth, Bearer token, and API key account cards intentionally set `uiConfig.recommended: false`; endpoint requirements determine the mechanism, so the repository should not imply a preferred authentication type without a product decision.

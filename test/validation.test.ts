@@ -1041,6 +1041,49 @@ describe('Account Definition validation tests', () => {
     });
   });
 
+  const customAudienceAccountSchemas = [
+    {
+      accountName: 'custom_audience_basic_auth',
+      sections: [
+        { schemaKey: 'optionsSchema', field: 'basicAuthUserName', maxLength: 200 },
+        { schemaKey: 'secretSchema', field: 'basicAuthPassword', maxLength: 500 },
+      ],
+    },
+    {
+      accountName: 'custom_audience_bearer_token',
+      sections: [{ schemaKey: 'secretSchema', field: 'bearerToken', maxLength: 500 }],
+    },
+    {
+      accountName: 'custom_audience_api_key',
+      sections: [
+        { schemaKey: 'optionsSchema', field: 'apiKeyName', maxLength: 200 },
+        { schemaKey: 'secretSchema', field: 'apiKeyValue', maxLength: 500 },
+      ],
+    },
+  ];
+
+  it.each(customAudienceAccountSchemas)(
+    '$accountName requires bounded, non-blank account fields',
+    ({ accountName, sections }) => {
+      const accountSchema = getAccountDefinitionSchema(
+        'custom_audience',
+        accountName,
+        'destinations',
+      );
+
+      sections.forEach(({ schemaKey, field, maxLength }) => {
+        const validate = compileAccountSchemaWithErrorMessages(accountSchema[schemaKey]);
+
+        expect(validate({ [field]: 'credential' })).toBe(true);
+        expect(validate({})).toBe(false);
+        expect(validate({ [field]: '' })).toBe(false);
+        expect(validate({ [field]: '   ' })).toBe(false);
+        expect(validate({ [field]: 'x'.repeat(maxLength) })).toBe(true);
+        expect(validate({ [field]: 'x'.repeat(maxLength + 1) })).toBe(false);
+      });
+    },
+  );
+
   it('DESTINATION_ROKT optionsSchema accepts only safe mParticle API base URLs', () => {
     const accountSchema = getAccountDefinitionSchema('rokt', 'rokt_api_key', 'destinations');
     const validateOptions = compileAccountSchema(accountSchema.optionsSchema);
@@ -2269,6 +2312,7 @@ const clickHouseAccountSchema = () =>
 
 // Lookaround, \s and \p{} read differently in ECMA-262 and Go RE2 (catalog LLD section 3.3). This is a
 // syntax check only: sqlconnect-go runs the shared fixture cases through Go RE2.
+// eslint-disable-next-line unicorn/better-regex
 const RE2_UNSAFE_PATTERN = /\(\?[=!<]|\\s|\\p\{/;
 
 describe('SOURCE_CLICKHOUSE optionsSchema', () => {
