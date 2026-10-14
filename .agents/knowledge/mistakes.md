@@ -66,3 +66,8 @@
 - `npm run check:schema:source clickhouse` prints nothing and exits 0, which looks like "form and schema agree". `EXCLUDED_DEST` in `scripts/schemaGenerator.py` lists `clickhouse`, and `get_schema_diff` skips excluded names for sources too. The exit code proves nothing. Verify the hand-written ClickHouse source schema with `test/data/validation/sources/clickhouse.json`. Do not rely on the generator for this source.
 - The ClickHouse tests do more than check regex syntax. `clickHouseFieldCases` in `test/validation.test.ts` runs the shared field fixture through AJV against `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json`. `RE2_UNSAFE_PATTERN` is an additional syntax screen.
 - A pre-commit full Jest run that times out is a failed run, not a pass. Rerun the ClickHouse tests with `npx jest test/validation.test.ts --testTimeout=60000`, or the full suite with `--maxWorkers=2 --testTimeout=120000`, and judge the result from the rerun.
+
+## INT-7259 — Do Not Express Missing-Flag Fallbacks as Explicit False
+
+- GAOC's first account-picker implementation inverse-gated the manual fields and legacy mapping variants with `preRequisites.featureFlags[].value: false`. That matches only an explicitly false flag payload, so when the rollout flag was absent neither the new picker nor its fallback rendered.
+- Corrective rule: for fallback UI that must render when a feature flag is false or missing, omit `value` in the inverse feature-flag prerequisite. Reserve `value: false` for contracts that specifically require an explicit false payload.

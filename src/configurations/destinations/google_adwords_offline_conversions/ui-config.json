@@ -18,6 +18,29 @@
                     "configKey": "rudderAccountId"
                   },
                   {
+                    "type": "nestedSelect",
+                    "label": "Customer ID",
+                    "configKey": "customerId",
+                    "apiName": "getConfigData",
+                    "apiDependencies": ["rudderAccountId"],
+                    "allowNonLeafSelection": true,
+                    "required": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "rudderAccountId",
+                          "exists": true
+                        }
+                      ],
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-google-ads-customer-picker",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  {
                     "type": "textInput",
                     "label": "Customer ID",
                     "note": "Enter the Customer ID",
@@ -25,13 +48,27 @@
                     "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
                     "regexErrorMessage": "Invalid Customer Id",
                     "required": true,
-                    "placeholder": "e.g: 6293X29833"
+                    "placeholder": "e.g: 6293X29833",
+                    "preRequisites": {
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-google-ads-customer-picker"
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "checkbox",
                     "label": "Sub Account",
                     "configKey": "subAccount",
-                    "default": false
+                    "default": false,
+                    "preRequisites": {
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-google-ads-customer-picker"
+                        }
+                      ]
+                    }
                   },
                   {
                     "type": "textInput",
@@ -46,6 +83,11 @@
                         {
                           "configKey": "subAccount",
                           "value": true
+                        }
+                      ],
+                      "featureFlags": [
+                        {
+                          "configKey": "AMP_enable-google-ads-customer-picker"
                         }
                       ]
                     }
@@ -234,13 +276,57 @@
                     "regex": "^(.{0,100})$"
                   },
                   {
+                    "type": "dynamicDataSelect",
+                    "configKey": "to",
+                    "label": "Google Ads conversion names",
+                    "placeholder": "e.g: App Sign-up",
+                    "regex": "^(.{0,100})$",
+                    "apiName": "getConversionActions",
+                    "apiDependencies": [
+                      "rudderAccountId",
+                      "customerId",
+                      "subAccount",
+                      "loginCustomerId"
+                    ]
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-google-ads-customer-picker",
+                      "value": true
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "mapping",
+                "label": "Map your Google Ads Conversions Names",
+                "configKey": "eventsToConversionsNamesMapping",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "configKey": "from",
+                    "label": "RudderStack event names",
+                    "placeholder": "e.g: Sign up completed",
+                    "regex": "^(.{0,100})$"
+                  },
+                  {
                     "type": "textInput",
                     "configKey": "to",
                     "label": "Google Ads conversion names",
                     "placeholder": "e.g: App Sign-up",
                     "regex": "^(.{0,100})$"
                   }
-                ]
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-google-ads-customer-picker"
+                    }
+                  ]
+                }
               },
               {
                 "type": "mapping",
@@ -295,13 +381,57 @@
                     "regex": "^(.{0,100})$"
                   },
                   {
+                    "type": "dynamicDataSelect",
+                    "configKey": "to",
+                    "label": "Google Ads custom variables",
+                    "placeholder": "e.g: revenue",
+                    "regex": "^(.{0,100})$",
+                    "apiName": "getCustomVariables",
+                    "apiDependencies": [
+                      "rudderAccountId",
+                      "customerId",
+                      "subAccount",
+                      "loginCustomerId"
+                    ]
+                  }
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-google-ads-customer-picker",
+                      "value": true
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "mapping",
+                "label": "Map your variable names to custom Google Ads variables",
+                "configKey": "customVariables",
+                "default": [],
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "configKey": "from",
+                    "label": "Custom variable names",
+                    "placeholder": "e.g: value",
+                    "regex": "^(.{0,100})$"
+                  },
+                  {
                     "type": "textInput",
                     "configKey": "to",
                     "label": "Google Ads custom variables",
                     "placeholder": "e.g: revenue",
                     "regex": "^(.{0,100})$"
                   }
-                ]
+                ],
+                "preRequisites": {
+                  "featureFlags": [
+                    {
+                      "configKey": "AMP_enable-google-ads-customer-picker"
+                    }
+                  ]
+                }
               }
             ]
           }
