@@ -132,3 +132,8 @@
 ## RUD-3252 — Knowledge Ledger Durability
 
 - Keep `.agents/knowledge/*.md` focused on durable repository rules under topic-based headings; omit temporary rollout or merge-sequencing instructions, and avoid duplicating exact workflow identifiers whose authoritative source is the workflow itself.
+
+## INT-7367 — Custom Activation Required-Field Error Guidance
+
+- Reviewer direction requires retaining required validation in the Custom Activation account schemas while relying on AJV's default missing-required-property error.
+- Do not add object-level `errorMessage.required` mappings or broaden the shared account meta-schema solely to provide friendlier required-field messages for these accounts.
