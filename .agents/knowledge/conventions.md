@@ -312,6 +312,7 @@
 
 - Custom Activation reusable account credentials reject all-whitespace values while enforcing field-specific bounds. Use bounded non-blank patterns `^(?=.{1,200}$).*\\S.*$` for `basicAuthUserName` and `apiKeyName`, and `^(?=.{1,500}$).*\\S.*$` for `basicAuthPassword`, `bearerToken`, and `apiKeyValue`.
 - The Basic auth, Bearer token, and API key account cards intentionally set `uiConfig.recommended: false`; endpoint requirements determine the mechanism, so the repository should not imply a preferred authentication type without a product decision.
+- Validate Custom Activation `rudderAccountId` with the standard bounded account-reference pattern `^.{1,100}$`; do not use only `^.+$` or add a property-level custom error message when peer account-backed destination schemas rely on AJV's default pattern error.
 
 ## RUD-3296 — Rokt Endpoint Ownership
 
