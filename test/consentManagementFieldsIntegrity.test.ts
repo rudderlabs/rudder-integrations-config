@@ -73,6 +73,7 @@ describe('Consent Management Fields Integrity tests', () => {
     'braze_audience',
     'reddit_audience',
     'gainsight_px_audience',
+    'marketo_audience',
   ];
 
   const destDir = path.resolve('src/configurations/destinations');
