@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.185.1](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.185.0...v1.185.1) (2026-10-14)
+
+
+### Bug Fixes
+
+* **rokt:** remove account API endpoint setting ([#2826](https://github.com/rudderlabs/rudder-integrations-config/issues/2826)) ([f501e4e](https://github.com/rudderlabs/rudder-integrations-config/commit/f501e4ef7f03c114691c70c77091897b36439863))
+
+## [1.185.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.184.0...v1.185.0) (2026-10-14)
+
+
+### Features
+
+* **gainsight_px_audience:** add Gainsight PX Audience destination and API-key account ([#2823](https://github.com/rudderlabs/rudder-integrations-config/issues/2823)) ([7751a33](https://github.com/rudderlabs/rudder-integrations-config/commit/7751a338dc6580c0371c09cc5740d452c761edb4))
+
+
+### Bug Fixes
+
+* **schema-generator:** add each required key once ([#2813](https://github.com/rudderlabs/rudder-integrations-config/issues/2813)) ([dfe98c5](https://github.com/rudderlabs/rudder-integrations-config/commit/dfe98c5de502a69b281bf6f0d5cdec4f9be5d52c))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump @babel/plugin-transform-modules-systemjs from 7.20.11 to 7.29.8 ([#2824](https://github.com/rudderlabs/rudder-integrations-config/issues/2824)) ([7cc8443](https://github.com/rudderlabs/rudder-integrations-config/commit/7cc8443fe2b37dfb96af72bdb768874229a59109))
+* **deps-dev:** bump brace-expansion from 1.1.12 to 1.1.21 ([#2819](https://github.com/rudderlabs/rudder-integrations-config/issues/2819)) ([2f71be8](https://github.com/rudderlabs/rudder-integrations-config/commit/2f71be829126475f2bef8cdadfe43e81c9aa809f))
+* **deps-dev:** bump flatted from 3.2.7 to 3.4.4 ([#2816](https://github.com/rudderlabs/rudder-integrations-config/issues/2816)) ([704589e](https://github.com/rudderlabs/rudder-integrations-config/commit/704589ee81729af10b43b1d4d5bebc334ad48349))
+* **deps-dev:** bump js-yaml from 3.14.2 to 3.15.2 ([#2821](https://github.com/rudderlabs/rudder-integrations-config/issues/2821)) ([65ef168](https://github.com/rudderlabs/rudder-integrations-config/commit/65ef168585f89a4911fc17f28e1bddbaa4ed914a))
+* **deps-dev:** bump minimatch from 3.1.2 to 3.1.5 ([#2822](https://github.com/rudderlabs/rudder-integrations-config/issues/2822)) ([76eb6a3](https://github.com/rudderlabs/rudder-integrations-config/commit/76eb6a37fe37856520aac9fba1353976f12a19a0))
+* **deps:** bump actions/setup-node from 6.4.0 to 7.0.0 ([#2789](https://github.com/rudderlabs/rudder-integrations-config/issues/2789)) ([25a1d39](https://github.com/rudderlabs/rudder-integrations-config/commit/25a1d39d0a7761e3eafb342407296d16ddb6ae7a))
+* **deps:** bump codecov/codecov-action from 7.0.0 to 7.1.1 ([#2790](https://github.com/rudderlabs/rudder-integrations-config/issues/2790)) ([7bbab91](https://github.com/rudderlabs/rudder-integrations-config/commit/7bbab91599f6b178cacd7e19742fdd7ef000f772))
+* **deps:** bump fast-uri from 3.1.0 to 3.1.8 ([#2825](https://github.com/rudderlabs/rudder-integrations-config/issues/2825)) ([ef7c6f7](https://github.com/rudderlabs/rudder-integrations-config/commit/ef7c6f7c47efa7d61e1eb9c792ca088253ea309d))
+* **deps:** bump lodash and commitizen ([#2817](https://github.com/rudderlabs/rudder-integrations-config/issues/2817)) ([2252c2a](https://github.com/rudderlabs/rudder-integrations-config/commit/2252c2a3605aff139ce52b218978b00de0b8b80f))
+* **deps:** bump serialize-javascript and terser-webpack-plugin ([#2820](https://github.com/rudderlabs/rudder-integrations-config/issues/2820)) ([2cc9548](https://github.com/rudderlabs/rudder-integrations-config/commit/2cc95486d039331cd6b92ed3640b6da8ed925f4c))
+
+
+### Documentation
+
+* **skills:** fold warehouse, icon and generator review learnings into bootstrap skill ([#2807](https://github.com/rudderlabs/rudder-integrations-config/issues/2807)) ([1c7f196](https://github.com/rudderlabs/rudder-integrations-config/commit/1c7f196f3a709728d147e0e6784c7db3d62c1884))
+
 ## [1.184.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.183.0...v1.184.0) (2026-10-09)
 
 

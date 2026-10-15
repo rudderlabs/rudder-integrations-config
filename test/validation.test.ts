@@ -378,6 +378,93 @@ describe('Validation Tests', () => {
   });
 });
 
+describe('Google Ads Remarketing Lists account picker configuration', () => {
+  const destinationPath = path.resolve(
+    'src/configurations/destinations/google_adwords_remarketing_lists',
+  );
+  const uiConfig = JSON.parse(
+    fs.readFileSync(path.join(destinationPath, 'ui-config.json'), 'utf-8'),
+  );
+  const dbConfig = JSON.parse(
+    fs.readFileSync(path.join(destinationPath, 'db-config.json'), 'utf-8'),
+  );
+  const connectionFields = uiConfig.uiConfig.baseTemplate[0].sections[0].groups[0].fields;
+  const customerFields = connectionFields.filter(
+    (field: { configKey: string }) => field.configKey === 'customerId',
+  );
+  const fieldByConfigKey = Object.fromEntries(
+    connectionFields.map((field: { configKey: string }) => [field.configKey, field]),
+  );
+  const featureFlag = 'AMP_enable-google-ads-customer-picker';
+
+  it('uses mutually exclusive hierarchy and flat customer account pickers', () => {
+    expect(customerFields).toHaveLength(2);
+    expect(customerFields.find((field: { type: string }) => field.type === 'nestedSelect')).toEqual(
+      {
+        type: 'nestedSelect',
+        label: 'Customer ID',
+        note: 'Select a manager account or descendant account. Selecting the top-level account clears the login customer ID; selecting a descendant uses the top-level account as the login customer ID',
+        configKey: 'customerId',
+        apiName: 'getConfigData',
+        apiDependencies: ['rudderAccountId'],
+        allowNonLeafSelection: true,
+        required: true,
+        placeholder: 'Select customer account',
+        preRequisites: {
+          fields: [{ configKey: 'rudderAccountId', exists: true }],
+          featureFlags: [{ configKey: featureFlag, value: true }],
+        },
+      },
+    );
+    expect(
+      customerFields.find((field: { apiName: string }) => field.apiName === 'customerAccounts'),
+    ).toEqual({
+      type: 'dynamicDataSelect',
+      label: 'Customer ID',
+      note: 'Select the Customer ID of your Google remarketing list',
+      configKey: 'customerId',
+      apiName: 'customerAccounts',
+      required: true,
+      apiDependencies: ['rudderAccountId'],
+      placeholder: 'Select customer account',
+      regex: '(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$',
+      regexErrorMessage: 'Invalid Customer ID',
+      preRequisites: {
+        fields: [{ configKey: 'rudderAccountId', exists: true }],
+        featureFlags: [{ configKey: featureFlag }],
+      },
+    });
+  });
+
+  it('inverse-gates the manual account controls while preserving login prerequisites', () => {
+    expect(fieldByConfigKey.subAccount.required).toBe(true);
+    expect(fieldByConfigKey.subAccount.preRequisites).toEqual({
+      featureFlags: [{ configKey: featureFlag }],
+    });
+    expect(fieldByConfigKey.loginCustomerId.preRequisites).toEqual({
+      fields: [{ configKey: 'subAccount', value: true }],
+      featureFlags: [{ configKey: featureFlag }],
+    });
+  });
+
+  it('keeps cloud audience and VDM list selection contracts unchanged', () => {
+    expect(fieldByConfigKey.audienceId).toMatchObject({
+      type: 'textInput',
+      configKey: 'audienceId',
+      preRequisites: {
+        fields: [{ configKey: 'connectionMode.cloud', value: 'cloud' }],
+      },
+    });
+    expect(fieldByConfigKey.audienceId.apiName).toBeUndefined();
+    expect(JSON.stringify(uiConfig)).not.toContain('getRemarketingLists');
+    expect(dbConfig.options.destinationFeatures.vdmLabels).toEqual({
+      newAudienceAlternateLabel: 'Create New List',
+      existingAudienceAlternateLabel: 'Use Existing List',
+      audienceAlternateLabel: 'List Id',
+    });
+  });
+});
+
 describe('Destination Definition validation tests', () => {
   dests.forEach((dest) => {
     it(`${dest} - destination definition test`, async () => {
@@ -1038,45 +1125,6 @@ describe('Account Definition validation tests', () => {
     it(`${integration}/${accountName} - account definition test`, async () => {
       const accDefConfig = await getAccountDefinitionConfig(integration, accountName, 'sources');
       await expect(validateAccountDefinitions(accDefConfig)).resolves.toEqual(true);
-    });
-  });
-
-  it('DESTINATION_ROKT optionsSchema accepts only safe mParticle API base URLs', () => {
-    const accountSchema = getAccountDefinitionSchema('rokt', 'rokt_api_key', 'destinations');
-    const validateOptions = compileAccountSchema(accountSchema.optionsSchema);
-    const options = (apiEndpoint: string) => ({
-      apiEndpoint,
-      serverToServerKey: 'synthetic-key',
-    });
-
-    [
-      'https://inbound.mparticle.com/s2s',
-      'https://inbound.mparticle.com/s2s/',
-      'https://inbound.mparticle.com/s2s/feed-v1_~.x',
-      'https://s2s.mparticle.com',
-      'https://mparticle.com',
-      'https://mparticle.com/',
-    ].forEach((apiEndpoint) => {
-      expect(validateOptions(options(apiEndpoint))).toBe(true);
-    });
-
-    [
-      'http://s2s.mparticle.com',
-      'https://evilmparticle.com',
-      'https://inbound.mparticle.com/.',
-      'https://inbound.mparticle.com/..',
-      'https://inbound.mparticle.com/../etc',
-      'https://inbound.mparticle.com/s2s/./events',
-      'https://inbound.mparticle.com/s2s/../events',
-      'https://inbound.mparticle.com//s2s',
-      'https://inbound.mparticle.com/s2s%2f..',
-      'https://s2s.mparticle.com.attacker.example',
-      'https://user@s2s.mparticle.com',
-      'https://s2s.mparticle.com:8443',
-      'https://s2s.mparticle.com?redirect=1',
-      'https://s2s.mparticle.com#fragment',
-    ].forEach((apiEndpoint) => {
-      expect(validateOptions(options(apiEndpoint))).toBe(false);
     });
   });
 
