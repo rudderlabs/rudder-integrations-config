@@ -1,0 +1,55 @@
+{
+  "name": "PINTEREST_AUDIENCE",
+  "displayName": "Pinterest Audience",
+  "version": "1.0",
+  "config": {
+    "auth": {
+      "type": "OAuth",
+      "role": "pinterest_audience",
+      "rudderScopes": ["delivery"]
+    },
+    "supportedAccountDefinitions": {
+      "rudderAccountId": ["DESTINATION_PINTEREST_AUDIENCE_OAUTH"]
+    },
+    "syncBehaviours": ["mirror"],
+    "supportsVisualMapperV2": true,
+    "disableJsonMapper": true,
+    "isAudienceSupported": true,
+    "transformAtV1": "router",
+    "supportedSourceTypes": ["warehouse"],
+    "supportedMessageTypes": {
+      "cloud": ["record"]
+    },
+    "supportedConnectionModes": {
+      "warehouse": ["cloud"]
+    },
+    "destConfig": {
+      "defaultConfig": ["rudderAccountId"],
+      "warehouse": ["connectionMode"]
+    },
+    "secretKeys": [],
+    "saveDestinationResponse": true
+  },
+  "options": {
+    "isBeta": true,
+    "audienceActivation": {
+      "discovery": {
+        "operations": {
+          "listFields": "listFields",
+          "listAudiences": "listAudiences",
+          "setup": "setup"
+        },
+        "contextFields": ["adAccountId"]
+      },
+      "vdm": {
+        "configDefaults": {
+          "syncMode": "mirror",
+          "isHashRequired": true,
+          "createAudience": "no"
+        }
+      },
+      "mappingGuidance": "Map at least one of Email, Mobile Ad ID or Phone. Values are normalised and SHA-256 hashed unless isHashRequired is false, in which case each value must already be a SHA-256 hex digest. Do not send IDFA collected from iOS app or website activity (Pinterest policy). The ad account id is not discoverable through these operations; set adAccountId first."
+    },
+    "icon": "pinterest"
+  }
+}

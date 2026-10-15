@@ -74,6 +74,7 @@ describe('Consent Management Fields Integrity tests', () => {
     'reddit_audience',
     'gainsight_px_audience',
     'hs_audience',
+    'pinterest_audience',
   ];
 
   const destDir = path.resolve('src/configurations/destinations');
