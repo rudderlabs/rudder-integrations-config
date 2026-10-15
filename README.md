@@ -18,7 +18,7 @@
 
 ---
 
-[![codecov](https://codecov.io/gh/rudderlabs/rudder-integrations-config/branch/develop/graph/badge.svg?token=K75QABOWUT)](https://codecov.io/gh/rudderlabs/rudder-integrations-config)
+[![codecov](https://codecov.io/gh/rudderlabs/rudder-integrations-config/branch/main/graph/badge.svg?token=K75QABOWUT)](https://codecov.io/gh/rudderlabs/rudder-integrations-config)
 
 # rudder-integrations-config
 

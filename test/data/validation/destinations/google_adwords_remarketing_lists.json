@@ -1,5 +1,24 @@
 [
   {
+    "testTitle": "Root hierarchy selection accepts an empty login customer ID",
+    "config": {
+      "rudderAccountId": "test-host",
+      "customerId": "1234567890",
+      "subAccount": false,
+      "loginCustomerId": ""
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Legacy root selection accepts an omitted login customer ID",
+    "config": {
+      "rudderAccountId": "test-host",
+      "customerId": "1234567890",
+      "subAccount": false
+    },
+    "result": true
+  },
+  {
     "config": {
       "customerId": "dfashethdetyjetyj",
       "subAccount": false,
@@ -383,6 +402,23 @@
     },
     "result": false,
     "err": ["consentManagement.cloud.0.provider must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "Consent management entry without provider is rejected",
+    "config": {
+      "rudderAccountId": "test-host",
+      "customerId": "dfashethdetyjetyj",
+      "subAccount": false,
+      "consentManagement": {
+        "cloud": [
+          {
+            "consents": [{ "consent": "marketing" }]
+          }
+        ]
+      }
+    },
+    "result": false,
+    "err": ["consentManagement.cloud.0 must have required property 'provider'"]
   },
   {
     "testTitle": "With consent management custom provider config and invalid resolutionStrategy value",

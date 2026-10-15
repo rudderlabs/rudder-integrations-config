@@ -4,7 +4,7 @@
 # See scripts/validate_account_definitions.py for the full list of checks performed.
 
 # Get the list of changed files
-changed_files=$(git diff --name-only origin/develop)
+changed_files=$(git diff --name-only "origin/${GITHUB_BASE_REF:-main}")
 echo "$changed_files"
 
 # Extract unique destination names from changed files

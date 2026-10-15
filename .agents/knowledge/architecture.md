@@ -60,7 +60,7 @@
 
 - Deployment Slack notifications are implemented in GitHub Actions workflows rather than application code.
 - The reusable deployment workflow `.github/workflows/deploy.yml` owns the Slack notification behavior and declares workflow-call secrets `SLACK_BOT_TOKEN` and `SLACK_RELEASE_CHANNEL_ID`.
-- Caller workflows pass those Slack secrets through deployment wrappers, including `.github/workflows/deploy-to-prod.yml`, `.github/workflows/deploy-to-staging.yml`, `.github/workflows/deploy-to-dev.yml`, `.github/workflows/manual-deploy.yml`, and `.github/workflows/rollback.yml` via the production deploy wrapper.
+- Caller workflows pass those Slack secrets through deployment wrappers, including `.github/workflows/deploy-to-prod.yml`, `.github/workflows/deploy-to-staging.yml`, `.github/workflows/deploy-to-dev.yml`, and `.github/workflows/rollback.yml` via the production deploy wrapper.
 
 ## SDK-5013 — Amplitude Hand-Authored Config Triplet
 
@@ -87,8 +87,8 @@
 
 ## AI-1339 — Release Draft Actor Gate Boundary
 
-- `.github/workflows/draft-new-release.yml` should not depend on the reusable `.github/workflows/validate-actor.yml` gate; release draft triggering relies on GitHub `workflow_dispatch` permissions and downstream release PR approval rather than team-name validation.
-- Keep `.github/workflows/validate-actor.yml` available even when draft release no longer uses it, because other workflows such as `create-hotfix-branch.yml` and rollback paths may still reference that reusable actor-validation workflow.
+- The legacy manual draft-release and hotfix workflows were removed when releases moved to release-please on `main`.
+- Keep `.github/workflows/validate-actor.yml` available because `rollback.yml` still uses it to authorize production rollbacks.
 
 ## SDK-5265 — CleverTap Android Kotlin Device-Mode Contract
 
@@ -114,6 +114,12 @@
 - Later review superseded both the fixed four-host allowlist and the generic arbitrary-host shape: `apiEndpoint` accepts HTTPS endpoints whose hostname is exactly `mparticle.com` or a subdomain ending in `.mparticle.com`, keeping future mParticle subdomains forward-compatible without permitting unrelated domains.
 - Endpoint validation rejects lookalike/non-mParticle domains, userinfo, query strings, fragments, ports, and paths; at most one trailing slash is permitted.
 
+## RUD-3296 — Rokt Fixed mParticle Endpoint Boundary
+
+- RUD-3296 supersedes the older Rokt `apiEndpoint` account contract: `src/configurations/destinations/rokt/accounts/rokt_api_key/` no longer collects or validates `options.apiEndpoint`.
+- Rokt accounts now carry only the option credential `serverToServerKey` and the secret credential `serverToServerSecret`; destination `config.destConfig.defaultConfig` mirrors those fields plus `rudderAccountId`.
+- The mParticle Events API base URL is transformer-owned and fixed to `https://inbound.mparticle.com/s2s`, with delivery to `/v2/bulkevents`; do not reintroduce a customer-authored endpoint in integrations-config.
+
 ## ACT2-766 — ClickHouse Reverse ETL Source Behind A Flag
 
 <!-- session: 2026-10-01 -->
@@ -122,3 +128,8 @@
 - Both definitions hide behind the flag `AMP_enable-clickhouse-retl-source`. `src/configurations/sources/clickhouse/db-config.json` declares it at `options.hidden.gate`. `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/db-config.json` declares it at `displayOptions.hidden.gate`. Keep both gates on the same flag name.
 - `src/configurations/sources/clickhouse/db-config.json` sets `options.syncBehaviours` to `["mirror"]` and sets `options.isSqlModelSupported`, `options.isAudienceSupported` and `options.isDataGraphSupported` to `false`.
 - The current form fields in `src/configurations/sources/clickhouse/ui-config.json` (`uiConfig[].fields[].value`) are `host`, `port`, `database`, `user` and `password`. The sync keeps its working tables in a `_rudderstack` database the customer creates (owner decision D33), so the form has no field for it. The form has no `secure`, `skipVerify` or `caCertificate` input.
+
+## SecretKeys Synchronization Boundary
+
+- Secret-key change detection compares only canonical root files at `src/configurations/destinations/<destination>/db-config.json`. Nested account definitions are excluded because their secrets are mirrored into root `config.secretKeys`, and archived `versions/*/db-config.json` files belong to a separate deploy-payload contract.
+- Secret-path manifest derivation is owned by rudder-transformer.

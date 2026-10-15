@@ -32,6 +32,13 @@ argument-hint: <destination-name> (e.g. "amplitude" or "mixpanel")
 
 **Ask the user only:** which fields should move to the account level (secret credential fields and non-secret option fields).
 
+**Net-new destination** (arriving from `bootstrap-new-destination`): there are no existing fields
+to read, because the scaffold holds only `placeholderKey`. Ask the user for each credential field:
+its key, secret or option, required or optional, and its label, placeholder and note. Take these
+from the partner's API docs or the destination spec if one exists. Then derive the auth type and
+account names from them as above. In Steps 3–5, remove `placeholderKey` from `destConfig`,
+`ui-config.json` and `schema.json`, because `rudderAccountId` replaces it.
+
 Do NOT proceed until confirmed.
 
 ---
@@ -50,7 +57,7 @@ Three rules for the `schema.json` patterns, each inverting a destination-level h
 
 - **All account field validation lives in `schema.json`.** The account `ui-config.json` takes no `regex` — it is rendering metadata only, a stray key is silently unread, and the schema generator never walks account definitions. Put the `pattern` in `secretSchema` / `optionsSchema` and pair it with an `errorMessage`. Don't copy the patterns from the meta-schema's own description; they carry the deprecated `{{ }}` / `env.` prefix. Full rules and evidence: [CONVENTIONS.md](../../../CONVENTIONS.md#account-field-validation-lives-in-the-account-schemajson).
 - **Encode length bounds in the `pattern`**, never as a sibling `maxLength` — `^(?=.{1,200}$).*\S.*$` is the idiom for "at most 200 characters, not all whitespace": [CONVENTIONS.md](../../../CONVENTIONS.md#keep-the-expression-to-what-the-value-is).
-- **A URL-valued field reuses the shared expression** from `http/schema.json` (`apiUrl`), varying only the trailing path group — and that expression is a syntax check, not an SSRF control: [CONVENTIONS.md](../../../CONVENTIONS.md#url-valued-fields-reuse-the-shared-expression).
+- **A URL-valued field reuses the shared expression** from `http/schema.json` (`apiUrl`), varying only the trailing path group — and that expression is a syntax check, not an SSRF control: [CONVENTIONS.md](../../../CONVENTIONS.md#url-valued-fields-reuse-the-shared-expression). **Exception:** when the endpoint is always on the partner's own domain and only the host varies (a regional or per-pod host), pin the partner's domain suffix rather than enumerating hosts or accepting any host: [CONVENTIONS.md](../../../CONVENTIONS.md#a-partner-owned-endpoint-pins-the-partners-domain).
 
 ---
 
@@ -106,7 +113,8 @@ the rest.
 
 The `oneOf` in **(b)** below exists because a _migration_ must keep configs valid that still carry
 the legacy destination-level auth fields. A net-new account-backed destination has no legacy
-fields: it declares `rudderAccountId` and no `oneOf` at all.
+fields: it declares `rudderAccountId` with no `oneOf` at all, and adds it to the top-level
+`"required"` array. Without the `oneOf`, nothing else makes the account link mandatory.
 
 **a)** Add `rudderAccountId` to `properties`:
 
@@ -169,6 +177,10 @@ Append three test cases to `test/data/validation/destinations/<destination>.json
 ```
 
 Error strings must match AJV output exactly.
+
+A net-new account-backed destination has no `oneOf`, so the two "Invalid" cases above don't apply. It needs a valid case with `rudderAccountId` set, one with it missing, and one with it set to `""` to exercise the `^.{1,100}$` pattern.
+
+Destination-specific cases go in this fixture file only. **Don't add a destination's own `describe` / `it` blocks to `test/validation.test.ts`**, which holds the generic harness. These fixtures only exercise the destination `schema.json`. The account `secretSchema` / `optionsSchema` has no fixture route, so check its patterns by hand before you push, and leave them out of `test/validation.test.ts`.
 
 ---
 

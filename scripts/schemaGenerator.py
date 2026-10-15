@@ -305,7 +305,10 @@ def generate_schema_for_dynamic_data_select(field, dbConfig, schema_field_name):
     Returns:
         object
     """
-    return {"type": FieldTypeEnum.STRING.value}
+    dynamicDataSelectSchemaObj = {"type": FieldTypeEnum.STRING.value}
+    if "regex" in field:
+        dynamicDataSelectSchemaObj["pattern"] = generalize_regex_pattern(field)
+    return dynamicDataSelectSchemaObj
 
 
 def generate_schema_for_account_management_input(field, dbConfig, schema_field_name):
@@ -1278,6 +1281,21 @@ def generate_connection_mode(dbConfig):
     return connectionObj
 
 
+def add_required_key(schemaObject, key):
+    """Adds a key to the schema's top-level required list once.
+
+    Mutually exclusive ui-config fields (e.g. a feature-flagged control and the
+    legacy control it replaces) can share one configKey; the key must still
+    appear only once, since JSON Schema requires unique "required" entries.
+
+    Args:
+        schemaObject (object): schema object holding the "required" list.
+        key (string): config key to mark as required.
+    """
+    if key not in schemaObject["required"]:
+        schemaObject["required"].append(key)
+
+
 def generate_schema_properties(
     uiConfig, dbConfig, schemaObject, properties, selector, currentSchema
 ):
@@ -1329,7 +1347,7 @@ def generate_schema_properties(
                     is_source
                     or is_field_present_in_default_config(field, dbConfig, "value")
                 ):
-                    schemaObject["required"].append(field["value"])
+                    add_required_key(schemaObject, field["value"])
 
         # Generate connectionMode for old format destinations, if it is already present
         # in the current schema.
@@ -1385,7 +1403,7 @@ def generate_schema_properties(
                                     or field.get("required")
                                 )
                             ):
-                                schemaObject["required"].append(field["configKey"])
+                                add_required_key(schemaObject, field["configKey"])
 
             for field in sdkTemplate.get("fields", []):
                 generateFunction = uiTypetoSchemaFn.get(field["type"], None)
@@ -1406,7 +1424,7 @@ def generate_schema_properties(
                 ) == True and is_field_present_in_default_config(
                     field, dbConfig, "configKey"
                 ):
-                    schemaObject["required"].append(field["configKey"])
+                    add_required_key(schemaObject, field["configKey"])
 
             for field in consentSettingsTemplate.get("fields", []):
                 generateFunction = uiTypetoSchemaFn.get(field["type"], None)
@@ -1419,7 +1437,7 @@ def generate_schema_properties(
                 ) == True and is_field_present_in_default_config(
                     field, dbConfig, "configKey"
                 ):
-                    schemaObject["required"].append(field["configKey"])
+                    add_required_key(schemaObject, field["configKey"])
 
             # default properties in new ui-config based schemas.
             if is_key_present_in_dest_config(dbConfig, "useNativeSDK"):

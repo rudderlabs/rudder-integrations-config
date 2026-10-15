@@ -167,7 +167,40 @@ two at a glance. To reject a query string or fragment — appropriate when the p
 URL that the transformer appends its own parameters to — change `(/.*)?$` to `(/[^?#\s]*)?$` and say
 so in the `errorMessage`.
 
-**Know what this expression is and isn't.** It is a syntactic check on a stored string. It cannot
+The shared expression accepts any host, which is right when the customer owns the host (`http`,
+`webhook`). When the host belongs to the partner, use the pinned form in the next section instead.
+
+### A partner-owned endpoint pins the partner's domain
+
+Some endpoints always live on the partner's own domain, with only the host varying, such as a
+regional or per-pod host the customer copies from the partner's dashboard. When the account's
+credentials are sent there, pin the partner's domain suffix, and do neither of these:
+
+- **Don't enumerate today's hosts.** A fixed list breaks the first time the partner adds a region,
+  and the fix is a schema release.
+- **Don't fall back to the shared expression.** It accepts any host, so a mistyped or pasted value
+  sends the partner credentials to whoever answers there.
+
+Replace `example\.com` with the partner's registrable domain:
+
+```text
+^https://(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)*example\.com(/[^?#\s]*)?$
+```
+
+- **HTTPS only.** Credentials are on the request.
+- **The label class is the DNS one.** Each label starts and ends alphanumeric, so `-bad.example.com`
+  and `pod-.example.com` are rejected. Don't copy `[a-zA-Z0-9-]{1,63}` from the shared expression
+  here, because it accepts both.
+- **`(?:label\.)*` before the literal suffix** accepts the bare domain and any depth of subdomain,
+  and rejects lookalikes such as `attackerexample.com` and `example.com.attacker.net`. Userinfo
+  (`user@`) and ports cannot match.
+- **The tail follows the rule above.** `(/[^?#\s]*)?$` for a base URL with an optional path, or `/?$`
+  when the partner documents a bare host only.
+- **The suffix is matched case-sensitively.** Partner documentation and dashboards give lowercase
+  hosts, so a readable literal is preferred over `[eE][xX]…` character classes.
+
+**Know what these expressions are and aren't.** Both are syntactic checks on a stored string. Pinning
+keeps credentials off hosts outside the partner's domain, and that is all it does. Neither expression can
 resolve DNS, so it cannot stop a hostname that resolves to a link-local or private address, and it
 has no view of redirects, DNS rebinding, or egress. Those are runtime concerns owned by the
 transformer/delivery layer. Do not try to encode them here, and do not widen the host lookaheads in
@@ -318,10 +351,10 @@ is covered, and a coverage miss fails the build.
 
 Two caveats, both arguments for running it yourself before you push:
 
-- Nothing runs it locally. There is no npm script, and neither `npm test` nor the pre-commit hook
-  invokes it, so the first failure you see is a red build.
-- The shell wrapper diffs against a hardcoded `origin/develop`, so on a branch cut from `main` (a
-  hotfix) the changed-file list is wrong and the destination you edited may not be picked up.
+- It is not part of `npm test`, but the pre-commit hook invokes it directly. If Husky is not
+  installed or you want to check account metadata before committing, run the wrapper yourself.
+- The shell wrapper diffs against `origin/${GITHUB_BASE_REF:-main}`, so pull requests use their
+  GitHub base branch while local runs default to the `main` trunk.
 
 ```bash
 python3 scripts/validate_account_definitions.py <destination>

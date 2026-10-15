@@ -1,7 +1,7 @@
 /*
  GENERATED - DO NOT EDIT
  This file is generated from the templates/Destinations.java.template file.
- Original file: https://github.com/rudderlabs/rudder-integrations-config/blob/develop/generated/Destinations.java
+ Original file: https://github.com/rudderlabs/rudder-integrations-config/blob/main/generated/Destinations.java
 
  NOTE: Contains only constants for device mode destinations
  */
