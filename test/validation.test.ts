@@ -2890,6 +2890,13 @@ describe('DESTINATION_HS_AUDIENCE_API_KEY secretSchema', () => {
     expect(validate({ accessToken: 'pat-synthetic-existing-token' })).toBe(true);
   });
 
+  it('accepts a 500-character Service Key and rejects a longer one', () => {
+    const validate = validateSecret();
+    expect(validate({ accessToken: 'a'.repeat(500) })).toBe(true);
+    expect(validate({ accessToken: 'a'.repeat(501) })).toBe(false);
+    expect(messages(validate)).toEqual(['Enter a HubSpot Service Key']);
+  });
+
   it('rejects missing, empty, whitespace-only, and non-string accessToken values', () => {
     const validate = validateSecret();
     expect(validate({})).toBe(false);
