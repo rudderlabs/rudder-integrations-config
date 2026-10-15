@@ -318,3 +318,7 @@
 
 - In Google Ads Remarketing Lists, the feature-flagged hierarchy picker and all three legacy account controls are mutually exclusive UI variants because they write the same persisted `customerId`, `subAccount`, and `loginCustomerId` keys. Gate the hierarchy `nestedSelect` on `AMP_enable-google-ads-customer-picker: true`, but omit `value` from that flag prerequisite on the legacy controls so the webapp treats the flag as falsy or missing; explicit `value: false` does not match a missing flag and can hide every Customer ID control.
 - Preserve the legacy controls' existing field prerequisites and metadata inside their inverse gate; hiding only the old customer picker can leave duplicate controls that conflict with the hierarchy picker's patches.
+
+## RUD-3351 — Rokt Event Mapping Layout
+
+- Place Rokt's Form Builder V2 `Event mappings` block immediately after `Initial setup` and before `Configuration settings`. This task-specific ordering and its OpenAI Ads prior art take precedence over the general convention that mapping blocks appear last; the order is presentation-only and does not affect runtime behavior.
