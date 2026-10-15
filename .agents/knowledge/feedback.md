@@ -137,3 +137,4 @@
 
 - Reviewer direction requires retaining required validation in the Custom Activation account schemas while relying on AJV's default missing-required-property error.
 - Do not add object-level `errorMessage.required` mappings or broaden the shared account meta-schema solely to provide friendlier required-field messages for these accounts.
+- Do not add destination-specific `test/validation.test.ts` cases solely for straightforward 1–200/1–500 credential length patterns; follow comparable simple account definitions and reserve focused account-schema tests for complex or security-sensitive behavior.
