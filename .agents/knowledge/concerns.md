@@ -133,3 +133,8 @@
 ## INT-7258 — Nested Select Schema Generator Gap
 
 - `npm run check:schema:destination google_adwords_remarketing_lists` reports that `nestedSelect` has no schema-generator function even though the command exits successfully. A hierarchy picker that writes already-defined flat delivery keys requires no destination-schema churn, but this warning should be distinguished from actual generated-schema drift.
+
+## INT-7367 — Custom Activation Schema Generator Incompatibility
+
+- `npm run check:schema:destination custom_audience` crashes on the existing bespoke `audienceDeliveryApiBuilder` field: the field has no `configKey`, but `scripts/schemaGenerator.py::generate_schema_properties` still calls `is_field_present_in_default_config` with that key and raises `KeyError: 'configKey'` after reporting that no generator exists.
+- This predates the account-authentication migration. Until the shared generator supports the bespoke field, use destination fixture validation to cover Custom Activation schema changes rather than treating this crash as evidence of a new schema diff.
