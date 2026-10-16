@@ -133,10 +133,3 @@
 ## INT-7258 — Nested Select Schema Generator Gap
 
 - `npm run check:schema:destination google_adwords_remarketing_lists` reports that `nestedSelect` has no schema-generator function even though the command exits successfully. A hierarchy picker that writes already-defined flat delivery keys requires no destination-schema churn, but this warning should be distinguished from actual generated-schema drift.
-
-## ACT2-1228 — CI Schema Step Checks Only The First Changed File
-
-<!-- session: 2026-10-15 -->
-
-- `.github/workflows/test.yml` ("Run schema validation for changed files") calls `scripts/run-schema-validation.sh $files_to_validate` unquoted, so each changed path is a separate argument, but the script reads only `changed_files="$1"`. CI therefore runs `schemaGenerator.py` for the directory of the first changed file only, and skips it entirely when that file is not directly under `src/configurations/destinations/<dir>/` (for example an `accounts/` file or a test file). Run `npm run check:schema:destination <dir>` locally for every destination a change touches, and treat any `UserWarning` as a failure.
-- `scripts/schemaGenerator.py::generate_schema_for_account_management_input` returns only `{"type": "string"}` and ignores a ui-config `regex`, so a `pattern` on `rudderAccountId` in a destination `schema.json` makes `check:schema:destination` warn with `"$delete": ["pattern"]`. On `main` at `68d8ef78`, `braze_audience`, `iterable_audience` and `gainsight_px_audience` each declare `rudderAccountId` with `"pattern": "^.{1,100}$"` and each warns; they got through because of the `$1` gap above. `marketo_audience/schema.json` declares `rudderAccountId` as `{"type": "string"}`. Bounding `rudderAccountId` length is a generator change for every destination, not a per-destination pattern.

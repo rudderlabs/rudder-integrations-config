@@ -70,10 +70,3 @@
 ## INT-7258 — Keep Conventional Commit Subjects Lowercase
 
 - Commitlint rejects an uppercase ticket identifier at the start of a Conventional Commit subject with `subject-case` (for example, `docs(knowledge): INT-7258 distill`). Keep ticket references lowercase in the subject (for example, `docs(knowledge): int-7258 distill`).
-
-## ACT2-1228 — Worktree Hook Shim Without Touching Shared Git Config
-
-<!-- session: 2026-10-15 -->
-
-- In a `.claude/worktrees/<name>` worktree, `git config core.hooksPath` can be the main checkout's absolute `.husky` path. Git config is shared across worktrees, so `git commit` runs the main checkout's `.husky/pre-commit`, which fails at line 2 when that checkout has no `.husky/_/husky.sh`. Running `npx husky install` from the worktree fixes it by rewriting the shared `core.hooksPath` for every checkout. To keep the hooks without changing shared config, copy `node_modules/husky/husky.sh` to the worktree's `.husky/_/husky.sh`, add a `.husky/_/.gitignore` containing `*`, and commit with `git -c core.hooksPath=.husky commit`.
-- ESLint run from inside a nested worktree also reads the main checkout's `.eslintrc.json`, because the repo's `.eslintrc.json` has no `"root": true`, and fails with "couldn't find the config \"airbnb-base\"" when the main checkout has no `node_modules`. Pass `--no-eslintrc -c .eslintrc.json` to lint with the worktree's own config.
