@@ -1,0 +1,35 @@
+{
+  "name": "HS_AUDIENCE",
+  "displayName": "HubSpot Audience",
+  "version": "1.0",
+  "config": {
+    "supportedAccountDefinitions": {
+      "rudderAccountId": ["DESTINATION_HS_AUDIENCE_API_KEY"]
+    },
+    "syncBehaviours": ["mirror"],
+    "supportsVisualMapperV2": true,
+    "isAudienceSupported": true,
+    "transformAtV1": "router",
+    "supportedSourceTypes": ["warehouse"],
+    "supportedMessageTypes": {
+      "cloud": ["record"]
+    },
+    "supportedConnectionModes": {
+      "warehouse": ["cloud"]
+    },
+    "destConfig": {
+      "defaultConfig": ["rudderAccountId", "accessToken"],
+      "warehouse": ["connectionMode"]
+    },
+    "secretKeys": ["accessToken"]
+  },
+  "options": {
+    "isBeta": true,
+    "hidden": {
+      "gate": {
+        "flags": [{ "name": "AMP_enable-hs-audience-destination", "value": false }]
+      }
+    },
+    "icon": "hubspot"
+  }
+}

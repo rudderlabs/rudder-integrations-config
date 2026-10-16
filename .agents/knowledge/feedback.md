@@ -138,8 +138,10 @@
 
 - Keep `.agents/knowledge/*.md` focused on durable repository rules under topic-based headings; omit temporary rollout or merge-sequencing instructions, and avoid duplicating exact workflow identifiers whose authoritative source is the workflow itself.
 
-## INT-7367 — Custom Activation Required-Field Error Guidance
+## ACT2-1015 — HubSpot Audience Account Id Schema
 
-- Reviewer direction requires retaining required validation in the Custom Activation account schemas while relying on AJV's default missing-required-property error.
-- Do not add object-level `errorMessage.required` mappings or broaden the shared account meta-schema solely to provide friendlier required-field messages for these accounts.
-- Do not add destination-specific `test/validation.test.ts` cases solely for straightforward 1–200/1–500 credential length patterns; follow comparable simple account definitions and reserve focused account-schema tests for complex or security-sensitive behavior.
+<!-- session: 2026-10-15 -->
+
+- `scripts/schemaGenerator.py::generate_schema_for_account_management_input` emits only `{"type": "string"}` and does not read a ui-config `regex`. A hand-written `pattern` on `rudderAccountId` makes `scripts/run-schema-validation.sh` fail, because that script treats any generator `UserWarning` as fatal.
+- For `src/configurations/destinations/hs_audience/schema.json`, keep `rudderAccountId` as `{"type": "string"}` with no `pattern`. Do not restore `^.{1,100}$` and do not change the shared generator for this destination. Empty and over-100-character account ids are valid in `test/data/validation/destinations/hs_audience.json`.
+- The HubSpot Audience Service Key in `src/configurations/destinations/hs_audience/accounts/hs_audience_api_key/schema.json` uses `^(?=.{1,500}$).*\S.*$`: at most 500 characters, and at least one non-whitespace character. The account option title in that account's `ui-config.json` is "Service Key"; the definition name stays `DESTINATION_HS_AUDIENCE_API_KEY`.

@@ -130,11 +130,6 @@
 
 - Resolved during review: `scripts/schemaGenerator.py::generate_schema_for_dynamic_data_select` now carries a field's `regex` into the generated schema `pattern`, matching `textInput` behavior. Keep regexes in destination `ui-config.json` as the source of truth so both the UI and regenerated backend schema reject malformed free-typed dynamic-select values.
 
-## INT-7367 — Custom Audience Schema Generator Incompatibility
-
-- `npm run check:schema:destination custom_audience` cannot complete while `scripts/schemaGenerator.py::generate_schema_properties` handles the bespoke `audienceDeliveryApiBuilder` field: the field has no `configKey`, and the generator raises `KeyError: 'configKey'` after reporting that no generator exists for the field type.
-- This limitation predates the account-auth migration. Until the shared generator supports the bespoke field, use destination validation fixtures to cover Custom Activation schema changes rather than interpreting this crash as a schema diff caused by the edited fields.
-
 ## INT-7258 — Nested Select Schema Generator Gap
 
 - `npm run check:schema:destination google_adwords_remarketing_lists` reports that `nestedSelect` has no schema-generator function even though the command exits successfully. A hierarchy picker that writes already-defined flat delivery keys requires no destination-schema churn, but this warning should be distinguished from actual generated-schema drift.

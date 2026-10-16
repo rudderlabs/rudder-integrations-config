@@ -133,10 +133,3 @@
 
 - Secret-key change detection compares only canonical root files at `src/configurations/destinations/<destination>/db-config.json`. Nested account definitions are excluded because their secrets are mirrored into root `config.secretKeys`, and archived `versions/*/db-config.json` files belong to a separate deploy-payload contract.
 - Secret-path manifest derivation is owned by rudder-transformer.
-
-## INT-7367 — Custom Activation Account Migration Contract
-
-- Custom Activation account-backed authentication uses three account definitions under `src/configurations/destinations/custom_audience/accounts/` for Basic auth, Bearer token, and API key credentials. The destination links them through `config.supportedAccountDefinitions.rudderAccountId` and persists `rudderAccountId` plus `authenticationEnabled` through `config.destConfig.defaultConfig`.
-- When `authenticationEnabled` is explicitly `true`, `src/configurations/destinations/custom_audience/schema.json` must require a non-empty `rudderAccountId`; `false` may remain valid without an account reference because only the true state enters the account-only transformer path.
-- Keep the legacy `authenticationType`, credential, and secret declarations during migration. `authenticationType` is optional, and each legacy per-method conditional must require the discriminator inside its `if` block so configs migrated to account-backed auth do not trigger legacy inline credential requirements.
-- Keep account-schema required validation for these credentials, but rely on AJV's default missing-required-property errors; do not broaden `src/schemas/account/account-schema-schema.json` solely to permit object-level `optionsSchema.errorMessage.required` or `secretSchema.errorMessage.required` mappings.
