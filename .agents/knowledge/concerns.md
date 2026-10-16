@@ -133,3 +133,7 @@
 ## INT-7258 — Nested Select Schema Generator Gap
 
 - `npm run check:schema:destination google_adwords_remarketing_lists` reports that `nestedSelect` has no schema-generator function even though the command exits successfully. A hierarchy picker that writes already-defined flat delivery keys requires no destination-schema churn, but this warning should be distinguished from actual generated-schema drift.
+
+## RUD-3351 — Rokt Schema Generator Baseline Drift
+
+- Rokt schema validation reports pre-existing drift because `scripts/schemaGenerator.py` recommends deleting `configSchema.properties.rudderAccountId.pattern`; this linked-account warning is unrelated to the hand-maintained `eventsMapping` schema used by the redirect group. `npm run check:schema:destination rokt` can still exit successfully while printing the warning, and `scripts/run-schema-validation.sh src/configurations/destinations/rokt/ui-config.json` treats it as a failure, so distinguish this baseline from event-mapping changes.
