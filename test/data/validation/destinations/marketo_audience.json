@@ -1,0 +1,48 @@
+[
+  {
+    "testTitle": "Valid config with rudderAccountId and the warehouse cloud connection mode",
+    "config": {
+      "rudderAccountId": "acc123",
+      "connectionMode": {
+        "warehouse": "cloud"
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Valid config with only rudderAccountId",
+    "config": {
+      "rudderAccountId": "acc123"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Invalid config — missing rudderAccountId",
+    "config": {
+      "connectionMode": {
+        "warehouse": "cloud"
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'rudderAccountId'"]
+  },
+  {
+    "testTitle": "Invalid config — rudderAccountId wrong type",
+    "config": {
+      "rudderAccountId": 123
+    },
+    "result": false,
+    "err": ["rudderAccountId must be string"]
+  },
+  {
+    "testTitle": "Invalid config — unsupported warehouse connection mode",
+    "config": {
+      "rudderAccountId": "acc123",
+      "connectionMode": {
+        "warehouse": "device"
+      }
+    },
+    "result": false,
+    "err": ["connectionMode.warehouse must be equal to one of the allowed values"]
+  }
+]
