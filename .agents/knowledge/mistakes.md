@@ -70,3 +70,10 @@
 ## INT-7258 — Keep Conventional Commit Subjects Lowercase
 
 - Commitlint rejects an uppercase ticket identifier at the start of a Conventional Commit subject with `subject-case` (for example, `docs(knowledge): INT-7258 distill`). Keep ticket references lowercase in the subject (for example, `docs(knowledge): int-7258 distill`).
+
+## ACT2-1228 — Worktree Commits Run The Main Checkout's Husky Hooks
+
+<!-- session: 2026-10-15 -->
+
+- This repository sets `extensions.worktreeConfig=true`, and a `.claude/worktrees/<name>` worktree can carry `core.hooksPath` as the main checkout's absolute `.husky` path in `.git/worktrees/<name>/config.worktree`, which overrides the shared `.git/config`. `git commit` in that worktree then runs the main checkout's `.husky/pre-commit`, which fails at line 2 when the main checkout has no `.husky/_/husky.sh`. `npx husky install` does not fix this: husky 8 runs `git config core.hooksPath .husky` without `--worktree`, so it writes only the shared config, and the worktree value still wins. Copy `node_modules/husky/husky.sh` to the worktree's `.husky/_/husky.sh`, add a `.husky/_/.gitignore` containing `*`, and commit with `git -c core.hooksPath=.husky commit` so the worktree's own hooks run. Check with `git config --show-origin --get-all core.hooksPath`.
+- ESLint run from inside a nested worktree also reads the main checkout's `.eslintrc.json`, because the repo's `.eslintrc.json` has no `"root": true`, and fails with "couldn't find the config \"airbnb-base\"" when the main checkout has no `node_modules`. Pass `--no-eslintrc -c .eslintrc.json` to lint with the worktree's own config.

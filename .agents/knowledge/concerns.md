@@ -137,3 +137,10 @@
 ## RUD-3351 — Rokt Schema Generator Baseline Drift
 
 - Rokt schema validation reports pre-existing drift because `scripts/schemaGenerator.py` recommends deleting `configSchema.properties.rudderAccountId.pattern`; this linked-account warning is unrelated to the hand-maintained `eventsMapping` schema used by the redirect group. `npm run check:schema:destination rokt` can still exit successfully while printing the warning, and `scripts/run-schema-validation.sh src/configurations/destinations/rokt/ui-config.json` treats it as a failure, so distinguish this baseline from event-mapping changes.
+
+## ACT2-1228 — CI Schema Step Checks Only The First Changed File
+
+<!-- session: 2026-10-15 -->
+
+- `.github/workflows/test.yml` ("Run schema validation for changed files") calls `scripts/run-schema-validation.sh $files_to_validate` unquoted, so each changed path is a separate argument, but the script reads only `changed_files="$1"`. CI therefore runs `schemaGenerator.py` for the directory of the first changed file only, and skips it entirely when that file is not directly under `src/configurations/destinations/<dir>/` (for example an `accounts/` file or a test file). Run `npm run check:schema:destination <dir>` locally for every destination a change touches, and treat any `UserWarning` as a failure. To reproduce the CI step locally, run it under bash: zsh does not word-split the unquoted variable, so a zsh run passes the whole list as `$1` and hides the gap.
+- `scripts/schemaGenerator.py::generate_schema_for_account_management_input` returns only `{"type": "string"}` and ignores a ui-config `regex`, so a `pattern` on `rudderAccountId` in a destination `schema.json` makes `check:schema:destination` warn with `"$delete": ["pattern"]`. On `main` at `68d8ef78`, `braze_audience`, `iterable_audience` and `gainsight_px_audience` each declare `rudderAccountId` with `"pattern": "^.{1,100}$"` and each warns; they got through because of the `$1` gap above. `marketo_audience/schema.json` declares `rudderAccountId` as `{"type": "string"}`. Bounding `rudderAccountId` length is a generator change for every destination, not a per-destination pattern.

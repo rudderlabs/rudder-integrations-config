@@ -322,3 +322,11 @@
 ## RUD-3351 — Rokt Event Mapping Layout
 
 - Place Rokt's Form Builder V2 `Event mappings` block immediately after `Initial setup` and before `Configuration settings`. This task-specific ordering and its OpenAI Ads prior art take precedence over the general convention that mapping blocks appear last; the order is presentation-only and does not affect runtime behavior.
+
+## ACT2-1228 — Marketo Audience Account Fields
+
+<!-- session: 2026-10-15 -->
+
+- `DESTINATION_MARKETO_AUDIENCE_API_KEY` (`src/configurations/destinations/marketo_audience/accounts/marketo_audience_api_key/`) keeps the Munchkin ID `accountId` as an option field and only `clientId` and `clientSecret` as secret fields. `MARKETO_STATIC_LIST` lists `accountId` in `secretKeys`; do not copy that, because the Munchkin ID is public (it ships in the Munchkin tracking script).
+- The account `optionsSchema` pins `accountId` to `^[0-9A-Za-z]{3}-[0-9A-Za-z]{3}-[0-9A-Za-z]{3}$`. rudder-integrations-info and rudder-transformer build the token URL as `https://<accountId>.mktorest.com` and send `clientId` and `clientSecret` to it, so a free-form or length-only pattern would let whoever creates the account choose the host that receives the credentials. Do not widen it. The `DESTINATION_MARKETO_AUDIENCE_API_KEY optionsSchema` tests in `test/validation.test.ts` pin the host-changing values it must reject.
+- The pattern lives only in the account `schema.json`, which config-backend enforces on save. rudder-webapp's account form (`src/components/common/lightFormBuilder`, field type `BaseFieldConfig` in `src/api/types.ts`, checked on master `4da376af6`, 2026-10-14) has no `regex` key and runs no schema validation in the browser, so a `regex` copied into the account `ui-config.json` would never run.
