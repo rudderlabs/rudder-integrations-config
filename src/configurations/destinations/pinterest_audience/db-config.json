@@ -11,6 +11,7 @@
     "disableJsonMapper": true,
     "isAudienceSupported": true,
     "transformAtV1": "router",
+    "recordFormat": "records",
     "supportedSourceTypes": ["warehouse"],
     "supportedMessageTypes": {
       "cloud": ["record"]
@@ -44,7 +45,7 @@
           "createAudience": "no"
         }
       },
-      "mappingGuidance": "Pinterest Customer Lists accept three identifier columns. Use these names verbatim as `to`; they are what get_audience_destination_schema returns in fields[].name.\n- EMAIL — the user's email address.\n- MAID — a mobile advertising ID (AAID on Android; IDFA only where Pinterest's policy allows it).\n- PHONE — the user's phone number.\n\nMap as many as you have: Pinterest matches a user if any column in the row matches, so a row carrying several identifiers has a higher match rate than any one alone.\n\nPhone numbers must include the country code (for example 13125550100 for a US number); formatting characters are removed before hashing.\n\nHashing: with isHashRequired true (the default) send RAW warehouse values and the integration normalizes and SHA-256 hashes them. With isHashRequired false, every value must already be the SHA-256 hex digest of the lowercased, trimmed email, or of the digits-only phone number including country code; unhashed values are rejected or fail to match.\n\nDon't send IDFA collected from iOS app or website activity — Pinterest's policy forbids it.\n\nPinterest needs at least 100 matched users and 48–72 hours before an audience can be targeted.\n\nAD ACCOUNT: the ad account id is not discoverable through these operations. An agent MUST have `adAccountId` set on the destination config before calling listAudiences or setup; ask the user for it rather than guessing."
+      "mappingGuidance": "Pinterest Customer Lists accept two identifier columns. Use these names verbatim as `to`; they are what get_audience_destination_schema returns in fields[].name.\n- EMAIL — the user's email address.\n- MAID — a mobile advertising ID (AAID on Android; IDFA only where Pinterest's policy allows it).\n\nMap both when you have both: Pinterest matches a user if any identifier matches, so sending email and MAID gives a higher match rate than either alone.\n\nHashing: with isHashRequired true (the default) send RAW warehouse values and the integration normalizes and SHA-256 hashes them. With isHashRequired false, every value must already be the SHA-256 hex digest of the lowercased, trimmed email or the lowercased MAID; unhashed values are rejected or fail to match.\n\nDon't send IDFA collected from iOS app or website activity — Pinterest's policy forbids it.\n\nPinterest needs at least 100 matched users and 48–72 hours before an audience can be targeted.\n\nAD ACCOUNT: the ad account id is not discoverable through these operations. An agent MUST have `adAccountId` set on the destination config before calling listAudiences or setup; ask the user for it rather than guessing."
     },
     "icon": "pinterest"
   }
