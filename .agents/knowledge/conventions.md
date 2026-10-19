@@ -322,3 +322,9 @@
 ## RUD-3351 — Rokt Event Mapping Layout
 
 - Place Rokt's Form Builder V2 `Event mappings` block immediately after `Initial setup` and before `Configuration settings`. This task-specific ordering and its OpenAI Ads prior art take precedence over the general convention that mapping blocks appear last; the order is presentation-only and does not affect runtime behavior.
+
+## INT-7367 — Custom Activation Account Credential Contracts
+
+- Custom Activation account credentials reject all-whitespace values while enforcing their per-field bounds: use `^(?=.{1,200}$).*\S.*$` for `basicAuthUserName` and `apiKeyName`, and `^(?=.{1,500}$).*\S.*$` for `basicAuthPassword`, `bearerToken`, and `apiKeyValue`.
+- Use the standard bounded account-reference pattern `^.{1,100}$` for Custom Activation `rudderAccountId`, rather than an unbounded non-empty pattern.
+- The Basic Auth, Bearer Token, and API Key account cards do not prefer one endpoint authentication method over another; keep `uiConfig.recommended: false` on all three unless product explicitly selects a preferred mechanism.

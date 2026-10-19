@@ -137,3 +137,8 @@
 ## RUD-3351 — Rokt Schema Generator Baseline Drift
 
 - Rokt schema validation reports pre-existing drift because `scripts/schemaGenerator.py` recommends deleting `configSchema.properties.rudderAccountId.pattern`; this linked-account warning is unrelated to the hand-maintained `eventsMapping` schema used by the redirect group. `npm run check:schema:destination rokt` can still exit successfully while printing the warning, and `scripts/run-schema-validation.sh src/configurations/destinations/rokt/ui-config.json` treats it as a failure, so distinguish this baseline from event-mapping changes.
+
+## INT-7367 — Custom Activation Schema Generator Incompatibility
+
+- `npm run check:schema:destination custom_audience` cannot validate the current baseline because `scripts/schemaGenerator.py::generate_schema_properties` encounters the bespoke `audienceDeliveryApiBuilder` field without a `configKey` and raises `KeyError: 'configKey'` after reporting that no generator exists.
+- This predates the account-auth migration; use destination fixture validation for Custom Activation schema changes until the shared generator supports that bespoke field, rather than treating the crash as evidence of an INT-7367 schema defect.
