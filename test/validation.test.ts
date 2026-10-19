@@ -3054,15 +3054,18 @@ describe('DESTINATION_MARKETO_AUDIENCE_API_KEY account definition', () => {
     await expect(validateAccountDefinitions(loadMarketoAudienceAccount())).resolves.toEqual(true);
   });
 
-  it('is an api_key account with the Munchkin ID as an option and the client credentials as secrets, behind the release gate', () => {
+  it('is an api_key account with the Munchkin ID as an option and the client credentials as secrets', () => {
     expect(loadMarketoAudienceAccount()).toEqual({
       name: 'DESTINATION_MARKETO_AUDIENCE_API_KEY',
       type: 'marketo_audience',
       category: 'destination',
       authenticationType: 'api_key',
-      displayOptions: { hidden: MARKETO_AUDIENCE_GATE },
       config: { optionFields: ['accountId'], secretFields: ['clientId', 'clientSecret'] },
     });
+  });
+
+  it('has no displayOptions.hidden gate so Lookout can offer the account while the destination stays Flagsmith-gated', () => {
+    expect(loadMarketoAudienceAccount().displayOptions?.hidden).toBeUndefined();
   });
 });
 
