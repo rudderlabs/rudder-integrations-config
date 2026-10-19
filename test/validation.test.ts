@@ -788,6 +788,35 @@ describe('Destination Definition validation tests', () => {
     );
   });
 
+  it.each(['records', 'records_v2'])('accepts recordFormat %s', async (recordFormat) => {
+    const destinationDefinition = getMinimalDestinationDefinition();
+
+    await expect(
+      validateDestinationDefinitions({
+        ...destinationDefinition,
+        config: { ...destinationDefinition.config, recordFormat },
+      }),
+    ).resolves.toEqual(true);
+  });
+
+  // The transformer treats any value other than exactly "records_v2" as classic, so a typo in a
+  // flip PR would silently keep the classic body; the enum is what rejects it.
+  it.each(['records-v2', 'RECORDS_V2', 'records_v3', 'record', ''])(
+    'rejects recordFormat %p',
+    async (recordFormat) => {
+      const destinationDefinition = getMinimalDestinationDefinition();
+
+      await expectValidationError(
+        validateDestinationDefinitions({
+          ...destinationDefinition,
+          config: { ...destinationDefinition.config, recordFormat },
+        }),
+        'config.recordFormat must be equal to one of the allowed values',
+        false,
+      );
+    },
+  );
+
   it('accepts Visual Mapper V2 with legacy audience support', async () => {
     const destinationDefinition = getMinimalDestinationDefinition();
 
