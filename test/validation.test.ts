@@ -2871,8 +2871,9 @@ describe('DESTINATION_HS_AUDIENCE_API_KEY account definition', () => {
     expect(accountConfig.config.optionFields).toEqual([]);
   });
 
-  it('displayOptions.hidden matches the destination temporary gate', () => {
-    expectHsAudienceGate(loadAccount().displayOptions.hidden);
+  it('has no displayOptions.hidden gate so Lookout can offer the account while the destination stays Flagsmith-gated', () => {
+    const accountConfig = loadAccount();
+    expect(accountConfig.displayOptions?.hidden).toBeUndefined();
   });
 });
 

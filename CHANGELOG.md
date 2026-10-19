@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.186.1](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.186.0...v1.186.1) (2026-10-19)
+
+
+### Miscellaneous
+
+* **hs-audience:** remove display options hidden from db-config.json ([#2843](https://github.com/rudderlabs/rudder-integrations-config/issues/2843)) ([e0357af](https://github.com/rudderlabs/rudder-integrations-config/commit/e0357afe96b737ec0a4dcf7a6a6c5a4768b35b5a))
+
+## [1.186.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.185.1...v1.186.0) (2026-10-16)
+
+
+### Features
+
+* add PINTEREST_AUDIENCE destination (hidden) and its OAuth account definition (ACT2-1194) ([#2835](https://github.com/rudderlabs/rudder-integrations-config/issues/2835)) ([ba01c7b](https://github.com/rudderlabs/rudder-integrations-config/commit/ba01c7be513278df405fea89a6f3a923402e405a))
+* **google-ads:** add GARL account hierarchy picker ([#2810](https://github.com/rudderlabs/rudder-integrations-config/issues/2810)) ([1156c11](https://github.com/rudderlabs/rudder-integrations-config/commit/1156c1137b82dc69d0e647044971a76276de5f40))
+* **hs-audience:** add HubSpot Audience destination definition ([#2798](https://github.com/rudderlabs/rudder-integrations-config/issues/2798)) ([175dbd4](https://github.com/rudderlabs/rudder-integrations-config/commit/175dbd46ee41d15dd89ba5bb0294d9e3ee172e84))
+* **rokt:** add conversion event mappings ([#2834](https://github.com/rudderlabs/rudder-integrations-config/issues/2834)) ([8218c18](https://github.com/rudderlabs/rudder-integrations-config/commit/8218c181e2cc34b7ff78854db1d1c4b3358892b0))
+
+
+### Miscellaneous
+
+* **deps:** bump actions/setup-node from 7.0.0 to 7.1.0 ([#2832](https://github.com/rudderlabs/rudder-integrations-config/issues/2832)) ([68d8ef7](https://github.com/rudderlabs/rudder-integrations-config/commit/68d8ef786ce45f3b30bdea948161d205e3a7a706))
+* **deps:** bump step-security/harden-runner from 2.21.1 to 2.22.1 ([#2831](https://github.com/rudderlabs/rudder-integrations-config/issues/2831)) ([93a0f7a](https://github.com/rudderlabs/rudder-integrations-config/commit/93a0f7af0c8fe416953a0ad5a374921eeb9a752c))
+
+
+### Documentation
+
+* **skills:** carry option-level featureFlag over in Form Builder V2 migrations ([#2806](https://github.com/rudderlabs/rudder-integrations-config/issues/2806)) ([fc13d63](https://github.com/rudderlabs/rudder-integrations-config/commit/fc13d6322d88f996ec327ad2a0f9a1125648045c))
+
 ## [1.185.1](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.185.0...v1.185.1) (2026-10-14)
 
 
