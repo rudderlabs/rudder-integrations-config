@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.186.1](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.186.0...v1.186.1) (2026-10-19)
+
+
+### Miscellaneous
+
+* **hs-audience:** remove display options hidden from db-config.json ([#2843](https://github.com/rudderlabs/rudder-integrations-config/issues/2843)) ([e0357af](https://github.com/rudderlabs/rudder-integrations-config/commit/e0357afe96b737ec0a4dcf7a6a6c5a4768b35b5a))
+
 ## [1.186.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.185.1...v1.186.0) (2026-10-16)
 
 
