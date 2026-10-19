@@ -319,10 +319,6 @@
 - In Google Ads Remarketing Lists, the feature-flagged hierarchy picker and all three legacy account controls are mutually exclusive UI variants because they write the same persisted `customerId`, `subAccount`, and `loginCustomerId` keys. Gate the hierarchy `nestedSelect` on `AMP_enable-google-ads-customer-picker: true`, but omit `value` from that flag prerequisite on the legacy controls so the webapp treats the flag as falsy or missing; explicit `value: false` does not match a missing flag and can hide every Customer ID control.
 - Preserve the legacy controls' existing field prerequisites and metadata inside their inverse gate; hiding only the old customer picker can leave duplicate controls that conflict with the hierarchy picker's patches.
 
-## INT-7367 — Custom Activation Account Authentication Contract
+## RUD-3351 — Rokt Event Mapping Layout
 
-- Custom Activation account credentials use bounded non-blank patterns: `^(?=.{1,200}$).*\S.*$` for `basicAuthUserName` and `apiKeyName`, and `^(?=.{1,500}$).*\S.*$` for `basicAuthPassword`, `bearerToken`, and `apiKeyValue`. All-whitespace credentials are invalid.
-- Basic Auth, Bearer Token, and API Key account cards all set `uiConfig.recommended: false`; endpoint requirements determine the authentication method, so the repository does not designate a preferred mechanism.
-- The destination schema keeps `authenticationType` optional for migrated account-backed configs while preserving the legacy authentication-type properties and per-method conditional branches. Each legacy branch must require the `authenticationType` discriminator in its `if` block so a migrated config without that key does not trigger inline credential requirements.
-- When `authenticationEnabled` is explicitly `true`, the destination schema requires `rudderAccountId`; `false` may omit the account reference. Custom Activation uses the bounded account-reference pattern `^.{1,100}$` and relies on default AJV validation messages.
-- Preserve the existing legacy authentication and credential declarations in destination metadata until the separate cleanup removes the inline path; workspace-config filtering drops keys that are no longer declared.
+- Place Rokt's Form Builder V2 `Event mappings` block immediately after `Initial setup` and before `Configuration settings`. This task-specific ordering and its OpenAI Ads prior art take precedence over the general convention that mapping blocks appear last; the order is presentation-only and does not affect runtime behavior.

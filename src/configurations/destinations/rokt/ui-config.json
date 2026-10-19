@@ -40,6 +40,32 @@
         ]
       },
       {
+        "title": "Event mappings",
+        "note": "Map RudderStack track events to Rokt conversion types",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "RudderStack to Rokt conversion mappings",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "eventsMapping",
+                    "label": "Event mappings",
+                    "note": "Map RudderStack event names to Rokt conversion types"
+                  }
+                ],
+                "callout": {
+                  "message": "Only events with a mapping are delivered to Rokt.",
+                  "type": "info"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
         "title": "Configuration settings",
         "note": "Manage the settings for your destination",
         "sections": [
@@ -57,6 +83,42 @@
       "title": "SDK settings",
       "note": "not visible in the ui",
       "fields": []
+    },
+    "redirectGroups": {
+      "eventsMapping": {
+        "fields": [
+          {
+            "type": "mapping",
+            "label": "Map your RudderStack events to Rokt conversion types",
+            "note": "Map RudderStack track event names to the Rokt conversion type each should be sent as.",
+            "configKey": "eventsMapping",
+            "default": [],
+            "addButtonLabel": "Add event mapping",
+            "uniqueRowFields": ["from"],
+            "uniqueRowFieldsErrorMessage": "Only one Rokt conversion type can be configured per RudderStack event name.",
+            "columns": [
+              {
+                "type": "textInput",
+                "label": "RudderStack event name",
+                "configKey": "from",
+                "regex": "^(.{1,100})$",
+                "regexErrorMessage": "Enter a non-empty RudderStack event name.",
+                "placeholder": "e.g: Order Completed",
+                "required": true
+              },
+              {
+                "type": "textInput",
+                "label": "Rokt conversion type",
+                "configKey": "to",
+                "regex": "^(.{1,100})$",
+                "regexErrorMessage": "Enter a non-empty Rokt conversion type.",
+                "placeholder": "e.g: purchase",
+                "required": true
+              }
+            ]
+          }
+        ]
+      }
     },
     "consentSettingsTemplate": {
       "title": "Consent settings",
