@@ -1,9 +1,8 @@
 [
   {
-    "testTitle": "minimal valid config with noAuth",
+    "testTitle": "minimal valid config with authentication disabled",
     "config": {
       "baseUrl": "https://api.example.com",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{\"users\": [{{users}}]}",
@@ -23,101 +22,8 @@
           "endpoint": "/delete",
           "batchSize": 500
         }
-      }
-    },
-    "result": true
-  },
-  {
-    "testTitle": "valid config with basicAuth",
-    "config": {
-      "baseUrl": "https://api.example.com",
-      "authenticationType": "basicAuth",
-      "basicAuthUserName": "user",
-      "basicAuthPassword": "pass",
-      "headers": [{ "key": "X-Custom", "value": "foo" }],
-      "actions": {
-        "insert": {
-          "requestBody": "{}",
-          "method": "POST",
-          "endpoint": "/insert",
-          "batchSize": 500
-        },
-        "update": {
-          "requestBody": "{}",
-          "method": "PUT",
-          "endpoint": "/update",
-          "batchSize": 500
-        },
-        "delete": {
-          "requestBody": "{}",
-          "method": "DELETE",
-          "endpoint": "/delete",
-          "batchSize": 500
-        }
-      }
-    },
-    "result": true
-  },
-  {
-    "testTitle": "valid config with bearerToken and action fields",
-    "config": {
-      "baseUrl": "https://api.example.com",
-      "authenticationType": "bearerToken",
-      "bearerToken": "token123",
-      "actions": {
-        "insert": {
-          "requestBody": "{}",
-          "method": "POST",
-          "endpoint": "/insert",
-          "batchSize": 1000,
-          "fields": [
-            { "name": "email", "isRequired": true, "hashType": "SHA256", "isCustom": false },
-            { "name": "first_name", "isRequired": false, "hashType": "NONE", "isCustom": false }
-          ]
-        },
-        "update": {
-          "requestBody": "{}",
-          "method": "PUT",
-          "endpoint": "/update",
-          "batchSize": 500
-        },
-        "delete": {
-          "requestBody": "{}",
-          "method": "DELETE",
-          "endpoint": "/delete",
-          "batchSize": 500
-        }
-      }
-    },
-    "result": true
-  },
-  {
-    "testTitle": "valid config with apiKey",
-    "config": {
-      "baseUrl": "https://api.example.com",
-      "authenticationType": "apiKey",
-      "apiKeyName": "X-API-Key",
-      "apiKeyValue": "abc123",
-      "actions": {
-        "insert": {
-          "requestBody": "{}",
-          "method": "POST",
-          "endpoint": "/insert",
-          "batchSize": 500
-        },
-        "update": {
-          "requestBody": "{}",
-          "method": "PUT",
-          "endpoint": "/update",
-          "batchSize": 2000
-        },
-        "delete": {
-          "requestBody": "{}",
-          "method": "DELETE",
-          "endpoint": "/delete",
-          "batchSize": 500
-        }
-      }
+      },
+      "authenticationEnabled": false
     },
     "result": true
   },
@@ -237,6 +143,98 @@
     "err": ["authenticationEnabled must be boolean"]
   },
   {
+    "testTitle": "legacy inline Basic Auth payload is rejected",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationType": "basicAuth",
+      "basicAuthUserName": "user",
+      "basicAuthPassword": "pass",
+      "actions": {
+        "insert": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/insert",
+          "batchSize": 500
+        },
+        "update": {
+          "requestBody": "{}",
+          "method": "PUT",
+          "endpoint": "/update",
+          "batchSize": 500
+        },
+        "delete": {
+          "requestBody": "{}",
+          "method": "DELETE",
+          "endpoint": "/delete",
+          "batchSize": 500
+        }
+      }
+    },
+    "result": false,
+    "err": [" must NOT be valid"]
+  },
+  {
+    "testTitle": "legacy inline Bearer Token payload is rejected",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationType": "bearerToken",
+      "bearerToken": "token123",
+      "actions": {
+        "insert": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/insert",
+          "batchSize": 500
+        },
+        "update": {
+          "requestBody": "{}",
+          "method": "PUT",
+          "endpoint": "/update",
+          "batchSize": 500
+        },
+        "delete": {
+          "requestBody": "{}",
+          "method": "DELETE",
+          "endpoint": "/delete",
+          "batchSize": 500
+        }
+      }
+    },
+    "result": false,
+    "err": [" must NOT be valid"]
+  },
+  {
+    "testTitle": "legacy inline API Key payload is rejected",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationType": "apiKey",
+      "apiKeyName": "X-API-Key",
+      "apiKeyValue": "abc123",
+      "actions": {
+        "insert": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/insert",
+          "batchSize": 500
+        },
+        "update": {
+          "requestBody": "{}",
+          "method": "PUT",
+          "endpoint": "/update",
+          "batchSize": 500
+        },
+        "delete": {
+          "requestBody": "{}",
+          "method": "DELETE",
+          "endpoint": "/delete",
+          "batchSize": 500
+        }
+      }
+    },
+    "result": false,
+    "err": [" must NOT be valid"]
+  },
+  {
     "testTitle": "empty config — missing required top-level properties",
     "config": {},
     "result": false,
@@ -246,7 +244,6 @@
     "testTitle": "invalid baseUrl scheme",
     "config": {
       "baseUrl": "ftp://example.com",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
@@ -277,7 +274,6 @@
     "testTitle": "baseUrl with scheme but no host",
     "config": {
       "baseUrl": "https://",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
@@ -308,7 +304,6 @@
     "testTitle": "baseUrl pointing at localhost is rejected",
     "config": {
       "baseUrl": "http://localhost",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
@@ -339,7 +334,6 @@
     "testTitle": "baseUrl pointing at localhost with port is rejected",
     "config": {
       "baseUrl": "http://localhost:3000/path",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
@@ -370,7 +364,6 @@
     "testTitle": "baseUrl with localhost subdomain prefix is rejected",
     "config": {
       "baseUrl": "https://localhost.example.com",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
@@ -401,7 +394,6 @@
     "testTitle": "baseUrl pointing at a bare IP address is rejected",
     "config": {
       "baseUrl": "http://127.0.0.1",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
@@ -432,7 +424,6 @@
     "testTitle": "baseUrl pointing at an ngrok tunnel is rejected",
     "config": {
       "baseUrl": "https://abcd1234.ngrok.io",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
@@ -463,7 +454,6 @@
     "testTitle": "baseUrl pointing at a .localhost host is rejected",
     "config": {
       "baseUrl": "http://service.localhost",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
@@ -494,7 +484,6 @@
     "testTitle": "valid baseUrl with port and path",
     "config": {
       "baseUrl": "https://api.example.com:8080/v1/audiences",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
@@ -519,166 +508,15 @@
     "result": true
   },
   {
-    "testTitle": "invalid authenticationType enum value",
-    "config": {
-      "baseUrl": "https://api.example.com",
-      "authenticationType": "oauth",
-      "actions": {
-        "insert": {
-          "requestBody": "{}",
-          "method": "POST",
-          "endpoint": "/x",
-          "batchSize": 1
-        },
-        "update": {
-          "requestBody": "{}",
-          "method": "PUT",
-          "endpoint": "/x",
-          "batchSize": 1
-        },
-        "delete": {
-          "requestBody": "{}",
-          "method": "DELETE",
-          "endpoint": "/x",
-          "batchSize": 1
-        }
-      }
-    },
-    "result": false,
-    "err": ["authenticationType must be equal to one of the allowed values"]
-  },
-  {
-    "testTitle": "basicAuth missing required credentials",
-    "config": {
-      "baseUrl": "https://api.example.com",
-      "authenticationType": "basicAuth",
-      "actions": {
-        "insert": {
-          "requestBody": "{}",
-          "method": "POST",
-          "endpoint": "/x",
-          "batchSize": 1
-        },
-        "update": {
-          "requestBody": "{}",
-          "method": "PUT",
-          "endpoint": "/x",
-          "batchSize": 1
-        },
-        "delete": {
-          "requestBody": "{}",
-          "method": "DELETE",
-          "endpoint": "/x",
-          "batchSize": 1
-        }
-      }
-    },
-    "result": false,
-    "err": [
-      " must have required property 'basicAuthUserName'",
-      " must have required property 'basicAuthPassword'",
-      " must match \"then\" schema"
-    ]
-  },
-  {
-    "testTitle": "basicAuth with empty credential string",
-    "config": {
-      "baseUrl": "https://api.example.com",
-      "authenticationType": "basicAuth",
-      "basicAuthUserName": "user",
-      "basicAuthPassword": "",
-      "actions": {
-        "insert": {
-          "requestBody": "{}",
-          "method": "POST",
-          "endpoint": "/x",
-          "batchSize": 1
-        },
-        "update": {
-          "requestBody": "{}",
-          "method": "PUT",
-          "endpoint": "/x",
-          "batchSize": 1
-        },
-        "delete": {
-          "requestBody": "{}",
-          "method": "DELETE",
-          "endpoint": "/x",
-          "batchSize": 1
-        }
-      }
-    },
-    "result": false,
-    "err": ["basicAuthPassword must NOT have fewer than 1 characters"]
-  },
-  {
-    "testTitle": "bearerToken auth missing token",
-    "config": {
-      "baseUrl": "https://api.example.com",
-      "authenticationType": "bearerToken",
-      "actions": {
-        "insert": {
-          "requestBody": "{}",
-          "method": "POST",
-          "endpoint": "/x",
-          "batchSize": 1
-        },
-        "update": {
-          "requestBody": "{}",
-          "method": "PUT",
-          "endpoint": "/x",
-          "batchSize": 1
-        },
-        "delete": {
-          "requestBody": "{}",
-          "method": "DELETE",
-          "endpoint": "/x",
-          "batchSize": 1
-        }
-      }
-    },
-    "result": false,
-    "err": [" must have required property 'bearerToken'", " must match \"then\" schema"]
-  },
-  {
-    "testTitle": "apiKey auth missing key name and value",
-    "config": {
-      "baseUrl": "https://api.example.com",
-      "authenticationType": "apiKey",
-      "actions": {
-        "insert": {
-          "requestBody": "{}",
-          "method": "POST",
-          "endpoint": "/x",
-          "batchSize": 1
-        },
-        "update": {
-          "requestBody": "{}",
-          "method": "PUT",
-          "endpoint": "/x",
-          "batchSize": 1
-        },
-        "delete": {
-          "requestBody": "{}",
-          "method": "DELETE",
-          "endpoint": "/x",
-          "batchSize": 1
-        }
-      }
-    },
-    "result": false,
-    "err": [
-      " must have required property 'apiKeyName'",
-      " must have required property 'apiKeyValue'",
-      " must match \"then\" schema"
-    ]
-  },
-  {
     "testTitle": "header value must not be empty",
     "config": {
       "baseUrl": "https://api.example.com",
-      "authenticationType": "noAuth",
-      "headers": [{ "key": "X-Custom", "value": "" }],
+      "headers": [
+        {
+          "key": "X-Custom",
+          "value": ""
+        }
+      ],
       "actions": {
         "insert": {
           "requestBody": "{}",
@@ -707,7 +545,6 @@
     "testTitle": "actions empty object — missing all required actions",
     "config": {
       "baseUrl": "https://api.example.com",
-      "authenticationType": "noAuth",
       "actions": {}
     },
     "result": false,
@@ -721,7 +558,6 @@
     "testTitle": "actions key not in allowed enum",
     "config": {
       "baseUrl": "https://api.example.com",
-      "authenticationType": "noAuth",
       "actions": {
         "UPSERT": {
           "requestBody": "{}",
@@ -743,7 +579,6 @@
     "testTitle": "action missing required keys",
     "config": {
       "baseUrl": "https://api.example.com",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {},
         "update": {
@@ -772,7 +607,6 @@
     "testTitle": "action batchSize out of range",
     "config": {
       "baseUrl": "https://api.example.com",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
@@ -801,7 +635,6 @@
     "testTitle": "action batchSize must be an integer",
     "config": {
       "baseUrl": "https://api.example.com",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
@@ -830,14 +663,17 @@
     "testTitle": "action field missing required properties",
     "config": {
       "baseUrl": "https://api.example.com",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
           "method": "POST",
           "endpoint": "/x",
           "batchSize": 1,
-          "fields": [{ "name": "email" }]
+          "fields": [
+            {
+              "name": "email"
+            }
+          ]
         },
         "update": {
           "requestBody": "{}",
@@ -864,7 +700,6 @@
     "testTitle": "action field with invalid hashType",
     "config": {
       "baseUrl": "https://api.example.com",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
@@ -872,7 +707,12 @@
           "endpoint": "/x",
           "batchSize": 1,
           "fields": [
-            { "name": "email", "isRequired": true, "hashType": "BLAKE3", "isCustom": false }
+            {
+              "name": "email",
+              "isRequired": true,
+              "hashType": "BLAKE3",
+              "isCustom": false
+            }
           ]
         },
         "update": {
@@ -896,7 +736,6 @@
     "testTitle": "update action with useInsertConfig true — standard fields not required",
     "config": {
       "baseUrl": "https://api.example.com",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
@@ -921,7 +760,6 @@
     "testTitle": "update action with useInsertConfig false and all standard fields",
     "config": {
       "baseUrl": "https://api.example.com",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
@@ -950,7 +788,6 @@
     "testTitle": "update action with useInsertConfig false but missing standard fields",
     "config": {
       "baseUrl": "https://api.example.com",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
@@ -982,7 +819,6 @@
     "testTitle": "update action without useInsertConfig must have standard fields",
     "config": {
       "baseUrl": "https://api.example.com",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
@@ -1012,7 +848,6 @@
     "testTitle": "useInsertConfig must be a boolean",
     "config": {
       "baseUrl": "https://api.example.com",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
@@ -1042,7 +877,6 @@
     "testTitle": "useInsertConfig not allowed on insert action",
     "config": {
       "baseUrl": "https://api.example.com",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "useInsertConfig": true,
@@ -1072,7 +906,6 @@
     "testTitle": "useInsertConfig not allowed on delete action",
     "config": {
       "baseUrl": "https://api.example.com",
-      "authenticationType": "noAuth",
       "actions": {
         "insert": {
           "requestBody": "{}",
