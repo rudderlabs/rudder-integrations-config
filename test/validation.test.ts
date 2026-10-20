@@ -3098,7 +3098,14 @@ describe('DESTINATION_MARKETO_AUDIENCE_API_KEY optionsSchema', () => {
 
   it('accepts a Munchkin ID of three groups of three letters or digits', () => {
     const validate = validateOptions();
-    ['123-ABC-456', 'abc-def-ghi', '000-000-000', 'A1b-2Cd-3eF'].forEach((accountId) => {
+    [
+      '123-ABC-456',
+      'abc-def-ghi',
+      '000-000-000',
+      'A1b-2Cd-3eF',
+      '09A-09A-09A',
+      'Zaz-Zaz-Zaz',
+    ].forEach((accountId) => {
       expect({ accountId, valid: validate({ accountId }) }).toEqual({ accountId, valid: true });
     });
   });
@@ -3120,6 +3127,51 @@ describe('DESTINATION_MARKETO_AUDIENCE_API_KEY optionsSchema', () => {
       '123-ABC-456@attacker.example',
       'attacker.example/123-ABC-456',
       'attacker.example#123-ABC-456',
+    ].forEach((accountId) => {
+      expect({ accountId, valid: validate({ accountId }) }).toEqual({ accountId, valid: false });
+      expect({ accountId, messages: ajvMessages(validate) }).toEqual({
+        accountId,
+        messages: [MUNCHKIN_ID_MESSAGE],
+      });
+    });
+  });
+
+  // One row per group and separator, so that loosening any character class, repeat count or
+  // separator in the pattern (for example A-Za-z to A-z, or {3} to {3,4}) fails at least one row.
+  it('rejects a Munchkin ID with a character, length or separator the pattern does not allow', () => {
+    const validate = validateOptions();
+    [
+      '1_3-ABC-456',
+      '123-A_C-456',
+      '123-ABC-4_6',
+      '1\\3-ABC-456',
+      '123-A\\C-456',
+      '123-ABC-4\\6',
+      '1.3-ABC-456',
+      '123-A.C-456',
+      '123-ABC-4.6',
+      '1 3-ABC-456',
+      '123-A C-456',
+      '123-ABC-4 6',
+      '1-3-ABC-456',
+      '123-A-C-456',
+      '123-ABC-4-6',
+      '1234-ABC-456',
+      '123-ABCD-456',
+      '123-AB-456',
+      '123-ABC-45',
+      '123.ABC-456',
+      '123-ABC.456',
+      '123_ABC-456',
+      '123-ABC_456',
+      '123ABC-456',
+      '123-ABC456',
+      '123/ABC-456',
+      '123-ABC/456',
+      '123--ABC-456',
+      '123-ABC--456',
+      '123 ABC-456',
+      '123-ABC 456',
     ].forEach((accountId) => {
       expect({ accountId, valid: validate({ accountId }) }).toEqual({ accountId, valid: false });
       expect({ accountId, messages: ajvMessages(validate) }).toEqual({
@@ -3166,6 +3218,21 @@ describe('DESTINATION_MARKETO_AUDIENCE_API_KEY secretSchema', () => {
       expect(validate({ clientId: 'synthetic-client-id', clientSecret })).toBe(false);
       expect(ajvMessages(validate)).toEqual([CLIENT_SECRET_MESSAGE]);
     });
+  });
+
+  it('rejects a client ID or client secret made only of whitespace', () => {
+    const validate = validateSecret();
+    [' ', '   ', '\t', ' '.repeat(100)].forEach((blank) => {
+      expect(validate({ clientId: blank, clientSecret: 'synthetic-secret' })).toBe(false);
+      expect(ajvMessages(validate)).toEqual([CLIENT_ID_MESSAGE]);
+      expect(validate({ clientId: 'synthetic-client-id', clientSecret: blank })).toBe(false);
+      expect(ajvMessages(validate)).toEqual([CLIENT_SECRET_MESSAGE]);
+    });
+  });
+
+  it('accepts credentials with surrounding or inner spaces as long as one character is not a space', () => {
+    const validate = validateSecret();
+    expect(validate({ clientId: ' synthetic id ', clientSecret: ' synthetic secret ' })).toBe(true);
   });
 
   it('requires clientId and clientSecret and rejects non-string values', () => {
