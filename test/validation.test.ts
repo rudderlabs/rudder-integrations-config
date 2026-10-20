@@ -3127,6 +3127,8 @@ describe('DESTINATION_MARKETO_AUDIENCE_API_KEY optionsSchema', () => {
       '123-ABC-456@attacker.example',
       'attacker.example/123-ABC-456',
       'attacker.example#123-ABC-456',
+      'env.attacker.example/',
+      'env.MUNCHKIN_ID',
     ].forEach((accountId) => {
       expect({ accountId, valid: validate({ accountId }) }).toEqual({ accountId, valid: false });
       expect({ accountId, messages: ajvMessages(validate) }).toEqual({
@@ -3193,8 +3195,9 @@ describe('DESTINATION_MARKETO_AUDIENCE_API_KEY optionsSchema', () => {
 describe('DESTINATION_MARKETO_AUDIENCE_API_KEY secretSchema', () => {
   const validateSecret = () =>
     compileAccountSchemaWithErrorMessages(marketoAudienceAccountSchema().secretSchema);
-  const CLIENT_ID_MESSAGE = 'Enter a client ID of up to 100 characters';
-  const CLIENT_SECRET_MESSAGE = 'Enter a client secret of up to 500 characters';
+  const CLIENT_ID_MESSAGE = 'Enter a client ID of 1 to 100 characters that is not only spaces';
+  const CLIENT_SECRET_MESSAGE =
+    'Enter a client secret of 1 to 500 characters that is not only spaces';
 
   it('accepts a client ID of up to 100 characters and a client secret of up to 500', () => {
     const validate = validateSecret();
