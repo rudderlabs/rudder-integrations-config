@@ -133,3 +133,9 @@
 
 - Secret-key change detection compares only canonical root files at `src/configurations/destinations/<destination>/db-config.json`. Nested account definitions are excluded because their secrets are mirrored into root `config.secretKeys`, and archived `versions/*/db-config.json` files belong to a separate deploy-payload contract.
 - Secret-path manifest derivation is owned by rudder-transformer.
+
+## INT-7367 — Custom Activation Account-Backed Authentication
+
+- Custom Activation supports Basic Auth, Bearer Token, and API Key through three account definitions under `src/configurations/destinations/custom_audience/accounts/`; the destination links them through `config.supportedAccountDefinitions.rudderAccountId`, and `rudderAccountId` plus `authenticationEnabled` belong in `config.destConfig.defaultConfig`.
+- When `authenticationEnabled` is explicitly `true`, `schema.json` requires a non-empty linked `rudderAccountId`; `false` does not require an account reference.
+- Preserve migration compatibility by keeping `authenticationType` optional while retaining each legacy per-method conditional with `required: ["authenticationType"]`. This makes those legacy credential branches self-disable for migrated account-backed configs without withdrawing legacy credential declarations that workspace config still needs.
