@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.187.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.186.1...v1.187.0) (2026-10-20)
+
+
+### Features
+
+* **marketo-audience:** add Marketo Audience destination definition ([#2836](https://github.com/rudderlabs/rudder-integrations-config/issues/2836)) ([4d1d4bd](https://github.com/rudderlabs/rudder-integrations-config/commit/4d1d4bdaa2a92740a5295d9f4b76c432bb60e214))
+* **pinterest_audience:** choose the customer-list record format from the definition ([#2839](https://github.com/rudderlabs/rudder-integrations-config/issues/2839)) ([25fc071](https://github.com/rudderlabs/rudder-integrations-config/commit/25fc07198d59e6224dedf0868452a3c9e889f7b8))
+
 ## [1.186.1](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.186.0...v1.186.1) (2026-10-19)
 
 
