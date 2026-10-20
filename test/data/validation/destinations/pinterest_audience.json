@@ -1,18 +1,21 @@
 [
   {
     "testTitle": "Valid config with rudderAccountId",
-    "config": { "rudderAccountId": "acc123" },
+    "config": { "rudderAccountId": "2Ntd8u6hKqmV3fZb1Y7cXQ9wLrA" },
     "result": true
   },
   {
     "testTitle": "Valid config with rudderAccountId and connectionMode",
-    "config": { "rudderAccountId": "acc123", "connectionMode": { "warehouse": "cloud" } },
+    "config": {
+      "rudderAccountId": "2Ntd8u6hKqmV3fZb1Y7cXQ9wLrA",
+      "connectionMode": { "warehouse": "cloud" }
+    },
     "result": true
   },
   {
     "testTitle": "Valid config with adAccountId on the destination, as Lookout's buildDestinationConfig writes it and audienceActivation contextFields reads it",
     "config": {
-      "rudderAccountId": "acc123",
+      "rudderAccountId": "2Ntd8u6hKqmV3fZb1Y7cXQ9wLrA",
       "adAccountId": "549755885175",
       "connectionMode": { "warehouse": "cloud" }
     },
@@ -25,14 +28,29 @@
     "err": [" must have required property 'rudderAccountId'"]
   },
   {
-    "testTitle": "Invalid config — empty rudderAccountId",
+    "testTitle": "Invalid config — empty rudderAccountId is not an account id",
     "config": { "rudderAccountId": "" },
     "result": false,
-    "err": ["rudderAccountId must match pattern \"^.{1,100}$\""]
+    "err": ["rudderAccountId must match pattern \"^[0-9A-Za-z]{27}$\""]
+  },
+  {
+    "testTitle": "Invalid config — rudderAccountId one character short of a KSUID",
+    "config": { "rudderAccountId": "2Ntd8u6hKqmV3fZb1Y7cXQ9wLr" },
+    "result": false,
+    "err": ["rudderAccountId must match pattern \"^[0-9A-Za-z]{27}$\""]
+  },
+  {
+    "testTitle": "Invalid config — rudderAccountId with a non-base62 character",
+    "config": { "rudderAccountId": "2Ntd8u6hKqmV3fZb1Y7cXQ9wLr-" },
+    "result": false,
+    "err": ["rudderAccountId must match pattern \"^[0-9A-Za-z]{27}$\""]
   },
   {
     "testTitle": "Invalid config — connectionMode.warehouse device is not supported",
-    "config": { "rudderAccountId": "acc123", "connectionMode": { "warehouse": "device" } },
+    "config": {
+      "rudderAccountId": "2Ntd8u6hKqmV3fZb1Y7cXQ9wLrA",
+      "connectionMode": { "warehouse": "device" }
+    },
     "result": false,
     "err": ["connectionMode.warehouse must be equal to one of the allowed values"]
   }
