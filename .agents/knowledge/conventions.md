@@ -328,3 +328,8 @@
 - Custom Activation reusable credentials reject all-whitespace values while enforcing their field bounds: use `^(?=.{1,200}$).*\S.*$` for `basicAuthUserName` and `apiKeyName`, and `^(?=.{1,500}$).*\S.*$` for `basicAuthPassword`, `bearerToken`, and `apiKeyValue`.
 - None of the Basic Auth, Bearer Token, or API Key account cards is preferred; keep `uiConfig.recommended: false` for all three unless product explicitly chooses a recommended mechanism.
 - Use the standard bounded linked-account reference pattern `^.{1,100}$` for Custom Activation `rudderAccountId` rather than an unbounded non-empty pattern.
+
+## RUD-3387 — TikTok Offline Standard Event Contract
+
+- TikTok Ads Offline Events must not expose `Lead` in the `eventsToStandard` UI options or schema enum; `Purchase`, the empty-string enum member, and the other supported standard events remain valid.
+- Existing saved `eventsToStandard` mappings whose `to` value is `Lead` are intentionally not migrated or handled specially in integrations-config. Runtime mapping behavior belongs to rudder-transformer rather than this repository.
