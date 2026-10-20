@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.190.1](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.190.0...v1.190.1) (2026-10-20)
+
+
+### Bug Fixes
+
+* **tiktok-ads-offline-events:** remove unsupported lead event ([#2851](https://github.com/rudderlabs/rudder-integrations-config/issues/2851)) ([ffbd278](https://github.com/rudderlabs/rudder-integrations-config/commit/ffbd278d7d6a2a12968868efdc7389fd29a44fc0))
+
 ## [1.190.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.189.0...v1.190.0) (2026-10-20)
 
 
