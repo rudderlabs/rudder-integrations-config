@@ -2872,8 +2872,9 @@ describe('DESTINATION_HS_AUDIENCE_API_KEY account definition', () => {
     expect(accountConfig.config.optionFields).toEqual([]);
   });
 
-  it('displayOptions.hidden matches the destination temporary gate', () => {
-    expectHsAudienceGate(loadAccount().displayOptions.hidden);
+  it('has no displayOptions.hidden gate so Lookout can offer the account while the destination stays Flagsmith-gated', () => {
+    const accountConfig = loadAccount();
+    expect(accountConfig.displayOptions?.hidden).toBeUndefined();
   });
 });
 
@@ -2983,6 +2984,270 @@ describe('hs_audience destination ui-config', () => {
         key: forbidden,
         present: false,
       });
+    });
+  });
+});
+
+const MARKETO_AUDIENCE_DIR = 'src/configurations/destinations/marketo_audience';
+const MARKETO_AUDIENCE_ACCOUNT_DIR = `${MARKETO_AUDIENCE_DIR}/accounts/marketo_audience_api_key`;
+const MARKETO_AUDIENCE_GATE = {
+  gate: { flags: [{ name: 'AMP_enable-marketo-audience-destination', value: false }] },
+};
+
+// Read from disk: the definition validators run AJV with useDefaults and mutate what they are
+// given, so a cached import would carry defaults into the next assertion.
+const readJson = (file: string) => JSON.parse(fs.readFileSync(path.resolve(file), 'utf-8'));
+
+const loadMarketoAudienceAccount = () => readJson(`${MARKETO_AUDIENCE_ACCOUNT_DIR}/db-config.json`);
+
+const marketoAudienceAccountSchema = () =>
+  getAccountDefinitionSchema('marketo_audience', 'marketo_audience_api_key', 'destinations');
+
+const ajvMessages = (validate: ValidateFunction) => (validate.errors ?? []).map((e) => e.message);
+
+describe('MARKETO_AUDIENCE destination definition', () => {
+  const loadDestination = () => readJson(`${MARKETO_AUDIENCE_DIR}/db-config.json`);
+
+  it('declares a warehouse-only VDM V2 mirror audience destination behind the release gate', async () => {
+    await expect(validateDestinationDefinitions(loadDestination())).resolves.toEqual(true);
+    const destDefConfig = loadDestination();
+    expect(destDefConfig).toMatchObject({
+      name: 'MARKETO_AUDIENCE',
+      displayName: 'Marketo Audience',
+      version: '1.0',
+    });
+    expect(destDefConfig.config).toMatchObject({
+      supportedAccountDefinitions: {
+        rudderAccountId: ['DESTINATION_MARKETO_AUDIENCE_API_KEY'],
+      },
+      syncBehaviours: ['mirror'],
+      supportsVisualMapperV2: true,
+      isAudienceSupported: true,
+      transformAtV1: 'router',
+      supportedSourceTypes: ['warehouse'],
+      supportedMessageTypes: { cloud: ['record'] },
+      supportedConnectionModes: { warehouse: ['cloud'] },
+    });
+    expect(destDefConfig.options).toEqual({
+      isBeta: true,
+      hidden: MARKETO_AUDIENCE_GATE,
+      icon: 'marketo',
+    });
+  });
+
+  it('lists every account field in defaultConfig and every account secret in secretKeys', () => {
+    const { config } = loadDestination();
+    const account = loadMarketoAudienceAccount();
+    expect(config.destConfig).toEqual({
+      defaultConfig: ['rudderAccountId', 'accountId', 'clientId', 'clientSecret'],
+      warehouse: ['connectionMode'],
+    });
+    expect(config.secretKeys).toEqual(['clientId', 'clientSecret']);
+    expect(config.destConfig.defaultConfig).toEqual(
+      expect.arrayContaining([...account.config.optionFields, ...account.config.secretFields]),
+    );
+    expect(config.secretKeys).toEqual(expect.arrayContaining(account.config.secretFields));
+  });
+});
+
+describe('DESTINATION_MARKETO_AUDIENCE_API_KEY account definition', () => {
+  it('passes the account meta-schema', async () => {
+    await expect(validateAccountDefinitions(loadMarketoAudienceAccount())).resolves.toEqual(true);
+  });
+
+  it('is an api_key account with the Munchkin ID as an option and the client credentials as secrets', () => {
+    expect(loadMarketoAudienceAccount()).toEqual({
+      name: 'DESTINATION_MARKETO_AUDIENCE_API_KEY',
+      type: 'marketo_audience',
+      category: 'destination',
+      authenticationType: 'api_key',
+      config: { optionFields: ['accountId'], secretFields: ['clientId', 'clientSecret'] },
+    });
+  });
+
+  it('has no displayOptions.hidden gate so Lookout can offer the account while the destination stays Flagsmith-gated', () => {
+    expect(loadMarketoAudienceAccount().displayOptions?.hidden).toBeUndefined();
+  });
+});
+
+describe('DESTINATION_MARKETO_AUDIENCE_API_KEY account schema', () => {
+  it('is valid against the account schema meta-schema and has no combinedSchema', () => {
+    const validateAccountSchema = compileAccountSchema(
+      readJson('src/schemas/account/account-schema-schema.json'),
+    );
+    const accountSchema = marketoAudienceAccountSchema();
+    const isValid = validateAccountSchema(accountSchema);
+    expect(validateAccountSchema.errors ?? []).toEqual([]);
+    expect(isValid).toBe(true);
+    expect(accountSchema.combinedSchema).toBeUndefined();
+  });
+
+  it('declares exactly the account optionFields and secretFields', () => {
+    const { optionsSchema, secretSchema } = marketoAudienceAccountSchema();
+    const { config } = loadMarketoAudienceAccount();
+    expect(Object.keys(optionsSchema.properties)).toEqual(config.optionFields);
+    expect(optionsSchema.required).toEqual(config.optionFields);
+    expect(Object.keys(secretSchema.properties)).toEqual(config.secretFields);
+    expect(secretSchema.required).toEqual(config.secretFields);
+  });
+});
+
+describe('DESTINATION_MARKETO_AUDIENCE_API_KEY optionsSchema', () => {
+  const validateOptions = () =>
+    compileAccountSchemaWithErrorMessages(marketoAudienceAccountSchema().optionsSchema);
+  const MUNCHKIN_ID_MESSAGE = 'Enter a Munchkin ID such as 123-ABC-456';
+
+  it('accepts a Munchkin ID of three groups of three letters or digits', () => {
+    const validate = validateOptions();
+    ['123-ABC-456', 'abc-def-ghi', '000-000-000', 'A1b-2Cd-3eF'].forEach((accountId) => {
+      expect({ accountId, valid: validate({ accountId }) }).toEqual({ accountId, valid: true });
+    });
+  });
+
+  it('rejects any accountId that would change the host the token request is sent to', () => {
+    const validate = validateOptions();
+    [
+      '',
+      '123ABC456',
+      '12-ABC-456',
+      '123-ABC-4567',
+      '123-ABC-456-789',
+      '123_ABC_456',
+      ' 123-ABC-456',
+      '123-ABC-456 ',
+      '123-ABC-456\n',
+      '123-ABC-456.mktorest.com',
+      'https://123-ABC-456.mktorest.com',
+      '123-ABC-456@attacker.example',
+      'attacker.example/123-ABC-456',
+      'attacker.example#123-ABC-456',
+    ].forEach((accountId) => {
+      expect({ accountId, valid: validate({ accountId }) }).toEqual({ accountId, valid: false });
+      expect({ accountId, messages: ajvMessages(validate) }).toEqual({
+        accountId,
+        messages: [MUNCHKIN_ID_MESSAGE],
+      });
+    });
+  });
+
+  it('requires accountId and rejects a non-string value', () => {
+    const validate = validateOptions();
+    expect(validate({})).toBe(false);
+    expect(ajvMessages(validate)).toEqual(["must have required property 'accountId'"]);
+    expect(validate({ accountId: 123 })).toBe(false);
+    expect(ajvMessages(validate)).toEqual(['must be string']);
+  });
+});
+
+describe('DESTINATION_MARKETO_AUDIENCE_API_KEY secretSchema', () => {
+  const validateSecret = () =>
+    compileAccountSchemaWithErrorMessages(marketoAudienceAccountSchema().secretSchema);
+  const CLIENT_ID_MESSAGE = 'Enter a client ID of up to 100 characters';
+  const CLIENT_SECRET_MESSAGE = 'Enter a client secret of up to 500 characters';
+
+  it('accepts a client ID of up to 100 characters and a client secret of up to 500', () => {
+    const validate = validateSecret();
+    expect(validate({ clientId: 'synthetic-client-id', clientSecret: 'synthetic-secret' })).toBe(
+      true,
+    );
+    expect(validate({ clientId: 'a'.repeat(100), clientSecret: 'b'.repeat(500) })).toBe(true);
+  });
+
+  it('rejects an empty or over-long client ID with the length message', () => {
+    const validate = validateSecret();
+    ['', 'a'.repeat(101)].forEach((clientId) => {
+      expect(validate({ clientId, clientSecret: 'synthetic-secret' })).toBe(false);
+      expect(ajvMessages(validate)).toEqual([CLIENT_ID_MESSAGE]);
+    });
+  });
+
+  it('rejects an empty or over-long client secret with the length message', () => {
+    const validate = validateSecret();
+    ['', 'b'.repeat(501)].forEach((clientSecret) => {
+      expect(validate({ clientId: 'synthetic-client-id', clientSecret })).toBe(false);
+      expect(ajvMessages(validate)).toEqual([CLIENT_SECRET_MESSAGE]);
+    });
+  });
+
+  it('requires clientId and clientSecret and rejects non-string values', () => {
+    const validate = validateSecret();
+    expect(validate({})).toBe(false);
+    expect(ajvMessages(validate)).toEqual([
+      "must have required property 'clientId'",
+      "must have required property 'clientSecret'",
+    ]);
+    expect(validate({ clientId: 1, clientSecret: 2 })).toBe(false);
+    expect(ajvMessages(validate)).toEqual(['must be string', 'must be string']);
+  });
+});
+
+describe('marketo_audience account ui-config', () => {
+  const loadUiConfig = () => readJson(`${MARKETO_AUDIENCE_ACCOUNT_DIR}/ui-config.json`);
+
+  it('is valid against the account ui-config meta-schema', () => {
+    const validate = compileAccountSchema(
+      readJson('src/schemas/account/account-ui-config-schema.json'),
+    );
+    const isValid = validate(loadUiConfig());
+    expect(validate.errors ?? []).toEqual([]);
+    expect(isValid).toBe(true);
+  });
+
+  it('asks for the account name, Munchkin ID, client ID and client secret, with only the client credentials secret', () => {
+    const { uiConfig } = loadUiConfig();
+    expect(uiConfig).toMatchObject({
+      name: 'API Key',
+      icon: 'key',
+      form: { title: 'Connect your Marketo account' },
+    });
+    expect(
+      uiConfig.form.fields.map((f: { label: string; key: unknown; secret?: boolean }) => ({
+        label: f.label,
+        key: f.key,
+        secret: f.secret ?? false,
+      })),
+    ).toEqual([
+      { label: 'Account name', key: 'name', secret: false },
+      { label: 'Munchkin Account ID', key: ['options', 'accountId'], secret: false },
+      { label: 'Client ID', key: ['options', 'clientId'], secret: true },
+      { label: 'Client Secret', key: ['options', 'clientSecret'], secret: true },
+    ]);
+  });
+
+  it('tells the customer where to find the Munchkin ID', () => {
+    const munchkinField = loadUiConfig().uiConfig.form.fields[1];
+    expect(munchkinField.note).toContain('Admin › Web Services');
+  });
+});
+
+describe('marketo_audience destination ui-config', () => {
+  const loadUiConfig = () => readJson(`${MARKETO_AUDIENCE_DIR}/ui-config.json`).uiConfig;
+  const collectConfigKeys = (node: unknown): string[] => {
+    if (Array.isArray(node)) return node.flatMap(collectConfigKeys);
+    if (node && typeof node === 'object') {
+      return Object.entries(node).flatMap(([key, value]) =>
+        key === 'configKey' && typeof value === 'string' ? [value] : collectConfigKeys(value),
+      );
+    }
+    return [];
+  };
+
+  it('opens with the Marketo account picker and configures nothing else', () => {
+    const ui = loadUiConfig();
+    expect(ui.baseTemplate[0].sections[0].groups[0].fields[0]).toEqual({
+      type: 'accountManagementInput',
+      label: 'Marketo account',
+      configKey: 'rudderAccountId',
+    });
+    expect(collectConfigKeys(ui)).toEqual(['rudderAccountId']);
+    expect(ui.redirectGroups).toBeUndefined();
+  });
+
+  it('keeps the empty sdkTemplate that form builder v2 requires', () => {
+    expect(loadUiConfig().sdkTemplate).toEqual({
+      title: 'SDK settings',
+      note: 'not visible in the ui',
+      fields: [],
     });
   });
 });
