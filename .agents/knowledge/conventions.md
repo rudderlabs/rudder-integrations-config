@@ -333,3 +333,8 @@
 
 - TikTok Ads Offline Events must not expose `Lead` in the `eventsToStandard` UI options or schema enum; `Purchase`, the empty-string enum member, and the other supported standard events remain valid.
 - Existing saved `eventsToStandard` mappings whose `to` value is `Lead` are intentionally not migrated or handled specially in integrations-config. Runtime mapping behavior belongs to rudder-transformer rather than this repository.
+
+## INT-7419 — Destination Constants Workflow Safety
+
+- Keep `.github/workflows/raise-pr-for-constants.yml` push-to-main only unless manual cross-repository writes and PR updates are explicitly desired; the optional `workflow_dispatch` trigger was intentionally omitted because every run performs real downstream mutations.
+- The workflow's source checkout should use `persist-credentials: false`; subsequent cross-repository operations authenticate explicitly with the generated GitHub App token through `GH_TOKEN`, so retaining the checkout credential is unnecessary and violates least-privilege guidance.
