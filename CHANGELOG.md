@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.190.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.189.0...v1.190.0) (2026-10-20)
+
+
+### Features
+
+* add Custom Activation auth account definitions ([#2827](https://github.com/rudderlabs/rudder-integrations-config/issues/2827)) ([79857eb](https://github.com/rudderlabs/rudder-integrations-config/commit/79857eb48eb3bf5fd109cba14044f758d147ef9e))
+
 ## [1.189.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.188.0...v1.189.0) (2026-10-20)
 
 
