@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.188.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.187.0...v1.188.0) (2026-10-20)
+
+
+### Features
+
+* add Purchase and Lead to TikTok offline events ([#2840](https://github.com/rudderlabs/rudder-integrations-config/issues/2840)) ([ae016cd](https://github.com/rudderlabs/rudder-integrations-config/commit/ae016cd8d4f4e8a89b36608e6efcc2e92c57e94a))
+
 ## [1.187.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.186.1...v1.187.0) (2026-10-20)
 
 
