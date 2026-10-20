@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.189.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.188.0...v1.189.0) (2026-10-20)
+
+
+### Features
+
+* **pinterest_audience:** unhide Pinterest Audience (ACT2-1194) ([#2848](https://github.com/rudderlabs/rudder-integrations-config/issues/2848)) ([ef0a663](https://github.com/rudderlabs/rudder-integrations-config/commit/ef0a663eacabb64eedbe8d7697901c8fa249c5ce))
+
 ## [1.188.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.187.0...v1.188.0) (2026-10-20)
 
 
