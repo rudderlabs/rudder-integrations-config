@@ -117,4 +117,4 @@
 ## RUD-3398 — Housekeeping Workflow Authentication
 
 - `.github/workflows/housekeeping.yml` uses the built-in `GITHUB_TOKEN` with narrowly scoped job-level permissions: stale issue/PR maintenance needs `issues: write` and `pull-requests: write`, while stale-branch deletion needs `contents: write`. Do not couple these jobs to the release GitHub App when repository job permissions already cover their operations.
-- Keep checkout `persist-credentials: false` for stale-branch cleanup because `beatlabs/delete-old-branches-action` receives its token explicitly; retaining checkout credentials adds unnecessary credential persistence.
+- Keep checkout's default credential persistence for stale-branch cleanup. `beatlabs/delete-old-branches-action` runs git commands, and git cannot authenticate without the persisted token even when `repo_token` is passed (ai-sdk-python failed this way, RUD-3396).
