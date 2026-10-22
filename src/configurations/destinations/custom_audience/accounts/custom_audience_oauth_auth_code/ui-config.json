@@ -1,0 +1,71 @@
+{
+  "uiConfig": {
+    "name": "OAuth (Authorization Code with PKCE)",
+    "isOAuth": true,
+    "description": "Connect using the OAuth 2.0 Authorization Code flow with PKCE",
+    "icon": "key",
+    "recommended": false,
+    "form": {
+      "title": "Create an Authorization Code account",
+      "fields": [
+        {
+          "component": "textField",
+          "label": "Account name",
+          "placeholder": "e.g: Custom Activation production",
+          "key": "name"
+        },
+        {
+          "component": "textField",
+          "label": "Authorization URL",
+          "placeholder": "e.g: https://example.com/oauth/authorize",
+          "key": ["options", "authorizationUrl"],
+          "note": "Add provider-specific authorization parameters, such as prompt or duration, to this URL's query string."
+        },
+        {
+          "component": "textField",
+          "label": "Token URL",
+          "placeholder": "e.g: https://api.example.com/oauth/token",
+          "key": ["options", "tokenUrl"],
+          "note": "Enter the token endpoint without query parameters. Use Extra token parameters for additional form values."
+        },
+        {
+          "component": "textField",
+          "label": "Client ID",
+          "placeholder": "Enter your OAuth client ID",
+          "key": ["options", "clientId"]
+        },
+        {
+          "component": "textField",
+          "label": "Scopes",
+          "placeholder": "e.g: read write",
+          "key": ["options", "scopes"],
+          "note": "Enter space-separated scopes, or comma-separated scopes for providers such as Pinterest."
+        },
+        {
+          "component": "textField",
+          "label": "Extra token parameters",
+          "placeholder": "e.g: audience=https%3A%2F%2Fapi.example.com",
+          "key": ["options", "extraTokenParams"],
+          "optional": true,
+          "note": "Enter additional URL-encoded form parameters for token requests."
+        },
+        {
+          "component": "selectField",
+          "label": "Token authentication method",
+          "key": ["options", "tokenAuthMethod"],
+          "options": [
+            {
+              "label": "Authorization header (Basic)",
+              "value": "client_secret_basic"
+            },
+            {
+              "label": "Request body",
+              "value": "client_secret_post"
+            }
+          ],
+          "default": "client_secret_basic"
+        }
+      ]
+    }
+  }
+}
