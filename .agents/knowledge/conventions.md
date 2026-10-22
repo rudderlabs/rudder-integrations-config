@@ -338,3 +338,9 @@
 
 - Keep `.github/workflows/raise-pr-for-constants.yml` push-to-main only unless manual cross-repository writes and PR updates are explicitly desired; the optional `workflow_dispatch` trigger was intentionally omitted because every run performs real downstream mutations.
 - The workflow's source checkout should use `persist-credentials: false`; subsequent cross-repository operations authenticate explicitly with the generated GitHub App token through `GH_TOKEN`, so retaining the checkout credential is unnecessary and violates least-privilege guidance.
+
+## INT-7432 — OpenAI Ads Cloud Hashing Toggle
+
+- OpenAI Ads `isHashRequired` is a destination-wide, default-true boolean carried through both `config.includeKeys` and `config.destConfig.defaultConfig`; keep the UI checkbox in Configuration settings / Event settings after `defaultActionSource`.
+- The setting is supported only by cloud-mode transformer delivery. Gate the checkbox with `preRequisites.fields: [{ configKey: "connectionModes.cloud", value: true }]` so web-device-only configurations do not expose an unsupported toggle.
+- Disabling hashing applies to all hashable identifiers together, requires already-hashed values, and skips RudderStack normalization. Customer documentation must describe that all-fields behavior, customer-owned normalization, and cloud-only scope.
