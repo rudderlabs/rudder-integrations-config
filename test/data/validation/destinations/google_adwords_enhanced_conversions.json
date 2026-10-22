@@ -262,17 +262,15 @@
     "result": true
   },
   {
-    "testTitle": "With an overlong login customer ID",
+    "testTitle": "With an overlong env-prefixed login customer ID",
     "config": {
       "rudderAccountId": "test-host",
       "customerId": "1234567890",
-      "loginCustomerId": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "loginCustomerId": "env.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
       "subAccount": true
     },
     "result": false,
-    "err": [
-      "loginCustomerId must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$\""
-    ]
+    "err": ["loginCustomerId must match pattern \"^.{0,100}$\""]
   },
   {
     "testTitle": "With duplicate consent management providers config - cloud",
