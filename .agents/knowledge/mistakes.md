@@ -57,7 +57,7 @@
 <!-- session: 2026-09-23 -->
 
 - Symlinking a `.claude/worktrees/<name>` worktree's `node_modules` to the main checkout's made `test/validation.test.ts` and `test/validator/validator.test.ts` fail to load with "Cannot find module 'ajv-keywords' from 'src/validator/index.ts'" (2 of 4 suites), which looks like broken code but is a stale main install.
-- Corrective rule: in a worktree run `npm ci --ignore-scripts` inside the worktree (all 4 suites then pass), then `npx husky install` before committing — with `--ignore-scripts` the `.husky/_/husky.sh` shim is missing and `git commit` fails at `.husky/pre-commit` line 2. Do not bypass the hook with `--no-verify`.
+- Corrective rule: in a worktree run `npm ci --ignore-scripts` inside the worktree (all 4 suites then pass). The global git-hooks tool runs the hooks with `node_modules` alone. Without it, run `npx husky` in each worktree. Do not bypass the hook with `--no-verify`.
 
 ## ACT2-766 — ClickHouse Schema Check And Local Test Traps
 
