@@ -199,10 +199,6 @@ Replace `example\.com` with the partner's registrable domain:
 - **The suffix is matched case-sensitively.** Partner documentation and dashboards give lowercase
   hosts, so a readable literal is preferred over `[eE][xX]…` character classes.
 
-Worked example: [`rokt/accounts/rokt_api_key/schema.json`](src/configurations/destinations/rokt/accounts/rokt_api_key/schema.json)
-(`apiEndpoint`). It predates this section and uses the looser label class, so copy the expression
-above rather than that file.
-
 **Know what these expressions are and aren't.** Both are syntactic checks on a stored string. Pinning
 keeps credentials off hosts outside the partner's domain, and that is all it does. Neither expression can
 resolve DNS, so it cannot stop a hostname that resolves to a link-local or private address, and it

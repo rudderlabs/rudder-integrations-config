@@ -1,0 +1,35 @@
+{
+  "name": "MARKETO_AUDIENCE",
+  "displayName": "Marketo Audience",
+  "version": "1.0",
+  "config": {
+    "supportedAccountDefinitions": {
+      "rudderAccountId": ["DESTINATION_MARKETO_AUDIENCE_API_KEY"]
+    },
+    "syncBehaviours": ["mirror"],
+    "supportsVisualMapperV2": true,
+    "isAudienceSupported": true,
+    "transformAtV1": "router",
+    "supportedSourceTypes": ["warehouse"],
+    "supportedMessageTypes": {
+      "cloud": ["record"]
+    },
+    "supportedConnectionModes": {
+      "warehouse": ["cloud"]
+    },
+    "destConfig": {
+      "defaultConfig": ["rudderAccountId", "accountId", "clientId", "clientSecret"],
+      "warehouse": ["connectionMode"]
+    },
+    "secretKeys": ["clientId", "clientSecret"]
+  },
+  "options": {
+    "isBeta": true,
+    "hidden": {
+      "gate": {
+        "flags": [{ "name": "AMP_enable-marketo-audience-destination", "value": false }]
+      }
+    },
+    "icon": "marketo"
+  }
+}

@@ -134,3 +134,21 @@
 
 - `npm run check:schema:destination google_adwords_enhanced_conversions` exits successfully but reports pre-existing drift that would remove `required: ["provider"]` from each consent-management source's row schema; the same warning occurs against the unchanged baseline and should remain separate from scoped GAEC picker work.
 - The schema generator has no handlers for `nestedSelect` or `dynamicMultiSelect` and emits informational `No schema generator function found` messages for those field types. Do not interpret those messages as evidence that their persisted schema contracts were generated or validated.
+
+## INT-7258 — Nested Select Schema Generator Gap
+
+- `npm run check:schema:destination google_adwords_remarketing_lists` reports that `nestedSelect` has no schema-generator function even though the command exits successfully. A hierarchy picker that writes already-defined flat delivery keys requires no destination-schema churn, but this warning should be distinguished from actual generated-schema drift.
+
+## RUD-3351 — Rokt Schema Generator Baseline Drift
+
+- Rokt schema validation reports pre-existing drift because `scripts/schemaGenerator.py` recommends deleting `configSchema.properties.rudderAccountId.pattern`; this linked-account warning is unrelated to the hand-maintained `eventsMapping` schema used by the redirect group. `npm run check:schema:destination rokt` can still exit successfully while printing the warning, and `scripts/run-schema-validation.sh src/configurations/destinations/rokt/ui-config.json` treats it as a failure, so distinguish this baseline from event-mapping changes.
+
+## INT-7410 — TikTok Offline Schema Generator Baseline Drift
+
+- `npm run check:schema:destination tiktok_ads_offline_events` can exit successfully while recommending pre-existing schema changes: top-level `additionalProperties: false` and `required: ["provider"]` in every supported source's `consentManagement` item schema.
+- These warnings are unrelated to synchronized additions to the `eventsToStandard` UI options and schema enum; keep baseline normalization out of scoped additive event-option changes.
+
+## INT-7367 — Custom Activation Schema Generator Incompatibility
+
+- `npm run check:schema:destination custom_audience` cannot complete because `scripts/schemaGenerator.py::generate_schema_properties` encounters the bespoke `audienceDeliveryApiBuilder` field without a `configKey`, reports that no generator exists, and then raises `KeyError: 'configKey'` while checking default-config presence.
+- Until the shared generator supports that field shape, use destination validation fixtures to cover Custom Activation schema changes rather than treating this generator failure as a schema regression.

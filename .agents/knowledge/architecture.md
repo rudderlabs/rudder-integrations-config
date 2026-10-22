@@ -114,6 +114,12 @@
 - Later review superseded both the fixed four-host allowlist and the generic arbitrary-host shape: `apiEndpoint` accepts HTTPS endpoints whose hostname is exactly `mparticle.com` or a subdomain ending in `.mparticle.com`, keeping future mParticle subdomains forward-compatible without permitting unrelated domains.
 - Endpoint validation rejects lookalike/non-mParticle domains, userinfo, query strings, fragments, ports, and paths; at most one trailing slash is permitted.
 
+## RUD-3296 — Rokt Fixed mParticle Endpoint Boundary
+
+- RUD-3296 supersedes the older Rokt `apiEndpoint` account contract: `src/configurations/destinations/rokt/accounts/rokt_api_key/` no longer collects or validates `options.apiEndpoint`.
+- Rokt accounts now carry only the option credential `serverToServerKey` and the secret credential `serverToServerSecret`; destination `config.destConfig.defaultConfig` mirrors those fields plus `rudderAccountId`.
+- The mParticle Events API base URL is transformer-owned and fixed to `https://inbound.mparticle.com/s2s`, with delivery to `/v2/bulkevents`; do not reintroduce a customer-authored endpoint in integrations-config.
+
 ## ACT2-766 — ClickHouse Reverse ETL Source Behind A Flag
 
 <!-- session: 2026-10-01 -->
@@ -127,3 +133,9 @@
 
 - Secret-key change detection compares only canonical root files at `src/configurations/destinations/<destination>/db-config.json`. Nested account definitions are excluded because their secrets are mirrored into root `config.secretKeys`, and archived `versions/*/db-config.json` files belong to a separate deploy-payload contract.
 - Secret-path manifest derivation is owned by rudder-transformer.
+
+## INT-7367 — Custom Activation Account-Backed Authentication
+
+- Custom Activation supports Basic Auth, Bearer Token, and API Key through three account definitions under `src/configurations/destinations/custom_audience/accounts/`; the destination links them through `config.supportedAccountDefinitions.rudderAccountId`, and `rudderAccountId` plus `authenticationEnabled` belong in `config.destConfig.defaultConfig`.
+- When `authenticationEnabled` is explicitly `true`, `schema.json` requires a non-empty linked `rudderAccountId`; `false` does not require an account reference.
+- Preserve migration compatibility by keeping `authenticationType` optional while retaining each legacy per-method conditional with `required: ["authenticationType"]`. This makes those legacy credential branches self-disable for migrated account-backed configs without withdrawing legacy credential declarations that workspace config still needs.

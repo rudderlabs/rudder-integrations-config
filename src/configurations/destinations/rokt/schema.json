@@ -9,6 +9,29 @@
         "type": "string",
         "pattern": "^.{1,100}$"
       },
+      "eventsMapping": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "^(.{1,100})$"
+            },
+            "to": {
+              "type": "string",
+              "pattern": "^(.{1,100})$"
+            }
+          },
+          "required": ["from", "to"],
+          "additionalProperties": false
+        },
+        "uniqueItemProperties": ["from"],
+        "errorMessage": {
+          "uniqueItemProperties": "Only one Rokt conversion type can be configured per RudderStack event name."
+        },
+        "default": []
+      },
       "connectionMode": {
         "type": "object",
         "properties": {

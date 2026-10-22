@@ -76,6 +76,11 @@ describe('Schema Generator', () => {
         destName: 'integer_select_dest',
         expectedSchemaFile: 'integerSelectDest.json',
       },
+      {
+        description: 'required fields sharing a configKey produce one required entry',
+        destName: 'duplicate_required_key_dest',
+        expectedSchemaFile: 'duplicateRequiredKeyDest.json',
+      },
     ];
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

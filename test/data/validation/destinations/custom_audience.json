@@ -122,14 +122,125 @@
     "result": true
   },
   {
+    "testTitle": "valid migrated config without legacy authenticationType",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationEnabled": true,
+      "rudderAccountId": "acc_123",
+      "actions": {
+        "insert": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/insert",
+          "batchSize": 500
+        },
+        "update": {
+          "requestBody": "{}",
+          "method": "PUT",
+          "endpoint": "/update",
+          "batchSize": 500
+        },
+        "delete": {
+          "requestBody": "{}",
+          "method": "DELETE",
+          "endpoint": "/delete",
+          "batchSize": 500
+        }
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "authenticationEnabled true requires an account",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationEnabled": true,
+      "actions": {
+        "insert": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/insert",
+          "batchSize": 500
+        },
+        "update": {
+          "requestBody": "{}",
+          "method": "PUT",
+          "endpoint": "/update",
+          "batchSize": 500
+        },
+        "delete": {
+          "requestBody": "{}",
+          "method": "DELETE",
+          "endpoint": "/delete",
+          "batchSize": 500
+        }
+      }
+    },
+    "result": false,
+    "err": [" must have required property 'rudderAccountId'", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "authenticationEnabled accepts false without an account",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationEnabled": false,
+      "actions": {
+        "insert": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/insert",
+          "batchSize": 500
+        },
+        "update": {
+          "requestBody": "{}",
+          "method": "PUT",
+          "endpoint": "/update",
+          "batchSize": 500
+        },
+        "delete": {
+          "requestBody": "{}",
+          "method": "DELETE",
+          "endpoint": "/delete",
+          "batchSize": 500
+        }
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "authenticationEnabled rejects non-boolean values",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationEnabled": "true",
+      "actions": {
+        "insert": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/insert",
+          "batchSize": 500
+        },
+        "update": {
+          "requestBody": "{}",
+          "method": "PUT",
+          "endpoint": "/update",
+          "batchSize": 500
+        },
+        "delete": {
+          "requestBody": "{}",
+          "method": "DELETE",
+          "endpoint": "/delete",
+          "batchSize": 500
+        }
+      }
+    },
+    "result": false,
+    "err": ["authenticationEnabled must be boolean"]
+  },
+  {
     "testTitle": "empty config — missing required top-level properties",
     "config": {},
     "result": false,
-    "err": [
-      " must have required property 'baseUrl'",
-      " must have required property 'authenticationType'",
-      " must have required property 'actions'"
-    ]
+    "err": [" must have required property 'baseUrl'", " must have required property 'actions'"]
   },
   {
     "testTitle": "invalid baseUrl scheme",
