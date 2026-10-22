@@ -196,7 +196,7 @@ Start from [`scripts/template-ui-config.json`](../../../scripts/template-ui-conf
 
 - `baseTemplate[0].sections[1].groups[0]` = connection mode slot, `fields: []` (framework overwrites)
 - `baseTemplate[0].sections[2].groups[0]` = immutable fields (optional)
-- a collapsible titled exactly `Configuration settings`, containing a section titled exactly `Destination settings`
+- a collapsible titled exactly `Configuration settings`, containing a section titled exactly `Destination settings` when there are page-2 or `sdkTemplate` fields. A cloud-only destination with neither drops it: [Configuration settings sections](../../../CONVENTIONS.md#configuration-settings-sections)
 - consent, **only if `destConfig.<sourceType>` lists `consentManagement`**, needs a section with `"id": "consentSettings"` plus a `consentSettingsTemplate`. Gate on `db-config.json`, not on the destination's category: all 75 v2 destinations that support consent have the template and none lack it, but 3 that do not support it (`custom_audience`, `linkedin_audience`, `tiktok_audience`) ship a dead one — fields with nowhere to persist. Do not copy those. Copy the consent block from `scripts/template-ui-config.json`, which carries the standardised provider list.
 
 Apply the attribute renames and per-type mapping from the runbook (`value`→`configKey`, `options[].name`→`label`, `defaultOption`→`default`, `preRequisiteField`→`preRequisites`, `dynamicForm`/`dynamicSelectForm`→`mapping`, `useNativeSDK`/`defaultCheckbox`→delete).

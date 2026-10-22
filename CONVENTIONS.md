@@ -7,6 +7,7 @@ This document captures naming and structural conventions used across this reposi
 - [**AccountDefinition naming (`accountDefinitionName`)**](#accountdefinition-naming-accountdefinitionname)
 - [**String `pattern` and `regex`**](#string-pattern-and-regex)
 - [**`sdkTemplate` is required, even on a cloud-only destination**](#sdktemplate-is-required-even-on-a-cloud-only-destination)
+- [**Configuration settings sections**](#configuration-settings-sections)
 - [**Optional fields must accept the empty string**](#optional-fields-must-accept-the-empty-string)
 - [**Where account credential fields live**](#where-account-credential-fields-live)
 - [**Deduplication / event-id config key (`deduplicationKey`)**](#deduplication--event-id-config-key-deduplicationkey)
@@ -293,6 +294,41 @@ for f in glob.glob('src/configurations/destinations/*/ui-config.json'):
         bad.append(f)
 print(bad or 'all form-builder-v2 destinations carry sdkTemplate')"
 ```
+
+## Configuration settings sections
+
+rudder-webapp builds the "Configuration settings" block from two sections, matched by name in
+`configurationV2/formComponents/util.ts`:
+
+- **`"id": "consentSettings"`** receives every `consentSettingsTemplate` field. Without this section
+  the consent form is never rendered, and the customer cannot configure consent at all. Every
+  destination that ships a `consentSettingsTemplate` needs it.
+- **`"title": "Destination settings"`** receives the destination's own page-2 fields, plus the
+  `sdkTemplate` fields on device and hybrid mode.
+
+Neither check is caught by tests. Each one fails as a missing form, not an error.
+
+A cloud-only destination with no page-2 fields keeps only the consent section. A leftover
+"Destination settings" section with an empty `"fields": []` group renders as an empty page:
+
+```json
+{
+  "title": "Configuration settings",
+  "note": "Manage the settings for your destination",
+  "sections": [
+    {
+      "id": "consentSettings",
+      "title": "Consent settings",
+      "note": "Configure consent settings for each provider here",
+      "icon": "settings",
+      "groups": []
+    }
+  ]
+}
+```
+
+25 destinations ship exactly this shape (`rokt`, `everflow`). With page-2 fields, "Destination
+settings" comes first and the consent section follows it (`klaviyo_bulk_upload`).
 
 ## Optional fields must accept the empty string
 
