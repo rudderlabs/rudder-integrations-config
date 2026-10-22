@@ -20,7 +20,7 @@ jobs:
       contents: read
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        uses: step-security/harden-runner@ccd8616d44fd3846e67624a50d5aad6d37bf2d25 # v2.22.1
         with:
           egress-policy: audit
 
@@ -38,6 +38,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
+          persist-credentials: false
 
       - name: Checkout Destination Repo
         run: |
@@ -74,10 +75,9 @@ jobs:
 
           # Get current file SHA
           FILE_PATH="${{ env.DEST_PATH }}"
-          CURRENT_SHA=$(gh api repos/rudderlabs/rudder-sdk-js/contents/"$FILE_PATH" \
+          CURRENT_SHA=$(gh api "repos/rudderlabs/rudder-sdk-js/contents/${FILE_PATH}?ref=${{ env.BRANCH_NAME }}" \
             --jq .sha \
-            -H "Accept: application/vnd.github.v3+json" \
-            -f ref="${{ env.BRANCH_NAME }}" || echo "")
+            -H "Accept: application/vnd.github.v3+json" 2>/dev/null) || CURRENT_SHA=""
 
           # Read file content and encode to base64
           CONTENT=$(base64 -w 0 "../${{ env.SRC_FILE }}")

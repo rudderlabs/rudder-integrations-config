@@ -71,3 +71,12 @@
 
 - GAOC's first account-picker implementation inverse-gated the manual fields and legacy mapping variants with `preRequisites.featureFlags[].value: false`. That matches only an explicitly false flag payload, so when the rollout flag was absent neither the new picker nor its fallback rendered.
 - Corrective rule: for fallback UI that must render when a feature flag is false or missing, omit `value` in the inverse feature-flag prerequisite. Reserve `value: false` for contracts that specifically require an explicit false payload.
+
+## INT-7258 — Keep Conventional Commit Subjects Lowercase
+
+- Commitlint rejects an uppercase ticket identifier at the start of a Conventional Commit subject with `subject-case` (for example, `docs(knowledge): INT-7258 distill`). Keep ticket references lowercase in the subject (for example, `docs(knowledge): int-7258 distill`).
+
+## INT-7367 — Match the Standard Account Reference Bound
+
+- Interpreting “similar to other destinations” as merely removing Custom Activation's custom `rudderAccountId` error message left the looser `^.+$` pattern in place.
+- The closest account-backed destination precedent uses `^.{1,100}$`; use that bounded pattern for Custom Activation instead of preserving an integration-specific unbounded variant.

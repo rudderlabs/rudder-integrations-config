@@ -314,3 +314,34 @@
 - `eventsToConversionsNamesMapping` and `customVariables` use paired feature-gated variants with the same persisted `{from,to}` row shape: the enabled variants change only the `to` column to `dynamicDataSelect` backed by `getConversionActions` or `getCustomVariables`, while fallback variants retain the legacy `textInput`. Preserve the existing `to` label, placeholder, regex, and scalar values across both variants. Do not alter `eventsToOfflineConversionsTypeMapping` as part of this rollout.
 - GAOC redirect-group mapping schemas are hand-maintained because `scripts/schemaGenerator.py` does not traverse `redirectGroups`. Schema checks can report unsupported `nestedSelect`/`redirect` shapes and unrelated baseline diffs; do not force-apply generated output, which can delete the mapping blocks that preserve scalar `to` values.
 - Root-account configs remain compatible with both `loginCustomerId: ""` and an omitted `loginCustomerId` when `subAccount` is false; preserve the existing conditional login-customer validation rather than making the field unconditionally required.
+
+## RUD-3296 — Rokt Endpoint Ownership
+
+- RUD-3296 supersedes the RUD-3256 endpoint-path guidance: do not add `apiEndpoint` to Rokt account `optionFields`, account `optionsSchema`, account UI fields, or destination `config.destConfig.defaultConfig`.
+- Rokt account metadata should expose only `serverToServerKey` as an option field and `serverToServerSecret` as a secret field; stale stored `options.apiEndpoint` values are not an integrations-config authoring contract.
+- Endpoint host/path validation for Rokt should not be hand-maintained in this repository because the transformer owns the fixed mParticle Events API base URL `https://inbound.mparticle.com/s2s`.
+
+## INT-7258 — GARL Account Picker Exclusivity
+
+- In Google Ads Remarketing Lists, the feature-flagged hierarchy picker and all three legacy account controls are mutually exclusive UI variants because they write the same persisted `customerId`, `subAccount`, and `loginCustomerId` keys. Gate the hierarchy `nestedSelect` on `AMP_enable-google-ads-customer-picker: true`, but omit `value` from that flag prerequisite on the legacy controls so the webapp treats the flag as falsy or missing; explicit `value: false` does not match a missing flag and can hide every Customer ID control.
+- Preserve the legacy controls' existing field prerequisites and metadata inside their inverse gate; hiding only the old customer picker can leave duplicate controls that conflict with the hierarchy picker's patches.
+
+## RUD-3351 — Rokt Event Mapping Layout
+
+- Place Rokt's Form Builder V2 `Event mappings` block immediately after `Initial setup` and before `Configuration settings`. This task-specific ordering and its OpenAI Ads prior art take precedence over the general convention that mapping blocks appear last; the order is presentation-only and does not affect runtime behavior.
+
+## INT-7367 — Custom Activation Credential Contracts
+
+- Custom Activation reusable credentials reject all-whitespace values while enforcing their field bounds: use `^(?=.{1,200}$).*\S.*$` for `basicAuthUserName` and `apiKeyName`, and `^(?=.{1,500}$).*\S.*$` for `basicAuthPassword`, `bearerToken`, and `apiKeyValue`.
+- None of the Basic Auth, Bearer Token, or API Key account cards is preferred; keep `uiConfig.recommended: false` for all three unless product explicitly chooses a recommended mechanism.
+- Use the standard bounded linked-account reference pattern `^.{1,100}$` for Custom Activation `rudderAccountId` rather than an unbounded non-empty pattern.
+
+## RUD-3387 — TikTok Offline Standard Event Contract
+
+- TikTok Ads Offline Events must not expose `Lead` in the `eventsToStandard` UI options or schema enum; `Purchase`, the empty-string enum member, and the other supported standard events remain valid.
+- Existing saved `eventsToStandard` mappings whose `to` value is `Lead` are intentionally not migrated or handled specially in integrations-config. Runtime mapping behavior belongs to rudder-transformer rather than this repository.
+
+## INT-7419 — Destination Constants Workflow Safety
+
+- Keep `.github/workflows/raise-pr-for-constants.yml` push-to-main only unless manual cross-repository writes and PR updates are explicitly desired; the optional `workflow_dispatch` trigger was intentionally omitted because every run performs real downstream mutations.
+- The workflow's source checkout should use `persist-credentials: false`; subsequent cross-repository operations authenticate explicitly with the generated GitHub App token through `GH_TOKEN`, so retaining the checkout credential is unnecessary and violates least-privilege guidance.

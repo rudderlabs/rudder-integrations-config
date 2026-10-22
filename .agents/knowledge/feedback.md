@@ -107,6 +107,11 @@
 - Reviewer guidance rejected enumerating the current mParticle regional hosts for Rokt `apiEndpoint`; accept HTTPS endpoints on `mparticle.com` and any `.mparticle.com` subdomain so future mParticle subdomains do not require a schema release.
 - Do not broaden this into generic endpoint validation: reject lookalike/non-mParticle domains, userinfo, query strings, fragments, ports, and paths, while permitting at most one trailing slash.
 
+## RUD-3296 — Rokt Endpoint Removal Guidance
+
+- Reviewer direction for RUD-3296 supersedes the older Rokt endpoint-review guidance: Rokt no longer asks customers for `options.apiEndpoint` and integrations-config should not preserve account UI, account schema, destination `defaultConfig`, or tests for that field.
+- The Rokt account keeps only `serverToServerKey` and `serverToServerSecret`; the transformer uses the fixed mParticle Events API base URL `https://inbound.mparticle.com/s2s` and appends its bulk-events path.
+
 ## ACT2-766 — ClickHouse Source Review Guidance
 
 <!-- session: 2026-10-01 -->
@@ -132,3 +137,17 @@
 ## RUD-3252 — Knowledge Ledger Durability
 
 - Keep `.agents/knowledge/*.md` focused on durable repository rules under topic-based headings; omit temporary rollout or merge-sequencing instructions, and avoid duplicating exact workflow identifiers whose authoritative source is the workflow itself.
+
+## ACT2-1015 — HubSpot Audience Account Id Schema
+
+<!-- session: 2026-10-15 -->
+
+- `scripts/schemaGenerator.py::generate_schema_for_account_management_input` emits only `{"type": "string"}` and does not read a ui-config `regex`. A hand-written `pattern` on `rudderAccountId` makes `scripts/run-schema-validation.sh` fail, because that script treats any generator `UserWarning` as fatal.
+- For `src/configurations/destinations/hs_audience/schema.json`, keep `rudderAccountId` as `{"type": "string"}` with no `pattern`. Do not restore `^.{1,100}$` and do not change the shared generator for this destination. Empty and over-100-character account ids are valid in `test/data/validation/destinations/hs_audience.json`.
+- The HubSpot Audience Service Key in `src/configurations/destinations/hs_audience/accounts/hs_audience_api_key/schema.json` uses `^(?=.{1,500}$).*\S.*$`: at most 500 characters, and at least one non-whitespace character. The account option title in that account's `ui-config.json` is "Service Key"; the definition name stays `DESTINATION_HS_AUDIENCE_API_KEY`.
+
+## INT-7367 — Custom Activation Validation Review Guidance
+
+- Retain required-field validation in the Custom Activation account schemas, but rely on AJV's default missing-property messages. Do not add object-level `errorMessage.required` maps or broaden the shared account meta-schema solely for friendlier destination-specific messages.
+- Likewise, keep the standard `rudderAccountId` pattern without a property-level custom `errorMessage`; peer account-backed destinations rely on AJV's default pattern error.
+- Do not add destination-specific `test/validation.test.ts` cases solely to execute straightforward 1–200 or 1–500 credential bounds. Reserve focused shared-suite account tests for complex or security-sensitive behavior.

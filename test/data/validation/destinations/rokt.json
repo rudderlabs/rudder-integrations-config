@@ -5,6 +5,27 @@
     "result": true
   },
   {
+    "testTitle": "valid empty event mappings",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventsMapping": []
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid event mapping",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventsMapping": [
+        {
+          "from": "Order Completed",
+          "to": "purchase"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
     "testTitle": "valid cloud connection mode and consent management",
     "config": {
       "rudderAccountId": "account_123",
@@ -56,22 +77,72 @@
     "testTitle": "invalid destination-level account credentials",
     "config": {
       "rudderAccountId": "account_123",
-      "apiEndpoint": "https://s2s.mparticle.com",
       "serverToServerKey": "synthetic-key",
       "serverToServerSecret": "synthetic-secret"
     },
     "result": false,
-    "err": [
-      " must NOT have additional properties",
-      " must NOT have additional properties",
-      " must NOT have additional properties"
-    ]
+    "err": [" must NOT have additional properties", " must NOT have additional properties"]
   },
   {
-    "testTitle": "invalid event mapping setting",
+    "testTitle": "invalid event mapping key spelling",
     "config": { "rudderAccountId": "account_123", "eventMapping": [] },
     "result": false,
     "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid duplicate event mapping from rows",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventsMapping": [
+        { "from": "Order Completed", "to": "purchase" },
+        { "from": "Order Completed", "to": "conversion" }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventsMapping Only one Rokt conversion type can be configured per RudderStack event name."
+    ]
+  },
+  {
+    "testTitle": "invalid blank event mapping source",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventsMapping": [{ "from": "", "to": "purchase" }]
+    },
+    "result": false,
+    "err": ["eventsMapping.0.from must match pattern \"^(.{1,100})$\""]
+  },
+  {
+    "testTitle": "invalid blank Rokt conversion type",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventsMapping": [{ "from": "Order Completed", "to": "" }]
+    },
+    "result": false,
+    "err": ["eventsMapping.0.to must match pattern \"^(.{1,100})$\""]
+  },
+  {
+    "testTitle": "invalid extra event mapping property",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventsMapping": [{ "from": "Order Completed", "to": "purchase", "enabled": true }]
+    },
+    "result": false,
+    "err": ["eventsMapping.0 must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid over-length event mapping source",
+    "config": {
+      "rudderAccountId": "account_123",
+      "eventsMapping": [
+        {
+          "from": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "to": "purchase"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["eventsMapping.0.from must match pattern \"^(.{1,100})$\""]
   },
   {
     "testTitle": "invalid event filtering setting",

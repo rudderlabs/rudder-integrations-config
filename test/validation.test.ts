@@ -621,6 +621,93 @@ describe('Google Ads Offline Conversions UI config', () => {
   });
 });
 
+describe('Google Ads Remarketing Lists account picker configuration', () => {
+  const destinationPath = path.resolve(
+    'src/configurations/destinations/google_adwords_remarketing_lists',
+  );
+  const uiConfig = JSON.parse(
+    fs.readFileSync(path.join(destinationPath, 'ui-config.json'), 'utf-8'),
+  );
+  const dbConfig = JSON.parse(
+    fs.readFileSync(path.join(destinationPath, 'db-config.json'), 'utf-8'),
+  );
+  const connectionFields = uiConfig.uiConfig.baseTemplate[0].sections[0].groups[0].fields;
+  const customerFields = connectionFields.filter(
+    (field: { configKey: string }) => field.configKey === 'customerId',
+  );
+  const fieldByConfigKey = Object.fromEntries(
+    connectionFields.map((field: { configKey: string }) => [field.configKey, field]),
+  );
+  const featureFlag = 'AMP_enable-google-ads-customer-picker';
+
+  it('uses mutually exclusive hierarchy and flat customer account pickers', () => {
+    expect(customerFields).toHaveLength(2);
+    expect(customerFields.find((field: { type: string }) => field.type === 'nestedSelect')).toEqual(
+      {
+        type: 'nestedSelect',
+        label: 'Customer ID',
+        note: 'Select a manager account or descendant account. Selecting the top-level account clears the login customer ID; selecting a descendant uses the top-level account as the login customer ID',
+        configKey: 'customerId',
+        apiName: 'getConfigData',
+        apiDependencies: ['rudderAccountId'],
+        allowNonLeafSelection: true,
+        required: true,
+        placeholder: 'Select customer account',
+        preRequisites: {
+          fields: [{ configKey: 'rudderAccountId', exists: true }],
+          featureFlags: [{ configKey: featureFlag, value: true }],
+        },
+      },
+    );
+    expect(
+      customerFields.find((field: { apiName: string }) => field.apiName === 'customerAccounts'),
+    ).toEqual({
+      type: 'dynamicDataSelect',
+      label: 'Customer ID',
+      note: 'Select the Customer ID of your Google remarketing list',
+      configKey: 'customerId',
+      apiName: 'customerAccounts',
+      required: true,
+      apiDependencies: ['rudderAccountId'],
+      placeholder: 'Select customer account',
+      regex: '(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$',
+      regexErrorMessage: 'Invalid Customer ID',
+      preRequisites: {
+        fields: [{ configKey: 'rudderAccountId', exists: true }],
+        featureFlags: [{ configKey: featureFlag }],
+      },
+    });
+  });
+
+  it('inverse-gates the manual account controls while preserving login prerequisites', () => {
+    expect(fieldByConfigKey.subAccount.required).toBe(true);
+    expect(fieldByConfigKey.subAccount.preRequisites).toEqual({
+      featureFlags: [{ configKey: featureFlag }],
+    });
+    expect(fieldByConfigKey.loginCustomerId.preRequisites).toEqual({
+      fields: [{ configKey: 'subAccount', value: true }],
+      featureFlags: [{ configKey: featureFlag }],
+    });
+  });
+
+  it('keeps cloud audience and VDM list selection contracts unchanged', () => {
+    expect(fieldByConfigKey.audienceId).toMatchObject({
+      type: 'textInput',
+      configKey: 'audienceId',
+      preRequisites: {
+        fields: [{ configKey: 'connectionMode.cloud', value: 'cloud' }],
+      },
+    });
+    expect(fieldByConfigKey.audienceId.apiName).toBeUndefined();
+    expect(JSON.stringify(uiConfig)).not.toContain('getRemarketingLists');
+    expect(dbConfig.options.destinationFeatures.vdmLabels).toEqual({
+      newAudienceAlternateLabel: 'Create New List',
+      existingAudienceAlternateLabel: 'Use Existing List',
+      audienceAlternateLabel: 'List Id',
+    });
+  });
+});
+
 describe('Destination Definition validation tests', () => {
   dests.forEach((dest) => {
     it(`${dest} - destination definition test`, async () => {
@@ -1281,45 +1368,6 @@ describe('Account Definition validation tests', () => {
     it(`${integration}/${accountName} - account definition test`, async () => {
       const accDefConfig = await getAccountDefinitionConfig(integration, accountName, 'sources');
       await expect(validateAccountDefinitions(accDefConfig)).resolves.toEqual(true);
-    });
-  });
-
-  it('DESTINATION_ROKT optionsSchema accepts only safe mParticle API base URLs', () => {
-    const accountSchema = getAccountDefinitionSchema('rokt', 'rokt_api_key', 'destinations');
-    const validateOptions = compileAccountSchema(accountSchema.optionsSchema);
-    const options = (apiEndpoint: string) => ({
-      apiEndpoint,
-      serverToServerKey: 'synthetic-key',
-    });
-
-    [
-      'https://inbound.mparticle.com/s2s',
-      'https://inbound.mparticle.com/s2s/',
-      'https://inbound.mparticle.com/s2s/feed-v1_~.x',
-      'https://s2s.mparticle.com',
-      'https://mparticle.com',
-      'https://mparticle.com/',
-    ].forEach((apiEndpoint) => {
-      expect(validateOptions(options(apiEndpoint))).toBe(true);
-    });
-
-    [
-      'http://s2s.mparticle.com',
-      'https://evilmparticle.com',
-      'https://inbound.mparticle.com/.',
-      'https://inbound.mparticle.com/..',
-      'https://inbound.mparticle.com/../etc',
-      'https://inbound.mparticle.com/s2s/./events',
-      'https://inbound.mparticle.com/s2s/../events',
-      'https://inbound.mparticle.com//s2s',
-      'https://inbound.mparticle.com/s2s%2f..',
-      'https://s2s.mparticle.com.attacker.example',
-      'https://user@s2s.mparticle.com',
-      'https://s2s.mparticle.com:8443',
-      'https://s2s.mparticle.com?redirect=1',
-      'https://s2s.mparticle.com#fragment',
-    ].forEach((apiEndpoint) => {
-      expect(validateOptions(options(apiEndpoint))).toBe(false);
     });
   });
 
@@ -2512,6 +2560,7 @@ const clickHouseAccountSchema = () =>
 
 // Lookaround, \s and \p{} read differently in ECMA-262 and Go RE2 (catalog LLD section 3.3). This is a
 // syntax check only: sqlconnect-go runs the shared fixture cases through Go RE2.
+// eslint-disable-next-line unicorn/better-regex
 const RE2_UNSAFE_PATTERN = /\(\?[=!<]|\\s|\\p\{/;
 
 describe('SOURCE_CLICKHOUSE optionsSchema', () => {
@@ -2980,5 +3029,468 @@ describe('clickhouse ui-config', () => {
     expect(ui.docLinks.jsonMapperUseInstructions).toBe(
       'https://docs.rudderstack.com/reverse-etl/clickhouse/#specifying-the-data-to-import',
     );
+  });
+});
+
+const HS_AUDIENCE_GATE = {
+  gate: { flags: [{ name: 'AMP_enable-hs-audience-destination', value: false }] },
+};
+
+function expectHsAudienceGate(hidden: unknown): void {
+  expect(hidden).toEqual(HS_AUDIENCE_GATE);
+}
+
+describe('HS_AUDIENCE destination definition', () => {
+  // Read from disk: validateDestinationDefinitions uses AJV useDefaults and mutates imported
+  // modules (e.g. supportsBlankAudienceCreation), so a second validation of the cached import fails.
+  const loadDestination = () =>
+    JSON.parse(
+      fs.readFileSync(
+        path.resolve('src/configurations/destinations/hs_audience/db-config.json'),
+        'utf-8',
+      ),
+    );
+
+  it('declares HubSpot Audience capabilities, account reference, and accessToken secrets', async () => {
+    const destDefConfig = loadDestination();
+    await expect(validateDestinationDefinitions(destDefConfig)).resolves.toEqual(true);
+    expect(destDefConfig).toMatchObject({
+      name: 'HS_AUDIENCE',
+      displayName: 'HubSpot Audience',
+      version: '1.0',
+    });
+    expect(destDefConfig.config).toMatchObject({
+      supportedAccountDefinitions: {
+        rudderAccountId: ['DESTINATION_HS_AUDIENCE_API_KEY'],
+      },
+      syncBehaviours: ['mirror'],
+      supportsVisualMapperV2: true,
+      isAudienceSupported: true,
+      transformAtV1: 'router',
+      supportedSourceTypes: ['warehouse'],
+      supportedMessageTypes: { cloud: ['record'] },
+      supportedConnectionModes: { warehouse: ['cloud'] },
+      destConfig: {
+        defaultConfig: ['rudderAccountId', 'accessToken'],
+        warehouse: ['connectionMode'],
+      },
+      secretKeys: ['accessToken'],
+    });
+    expect(destDefConfig.options).toMatchObject({
+      isBeta: true,
+      icon: 'hubspot',
+    });
+  });
+
+  it('options.hidden is the temporary destination creation gate', () => {
+    expectHsAudienceGate(loadDestination().options.hidden);
+  });
+});
+
+describe('DESTINATION_HS_AUDIENCE_API_KEY account definition', () => {
+  const loadAccount = () =>
+    JSON.parse(
+      fs.readFileSync(
+        path.resolve(
+          'src/configurations/destinations/hs_audience/accounts/hs_audience_api_key/db-config.json',
+        ),
+        'utf-8',
+      ),
+    );
+
+  it('declares an api_key destination account that passes the account meta-schema', async () => {
+    const accountConfig = loadAccount();
+    await expect(validateAccountDefinitions(accountConfig)).resolves.toEqual(true);
+    expect(accountConfig).toMatchObject({
+      name: 'DESTINATION_HS_AUDIENCE_API_KEY',
+      type: 'hs_audience',
+      category: 'destination',
+      authenticationType: 'api_key',
+    });
+  });
+
+  it('has accessToken as the only secret and no option fields', () => {
+    const accountConfig = loadAccount();
+    expect(accountConfig.config.secretFields).toEqual(['accessToken']);
+    expect(accountConfig.config.optionFields).toEqual([]);
+  });
+
+  it('has no displayOptions.hidden gate so Lookout can offer the account while the destination stays Flagsmith-gated', () => {
+    const accountConfig = loadAccount();
+    expect(accountConfig.displayOptions?.hidden).toBeUndefined();
+  });
+});
+
+const hsAudienceAccountSchema = () =>
+  getAccountDefinitionSchema('hs_audience', 'hs_audience_api_key', 'destinations');
+
+describe('DESTINATION_HS_AUDIENCE_API_KEY secretSchema', () => {
+  const validateSecret = () =>
+    compileAccountSchemaWithErrorMessages(hsAudienceAccountSchema().secretSchema);
+  const messages = (validate: ValidateFunction) => (validate.errors ?? []).map((e) => e.message);
+
+  it('accepts a synthetic Service Key and a legacy private-app token shape', () => {
+    const validate = validateSecret();
+    expect(validate({ accessToken: 'synthetic-service-key' })).toBe(true);
+    expect(validate({ accessToken: 'pat-synthetic-existing-token' })).toBe(true);
+  });
+
+  it('accepts a 500-character Service Key and rejects a longer one', () => {
+    const validate = validateSecret();
+    expect(validate({ accessToken: 'a'.repeat(500) })).toBe(true);
+    expect(validate({ accessToken: 'a'.repeat(501) })).toBe(false);
+    expect(messages(validate)).toEqual(['Enter a HubSpot Service Key']);
+  });
+
+  it('rejects missing, empty, whitespace-only, and non-string accessToken values', () => {
+    const validate = validateSecret();
+    expect(validate({})).toBe(false);
+    expect(messages(validate)).toEqual(["must have required property 'accessToken'"]);
+    expect(validate({ accessToken: '' })).toBe(false);
+    expect(messages(validate)).toEqual(['Enter a HubSpot Service Key']);
+    expect(validate({ accessToken: '   ' })).toBe(false);
+    expect(messages(validate)).toEqual(['Enter a HubSpot Service Key']);
+    expect(validate({ accessToken: 123 })).toBe(false);
+    expect(messages(validate)).toEqual(['must be string']);
+  });
+});
+
+describe('DESTINATION_HS_AUDIENCE_API_KEY optionsSchema', () => {
+  it('accepts an empty options object and has no combinedSchema', () => {
+    const accountSchema = hsAudienceAccountSchema();
+    expect(accountSchema.combinedSchema).toBeUndefined();
+    const validate = compileAccountSchema(accountSchema.optionsSchema);
+    expect(validate({})).toBe(true);
+  });
+});
+
+describe('hs_audience account ui-config', () => {
+  const loadUiConfig = () =>
+    JSON.parse(
+      fs.readFileSync(
+        path.resolve(
+          'src/configurations/destinations/hs_audience/accounts/hs_audience_api_key/ui-config.json',
+        ),
+        'utf-8',
+      ),
+    ).uiConfig;
+
+  it('puts the account name first and the accessToken credential second as a secret', () => {
+    const fields = loadUiConfig().form.fields;
+    expect(fields.map((f: { key: unknown }) => f.key)).toEqual([
+      'name',
+      ['options', 'accessToken'],
+    ]);
+    expect(fields[1]).toMatchObject({
+      key: ['options', 'accessToken'],
+      secret: true,
+      component: 'textField',
+    });
+    expect(loadUiConfig().icon).toBe('key');
+  });
+});
+
+describe('hs_audience destination ui-config', () => {
+  const loadUiConfig = () =>
+    JSON.parse(
+      fs.readFileSync(
+        path.resolve('src/configurations/destinations/hs_audience/ui-config.json'),
+        'utf-8',
+      ),
+    ).uiConfig;
+
+  it('exposes only HubSpot account management and connection mode, with no OAuth hash or list controls', () => {
+    const ui = loadUiConfig();
+    const serialized = JSON.stringify(ui);
+    expect(ui.baseTemplate[0].sections[0].groups[0].fields).toEqual([
+      {
+        type: 'accountManagementInput',
+        label: 'HubSpot account',
+        configKey: 'rudderAccountId',
+      },
+    ]);
+    expect(ui.sdkTemplate).toEqual({
+      title: 'SDK settings',
+      note: 'not visible in the ui',
+      fields: [],
+    });
+    [
+      'audienceId',
+      'identifierMappings',
+      'hash',
+      'oauth',
+      'createList',
+      'accessToken',
+      'redirectGroups',
+    ].forEach((forbidden) => {
+      expect({ key: forbidden, present: serialized.includes(forbidden) }).toEqual({
+        key: forbidden,
+        present: false,
+      });
+    });
+  });
+});
+
+const MARKETO_AUDIENCE_DIR = 'src/configurations/destinations/marketo_audience';
+const MARKETO_AUDIENCE_ACCOUNT_DIR = `${MARKETO_AUDIENCE_DIR}/accounts/marketo_audience_api_key`;
+const MARKETO_AUDIENCE_GATE = {
+  gate: { flags: [{ name: 'AMP_enable-marketo-audience-destination', value: false }] },
+};
+
+// Read from disk: the definition validators run AJV with useDefaults and mutate what they are
+// given, so a cached import would carry defaults into the next assertion.
+const readJson = (file: string) => JSON.parse(fs.readFileSync(path.resolve(file), 'utf-8'));
+
+const loadMarketoAudienceAccount = () => readJson(`${MARKETO_AUDIENCE_ACCOUNT_DIR}/db-config.json`);
+
+const marketoAudienceAccountSchema = () =>
+  getAccountDefinitionSchema('marketo_audience', 'marketo_audience_api_key', 'destinations');
+
+const ajvMessages = (validate: ValidateFunction) => (validate.errors ?? []).map((e) => e.message);
+
+describe('MARKETO_AUDIENCE destination definition', () => {
+  const loadDestination = () => readJson(`${MARKETO_AUDIENCE_DIR}/db-config.json`);
+
+  it('declares a warehouse-only VDM V2 mirror audience destination behind the release gate', async () => {
+    await expect(validateDestinationDefinitions(loadDestination())).resolves.toEqual(true);
+    const destDefConfig = loadDestination();
+    expect(destDefConfig).toMatchObject({
+      name: 'MARKETO_AUDIENCE',
+      displayName: 'Marketo Audience',
+      version: '1.0',
+    });
+    expect(destDefConfig.config).toMatchObject({
+      supportedAccountDefinitions: {
+        rudderAccountId: ['DESTINATION_MARKETO_AUDIENCE_API_KEY'],
+      },
+      syncBehaviours: ['mirror'],
+      supportsVisualMapperV2: true,
+      isAudienceSupported: true,
+      transformAtV1: 'router',
+      supportedSourceTypes: ['warehouse'],
+      supportedMessageTypes: { cloud: ['record'] },
+      supportedConnectionModes: { warehouse: ['cloud'] },
+    });
+    expect(destDefConfig.options).toEqual({
+      isBeta: true,
+      hidden: MARKETO_AUDIENCE_GATE,
+      icon: 'marketo',
+    });
+  });
+
+  it('lists every account field in defaultConfig and every account secret in secretKeys', () => {
+    const { config } = loadDestination();
+    const account = loadMarketoAudienceAccount();
+    expect(config.destConfig).toEqual({
+      defaultConfig: ['rudderAccountId', 'accountId', 'clientId', 'clientSecret'],
+      warehouse: ['connectionMode'],
+    });
+    expect(config.secretKeys).toEqual(['clientId', 'clientSecret']);
+    expect(config.destConfig.defaultConfig).toEqual(
+      expect.arrayContaining([...account.config.optionFields, ...account.config.secretFields]),
+    );
+    expect(config.secretKeys).toEqual(expect.arrayContaining(account.config.secretFields));
+  });
+});
+
+describe('DESTINATION_MARKETO_AUDIENCE_API_KEY account definition', () => {
+  it('passes the account meta-schema', async () => {
+    await expect(validateAccountDefinitions(loadMarketoAudienceAccount())).resolves.toEqual(true);
+  });
+
+  it('is an api_key account with the Munchkin ID as an option and the client credentials as secrets', () => {
+    expect(loadMarketoAudienceAccount()).toEqual({
+      name: 'DESTINATION_MARKETO_AUDIENCE_API_KEY',
+      type: 'marketo_audience',
+      category: 'destination',
+      authenticationType: 'api_key',
+      config: { optionFields: ['accountId'], secretFields: ['clientId', 'clientSecret'] },
+    });
+  });
+
+  it('has no displayOptions.hidden gate so Lookout can offer the account while the destination stays Flagsmith-gated', () => {
+    expect(loadMarketoAudienceAccount().displayOptions?.hidden).toBeUndefined();
+  });
+});
+
+describe('DESTINATION_MARKETO_AUDIENCE_API_KEY account schema', () => {
+  it('is valid against the account schema meta-schema and has no combinedSchema', () => {
+    const validateAccountSchema = compileAccountSchema(
+      readJson('src/schemas/account/account-schema-schema.json'),
+    );
+    const accountSchema = marketoAudienceAccountSchema();
+    const isValid = validateAccountSchema(accountSchema);
+    expect(validateAccountSchema.errors ?? []).toEqual([]);
+    expect(isValid).toBe(true);
+    expect(accountSchema.combinedSchema).toBeUndefined();
+  });
+
+  it('declares exactly the account optionFields and secretFields', () => {
+    const { optionsSchema, secretSchema } = marketoAudienceAccountSchema();
+    const { config } = loadMarketoAudienceAccount();
+    expect(Object.keys(optionsSchema.properties)).toEqual(config.optionFields);
+    expect(optionsSchema.required).toEqual(config.optionFields);
+    expect(Object.keys(secretSchema.properties)).toEqual(config.secretFields);
+    expect(secretSchema.required).toEqual(config.secretFields);
+  });
+});
+
+describe('DESTINATION_MARKETO_AUDIENCE_API_KEY optionsSchema', () => {
+  const validateOptions = () =>
+    compileAccountSchemaWithErrorMessages(marketoAudienceAccountSchema().optionsSchema);
+  const MUNCHKIN_ID_MESSAGE = 'Enter a Munchkin ID such as 123-ABC-456';
+
+  it('accepts a Munchkin ID of three groups of three letters or digits', () => {
+    const validate = validateOptions();
+    ['123-ABC-456', 'abc-def-ghi', '000-000-000', 'A1b-2Cd-3eF'].forEach((accountId) => {
+      expect({ accountId, valid: validate({ accountId }) }).toEqual({ accountId, valid: true });
+    });
+  });
+
+  it('rejects any accountId that would change the host the token request is sent to', () => {
+    const validate = validateOptions();
+    [
+      '',
+      '123ABC456',
+      '12-ABC-456',
+      '123-ABC-4567',
+      '123-ABC-456-789',
+      '123_ABC_456',
+      ' 123-ABC-456',
+      '123-ABC-456 ',
+      '123-ABC-456\n',
+      '123-ABC-456.mktorest.com',
+      'https://123-ABC-456.mktorest.com',
+      '123-ABC-456@attacker.example',
+      'attacker.example/123-ABC-456',
+      'attacker.example#123-ABC-456',
+    ].forEach((accountId) => {
+      expect({ accountId, valid: validate({ accountId }) }).toEqual({ accountId, valid: false });
+      expect({ accountId, messages: ajvMessages(validate) }).toEqual({
+        accountId,
+        messages: [MUNCHKIN_ID_MESSAGE],
+      });
+    });
+  });
+
+  it('requires accountId and rejects a non-string value', () => {
+    const validate = validateOptions();
+    expect(validate({})).toBe(false);
+    expect(ajvMessages(validate)).toEqual(["must have required property 'accountId'"]);
+    expect(validate({ accountId: 123 })).toBe(false);
+    expect(ajvMessages(validate)).toEqual(['must be string']);
+  });
+});
+
+describe('DESTINATION_MARKETO_AUDIENCE_API_KEY secretSchema', () => {
+  const validateSecret = () =>
+    compileAccountSchemaWithErrorMessages(marketoAudienceAccountSchema().secretSchema);
+  const CLIENT_ID_MESSAGE = 'Enter a client ID of up to 100 characters';
+  const CLIENT_SECRET_MESSAGE = 'Enter a client secret of up to 500 characters';
+
+  it('accepts a client ID of up to 100 characters and a client secret of up to 500', () => {
+    const validate = validateSecret();
+    expect(validate({ clientId: 'synthetic-client-id', clientSecret: 'synthetic-secret' })).toBe(
+      true,
+    );
+    expect(validate({ clientId: 'a'.repeat(100), clientSecret: 'b'.repeat(500) })).toBe(true);
+  });
+
+  it('rejects an empty or over-long client ID with the length message', () => {
+    const validate = validateSecret();
+    ['', 'a'.repeat(101)].forEach((clientId) => {
+      expect(validate({ clientId, clientSecret: 'synthetic-secret' })).toBe(false);
+      expect(ajvMessages(validate)).toEqual([CLIENT_ID_MESSAGE]);
+    });
+  });
+
+  it('rejects an empty or over-long client secret with the length message', () => {
+    const validate = validateSecret();
+    ['', 'b'.repeat(501)].forEach((clientSecret) => {
+      expect(validate({ clientId: 'synthetic-client-id', clientSecret })).toBe(false);
+      expect(ajvMessages(validate)).toEqual([CLIENT_SECRET_MESSAGE]);
+    });
+  });
+
+  it('requires clientId and clientSecret and rejects non-string values', () => {
+    const validate = validateSecret();
+    expect(validate({})).toBe(false);
+    expect(ajvMessages(validate)).toEqual([
+      "must have required property 'clientId'",
+      "must have required property 'clientSecret'",
+    ]);
+    expect(validate({ clientId: 1, clientSecret: 2 })).toBe(false);
+    expect(ajvMessages(validate)).toEqual(['must be string', 'must be string']);
+  });
+});
+
+describe('marketo_audience account ui-config', () => {
+  const loadUiConfig = () => readJson(`${MARKETO_AUDIENCE_ACCOUNT_DIR}/ui-config.json`);
+
+  it('is valid against the account ui-config meta-schema', () => {
+    const validate = compileAccountSchema(
+      readJson('src/schemas/account/account-ui-config-schema.json'),
+    );
+    const isValid = validate(loadUiConfig());
+    expect(validate.errors ?? []).toEqual([]);
+    expect(isValid).toBe(true);
+  });
+
+  it('asks for the account name, Munchkin ID, client ID and client secret, with only the client credentials secret', () => {
+    const { uiConfig } = loadUiConfig();
+    expect(uiConfig).toMatchObject({
+      name: 'API Key',
+      icon: 'key',
+      form: { title: 'Connect your Marketo account' },
+    });
+    expect(
+      uiConfig.form.fields.map((f: { label: string; key: unknown; secret?: boolean }) => ({
+        label: f.label,
+        key: f.key,
+        secret: f.secret ?? false,
+      })),
+    ).toEqual([
+      { label: 'Account name', key: 'name', secret: false },
+      { label: 'Munchkin Account ID', key: ['options', 'accountId'], secret: false },
+      { label: 'Client ID', key: ['options', 'clientId'], secret: true },
+      { label: 'Client Secret', key: ['options', 'clientSecret'], secret: true },
+    ]);
+  });
+
+  it('tells the customer where to find the Munchkin ID', () => {
+    const munchkinField = loadUiConfig().uiConfig.form.fields[1];
+    expect(munchkinField.note).toContain('Admin › Web Services');
+  });
+});
+
+describe('marketo_audience destination ui-config', () => {
+  const loadUiConfig = () => readJson(`${MARKETO_AUDIENCE_DIR}/ui-config.json`).uiConfig;
+  const collectConfigKeys = (node: unknown): string[] => {
+    if (Array.isArray(node)) return node.flatMap(collectConfigKeys);
+    if (node && typeof node === 'object') {
+      return Object.entries(node).flatMap(([key, value]) =>
+        key === 'configKey' && typeof value === 'string' ? [value] : collectConfigKeys(value),
+      );
+    }
+    return [];
+  };
+
+  it('opens with the Marketo account picker and configures nothing else', () => {
+    const ui = loadUiConfig();
+    expect(ui.baseTemplate[0].sections[0].groups[0].fields[0]).toEqual({
+      type: 'accountManagementInput',
+      label: 'Marketo account',
+      configKey: 'rudderAccountId',
+    });
+    expect(collectConfigKeys(ui)).toEqual(['rudderAccountId']);
+    expect(ui.redirectGroups).toBeUndefined();
+  });
+
+  it('keeps the empty sdkTemplate that form builder v2 requires', () => {
+    expect(loadUiConfig().sdkTemplate).toEqual({
+      title: 'SDK settings',
+      note: 'not visible in the ui',
+      fields: [],
+    });
   });
 });
