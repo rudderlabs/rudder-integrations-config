@@ -219,6 +219,37 @@ async function getDestinationDefinitionConfig(destName: string) {
 const dests = getIntegrationNames('destinations');
 const sources = getIntegrationNames('sources');
 
+type VisibilityPrerequisites = {
+  fields?: Array<{ configKey: string; value?: unknown; exists?: boolean }>;
+  featureFlags?: Array<{ configKey: string; value?: unknown }>;
+  prerequisitesCondition?: string;
+};
+
+// Mirrors the webapp's preRequisites check for the one flag a test toggles. A flag entry without
+// `value` is the flag-off branch; any other flag is treated as off.
+const isFieldVisible = (
+  field: { preRequisites?: VisibilityPrerequisites },
+  {
+    featureFlag,
+    featureEnabled,
+    config,
+  }: { featureFlag: string; featureEnabled: boolean | undefined; config: Record<string, unknown> },
+) => {
+  if (!field.preRequisites) return true;
+  const checks = [
+    ...(field.preRequisites.fields ?? []).map(({ configKey, value, exists }) =>
+      exists === true ? config[configKey] !== undefined : config[configKey] === value,
+    ),
+    ...(field.preRequisites.featureFlags ?? []).map(({ configKey, value }) => {
+      if (configKey !== featureFlag) return false;
+      return value === undefined ? !featureEnabled : value === featureEnabled;
+    }),
+  ];
+  return field.preRequisites.prerequisitesCondition === 'or'
+    ? checks.some(Boolean)
+    : checks.every(Boolean);
+};
+
 describe('Core Tests', () => {
   it('If invalid integration name is provide, throw error', () => {
     expect(() => {
@@ -375,6 +406,240 @@ describe('Validation Tests', () => {
         });
       });
     });
+  });
+});
+
+describe('Google Ads Offline Conversions UI config', () => {
+  const uiConfigPath = path.resolve(
+    'src/configurations/destinations/google_adwords_offline_conversions/ui-config.json',
+  );
+  const { uiConfig } = JSON.parse(fs.readFileSync(uiConfigPath, 'utf-8'));
+  const connectionFields = uiConfig.baseTemplate[0].sections[0].groups[0].fields;
+  const mappingTabs = uiConfig.redirectGroups.eventMapping.tabs;
+  const mappingFields = mappingTabs.flatMap(
+    (tab: { fields: Record<string, unknown>[] }) => tab.fields,
+  );
+  const accountDependencies = ['rudderAccountId', 'customerId', 'subAccount', 'loginCustomerId'];
+  const featureFlag = 'AMP_enable-google-ads-customer-picker';
+  type FeatureFlagPrerequisite = { configKey: string; value?: boolean };
+  type FieldPrerequisite = { configKey: string; value?: unknown; exists?: boolean };
+  type UiField = {
+    type: string;
+    configKey: string;
+    preRequisites?: {
+      fields?: FieldPrerequisite[];
+      featureFlags?: FeatureFlagPrerequisite[];
+      prerequisitesCondition?: string;
+    };
+    columns?: UiField[];
+    [key: string]: unknown;
+  };
+
+  const getFeatureFlags = (field: {
+    preRequisites: { featureFlags: FeatureFlagPrerequisite[] };
+  }) => {
+    const flags = field.preRequisites.featureFlags;
+    expect(flags).toHaveLength(1);
+    expect(flags[0].configKey).toBe(featureFlag);
+    return flags;
+  };
+
+  const getFlagValue = (field: { preRequisites: { featureFlags: FeatureFlagPrerequisite[] } }) =>
+    getFeatureFlags(field)[0].value;
+
+  const isVisible = (
+    field: UiField,
+    featureEnabled: boolean | undefined,
+    config: Record<string, unknown> = { rudderAccountId: 'account-id', subAccount: true },
+  ) => isFieldVisible(field, { featureFlag, featureEnabled, config });
+
+  it('uses the shared gated account picker and inverse-gates the manual fields', () => {
+    const customerFields = connectionFields.filter(
+      (field: { configKey: string }) => field.configKey === 'customerId',
+    );
+    expect(customerFields).toHaveLength(2);
+
+    const accountPicker = customerFields.find(
+      (field: { type: string }) => field.type === 'nestedSelect',
+    );
+    expect(accountPicker).toMatchObject({
+      note: 'Select a manager account or descendant account. Selecting the top-level account clears the login customer ID; selecting a descendant uses the top-level account as the login customer ID',
+      configKey: 'customerId',
+      apiName: 'getConfigData',
+      apiDependencies: ['rudderAccountId'],
+      allowNonLeafSelection: true,
+      required: true,
+      preRequisites: {
+        fields: [{ configKey: 'rudderAccountId', exists: true }],
+        featureFlags: [{ configKey: featureFlag, value: true }],
+      },
+    });
+    expect(accountPicker).not.toHaveProperty('selectionOnly');
+    expect(accountPicker).not.toHaveProperty('valueMode');
+
+    const manualFields = connectionFields.filter((field: { type: string; configKey: string }) =>
+      ['textInput:customerId', 'checkbox:subAccount', 'textInput:loginCustomerId'].includes(
+        `${field.type}:${field.configKey}`,
+      ),
+    );
+    expect(manualFields).toHaveLength(3);
+    manualFields.forEach(
+      (field: { preRequisites: { featureFlags: FeatureFlagPrerequisite[] } }) => {
+        expect(getFeatureFlags(field)).toEqual([{ configKey: featureFlag }]);
+      },
+    );
+    expect(
+      manualFields.find((field: { configKey: string }) => field.configKey === 'loginCustomerId')
+        .preRequisites.fields,
+    ).toEqual([{ configKey: 'subAccount', value: true }]);
+  });
+
+  it('shows exactly one account-control set for missing, disabled, and enabled flags', () => {
+    const accountControlFields = connectionFields.filter(
+      (field: { type: string; configKey: string }) =>
+        [
+          'nestedSelect:customerId',
+          'textInput:customerId',
+          'checkbox:subAccount',
+          'textInput:loginCustomerId',
+        ].includes(`${field.type}:${field.configKey}`),
+    );
+    const visibleAccountControls = (featureEnabled: boolean | undefined) =>
+      accountControlFields
+        .filter((field: UiField) => isVisible(field, featureEnabled))
+        .map((field: { type: string; configKey: string }) => `${field.type}:${field.configKey}`);
+
+    expect(visibleAccountControls(undefined)).toEqual([
+      'textInput:customerId',
+      'checkbox:subAccount',
+      'textInput:loginCustomerId',
+    ]);
+    expect(visibleAccountControls(false)).toEqual([
+      'textInput:customerId',
+      'checkbox:subAccount',
+      'textInput:loginCustomerId',
+    ]);
+    expect(visibleAccountControls(true)).toEqual(['nestedSelect:customerId']);
+  });
+
+  it.each([
+    ['eventsToConversionsNamesMapping', 'getConversionActions'],
+    ['customVariables', 'getCustomVariables'],
+  ])('%s has one dynamic and one legacy mapping variant', (configKey, apiName) => {
+    const variants = mappingFields.filter(
+      (field: { configKey: string }) => field.configKey === configKey,
+    );
+    expect(variants).toHaveLength(2);
+    expect(variants.map(getFlagValue)).toEqual(expect.arrayContaining([true, undefined]));
+
+    const dynamicVariant = variants.find(
+      (field: Parameters<typeof getFlagValue>[0]) => getFlagValue(field) === true,
+    );
+    const legacyVariant = variants.find(
+      (field: Parameters<typeof getFlagValue>[0]) => getFlagValue(field) === undefined,
+    );
+    const dynamicTarget = dynamicVariant.columns.find(
+      (column: { configKey: string }) => column.configKey === 'to',
+    );
+    const legacyTarget = legacyVariant.columns.find(
+      (column: { configKey: string }) => column.configKey === 'to',
+    );
+
+    expect(dynamicTarget).toMatchObject({
+      type: 'dynamicDataSelect',
+      configKey: 'to',
+      apiName,
+      apiDependencies: accountDependencies,
+    });
+    expect(legacyTarget).toMatchObject({ type: 'textInput', configKey: 'to' });
+    expect(legacyTarget).not.toHaveProperty('apiName');
+    expect(legacyTarget).not.toHaveProperty('apiDependencies');
+    // The webapp's dynamicDataSelect doesn't render a placeholder, so the lookup column has none.
+    expect(dynamicTarget).not.toHaveProperty('placeholder');
+
+    const normalizedDynamic = JSON.parse(JSON.stringify(dynamicVariant));
+    const normalizedLegacy = JSON.parse(JSON.stringify(legacyVariant));
+    delete normalizedDynamic.preRequisites;
+    delete normalizedLegacy.preRequisites;
+    const normalizedDynamicTarget = normalizedDynamic.columns.find(
+      (column: { configKey: string }) => column.configKey === 'to',
+    );
+    normalizedDynamicTarget.type = 'textInput';
+    delete normalizedDynamicTarget.apiName;
+    delete normalizedDynamicTarget.apiDependencies;
+    delete normalizedLegacy.columns.find(
+      (column: { configKey: string }) => column.configKey === 'to',
+    ).placeholder;
+    expect(normalizedDynamic).toEqual(normalizedLegacy);
+  });
+
+  it.each([
+    ['eventsToConversionsNamesMapping', 'getConversionActions'],
+    ['customVariables', 'getCustomVariables'],
+  ])('%s renders exactly one lookup or legacy variant per flag state', (configKey, apiName) => {
+    const variants = mappingFields.filter(
+      (field: { configKey: string }) => field.configKey === configKey,
+    );
+    const visibleVariants = (featureEnabled: boolean | undefined) =>
+      variants.filter((field: UiField) => isVisible(field, featureEnabled));
+
+    [undefined, false].forEach((featureEnabled) => {
+      const visible = visibleVariants(featureEnabled);
+      expect({ featureEnabled, visibleCount: visible.length }).toEqual({
+        featureEnabled,
+        visibleCount: 1,
+      });
+      expect(getFlagValue(visible[0])).toBeUndefined();
+      expect(visible[0].columns.find((column: UiField) => column.configKey === 'to')).toMatchObject(
+        {
+          type: 'textInput',
+          configKey: 'to',
+        },
+      );
+    });
+
+    const visible = visibleVariants(true);
+    expect(visible).toHaveLength(1);
+    expect(getFlagValue(visible[0])).toBe(true);
+    expect(visible[0].columns.find((column: UiField) => column.configKey === 'to')).toMatchObject({
+      type: 'dynamicDataSelect',
+      configKey: 'to',
+      apiName,
+      apiDependencies: accountDependencies,
+    });
+  });
+
+  it('keeps the offline conversion type mapping unchanged', () => {
+    const variants = mappingFields.filter(
+      (field: { configKey: string }) => field.configKey === 'eventsToOfflineConversionsTypeMapping',
+    );
+    expect(variants).toEqual([
+      {
+        type: 'mapping',
+        label: 'Map your events with Google Ads Offline Conversions',
+        configKey: 'eventsToOfflineConversionsTypeMapping',
+        default: [],
+        columns: [
+          {
+            type: 'textInput',
+            configKey: 'from',
+            label: 'RudderStack event names',
+            placeholder: 'e.g: Sign up completed',
+            regex: '^(.{0,100})$',
+          },
+          {
+            type: 'singleSelect',
+            configKey: 'to',
+            label: 'Google Ads offline conversions',
+            options: [
+              { label: 'Click', value: 'click' },
+              { label: 'Call', value: 'call' },
+              { label: 'Store', value: 'store' },
+            ],
+          },
+        ],
+      },
+    ]);
   });
 });
 
@@ -1525,30 +1790,10 @@ describe('Account Definition validation tests', () => {
     expect(fieldByValue.workloadIdentityTargetServiceAccount.required).toBe(false);
 
     const isVisible = (
-      field: {
-        preRequisites?: {
-          fields?: Array<{ configKey: string; value: unknown }>;
-          featureFlags?: Array<{ configKey: string; value?: unknown }>;
-          prerequisitesCondition?: string;
-        };
-      },
+      field: { preRequisites?: VisibilityPrerequisites },
       authMethod: string | undefined,
       featureEnabled: boolean | undefined,
-    ) => {
-      if (!field.preRequisites) return true;
-      const checks = [
-        ...(field.preRequisites.fields ?? []).map(
-          ({ configKey, value }) => configKey === 'authMethod' && value === authMethod,
-        ),
-        ...(field.preRequisites.featureFlags ?? []).map(({ configKey, value }) => {
-          if (configKey !== featureFlag) return false;
-          return value === undefined ? !featureEnabled : value === featureEnabled;
-        }),
-      ];
-      return field.preRequisites.prerequisitesCondition === 'or'
-        ? checks.some(Boolean)
-        : checks.every(Boolean);
-    };
+    ) => isFieldVisible(field, { featureFlag, featureEnabled, config: { authMethod } });
     const visibleFields = (authMethod: string | undefined, featureEnabled: boolean | undefined) =>
       fields
         .filter((field: { value: string }) => isVisible(field, authMethod, featureEnabled))

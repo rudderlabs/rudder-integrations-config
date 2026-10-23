@@ -67,6 +67,12 @@
 - The ClickHouse tests do more than check regex syntax. `clickHouseFieldCases` in `test/validation.test.ts` runs the shared field fixture through AJV against `src/configurations/sources/clickhouse/accounts/SOURCE_CLICKHOUSE/schema.json`. `RE2_UNSAFE_PATTERN` is an additional syntax screen.
 - A pre-commit full Jest run that times out is a failed run, not a pass. Rerun the ClickHouse tests with `npx jest test/validation.test.ts --testTimeout=60000`, or the full suite with `--maxWorkers=2 --testTimeout=120000`, and judge the result from the rerun.
 
+## INT-7259 — GAOC Rollout and Commitlint Pitfalls
+
+- GAOC's first account-picker implementation inverse-gated the manual fields and legacy mapping variants with `preRequisites.featureFlags[].value: false`. That matches only an explicitly false flag payload, so when the rollout flag was absent neither the new picker nor its fallback rendered.
+- Corrective rule: for fallback UI that must render when a feature flag is false or missing, omit `value` in the inverse feature-flag prerequisite. Reserve `value: false` for contracts that specifically require an explicit false payload.
+- Because `.github/workflows/commitlint.yml` checks only the latest commit (`commitDepth: 1`), leaving a merge-from-main commit at the PR tip can make CI lint an upstream release commit instead of the feature commit. After syncing `main`, keep a valid conventional non-merge branch commit at the tip so the lint window evaluates branch-owned history.
+
 ## INT-7258 — Keep Conventional Commit Subjects Lowercase
 
 - Commitlint rejects an uppercase ticket identifier at the start of a Conventional Commit subject with `subject-case` (for example, `docs(knowledge): INT-7258 distill`). Keep ticket references lowercase in the subject (for example, `docs(knowledge): int-7258 distill`).
