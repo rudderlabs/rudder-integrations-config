@@ -151,3 +151,8 @@
 - Retain required-field validation in the Custom Activation account schemas, but rely on AJV's default missing-property messages. Do not add object-level `errorMessage.required` maps or broaden the shared account meta-schema solely for friendlier destination-specific messages.
 - Likewise, keep the standard `rudderAccountId` pattern without a property-level custom `errorMessage`; peer account-backed destinations rely on AJV's default pattern error.
 - Do not add destination-specific `test/validation.test.ts` cases solely to execute straightforward 1–200 or 1–500 credential bounds. Reserve focused shared-suite account tests for complex or security-sensitive behavior.
+
+## INT-7371 — Legacy Auth Cleanup Compatibility
+
+- Remove Custom Activation's legacy inline-auth declarations without adding `additionalProperties: false` or a targeted `not.anyOf` rejection for the retired keys. Config-backend validates stored config merged with incoming edits, so explicit rejection can make unrelated updates return 400 while stale migrated keys remain stored.
+- Undeclared legacy keys no longer flow through workspace config to the data plane; tolerate stale storage for edit compatibility rather than turning declaration cleanup into persisted-config rejection.
