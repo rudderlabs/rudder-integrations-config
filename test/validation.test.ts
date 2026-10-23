@@ -447,6 +447,7 @@ describe('Google Ads Offline Conversions UI config', () => {
       (field: { type: string }) => field.type === 'nestedSelect',
     );
     expect(accountPicker).toMatchObject({
+      note: 'Select a manager account or descendant account. Selecting the top-level account clears the login customer ID; selecting a descendant uses the top-level account as the login customer ID',
       configKey: 'customerId',
       apiName: 'getConfigData',
       apiDependencies: ['rudderAccountId'],
