@@ -351,3 +351,10 @@
 
 - Keep `.github/workflows/raise-pr-for-constants.yml` push-to-main only unless manual cross-repository writes and PR updates are explicitly desired; the optional `workflow_dispatch` trigger was intentionally omitted because every run performs real downstream mutations.
 - The workflow's source checkout should use `persist-credentials: false`; subsequent cross-repository operations authenticate explicitly with the generated GitHub App token through `GH_TOKEN`, so retaining the checkout credential is unnecessary and violates least-privilege guidance.
+
+## INT-7424 — Custom Activation OAuth Account Contracts
+
+<!-- session: 2026-10-22 -->
+
+- Keep Custom Activation OAuth configuration account-owned: the definitions under `src/configurations/destinations/custom_audience/accounts/custom_audience_oauth_*/` declare their option fields, while platform-managed OAuth secrets stay out of account `uiConfig.form.fields`, `secretFields`, and `secretSchema`; the destination `db-config.json` must not mirror OAuth options into `destConfig.defaultConfig` or OAuth secrets into `secretKeys`.
+- Account-modal field order is the order of `uiConfig.form.fields` in each account definition. Custom Activation has no destination-level account-form ordering property, so preserve the specification's field order directly in each OAuth account `ui-config.json`.
