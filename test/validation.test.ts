@@ -219,6 +219,37 @@ async function getDestinationDefinitionConfig(destName: string) {
 const dests = getIntegrationNames('destinations');
 const sources = getIntegrationNames('sources');
 
+type VisibilityPrerequisites = {
+  fields?: Array<{ configKey: string; value?: unknown; exists?: boolean }>;
+  featureFlags?: Array<{ configKey: string; value?: unknown }>;
+  prerequisitesCondition?: string;
+};
+
+// Mirrors the webapp's preRequisites check for the one flag a test toggles. A flag entry without
+// `value` is the flag-off branch; any other flag is treated as off.
+const isFieldVisible = (
+  field: { preRequisites?: VisibilityPrerequisites },
+  {
+    featureFlag,
+    featureEnabled,
+    config,
+  }: { featureFlag: string; featureEnabled: boolean | undefined; config: Record<string, unknown> },
+) => {
+  if (!field.preRequisites) return true;
+  const checks = [
+    ...(field.preRequisites.fields ?? []).map(({ configKey, value, exists }) =>
+      exists === true ? config[configKey] !== undefined : config[configKey] === value,
+    ),
+    ...(field.preRequisites.featureFlags ?? []).map(({ configKey, value }) => {
+      if (configKey !== featureFlag) return false;
+      return value === undefined ? !featureEnabled : value === featureEnabled;
+    }),
+  ];
+  return field.preRequisites.prerequisitesCondition === 'or'
+    ? checks.some(Boolean)
+    : checks.every(Boolean);
+};
+
 describe('Core Tests', () => {
   it('If invalid integration name is provide, throw error', () => {
     expect(() => {
@@ -420,22 +451,7 @@ describe('Google Ads Offline Conversions UI config', () => {
     field: UiField,
     featureEnabled: boolean | undefined,
     config: Record<string, unknown> = { rudderAccountId: 'account-id', subAccount: true },
-  ) => {
-    if (!field.preRequisites) return true;
-    const checks = [
-      ...(field.preRequisites.fields ?? []).map(({ configKey, value, exists }) => {
-        if (exists === true) return config[configKey] !== undefined;
-        return config[configKey] === value;
-      }),
-      ...(field.preRequisites.featureFlags ?? []).map(({ configKey, value }) => {
-        if (configKey !== featureFlag) return false;
-        return value === undefined ? !featureEnabled : value === featureEnabled;
-      }),
-    ];
-    return field.preRequisites.prerequisitesCondition === 'or'
-      ? checks.some(Boolean)
-      : checks.every(Boolean);
-  };
+  ) => isFieldVisible(field, { featureFlag, featureEnabled, config });
 
   it('uses the shared gated account picker and inverse-gates the manual fields', () => {
     const customerFields = connectionFields.filter(
@@ -538,6 +554,8 @@ describe('Google Ads Offline Conversions UI config', () => {
     expect(legacyTarget).toMatchObject({ type: 'textInput', configKey: 'to' });
     expect(legacyTarget).not.toHaveProperty('apiName');
     expect(legacyTarget).not.toHaveProperty('apiDependencies');
+    // The webapp's dynamicDataSelect doesn't render a placeholder, so the lookup column has none.
+    expect(dynamicTarget).not.toHaveProperty('placeholder');
 
     const normalizedDynamic = JSON.parse(JSON.stringify(dynamicVariant));
     const normalizedLegacy = JSON.parse(JSON.stringify(legacyVariant));
@@ -549,6 +567,9 @@ describe('Google Ads Offline Conversions UI config', () => {
     normalizedDynamicTarget.type = 'textInput';
     delete normalizedDynamicTarget.apiName;
     delete normalizedDynamicTarget.apiDependencies;
+    delete normalizedLegacy.columns.find(
+      (column: { configKey: string }) => column.configKey === 'to',
+    ).placeholder;
     expect(normalizedDynamic).toEqual(normalizedLegacy);
   });
 
@@ -1769,30 +1790,10 @@ describe('Account Definition validation tests', () => {
     expect(fieldByValue.workloadIdentityTargetServiceAccount.required).toBe(false);
 
     const isVisible = (
-      field: {
-        preRequisites?: {
-          fields?: Array<{ configKey: string; value: unknown }>;
-          featureFlags?: Array<{ configKey: string; value?: unknown }>;
-          prerequisitesCondition?: string;
-        };
-      },
+      field: { preRequisites?: VisibilityPrerequisites },
       authMethod: string | undefined,
       featureEnabled: boolean | undefined,
-    ) => {
-      if (!field.preRequisites) return true;
-      const checks = [
-        ...(field.preRequisites.fields ?? []).map(
-          ({ configKey, value }) => configKey === 'authMethod' && value === authMethod,
-        ),
-        ...(field.preRequisites.featureFlags ?? []).map(({ configKey, value }) => {
-          if (configKey !== featureFlag) return false;
-          return value === undefined ? !featureEnabled : value === featureEnabled;
-        }),
-      ];
-      return field.preRequisites.prerequisitesCondition === 'or'
-        ? checks.some(Boolean)
-        : checks.every(Boolean);
-    };
+    ) => isFieldVisible(field, { featureFlag, featureEnabled, config: { authMethod } });
     const visibleFields = (authMethod: string | undefined, featureEnabled: boolean | undefined) =>
       fields
         .filter((field: { value: string }) => isVisible(field, authMethod, featureEnabled))
