@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.191.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.190.1...v1.191.0) (2026-10-23)
+
+
+### Features
+
+* add gated GAEC account and conversion pickers ([#2812](https://github.com/rudderlabs/rudder-integrations-config/issues/2812)) ([160a185](https://github.com/rudderlabs/rudder-integrations-config/commit/160a1850cacf0ccd031f373a1b25bae9df6c0db2))
+* **custom-audience:** remove legacy inline authentication ([#2855](https://github.com/rudderlabs/rudder-integrations-config/issues/2855)) ([a11685b](https://github.com/rudderlabs/rudder-integrations-config/commit/a11685b01437989d85220511b2e12f73169d74b2))
+* **gaoc:** add account and mapping lookups ([#2811](https://github.com/rudderlabs/rudder-integrations-config/issues/2811)) ([c4b7d58](https://github.com/rudderlabs/rudder-integrations-config/commit/c4b7d584a206b9848e8de00aa3d5dafda37cc891))
+* **pushwoosh:** add pushwoosh destination definition ([#2809](https://github.com/rudderlabs/rudder-integrations-config/issues/2809)) ([3c08b20](https://github.com/rudderlabs/rudder-integrations-config/commit/3c08b207a16a7fac3912b5944a0bcb07e6ec34b8))
+
+
+### Bug Fixes
+
+* **ci:** correct destination constants SHA lookup ([#2853](https://github.com/rudderlabs/rudder-integrations-config/issues/2853)) ([7bc7387](https://github.com/rudderlabs/rudder-integrations-config/commit/7bc73879c08fa1b67b846ca50bb79c0011b793a2))
+* **ci:** use GitHub token for housekeeping ([#2857](https://github.com/rudderlabs/rudder-integrations-config/issues/2857)) ([6c47a9d](https://github.com/rudderlabs/rudder-integrations-config/commit/6c47a9dc013b839e0d76d6a3a438ccfc4263c232))
+* **pushwoosh:** show consent settings instead of empty settings group ([#2862](https://github.com/rudderlabs/rudder-integrations-config/issues/2862)) ([6a01eb8](https://github.com/rudderlabs/rudder-integrations-config/commit/6a01eb8e2a0b317d24c3938dcf0a63a896244832))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump browserslist from 4.23.3 to 4.29.3 ([#2842](https://github.com/rudderlabs/rudder-integrations-config/issues/2842)) ([7087b1a](https://github.com/rudderlabs/rudder-integrations-config/commit/7087b1af225f0f77460597fa4cf99e25249d8270))
+* **pushwoosh:** gate destination behind feature flag ([#2861](https://github.com/rudderlabs/rudder-integrations-config/issues/2861)) ([444607b](https://github.com/rudderlabs/rudder-integrations-config/commit/444607b424bb0222eb483f05742b3b88128ea407))
+
 ## [1.190.1](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.190.0...v1.190.1) (2026-10-20)
 
 
