@@ -45,6 +45,46 @@
     "result": true
   },
   {
+    "testTitle": "Allows an empty Login Customer ID for a root account",
+    "config": {
+      "customerId": "962-000-2972",
+      "rudderAccountId": "test-host",
+      "subAccount": false,
+      "loginCustomerId": ""
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Allows a legacy root account without Login Customer ID",
+    "config": {
+      "customerId": "962-000-2972",
+      "rudderAccountId": "test-host",
+      "subAccount": false
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Accepts free-text mapping targets, including names a lookup does not return",
+    "config": {
+      "customerId": "962-000-2972",
+      "rudderAccountId": "test-host",
+      "subAccount": false,
+      "eventsToConversionsNamesMapping": [
+        {
+          "from": "Sign up completed",
+          "to": "Stored conversion action"
+        }
+      ],
+      "customVariables": [
+        {
+          "from": "revenue",
+          "to": "Stored custom variable"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
     "testTitle": "Requires Login Customer ID when subAccount is true",
     "config": {
       "customerId": "962-000-2972",

@@ -308,6 +308,19 @@
 - Rokt account `apiEndpoint` accepts the `mparticle.com` apex or its subdomains with an optional path prefix, but path segments must reject exact `.` and `..` values so the account schema cannot admit traversal-like endpoints that the transformer rejects. Preserve config/runtime validation parity when changing this contract.
 - Keep Rokt's existing subdomain-label compatibility class `[a-zA-Z0-9-]{1,63}` when adjusting the endpoint path pattern. Tightening leading or trailing hyphens is a separate persisted-config compatibility change, not part of optional-path support; the hostname must still remain anchored to the apex or subdomains of `mparticle.com`.
 
+## INT-7259 — GAOC Account Picker and Mapping Lookup Contract
+
+- Google Ads Offline Conversions account selection uses a required `nestedSelect` bound to `customerId`, backed by `getConfigData`, dependent on `rudderAccountId`, and configured with `allowNonLeafSelection: true`. Gate it with `AMP_enable-google-ads-customer-picker` while retaining inverse-gated manual `customerId`, `subAccount`, and conditional `loginCustomerId` fields.
+- `eventsToConversionsNamesMapping` and `customVariables` use paired feature-gated variants with the same persisted `{from,to}` row shape: the enabled variants change only the `to` column to `dynamicDataSelect` backed by `getConversionActions` or `getCustomVariables`, while fallback variants retain the legacy `textInput`. Preserve the existing `to` label, regex, and scalar values across both variants; the `dynamicDataSelect` column has no placeholder because the webapp does not render one for it. Do not alter `eventsToOfflineConversionsTypeMapping` as part of this rollout.
+- GAOC redirect-group mapping schemas are hand-maintained because `scripts/schemaGenerator.py` does not traverse `redirectGroups`. Schema checks can report unsupported `nestedSelect`/`redirect` shapes and unrelated baseline diffs; do not force-apply generated output, which can delete the mapping blocks that preserve scalar `to` values.
+- Root-account configs remain compatible with both `loginCustomerId: ""` and an omitted `loginCustomerId` when `subAccount` is false; preserve the existing conditional login-customer validation rather than making the field unconditionally required.
+
+## INT-7257 — GAEC Account and Conversion Picker Rollout
+
+- Keep GAEC's manual `customerId`, `subAccount`, `loginCustomerId`, and legacy `listOfConversions` tag input behind the false branch of `AMP_enable-google-ads-customer-picker`, while the account `nestedSelect` and conversion `dynamicMultiSelect` use the true branch. Both variants must write the same delivery keys, and both conversion controls preserve `Array<{conversions:string}>` storage; retaining the legacy conversion field keeps flag-off cohorts able to edit conversions.
+- GAEC `loginCustomerId` uses the legacy-compatible schema pattern `(^\{\{.*\|\|(.*)\}\}$)|(^env[.].+)|^(.{0,100})$`. The zero-length alternative is required because selecting a root account persists `loginCustomerId: ""` rather than deleting the key.
+- Keep the inverse-gated manual GAEC `subAccount` checkbox marked `required: true`. It already defaults to false and is required by the persisted schema; dropping UI requiredness merely because the field has prerequisites causes schema generation to remove it from the required list and creates contract drift.
+
 ## RUD-3296 — Rokt Endpoint Ownership
 
 - RUD-3296 supersedes the RUD-3256 endpoint-path guidance: do not add `apiEndpoint` to Rokt account `optionFields`, account `optionsSchema`, account UI fields, or destination `config.destConfig.defaultConfig`.
