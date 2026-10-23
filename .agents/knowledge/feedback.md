@@ -151,3 +151,8 @@
 - Retain required-field validation in the Custom Activation account schemas, but rely on AJV's default missing-property messages. Do not add object-level `errorMessage.required` maps or broaden the shared account meta-schema solely for friendlier destination-specific messages.
 - Likewise, keep the standard `rudderAccountId` pattern without a property-level custom `errorMessage`; peer account-backed destinations rely on AJV's default pattern error.
 - Do not add destination-specific `test/validation.test.ts` cases solely to execute straightforward 1–200 or 1–500 credential bounds. Reserve focused shared-suite account tests for complex or security-sensitive behavior.
+
+## INT-7371 — Custom Activation Inline Auth Cleanup
+
+- Remove only Custom Activation's destination-level `authenticationType` declaration and its inline-auth schema properties/conditionals. Keep all account option and secret field names mirrored in destination `config.destConfig.defaultConfig`, and keep account secret names in root `config.secretKeys`, even though transformer authentication reads from `destination.deliveryAccount`; do not add an account-schema marker or destination-specific account-coverage exemption.
+- Keep the root destination schema open and do not add a targeted `not.anyOf` rejection for retired inline-auth keys. Config-backend validates stored config merged with incoming edits, so explicit rejection can block unrelated updates while stale keys remain; removing declarations is sufficient to stop those keys flowing to the data plane.
