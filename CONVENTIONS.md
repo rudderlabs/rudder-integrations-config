@@ -342,9 +342,8 @@ in two places:
 Both are enforced by `validate_account_field_coverage` in
 [`scripts/validate_account_definitions.py`](scripts/validate_account_definitions.py), which skips
 `authenticationType: "oauth"` accounts because the OAuth flow manages those secrets outside
-`destConfig`. An account with `config.credentialDelivery: "deliveryAccount"` is also skipped because
-its credentials come from the linked account rather than destination config. Omitting the marker
-retains the legacy mirrored-field checks. **CI enforces this**: the
+`destConfig`. Destinations listed in `DELIVERY_ACCOUNT_DESTINATIONS` are exempt because they read
+credentials only from the linked account rather than destination config. **CI enforces this**: the
 `Run account validation for changed files` step in
 [`.github/workflows/test.yml`](.github/workflows/test.yml) invokes
 [`scripts/validate_diff_accounts.sh`](scripts/validate_diff_accounts.sh), which validates every
@@ -362,10 +361,6 @@ Two caveats, both arguments for running it yourself before you push:
 ```bash
 python3 scripts/validate_account_definitions.py <destination>
 ```
-
-If the check fails, the destination metadata is what's wrong — **do not add a per-destination
-exemption to the validator.** Other destinations resolve credentials from a linked account and
-carry none.
 
 **Account credential fields do not belong in the destination `schema.json`.** They are validated
 by the account's own `secretSchema` / `optionsSchema` and are not part of the persisted
