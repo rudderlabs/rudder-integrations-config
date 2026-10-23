@@ -231,6 +231,18 @@
     "result": false
   },
   {
+    "testTitle": "With a root account picker selection",
+    "config": {
+      "rudderAccountId": "test-host",
+      "authStatus": "active",
+      "customerId": "1234567890",
+      "loginCustomerId": "",
+      "subAccount": false
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With a descendant account picker selection",
     "config": {
       "rudderAccountId": "test-host",
       "authStatus": "active",
@@ -239,6 +251,26 @@
       "subAccount": true
     },
     "result": true
+  },
+  {
+    "testTitle": "With a legacy sub-account missing a login customer ID",
+    "config": {
+      "rudderAccountId": "test-host",
+      "customerId": "1234567890",
+      "subAccount": true
+    },
+    "result": true
+  },
+  {
+    "testTitle": "With an overlong env-prefixed login customer ID",
+    "config": {
+      "rudderAccountId": "test-host",
+      "customerId": "1234567890",
+      "loginCustomerId": "env.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "subAccount": true
+    },
+    "result": false,
+    "err": ["loginCustomerId must match pattern \"^.{0,100}$\""]
   },
   {
     "testTitle": "With duplicate consent management providers config - cloud",
