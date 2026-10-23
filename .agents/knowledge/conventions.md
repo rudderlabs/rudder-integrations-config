@@ -343,4 +343,4 @@
 
 - OpenAI Ads `isHashRequired` is a destination-wide, default-true boolean carried through both `config.includeKeys` and `config.destConfig.defaultConfig`; keep the UI checkbox in Configuration settings / Event settings after `defaultActionSource`.
 - Expose the setting for both cloud and web device-mode connections; transformer support lives in `rudder-transformer`, and device-mode support lives in the OpenAI Ads integration in `rudder-sdk-js`.
-- Disabling hashing applies to all hashable identifiers together, requires already-hashed values, and skips RudderStack normalization. Customer documentation must describe that all-fields behavior and customer-owned normalization for both cloud and web device mode.
+- Disabling hashing requires email, phone number, first name, last name, and user ID to be normalized and pre-hashed; when no user ID is present, RudderStack hashes the anonymous ID automatically. Customer documentation must describe that behavior for both cloud and web device mode.
