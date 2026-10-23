@@ -14,16 +14,6 @@ import glob
 from pathlib import Path
 
 
-# Destinations that read account credentials only from the linked account
-# (destination.deliveryAccount), never from destination config. Their account
-# fields are intentionally not declared in destConfig/secretKeys.
-# Add a destination here only if its transformer never reads the copied
-# fields. See validate_account_field_coverage for why the check exists.
-DELIVERY_ACCOUNT_DESTINATIONS = {
-    "custom_audience",  # resolveAuth reads deliveryAccount (INT-7371)
-}
-
-
 def load_json_file(file_path):
     """Load and parse a JSON file."""
     try:
@@ -162,8 +152,6 @@ def validate_account_field_coverage(dest_dir):
 
     OAuth accounts are excluded because their secrets are managed by the OAuth flow,
     not through destConfig.
-    Destinations in DELIVERY_ACCOUNT_DESTINATIONS are exempt because they read
-    credentials only from the linked account.
 
     Args:
         dest_dir: Path to the destination directory.
@@ -171,13 +159,6 @@ def validate_account_field_coverage(dest_dir):
     Returns:
         bool: True if validation passes, False otherwise
     """
-    # config-backend copies account fields into destination config only when
-    # they are declared there; destinations reading that copy lose credentials
-    # if a field is removed (FB Custom Audience, INT-6216 / #2450). Skip
-    # destinations that never read the copy.
-    if dest_dir.name in DELIVERY_ACCOUNT_DESTINATIONS:
-        return True
-
     accounts_dir = dest_dir / "accounts"
 
     if not accounts_dir.exists():

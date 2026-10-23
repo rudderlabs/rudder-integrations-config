@@ -138,9 +138,4 @@
 
 - Custom Activation supports Basic Auth, Bearer Token, and API Key through three account definitions under `src/configurations/destinations/custom_audience/accounts/`; the destination links them through `config.supportedAccountDefinitions.rudderAccountId`, and `rudderAccountId` plus `authenticationEnabled` belong in `config.destConfig.defaultConfig`.
 - When `authenticationEnabled` is explicitly `true`, `schema.json` requires a non-empty linked `rudderAccountId`; `false` does not require an account reference.
-- Custom Activation credentials come only from the linked delivery account.
-
-## INT-7371 — Custom Activation Legacy Auth Removal
-
-- Custom Activation no longer declares destination-level inline authentication: `authenticationType`, `basicAuthUserName`, `basicAuthPassword`, `bearerToken`, `apiKeyName`, and `apiKeyValue` are absent from root destination config metadata and schema conditionals; Basic, Bearer, and API-key credentials remain owned by the three linked account definitions.
-- `scripts/validate_account_definitions.py::validate_account_field_coverage` treats delivery-account-only credential resolution as an explicit destination-level exception via `DELIVERY_ACCOUNT_DESTINATIONS`. Normal account-backed destinations still must mirror account fields into root `config.destConfig.defaultConfig` and `config.secretKeys`; do not infer delivery-account ownership from destination-schema absence or add per-account schema metadata.
+- Custom Activation follows the mirrored account-field pattern (fields declared in defaultConfig/secretKeys, like FB Custom Audience); its transformer reads credentials from deliveryAccount, which the preview also relies on.
