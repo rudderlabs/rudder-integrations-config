@@ -351,3 +351,9 @@
 
 - Keep `.github/workflows/raise-pr-for-constants.yml` push-to-main only unless manual cross-repository writes and PR updates are explicitly desired; the optional `workflow_dispatch` trigger was intentionally omitted because every run performs real downstream mutations.
 - The workflow's source checkout should use `persist-credentials: false`; subsequent cross-repository operations authenticate explicitly with the generated GitHub App token through `GH_TOKEN`, so retaining the checkout credential is unnecessary and violates least-privilege guidance.
+
+## INT-7432 — OpenAI Ads Hashing Toggle
+
+- OpenAI Ads `isHashRequired` is a destination-wide, default-true boolean carried through both `config.includeKeys` and `config.destConfig.defaultConfig`; keep the UI checkbox in Configuration settings / Event settings after `defaultActionSource`.
+- Expose the setting for both cloud and web device-mode connections; transformer support lives in `rudder-transformer`, and device-mode support lives in the OpenAI Ads integration in `rudder-sdk-js`.
+- Disabling hashing requires email, phone number, first name, last name, and user ID to be normalized and pre-hashed; when no user ID is present, RudderStack hashes the anonymous ID automatically. Customer documentation must describe that behavior for both cloud and web device mode.
