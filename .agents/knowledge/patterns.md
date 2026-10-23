@@ -113,3 +113,8 @@
 ## INT-7258 — Idempotent Required Fields for Flagged Replacements
 
 - Form Builder V2 schema generation must add Initial setup required keys idempotently. Mutually exclusive required UI fields may intentionally share one `configKey`—for example, a feature-flagged `nestedSelect` replacing a legacy picker—and must produce only one entry in the generated schema's `required` array.
+
+## RUD-3398 — Housekeeping Workflow Authentication
+
+- `.github/workflows/housekeeping.yml` uses the built-in `GITHUB_TOKEN` with narrowly scoped job-level permissions: stale issue/PR maintenance needs `issues: write` and `pull-requests: write`, while stale-branch deletion needs `contents: write`. Do not couple these jobs to the release GitHub App when repository job permissions already cover their operations.
+- Keep checkout's default credential persistence for stale-branch cleanup. `beatlabs/delete-old-branches-action` runs git commands, and git cannot authenticate without the persisted token even when `repo_token` is passed (ai-sdk-python failed this way, RUD-3396).
