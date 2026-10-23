@@ -140,3 +140,9 @@
 - When `authenticationEnabled` is explicitly `true`, `schema.json` requires a non-empty linked `rudderAccountId`; `false` does not require an account reference.
 - Preserve migration compatibility by keeping `authenticationType` optional while retaining each legacy per-method conditional with `required: ["authenticationType"]`. This makes those legacy credential branches self-disable for migrated account-backed configs without withdrawing legacy credential declarations that workspace config still needs.
 - INT-7371 supersedes the migration-compatibility state above: Custom Activation credentials now come only from the linked delivery account.
+
+## INT-7371 — Delivery-Account Credential Ownership
+
+- `config.credentialDelivery: "deliveryAccount"` on an account definition explicitly marks credentials as account-owned and delivered through the linked delivery account. Such fields must not be mirrored into destination `config.destConfig.defaultConfig` or root `config.secretKeys`.
+- `scripts/validate_account_definitions.py::validate_account_field_coverage` preserves root mirroring as the default for non-OAuth account definitions and skips those checks only for accounts with the schema-validated delivery-account marker. Do not infer this mode from account fields being absent from the destination schema: many conventional account-backed destinations omit schema properties but still require root mirroring.
+- Custom Activation's Basic Auth, Bearer Token, and API Key account definitions use this marker. Its root destination contract retains `authenticationEnabled` and `rudderAccountId`, but no longer declares `authenticationType` or the five inline credential keys; root `secretKeys` is empty.
