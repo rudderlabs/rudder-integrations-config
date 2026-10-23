@@ -113,8 +113,3 @@
 ## INT-7258 — Idempotent Required Fields for Flagged Replacements
 
 - Form Builder V2 schema generation must add Initial setup required keys idempotently. Mutually exclusive required UI fields may intentionally share one `configKey`—for example, a feature-flagged `nestedSelect` replacing a legacy picker—and must produce only one entry in the generated schema's `required` array.
-
-## INT-7371 — Reject Removed Keys Without Closing A Compatibility Schema
-
-- When a destination's root config schema must remain open for compatibility, removing properties does not make stale values invalid. Reject retired top-level keys with a targeted `not.anyOf` containing one `required` clause per forbidden key instead of setting root `additionalProperties: false`.
-- Custom Activation applies this pattern to `authenticationType`, `basicAuthUserName`, `basicAuthPassword`, `bearerToken`, `apiKeyName`, and `apiKeyValue`; validation fixtures cover stale Basic, Bearer, and API-key payloads and expect the AJV `must NOT be valid` failure.

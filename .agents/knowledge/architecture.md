@@ -139,9 +139,4 @@
 - Custom Activation supports Basic Auth, Bearer Token, and API Key through three account definitions under `src/configurations/destinations/custom_audience/accounts/`; the destination links them through `config.supportedAccountDefinitions.rudderAccountId`, and `rudderAccountId` plus `authenticationEnabled` belong in `config.destConfig.defaultConfig`.
 - When `authenticationEnabled` is explicitly `true`, `schema.json` requires a non-empty linked `rudderAccountId`; `false` does not require an account reference.
 - Preserve migration compatibility by keeping `authenticationType` optional while retaining each legacy per-method conditional with `required: ["authenticationType"]`. This makes those legacy credential branches self-disable for migrated account-backed configs without withdrawing legacy credential declarations that workspace config still needs.
-
-## INT-7371 — Custom Activation Delivery-Account Credential Ownership
-
-- INT-7371 supersedes the INT-7367 migration-compatibility state: Custom Activation no longer declares destination-level `authenticationType` or inline Basic, Bearer, and API-key credential fields/conditionals. Its root `defaultConfig` retains the linked account/toggle and delivery settings, while the three account definitions remain the credential owners.
-- Account definitions opt into account-owned credential delivery with `config.credentialDelivery: "deliveryAccount"`. For opted-in accounts, credentials are resolved through the linked delivery account and must not be mirrored into destination `config.destConfig.defaultConfig` or root `config.secretKeys`.
-- `scripts/validate_account_definitions.py::validate_account_field_coverage` keeps root mirroring as the default for non-OAuth accounts and bypasses that requirement only for the explicit `deliveryAccount` opt-in; schema absence alone is not evidence of account-owned delivery.
+- INT-7371 supersedes the migration-compatibility state above: Custom Activation credentials now come only from the linked delivery account.

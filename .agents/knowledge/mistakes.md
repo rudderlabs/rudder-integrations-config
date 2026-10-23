@@ -75,8 +75,3 @@
 
 - Interpreting “similar to other destinations” as merely removing Custom Activation's custom `rudderAccountId` error message left the looser `^.+$` pattern in place.
 - The closest account-backed destination precedent uses `^.{1,100}$`; use that bounded pattern for Custom Activation instead of preserving an integration-specific unbounded variant.
-
-## INT-7371 — Avoid Ambiguous Python Test Module Resolution
-
-- On Ubuntu CI with Python 3.12, `python3 -m unittest test/test_validate_account_definitions.py` can rewrite the path to `test.test_validate_account_definitions`, resolve Python's standard-library `test` package, and fail with `ModuleNotFoundError` because this repository's `test/` directory is not a package.
-- Invoke this executable test file directly as `python3 test/test_validate_account_definitions.py`, or use unittest discovery with `-s test`, so the workflow does not depend on the ambiguous `test` module name.

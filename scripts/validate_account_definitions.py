@@ -151,9 +151,7 @@ def validate_account_field_coverage(dest_dir):
     destConfig, it will be silently dropped from the API response.
 
     OAuth accounts are excluded because their secrets are managed by the OAuth flow,
-    not through destConfig. Accounts with credentialDelivery set to "deliveryAccount"
-    are also excluded because their credentials are delivered through the linked account
-    rather than copied into destination config.
+    not through destConfig.
 
     Args:
         dest_dir: Path to the destination directory.
@@ -167,7 +165,6 @@ def validate_account_field_coverage(dest_dir):
         return True  # No accounts to validate
 
     dest_config = load_json_file(dest_dir / "db-config.json")
-
     cfg = dest_config.get("config", {})
     dest_secret_keys = set(cfg.get("secretKeys", []))
     dest_config_fields = set(cfg.get("destConfig", {}).get("defaultConfig", []))

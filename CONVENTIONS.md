@@ -342,11 +342,10 @@ in two places:
 Both are enforced by `validate_account_field_coverage` in
 [`scripts/validate_account_definitions.py`](scripts/validate_account_definitions.py), which skips
 `authenticationType: "oauth"` accounts because the OAuth flow manages those secrets outside
-`destConfig`. It also skips an account whose `config.credentialDelivery` is explicitly
-`"deliveryAccount"`; those account-owned credentials are delivered through the linked account and
-must not be copied into destination config. Omitting `credentialDelivery` retains the legacy
-mirrored-field checks. **CI enforces this**: the `Run account validation tests` and
-`Run account validation for changed files` steps in
+`destConfig`. An account with `config.credentialDelivery: "deliveryAccount"` is also skipped because
+its credentials come from the linked account rather than destination config. Omitting the marker
+retains the legacy mirrored-field checks. **CI enforces this**: the
+`Run account validation for changed files` step in
 [`.github/workflows/test.yml`](.github/workflows/test.yml) invokes
 [`scripts/validate_diff_accounts.sh`](scripts/validate_diff_accounts.sh), which validates every
 destination whose `db-config.json` or `accounts/**` changed. Since those are the only files the
