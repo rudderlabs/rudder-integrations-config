@@ -77,6 +77,11 @@
 
 - Commitlint rejects an uppercase ticket identifier at the start of a Conventional Commit subject with `subject-case` (for example, `docs(knowledge): INT-7258 distill`). Keep ticket references lowercase in the subject (for example, `docs(knowledge): int-7258 distill`).
 
+## INT-7257 — Keep a Compliant Branch Commit at the PR Tip
+
+- Because `.github/workflows/commitlint.yml` uses `commitDepth: 1`, leaving a pull-request branch tip at a merge-from-main commit can make Commitlint inspect that unrelated upstream commit. This occurred when an upstream release commit failed the 100-character body-line limit because of its bot-generated `Co-authored-by` trailer.
+- After syncing `main` into a pull-request branch, ensure the tip is a compliant branch-owned Conventional Commit rather than the merge commit so Commitlint checks the intended change.
+
 ## INT-7367 — Match the Standard Account Reference Bound
 
 - Interpreting “similar to other destinations” as merely removing Custom Activation's custom `rudderAccountId` error message left the looser `^.+$` pattern in place.

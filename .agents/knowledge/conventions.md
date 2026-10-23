@@ -315,6 +315,12 @@
 - GAOC redirect-group mapping schemas are hand-maintained because `scripts/schemaGenerator.py` does not traverse `redirectGroups`. Schema checks can report unsupported `nestedSelect`/`redirect` shapes and unrelated baseline diffs; do not force-apply generated output, which can delete the mapping blocks that preserve scalar `to` values.
 - Root-account configs remain compatible with both `loginCustomerId: ""` and an omitted `loginCustomerId` when `subAccount` is false; preserve the existing conditional login-customer validation rather than making the field unconditionally required.
 
+## INT-7257 — GAEC Account and Conversion Picker Rollout
+
+- Keep GAEC's manual `customerId`, `subAccount`, `loginCustomerId`, and legacy `listOfConversions` tag input behind the false branch of `AMP_enable-google-ads-customer-picker`, while the account `nestedSelect` and conversion `dynamicMultiSelect` use the true branch. Both variants must write the same delivery keys, and both conversion controls preserve `Array<{conversions:string}>` storage; retaining the legacy conversion field keeps flag-off cohorts able to edit conversions.
+- GAEC `loginCustomerId` uses the legacy-compatible schema pattern `(^\{\{.*\|\|(.*)\}\}$)|(^env[.].+)|^(.{0,100})$`. The zero-length alternative is required because selecting a root account persists `loginCustomerId: ""` rather than deleting the key.
+- Keep the inverse-gated manual GAEC `subAccount` checkbox marked `required: true`. It already defaults to false and is required by the persisted schema; dropping UI requiredness merely because the field has prerequisites causes schema generation to remove it from the required list and creates contract drift.
+
 ## RUD-3296 — Rokt Endpoint Ownership
 
 - RUD-3296 supersedes the RUD-3256 endpoint-path guidance: do not add `apiEndpoint` to Rokt account `optionFields`, account `optionsSchema`, account UI fields, or destination `config.destConfig.defaultConfig`.
