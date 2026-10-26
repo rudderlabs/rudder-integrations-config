@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.192.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.191.0...v1.192.0) (2026-10-26)
+
+
+### Features
+
+* promote bigquery stream all events to ga ([#2868](https://github.com/rudderlabs/rudder-integrations-config/issues/2868)) ([faba176](https://github.com/rudderlabs/rudder-integrations-config/commit/faba1761daab20c17b7b44e1364efd5ec40b7b0a))
+
 ## [1.191.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.190.1...v1.191.0) (2026-10-26)
 
 
