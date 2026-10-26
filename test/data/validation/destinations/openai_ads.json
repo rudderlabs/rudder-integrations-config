@@ -24,6 +24,22 @@
     "result": true
   },
   {
+    "testTitle": "valid hashing enabled",
+    "config": {
+      "rudderAccountId": "account_123",
+      "isHashRequired": true
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid hashing disabled",
+    "config": {
+      "rudderAccountId": "account_123",
+      "isHashRequired": false
+    },
+    "result": true
+  },
+  {
     "testTitle": "valid omitted event mapping",
     "config": {
       "rudderAccountId": "account_123",
@@ -180,6 +196,15 @@
     },
     "result": false,
     "err": ["defaultActionSource must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "invalid non-boolean hashing setting",
+    "config": {
+      "rudderAccountId": "account_123",
+      "isHashRequired": "true"
+    },
+    "result": false,
+    "err": ["isHashRequired must be boolean"]
   },
   {
     "testTitle": "invalid event filtering option",

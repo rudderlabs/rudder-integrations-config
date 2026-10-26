@@ -118,3 +118,7 @@
 
 - `.github/workflows/housekeeping.yml` uses the built-in `GITHUB_TOKEN` with narrowly scoped job-level permissions: stale issue/PR maintenance needs `issues: write` and `pull-requests: write`, while stale-branch deletion needs `contents: write`. Do not couple these jobs to the release GitHub App when repository job permissions already cover their operations.
 - Keep checkout's default credential persistence for stale-branch cleanup. `beatlabs/delete-old-branches-action` runs git commands, and git cannot authenticate without the persisted token even when `repo_token` is passed (ai-sdk-python failed this way, RUD-3396).
+
+## INT-7432 — Preserve OpenAI Ads Redirect Schema During Generation
+
+- OpenAI Ads `eventMapping` is hand-maintained schema for `uiConfig.redirectGroups`, which `scripts/schemaGenerator.py` does not traverse. A force schema update attempts to delete that contract; use the destination update's skip-deletions flow so generated fields such as `isHashRequired` can be added without removing `eventMapping`.
