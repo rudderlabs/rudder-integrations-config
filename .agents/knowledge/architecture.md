@@ -138,4 +138,4 @@
 
 - Custom Activation supports Basic Auth, Bearer Token, and API Key through three account definitions under `src/configurations/destinations/custom_audience/accounts/`; the destination links them through `config.supportedAccountDefinitions.rudderAccountId`, and `rudderAccountId` plus `authenticationEnabled` belong in `config.destConfig.defaultConfig`.
 - When `authenticationEnabled` is explicitly `true`, `schema.json` requires a non-empty linked `rudderAccountId`; `false` does not require an account reference.
-- Preserve migration compatibility by keeping `authenticationType` optional while retaining each legacy per-method conditional with `required: ["authenticationType"]`. This makes those legacy credential branches self-disable for migrated account-backed configs without withdrawing legacy credential declarations that workspace config still needs.
+- Custom Activation follows the mirrored account-field pattern (fields declared in defaultConfig/secretKeys, like FB Custom Audience); its transformer reads credentials from deliveryAccount, which the preview also relies on.

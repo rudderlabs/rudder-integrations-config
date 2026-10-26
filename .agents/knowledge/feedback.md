@@ -151,3 +151,7 @@
 - Retain required-field validation in the Custom Activation account schemas, but rely on AJV's default missing-property messages. Do not add object-level `errorMessage.required` maps or broaden the shared account meta-schema solely for friendlier destination-specific messages.
 - Likewise, keep the standard `rudderAccountId` pattern without a property-level custom `errorMessage`; peer account-backed destinations rely on AJV's default pattern error.
 - Do not add destination-specific `test/validation.test.ts` cases solely to execute straightforward 1–200 or 1–500 credential bounds. Reserve focused shared-suite account tests for complex or security-sensitive behavior.
+
+## INT-7259 — GAOC Account Picker Copy Guidance
+
+- Keep the Google Ads Offline Conversions `customerId` nested account picker note aligned with the shared GAEC and GARL picker guidance: customers may select a manager or descendant account; selecting a top-level account clears the login customer ID, while selecting a descendant uses the top-level account as the login customer ID.
