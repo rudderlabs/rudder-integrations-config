@@ -343,5 +343,5 @@
 
 <!-- session: 2026-10-22 -->
 
-- Keep Custom Activation OAuth configuration account-owned: the definitions under `src/configurations/destinations/custom_audience/accounts/custom_audience_oauth_*/` declare their option fields, while platform-managed OAuth secrets stay out of account `uiConfig.form.fields`, `secretFields`, and `secretSchema`; the destination `db-config.json` must not mirror OAuth options into `destConfig.defaultConfig` or OAuth secrets into `secretKeys`.
+- Keep Custom Activation OAuth configuration account-owned: the definitions under `src/configurations/destinations/custom_audience/accounts/custom_audience_oauth_*/` declare their option fields and the user-supplied `clientSecret` in `uiConfig.form.fields`, `secretFields`, and `secretSchema`; only OAuth tokens are platform-written. The destination `db-config.json` must not mirror OAuth options into `destConfig.defaultConfig` or OAuth secrets into `secretKeys`.
 - Account-modal field order is the order of `uiConfig.form.fields` in each account definition. Custom Activation has no destination-level account-form ordering property, so preserve the specification's field order directly in each OAuth account `ui-config.json`.

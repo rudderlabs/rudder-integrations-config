@@ -176,6 +176,10 @@ async function getAccountDefinitionConfig(
   throw new Error(`Account configuration not found for ${integrationName}/${accountName}`);
 }
 
+// Read from disk: the definition validators run AJV with useDefaults and mutate what they are
+// given, so a cached import would carry defaults into the next assertion.
+const readJson = (file: string) => JSON.parse(fs.readFileSync(path.resolve(file), 'utf-8'));
+
 function getAccountDefinitionSchema(integrationName: string, accountName: string, type: string) {
   const schemaPath = path.resolve(
     `src/configurations/${type}/${integrationName}/accounts/${accountName}/schema.json`,
@@ -2080,6 +2084,93 @@ describe('Account Definition validation tests', () => {
   });
 });
 
+const customAudienceOAuthAccounts = [
+  {
+    accountName: 'custom_audience_oauth_client_credentials',
+    validOptions: {
+      tokenUrl: 'https://api.example.com/oauth/token',
+      clientId: 'client-id',
+    },
+  },
+  {
+    accountName: 'custom_audience_oauth_auth_code',
+    validOptions: {
+      authorizationUrl: 'https://example.com/oauth/authorize',
+      tokenUrl: 'https://api.example.com/oauth/token',
+      clientId: 'client-id',
+    },
+  },
+];
+
+describe.each(customAudienceOAuthAccounts)('$accountName account contract', (accountCase) => {
+  const accountDirectory = path.resolve(
+    'src/configurations/destinations/custom_audience/accounts',
+    accountCase.accountName,
+  );
+  const dbConfig = readJson(path.join(accountDirectory, 'db-config.json'));
+  const uiConfig = readJson(path.join(accountDirectory, 'ui-config.json')).uiConfig;
+  const accountSchema = getAccountDefinitionSchema(
+    'custom_audience',
+    accountCase.accountName,
+    'destinations',
+  );
+  const validateOptions = compileAccountSchema(accountSchema.optionsSchema);
+  const validateSecret = compileAccountSchema(accountSchema.secretSchema);
+
+  it('requires the user-supplied client secret and renders it immediately after the client ID', () => {
+    const fields = uiConfig.form.fields;
+    const clientIdIndex = fields.findIndex(
+      (field: { key: unknown }) => Array.isArray(field.key) && field.key[1] === 'clientId',
+    );
+
+    expect(dbConfig.config.secretFields).toEqual(['clientSecret']);
+    expect(accountSchema.secretSchema.required).toEqual(['clientSecret']);
+    expect(validateSecret({})).toBe(false);
+    expect(validateSecret({ clientSecret: 'client-secret' })).toBe(true);
+    expect(fields[clientIdIndex + 1]).toMatchObject({
+      label: 'Client secret',
+      key: ['options', 'clientSecret'],
+      secret: true,
+    });
+  });
+
+  it('rejects token URLs containing a query string or fragment', () => {
+    [
+      'https://api.example.com/oauth/token?audience=test',
+      'https://api.example.com/oauth/token#x',
+    ].forEach((tokenUrl) =>
+      expect(validateOptions({ ...accountCase.validOptions, tokenUrl })).toBe(false),
+    );
+  });
+
+  it('defaults tokenAuthMethod and rejects values outside the supported enum', () => {
+    const defaultedOptions = { ...accountCase.validOptions };
+
+    expect(validateOptions(defaultedOptions)).toBe(true);
+    expect(defaultedOptions).toMatchObject({ tokenAuthMethod: 'client_secret_basic' });
+    expect(
+      validateOptions({ ...accountCase.validOptions, tokenAuthMethod: 'unsupported_method' }),
+    ).toBe(false);
+  });
+
+  it('accepts omitted and empty scopes', () => {
+    expect(validateOptions({ ...accountCase.validOptions })).toBe(true);
+    expect(validateOptions({ ...accountCase.validOptions, scopes: '' })).toBe(true);
+  });
+
+  if ('authorizationUrl' in accountCase.validOptions) {
+    it('accepts HTTPS authorization URLs and rejects HTTP', () => {
+      expect(validateOptions({ ...accountCase.validOptions })).toBe(true);
+      expect(
+        validateOptions({
+          ...accountCase.validOptions,
+          authorizationUrl: 'http://example.com/oauth/authorize',
+        }),
+      ).toBe(false);
+    });
+  }
+});
+
 type ClickHouseFieldCase = {
   id: string;
   field: 'host' | 'name' | 'password';
@@ -2993,10 +3084,6 @@ const MARKETO_AUDIENCE_ACCOUNT_DIR = `${MARKETO_AUDIENCE_DIR}/accounts/marketo_a
 const MARKETO_AUDIENCE_GATE = {
   gate: { flags: [{ name: 'AMP_enable-marketo-audience-destination', value: false }] },
 };
-
-// Read from disk: the definition validators run AJV with useDefaults and mutate what they are
-// given, so a cached import would carry defaults into the next assertion.
-const readJson = (file: string) => JSON.parse(fs.readFileSync(path.resolve(file), 'utf-8'));
 
 const loadMarketoAudienceAccount = () => readJson(`${MARKETO_AUDIENCE_ACCOUNT_DIR}/db-config.json`);
 
