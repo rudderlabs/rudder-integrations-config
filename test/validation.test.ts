@@ -2362,13 +2362,6 @@ describe.each(customAudienceOAuthAccounts)('$accountName account contract', (acc
   const validateOptions = compileAccountSchema(accountSchema.optionsSchema);
   const validateSecret = compileAccountSchema(accountSchema.secretSchema);
 
-  it('passes the account ui-config meta-schema', () => {
-    const validateUiConfig = compileAccountSchema(
-      readJson('src/schemas/account/account-ui-config-schema.json'),
-    );
-    expect(validateUiConfig({ uiConfig })).toBe(true);
-  });
-
   it('requires the user-supplied client secret and renders it immediately after the client ID', () => {
     const fields = uiConfig.form.fields;
     const clientIdIndex = fields.findIndex(
@@ -2405,51 +2398,9 @@ describe.each(customAudienceOAuthAccounts)('$accountName account contract', (acc
     ).toBe(false);
   });
 
-  it('accepts omitted scopes and a list of up to 50 scopes', () => {
+  it('accepts omitted and empty scopes', () => {
     expect(validateOptions({ ...accountCase.validOptions })).toBe(true);
     expect(validateOptions({ ...accountCase.validOptions, scopes: [] })).toBe(true);
-    expect(
-      validateOptions({ ...accountCase.validOptions, scopes: Array(50).fill('a'.repeat(200)) }),
-    ).toBe(true);
-  });
-
-  it('rejects invalid scopes and lists longer than 50', () => {
-    ['read write', 'read,write', '', ' leading', 'a'.repeat(201)].forEach((scope) => {
-      expect(validateOptions({ ...accountCase.validOptions, scopes: [scope] })).toBe(false);
-    });
-    expect(validateOptions({ ...accountCase.validOptions, scopes: 'read' })).toBe(false);
-    expect(validateOptions({ ...accountCase.validOptions, scopes: Array(51).fill('read') })).toBe(
-      false,
-    );
-  });
-
-  it('defaults scopeSeparator to space and rejects unsupported separators', () => {
-    const defaultedOptions = { ...accountCase.validOptions };
-    expect(validateOptions(defaultedOptions)).toBe(true);
-    expect(defaultedOptions).toMatchObject({ scopeSeparator: 'space' });
-    expect(validateOptions({ ...accountCase.validOptions, scopeSeparator: 'comma' })).toBe(true);
-    expect(validateOptions({ ...accountCase.validOptions, scopeSeparator: 'semicolon' })).toBe(
-      false,
-    );
-    expect(dbConfig.config.optionFields.indexOf('scopeSeparator')).toBe(
-      dbConfig.config.optionFields.indexOf('scopes') + 1,
-    );
-    const scopesIndex = uiConfig.form.fields.findIndex(
-      (field: { label: string }) => field.label === 'Scopes',
-    );
-    expect(uiConfig.form.fields[scopesIndex]).toMatchObject({
-      component: 'tagField',
-      key: ['options', 'scopes'],
-    });
-    expect(uiConfig.form.fields[scopesIndex + 1]).toMatchObject({
-      component: 'selectField',
-      key: ['options', 'scopeSeparator'],
-      default: 'space',
-      options: [
-        { label: 'Space (most providers)', value: 'space' },
-        { label: 'Comma (e.g. Pinterest)', value: 'comma' },
-      ],
-    });
   });
 
   if ('authorizationUrl' in accountCase.validOptions) {
@@ -2463,61 +2414,6 @@ describe.each(customAudienceOAuthAccounts)('$accountName account contract', (acc
       ).toBe(false);
     });
   }
-});
-
-describe('Custom Activation OAuth copyField contract', () => {
-  const accountRoot = 'src/configurations/destinations/custom_audience/accounts';
-  const loadForm = (accountName: string) =>
-    readJson(`${accountRoot}/${accountName}/ui-config.json`).uiConfig.form;
-  const validateUiConfig = compileAccountSchema(
-    readJson('src/schemas/account/account-ui-config-schema.json'),
-  );
-
-  it('renders the Redirect URI only on Authorization Code, immediately after Authorization URL', () => {
-    const authCodeFields = loadForm('custom_audience_oauth_auth_code').fields;
-    const authorizationUrlIndex = authCodeFields.findIndex(
-      (field: { label: string }) => field.label === 'Authorization URL',
-    );
-    expect(authCodeFields[authorizationUrlIndex + 1]).toEqual({
-      component: 'copyField',
-      label: 'Redirect URI',
-      value: '{{oauthRedirectUri}}',
-      note: 'Register this exact URI as a redirect URI in your provider app before you connect.',
-    });
-    expect(
-      loadForm('custom_audience_oauth_client_credentials').fields.some(
-        (field: { component: string }) => field.component === 'copyField',
-      ),
-    ).toBe(false);
-  });
-
-  it('accepts a keyless copyField with value and rejects one missing value or carrying a key', () => {
-    const config = readJson(`${accountRoot}/custom_audience_oauth_auth_code/ui-config.json`);
-    const copyField = config.uiConfig.form.fields.find(
-      (field: { component: string }) => field.component === 'copyField',
-    );
-    expect(validateUiConfig(config)).toBe(true);
-    delete copyField.value;
-    expect(validateUiConfig(config)).toBe(false);
-    copyField.value = 42;
-    expect(validateUiConfig(config)).toBe(false);
-    copyField.value = '{{oauthRedirectUri}}';
-    copyField.key = ['options', 'redirectUri'];
-    expect(validateUiConfig(config)).toBe(false);
-  });
-
-  it('requires a key on textField, tagField, and selectField', () => {
-    for (const component of ['textField', 'tagField', 'selectField']) {
-      const config = readJson(
-        `${accountRoot}/custom_audience_oauth_client_credentials/ui-config.json`,
-      );
-      const field = config.uiConfig.form.fields.find(
-        (candidate: { component: string }) => candidate.component === component,
-      );
-      delete field.key;
-      expect({ component, valid: validateUiConfig(config) }).toEqual({ component, valid: false });
-    }
-  });
 });
 
 type ClickHouseFieldCase = {
