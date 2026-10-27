@@ -24,8 +24,10 @@
           "from": "$$.events[0].context.library.name"
         }
       ],
-      "supportedMessageTypes": ["track", "identify", "record"],
-      "connectionMode": { "warehouse": "cloud" },
+      "supportedMessageTypes": ["track", "identify"],
+      "connectionMode": {
+        "warehouse": "cloud"
+      },
       "isBatchingEnabled": true,
       "maxBatchSize": "1"
     },
@@ -185,6 +187,32 @@
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
       "supportedMessageTypes": ["track", "bogus"]
+    },
+    "result": false,
+    "err": ["supportedMessageTypes.1 must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "Reject empty supported message types",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "auth": "noAuth",
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
+      "supportedMessageTypes": []
+    },
+    "result": false,
+    "err": ["supportedMessageTypes must NOT have fewer than 1 items"]
+  },
+  {
+    "testTitle": "Reject record message type",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "auth": "noAuth",
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
+      "supportedMessageTypes": ["track", "record"]
     },
     "result": false,
     "err": ["supportedMessageTypes.1 must be equal to one of the allowed values"]
