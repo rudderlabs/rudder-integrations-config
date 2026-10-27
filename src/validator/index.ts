@@ -225,7 +225,13 @@ async function initAjvValidators() {
     const intgDir = path.dirname(file);
     const intgName = path.basename(intgDir);
     const intgType = path.basename(path.dirname(intgDir));
-    validators[`${intgType}___${intgName}`] = ajv.compile(contents[i].configSchema || {});
+    const archivedVersion = file.match(
+      /[/\\](destinations|sources)[/\\]([^/\\]+)[/\\]versions[/\\]([1-9][0-9]*)[/\\]schema\.json$/,
+    );
+    const key = archivedVersion
+      ? `${archivedVersion[1]}___${archivedVersion[2]}___${archivedVersion[3]}`
+      : `${intgType}___${intgName}`;
+    validators[key] = ajv.compile(contents[i].configSchema || {});
   });
 }
 
@@ -234,12 +240,16 @@ export function validateConfig(
   config: Record<string, unknown>,
   intgType: string,
   throwErrorOnMissingValidations = false,
+  version?: number,
 ) {
   if (!definitionName) {
     throw new Error('Missing definitionName');
   }
 
-  const validationMethod = validators[`${intgType}___${definitionName}`];
+  const validationKey = `${intgType}___${definitionName}${
+    version === undefined ? '' : `___${version}`
+  }`;
+  const validationMethod = validators[validationKey];
   if (!validationMethod && throwErrorOnMissingValidations) {
     throw new Error(`No validation method found for definition ${definitionName}`);
   }

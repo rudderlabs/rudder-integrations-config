@@ -362,3 +362,8 @@
 
 - BigQuery Stream (All Events) is generally available: keep `src/configurations/destinations/bqstream_all_events/db-config.json` without `options.isBeta` and without adding a hidden gate, while retaining `options.disableLiveEvents: true` and `options.icon: "bigquery"`.
 - Tier availability, documentation labels, and GA announcements are owned outside this repository; do not encode speculative rollout metadata or alter destination behavior for those follow-up concerns.
+
+## INT-7453 — HTTP v2 Batch-Size Validation and Gating
+
+- HTTP v2 validates any supplied `maxBatchSize` string in top-level `configSchema.properties` against the 1–5000 range, even when batching is off; retain `allOf.then.required` so the field becomes mandatory when `isBatchingEnabled` is true. Do not move range validation exclusively into the conditional branch, which would permit invalid dormant values to be saved.
+- Gate both the `isBatchingEnabled` toggle and the 1–5000 `maxBatchSize` UI field on `enable-http-v2-batch-size`; exposing the toggle without the size field lets customers select batching but fail the conditional required-field rule. The size field also depends on the batching toggle.
