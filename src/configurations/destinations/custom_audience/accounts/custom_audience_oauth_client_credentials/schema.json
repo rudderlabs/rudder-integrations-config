@@ -27,9 +27,17 @@
         "errorMessage": "Enter a client ID between 1 and 200 characters"
       },
       "scopes": {
+        "type": "array",
+        "maxItems": 50,
+        "items": {
+          "type": "string",
+          "pattern": "^[^\\s,]{1,200}$"
+        }
+      },
+      "scopeSeparator": {
         "type": "string",
-        "pattern": "^$|^(?=.{1,2000}$).*\\S.*$",
-        "errorMessage": "Enter one or more OAuth scopes"
+        "enum": ["space", "comma"],
+        "default": "space"
       },
       "extraTokenParams": {
         "type": "string",
