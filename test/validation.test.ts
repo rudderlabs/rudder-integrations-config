@@ -297,7 +297,7 @@ describe('Validation Tests', () => {
       expect(rootDefinition.config.destConfig.defaultConfig).not.toContain('propertiesMapping');
       expect(rootDefinition.config.destConfig.defaultConfig).not.toContain('isDefaultMapping');
       expect(rootDefinition.options.hidden.gate.flags).toEqual([
-        { name: 'enable-http-v2-destination', value: false },
+        { name: 'AMP_enable-http-v2-destination', value: false },
       ]);
       expect(rootUi.uiConfig.baseTemplate[1].sections[0].groups[0].fields).toEqual([
         { type: 'httpRequestBuilder' },
@@ -307,12 +307,12 @@ describe('Validation Tests', () => {
         expect(
           fields.find((field: { configKey: string }) => field.configKey === configKey).preRequisites
             .featureFlags,
-        ).toEqual([{ configKey: 'enable-http-v2-batch-size', value: true }]);
+        ).toEqual([{ configKey: 'AMP_enable-http-v2-batch-size', value: true }]);
       });
       expect(
         fields.find((field: { configKey: string }) => field.configKey === 'supportedMessageTypes')
           .preRequisites.featureFlags,
-      ).toEqual([{ configKey: 'enable-http-v2-message-types', value: true }]);
+      ).toEqual([{ configKey: 'AMP_enable-http-v2-message-types', value: true }]);
       expect(rootUi.uiConfig.sdkTemplate.fields).toEqual([]);
       expect(rootUi.uiConfig.consentSettingsTemplate.fields).toHaveLength(1);
     });

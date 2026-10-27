@@ -366,4 +366,4 @@
 ## INT-7453 — HTTP v2 Batch-Size Validation and Gating
 
 - HTTP v2 validates any supplied `maxBatchSize` string in top-level `configSchema.properties` against the 1–5000 range, even when batching is off; retain `allOf.then.required` so the field becomes mandatory when `isBatchingEnabled` is true. Do not move range validation exclusively into the conditional branch, which would permit invalid dormant values to be saved.
-- Gate both the `isBatchingEnabled` toggle and the 1–5000 `maxBatchSize` UI field on `enable-http-v2-batch-size`; exposing the toggle without the size field lets customers select batching but fail the conditional required-field rule. The size field also depends on the batching toggle.
+- Gate both the `isBatchingEnabled` toggle and the 1–5000 `maxBatchSize` UI field on `AMP_enable-http-v2-batch-size` (Flagsmith key `enable-http-v2-batch-size`; gate and `preRequisites` names need the `AMP_` prefix to resolve); exposing the toggle without the size field lets customers select batching but fail the conditional required-field rule. The size field also depends on the batching toggle.
