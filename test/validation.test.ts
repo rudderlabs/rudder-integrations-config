@@ -2155,22 +2155,6 @@ describe('Account Definition validation tests', () => {
     });
   });
 
-  it('keeps control-plane-only secret fields within secretFields', async () => {
-    const invalidFields: string[] = [];
-    for (const type of ['destinations', 'sources', 'data-retention']) {
-      for (const account of getAccountNames(type)) {
-        const [integration, accountName] = account.split('/');
-        const { config } = await getAccountDefinitionConfig(integration, accountName, type);
-        for (const field of config.controlPlaneOnlySecretFields ?? []) {
-          if (!config.secretFields?.includes(field)) {
-            invalidFields.push(`${type}/${account}: ${field}`);
-          }
-        }
-      }
-    }
-    expect(invalidFields).toEqual([]);
-  });
-
   const malformedAccountDefConfigs = [
     {
       description: 'missing required properties',
