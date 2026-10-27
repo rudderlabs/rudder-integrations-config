@@ -28,7 +28,6 @@
       "connectionMode": {
         "warehouse": "cloud"
       },
-      "isBatchingEnabled": true,
       "maxBatchSize": "1"
     },
     "result": true
@@ -41,7 +40,6 @@
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
-      "isBatchingEnabled": true,
       "maxBatchSize": "5000"
     },
     "result": true
@@ -54,35 +52,20 @@
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
-      "isBatchingEnabled": true,
       "maxBatchSize": "101"
     },
     "result": true
   },
   {
-    "testTitle": "No batching without a size",
+    "testTitle": "Batch size is optional",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
       "auth": "noAuth",
       "method": "POST",
       "format": "JSON",
-      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
-      "isBatchingEnabled": false
+      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}"
     },
     "result": true
-  },
-  {
-    "testTitle": "Missing required batch size",
-    "config": {
-      "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
-      "method": "POST",
-      "format": "JSON",
-      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
-      "isBatchingEnabled": true
-    },
-    "result": false,
-    "err": [" must have required property 'maxBatchSize'", " must match \"then\" schema"]
   },
   {
     "testTitle": "Reject batch size 0",
@@ -92,7 +75,6 @@
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
-      "isBatchingEnabled": true,
       "maxBatchSize": "0"
     },
     "result": false,
@@ -106,7 +88,6 @@
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
-      "isBatchingEnabled": true,
       "maxBatchSize": "5001"
     },
     "result": false,
@@ -120,7 +101,6 @@
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
-      "isBatchingEnabled": true,
       "maxBatchSize": "10000"
     },
     "result": false,
@@ -134,21 +114,7 @@
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
-      "isBatchingEnabled": true,
       "maxBatchSize": "01"
-    },
-    "result": false,
-    "err": ["maxBatchSize must match pattern \"^([1-9][0-9]{0,2}|[1-4][0-9]{3}|5000)$\""]
-  },
-  {
-    "testTitle": "Reject out-of-range size even without batching",
-    "config": {
-      "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
-      "method": "POST",
-      "format": "JSON",
-      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
-      "maxBatchSize": "5001"
     },
     "result": false,
     "err": ["maxBatchSize must match pattern \"^([1-9][0-9]{0,2}|[1-4][0-9]{3}|5000)$\""]
