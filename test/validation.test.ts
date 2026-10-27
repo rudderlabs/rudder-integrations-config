@@ -303,14 +303,13 @@ describe('Validation Tests', () => {
         { type: 'httpRequestBuilder' },
       ]);
       const { fields } = rootUi.uiConfig.baseTemplate[2].sections[0].groups[0];
-      expect(
-        fields.find((field: { configKey: string }) => field.configKey === 'maxBatchSize')
-          .preRequisites,
-      ).toEqual({ featureFlags: [{ configKey: 'AMP_enable-http-v2-batch-size', value: true }] });
-      expect(
-        fields.find((field: { configKey: string }) => field.configKey === 'supportedMessageTypes')
-          .preRequisites.featureFlags,
-      ).toEqual([{ configKey: 'AMP_enable-http-v2-message-types', value: true }]);
+      // Capability fields are always shown; only the catalogue gate is flagged.
+      ['maxBatchSize', 'supportedMessageTypes'].forEach((configKey) => {
+        expect(
+          fields.find((field: { configKey: string }) => field.configKey === configKey)
+            .preRequisites,
+        ).toBeUndefined();
+      });
       expect(rootUi.uiConfig.sdkTemplate.fields).toEqual([]);
       expect(rootUi.uiConfig.consentSettingsTemplate.fields).toHaveLength(1);
     });
