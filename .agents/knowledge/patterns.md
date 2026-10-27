@@ -122,3 +122,7 @@
 ## INT-7432 — Preserve OpenAI Ads Redirect Schema During Generation
 
 - OpenAI Ads `eventMapping` is hand-maintained schema for `uiConfig.redirectGroups`, which `scripts/schemaGenerator.py` does not traverse. A force schema update attempts to delete that contract; use the destination update's skip-deletions flow so generated fields such as `isHashRequired` can be added without removing `eventMapping`.
+
+## INT-7424 — Keyless Composite UI Fields in Schema Generation
+
+- `scripts/schemaGenerator.py` should skip `baseTemplate` fields without `configKey` when generating persisted properties and checking required-field membership in `defaultConfig`: Custom Activation's `audienceDeliveryApiBuilder` is a keyless composite control, while its `baseUrl`, `actions`, and `headers` schema is hand-maintained in `src/configurations/destinations/custom_audience/schema.json`. This supersedes the INT-7367 generator-crash observation in `concerns.md`.
