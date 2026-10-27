@@ -362,3 +362,8 @@
 
 - BigQuery Stream (All Events) is generally available: keep `src/configurations/destinations/bqstream_all_events/db-config.json` without `options.isBeta` and without adding a hidden gate, while retaining `options.disableLiveEvents: true` and `options.icon: "bigquery"`.
 - Tier availability, documentation labels, and GA announcements are owned outside this repository; do not encode speculative rollout metadata or alter destination behavior for those follow-up concerns.
+
+## RUD-3426 — Microsoft Fabric Public Beta Visibility
+
+- Microsoft Fabric is a public beta: keep `src/configurations/destinations/microsoft_fabric/db-config.json` `options.isBeta: true` and its `options.icon`, but omit `options.hidden` entirely so the catalog does not require a workspace feature flag. Do not remove the Beta badge as if this were GA.
+- This visibility change belongs only in the destination definition; the service-principal account and Fabric UI/persisted schema do not need changes for the public-beta promotion.
