@@ -155,3 +155,7 @@
 ## INT-7259 — GAOC Account Picker Copy Guidance
 
 - Keep the Google Ads Offline Conversions `customerId` nested account picker note aligned with the shared GAEC and GARL picker guidance: customers may select a manager or descendant account; selecting a top-level account clears the login customer ID, while selecting a descendant uses the top-level account as the login customer ID.
+
+## INT-7424 — Custom Activation OAuth Test Scope
+
+- Owner direction: preserve existing Custom Activation OAuth account contract tests in `test/validation.test.ts`, but do not add detailed cases there for scopes list limits, `scopeSeparator` options/order, `copyField` meta-schema behavior, or Redirect URI placement. After changing scopes from a string to an array, update the existing optional/empty-scopes assertion to use `[]`. Keep the schema-generator regression test in `test/component_tests/schemaGenerator.test.ts`.
