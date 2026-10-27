@@ -139,3 +139,9 @@
 - Custom Activation supports Basic Auth, Bearer Token, and API Key through three account definitions under `src/configurations/destinations/custom_audience/accounts/`; the destination links them through `config.supportedAccountDefinitions.rudderAccountId`, and `rudderAccountId` plus `authenticationEnabled` belong in `config.destConfig.defaultConfig`.
 - When `authenticationEnabled` is explicitly `true`, `schema.json` requires a non-empty linked `rudderAccountId`; `false` does not require an account reference.
 - Custom Activation follows the mirrored account-field pattern (fields declared in defaultConfig/secretKeys, like FB Custom Audience); its transformer reads credentials from deliveryAccount, which the preview also relies on.
+
+## INT-7453 — HTTP Destination Version and Builder Boundary
+
+- HTTP v2 is the current triplet at `src/configurations/destinations/http/`; the former root v1 triplet is preserved under `versions/1/` with `status: supported`. `scripts/deployToDB.py` reads root files as current and `versions/*` as archives, so placing v2 only under `versions/2/` would leave v1 current.
+- HTTP v2's `ui-config.json` uses an `httpRequestBuilder` custom field for the JSONata body, URL, headers, query parameters, and preview. The persisted `schema.json` hand-maintains builder-owned request-field validation because `scripts/schemaGenerator.py` cannot traverse custom builder fields; JSONata syntax validation belongs to the parse endpoint, not JSON Schema.
+- HTTP v2 supports JSON body format only, retaining the JSON default and the existing API URL, authentication, method, consent, and request-field keys. Archived v1 preserves XML/FORM and `xmlRootKey` for existing destinations.

@@ -281,6 +281,55 @@ describe('Validation Tests', () => {
     await init();
   });
 
+  describe('HTTP versioned destination', () => {
+    const directory = path.resolve('src/configurations/destinations/http');
+    const rootDefinition = JSON.parse(
+      fs.readFileSync(path.join(directory, 'db-config.json'), 'utf-8'),
+    );
+    const rootUi = JSON.parse(fs.readFileSync(path.join(directory, 'ui-config.json'), 'utf-8'));
+
+    it('root v2 uses native dispatch and a closed gate', () => {
+      expect(rootDefinition.version).toBe('2.0');
+      expect(rootDefinition.config.cdkV2Enabled).toBeUndefined();
+      expect(rootDefinition.config.destConfig.defaultConfig).toEqual(
+        expect.arrayContaining(['requestBodyTemplate', 'supportedMessageTypes', 'maxBatchSize']),
+      );
+      expect(rootDefinition.config.destConfig.defaultConfig).not.toContain('propertiesMapping');
+      expect(rootDefinition.config.destConfig.defaultConfig).not.toContain('isDefaultMapping');
+      expect(rootDefinition.options.hidden.gate.flags).toEqual([
+        { name: 'enable-http-v2-destination', value: false },
+      ]);
+      expect(rootUi.uiConfig.baseTemplate[1].sections[0].groups[0].fields).toEqual([
+        { type: 'httpRequestBuilder' },
+      ]);
+      const { fields } = rootUi.uiConfig.baseTemplate[2].sections[0].groups[0];
+      ['isBatchingEnabled', 'maxBatchSize'].forEach((configKey) => {
+        expect(
+          fields.find((field: { configKey: string }) => field.configKey === configKey).preRequisites
+            .featureFlags,
+        ).toEqual([{ configKey: 'enable-http-v2-batch-size', value: true }]);
+      });
+      expect(
+        fields.find((field: { configKey: string }) => field.configKey === 'supportedMessageTypes')
+          .preRequisites.featureFlags,
+      ).toEqual([{ configKey: 'enable-http-v2-message-types', value: true }]);
+      expect(rootUi.uiConfig.sdkTemplate.fields).toEqual([]);
+      expect(rootUi.uiConfig.consentSettingsTemplate.fields).toHaveLength(1);
+    });
+
+    getIntegrationData('http-v1', 'versions').forEach((td: Record<string, unknown>) => {
+      it(`v1 - ${td.testTitle}`, () => {
+        const validateV1 = () =>
+          validateConfig('http', td.config as Record<string, unknown>, 'destinations', true, 1);
+        if (td.result === true) {
+          expect(validateV1()).toBeUndefined();
+        } else {
+          expect(validateV1).toThrow(JSON.stringify(td.err));
+        }
+      });
+    });
+  });
+
   // Destination tests
   Object.keys(destTcData).forEach((dest: string, destIdx: number) => {
     describe(`${destIdx + 1}. Destination - ${dest}`, () => {

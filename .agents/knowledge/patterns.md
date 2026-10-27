@@ -122,3 +122,7 @@
 ## INT-7432 — Preserve OpenAI Ads Redirect Schema During Generation
 
 - OpenAI Ads `eventMapping` is hand-maintained schema for `uiConfig.redirectGroups`, which `scripts/schemaGenerator.py` does not traverse. A force schema update attempts to delete that contract; use the destination update's skip-deletions flow so generated fields such as `isHashRequired` can be added without removing `eventMapping`.
+
+## INT-7453 — Archived HTTP v1 Fixture Coverage
+
+- Keep archived HTTP v1 validation cases in `test/data/validation/versions/http-v1.json` and run them in `test/validation.test.ts` through `validateConfig('http', config, 'destinations', true, 1)`; `src/validator` registers each `versions/<major>/schema.json` under `<type>___<name>___<major>`. The root fixture discovery treats files in `test/data/validation/destinations/` as destination names, so an `http-v1.json` file there would be interpreted as a nonexistent root destination.
