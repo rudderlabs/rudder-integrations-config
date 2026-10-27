@@ -365,5 +365,5 @@
 
 ## INT-7453 — HTTP v2 Batch-Size Validation and Gating
 
-- HTTP v2 validates any supplied `maxBatchSize` string in top-level `configSchema.properties` against the 1–5000 range. v2 has no `isBatchingEnabled` toggle: `maxBatchSize` alone controls batching (`1` = one event per request; the transformer defaults to 100 when absent).
+- HTTP v2 validates any supplied `maxBatchSize` string in top-level `configSchema.properties` against the 1–5000 range. v2 has no `isBatchingEnabled` toggle: `maxBatchSize` alone controls batching (`1` = one event per request; schema, ui-config and transformer all default to 5000).
 - Gate the `maxBatchSize` UI field on `AMP_enable-http-v2-batch-size` (Flagsmith key `enable-http-v2-batch-size`; gate and `preRequisites` names need the `AMP_` prefix to resolve).
