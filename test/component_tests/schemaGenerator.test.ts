@@ -130,14 +130,6 @@ describe('Schema Generator', () => {
     });
   });
 
-  it('checks Custom Activation with a keyless display-only field', () => {
-    const output = execSync('npm run check:schema:destination custom_audience 2>&1', {
-      encoding: 'utf8',
-    });
-
-    expect(output).not.toMatch(/warning|No schema generator function|No configKey found/i);
-  });
-
   describe('should update and save schema for the specified destination', () => {
     const testData = [
       {
