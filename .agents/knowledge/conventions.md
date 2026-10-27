@@ -366,3 +366,8 @@
 - OpenAI Ads `isHashRequired` is a destination-wide, default-true boolean carried through both `config.includeKeys` and `config.destConfig.defaultConfig`; keep the UI checkbox in Configuration settings / Event settings after `defaultActionSource`.
 - Expose the setting for both cloud and web device-mode connections; transformer support lives in `rudder-transformer`, and device-mode support lives in the OpenAI Ads integration in `rudder-sdk-js`.
 - Disabling hashing requires email, phone number, first name, last name, and user ID to be normalized and pre-hashed; when no user ID is present, RudderStack hashes the anonymous ID automatically. Customer documentation must describe that behavior for both cloud and web device mode.
+
+## INT-7440 — BigQuery Stream All Events General Availability
+
+- BigQuery Stream (All Events) is generally available: keep `src/configurations/destinations/bqstream_all_events/db-config.json` without `options.isBeta` and without adding a hidden gate, while retaining `options.disableLiveEvents: true` and `options.icon: "bigquery"`.
+- Tier availability, documentation labels, and GA announcements are owned outside this repository; do not encode speculative rollout metadata or alter destination behavior for those follow-up concerns.
