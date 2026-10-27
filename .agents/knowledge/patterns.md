@@ -125,4 +125,4 @@
 
 ## INT-7453 — Archived HTTP v1 Fixture Coverage
 
-- Keep archived HTTP v1 validation cases in `test/data/validation/versions/http-v1.json` and compile `src/configurations/destinations/http/versions/1/schema.json` explicitly with AJV in `test/validation.test.ts`. The root fixture discovery treats files in `test/data/validation/destinations/` as destination names, so an `http-v1.json` file there would be interpreted as a nonexistent root destination; explicit archive coverage protects existing authentication, consent, and mapping contracts without changing the shared root-only lookup.
+- Keep archived HTTP v1 validation cases in `test/data/validation/versions/http-v1.json` and run them in `test/validation.test.ts` through `validateConfig('http', config, 'destinations', true, 1)`; `src/validator` registers each `versions/<major>/schema.json` under `<type>___<name>___<major>`. The root fixture discovery treats files in `test/data/validation/destinations/` as destination names, so an `http-v1.json` file there would be interpreted as a nonexistent root destination.

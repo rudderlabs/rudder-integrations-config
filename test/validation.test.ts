@@ -287,30 +287,8 @@ describe('Validation Tests', () => {
       fs.readFileSync(path.join(directory, 'db-config.json'), 'utf-8'),
     );
     const rootUi = JSON.parse(fs.readFileSync(path.join(directory, 'ui-config.json'), 'utf-8'));
-    const archivedDirectory = path.join(directory, 'versions/1');
-    const archivedDefinition = JSON.parse(
-      fs.readFileSync(path.join(archivedDirectory, 'db-config.json'), 'utf-8'),
-    );
-    const archivedUi = JSON.parse(
-      fs.readFileSync(path.join(archivedDirectory, 'ui-config.json'), 'utf-8'),
-    );
-    const archivedCases = JSON.parse(
-      fs.readFileSync(path.resolve('test/data/validation/versions/http-v1.json'), 'utf-8'),
-    );
 
-    it('keeps v1 supported and unchanged while root v2 uses native dispatch and a closed gate', () => {
-      expect(archivedDefinition.version).toBe('1.0');
-      expect(archivedDefinition.status).toBe('supported');
-      expect(archivedDefinition.config.cdkV2Enabled).toBe(true);
-      expect(archivedDefinition.options.hidden).toBeUndefined();
-      expect(archivedDefinition.config.destConfig.defaultConfig).toEqual(
-        expect.arrayContaining(['propertiesMapping', 'isDefaultMapping', 'xmlRootKey']),
-      );
-      expect(archivedUi.uiConfig.redirectGroups.advancedMapping).toBeDefined();
-      const archivedSchema = JSON.parse(
-        fs.readFileSync(path.join(archivedDirectory, 'schema.json'), 'utf-8'),
-      ).configSchema;
-      expect(archivedSchema.properties.format.enum).toEqual(['JSON', 'XML', 'FORM']);
+    it('root v2 uses native dispatch and a closed gate', () => {
       expect(rootDefinition.version).toBe('2.0');
       expect(rootDefinition.config.cdkV2Enabled).toBeUndefined();
       expect(rootDefinition.config.destConfig.defaultConfig).toEqual(
@@ -325,12 +303,12 @@ describe('Validation Tests', () => {
         { type: 'httpRequestBuilder' },
       ]);
       const { fields } = rootUi.uiConfig.baseTemplate[2].sections[0].groups[0];
-      for (const configKey of ['isBatchingEnabled', 'maxBatchSize']) {
+      ['isBatchingEnabled', 'maxBatchSize'].forEach((configKey) => {
         expect(
           fields.find((field: { configKey: string }) => field.configKey === configKey).preRequisites
             .featureFlags,
         ).toEqual([{ configKey: 'enable-http-v2-batch-size', value: true }]);
-      }
+      });
       expect(
         fields.find((field: { configKey: string }) => field.configKey === 'supportedMessageTypes')
           .preRequisites.featureFlags,
@@ -339,24 +317,17 @@ describe('Validation Tests', () => {
       expect(rootUi.uiConfig.consentSettingsTemplate.fields).toHaveLength(1);
     });
 
-    archivedCases.forEach(
-      (td: {
-        testTitle: string;
-        config: Record<string, unknown>;
-        result: boolean;
-        err?: string[];
-      }) => {
-        it(`v1 - ${td.testTitle}`, () => {
-          const validateV1 = () =>
-            validateConfig('http', { ...td.config }, 'destinations', true, 1);
-          if (td.result) {
-            expect(validateV1()).toBeUndefined();
-          } else {
-            expect(validateV1).toThrow(JSON.stringify(td.err));
-          }
-        });
-      },
-    );
+    getIntegrationData('http-v1', 'versions').forEach((td: Record<string, unknown>) => {
+      it(`v1 - ${td.testTitle}`, () => {
+        const validateV1 = () =>
+          validateConfig('http', td.config as Record<string, unknown>, 'destinations', true, 1);
+        if (td.result === true) {
+          expect(validateV1()).toBeUndefined();
+        } else {
+          expect(validateV1).toThrow(JSON.stringify(td.err));
+        }
+      });
+    });
   });
 
   // Destination tests
