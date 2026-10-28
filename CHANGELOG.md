@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.193.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.192.0...v1.193.0) (2026-10-28)
+
+
+### Features
+
+* label deprecated tiktok standard events as legacy ([#2875](https://github.com/rudderlabs/rudder-integrations-config/issues/2875)) ([fbddde0](https://github.com/rudderlabs/rudder-integrations-config/commit/fbddde07a888c6bdce9a67cc50434afeb0dc533c))
+* make microsoft fabric destination public beta ([#2872](https://github.com/rudderlabs/rudder-integrations-config/issues/2872)) ([826be19](https://github.com/rudderlabs/rudder-integrations-config/commit/826be19a5f722c5bf8a9b91029b113e87bd809de))
+* preserve per-major destination options in deploy archives ([#2874](https://github.com/rudderlabs/rudder-integrations-config/issues/2874)) ([cffad78](https://github.com/rudderlabs/rudder-integrations-config/commit/cffad78267aad28361250f5d6b5dbdebc7e553bf))
+
+
+### Miscellaneous
+
+* **husky:** run hooks without husky install, drop jest from pre-commit ([#2841](https://github.com/rudderlabs/rudder-integrations-config/issues/2841)) ([da4375d](https://github.com/rudderlabs/rudder-integrations-config/commit/da4375de48f7e75f40abdffe0a49e0303a69e84b))
+* move the PR title check to check-pr-title v2.0.3 ([#2873](https://github.com/rudderlabs/rudder-integrations-config/issues/2873)) ([65a196d](https://github.com/rudderlabs/rudder-integrations-config/commit/65a196d82228a56cbdd2489cd10da51e0acbef96))
+
+
+### Documentation
+
+* require consentSettings section in Configuration settings ([#2863](https://github.com/rudderlabs/rudder-integrations-config/issues/2863)) ([b3e1f32](https://github.com/rudderlabs/rudder-integrations-config/commit/b3e1f323505ca5691032defa1e4c76bf06ed432d))
+
 ## [1.192.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.191.0...v1.192.0) (2026-10-26)
 
 
