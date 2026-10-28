@@ -98,6 +98,77 @@ class TestVersionsArchive(unittest.TestCase):
                 archive["1"]["migrationDocsUrl"], "https://example.com/versions"
             )
 
+    def test_carries_archived_hidden_gate_and_other_options(self):
+        with tempfile.TemporaryDirectory() as root:
+            options = {
+                "isBeta": True,
+                "hidden": {
+                    "gate": {
+                        "flags": [{"name": "ENTERPRISE_PLAN", "value": False}],
+                    }
+                },
+            }
+            self._write_major(root, 1, options=options)
+
+            archive = deployToDB.build_versions_archive(root)
+
+            self.assertEqual(archive["1"]["options"], options)
+
+    def test_carries_non_gate_options_without_inventing_a_gate(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._write_major(root, 2, options={"isBeta": True})
+
+            archive = deployToDB.build_versions_archive(root)
+
+            self.assertEqual(archive["2"]["options"], {"isBeta": True})
+
+    def test_omits_options_when_archived_major_does_not_declare_them(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._write_major(root, 1)
+
+            archive = deployToDB.build_versions_archive(root)
+
+            self.assertNotIn("options", archive["1"])
+
+    def test_update_payload_uses_each_archived_majors_own_options(self):
+        with tempfile.TemporaryDirectory() as workspace:
+            directory = os.path.join(workspace, "destinations", "gate_example")
+            os.makedirs(directory)
+            current_options = {
+                "hidden": {"gate": {"flags": [{"name": "AMP_ROLLOUT", "value": False}]}}
+            }
+            with open(os.path.join(directory, "db-config.json"), "w") as handle:
+                json.dump(
+                    {
+                        "name": "GATE_EXAMPLE",
+                        "version": "2.0",
+                        "options": current_options,
+                    },
+                    handle,
+                )
+            archived_options = {
+                "isBeta": True,
+                "hidden": {
+                    "gate": {"flags": [{"name": "ENTERPRISE_PLAN", "value": False}]}
+                },
+            }
+            self._write_major(directory, 1, options=archived_options)
+            self._write_major(directory, 3)
+            with mock.patch.object(
+                deployToDB, "CONFIG_DIR", os.path.relpath(workspace)
+            ), mock.patch.object(
+                deployToDB, "update_config_definition", return_value=(200, {})
+            ) as update:
+                report = deployToDB.update_diff_db(
+                    "destination", {"GATE_EXAMPLE": {}}, item_name="gate_example"
+                )
+
+            self.assertEqual(report[0]["action"], "update")
+            payload = update.call_args.args[3]
+            self.assertEqual(payload["options"], current_options)
+            self.assertEqual(payload["versions"]["1"]["options"], archived_options)
+            self.assertNotIn("options", payload["versions"]["3"])
+
     def test_omits_advisory_fields_the_major_does_not_declare(self):
         # Absence is meaningful downstream: no retirement date means none is scheduled yet, which is
         # different from one the deploy quietly dropped.

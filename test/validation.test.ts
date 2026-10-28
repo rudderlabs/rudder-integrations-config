@@ -216,6 +216,14 @@ async function getDestinationDefinitionConfig(destName: string) {
   return config.default;
 }
 
+function withoutArchiveLifecycleFields(dbConfig: Record<string, unknown>) {
+  const definition = { ...dbConfig };
+  delete definition.status;
+  delete definition.retirementDate;
+  delete definition.migrationDocsUrl;
+  return definition;
+}
+
 const dests = getIntegrationNames('destinations');
 const sources = getIntegrationNames('sources');
 
@@ -736,6 +744,68 @@ describe('Destination Definition validation tests', () => {
       const destDefConfig = await getDestinationDefinitionConfig(dest);
       await expect(validateDestinationDefinitions(destDefConfig)).resolves.toEqual(true);
     });
+
+    const versionsPath = path.resolve(`src/configurations/destinations/${dest}/versions`);
+    if (fs.existsSync(versionsPath)) {
+      fs.readdirSync(versionsPath).forEach((major) => {
+        const archivePath = path.join(versionsPath, major, 'db-config.json');
+        if (fs.existsSync(archivePath)) {
+          it(`${dest} - archived major ${major} definition test`, async () => {
+            const archived = JSON.parse(fs.readFileSync(archivePath, 'utf-8'));
+            // Lifecycle fields are archive-only; root definitions must remain strict.
+            expect(['supported', 'retired']).toContain(archived.status);
+            await expect(
+              validateDestinationDefinitions(withoutArchiveLifecycleFields(archived)),
+            ).resolves.toEqual(true);
+          });
+        }
+      });
+    }
+  });
+
+  it('accepts an archived major gate without allowing lifecycle fields on root definitions', async () => {
+    const archived = {
+      ...getMinimalDestinationDefinition({
+        gate: {
+          flags: [
+            { name: 'ENTERPRISE_PLAN', value: false },
+            { name: 'AMP_ROLLOUT', value: false },
+          ],
+          condition: 'or',
+        },
+      }),
+      status: 'supported',
+      retirementDate: '2027-01-01',
+      migrationDocsUrl: 'https://example.com/migrate',
+    };
+    await expect(
+      validateDestinationDefinitions(withoutArchiveLifecycleFields(archived)),
+    ).resolves.toEqual(true);
+    await expectValidationError(
+      validateDestinationDefinitions(archived),
+      'must NOT have additional properties',
+      false,
+    );
+  });
+
+  it.each([
+    { flags: [{ name: 'AMP_ROLLOUT' }] },
+    {
+      flags: [
+        { name: 'ENTERPRISE_PLAN', value: false },
+        { name: 'AMP_ROLLOUT', value: false },
+      ],
+    },
+    { flags: [{ name: 'AMP_ROLLOUT', value: false, unknown: true }] },
+  ])('rejects a malformed archived gate: %j', async (gate) => {
+    await expect(
+      validateDestinationDefinitions(
+        withoutArchiveLifecycleFields({
+          ...getMinimalDestinationDefinition({ gate }),
+          status: 'supported',
+        }),
+      ),
+    ).rejects.toThrow();
   });
 
   const malformedDestDefConfigs = [

@@ -106,6 +106,7 @@ Copy the template, then:
   endpoint (`webhook`).
 - If category (Form 2) = `warehouse`: add top-level `"category": "warehouse"` (sibling of `name`), set `transformAtV1` to `processor` (above), and follow [Warehouse destinations](#warehouse-destinations).
 - `options.icon` — set it to the destination's kebab-case icon name from the RudderStack Integration Icons Figma library (published as `@rudderlabs/icons`). The template's `options` carries only `isBeta`, so this is easy to miss — and every definition but `test_destination` has one. Use the destination's own brand — don't borrow a neighbouring brand's icon.
+- If gating visibility, follow [per-major destination visibility gates](../../../CONVENTIONS.md#per-major-destination-visibility-gates). The root gate affects only the current major; archived majors need their own plan gate, and a flagged new major needs a `supported` previous major.
 - `supportedSourceTypes` ← Form 1.
 - `destConfig.defaultConfig` = `["placeholderKey"]` — a neutral placeholder field (also added to ui-config and schema, below) so the scaffold validates (`defaultConfig` can't be empty per the meta-schema). Replace it with the real config keys as fields are added.
 - For **each** source type in `supportedSourceTypes`, add a `destConfig.<sourceType>` array containing at least `["connectionMode", "consentManagement"]`.

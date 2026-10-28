@@ -233,7 +233,7 @@ def build_versions_archive(directory):
             )
         entry["uiConfig"] = ui_config
 
-        for optional_key in ("retirementDate", "migrationDocsUrl"):
+        for optional_key in ("retirementDate", "migrationDocsUrl", "options"):
             if optional_key in versioned_data:
                 entry[optional_key] = versioned_data[optional_key]
 
