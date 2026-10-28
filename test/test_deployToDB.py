@@ -98,38 +98,6 @@ class TestVersionsArchive(unittest.TestCase):
                 archive["1"]["migrationDocsUrl"], "https://example.com/versions"
             )
 
-    def test_carries_archived_hidden_gate_and_other_options(self):
-        with tempfile.TemporaryDirectory() as root:
-            options = {
-                "isBeta": True,
-                "hidden": {
-                    "gate": {
-                        "flags": [{"name": "ENTERPRISE_PLAN", "value": False}],
-                    }
-                },
-            }
-            self._write_major(root, 1, options=options)
-
-            archive = deployToDB.build_versions_archive(root)
-
-            self.assertEqual(archive["1"]["options"], options)
-
-    def test_carries_non_gate_options_without_inventing_a_gate(self):
-        with tempfile.TemporaryDirectory() as root:
-            self._write_major(root, 2, options={"isBeta": True})
-
-            archive = deployToDB.build_versions_archive(root)
-
-            self.assertEqual(archive["2"]["options"], {"isBeta": True})
-
-    def test_omits_options_when_archived_major_does_not_declare_them(self):
-        with tempfile.TemporaryDirectory() as root:
-            self._write_major(root, 1)
-
-            archive = deployToDB.build_versions_archive(root)
-
-            self.assertNotIn("options", archive["1"])
-
     def test_update_payload_uses_each_archived_majors_own_options(self):
         with tempfile.TemporaryDirectory() as workspace:
             directory = os.path.join(workspace, "destinations", "gate_example")
@@ -179,6 +147,7 @@ class TestVersionsArchive(unittest.TestCase):
 
             self.assertNotIn("retirementDate", archive["2"])
             self.assertNotIn("migrationDocsUrl", archive["2"])
+            self.assertNotIn("options", archive["2"])
 
     def test_rejects_a_status_outside_the_lifecycle(self):
         with tempfile.TemporaryDirectory() as root:

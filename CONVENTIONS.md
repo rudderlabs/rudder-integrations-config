@@ -25,19 +25,15 @@ archived `options` as authored, without inheriting the current major's options. 
 without archived majors still uses its root gate as before. Keep archived lifecycle fields
 (`status`, `retirementDate`, `migrationDocsUrl`) out of the root file.
 
-The gate uses **hide-when** polarity: a flag item `{ "name": "AMP_example", "value": false }`
-hides that major when the flag is false. `AMP_<flagsmith-key>` resolves a Flagsmith flag; a
-bare Flagsmith key is not recognized and silently resolves to false. A raw billing plan
-feature name (for example `ENTERPRISE_PLAN`) resolves that plan's boolean feature. Every flag
-item needs a boolean `value`; two or more items need `condition: "and"` or `"or"` to combine
-the hide conditions. Use `"or"` to hide a major if **either** its plan is unavailable **or**
-its rollout flag is off.
+Gate names are `AMP_<flagsmith-key>` for a Flagsmith flag or a raw boolean billing plan feature
+(for example `ENTERPRISE_PLAN`); see the [README](README.md) for the gate syntax. Combine a plan
+gate and a rollout flag with `condition: "or"` so the major is hidden if **either** is missing.
 
 **Repeat plan gates on every major** so a workspace on the wrong plan cannot access an
 archived major. To roll out a new major behind a flag, gate the root (current) major and
 keep the previous archived major `"status": "supported"` with its own plan gate (or no gate
 if it is public). Do not gate the whole definition when an ungated fallback major should
-remain available. An archived major's `options.hidden` is not inherited from the root.
+remain available.
 
 ## AccountDefinition naming (`accountDefinitionName`)
 

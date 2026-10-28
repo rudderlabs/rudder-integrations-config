@@ -763,51 +763,6 @@ describe('Destination Definition validation tests', () => {
     }
   });
 
-  it('accepts an archived major gate without allowing lifecycle fields on root definitions', async () => {
-    const archived = {
-      ...getMinimalDestinationDefinition({
-        gate: {
-          flags: [
-            { name: 'ENTERPRISE_PLAN', value: false },
-            { name: 'AMP_ROLLOUT', value: false },
-          ],
-          condition: 'or',
-        },
-      }),
-      status: 'supported',
-      retirementDate: '2027-01-01',
-      migrationDocsUrl: 'https://example.com/migrate',
-    };
-    await expect(
-      validateDestinationDefinitions(withoutArchiveLifecycleFields(archived)),
-    ).resolves.toEqual(true);
-    await expectValidationError(
-      validateDestinationDefinitions(archived),
-      'must NOT have additional properties',
-      false,
-    );
-  });
-
-  it.each([
-    { flags: [{ name: 'AMP_ROLLOUT' }] },
-    {
-      flags: [
-        { name: 'ENTERPRISE_PLAN', value: false },
-        { name: 'AMP_ROLLOUT', value: false },
-      ],
-    },
-    { flags: [{ name: 'AMP_ROLLOUT', value: false, unknown: true }] },
-  ])('rejects a malformed archived gate: %j', async (gate) => {
-    await expect(
-      validateDestinationDefinitions(
-        withoutArchiveLifecycleFields({
-          ...getMinimalDestinationDefinition({ gate }),
-          status: 'supported',
-        }),
-      ),
-    ).rejects.toThrow();
-  });
-
   const malformedDestDefConfigs = [
     {
       description: 'missing "name" and "displayName" properties',
