@@ -4,6 +4,7 @@ This document captures naming and structural conventions used across this reposi
 
 ## Table of contents
 
+- [**Per-major destination visibility gates**](#per-major-destination-visibility-gates)
 - [**AccountDefinition naming (`accountDefinitionName`)**](#accountdefinition-naming-accountdefinitionname)
 - [**String `pattern` and `regex`**](#string-pattern-and-regex)
 - [**`sdkTemplate` is required, even on a cloud-only destination**](#sdktemplate-is-required-even-on-a-cloud-only-destination)
@@ -15,6 +16,25 @@ This document captures naming and structural conventions used across this reposi
 - [**Client-side event filtering keys**](#client-side-event-filtering-keys)
 - [**Where a field goes in `destConfig` (`defaultConfig` vs a source type)**](#where-a-field-goes-in-destconfig-defaultconfig-vs-a-source-type)
 - [**Restricting a field by connection mode**](#restricting-a-field-by-connection-mode)
+
+## Per-major destination visibility gates
+
+A destination's `options.hidden.gate` applies **only to the major described by its own
+`db-config.json`**. The root file describes the current major; each
+`versions/<major>/db-config.json` describes that archived major. The deploy payload preserves
+archived `options` as authored, without inheriting the current major's options. A destination
+without archived majors still uses its root gate as before. Keep archived lifecycle fields
+(`status`, `retirementDate`, `migrationDocsUrl`) out of the root file.
+
+Gate names are `AMP_<flagsmith-key>` for a Flagsmith flag or a raw boolean billing plan feature
+(for example `ENTERPRISE_PLAN`); see the [README](README.md) for the gate syntax. Combine a plan
+gate and a rollout flag with `condition: "or"` so the major is hidden if **either** is missing.
+
+**Repeat plan gates on every major** so a workspace on the wrong plan cannot access an
+archived major. To roll out a new major behind a flag, gate the root (current) major and
+keep the previous archived major `"status": "supported"` with its own plan gate (or no gate
+if it is public). Do not gate the whole definition when an ungated fallback major should
+remain available.
 
 ## AccountDefinition naming (`accountDefinitionName`)
 

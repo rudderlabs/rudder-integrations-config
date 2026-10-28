@@ -196,7 +196,7 @@ def build_versions_archive(directory):
         versioned_data = get_file_content(major_directory)
 
         # On disk, an archived major carries a flat `version` (major.minor string)
-        # plus sibling `status`/`retirementDate?`/`migrationDocsUrl?` — the same
+        # plus sibling `status`/`retirementDate?`/`migrationDocsUrl?`/`options?` — the same
         # shape as the root db-config.json. The archive entry the backend persists
         # carries it under the same `version` key.
         version = versioned_data.get("version")
@@ -233,7 +233,7 @@ def build_versions_archive(directory):
             )
         entry["uiConfig"] = ui_config
 
-        for optional_key in ("retirementDate", "migrationDocsUrl"):
+        for optional_key in ("retirementDate", "migrationDocsUrl", "options"):
             if optional_key in versioned_data:
                 entry[optional_key] = versioned_data[optional_key]
 

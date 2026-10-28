@@ -34,7 +34,7 @@ Refer src/schemas/destinations/, src/schemas/account for adding any additional n
 
 ## Reference
 
-[`CONVENTIONS.md`](../../../CONVENTIONS.md) is the repo-wide source of truth — read it first. The sections that bite here are [account definition naming](../../../CONVENTIONS.md#accountdefinition-naming-accountdefinitionname), [where account credential fields live](../../../CONVENTIONS.md#where-account-credential-fields-live), [string `pattern` / `regex`](../../../CONVENTIONS.md#string-pattern-and-regex), and [optional fields must accept the empty string](../../../CONVENTIONS.md#optional-fields-must-accept-the-empty-string).
+[`CONVENTIONS.md`](../../../CONVENTIONS.md) is the repo-wide source of truth — read it first. The sections that bite here are [per-major destination visibility gates](../../../CONVENTIONS.md#per-major-destination-visibility-gates), [account definition naming](../../../CONVENTIONS.md#accountdefinition-naming-accountdefinitionname), [where account credential fields live](../../../CONVENTIONS.md#where-account-credential-fields-live), [string `pattern` / `regex`](../../../CONVENTIONS.md#string-pattern-and-regex), and [optional fields must accept the empty string](../../../CONVENTIONS.md#optional-fields-must-accept-the-empty-string).
 
 Find existing VDM destinations by searching for `supportsVisualMapper: true` in `src/configurations/destinations/*/db-config.json`. Read their complete config (db-config, ui-config, schema, and accounts/) for patterns. **Copy their shape, not their rules** — most predate `CONVENTIONS.md`, so they will carry the deprecated `{{ }}` / `env.` regex prefix and other patterns the conventions now forbid. Where the two disagree, `CONVENTIONS.md` is current.
 
