@@ -155,3 +155,9 @@
 ## INT-7259 — GAOC Account Picker Copy Guidance
 
 - Keep the Google Ads Offline Conversions `customerId` nested account picker note aligned with the shared GAEC and GARL picker guidance: customers may select a manager or descendant account; selecting a top-level account clears the login customer ID, while selecting a descendant uses the top-level account as the login customer ID.
+
+## INT-7424 — Custom Activation OAuth Review Direction
+
+- The latest owner contract supersedes interim Client Credentials designs: use `machine_oauth` with `refreshOAuthToken: true`, no `uiConfig.isOAuth`, and account-owned credentials; Authorization Code remains `oauth`. Do not revive `authenticationType: "client_credentials"`, destination credential mirroring, or `controlPlaneOnlySecretFields` for these accounts.
+- Keep Custom Activation-specific accepted/rejected configuration cases in `test/data/validation/destinations/custom_audience.json`, not a bespoke block in `test/validation.test.ts`; the owner explicitly requested reverting additions to that shared test file, including the proposed generic control-plane-only secret subset test. Do not add a Custom Activation-specific schema-generator component test. Retain the generic keyless-field generator fix.
+- Reviewer direction requires `tokenUrl` validation to reject any `ngrok.io` subdomain, including nested hosts such as `a.b.ngrok.io`, while accepting ordinary provider hosts. Preserve account-schema cases for URL validity, required values, lengths, scope tags/separators, token auth methods, and extra-token-parameter limits.
