@@ -86,6 +86,31 @@
     "err": [" must have required property 'rudderAccountId'", " must match \"then\" schema"]
   },
   {
+    "testTitle": "authenticationEnabled rejects an empty linked account reference",
+    "config": {
+      "baseUrl": "https://api.example.com",
+      "authenticationEnabled": true,
+      "rudderAccountId": "",
+      "actions": {
+        "insert": {
+          "requestBody": "{}",
+          "method": "POST",
+          "endpoint": "/insert",
+          "batchSize": 500
+        },
+        "update": { "useInsertConfig": true },
+        "delete": {
+          "requestBody": "{}",
+          "method": "DELETE",
+          "endpoint": "/delete",
+          "batchSize": 500
+        }
+      }
+    },
+    "result": false,
+    "err": ["rudderAccountId must match pattern \"^.{1,100}$\""]
+  },
+  {
     "testTitle": "authenticationEnabled accepts false without an account",
     "config": {
       "baseUrl": "https://api.example.com",
