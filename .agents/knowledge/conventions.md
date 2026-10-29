@@ -362,3 +362,9 @@
 
 - BigQuery Stream (All Events) is generally available: keep `src/configurations/destinations/bqstream_all_events/db-config.json` without `options.isBeta` and without adding a hidden gate, while retaining `options.disableLiveEvents: true` and `options.icon: "bigquery"`.
 - Tier availability, documentation labels, and GA announcements are owned outside this repository; do not encode speculative rollout metadata or alter destination behavior for those follow-up concerns.
+
+## INT-7424 — Custom Activation Account Form Contract
+
+- Set account form order in each account's `ui-config.json` `uiConfig.form.fields` array, not the destination's `ui-config.json`. Client Credentials uses Account name → Token URL → Client ID → Client secret → Scopes → Scope separator → Extra token parameters → Token authentication method; Authorization Code also places Authorization URL before Token URL and a display-only Redirect URI directly after Authorization URL.
+- Both forms use an optional `scopes` `tagField`, persisted as an array of at most 50 strings each matching `^[^\s,]{1,200}$`; `scopeSeparator` follows scopes, with space as default and comma as the alternative. Do not revert scopes to an optional string. Authorization Code's Redirect URI is a keyless `copyField` with value `{{oauthRedirectUri}}` and instructions to register that URI. Account UI meta-schema permits `tagField`, requires `value` and forbids `key` for `copyField`, and requires `key` on other components.
+- Both account forms collect `clientSecret` immediately after `clientId`; declare it in account `secretFields`, require it in account `secretSchema`, and render it as a secret UI input. Only OAuth tokens are platform-written.
