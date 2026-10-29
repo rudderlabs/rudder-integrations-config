@@ -194,5 +194,66 @@
     },
     "result": false,
     "err": ["format must be equal to constant"]
+  },
+  {
+    "testTitle": "Basic auth with an empty password",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "auth": "basicAuth",
+      "username": "user"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Reject basic auth without a username",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "auth": "basicAuth"
+    },
+    "result": false,
+    "err": [" must have required property 'username'", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "Bearer token auth",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "auth": "bearerTokenAuth",
+      "bearerToken": "sample-token"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Reject bearer token auth without a token",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "auth": "bearerTokenAuth"
+    },
+    "result": false,
+    "err": [" must have required property 'bearerToken'", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "Reject API key auth without a key value",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "auth": "apiKeyAuth",
+      "apiKeyName": "x-api-key"
+    },
+    "result": false,
+    "err": [" must have required property 'apiKeyValue'", " must match \"then\" schema"]
   }
 ]
