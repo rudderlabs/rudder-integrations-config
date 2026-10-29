@@ -70,12 +70,17 @@ describe.each(definitions)('$name account definition', (definition) => {
     expect(validateOptions(options({ tokenUrl: 'https://api.example.com/oauth/token' }))).toBe(
       true,
     );
+    expect(validateOptions(options({ tokenUrl: 'https://api.example.com/x.localhost' }))).toBe(
+      true,
+    );
     for (const tokenUrl of [
       'https://x.ngrok.io/token',
       'https://a.b.ngrok.io/token',
       'https://A.B.NGROK.IO/token',
       'http://api.example.com/token',
       'https://localhost/token',
+      'https://x.localhost/token',
+      'https://X.LOCALHOST/token',
       'https://api.example.com/token?code=1',
       'https://api.example.com/token#fragment',
     ]) {
