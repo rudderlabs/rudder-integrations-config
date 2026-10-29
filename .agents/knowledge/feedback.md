@@ -155,9 +155,3 @@
 ## INT-7259 — GAOC Account Picker Copy Guidance
 
 - Keep the Google Ads Offline Conversions `customerId` nested account picker note aligned with the shared GAEC and GARL picker guidance: customers may select a manager or descendant account; selecting a top-level account clears the login customer ID, while selecting a descendant uses the top-level account as the login customer ID.
-
-## INT-7424 — Custom Activation OAuth Review Scope
-
-- Owner direction supersedes earlier Client Credentials designs: use `authenticationType: "machine_oauth"` with refresh behavior, but omit `uiConfig.isOAuth`; do not use the older `client_credentials` or plain `oauth` authentication type for that definition. Do not introduce `controlPlaneOnlySecretFields` for these accounts; their stored client secrets are available to the data plane.
-- Keep `test/validation.test.ts` unchanged for this work: the owner withdrew both the bespoke Custom Activation OAuth block and the proposed repository-wide control-plane-only-secret subset assertion. Put destination-specific cases in `test/data/validation/destinations/custom_audience.json`; rely on generic account-definition validation and direct account/schema checks rather than reinstating bespoke shared-suite cases.
-- Keep the generic schema-generator handling of keyless composite fields, but do not add a Custom Activation-specific component test or bundle a multi-argument `scripts/run-schema-validation.sh` fix with this work. Keep legacy destination schema fields until the separate account-management migration.

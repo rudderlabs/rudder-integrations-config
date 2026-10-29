@@ -29,6 +29,74 @@
   },
   {
     "testTitle": "valid migrated config without legacy authenticationType",
+    "accountDefinitions": [
+      {
+        "directory": "custom_audience_client_credentials",
+        "name": "DESTINATION_CUSTOM_AUDIENCE_CLIENT_CREDENTIALS",
+        "authenticationType": "machine_oauth",
+        "gate": "AMP_enable-custom-audience-client-credentials-account",
+        "refreshOAuthToken": true,
+        "secretFields": ["clientSecret"],
+        "isOAuth": false,
+        "optionFields": [
+          "tokenUrl",
+          "clientId",
+          "scopes",
+          "scopeSeparator",
+          "extraTokenParams",
+          "tokenAuthMethod"
+        ],
+        "fieldOrder": [
+          "Account name",
+          "Token URL",
+          "Client ID",
+          "Client secret",
+          "Scopes",
+          "Scope separator",
+          "Extra token parameters",
+          "Token authentication method"
+        ],
+        "validOptions": {
+          "tokenUrl": "https://api.example.com/oauth/token",
+          "clientId": "client-id"
+        }
+      },
+      {
+        "directory": "custom_audience_oauth_auth_code",
+        "name": "DESTINATION_CUSTOM_AUDIENCE_OAUTH_AUTH_CODE",
+        "authenticationType": "oauth",
+        "gate": "AMP_enable-custom-audience-oauth-auth-code-account",
+        "refreshOAuthToken": true,
+        "secretFields": ["clientSecret"],
+        "isOAuth": true,
+        "optionFields": [
+          "authorizationUrl",
+          "tokenUrl",
+          "clientId",
+          "scopes",
+          "scopeSeparator",
+          "extraTokenParams",
+          "tokenAuthMethod"
+        ],
+        "fieldOrder": [
+          "Account name",
+          "Authorization URL",
+          "Redirect URI",
+          "Token URL",
+          "Client ID",
+          "Client secret",
+          "Scopes",
+          "Scope separator",
+          "Extra token parameters",
+          "Token authentication method"
+        ],
+        "validOptions": {
+          "authorizationUrl": "https://api.example.com/authorize",
+          "tokenUrl": "https://api.example.com/oauth/token",
+          "clientId": "client-id"
+        }
+      }
+    ],
     "config": {
       "baseUrl": "https://api.example.com",
       "authenticationEnabled": true,
