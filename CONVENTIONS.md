@@ -4,9 +4,11 @@ This document captures naming and structural conventions used across this reposi
 
 ## Table of contents
 
+- [**Per-major destination visibility gates**](#per-major-destination-visibility-gates)
 - [**AccountDefinition naming (`accountDefinitionName`)**](#accountdefinition-naming-accountdefinitionname)
 - [**String `pattern` and `regex`**](#string-pattern-and-regex)
 - [**`sdkTemplate` is required, even on a cloud-only destination**](#sdktemplate-is-required-even-on-a-cloud-only-destination)
+- [**Configuration settings sections**](#configuration-settings-sections)
 - [**Optional fields must accept the empty string**](#optional-fields-must-accept-the-empty-string)
 - [**Where account credential fields live**](#where-account-credential-fields-live)
 - [**Deduplication / event-id config key (`deduplicationKey`)**](#deduplication--event-id-config-key-deduplicationkey)
@@ -14,6 +16,25 @@ This document captures naming and structural conventions used across this reposi
 - [**Client-side event filtering keys**](#client-side-event-filtering-keys)
 - [**Where a field goes in `destConfig` (`defaultConfig` vs a source type)**](#where-a-field-goes-in-destconfig-defaultconfig-vs-a-source-type)
 - [**Restricting a field by connection mode**](#restricting-a-field-by-connection-mode)
+
+## Per-major destination visibility gates
+
+A destination's `options.hidden.gate` applies **only to the major described by its own
+`db-config.json`**. The root file describes the current major; each
+`versions/<major>/db-config.json` describes that archived major. The deploy payload preserves
+archived `options` as authored, without inheriting the current major's options. A destination
+without archived majors still uses its root gate as before. Keep archived lifecycle fields
+(`status`, `retirementDate`, `migrationDocsUrl`) out of the root file.
+
+Gate names are `AMP_<flagsmith-key>` for a Flagsmith flag or a raw boolean billing plan feature
+(for example `ENTERPRISE_PLAN`); see the [README](README.md) for the gate syntax. Combine a plan
+gate and a rollout flag with `condition: "or"` so the major is hidden if **either** is missing.
+
+**Repeat plan gates on every major** so a workspace on the wrong plan cannot access an
+archived major. To roll out a new major behind a flag, gate the root (current) major and
+keep the previous archived major `"status": "supported"` with its own plan gate (or no gate
+if it is public). Do not gate the whole definition when an ungated fallback major should
+remain available.
 
 ## AccountDefinition naming (`accountDefinitionName`)
 
@@ -293,6 +314,50 @@ for f in glob.glob('src/configurations/destinations/*/ui-config.json'):
         bad.append(f)
 print(bad or 'all form-builder-v2 destinations carry sdkTemplate')"
 ```
+
+## Configuration settings sections
+
+rudder-webapp builds the "Configuration settings" block from two sections, matched by name in
+`configurationV2/formComponents/util.ts`:
+
+- **`"id": "consentSettings"`** receives every `consentSettingsTemplate` field. Without this section
+  the consent form is never rendered, and the customer cannot configure consent at all. Every
+  destination that ships a `consentSettingsTemplate` needs it. Pure rETL destinations ship neither
+  (below).
+- **`"title": "Destination settings"`** receives the destination's own page-2 fields, plus the
+  `sdkTemplate` fields on device and hybrid mode.
+
+Neither check is caught by tests. Each one fails as a missing form, not an error.
+
+A cloud-only destination with no page-2 fields keeps only the consent section. A leftover
+"Destination settings" section with an empty `"fields": []` group renders as an empty page:
+
+```json
+{
+  "title": "Configuration settings",
+  "note": "Manage the settings for your destination",
+  "sections": [
+    {
+      "id": "consentSettings",
+      "title": "Consent settings",
+      "note": "Configure consent settings for each provider here",
+      "icon": "settings",
+      "groups": []
+    }
+  ]
+}
+```
+
+22 event-stream destinations ship exactly this shape (`rokt`, `everflow`). With page-2 fields,
+"Destination settings" comes first and the consent section follows it (`intercom_v2`).
+
+Consent applies only to destinations that receive event streams. A pure rETL destination
+(`supportedSourceTypes` is exactly `["warehouse"]`) ships no consent surface: no
+`consentSettingsTemplate`, no `consentSettings` section, no `consentManagement` in `destConfig` or
+the schema. With no page-2 fields either, it has no "Configuration settings" block at all
+(`braze_audience`, `pinterest_audience`). Add it to `skipDestinations` in
+[`test/consentManagementFieldsIntegrity.test.ts`](test/consentManagementFieldsIntegrity.test.ts).
+Older warehouse-only destinations that still carry consent (`sftp`, `zoho`) are not the model.
 
 ## Optional fields must accept the empty string
 
@@ -614,7 +679,8 @@ only shown for some sources. Consent fields (`consentManagement`, `oneTrustCooki
 That test asserts the `destConfig` source-type keys **exactly equal** `supportedSourceTypes`
 (`:116-118`) and that each one includes `consentManagement` (`:101-108`), so this holds even for a
 destination with no configurable product settings at all — there is no "it has nothing to configure"
-exemption. Drop a source type's entry and the test doesn't fail cleanly, it throws on
+exemption. The only exemption is a pure rETL destination, which skips consent entirely:
+[Configuration settings sections](#configuration-settings-sections). Drop a source type's entry and the test doesn't fail cleanly, it throws on
 `undefined.includes`, which reads like a broken test rather than a missing key.
 
 Only list the source types that actually support the field: `autoTrackDeviceAttributes` goes

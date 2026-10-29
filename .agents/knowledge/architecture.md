@@ -139,3 +139,7 @@
 - Custom Activation supports Basic Auth, Bearer Token, and API Key through three account definitions under `src/configurations/destinations/custom_audience/accounts/`; the destination links them through `config.supportedAccountDefinitions.rudderAccountId`, and `rudderAccountId` plus `authenticationEnabled` belong in `config.destConfig.defaultConfig`.
 - When `authenticationEnabled` is explicitly `true`, `schema.json` requires a non-empty linked `rudderAccountId`; `false` does not require an account reference.
 - Custom Activation follows the mirrored account-field pattern (fields declared in defaultConfig/secretKeys, like FB Custom Audience); its transformer reads credentials from deliveryAccount, which the preview also relies on.
+
+## INT-7462 — Archived Major Options in Deployment
+
+- `scripts/deployToDB.py::build_versions_archive` copies the full `options` object from an archived major's `versions/<major>/db-config.json` into its deploy-payload archive entry only when that archived file declares `options`. It neither inherits root `options` nor synthesizes an empty object: an ungated archived major must remain available when the current major is gated, and authored metadata such as `isBeta` must survive alongside `hidden`.

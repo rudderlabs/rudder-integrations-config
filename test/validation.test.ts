@@ -216,6 +216,14 @@ async function getDestinationDefinitionConfig(destName: string) {
   return config.default;
 }
 
+function withoutArchiveLifecycleFields(dbConfig: Record<string, unknown>) {
+  const definition = { ...dbConfig };
+  delete definition.status;
+  delete definition.retirementDate;
+  delete definition.migrationDocsUrl;
+  return definition;
+}
+
 const dests = getIntegrationNames('destinations');
 const sources = getIntegrationNames('sources');
 
@@ -736,6 +744,23 @@ describe('Destination Definition validation tests', () => {
       const destDefConfig = await getDestinationDefinitionConfig(dest);
       await expect(validateDestinationDefinitions(destDefConfig)).resolves.toEqual(true);
     });
+
+    const versionsPath = path.resolve(`src/configurations/destinations/${dest}/versions`);
+    if (fs.existsSync(versionsPath)) {
+      fs.readdirSync(versionsPath).forEach((major) => {
+        const archivePath = path.join(versionsPath, major, 'db-config.json');
+        if (fs.existsSync(archivePath)) {
+          it(`${dest} - archived major ${major} definition test`, async () => {
+            const archived = JSON.parse(fs.readFileSync(archivePath, 'utf-8'));
+            // Lifecycle fields are archive-only; root definitions must remain strict.
+            expect(['supported', 'retired']).toContain(archived.status);
+            await expect(
+              validateDestinationDefinitions(withoutArchiveLifecycleFields(archived)),
+            ).resolves.toEqual(true);
+          });
+        }
+      });
+    }
   });
 
   const malformedDestDefConfigs = [
