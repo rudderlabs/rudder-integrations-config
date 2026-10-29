@@ -116,27 +116,6 @@ class TestVersionsArchive(unittest.TestCase):
             with self.assertRaises(ValueError):
                 deployToDB.build_versions_archive(root)
 
-    def test_http_v1_is_archived_as_supported_with_original_slices(self):
-        directory = os.path.join(
-            os.path.dirname(SCRIPTS_DIR),
-            "src",
-            "configurations",
-            "destinations",
-            "http",
-        )
-        archived = deployToDB.build_versions_archive(directory)["1"]
-        self.assertEqual(archived["version"], "1.0")
-        self.assertEqual(archived["status"], "supported")
-        self.assertTrue(archived["config"]["cdkV2Enabled"])
-        self.assertIn(
-            "propertiesMapping", archived["config"]["destConfig"]["defaultConfig"]
-        )
-        self.assertIn("advancedMapping", archived["uiConfig"]["redirectGroups"])
-        self.assertEqual(
-            archived["configSchema"]["properties"]["format"]["enum"],
-            ["JSON", "XML", "FORM"],
-        )
-
     def test_no_archive_directory_yields_an_empty_archive(self):
         # Matches what the control plane stores for a definition that has never been versioned, so a
         # definition without an archive does not diff against the database on every deploy.

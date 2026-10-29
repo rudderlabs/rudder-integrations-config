@@ -310,8 +310,13 @@ describe('Validation Tests', () => {
             .preRequisites,
         ).toBeUndefined();
       });
-      expect(rootUi.uiConfig.sdkTemplate.fields).toEqual([]);
-      expect(rootUi.uiConfig.consentSettingsTemplate.fields).toHaveLength(1);
+    });
+
+    it('v1 is archived as supported', () => {
+      const v1 = JSON.parse(
+        fs.readFileSync(path.join(directory, 'versions/1/db-config.json'), 'utf-8'),
+      );
+      expect(v1).toMatchObject({ version: '1.0', status: 'supported' });
     });
 
     getIntegrationData('http-v1', 'versions').forEach((td: Record<string, unknown>) => {

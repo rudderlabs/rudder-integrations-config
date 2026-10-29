@@ -362,8 +362,3 @@
 
 - BigQuery Stream (All Events) is generally available: keep `src/configurations/destinations/bqstream_all_events/db-config.json` without `options.isBeta` and without adding a hidden gate, while retaining `options.disableLiveEvents: true` and `options.icon: "bigquery"`.
 - Tier availability, documentation labels, and GA announcements are owned outside this repository; do not encode speculative rollout metadata or alter destination behavior for those follow-up concerns.
-
-## INT-7453 — HTTP v2 Batch-Size Validation
-
-- HTTP v2 validates any supplied `maxBatchSize` string in top-level `configSchema.properties` against the 1–5000 range. v2 has no `isBatchingEnabled` toggle: `maxBatchSize` alone controls batching (`1` = one event per request; schema, ui-config and transformer all default to 5000).
-- `maxBatchSize` and `supportedMessageTypes` are not flag-gated: deployment order (transformer, rudder-server and router config before the catalogue flag) makes them safe, so `AMP_enable-http-v2-destination` is the only v2 switch.
