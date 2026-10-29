@@ -352,16 +352,6 @@
 - Keep `.github/workflows/raise-pr-for-constants.yml` push-to-main only unless manual cross-repository writes and PR updates are explicitly desired; the optional `workflow_dispatch` trigger was intentionally omitted because every run performs real downstream mutations.
 - The workflow's source checkout should use `persist-credentials: false`; subsequent cross-repository operations authenticate explicitly with the generated GitHub App token through `GH_TOKEN`, so retaining the checkout credential is unnecessary and violates least-privilege guidance.
 
-## INT-7424 — Custom Activation OAuth Account Contracts
-
-<!-- session: 2026-10-22 -->
-
-- Keep Custom Activation OAuth configuration account-owned: the definitions under `src/configurations/destinations/custom_audience/accounts/custom_audience_oauth_*/` declare their option fields and the user-supplied `clientSecret` in `uiConfig.form.fields`, `secretFields`, and `secretSchema`; only OAuth tokens are platform-written. The destination `db-config.json` must not mirror OAuth options into `destConfig.defaultConfig` or OAuth secrets into `secretKeys`.
-- Account-modal field order is the order of `uiConfig.form.fields` in each account definition. Custom Activation has no destination-level account-form ordering property, so preserve the specification's field order directly in each OAuth account `ui-config.json`.
-- The two OAuth account definitions are `DESTINATION_CUSTOM_AUDIENCE_OAUTH_CLIENT_CREDENTIALS` and `DESTINATION_CUSTOM_AUDIENCE_OAUTH_AUTH_CODE`. Link both through destination `config.supportedAccountDefinitions.rudderAccountId`; each account definition independently uses its own `AMP_enable-custom-audience-oauth-*-account` hidden gate and declares `refreshOAuthToken: true`.
-- Custom Activation OAuth `scopes` are optional `tagField` values stored as an array of at most 50 strings, each matching `^[^\s,]{1,200}$`; this supersedes the earlier string-scopes/empty-string contract. Put `scopeSeparator` immediately after `scopes` in both `optionFields` and `uiConfig.form.fields`, with `space` as the default and `comma` as the other select option. Keep focused account validation coverage for token URL query/fragment rejection, the `tokenAuthMethod` enum/default, optional scopes, and HTTPS-only `authorizationUrl`.
-- The Authorization Code account alone renders a display-only Redirect URI `copyField` immediately after Authorization URL, with value `{{oauthRedirectUri}}` and no storage key; its copy instructs users to register that URI. In `src/schemas/account/account-ui-config-schema.json`, allow `tagField`, require `value` and forbid `key` for `copyField`, and require `key` for every other component.
-
 ## INT-7432 — OpenAI Ads Hashing Toggle
 
 - OpenAI Ads `isHashRequired` is a destination-wide, default-true boolean carried through both `config.includeKeys` and `config.destConfig.defaultConfig`; keep the UI checkbox in Configuration settings / Event settings after `defaultActionSource`.
