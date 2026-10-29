@@ -142,7 +142,7 @@ def validate_destination_accounts(destination_name):
 
 def validate_account_field_coverage(dest_dir):
     """
-    Validate that for each non-oauth account definition:
+    Validate that for each ordinary account definition:
       1. All fields (secretFields + optionFields) are present in the destination's destConfig.
       2. All secretFields are present in the destination's secretKeys.
 
@@ -150,8 +150,8 @@ def validate_account_field_coverage(dest_dir):
     in the destination definition's destConfig. If an account field is missing from
     destConfig, it will be silently dropped from the API response.
 
-    OAuth accounts are excluded because their secrets are managed by the OAuth flow,
-    not through destConfig.
+    Interactive OAuth and machine OAuth accounts are excluded because their credentials
+    stay on the account and are not merged into destination config.
 
     Args:
         dest_dir: Path to the destination directory.
@@ -177,7 +177,7 @@ def validate_account_field_coverage(dest_dir):
 
         account_config = load_json_file(account_dir / "db-config.json")
 
-        if account_config.get("authenticationType") == "oauth":
+        if account_config.get("authenticationType") in ("oauth", "machine_oauth"):
             continue
 
         account_name = account_config["name"]
