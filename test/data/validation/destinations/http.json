@@ -255,5 +255,41 @@
     },
     "result": false,
     "err": [" must have required property 'apiKeyValue'", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "Reject an empty header key",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "auth": "noAuth",
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "headers": [
+        {
+          "to": "",
+          "from": "$$.message.userId"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["headers.0.to must match pattern \"^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{1,100}$\""]
+  },
+  {
+    "testTitle": "Reject an empty query parameter key",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "auth": "noAuth",
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "queryParams": [
+        {
+          "to": "",
+          "from": "$$.message.userId"
+        }
+      ]
+    },
+    "result": false,
+    "err": ["queryParams.0.to must match pattern \"^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- ]{1,100}$\""]
   }
 ]
