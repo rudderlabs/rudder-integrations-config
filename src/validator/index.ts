@@ -217,8 +217,7 @@ async function importJsonFromFile(file: string) {
 }
 
 async function initAjvValidators() {
-  const configDir = path.join(__dirname, '../configurations');
-  const files = await glob(path.join(configDir, '**/schema.json'));
+  const files = await glob(path.join(__dirname, '../configurations/**/schema.json'));
   const filePromises = files.map(importJsonFromFile);
   const contents = await Promise.all(filePromises);
 
@@ -226,9 +225,12 @@ async function initAjvValidators() {
     const intgDir = path.dirname(file);
     const intgName = path.basename(intgDir);
     const intgType = path.basename(path.dirname(intgDir));
-    // archived majors live at <type>/<name>/versions/<major>/schema.json
-    const [type, name, sub, major] = path.relative(configDir, intgDir).split(path.sep);
-    const key = sub === 'versions' ? `${type}___${name}___${major}` : `${intgType}___${intgName}`;
+    const archivedVersion = file.match(
+      /[/\\](destinations|sources)[/\\]([^/\\]+)[/\\]versions[/\\]([1-9]\d*)[/\\]schema\.json$/,
+    );
+    const key = archivedVersion
+      ? `${archivedVersion[1]}___${archivedVersion[2]}___${archivedVersion[3]}`
+      : `${intgType}___${intgName}`;
     validators[key] = ajv.compile(contents[i].configSchema || {});
   });
 }
@@ -238,7 +240,7 @@ export function validateConfig(
   config: Record<string, unknown>,
   intgType: string,
   throwErrorOnMissingValidations = false,
-  version?: number,
+  version: number | undefined = undefined,
 ) {
   if (!definitionName) {
     throw new Error('Missing definitionName');
