@@ -663,8 +663,7 @@ one only for the behaviour described here, and never name an unrelated field aft
 - **`supportedMessageTypes`** — an array of message types (`track`, `page`, …). The processor
   drops events of any other type before transformation, as filtered events. It narrows the
   definition-level `config.supportedMessageTypes` in `db-config.json`; a destination without
-  one (e.g. HTTP v2) uses it alone. An empty array drops every event. See
-  [INT-7453](https://linear.app/rudderstack/issue/INT-7453) and rudder-server#7538.
+  one (e.g. HTTP v2) uses it alone. An empty array drops every event.
 
 ## Where a field goes in `destConfig` (`defaultConfig` vs a source type)
 
