@@ -14,6 +14,7 @@ This document captures naming and structural conventions used across this reposi
 - [**Deduplication / event-id config key (`deduplicationKey`)**](#deduplication--event-id-config-key-deduplicationkey)
 - [**Event name mapping**](#event-name-mapping)
 - [**Client-side event filtering keys**](#client-side-event-filtering-keys)
+- [**Reserved destination config keys**](#reserved-destination-config-keys)
 - [**Where a field goes in `destConfig` (`defaultConfig` vs a source type)**](#where-a-field-goes-in-destconfig-defaultconfig-vs-a-source-type)
 - [**Restricting a field by connection mode**](#restricting-a-field-by-connection-mode)
 
@@ -653,6 +654,17 @@ mode](#restricting-a-field-by-connection-mode)).
 
 `src/validator/index.ts` rejects any destination definition listing one of the three keys
 outside `defaultConfig`, naming the keys and the `destConfig.<section>` path.
+
+## Reserved destination config keys
+
+rudder-server reads these `configKey`s from every destination's config, whatever its type. Use
+one only for the behaviour described here, and never name an unrelated field after it.
+
+- **`supportedMessageTypes`** — an array of message types (`track`, `page`, …). The processor
+  drops events of any other type before transformation, as filtered events. It narrows the
+  definition-level `config.supportedMessageTypes` in `db-config.json`; a destination without
+  one (e.g. HTTP v2) uses it alone. An empty array drops every event. See
+  [INT-7453](https://linear.app/rudderstack/issue/INT-7453) and rudder-server#7538.
 
 ## Where a field goes in `destConfig` (`defaultConfig` vs a source type)
 
