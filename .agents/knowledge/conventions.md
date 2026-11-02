@@ -26,7 +26,7 @@
 <!-- RUD-2776 -->
 
 - Pre-commit flow expects preprocessing and tests before staged-linting (`package.json:30`).
-- Commit messages must follow Conventional Commits (`commitlint.config.js` extends `@commitlint/config-conventional`); the `commitlint` CI check lints the latest commit (`commitDepth: 1` in `.github/workflows/commitlint.yml`), so any auto-generated commit (e.g. Copilot Autofix `Potential fix for pull request finding`) must be reworded to `type: subject` before push. Record future occurrences in `mistakes.md`.
+- Commit messages must follow Conventional Commits (`commitlint.config.js` extends `@commitlint/config-conventional`); the local `commit-msg` hook runs commitlint. CI checks only the PR title (`.github/workflows/check-pr-title.yml`), and the squash merge uses that title as the commit title (SEC-784 removed the commitlint workflow). Record future occurrences in `mistakes.md`.
 - Schema lifecycle is CLI-driven with separate check/update scripts for sources and destinations (`package.json:33`, `package.json:37`, `scripts/schemaGenerator.py`).
 - Display-name integrity is guarded by dedicated scripts, including staged-only mode (`package.json:45`, `package.json:46`).
 
