@@ -367,3 +367,8 @@
 
 - Microsoft Fabric is a public beta: keep `src/configurations/destinations/microsoft_fabric/db-config.json` `options.isBeta: true` and its `options.icon`, but omit `options.hidden` entirely so the catalog does not require a workspace feature flag. Do not remove the Beta badge as if this were GA.
 - This visibility change belongs only in the destination definition; the service-principal account and Fabric UI/persisted schema do not need changes for the public-beta promotion.
+
+## RUD-3444 — Pushwoosh General Availability Metadata
+
+- For Pushwoosh GA, `src/configurations/destinations/pushwoosh/db-config.json` retains `options.icon: "pushwoosh"`, sets `options.isBeta: false` explicitly, and omits `options.hidden` entirely. Follow this task's explicit `false` metadata contract rather than the omit-`isBeta` convention used for some other GA destinations; do not invert the old `AMP_enable-pushwoosh-destination` gate.
+- The GA visibility change is confined to destination `options`; leave the Pushwoosh `config` object unchanged.
