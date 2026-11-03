@@ -155,3 +155,8 @@
 ## INT-7259 — GAOC Account Picker Copy Guidance
 
 - Keep the Google Ads Offline Conversions `customerId` nested account picker note aligned with the shared GAEC and GARL picker guidance: customers may select a manager or descendant account; selecting a top-level account clears the login customer ID, while selecting a descendant uses the top-level account as the login customer ID.
+
+## INT-7424 — Custom Activation OAuth Review Scope
+
+- The owner wants `test/validation.test.ts` unchanged for this change: keep destination-specific cases in `test/data/validation/destinations/custom_audience.json`, rather than adding a bespoke account test block or a generic control-plane-secret subset test to the shared suite. Account-schema cases should cover required values, lengths, scope tags, separators, token-auth methods, extra token parameters, and URL acceptance/rejection, including nested `ngrok.io` hosts.
+- Retain the generic keyless-field correction in `scripts/schemaGenerator.py`, but do not add a Custom Activation-specific component regression test or a multi-argument `run-schema-validation.sh` fix as part of this change. Avoid unrelated agent-instruction edits and Send test record changes.
