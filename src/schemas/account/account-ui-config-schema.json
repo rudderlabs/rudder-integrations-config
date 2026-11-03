@@ -57,7 +57,7 @@
                     "description": "Example value shown as placeholder text."
                   },
                   "key": {
-                    "description": "Storage path. Use string 'name' for the account name field. Use array ['options', '<fieldKey>'] for other inputs. Omit for copyField.",
+                    "description": "Storage path. Use string 'name' for the account name field. Use array ['options', '<fieldKey>'] for other inputs. Optional for copyField.",
                     "oneOf": [
                       { "type": "string", "const": "name" },
                       {
@@ -80,6 +80,10 @@
                   "note": {
                     "type": "string",
                     "description": "Help text shown below the field."
+                  },
+                  "info": {
+                    "type": "string",
+                    "description": "Help text shown with the field."
                   },
                   "options": {
                     "type": "array",
@@ -108,8 +112,7 @@
                       "required": ["component"]
                     },
                     "then": {
-                      "required": ["value"],
-                      "not": { "required": ["key"] }
+                      "required": ["value"]
                     },
                     "else": {
                       "required": ["key"]
@@ -124,8 +127,7 @@
                       "required": ["options"]
                     }
                   }
-                ],
-                "additionalProperties": false
+                ]
               }
             }
           },

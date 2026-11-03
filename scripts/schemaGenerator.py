@@ -1368,22 +1368,26 @@ def generate_schema_properties(
                 for section in template.get("sections", []):
                     for group in section.get("groups", []):
                         for field in group.get("fields", []):
-                            # Display-only controls have no single stored property to generate.
-                            if "configKey" not in field:
-                                continue
                             generateFunction = uiTypetoSchemaFn.get(field["type"], None)
                             if generateFunction:
                                 # Generate schema for the field if it is defined in the destination config
-                                if is_key_present_in_dest_config(
-                                    dbConfig, field["configKey"]
-                                ):
-                                    properties[field["configKey"]] = generateFunction(
-                                        field, dbConfig, "configKey"
-                                    )
+                                if "configKey" in field:
+                                    if is_key_present_in_dest_config(
+                                        dbConfig, field["configKey"]
+                                    ):
+                                        properties[field["configKey"]] = (
+                                            generateFunction(
+                                                field, dbConfig, "configKey"
+                                            )
+                                        )
+                                    else:
+                                        warnings.warn(
+                                            f'The field {field["configKey"]} is defined in ui-config.json but not in db-config.json\n',
+                                            UserWarning,
+                                        )
                                 else:
-                                    warnings.warn(
-                                        f'The field {field["configKey"]} is defined in ui-config.json but not in db-config.json\n',
-                                        UserWarning,
+                                    print(
+                                        f"No configKey found for field: {field['type']}"
                                     )
                             else:
                                 print(

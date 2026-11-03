@@ -56,14 +56,14 @@ describe.each(definitions)('$name account definition', (definition) => {
     expect(Object.keys(schema.secretSchema.properties)).toEqual(definition.secretFields);
   });
 
-  it('shows scope tags and help notes for both account forms', () => {
+  it('shows scope tags and help text for both account forms', () => {
     const fields = uiConfig.form.fields;
     expect(fields.find((field: { label: string }) => field.label === 'Scopes')).toMatchObject({
       component: 'tagField',
       optional: true,
-      note: 'Add each scope as a tag, or paste scopes separated by spaces or commas.',
+      info: 'Add each scope as a tag, or paste scopes separated by spaces or commas.',
     });
-    expect(fields.find((field: { label: string }) => field.label === 'Token URL').note).toContain(
+    expect(fields.find((field: { label: string }) => field.label === 'Token URL').info).toContain(
       'query parameters or fragments',
     );
     expect(

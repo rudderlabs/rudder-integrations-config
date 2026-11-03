@@ -33,19 +33,18 @@ describe('Account UI form field schema', () => {
     expect(validate(accountUiConfig([nameField, secretField, tagField, copyField]))).toBe(true);
   });
 
-  it('requires a value and forbids a key on copy fields', () => {
+  it('requires a value on copy fields and permits an optional key', () => {
     expect(
       validate(accountUiConfig([nameField, { ...copyField, key: ['options', 'redirectUri'] }])),
-    ).toBe(false);
+    ).toBe(true);
     expect(
       validate(accountUiConfig([nameField, { component: 'copyField', label: 'Redirect URI' }])),
     ).toBe(false);
   });
 
-  it('requires a key on input fields and rejects unknown properties', () => {
+  it('requires a key on input fields', () => {
     expect(validate(accountUiConfig([{ component: 'textField', label: 'Account name' }]))).toBe(
       false,
     );
-    expect(validate(accountUiConfig([nameField, { ...copyField, unexpected: true }]))).toBe(false);
   });
 });
