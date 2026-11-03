@@ -377,9 +377,3 @@
 
 - Rokt is a public beta: keep `src/configurations/destinations/rokt/db-config.json` `options.isBeta: true` and `options.icon: "rokt"`, but omit `options.hidden` so all workspaces can see the destination without `AMP_enable-rokt-destination`. Do not treat OpenAI Ads' later GA state (no `isBeta`) as the public-beta template.
 - This visibility promotion changes only the root destination `options`; Rokt has no archived major definitions, and its account credentials and connection capabilities do not change.
-
-## INT-7424 — Custom Activation OAuth Account Form Contract
-
-- Account form order lives in each account's `ui-config.json` `uiConfig.form.fields` array, not in the destination `ui-config.json`. Client Credentials orders Account name, Token URL, Client ID, Client secret, Scopes, Scope separator, Extra token parameters, Token authentication method; Authorization Code additionally places Authorization URL before Token URL and a display-only Redirect URI immediately after Authorization URL.
-- In both forms, optional `scopes` is a `tagField` backed by an array of up to 50 strings matching `^[^\s,]{1,200}$`; `scopeSeparator` follows scopes and offers space (default) or comma. Authorization Code's Redirect URI is a keyless `copyField` with value `{{oauthRedirectUri}}` and guidance to register that URI. The account UI meta-schema permits `tagField`, requires `value` and forbids `key` for `copyField`, and requires `key` for other components.
-- Both account forms use scope-tag help notes and provider-neutral customer-facing copy. Keep account options and secret schemas open so rudder-auth can identify a `clientSecret` incorrectly supplied in options. Token URL validation rejects localhost and `*.localhost` hosts as well as all `ngrok.io` subdomains (including nested hosts), without rejecting an otherwise valid URL solely because its path contains `.localhost`.
