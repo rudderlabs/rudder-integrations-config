@@ -143,3 +143,9 @@
 ## INT-7462 — Archived Major Options in Deployment
 
 - `scripts/deployToDB.py::build_versions_archive` copies the full `options` object from an archived major's `versions/<major>/db-config.json` into its deploy-payload archive entry only when that archived file declares `options`. It neither inherits root `options` nor synthesizes an empty object: an ungated archived major must remain available when the current major is gated, and authored metadata such as `isBeta` must survive alongside `hidden`.
+
+## INT-7424 — Custom Activation OAuth Account Boundary
+
+- Custom Activation links `DESTINATION_CUSTOM_AUDIENCE_CLIENT_CREDENTIALS` (under `accounts/custom_audience_client_credentials/`) and `DESTINATION_CUSTOM_AUDIENCE_OAUTH_AUTH_CODE` through destination `config.supportedAccountDefinitions.rudderAccountId`. Both account definitions own their option and secret fields; do not mirror OAuth credentials into destination `destConfig`, `secretKeys`, or persisted `schema.json`.
+- Client Credentials uses `authenticationType: "machine_oauth"`, `refreshOAuthToken: true`, and no `uiConfig.isOAuth`, so it uses the standard Save/Edit/Switch form. Authorization Code uses `authenticationType: "oauth"`, `refreshOAuthToken: true`, and `uiConfig.isOAuth`. Each account has its own `displayOptions.hidden.gate` Flagsmith flag. `clientSecret` is a customer-entered account secret, not a platform-written token.
+- Treat both `oauth` and `machine_oauth` as account-only credential types in `scripts/validate_account_definitions.py`; destination-level account-field mirroring applies to the older Basic Auth/Bearer/API Key accounts, not these two definitions.

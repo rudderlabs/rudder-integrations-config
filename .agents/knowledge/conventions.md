@@ -367,3 +367,9 @@
 
 - Microsoft Fabric is a public beta: keep `src/configurations/destinations/microsoft_fabric/db-config.json` `options.isBeta: true` and its `options.icon`, but omit `options.hidden` entirely so the catalog does not require a workspace feature flag. Do not remove the Beta badge as if this were GA.
 - This visibility change belongs only in the destination definition; the service-principal account and Fabric UI/persisted schema do not need changes for the public-beta promotion.
+
+## INT-7424 — Custom Activation OAuth Account Forms
+
+- Account form ordering lives in each account's `ui-config.json` `uiConfig.form.fields` array, not destination `ui-config.json`. Client Credentials presents Account name, Token URL, Client ID, Client secret, Scopes, Scope separator, Extra token parameters, Token authentication method; Authorization Code also presents Authorization URL before Token URL and a display-only Redirect URI immediately after Authorization URL.
+- Both accounts expose optional `scopes` as a `tagField` backed by an array of at most 50 strings matching `^[^\s,]{1,200}$`; `scopeSeparator` follows scopes in account option fields and the form, with space as default and comma as alternative. Authorization Code alone shows a keyless `copyField` with value `{{oauthRedirectUri}}`, telling users to register the URI. Account UI meta-schema allows `tagField` and requires `value` but forbids `key` on `copyField`; all other components require `key`.
+- Keep options and secret schemas open so rudder-auth can identify a `clientSecret` mistakenly placed in options. Customer-facing account help text should not name specific providers. Token URL validation rejects ngrok.io subdomains (including nested hosts) and localhost or `*.localhost` as hosts, but does not reject an ordinary provider URL merely because its path includes `.localhost`. Authorization URLs are HTTPS-only.
