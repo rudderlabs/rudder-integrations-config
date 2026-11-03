@@ -56,6 +56,30 @@ describe.each(definitions)('$name account definition', (definition) => {
     expect(Object.keys(schema.secretSchema.properties)).toEqual(definition.secretFields);
   });
 
+  it('shows scope tags and help notes for both account forms', () => {
+    const fields = uiConfig.form.fields;
+    expect(fields.find((field: { label: string }) => field.label === 'Scopes')).toMatchObject({
+      component: 'tagField',
+      optional: true,
+      note: 'Add each scope as a tag, or paste scopes separated by spaces or commas.',
+    });
+    expect(fields.find((field: { label: string }) => field.label === 'Token URL').note).toContain(
+      'query parameters or fragments',
+    );
+    expect(
+      fields.find((field: { label: string }) => field.label === 'Scope separator').options,
+    ).toEqual([
+      { label: 'Space (most providers)', value: 'space' },
+      { label: 'Comma', value: 'comma' },
+    ]);
+  });
+
+  it('leaves misplaced client secrets for rudder-auth to reject', () => {
+    expect(schema.optionsSchema.additionalProperties).toBeUndefined();
+    expect(schema.secretSchema.additionalProperties).toBeUndefined();
+    expect(validateOptions(options({ clientSecret: 'misplaced-secret' }))).toBe(true);
+  });
+
   it('requires provider URLs, client ID, and client secret', () => {
     for (const field of Object.keys(definition.validOptions)) {
       const missing = options();
@@ -102,6 +126,10 @@ describe.each(definitions)('$name account definition', (definition) => {
         validateOptions(options({ authorizationUrl: 'http://api.example.com/authorize' })),
       ).toBe(false);
       expect(validateOptions(options({ authorizationUrl: 'https://' }))).toBe(false);
+      expect(validateOptions(options({ authorizationUrl: 'https://?prompt=consent' }))).toBe(false);
+      expect(
+        validateOptions(options({ authorizationUrl: 'https://user:pass@example.com/authorize' })),
+      ).toBe(false);
     });
   }
 
@@ -131,10 +159,12 @@ describe.each(definitions)('$name account definition', (definition) => {
     }
   });
 
-  it('defaults the separator and auth method and rejects unsupported choices', () => {
+  it('defaults optional values and rejects unsupported choices', () => {
     const defaulted = options();
     expect(validateOptions(defaulted)).toBe(true);
+    expect(defaulted.scopes).toEqual([]);
     expect(defaulted.scopeSeparator).toBe('space');
+    expect(defaulted.extraTokenParams).toBe('');
     expect(defaulted.tokenAuthMethod).toBe('client_secret_basic');
     expect(validateOptions(options({ scopeSeparator: 'comma' }))).toBe(true);
     expect(validateOptions(options({ tokenAuthMethod: 'client_secret_post' }))).toBe(true);
