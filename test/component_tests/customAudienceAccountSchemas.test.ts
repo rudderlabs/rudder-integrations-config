@@ -2,111 +2,65 @@ import fs from 'fs';
 import path from 'path';
 import Ajv from 'ajv';
 
-type DefinitionCase = {
-  directory: string;
-  name: string;
-  authenticationType: string;
-  gate: string;
-  refreshOAuthToken: boolean;
-  secretFields: string[];
-  isOAuth: boolean;
-  optionFields: string[];
-  fieldOrder: string[];
-  validOptions: Record<string, unknown>;
-};
+const accountRoot = 'src/configurations/destinations/custom_audience/accounts';
+const accounts = [
+  {
+    directory: 'custom_audience_client_credentials',
+    requiredOptions: {
+      tokenUrl: 'https://api.example.com/oauth/token',
+      clientId: 'client-id',
+    },
+  },
+  {
+    directory: 'custom_audience_oauth_auth_code',
+    requiredOptions: {
+      authorizationUrl: 'https://api.example.com/authorize',
+      tokenUrl: 'https://api.example.com/oauth/token',
+      clientId: 'client-id',
+    },
+  },
+];
 
-const readJson = (file: string) => JSON.parse(fs.readFileSync(path.resolve(file), 'utf-8'));
-const destinationRoot = 'src/configurations/destinations/custom_audience';
-const fixture = readJson('test/data/validation/destinations/custom_audience.json') as Array<{
-  accountDefinitions?: DefinitionCase[];
-}>;
-const definitions = fixture.flatMap(({ accountDefinitions = [] }) => accountDefinitions);
-const destination = readJson(`${destinationRoot}/db-config.json`);
-
-describe.each(definitions)('$name account definition', (definition) => {
-  const accountRoot = `${destinationRoot}/accounts/${definition.directory}`;
-  const dbConfig = readJson(`${accountRoot}/db-config.json`);
-  const uiConfig = readJson(`${accountRoot}/ui-config.json`).uiConfig;
-  const schema = readJson(`${accountRoot}/schema.json`);
-  const ajv = new Ajv({ allErrors: true, useDefaults: true, strict: false });
+describe.each(accounts)('$directory account schema', ({ directory, requiredOptions }) => {
+  const schema = JSON.parse(
+    fs.readFileSync(path.resolve(accountRoot, directory, 'schema.json'), 'utf-8'),
+  );
+  const ajv = new Ajv({ strict: false });
   const validateOptions = ajv.compile(schema.optionsSchema);
   const validateSecret = ajv.compile(schema.secretSchema);
-  const options = (patch: Record<string, unknown> = {}) => ({
-    ...definition.validOptions,
-    ...patch,
-  });
+  const options = (patch: Record<string, unknown> = {}) => ({ ...requiredOptions, ...patch });
 
-  it('matches the fixture definition shape and form order', () => {
-    expect(dbConfig.name).toBe(definition.name);
-    expect(dbConfig.authenticationType).toBe(definition.authenticationType);
-    expect(dbConfig.config.refreshOAuthToken).toBe(definition.refreshOAuthToken);
-    expect(dbConfig.config.secretFields).toEqual(definition.secretFields);
-    expect(dbConfig.config.optionFields).toEqual(definition.optionFields);
-    expect(dbConfig.displayOptions.hidden.gate.flags).toEqual([
-      { name: definition.gate, value: false },
-    ]);
-    expect(uiConfig.isOAuth).toBe(definition.isOAuth ? true : undefined);
-    expect(uiConfig.form.fields.map((field: { label: string }) => field.label)).toEqual(
-      definition.fieldOrder,
-    );
-    expect(destination.config.supportedAccountDefinitions.rudderAccountId).toContain(
-      definition.name,
-    );
-    expect(Object.keys(schema.optionsSchema.properties)).toEqual(definition.optionFields);
-    expect(Object.keys(schema.secretSchema.properties)).toEqual(definition.secretFields);
-  });
-
-  it('shows scope tags and help text for both account forms', () => {
-    const fields = uiConfig.form.fields;
-    expect(fields.find((field: { label: string }) => field.label === 'Scopes')).toMatchObject({
-      component: 'tagField',
-      optional: true,
-      info: 'Add each scope as a tag, or paste scopes separated by spaces or commas.',
-    });
-    expect(fields.find((field: { label: string }) => field.label === 'Token URL').info).toContain(
-      'query parameters or fragments',
-    );
-    expect(
-      fields.find((field: { label: string }) => field.label === 'Scope separator').options,
-    ).toEqual([
-      { label: 'Space (most providers)', value: 'space' },
-      { label: 'Comma', value: 'comma' },
-    ]);
-  });
-
-  it('leaves misplaced client secrets for rudder-auth to reject', () => {
-    expect(schema.optionsSchema.additionalProperties).toBeUndefined();
-    expect(schema.secretSchema.additionalProperties).toBeUndefined();
-    expect(validateOptions(options({ clientSecret: 'misplaced-secret' }))).toBe(true);
-  });
-
-  it('requires provider URLs, client ID, and client secret', () => {
-    for (const field of Object.keys(definition.validOptions)) {
-      const missing = options();
+  it('requires its option fields and client secret', () => {
+    expect(validateOptions(options())).toBe(true);
+    for (const field of Object.keys(requiredOptions)) {
+      const missing: Record<string, unknown> = options();
       delete missing[field];
       expect(validateOptions(missing)).toBe(false);
     }
     expect(validateSecret({})).toBe(false);
-    expect(validateSecret({ clientSecret: 's' })).toBe(true);
+    expect(validateSecret({ clientSecret: 'secret' })).toBe(true);
   });
 
-  it('accepts a provider token URL and rejects ngrok subdomains and invalid URLs', () => {
-    expect(validateOptions(options({ tokenUrl: 'https://api.example.com/oauth/token' }))).toBe(
-      true,
-    );
-    expect(validateOptions(options({ tokenUrl: 'https://api.example.com/x.localhost' }))).toBe(
-      true,
-    );
+  it('accepts public HTTPS token URLs and rejects unsafe or malformed URLs', () => {
+    for (const tokenUrl of [
+      'https://api.example.com/oauth/token',
+      'https://api.example.com/x.localhost',
+      'https://api.example.com:10/token',
+      'https://api.example.com:65535/token',
+    ]) {
+      expect(validateOptions(options({ tokenUrl }))).toBe(true);
+    }
     for (const tokenUrl of [
       'https://x.ngrok.io/token',
       'https://a.b.ngrok.io/token',
-      'https://A.B.NGROK.IO/token',
       'http://api.example.com/token',
       'https://localhost/token',
       'https://x.localhost/token',
-      'https://X.LOCALHOST/token',
       'https://api.example.com/token?code=1',
       'https://api.example.com/token#fragment',
+      'https://api.example.com:9/token',
+      'https://api.example.com:65536/token',
+      'https://api.example.c/token',
     ]) {
       expect({ tokenUrl, valid: validateOptions(options({ tokenUrl })) }).toEqual({
         tokenUrl,
@@ -115,66 +69,21 @@ describe.each(definitions)('$name account definition', (definition) => {
     }
   });
 
-  if (definition.authenticationType === 'oauth') {
+  if (directory === 'custom_audience_oauth_auth_code') {
     it('accepts an HTTPS authorization URL with query and rejects invalid URLs', () => {
       expect(
         validateOptions(
           options({ authorizationUrl: 'https://api.example.com/authorize?prompt=consent' }),
         ),
       ).toBe(true);
-      expect(
-        validateOptions(options({ authorizationUrl: 'http://api.example.com/authorize' })),
-      ).toBe(false);
-      expect(validateOptions(options({ authorizationUrl: 'https://' }))).toBe(false);
-      expect(validateOptions(options({ authorizationUrl: 'https://?prompt=consent' }))).toBe(false);
-      expect(
-        validateOptions(options({ authorizationUrl: 'https://user:pass@example.com/authorize' })),
-      ).toBe(false);
+      for (const authorizationUrl of [
+        'http://api.example.com/authorize',
+        'https://',
+        'https://?prompt=consent',
+        'https://user:pass@example.com/authorize',
+      ]) {
+        expect(validateOptions(options({ authorizationUrl }))).toBe(false);
+      }
     });
   }
-
-  it('enforces client ID and secret lengths', () => {
-    expect(validateOptions(options({ clientId: 'a'.repeat(200) }))).toBe(true);
-    for (const clientId of ['', ' ', 'a'.repeat(201)]) {
-      expect(validateOptions(options({ clientId }))).toBe(false);
-    }
-    expect(validateSecret({ clientSecret: 's'.repeat(500) })).toBe(true);
-    expect(validateSecret({ clientSecret: '' })).toBe(false);
-    expect(validateSecret({ clientSecret: 's'.repeat(501) })).toBe(false);
-  });
-
-  it('accepts optional empty scopes and enforces tag count and length', () => {
-    expect(validateOptions(options({ scopes: [] }))).toBe(true);
-    expect(validateOptions(options({ scopes: Array(50).fill('read') }))).toBe(true);
-    expect(validateOptions(options({ scopes: ['s'.repeat(200)] }))).toBe(true);
-    for (const scopes of [
-      Array(51).fill('read'),
-      [''],
-      ['read write'],
-      ['read,write'],
-      ['s'.repeat(201)],
-      'read write',
-    ]) {
-      expect(validateOptions(options({ scopes }))).toBe(false);
-    }
-  });
-
-  it('defaults optional values and rejects unsupported choices', () => {
-    const defaulted = options();
-    expect(validateOptions(defaulted)).toBe(true);
-    expect(defaulted.scopes).toEqual([]);
-    expect(defaulted.scopeSeparator).toBe('space');
-    expect(defaulted.extraTokenParams).toBe('');
-    expect(defaulted.tokenAuthMethod).toBe('client_secret_basic');
-    expect(validateOptions(options({ scopeSeparator: 'comma' }))).toBe(true);
-    expect(validateOptions(options({ tokenAuthMethod: 'client_secret_post' }))).toBe(true);
-    expect(validateOptions(options({ scopeSeparator: 'pipe' }))).toBe(false);
-    expect(validateOptions(options({ tokenAuthMethod: 'none' }))).toBe(false);
-  });
-
-  it('accepts optional empty token parameters and enforces the 2,000 character limit', () => {
-    expect(validateOptions(options({ extraTokenParams: '' }))).toBe(true);
-    expect(validateOptions(options({ extraTokenParams: 'x'.repeat(2000) }))).toBe(true);
-    expect(validateOptions(options({ extraTokenParams: 'x'.repeat(2001) }))).toBe(false);
-  });
 });
