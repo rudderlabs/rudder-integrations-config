@@ -155,8 +155,3 @@
 ## INT-7259 — GAOC Account Picker Copy Guidance
 
 - Keep the Google Ads Offline Conversions `customerId` nested account picker note aligned with the shared GAEC and GARL picker guidance: customers may select a manager or descendant account; selecting a top-level account clears the login customer ID, while selecting a descendant uses the top-level account as the login customer ID.
-
-## INT-7424 — Custom Activation OAuth Review Boundaries
-
-- Keep Custom Activation account-specific accepted/rejected schema cases in `test/data/validation/destinations/custom_audience.json`, including URL host filtering and field bounds; do not add a destination-specific test block to shared `test/validation.test.ts`. Avoid adding a Custom Activation-specific schema-generator component test solely for this change.
-- Keep the generic keyless-field schema-generator fix, but do not fold a multi-argument `scripts/run-schema-validation.sh` fix or unrelated agent-instruction edits into the account-definition change. Do not remove legacy destination schema fields before the separate account-management migration.

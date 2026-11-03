@@ -143,9 +143,3 @@
 ## INT-7462 — Archived Major Options in Deployment
 
 - `scripts/deployToDB.py::build_versions_archive` copies the full `options` object from an archived major's `versions/<major>/db-config.json` into its deploy-payload archive entry only when that archived file declares `options`. It neither inherits root `options` nor synthesizes an empty object: an ungated archived major must remain available when the current major is gated, and authored metadata such as `isBeta` must survive alongside `hidden`.
-
-## INT-7424 — Custom Activation Account Ownership
-
-- Custom Activation links `DESTINATION_CUSTOM_AUDIENCE_OAUTH_CLIENT_CREDENTIALS` and `DESTINATION_CUSTOM_AUDIENCE_OAUTH_AUTH_CODE` through `src/configurations/destinations/custom_audience/db-config.json` `config.supportedAccountDefinitions.rudderAccountId`. The former uses `authenticationType: "machine_oauth"`, `refreshOAuthToken: true`, and the standard account form (no `uiConfig.isOAuth`); the latter uses `authenticationType: "oauth"`, `refreshOAuthToken: true`, and the OAuth form.
-- Both account definitions own their credential options and user-supplied `clientSecret` (`secretFields`/`secretSchema`), while only tokens are platform-written. Treat `oauth` and `machine_oauth` as account-only credential types in `scripts/validate_account_definitions.py`: do not mirror their credentials into destination `destConfig.defaultConfig`, `secretKeys`, or persisted `schema.json`.
-- Each account definition has its own hide-when-false Flagsmith gate; gate metadata references externally provisioned flags, rather than provisioning flags in this repository.

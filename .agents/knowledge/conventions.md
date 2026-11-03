@@ -373,8 +373,7 @@
 - For Pushwoosh GA, `src/configurations/destinations/pushwoosh/db-config.json` retains `options.icon: "pushwoosh"`, sets `options.isBeta: false` explicitly, and omits `options.hidden` entirely. Follow this task's explicit `false` metadata contract rather than the omit-`isBeta` convention used for some other GA destinations; do not invert the old `AMP_enable-pushwoosh-destination` gate.
 - The GA visibility change is confined to destination `options`; leave the Pushwoosh `config` object unchanged.
 
-## INT-7424 — Custom Activation Account Form and Schema Contract
+## RUD-3450 — Rokt Public Beta Visibility
 
-- For both Custom Activation OAuth account definitions, `uiConfig.form.fields` determines account-form order. Place the user-supplied, secret `clientSecret` immediately after `clientId`; represent optional `scopes` as a `tagField` backed by an array of at most 50 strings matching `^[^\s,]{1,200}$`. Put `scopeSeparator` immediately after scopes, with space as default and comma as the other select option.
-- The Authorization Code account alone shows a display-only Redirect URI `copyField` immediately after Authorization URL, with value `{{oauthRedirectUri}}` and no storage key. In `src/schemas/account/account-ui-config-schema.json`, `copyField` requires `value` and forbids `key`; every other component requires `key`. Keep customer-facing form copy provider-neutral and include scope-tag help notes in both forms.
-- Keep the Custom Activation account `optionsSchema` and `secretSchema` open so rudder-auth can reject `clientSecret` when misplaced in options. Token URL validation rejects localhost and its subdomains and all ngrok.io subdomains by **host**, not matching path text such as `/x.localhost`; Authorization URL accepts HTTPS only, and Token URL rejects queries and fragments.
+- Rokt is a public beta: keep `src/configurations/destinations/rokt/db-config.json` `options.isBeta: true` and `options.icon: "rokt"`, but omit `options.hidden` so all workspaces can see the destination without `AMP_enable-rokt-destination`. Do not treat OpenAI Ads' later GA state (no `isBeta`) as the public-beta template.
+- This visibility promotion changes only the root destination `options`; Rokt has no archived major definitions, and its account credentials and connection capabilities do not change.
