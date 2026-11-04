@@ -126,3 +126,10 @@
 ## INT-7462 — Archived Definition Validation Without Loosening Root Schema
 
 - In `test/validation.test.ts`, validate each archived destination `versions/<major>/db-config.json` through `validateDestinationDefinitions` after removing only archive-only lifecycle fields `status`, `retirementDate`, and `migrationDocsUrl`. Root definitions continue through the unmodified strict schema, while deployment validates archive status separately. Do not add archive-only fields to the root schema or introduce a production validator mode solely for this test adaptation.
+
+## INT-7507 — V2 Account Picker and Optional Initial Setup Generation
+
+- `scripts/schemaGenerator.py` maps `accountManagementInput` to the same string-schema generation as `dynamicDataSelect`: an explicitly authored UI `regex` becomes a generated `pattern`. This permits a bounded MaxCompute `rudderAccountId` (`^.{1,100}$`) without hand-maintained destination-schema drift or tightening every existing account picker.
+- V2 Initial setup schema generation honors explicit `required: false` even without prerequisites; omitted `required` retains the existing mandatory-by-placement behavior. This allows defaulted immutable MaxCompute controls to render at creation without requiring their keys in already saved configs. Do not add dummy prerequisites to suppress requiredness.
+- The MaxCompute schema-generator component regression uses the actual destination definition and restores its `schema.json` after regeneration; it checks bounded account picker, optional immutable fields, and closed-object behavior (`test/component_tests/schemaGenerator.test.ts`).
+- `test/validation.test.ts` includes MaxCompute in `warehouseDestinationNames` for shared sync-frequency coverage, but excludes it from legacy compatibility-flag cases: its closed schema rejects `allowUsersContextTraits` and `underscoreDivideNumbers`.

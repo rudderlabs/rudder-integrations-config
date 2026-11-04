@@ -311,11 +311,6 @@ def generate_schema_for_dynamic_data_select(field, dbConfig, schema_field_name):
     return dynamicDataSelectSchemaObj
 
 
-def generate_schema_for_account_management_input(field, dbConfig, schema_field_name):
-    """Creates a schema object for an accountManagementInput field."""
-    return {"type": FieldTypeEnum.STRING.value}
-
-
 def generate_schema_for_textarea_input(field, dbConfig, schema_field_name):
     """Creates a schema object of textareaInput.
 
@@ -1399,8 +1394,11 @@ def generate_schema_properties(
                                     field, dbConfig, "configKey"
                                 )
                                 and (
-                                    "preRequisites" not in field
-                                    or field.get("required")
+                                    field.get("required") is True
+                                    or (
+                                        "required" not in field
+                                        and "preRequisites" not in field
+                                    )
                                 )
                             ):
                                 add_required_key(schemaObject, field["configKey"])
@@ -1708,7 +1706,7 @@ uiTypetoSchemaFn = {
     "textInput": generate_schema_for_textinput,
     "textareaInput": generate_schema_for_textarea_input,
     "singleSelect": generate_schema_for_single_select,
-    "accountManagementInput": generate_schema_for_account_management_input,
+    "accountManagementInput": generate_schema_for_dynamic_data_select,
     "dynamicCustomForm": generate_schema_for_dynamic_custom_form,
     "dynamicForm": generate_schema_for_dynamic_form,
     "mapping": generate_schema_for_mapping,

@@ -194,6 +194,30 @@ describe('Schema Generator', () => {
     });
   });
 
+  it('generates optional immutable controls and a bounded account picker without requiring defaults', () => {
+    const destination = 'maxcompute';
+    const schemaFilePath = path.resolve(
+      `src/configurations/destinations/${destination}/schema.json`,
+    );
+    const schemaBefore = readFile(schemaFilePath);
+    expect(schemaBefore).toBeDefined();
+    const cmd = `npm run update:schema:destination "${destination}"`;
+
+    try {
+      execSync(cmd, { stdio: 'pipe' });
+      const schema = readSchemaFile(schemaFilePath).configSchema;
+      expect(schema.properties.rudderAccountId.pattern).toBe('^.{1,100}$');
+      expect(schema.required).toContain('namespace');
+      ['skipViews', 'partitionColumn', 'partitionType'].forEach((key) => {
+        expect(schema.required).not.toContain(key);
+        expect(schema.properties[key]['rs-immutable']).toBe(true);
+      });
+      expect(schema.additionalProperties).toBe(false);
+    } finally {
+      if (schemaBefore) writeFile(schemaFilePath, schemaBefore);
+    }
+  });
+
   describe('should exclude ignored fields from diff', () => {
     const testData = [
       {
