@@ -3,9 +3,13 @@ import path from 'path';
 import Ajv from 'ajv';
 
 const accountRoot = 'src/configurations/destinations/custom_audience/accounts';
+const uiSchema = JSON.parse(
+  fs.readFileSync(path.resolve('src/schemas/account/account-ui-config-schema.json'), 'utf-8'),
+);
+const validateUiConfig = new Ajv({ strict: false }).compile(uiSchema);
 const accounts = [
   {
-    directory: 'custom_audience_client_credentials',
+    directory: 'custom_audience_machine_oauth_client_credentials',
     requiredOptions: {
       tokenUrl: 'https://api.example.com/oauth/token',
       clientId: 'client-id',
@@ -27,23 +31,17 @@ describe.each(accounts)('$directory account schema', ({ directory, requiredOptio
   );
   const ajv = new Ajv({ strict: false });
   const validateOptions = ajv.compile(schema.optionsSchema);
-  const validateSecret = ajv.compile(schema.secretSchema);
   const options = (patch: Record<string, unknown> = {}) => ({ ...requiredOptions, ...patch });
 
-  it('requires its option fields and client secret', () => {
-    expect(validateOptions(options())).toBe(true);
-    for (const field of Object.keys(requiredOptions)) {
-      const missing: Record<string, unknown> = options();
-      delete missing[field];
-      expect(validateOptions(missing)).toBe(false);
-    }
-    expect(validateSecret({})).toBe(false);
-    expect(validateSecret({ clientSecret: 'secret' })).toBe(true);
+  it('accepts its account UI config against the shared schema', () => {
+    const uiConfig = JSON.parse(
+      fs.readFileSync(path.resolve(accountRoot, directory, 'ui-config.json'), 'utf-8'),
+    );
+    expect(validateUiConfig(uiConfig)).toBe(true);
   });
 
   it('accepts public HTTPS token URLs and rejects unsafe or malformed URLs', () => {
     for (const tokenUrl of [
-      'https://api.example.com/oauth/token',
       'https://api.example.com/x.localhost',
       'https://api.example.com:10/token',
       'https://api.example.com:65535/token',

@@ -126,8 +126,3 @@
 ## INT-7462 — Archived Definition Validation Without Loosening Root Schema
 
 - In `test/validation.test.ts`, validate each archived destination `versions/<major>/db-config.json` through `validateDestinationDefinitions` after removing only archive-only lifecycle fields `status`, `retirementDate`, and `migrationDocsUrl`. Root definitions continue through the unmodified strict schema, while deployment validates archive status separately. Do not add archive-only fields to the root schema or introduce a production validator mode solely for this test adaptation.
-
-## INT-7424 — Keyless Composite Fields in Schema Generation
-
-- `scripts/schemaGenerator.py` should skip destination `baseTemplate` fields lacking `configKey` before treating them as persisted properties or checking `defaultConfig` requiredness. Custom Activation's `audienceDeliveryApiBuilder` is a keyless composite control whose `baseUrl`/actions/headers schema is hand-maintained in `src/configurations/destinations/custom_audience/schema.json`.
-- Even after the keyless-field fix, the Custom Activation schema check may print a non-fatal diff and recommend top-level `additionalProperties: false`. Do not close the persisted schema solely for that recommendation: legacy auth keys in destination `defaultConfig` are absent from its schema properties, and a closed schema could reject saved configs.

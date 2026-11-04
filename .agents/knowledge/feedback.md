@@ -155,8 +155,3 @@
 ## INT-7259 — GAOC Account Picker Copy Guidance
 
 - Keep the Google Ads Offline Conversions `customerId` nested account picker note aligned with the shared GAEC and GARL picker guidance: customers may select a manager or descendant account; selecting a top-level account clears the login customer ID, while selecting a descendant uses the top-level account as the login customer ID.
-
-## INT-7424 — Custom Activation OAuth Review Guidance
-
-- Keep destination-specific Custom Activation OAuth acceptance/rejection cases in `test/data/validation/destinations/custom_audience.json`, not a bespoke block in shared `test/validation.test.ts`; definition-shape expectations belong in the fixture. Preserve coverage of token URL host filtering, required fields, lengths, scope tags/separator, token authentication methods, and extra token parameters.
-- Keep Flagsmith rollout metadata on each account definition; flag provisioning happens outside integrations-config. Do not remove legacy Custom Activation destination schema fields as part of account-definition changes before the separate account-management migration.
