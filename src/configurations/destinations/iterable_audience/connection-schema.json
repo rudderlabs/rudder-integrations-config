@@ -8,8 +8,11 @@
     "required": ["audienceId"],
     "properties": {
       "audienceId": {
-        "type": ["string", "integer"],
-        "description": "The Iterable list this connection delivers to. The transformer accepts a string or a number."
+        "description": "The Iterable list this connection delivers to. A string is accepted because the dashboard stores the id as one, but it must spell a positive integer: the transformer does `Number(audienceId)` (routerTransform.ts:123, commented \"Iterable's API expects a numeric listId\"), so \"\" becomes 0 and \"abc\" becomes NaN, which serialises to `listId: null` and fails at sync time instead of at create time.",
+        "oneOf": [
+          { "type": "integer", "minimum": 1 },
+          { "type": "string", "pattern": "^[1-9][0-9]*$" }
+        ]
       },
       "updateExistingUsersOnly": {
         "type": "boolean",
