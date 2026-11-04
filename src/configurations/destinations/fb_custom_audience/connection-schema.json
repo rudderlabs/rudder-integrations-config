@@ -5,7 +5,7 @@
     "description": "Per-connection destination config for a VDM v2 rETL connection, as accepted in `destinationConfig` on POST /v2/retl-connections. Keys match what the transformer reads off connection.config.destination in processRecordInputsV2. isValueBasedAudience is absent on purpose: integrations-info /setup derives it from identifierMappings, and config-backend derives it the same way, so a caller cannot set it. syncMode, schemaVersion, eventType, identifierMappings and fieldMappings are written by config-backend.",
     "type": "object",
     "additionalProperties": false,
-    "required": ["audienceId"],
+    "required": ["audienceId", "isHashRequired"],
     "properties": {
       "audienceId": {
         "type": "string",
@@ -14,7 +14,8 @@
       },
       "isHashRequired": {
         "type": "boolean",
-        "default": true
+        "default": true,
+        "description": "Required: an omitted value is read as `false`, and `processAudienceRecord` then throws a hashing-consistency error on raw warehouse values. The destination's own configSchema defaults it to true, but nothing applies that default to the per-connection block."
       },
       "isRaw": {
         "type": "boolean",

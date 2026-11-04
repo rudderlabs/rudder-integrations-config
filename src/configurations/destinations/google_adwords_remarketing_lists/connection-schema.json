@@ -5,7 +5,7 @@
     "description": "Per-connection destination config for a VDM v2 rETL connection, as accepted in `destinationConfig` on POST /v2/retl-connections. Keys match what the transformer reads off connection.config.destination in processVDMV2RecordEvents. syncMode, schemaVersion, eventType, identifierMappings and fieldMappings are written by config-backend and are not caller-settable; createAudience belongs to the integrations-info /setup flow, which this connection flow does not use.",
     "type": "object",
     "additionalProperties": false,
-    "required": ["audienceId"],
+    "required": ["audienceId", "isHashRequired"],
     "properties": {
       "audienceId": {
         "type": "string",
@@ -19,7 +19,8 @@
       },
       "isHashRequired": {
         "type": "boolean",
-        "default": true
+        "default": true,
+        "description": "Required: an omitted value is read as `false`, and `processAudienceRecord` then throws a hashing-consistency error on raw warehouse values. The destination's own configSchema defaults it to true, but nothing applies that default to the per-connection block."
       },
       "userDataConsent": {
         "type": "string",
