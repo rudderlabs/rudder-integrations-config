@@ -1,0 +1,50 @@
+{
+  "connectionConfigSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "FB_CUSTOM_AUDIENCE rETL connection config",
+    "description": "Per-connection destination config for a VDM v2 rETL connection, as accepted in `destinationConfig` on POST /v2/retl-connections. Keys match what the transformer reads off connection.config.destination in processRecordInputsV2. isValueBasedAudience is absent on purpose: integrations-info /setup derives it from identifierMappings, and config-backend derives it the same way, so a caller cannot set it. syncMode, schemaVersion, eventType, identifierMappings and fieldMappings are written by config-backend.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["audienceId"],
+    "properties": {
+      "audienceId": {
+        "type": "string",
+        "minLength": 1,
+        "description": "The Facebook custom audience this connection delivers to. Required: the transformer throws 'Audience ID is a mandatory field' without it."
+      },
+      "isHashRequired": {
+        "type": "boolean",
+        "default": true
+      },
+      "isRaw": {
+        "type": "boolean",
+        "default": false
+      },
+      "disableFormat": {
+        "type": "boolean",
+        "default": false
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "UNKNOWN",
+          "FILE_IMPORTED",
+          "EVENT_BASED",
+          "SEED_BASED",
+          "THIRD_PARTY_IMPORTED",
+          "COPY_PASTE",
+          "CONTACT_IMPORTER",
+          "HOUSEHOLD_AUDIENCE",
+          "NA"
+        ],
+        "default": "NA",
+        "description": "data_source.type on the Facebook payload."
+      },
+      "subType": {
+        "type": "string",
+        "default": "NA",
+        "description": "data_source.sub_type on the Facebook payload. Not enumerated here: the destination's own configSchema carries the full 50-value list, and a connection schema that repeats it would be a second place to keep in step."
+      }
+    }
+  }
+}

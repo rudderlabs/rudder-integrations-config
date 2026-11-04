@@ -1,0 +1,20 @@
+{
+  "connectionConfigSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "ITERABLE_AUDIENCE rETL connection config",
+    "description": "Per-connection destination config for a VDM v2 rETL connection, as accepted in `destinationConfig` on POST /v2/retl-connections. Mirrors IterableConnectionConfigSchema in rudder-transformer (src/v0/destinations/iterable_audience/types.ts), minus identifierMappings, which config-backend writes from the request's `identifiers`. This destination declares no audienceId in its own configSchema, so the connection is the only place it lives.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["audienceId"],
+    "properties": {
+      "audienceId": {
+        "type": ["string", "integer"],
+        "description": "The Iterable list this connection delivers to. The transformer accepts a string or a number."
+      },
+      "updateExistingUsersOnly": {
+        "type": "boolean",
+        "description": "Forwarded into the Iterable subscribe request. Iterable defaults to false when omitted, and it is only respected for userID-based and hybrid projects."
+      }
+    }
+  }
+}

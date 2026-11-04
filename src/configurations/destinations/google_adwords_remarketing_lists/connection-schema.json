@@ -1,0 +1,36 @@
+{
+  "connectionConfigSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "GOOGLE_ADWORDS_REMARKETING_LISTS rETL connection config",
+    "description": "Per-connection destination config for a VDM v2 rETL connection, as accepted in `destinationConfig` on POST /v2/retl-connections. Keys match what the transformer reads off connection.config.destination in processVDMV2RecordEvents. syncMode, schemaVersion, eventType, identifierMappings and fieldMappings are written by config-backend and are not caller-settable; createAudience belongs to the integrations-info /setup flow, which this connection flow does not use.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["audienceId"],
+    "properties": {
+      "audienceId": {
+        "type": "string",
+        "minLength": 1,
+        "description": "The Google Ads user list this connection delivers to. Required: the transformer rejects a record batch without it."
+      },
+      "typeOfList": {
+        "type": "string",
+        "enum": ["General", "userID", "mobileDeviceID"],
+        "default": "General"
+      },
+      "isHashRequired": {
+        "type": "boolean",
+        "default": true
+      },
+      "userDataConsent": {
+        "type": "string",
+        "enum": ["UNSPECIFIED", "UNKNOWN", "GRANTED", "DENIED"],
+        "default": "UNSPECIFIED"
+      },
+      "personalizationConsent": {
+        "type": "string",
+        "enum": ["UNSPECIFIED", "UNKNOWN", "GRANTED", "DENIED"],
+        "default": "UNSPECIFIED"
+      }
+    }
+  }
+}
