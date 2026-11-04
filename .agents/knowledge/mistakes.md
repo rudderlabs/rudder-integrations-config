@@ -71,7 +71,7 @@
 
 - GAOC's first account-picker implementation inverse-gated the manual fields and legacy mapping variants with `preRequisites.featureFlags[].value: false`. That matches only an explicitly false flag payload, so when the rollout flag was absent neither the new picker nor its fallback rendered.
 - Corrective rule: for fallback UI that must render when a feature flag is false or missing, omit `value` in the inverse feature-flag prerequisite. Reserve `value: false` for contracts that specifically require an explicit false payload.
-- Because `.github/workflows/commitlint.yml` checks only the latest commit (`commitDepth: 1`), leaving a merge-from-main commit at the PR tip can make CI lint an upstream release commit instead of the feature commit. After syncing `main`, keep a valid conventional non-merge branch commit at the tip so the lint window evaluates branch-owned history.
+- Historical: SEC-784 removed `.github/workflows/commitlint.yml`; CI now checks only the PR title. Because `.github/workflows/commitlint.yml` checks only the latest commit (`commitDepth: 1`), leaving a merge-from-main commit at the PR tip can make CI lint an upstream release commit instead of the feature commit. After syncing `main`, keep a valid conventional non-merge branch commit at the tip so the lint window evaluates branch-owned history.
 
 ## INT-7258 — Keep Conventional Commit Subjects Lowercase
 
@@ -79,8 +79,8 @@
 
 ## INT-7257 — Keep a Compliant Branch Commit at the PR Tip
 
-- Because `.github/workflows/commitlint.yml` uses `commitDepth: 1`, leaving a pull-request branch tip at a merge-from-main commit can make Commitlint inspect that unrelated upstream commit. This occurred when an upstream release commit failed the 100-character body-line limit because of its bot-generated `Co-authored-by` trailer.
-- After syncing `main` into a pull-request branch, ensure the tip is a compliant branch-owned Conventional Commit rather than the merge commit so Commitlint checks the intended change.
+- Historical: SEC-784 removed `.github/workflows/commitlint.yml`; CI now checks only the PR title. Because `.github/workflows/commitlint.yml` uses `commitDepth: 1`, leaving a pull-request branch tip at a merge-from-main commit can make Commitlint inspect that unrelated upstream commit. This occurred when an upstream release commit failed the 100-character body-line limit because of its bot-generated `Co-authored-by` trailer.
+- Historical: SEC-784 removed `.github/workflows/commitlint.yml`; CI now checks only the PR title. After syncing `main` into a pull-request branch, ensure the tip is a compliant branch-owned Conventional Commit rather than the merge commit so Commitlint checks the intended change.
 
 ## INT-7367 — Match the Standard Account Reference Bound
 
