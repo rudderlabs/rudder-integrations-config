@@ -1,6 +1,11 @@
 #!/bin/bash
 
-changed_files="$1"
+# Every argument, not just the first. The workflow passes its file list unquoted
+# (.github/workflows/test.yml:68 `scripts/run-schema-validation.sh $files_to_validate`, already
+# newline-to-space converted), so the shell word-splits it into separate arguments and "$1" is the
+# first changed file alone. "$*" joins them back into one space-separated list, which the loop below
+# splits again, so a single space-separated argument still works too.
+changed_files="$*"
 exit_code=0
 last_directory=""
 # The three files schemaGenerator.py reads for a destination or source — see
