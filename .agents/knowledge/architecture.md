@@ -143,3 +143,9 @@
 ## INT-7462 — Archived Major Options in Deployment
 
 - `scripts/deployToDB.py::build_versions_archive` copies the full `options` object from an archived major's `versions/<major>/db-config.json` into its deploy-payload archive entry only when that archived file declares `options`. It neither inherits root `options` nor synthesizes an empty object: an ungated archived major must remain available when the current major is gated, and authored metadata such as `isBeta` must survive alongside `hidden`.
+
+## INT-7519 — HTTP Major-Version Authentication Boundary
+
+- HTTP v1's definition triplet is archived intact under `src/configurations/destinations/http/versions/1/`; the current root triplet is v2 and uses linked accounts for authentication. Preserve the existing request, consent, and mapping shape across the version split rather than fabricating request-shaping fields from a separate pending change.
+- In HTTP v2 `schema.json`, `authenticationEnabled` is an explicitly required boolean (default `false`), and `true` conditionally requires `rudderAccountId`. Reject the six legacy inline auth keys (`auth`, `username`, `password`, `bearerToken`, `apiKeyName`, `apiKeyValue`) with an explicit top-level `not`/`anyOf` rule: closing the entire HTTP config object with `additionalProperties: false` also rejects legitimate existing request and mapping keys. Keep the archived v1 schema unchanged.
+- The current HTTP major requires `provider` in consent-management rows to align with schema generation; the archived v1 consent schema remains unchanged.

@@ -1,7 +1,7 @@
 {
   "name": "HTTP",
   "displayName": "HTTP Webhook",
-  "version": "1.0",
+  "version": "2.0",
   "config": {
     "cdkV2Enabled": true,
     "transformAtV1": "router",
@@ -36,15 +36,18 @@
       "cordova": ["cloud"],
       "shopify": ["cloud"]
     },
+    "supportedAccountDefinitions": {
+      "rudderAccountId": [
+        "DESTINATION_HTTP_BASIC_AUTH",
+        "DESTINATION_HTTP_BEARER_TOKEN",
+        "DESTINATION_HTTP_API_KEY"
+      ]
+    },
     "destConfig": {
       "defaultConfig": [
         "apiUrl",
-        "auth",
-        "username",
-        "password",
-        "bearerToken",
-        "apiKeyName",
-        "apiKeyValue",
+        "rudderAccountId",
+        "authenticationEnabled",
         "xmlRootKey",
         "method",
         "format",
@@ -128,9 +131,14 @@
         "ketchConsentPurposes"
       ]
     },
-    "secretKeys": ["password", "bearerToken", "apiKeyValue"]
+    "secretKeys": []
   },
   "options": {
-    "icon": "http"
+    "icon": "http",
+    "hidden": {
+      "gate": {
+        "flags": [{ "name": "AMP_enable-http-v2-destination", "value": false }]
+      }
+    }
   }
 }

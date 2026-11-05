@@ -126,3 +126,7 @@
 ## INT-7462 — Archived Definition Validation Without Loosening Root Schema
 
 - In `test/validation.test.ts`, validate each archived destination `versions/<major>/db-config.json` through `validateDestinationDefinitions` after removing only archive-only lifecycle fields `status`, `retirementDate`, and `migrationDocsUrl`. Root definitions continue through the unmodified strict schema, while deployment validates archive status separately. Do not add archive-only fields to the root schema or introduce a production validator mode solely for this test adaptation.
+
+## INT-7519 — Versioned Account-Only Definition Validation
+
+- `scripts/validate_account_definitions.py` supports a generic all-or-nothing alternative to the usual mirrored account-field contract for versioned account-only destinations: require an immediately previous archived major with mirrored credentials, a current major greater than 1 that allowlists the account reference, empty current-root `secretKeys`, and no current-root credential fields. Keep mirrored-field validation for other account-backed destinations; do not exempt HTTP by name or accept only part of the versioned contract.
