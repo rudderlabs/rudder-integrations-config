@@ -6,8 +6,8 @@
     "properties": {
       "clientSecret": {
         "type": "string",
-        "pattern": "^.{1,500}$",
-        "errorMessage": "Enter a client secret between 1 and 500 characters"
+        "pattern": "^(?=.{1,500}$).*\\S.*$",
+        "errorMessage": "Enter a client secret between 1 and 500 characters that is not only whitespace"
       }
     }
   },
@@ -41,19 +41,22 @@
       },
       "scopeSeparator": {
         "type": "string",
-        "enum": ["space", "comma"],
-        "default": "space"
+        "enum": ["space", "comma"]
       },
       "extraTokenParams": {
         "type": "string",
-        "default": "",
         "pattern": "^.{0,2000}$",
-        "errorMessage": "Enter token parameters up to 2000 characters"
+        "not": {
+          "pattern": "(?:^\\??|&)(?:(?:[cC]|%[46]3)(?:[lL]|%[46][cC])(?:[iI]|%[46]9)(?:[eE]|%[46]5)(?:[nN]|%[46][eE])(?:[tT]|%[57]4)(?:_|%5[fF])(?:[iI]|%[46]9)(?:[dD]|%[46]4)|(?:[cC]|%[46]3)(?:[lL]|%[46][cC])(?:[iI]|%[46]9)(?:[eE]|%[46]5)(?:[nN]|%[46][eE])(?:[tT]|%[57]4)(?:_|%5[fF])(?:[sS]|%[57]3)(?:[eE]|%[46]5)(?:[cC]|%[46]3)(?:[rR]|%[57]2)(?:[eE]|%[46]5)(?:[tT]|%[57]4)|(?:[cC]|%[46]3)(?:[oO]|%[46][fF])(?:[dD]|%[46]4)(?:[eE]|%[46]5)|(?:[cC]|%[46]3)(?:[oO]|%[46][fF])(?:[dD]|%[46]4)(?:[eE]|%[46]5)(?:_|%5[fF])(?:[cC]|%[46]3)(?:[hH]|%[46]8)(?:[aA]|%[46]1)(?:[lL]|%[46][cC])(?:[lL]|%[46][cC])(?:[eE]|%[46]5)(?:[nN]|%[46][eE])(?:[gG]|%[46]7)(?:[eE]|%[46]5)|(?:[cC]|%[46]3)(?:[oO]|%[46][fF])(?:[dD]|%[46]4)(?:[eE]|%[46]5)(?:_|%5[fF])(?:[cC]|%[46]3)(?:[hH]|%[46]8)(?:[aA]|%[46]1)(?:[lL]|%[46][cC])(?:[lL]|%[46][cC])(?:[eE]|%[46]5)(?:[nN]|%[46][eE])(?:[gG]|%[46]7)(?:[eE]|%[46]5)(?:_|%5[fF])(?:[mM]|%[46][dD])(?:[eE]|%[46]5)(?:[tT]|%[57]4)(?:[hH]|%[46]8)(?:[oO]|%[46][fF])(?:[dD]|%[46]4)|(?:[cC]|%[46]3)(?:[oO]|%[46][fF])(?:[dD]|%[46]4)(?:[eE]|%[46]5)(?:_|%5[fF])(?:[vV]|%[57]6)(?:[eE]|%[46]5)(?:[rR]|%[57]2)(?:[iI]|%[46]9)(?:[fF]|%[46]6)(?:[iI]|%[46]9)(?:[eE]|%[46]5)(?:[rR]|%[57]2)|(?:[gG]|%[46]7)(?:[rR]|%[57]2)(?:[aA]|%[46]1)(?:[nN]|%[46][eE])(?:[tT]|%[57]4)(?:_|%5[fF])(?:[tT]|%[57]4)(?:[yY]|%[57]9)(?:[pP]|%[57]0)(?:[eE]|%[46]5)|(?:[rR]|%[57]2)(?:[eE]|%[46]5)(?:[dD]|%[46]4)(?:[iI]|%[46]9)(?:[rR]|%[57]2)(?:[eE]|%[46]5)(?:[cC]|%[46]3)(?:[tT]|%[57]4)(?:_|%5[fF])(?:[uU]|%[57]5)(?:[rR]|%[57]2)(?:[iI]|%[46]9)|(?:[rR]|%[57]2)(?:[eE]|%[46]5)(?:[fF]|%[46]6)(?:[rR]|%[57]2)(?:[eE]|%[46]5)(?:[sS]|%[57]3)(?:[hH]|%[46]8)(?:_|%5[fF])(?:[tT]|%[57]4)(?:[oO]|%[46][fF])(?:[kK]|%[46][bB])(?:[eE]|%[46]5)(?:[nN]|%[46][eE])|(?:[rR]|%[57]2)(?:[eE]|%[46]5)(?:[sS]|%[57]3)(?:[pP]|%[57]0)(?:[oO]|%[46][fF])(?:[nN]|%[46][eE])(?:[sS]|%[57]3)(?:[eE]|%[46]5)(?:_|%5[fF])(?:[tT]|%[57]4)(?:[yY]|%[57]9)(?:[pP]|%[57]0)(?:[eE]|%[46]5)|(?:[sS]|%[57]3)(?:[cC]|%[46]3)(?:[oO]|%[46][fF])(?:[pP]|%[57]0)(?:[eE]|%[46]5)|(?:[sS]|%[57]3)(?:[tT]|%[57]4)(?:[aA]|%[46]1)(?:[tT]|%[57]4)(?:[eE]|%[46]5))(?:=|&|$)"
+        },
+        "errorMessage": {
+          "pattern": "Enter token parameters up to 2000 characters",
+          "not": "Extra token parameters cannot use reserved OAuth parameter names (for example, scope or client_id)"
+        }
       },
       "tokenAuthMethod": {
         "type": "string",
-        "enum": ["client_secret_basic", "client_secret_post"],
-        "default": "client_secret_basic"
+        "enum": ["client_secret_basic", "client_secret_post"]
       }
     }
   }
