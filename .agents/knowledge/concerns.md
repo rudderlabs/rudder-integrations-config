@@ -152,3 +152,7 @@
 
 - `npm run check:schema:destination custom_audience` cannot complete because `scripts/schemaGenerator.py::generate_schema_properties` encounters the bespoke `audienceDeliveryApiBuilder` field without a `configKey`, reports that no generator exists, and then raises `KeyError: 'configKey'` while checking default-config presence.
 - Until the shared generator supports that field shape, use destination validation fixtures to cover Custom Activation schema changes rather than treating this generator failure as a schema regression.
+
+## INT-7520 — HTTP V2 Schema Generator Baseline Drift
+
+- The HTTP v2 definition from PR #2871 has required auth-specific Initial setup UI fields that its `schema.json` does not require at the top level; `scripts/run-schema-validation.sh` reports a required-field warning even on that unchanged baseline. A consent-management dynamic-custom-form provider-required warning also occurs on the unchanged PR and main baselines. These warnings predate the XML/FORM definition change, but the changed-destination schema wrapper can still fail until the baseline drift is resolved.
