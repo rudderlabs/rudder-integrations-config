@@ -57,6 +57,16 @@
                     "placeholder": "e.g: rudder-staging",
                     "required": true,
                     "note": "Existing OSS bucket for staging files in the project region."
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "OSS prefix",
+                    "configKey": "prefix",
+                    "regex": "^[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100}$",
+                    "regexErrorMessage": "Remove apostrophes, backslashes and control characters",
+                    "placeholder": "e.g: rudder/events",
+                    "required": false,
+                    "note": "Optional path prefix for staged files; forward slashes are allowed."
                   }
                 ]
               }
@@ -282,22 +292,6 @@
                     "configKey": "cleanupObjectStorageFiles",
                     "note": "Delete staged OSS files after a successful sync.",
                     "default": true
-                  }
-                ]
-              },
-              {
-                "title": "Object storage",
-                "note": "Configure where RudderStack stages files in OSS.",
-                "fields": [
-                  {
-                    "type": "textInput",
-                    "label": "OSS prefix",
-                    "configKey": "prefix",
-                    "regex": "^[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100}$",
-                    "regexErrorMessage": "Remove apostrophes, backslashes and control characters",
-                    "placeholder": "e.g: rudder/events",
-                    "required": false,
-                    "note": "Optional path prefix for staged files; forward slashes are allowed."
                   }
                 ]
               }

@@ -348,9 +348,14 @@ describe('Validation Tests', () => {
     const { uiConfig } = JSON.parse(
       fs.readFileSync('src/configurations/destinations/maxcompute/ui-config.json', 'utf-8'),
     );
-    const prefixField = uiConfig.baseTemplate[1].sections[0].groups
-      .flatMap((group: { fields: Array<{ configKey: string; regex?: string }> }) => group.fields)
-      .find((field: { configKey: string }) => field.configKey === 'prefix');
+    type Field = { configKey: string; regex?: string };
+    type Template = { sections?: Array<{ groups?: Array<{ fields?: Field[] }> }> };
+    const templates: Template[] = uiConfig.baseTemplate;
+    const prefixField = templates
+      .flatMap((template) => template.sections ?? [])
+      .flatMap((section) => section.groups ?? [])
+      .flatMap((group) => group.fields ?? [])
+      .find((field) => field.configKey === 'prefix');
 
     expect(prefixField).toBeDefined();
     expect(new RegExp(prefixField.regex).test('path\u0085line')).toBe(false);
