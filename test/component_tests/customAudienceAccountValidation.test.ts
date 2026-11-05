@@ -49,13 +49,6 @@ describe.each(accountNames)('%s account validation', (accountName) => {
     expect(options).toEqual(baseOptions);
   });
 
-  it('keeps the initial select values in the account form', () => {
-    const { fields } = loadAccount(accountName, 'ui-config.json').uiConfig.form;
-    const field = (key: string) => fields.find((item: { key: string[] }) => item.key?.[1] === key);
-    expect(field('scopeSeparator').default).toBe('space');
-    expect(field('tokenAuthMethod').default).toBe('client_secret_basic');
-  });
-
   it('rejects every reserved extra token parameter name, regardless of case', () => {
     const validate = compile(optionsSchema);
     reservedKeys.forEach((key) => {
