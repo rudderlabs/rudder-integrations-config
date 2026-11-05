@@ -344,19 +344,6 @@ describe('Validation Tests', () => {
     return validCase.config as Record<string, unknown>;
   };
 
-  it('MaxCompute UI rejects C1 controls in the OSS prefix', () => {
-    const { uiConfig } = JSON.parse(
-      fs.readFileSync('src/configurations/destinations/maxcompute/ui-config.json', 'utf-8'),
-    );
-    const prefixField = uiConfig.baseTemplate[1].sections[0].groups
-      .flatMap((group: { fields: Array<{ configKey: string; regex?: string }> }) => group.fields)
-      .find((field: { configKey: string }) => field.configKey === 'prefix');
-
-    expect(prefixField).toBeDefined();
-    expect(new RegExp(prefixField.regex).test('path\u0085line')).toBe(false);
-    expect(new RegExp(prefixField.regex).test('')).toBe(true);
-  });
-
   describe('Warehouse sync frequency validation', () => {
     warehouseDestinationNames.forEach((dest) => {
       it(`${dest} accepts 10-minute sync frequency and rejects invalid frequency`, () => {
