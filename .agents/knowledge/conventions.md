@@ -382,3 +382,9 @@
 
 - Everflow public beta uses `src/configurations/destinations/everflow/db-config.json` `options` with `isBeta: true` and `icon: "everflow"`, but no `hidden` gate. Keep the Beta badge while making the destination available without `AMP_enable-everflow-destination`; do not copy OpenAI Ads' later GA shape, which omits `isBeta`.
 - Confine this visibility change to the root destination `options`; the persisted schema, account metadata, generated constants, and other destinations do not need changes.
+
+## INT-7520 — HTTP V2 XML and FORM Definition Rules
+
+- HTTP v2 is cloud-only: `src/configurations/destinations/http/db-config.json` lists `format` in `config.destConfig.defaultConfig`, not `config.includeKeys`. Put `xmlRootKey` beside `format` in `defaultConfig` to preserve persisted configuration; do not introduce device-mode `includeKeys` solely for these fields.
+- Keep HTTP v2 `xmlRootKey` as an optional top-level `schema.json` property with pattern `^(.{0,100})$`, even though its `ui-config.json` field is visible only for XML. The schema generator derives the top-level property from the UI field; an XML-only conditional property creates generator drift, and validating a stale root key for another format does not change its wire behavior.
+- Keep HTTP v2 `maxBatchSize` required in the UI only when `format` is JSON or XML, with no UI or schema default. Hand-author a `schema.json` `allOf` conditional requiring `maxBatchSize` when `format` is JSON or XML; do not make it top-level required, so FORM without a batch size remains valid. `scripts/schemaGenerator.py` derives the field property but not this conditional requirement.

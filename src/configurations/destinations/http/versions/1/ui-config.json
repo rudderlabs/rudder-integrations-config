@@ -1,0 +1,614 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Base URL",
+                    "configKey": "apiUrl",
+                    "note": [
+                      "Enter the Base URL. For adding path parameters and/or query parameters, please go to Event Configurations > Request URL"
+                    ],
+                    "regex": "^(https?://)(?![a-zA-Z0-9-]*\\.ngrok\\.io)(?!localhost|.*\\.localhost)([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,}(:(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5]\\d{4}|[1-9]\\d{1,3}))?(/.*)?$",
+                    "regexErrorMessage": "Invalid Base URL",
+                    "placeholder": "e.g. http://www.abcd.com"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Authentication",
+                    "configKey": "auth",
+                    "options": [
+                      {
+                        "label": "No Auth",
+                        "value": "noAuth"
+                      },
+                      {
+                        "label": "Basic Auth",
+                        "value": "basicAuth"
+                      },
+                      {
+                        "label": "Bearer Token",
+                        "value": "bearerTokenAuth"
+                      },
+                      {
+                        "label": "API Key",
+                        "value": "apiKeyAuth"
+                      }
+                    ],
+                    "default": "noAuth"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Username",
+                    "configKey": "username",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Username",
+                    "placeholder": "e.g. test username",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "auth",
+                          "value": "basicAuth"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Password",
+                    "configKey": "password",
+                    "regex": "^(.{0,100})$",
+                    "regexErrorMessage": "Invalid Password",
+                    "placeholder": "e.g. test password",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "auth",
+                          "value": "basicAuth"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Token",
+                    "configKey": "bearerToken",
+                    "regex": "^(.{1,2048})$",
+                    "regexErrorMessage": "Invalid Token",
+                    "placeholder": "e.g. test token",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "auth",
+                          "value": "bearerTokenAuth"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Key",
+                    "configKey": "apiKeyName",
+                    "regex": "^(\\S{1,100})$",
+                    "regexErrorMessage": "Invalid Key Name",
+                    "default": "x-api-key",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "auth",
+                          "value": "apiKeyAuth"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Value",
+                    "configKey": "apiKeyValue",
+                    "regex": "^(.{1,100})$",
+                    "regexErrorMessage": "Invalid Value",
+                    "placeholder": "e.g. test value",
+                    "secret": true,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "auth",
+                          "value": "apiKeyAuth"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Method",
+                    "configKey": "method",
+                    "options": [
+                      {
+                        "label": "POST",
+                        "value": "POST"
+                      },
+                      {
+                        "label": "PUT",
+                        "value": "PUT"
+                      },
+                      {
+                        "label": "PATCH",
+                        "value": "PATCH"
+                      },
+                      {
+                        "label": "GET",
+                        "value": "GET"
+                      },
+                      {
+                        "label": "DELETE",
+                        "value": "DELETE"
+                      }
+                    ],
+                    "default": "POST"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Body Format",
+                    "configKey": "format",
+                    "options": [
+                      {
+                        "label": "JSON",
+                        "value": "JSON"
+                      },
+                      {
+                        "label": "XML",
+                        "value": "XML"
+                      },
+                      {
+                        "label": "FORM",
+                        "value": "FORM"
+                      }
+                    ],
+                    "default": "JSON"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Event configuration",
+        "note": "Configure event mapping, query parameters, and headers.",
+        "hideEditIcon": true,
+        "sections": [
+          {
+            "groups": [
+              {
+                "icon": "rightToLine",
+                "title": "Event configuration",
+                "fields": [
+                  {
+                    "type": "redirect",
+                    "redirectGroupKey": "advancedMapping"
+                  }
+                ],
+                "callout": {
+                  "message": "Mappings take precedence over any transformations for the destination.",
+                  "type": "info"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure advanced destination-specific settings here",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "HTTP configuration settings",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Enable Batching",
+                    "configKey": "isBatchingEnabled",
+                    "default": false,
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "format",
+                          "value": "JSON"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Maximum Batch Size",
+                    "note": "Maximum batch size allowed is 100",
+                    "configKey": "maxBatchSize",
+                    "regex": "^([1-9][0-9]{0,1}|100)$",
+                    "regexErrorMessage": "Invalid Batch Size",
+                    "placeholder": "e.g. 10",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "isBatchingEnabled",
+                          "value": true
+                        },
+                        {
+                          "configKey": "format",
+                          "value": "JSON"
+                        }
+                      ],
+                      "condition": "and"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          },
+          {
+            "title": "Other settings",
+            "note": "Configure advanced RudderStack features here",
+            "icon": "otherSettings",
+            "groups": [
+              {
+                "title": "Client-side event filtering",
+                "note": "Decide what events are allowed (allowlisting) and blocked (denylisting)",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "connectionModes.webDevice",
+                      "value": true
+                    },
+                    {
+                      "configKey": "connectionModes.mobileDevice",
+                      "value": true
+                    }
+                  ],
+                  "condition": "or"
+                },
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Choose if you want to turn on event filtering: ",
+                    "configKey": "eventFilteringOption",
+                    "note": "You must select either allowlist or denylist to enable events filtering",
+                    "options": [
+                      {
+                        "label": "Disabled",
+                        "value": "disable"
+                      },
+                      {
+                        "label": "Filter via allowlist",
+                        "value": "whitelistedEvents"
+                      },
+                      {
+                        "label": "Filter via denylist",
+                        "value": "blacklistedEvents"
+                      }
+                    ],
+                    "default": "disable"
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Allowlisted events",
+                    "note": "Input the events you want to allowlist.\nInput separate events by pressing 'Enter'.",
+                    "configKey": "whitelistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "whitelistedEvents"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "tagInput",
+                    "label": "Denylisted events",
+                    "note": "Input the events you want to denylist.\nInput separate events by pressing 'Enter'.",
+                    "configKey": "blacklistedEvents",
+                    "tagKey": "eventName",
+                    "placeholder": "e.g: Anonymous page visit",
+                    "default": [
+                      {
+                        "eventName": ""
+                      }
+                    ],
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "eventFilteringOption",
+                          "value": "blacklistedEvents"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "iubenda",
+                  "value": "iubenda"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category IDs",
+              "note": "Input your consent category IDs by pressing 'Enter' after each entry. We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ]
+            }
+          ],
+          "uniqueRowFields": ["provider"]
+        }
+      ]
+    },
+    "redirectGroups": {
+      "advancedMapping": {
+        "tabs": [
+          {
+            "name": "Request URL",
+            "fields": [
+              {
+                "type": "customComponent",
+                "componentId": "urlPreview"
+              },
+              {
+                "type": "mapping",
+                "label": "Enter your path parameters in sequence",
+                "note": "You could dynamically add values from fields in the RudderStack payload (using JSON path) or constants.",
+                "columns": [
+                  {
+                    "key": "path",
+                    "type": "textInput",
+                    "label": "Path",
+                    "placeholder": "$.userId or users",
+                    "regex": "^\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)\\/?$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{0,100}\\/?$",
+                    "regexErrorMessage": "Please enter a valid JSON path or a constant"
+                  }
+                ],
+                "default": [],
+                "configKey": "pathParams",
+                "addButtonLabel": "Add path parameter"
+              },
+              {
+                "type": "mapping",
+                "label": "Map your query parameters",
+                "note": "Map the query parameter keys to the values from fields in the RudderStack payload (using JSON path) or constants.",
+                "configKey": "queryParams",
+                "default": [],
+                "separatorIcon": "colon",
+                "addButtonLabel": "Add query parameter",
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "configKey": "to",
+                    "label": "Key",
+                    "regex": "^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- ]{0,100}$",
+                    "regexErrorMessage": "JSON path is not supported. Please enter a constant",
+                    "placeholder": "e.g: customerId"
+                  },
+                  {
+                    "type": "textInput",
+                    "configKey": "from",
+                    "label": "Value",
+                    "regex": "^\\$(?:\\.|(?:\\.\\.(\\w+|\\*)|\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- ]{0,100}$",
+                    "regexErrorMessage": "Please enter a valid JSON path or a constant",
+                    "placeholder": "e.g: $.userId or userId"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Headers",
+            "fields": [
+              {
+                "type": "mapping",
+                "label": "Map your headers",
+                "note": "Build your Headers object by specifying the Key name, then map the values from fields in the RudderStack payload (using JSON path) or constants.",
+                "configKey": "headers",
+                "default": [],
+                "separatorIcon": "colon",
+                "addButtonLabel": "Add header",
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "configKey": "to",
+                    "label": "Key",
+                    "regex": "^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{0,100}$",
+                    "regexErrorMessage": "JSON path is not supported. Please enter a constant",
+                    "placeholder": "e.g. content-type"
+                  },
+                  {
+                    "type": "textInput",
+                    "configKey": "from",
+                    "label": "Value",
+                    "regex": "^\\$(?:\\.|(?:\\.\\.(\\w+|\\*)|\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- /\\\\]{0,100}$",
+                    "regexErrorMessage": "Please enter a valid JSON path or a constant",
+                    "placeholder": "e.g. $.contentType or application/json"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Request Body",
+            "fields": [
+              {
+                "type": "checkbox",
+                "label": "Send the event payload as it is",
+                "configKey": "isDefaultMapping",
+                "default": true
+              },
+              {
+                "type": "textInput",
+                "label": "XML Root Key",
+                "note": "Enter the root key to be used as a common prefix for all field mappings being defined below",
+                "configKey": "xmlRootKey",
+                "regex": "^(.{0,100})$",
+                "regexErrorMessage": "Invalid XML root key",
+                "placeholder": "e.g. root",
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "format",
+                      "value": "XML"
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "mapping",
+                "label": "Map your request payload",
+                "note": "Build your HTTP request payload using JSON path, then map the values from fields in the RudderStack payload (using JSON path) or constants.",
+                "configKey": "propertiesMapping",
+                "separatorIcon": "colon",
+                "addButtonLabel": "Add request mapping",
+                "columns": [
+                  {
+                    "type": "textInput",
+                    "configKey": "to",
+                    "label": "Key",
+                    "regex": "^(?:$|\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('[^\\s']+'|\"[^\\s\"]+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$)",
+                    "regexErrorMessage": "Please enter a valid JSON path",
+                    "placeholder": "e.g: $.events.key2"
+                  },
+                  {
+                    "type": "textInput",
+                    "configKey": "from",
+                    "label": "Value",
+                    "regex": "^\\$(?:\\.|(?:\\.\\.(\\w+|\\*)|\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{0,100}$",
+                    "regexErrorMessage": "Please enter a valid JSON path or a constant",
+                    "placeholder": "e.g: $.properties.key1"
+                  }
+                ],
+                "preRequisites": {
+                  "fields": [
+                    {
+                      "configKey": "isDefaultMapping",
+                      "value": false
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
