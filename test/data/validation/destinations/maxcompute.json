@@ -152,6 +152,19 @@
     "err": ["rudderAccountId must match pattern \"^.{1,100}$\""]
   },
   {
+    "testTitle": "dotted bucket name",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "bucketName": "rudder.staging",
+      "namespace": "rudder_events"
+    },
+    "result": false,
+    "err": ["bucketName must match pattern \"^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$\""]
+  },
+  {
     "testTitle": "oversized namespace",
     "config": {
       "rudderAccountId": "account_123",
@@ -283,7 +296,7 @@
       "namespace": "rudder_events"
     },
     "result": false,
-    "err": ["bucketName must match pattern \"^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$\""]
+    "err": ["bucketName must match pattern \"^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$\""]
   },
   {
     "testTitle": "prefix with apostrophe",
