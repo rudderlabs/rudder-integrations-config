@@ -42,7 +42,7 @@
                     "type": "textInput",
                     "label": "MaxCompute endpoint",
                     "configKey": "endpoint",
-                    "regex": "^https://service\\.[a-z]{2}(?:-[a-z0-9]+)+\\.maxcompute\\.aliyun\\.com/api/?$",
+                    "regex": "^https://service\\.[a-z]{2}(?:-[a-z0-9]+)+\\.maxcompute\\.aliyun\\.com/api$",
                     "regexErrorMessage": "Enter a MaxCompute HTTPS API endpoint",
                     "placeholder": "e.g: https://service.cn-hangzhou.maxcompute.aliyun.com/api",
                     "required": true,
@@ -80,7 +80,7 @@
           },
           {
             "title": "Warehouse settings",
-            "note": "Choose table names and partitioning when creating this destination",
+            "note": "Configure the schema and partitioning used for warehouse tables",
             "icon": "settings",
             "groups": [
               {
@@ -90,8 +90,8 @@
                     "type": "textInput",
                     "label": "Namespace",
                     "configKey": "namespace",
-                    "regex": "^[A-Za-z][A-Za-z0-9_]{0,126}$",
-                    "regexErrorMessage": "Use 1 to 127 letters, numbers or underscores",
+                    "regex": "^(?=.{1,127}$)[a-z]+(?:_(?:[a-z]+|[0-9]+))*$",
+                    "regexErrorMessage": "Use lowercase letters, numbers and single underscores, starting with a letter; separate numbers with underscores (e.g. rudder_events_2)",
                     "placeholder": "e.g: rudder_events",
                     "required": true,
                     "note": "Name of the schema for MaxCompute tables; cannot be changed later.",
@@ -171,13 +171,12 @@
         "note": "Manage the settings for your destination",
         "sections": [
           {
-            "title": "Destination settings",
-            "note": "Configure the warehouse sync schedule and load behavior",
+            "title": "Sync settings",
+            "note": "Configure the warehouse sync schedule",
             "icon": "settings",
             "groups": [
               {
-                "title": "Sync schedule",
-                "note": "Control when warehouse tables are synchronized.",
+                "title": "Schedule",
                 "fields": [
                   {
                     "type": "singleSelect",
@@ -228,18 +227,18 @@
                   },
                   {
                     "type": "timePicker",
-                    "label": "Sync starting at (optional)",
+                    "label": "Sync starting at (Optional)",
                     "configKey": "syncStartAt",
                     "options": {
                       "omitSeconds": true,
                       "minuteStep": 15
                     },
                     "required": false,
-                    "note": "Specify a start time in UTC."
+                    "note": "Specify the time in UTC."
                   },
                   {
                     "type": "timeRangePicker",
-                    "label": "Exclude window (optional)",
+                    "label": "Exclude window (Optional)",
                     "configKey": "excludeWindow",
                     "startTime": {
                       "label": "Start time",
@@ -254,26 +253,32 @@
                       "minuteStep": 1
                     },
                     "required": false,
-                    "note": "Specify a time range in UTC."
+                    "note": "Specify the time range in UTC."
                   }
                 ]
-              },
+              }
+            ]
+          },
+          {
+            "title": "Warehouse settings",
+            "note": "Configure load behavior and table creation",
+            "icon": "settings",
+            "groups": [
               {
                 "title": "Load behavior",
-                "note": "Control table creation and staged-file cleanup.",
                 "fields": [
                   {
                     "type": "checkbox",
                     "label": "Skip Users table",
                     "configKey": "skipUsersTable",
-                    "note": "Skip creating a Users table; identify events still load.",
+                    "note": "Disable the creation of a Users table. Its carry-forward queries can significantly increase warehouse operation time.",
                     "default": true
                   },
                   {
                     "type": "checkbox",
                     "label": "Skip Tracks table",
                     "configKey": "skipTracksTable",
-                    "note": "Skip loading events into the Tracks table.",
+                    "note": "Enable to skip sending event data to the tracks table.",
                     "default": false
                   },
                   {
@@ -287,7 +292,6 @@
               },
               {
                 "title": "Object storage",
-                "note": "Configure where RudderStack stages files in OSS.",
                 "fields": [
                   {
                     "type": "textInput",
