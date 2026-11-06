@@ -382,8 +382,3 @@
 
 - Everflow public beta uses `src/configurations/destinations/everflow/db-config.json` `options` with `isBeta: true` and `icon: "everflow"`, but no `hidden` gate. Keep the Beta badge while making the destination available without `AMP_enable-everflow-destination`; do not copy OpenAI Ads' later GA shape, which omits `isBeta`.
 - Confine this visibility change to the root destination `options`; the persisted schema, account metadata, generated constants, and other destinations do not need changes.
-
-## INT-7424 — Custom Activation OAuth Account Forms
-
-- Order account fields in each definition's `ui-config.json` `uiConfig.form.fields` array; the destination `ui-config.json` does not control account-form field order.
-- Both forms store optional `scopes` as a `tagField` array of at most 50 strings, each matching `^[^\s,]{1,200}$`, followed by a `scopeSeparator` select with space as the default and comma as the alternative. Authorization Code alone adds a keyless, display-only `copyField` with `value: "{{oauthRedirectUri}}"` immediately after Authorization URL; `src/schemas/account/account-ui-config-schema.json` requires `value` and forbids `key` for `copyField`, while other components require `key`.

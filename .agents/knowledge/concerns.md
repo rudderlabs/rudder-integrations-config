@@ -152,7 +152,3 @@
 
 - `npm run check:schema:destination custom_audience` cannot complete because `scripts/schemaGenerator.py::generate_schema_properties` encounters the bespoke `audienceDeliveryApiBuilder` field without a `configKey`, reports that no generator exists, and then raises `KeyError: 'configKey'` while checking default-config presence.
 - Until the shared generator supports that field shape, use destination validation fixtures to cover Custom Activation schema changes rather than treating this generator failure as a schema regression.
-
-## INT-7424 — Custom Activation Schema Generator Boundary
-
-- The earlier INT-7367 keyless `audienceDeliveryApiBuilder` generator crash is addressed by skipping display-only/composite base-template fields without `configKey` in `scripts/schemaGenerator.py`; its `baseUrl`/actions/headers persisted schema remains hand-maintained. A schema check may still print a diff recommending top-level `additionalProperties: false` without a `UserWarning`. Do not close the destination schema solely to remove that recommendation: legacy authentication keys in destination `defaultConfig` are absent from its persisted schema properties, and saved configs could otherwise be rejected.

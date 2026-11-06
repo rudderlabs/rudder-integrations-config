@@ -155,12 +155,3 @@
 ## INT-7259 — GAOC Account Picker Copy Guidance
 
 - Keep the Google Ads Offline Conversions `customerId` nested account picker note aligned with the shared GAEC and GARL picker guidance: customers may select a manager or descendant account; selecting a top-level account clears the login customer ID, while selecting a descendant uses the top-level account as the login customer ID.
-
-## INT-7424 — Custom Activation OAuth Review Guidance
-
-- Keep customer-facing OAuth account form copy provider-neutral, with help notes for scope tags and a Redirect URI instruction in the Authorization Code form.
-- Keep Custom Activation-specific validation cases in `test/data/validation/destinations/custom_audience.json`, including account-schema acceptance and rejection for URL restrictions, required values, lengths, scopes, separators, token authentication methods, and extra token parameters. Do not add bespoke Custom Activation OAuth test blocks to the shared `test/validation.test.ts` suite.
-- Keep the generic schema-generator fix for keyless composite fields, but do not add a Custom Activation-specific generator component test or bundle an unrelated multi-argument `run-schema-validation.sh` correction into this change.
-- Both account forms use optional scope tags and help notes, and customer-facing copy must remain provider-neutral. Authorization Code shows a display-only Redirect URI copy control after Authorization URL, instructing users to register that URI.
-- Keep account option and secret schemas open so rudder-auth can detect and reject a `clientSecret` incorrectly placed in account options. Token URL host filtering rejects `localhost`, `*.localhost`, and all `*.ngrok.io` subdomains (including nested ones), but must not reject a URL solely because its path contains `.localhost`.
-- Do not set JSON Schema defaults for optional account options such as `scopes`, `scopeSeparator`, `extraTokenParams`, or `tokenAuthMethod`: account Edit PATCH validation uses AJV `useDefaults`, which inserts omitted defaults into the PATCH and can overwrite stored values on merge. Put initial selections in each account `ui-config.json` instead; explicit updates, including `scopes: []`, remain valid.
