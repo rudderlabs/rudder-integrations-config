@@ -143,3 +143,8 @@
 ## INT-7462 — Archived Major Options in Deployment
 
 - `scripts/deployToDB.py::build_versions_archive` copies the full `options` object from an archived major's `versions/<major>/db-config.json` into its deploy-payload archive entry only when that archived file declares `options`. It neither inherits root `options` nor synthesizes an empty object: an ungated archived major must remain available when the current major is gated, and authored metadata such as `isBeta` must survive alongside `hidden`.
+
+## INT-7424 — Custom Activation Account-Owned OAuth Credentials
+
+- Custom Activation links its Client Credentials and Authorization Code account definitions through `src/configurations/destinations/custom_audience/db-config.json` `config.supportedAccountDefinitions.rudderAccountId`. Client Credentials is `DESTINATION_CUSTOM_AUDIENCE_CLIENT_CREDENTIALS` under `accounts/custom_audience_client_credentials/`, with `authenticationType: "machine_oauth"`, `refreshOAuthToken: true`, and no `uiConfig.isOAuth` so it uses the standard Save/Edit/Switch form. Authorization Code is `DESTINATION_CUSTOM_AUDIENCE_OAUTH_AUTH_CODE`, with `authenticationType: "oauth"`, `refreshOAuthToken: true`, and `uiConfig.isOAuth`.
+- Both account types keep options and `clientSecret` account-owned: `clientSecret` is user-supplied at creation, declared in account `secretFields`, required in account `secretSchema`, and available to the data plane. `scripts/validate_account_definitions.py` treats both `oauth` and `machine_oauth` as account-only credential types; do not mirror their fields into destination `defaultConfig`, `secretKeys`, or persisted `schema.json`. Keep the legacy destination schema fields until the separate account-management migration is complete.

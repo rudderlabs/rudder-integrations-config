@@ -126,3 +126,8 @@
 ## INT-7462 — Archived Definition Validation Without Loosening Root Schema
 
 - In `test/validation.test.ts`, validate each archived destination `versions/<major>/db-config.json` through `validateDestinationDefinitions` after removing only archive-only lifecycle fields `status`, `retirementDate`, and `migrationDocsUrl`. Root definitions continue through the unmodified strict schema, while deployment validates archive status separately. Do not add archive-only fields to the root schema or introduce a production validator mode solely for this test adaptation.
+
+## INT-7424 — Account Edit PATCH Defaults and Keyless Schema Fields
+
+- Keep initial account-form selections in account `ui-config.json`, not JSON Schema defaults on optional account options (`scopes`, `scopeSeparator`, `extraTokenParams`, `tokenAuthMethod`). Account Edit PATCH uses AJV `useDefaults`: schema defaults insert omitted keys into submitted options, which can overwrite saved values during config-backend PATCH merging. Explicit option values, including `scopes: []`, remain valid intentional updates.
+- `scripts/schemaGenerator.py` must skip destination `baseTemplate` fields without `configKey` when generating single persisted properties or checking required-field presence in `defaultConfig`. Custom Activation's keyless `audienceDeliveryApiBuilder` is composite/display-only; its `baseUrl`/actions/headers schema is hand-maintained in `src/configurations/destinations/custom_audience/schema.json`. Do not close that destination schema solely to silence a generic `additionalProperties: false` recommendation: legacy auth keys in `defaultConfig` are absent from its persisted schema properties.
