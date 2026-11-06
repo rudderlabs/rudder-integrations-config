@@ -18,10 +18,9 @@
       "project": "analytics_project",
       "region": "cn-hangzhou",
       "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
-      "bucketName": "rudder-staging",
+      "bucketName": "rudder-staging/rudder/events",
       "namespace": "rudder_events",
       "syncFrequency": "10",
-      "prefix": "rudder/events",
       "partitionColumn": "received_at",
       "partitionType": "hour",
       "skipViews": true,
@@ -53,15 +52,14 @@
     "result": true
   },
   {
-    "testTitle": "optional prefix may be cleared",
+    "testTitle": "bucket name with trailing slash",
     "config": {
       "rudderAccountId": "account_123",
       "project": "analytics_project",
       "region": "cn-hangzhou",
       "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
-      "bucketName": "rudder-staging",
-      "namespace": "rudder_events",
-      "prefix": ""
+      "bucketName": "rudder-staging/",
+      "namespace": "rudder_events"
     },
     "result": true
   },
@@ -174,7 +172,9 @@
       "namespace": "rudder_events"
     },
     "result": false,
-    "err": ["bucketName must match pattern \"^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$\""]
+    "err": [
+      "bucketName must match pattern \"^[a-z0-9][a-z0-9-]{1,61}[a-z0-9](?:/[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100})?$\""
+    ]
   },
   {
     "testTitle": "oversized namespace",
@@ -375,63 +375,69 @@
       "namespace": "rudder_events"
     },
     "result": false,
-    "err": ["bucketName must match pattern \"^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$\""]
+    "err": [
+      "bucketName must match pattern \"^[a-z0-9][a-z0-9-]{1,61}[a-z0-9](?:/[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100})?$\""
+    ]
   },
   {
-    "testTitle": "prefix with apostrophe",
+    "testTitle": "bucket folder path with apostrophe",
     "config": {
       "rudderAccountId": "account_123",
       "project": "analytics_project",
       "region": "cn-hangzhou",
       "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
-      "bucketName": "rudder-staging",
-      "namespace": "rudder_events",
-      "prefix": "it's unsafe"
+      "bucketName": "rudder-staging/it's unsafe",
+      "namespace": "rudder_events"
     },
     "result": false,
-    "err": ["prefix must match pattern \"^[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100}$\""]
+    "err": [
+      "bucketName must match pattern \"^[a-z0-9][a-z0-9-]{1,61}[a-z0-9](?:/[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100})?$\""
+    ]
   },
   {
-    "testTitle": "prefix with backslash",
+    "testTitle": "bucket folder path with backslash",
     "config": {
       "rudderAccountId": "account_123",
       "project": "analytics_project",
       "region": "cn-hangzhou",
       "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
-      "bucketName": "rudder-staging",
-      "namespace": "rudder_events",
-      "prefix": "path\\escape"
+      "bucketName": "rudder-staging/path\\escape",
+      "namespace": "rudder_events"
     },
     "result": false,
-    "err": ["prefix must match pattern \"^[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100}$\""]
+    "err": [
+      "bucketName must match pattern \"^[a-z0-9][a-z0-9-]{1,61}[a-z0-9](?:/[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100})?$\""
+    ]
   },
   {
-    "testTitle": "prefix with control character",
+    "testTitle": "bucket folder path with control character",
     "config": {
       "rudderAccountId": "account_123",
       "project": "analytics_project",
       "region": "cn-hangzhou",
       "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
-      "bucketName": "rudder-staging",
-      "namespace": "rudder_events",
-      "prefix": "path\nline"
+      "bucketName": "rudder-staging/path\nline",
+      "namespace": "rudder_events"
     },
     "result": false,
-    "err": ["prefix must match pattern \"^[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100}$\""]
+    "err": [
+      "bucketName must match pattern \"^[a-z0-9][a-z0-9-]{1,61}[a-z0-9](?:/[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100})?$\""
+    ]
   },
   {
-    "testTitle": "prefix with C1 control character",
+    "testTitle": "bucket folder path with C1 control character",
     "config": {
       "rudderAccountId": "account_123",
       "project": "analytics_project",
       "region": "cn-hangzhou",
       "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
-      "bucketName": "rudder-staging",
-      "namespace": "rudder_events",
-      "prefix": "path\u0085line"
+      "bucketName": "rudder-staging/path\u0085line",
+      "namespace": "rudder_events"
     },
     "result": false,
-    "err": ["prefix must match pattern \"^[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100}$\""]
+    "err": [
+      "bucketName must match pattern \"^[a-z0-9][a-z0-9-]{1,61}[a-z0-9](?:/[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100})?$\""
+    ]
   },
   {
     "testTitle": "reject unexposed preferAppend",

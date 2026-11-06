@@ -52,11 +52,11 @@
                     "type": "textInput",
                     "label": "OSS bucket name",
                     "configKey": "bucketName",
-                    "regex": "^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$",
-                    "regexErrorMessage": "Enter a valid OSS bucket name",
-                    "placeholder": "e.g: rudder-staging",
+                    "regex": "^[a-z0-9][a-z0-9-]{1,61}[a-z0-9](?:/[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100})?$",
+                    "regexErrorMessage": "Enter a valid OSS bucket name, optionally followed by a folder path without apostrophes, backslashes or control characters",
+                    "placeholder": "e.g: rudder-staging or rudder-staging/rudder/events",
                     "required": true,
-                    "note": "Existing OSS bucket for staging files in the project region."
+                    "note": "Existing OSS bucket for staging files in the project region. To stage files in a folder, add its path after the bucket name (e.g. rudder-staging/rudder/events)."
                   }
                 ]
               }
@@ -287,21 +287,6 @@
                     "configKey": "cleanupObjectStorageFiles",
                     "note": "Delete staged OSS files after a successful sync.",
                     "default": true
-                  }
-                ]
-              },
-              {
-                "title": "Object storage",
-                "fields": [
-                  {
-                    "type": "textInput",
-                    "label": "OSS prefix",
-                    "configKey": "prefix",
-                    "regex": "^[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100}$",
-                    "regexErrorMessage": "Remove apostrophes, backslashes and control characters",
-                    "placeholder": "e.g: rudder/events",
-                    "required": false,
-                    "note": "Optional path prefix for staged files; forward slashes are allowed."
                   }
                 ]
               }
