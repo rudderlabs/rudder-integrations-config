@@ -143,3 +143,7 @@
 ## INT-7462 — Archived Major Options in Deployment
 
 - `scripts/deployToDB.py::build_versions_archive` copies the full `options` object from an archived major's `versions/<major>/db-config.json` into its deploy-payload archive entry only when that archived file declares `options`. It neither inherits root `options` nor synthesizes an empty object: an ungated archived major must remain available when the current major is gated, and authored metadata such as `isBeta` must survive alongside `hidden`.
+
+## INT-7507 — MaxCompute Event-Stream Source Boundary
+
+- `src/configurations/destinations/maxcompute/` uses Microsoft Fabric's 13 event-stream source types in cloud mode, rather than the bootstrap warehouse source type. `warehouse` denotes the destination category here, not reverse-ETL source support; consent-management metadata covers each supported event-stream source.
