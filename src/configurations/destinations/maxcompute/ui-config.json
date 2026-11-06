@@ -57,6 +57,14 @@
                     "placeholder": "e.g: rudder-staging or rudder-staging/rudder/events",
                     "required": true,
                     "note": "Enter an existing OSS bucket name, optionally followed by a directory prefix, for staging files in the same region as the MaxCompute project. (e.g: rudder-staging/rudder/events)"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Clean up staged files after successful sync",
+                    "configKey": "cleanupObjectStorageFiles",
+                    "note": "Delete staged OSS files after a successful sync. When enabled, the OSS policy must allow deleting objects; the connection test checks this.",
+                    "default": true,
+                    "required": true
                   }
                 ]
               }
@@ -280,13 +288,6 @@
                     "configKey": "skipTracksTable",
                     "note": "Enable to skip sending event data to the tracks table.",
                     "default": false
-                  },
-                  {
-                    "type": "checkbox",
-                    "label": "Clean up staged files after successful sync",
-                    "configKey": "cleanupObjectStorageFiles",
-                    "note": "Delete staged OSS files after a successful sync.",
-                    "default": true
                   }
                 ]
               }
