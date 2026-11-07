@@ -1,0 +1,570 @@
+[
+  {
+    "testTitle": "valid minimal linked account",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid schedule partition storage and cloud consent",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging/rudder/events",
+      "namespace": "rudder_events",
+      "syncFrequency": "10",
+      "partitionColumn": "received_at",
+      "partitionType": "hour",
+      "skipViews": true,
+      "skipUsersTable": false,
+      "skipTracksTable": true,
+      "cleanupObjectStorageFiles": false,
+      "syncStartAt": "01:15",
+      "excludeWindow": {
+        "excludeWindowStartTime": "02:00",
+        "excludeWindowEndTime": "03:00"
+      },
+      "connectionMode": {
+        "web": "cloud"
+      },
+      "consentManagement": {
+        "web": [
+          {
+            "provider": "custom",
+            "resolutionStrategy": "and",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "result": true
+  },
+  {
+    "testTitle": "bucket name with trailing slash",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging/",
+      "namespace": "rudder_events"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "127 character safe namespace",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "namespace with underscore-separated number",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events_2"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid three character project",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "abc",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid 28 character project",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "abbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "valid international region and endpoint",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "ap-southeast-1",
+      "endpoint": "https://service.ap-southeast-1.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "linked account is required",
+    "config": {
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events"
+    },
+    "result": false,
+    "err": [" must have required property 'rudderAccountId'"]
+  },
+  {
+    "testTitle": "empty linked account",
+    "config": {
+      "rudderAccountId": "",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events"
+    },
+    "result": false,
+    "err": ["rudderAccountId must match pattern \"^.{1,100}$\""]
+  },
+  {
+    "testTitle": "oversized linked account",
+    "config": {
+      "rudderAccountId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events"
+    },
+    "result": false,
+    "err": ["rudderAccountId must match pattern \"^.{1,100}$\""]
+  },
+  {
+    "testTitle": "dotted bucket name",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder.staging",
+      "namespace": "rudder_events"
+    },
+    "result": false,
+    "err": [
+      "directoryPath must match pattern \"^[a-z0-9][a-z0-9-]{1,61}[a-z0-9](?:/[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100})?$\""
+    ]
+  },
+  {
+    "testTitle": "oversized namespace",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "result": false,
+    "err": ["namespace must match pattern \"^(?=.{1,127}$)[a-z]+(?:_(?:[a-z]+|[0-9]+))*$\""]
+  },
+  {
+    "testTitle": "unsafe namespace",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "bad-name"
+    },
+    "result": false,
+    "err": ["namespace must match pattern \"^(?=.{1,127}$)[a-z]+(?:_(?:[a-z]+|[0-9]+))*$\""]
+  },
+  {
+    "testTitle": "namespace with leading underscore",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "_leading"
+    },
+    "result": false,
+    "err": ["namespace must match pattern \"^(?=.{1,127}$)[a-z]+(?:_(?:[a-z]+|[0-9]+))*$\""]
+  },
+  {
+    "testTitle": "namespace with uppercase letters",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "MyEvents"
+    },
+    "result": false,
+    "err": ["namespace must match pattern \"^(?=.{1,127}$)[a-z]+(?:_(?:[a-z]+|[0-9]+))*$\""]
+  },
+  {
+    "testTitle": "namespace with number not separated by underscore",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "events2"
+    },
+    "result": false,
+    "err": ["namespace must match pattern \"^(?=.{1,127}$)[a-z]+(?:_(?:[a-z]+|[0-9]+))*$\""]
+  },
+  {
+    "testTitle": "namespace with double underscore",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder__events"
+    },
+    "result": false,
+    "err": ["namespace must match pattern \"^(?=.{1,127}$)[a-z]+(?:_(?:[a-z]+|[0-9]+))*$\""]
+  },
+  {
+    "testTitle": "namespace with trailing underscore",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "events_"
+    },
+    "result": false,
+    "err": ["namespace must match pattern \"^(?=.{1,127}$)[a-z]+(?:_(?:[a-z]+|[0-9]+))*$\""]
+  },
+  {
+    "testTitle": "short project",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "ab",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events"
+    },
+    "result": false,
+    "err": ["project must match pattern \"^[A-Za-z][A-Za-z0-9_]{2,27}$\""]
+  },
+  {
+    "testTitle": "long project",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "abbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events"
+    },
+    "result": false,
+    "err": ["project must match pattern \"^[A-Za-z][A-Za-z0-9_]{2,27}$\""]
+  },
+  {
+    "testTitle": "project with leading underscore",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "_bad",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events"
+    },
+    "result": false,
+    "err": ["project must match pattern \"^[A-Za-z][A-Za-z0-9_]{2,27}$\""]
+  },
+  {
+    "testTitle": "invalid region shape",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn_hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events"
+    },
+    "result": false,
+    "err": ["region must match pattern \"^[a-z]{2}(?:-[a-z0-9]+)+$\""]
+  },
+  {
+    "testTitle": "invalid endpoint host",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://attacker.example.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events"
+    },
+    "result": false,
+    "err": [
+      "endpoint must match pattern \"^https://service\\.[a-z]{2}(?:-[a-z0-9]+)+\\.maxcompute\\.aliyun\\.com/api$\""
+    ]
+  },
+  {
+    "testTitle": "non-HTTPS endpoint",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "http://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events"
+    },
+    "result": false,
+    "err": [
+      "endpoint must match pattern \"^https://service\\.[a-z]{2}(?:-[a-z0-9]+)+\\.maxcompute\\.aliyun\\.com/api$\""
+    ]
+  },
+  {
+    "testTitle": "endpoint with trailing slash",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api/",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events"
+    },
+    "result": false,
+    "err": [
+      "endpoint must match pattern \"^https://service\\.[a-z]{2}(?:-[a-z0-9]+)+\\.maxcompute\\.aliyun\\.com/api$\""
+    ]
+  },
+  {
+    "testTitle": "invalid OSS bucket",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "Bad_Bucket",
+      "namespace": "rudder_events"
+    },
+    "result": false,
+    "err": [
+      "directoryPath must match pattern \"^[a-z0-9][a-z0-9-]{1,61}[a-z0-9](?:/[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100})?$\""
+    ]
+  },
+  {
+    "testTitle": "bucket folder path with apostrophe",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging/it's unsafe",
+      "namespace": "rudder_events"
+    },
+    "result": false,
+    "err": [
+      "directoryPath must match pattern \"^[a-z0-9][a-z0-9-]{1,61}[a-z0-9](?:/[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100})?$\""
+    ]
+  },
+  {
+    "testTitle": "bucket folder path with backslash",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging/path\\escape",
+      "namespace": "rudder_events"
+    },
+    "result": false,
+    "err": [
+      "directoryPath must match pattern \"^[a-z0-9][a-z0-9-]{1,61}[a-z0-9](?:/[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100})?$\""
+    ]
+  },
+  {
+    "testTitle": "bucket folder path with control character",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging/path\nline",
+      "namespace": "rudder_events"
+    },
+    "result": false,
+    "err": [
+      "directoryPath must match pattern \"^[a-z0-9][a-z0-9-]{1,61}[a-z0-9](?:/[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100})?$\""
+    ]
+  },
+  {
+    "testTitle": "bucket folder path with C1 control character",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging/path\u0085line",
+      "namespace": "rudder_events"
+    },
+    "result": false,
+    "err": [
+      "directoryPath must match pattern \"^[a-z0-9][a-z0-9-]{1,61}[a-z0-9](?:/[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100})?$\""
+    ]
+  },
+  {
+    "testTitle": "reject unexposed preferAppend",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events",
+      "preferAppend": true
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "reject unexposed allowUsersContextTraits",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events",
+      "allowUsersContextTraits": true
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "reject unexposed underscoreDivideNumbers",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events",
+      "underscoreDivideNumbers": true
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "reject unexposed useRudderStorage",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events",
+      "useRudderStorage": true
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "reject unexposed accessKeySecret",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events",
+      "accessKeySecret": "test-secret"
+    },
+    "result": false,
+    "err": [" must NOT have additional properties"]
+  },
+  {
+    "testTitle": "invalid partition column",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events",
+      "partitionColumn": "bad"
+    },
+    "result": false,
+    "err": ["partitionColumn must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "invalid partition type",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events",
+      "partitionType": "month"
+    },
+    "result": false,
+    "err": ["partitionType must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "invalid sync frequency",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events",
+      "syncFrequency": "11"
+    },
+    "result": false,
+    "err": ["syncFrequency must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "device mode is not supported",
+    "config": {
+      "rudderAccountId": "account_123",
+      "project": "analytics_project",
+      "region": "cn-hangzhou",
+      "endpoint": "https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+      "directoryPath": "rudder-staging",
+      "namespace": "rudder_events",
+      "connectionMode": {
+        "web": "device"
+      }
+    },
+    "result": false,
+    "err": ["connectionMode.web must be equal to one of the allowed values"]
+  }
+]
