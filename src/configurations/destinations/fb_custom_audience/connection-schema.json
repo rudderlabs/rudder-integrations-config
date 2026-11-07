@@ -1,0 +1,101 @@
+{
+  "connectionConfigSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "FB_CUSTOM_AUDIENCE rETL connection config",
+    "description": "Per-connection destination config for a VDM v2 rETL connection, as accepted in `destinationConfig` on POST /v2/retl-connections. Keys match what the transformer reads off connection.config.destination in processRecordInputsV2. isValueBasedAudience is absent on purpose: integrations-info /setup derives it from identifierMappings, and config-backend derives it the same way, so a caller cannot set it. syncMode, schemaVersion, eventType, identifierMappings and fieldMappings are written by config-backend. Keys the dashboard writes but nothing reads are not accepted: a caller copying a dashboard-made connection has to drop them, and config-backend has to strip them on read so an import does not carry them into a spec that then fails validation. For this destination that key is `subtype`, which the webapp writes on every connection (lower-case t). The transformer reads `subType` and writes data_source.sub_type from it, so a lower-case `subtype` never reaches Meta; the ~397 connections already carrying it send no sub_type at all. Correcting those rows changes what they deliver, so it needs its own decision rather than a spelling this schema accepts. No default is declared anywhere in this file: config-backend applies none, and a default here would become a written-out field in a generated IaC spec and then a permanent diff.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["audienceId", "isHashRequired"],
+    "properties": {
+      "audienceId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$",
+        "description": "The Facebook custom audience this connection delivers to. Required: the transformer throws 'Audience ID is a mandatory field' without it. A Meta audience id is a numeric string, so the pattern refuses an empty or whitespace-only value and a name typed in by mistake, which would otherwise pass create and fail every record at the first sync."
+      },
+      "isHashRequired": {
+        "type": "boolean",
+        "description": "Required, and no default: an omitted value is read as `false`, and `processAudienceRecord` then throws a hashing-consistency error on raw warehouse values. The destination's own configSchema defaults it to true, but nothing applies that default to the per-connection block, so the caller has to say which it wants. Warehouse columns are normally raw, which makes `true` the usual answer."
+      },
+      "isRaw": {
+        "type": "boolean",
+        "description": "Whether the incoming identifier values are already hashed. Read as false when omitted."
+      },
+      "disableFormat": {
+        "type": "boolean",
+        "description": "Skips the transformer's normalisation of identifier values before hashing. Read as false when omitted."
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "UNKNOWN",
+          "FILE_IMPORTED",
+          "EVENT_BASED",
+          "SEED_BASED",
+          "THIRD_PARTY_IMPORTED",
+          "COPY_PASTE",
+          "CONTACT_IMPORTER",
+          "HOUSEHOLD_AUDIENCE",
+          "NA"
+        ],
+        "description": "data_source.type on the Facebook payload. Omitted, nothing is sent; the webapp writes FILE_IMPORTED, so a connection meant to match one made in the dashboard has to set it."
+      },
+      "subType": {
+        "type": "string",
+        "enum": [
+          "ANYTHING",
+          "NOTHING",
+          "HASHES",
+          "USER_IDS",
+          "HASHES_OR_USER_IDS",
+          "MOBILE_ADVERTISER_IDS",
+          "FB_EVENT_SIGNALS",
+          "EXTERNAL_IDS",
+          "MULTI_HASHES",
+          "TOKENS",
+          "EXTERNAL_IDS_MIX",
+          "WEB_PIXEL_HITS",
+          "MOBILE_APP_EVENTS",
+          "MOBILE_APP_COMBINATION_EVENTS",
+          "VIDEO_EVENTS",
+          "WEB_PIXEL_COMBINATION_EVENTS",
+          "IG_BUSINESS_EVENTS",
+          "MULTI_DATA_EVENTS",
+          "STORE_VISIT_EVENTS",
+          "INSTANT_ARTICLE_EVENTS",
+          "ENGAGEMENT_EVENT_USERS",
+          "FACEBOOK_WIFI_EVENTS",
+          "CUSTOM_AUDIENCE_USERS",
+          "S_EXPR",
+          "DYNAMIC_RULE",
+          "CONVERSION_PIXEL_HITS",
+          "APP_USERS",
+          "CAMPAIGN_CONVERSIONS",
+          "WEB_PIXEL_HITS_CUSTOM_AUDIENCE_USERS",
+          "MOBILE_APP_CUSTOM_AUDIENCE_USERS",
+          "VIDEO_EVENT_USERS",
+          "FB_PIXEL_HITS",
+          "IG_PROMOTED_POST",
+          "PLACE_VISITS",
+          "OFFLINE_EVENT_USERS",
+          "EXPANDED_AUDIENCE",
+          "SEED_LIST",
+          "PARTNER_CATEGORY_USERS",
+          "PAGE_SMART_AUDIENCE",
+          "MULTICOUNTRY_COMBINATION",
+          "PLATFORM_USERS",
+          "MULTI_EVENT_SOURCE",
+          "SMART_AUDIENCE",
+          "LOOKALIKE_PLATFORM",
+          "SIGNAL_SOURCE",
+          "MAIL_CHIMP_EMAIL_HASHES",
+          "CONSTANT_CONTACTS_EMAIL_HASHES",
+          "COPY_PASTE_EMAIL_HASHES",
+          "CONTACT_IMPORTER",
+          "DATA_FILE",
+          "NA"
+        ],
+        "description": "data_source.sub_type on the Facebook payload. Enumerated rather than left a free string because the transformer forwards whatever it is given: 'MULTI_HASH' for 'MULTI_HASHES' would be accepted here and then rejected by Meta. The list is copied from this destination's own configSchema and a test asserts the two stay identical. The webapp writes MULTI_HASHES."
+      }
+    }
+  }
+}
