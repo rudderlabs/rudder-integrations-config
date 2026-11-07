@@ -147,3 +147,10 @@
 ## INT-7507 — MaxCompute Event-Stream Source Boundary
 
 - `src/configurations/destinations/maxcompute/` uses Microsoft Fabric's 13 event-stream source types in cloud mode, rather than the bootstrap warehouse source type. `warehouse` denotes the destination category here, not reverse-ETL source support; consent-management metadata covers each supported event-stream source.
+
+## INT-7424 — Custom Activation OAuth Account Boundary
+
+- Custom Activation links two additional account definitions through `src/configurations/destinations/custom_audience/db-config.json` `config.supportedAccountDefinitions.rudderAccountId`: `DESTINATION_CUSTOM_AUDIENCE_OAUTH_CLIENT_CREDENTIALS` uses `authenticationType: "machine_oauth"`, `refreshOAuthToken: true`, and no `uiConfig.isOAuth`; `DESTINATION_CUSTOM_AUDIENCE_OAUTH_AUTH_CODE` uses `authenticationType: "oauth"`, `refreshOAuthToken: true`, and `uiConfig.isOAuth`. Each has its own account-definition Flagsmith visibility gate.
+- Both flows keep OAuth options and user-supplied `clientSecret` in their account definitions rather than mirroring credentials into destination `config.destConfig.defaultConfig`, `config.secretKeys`, or persisted destination `schema.json`. The client secret is a required account `secretFields`/`secretSchema` field; tokens are platform-written.
+- In both new account `schema.json` files, keep options and secret schemas open so rudder-auth can distinguish and reject `clientSecret` supplied in options. Account form order is controlled by each account `ui-config.json` `uiConfig.form.fields` array, not destination `ui-config.json`.
+- The keyless `audienceDeliveryApiBuilder` in the destination's Initial setup is a display/composite field; its `baseUrl`/actions/headers persisted schema is maintained in the destination `schema.json`, not generated as one property from the UI control.
