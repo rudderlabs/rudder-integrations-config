@@ -1421,6 +1421,83 @@ describe('Account Definition validation tests', () => {
     });
   });
 
+  describe.each(['custom_audience_client_credentials', 'custom_audience_oauth_auth_code'])(
+    '%s account schema',
+    (accountName) => {
+      const { optionsSchema, secretSchema } = getAccountDefinitionSchema(
+        'custom_audience',
+        accountName,
+        'destinations',
+      );
+      const baseOptions = {
+        ...(accountName === 'custom_audience_oauth_auth_code' && {
+          authorizationUrl: 'https://auth.example.com/authorize',
+        }),
+        tokenUrl: 'https://auth.example.com/token',
+        clientId: 'client-id',
+      };
+
+      it('does not add defaults to an options PATCH', () => {
+        const options = { ...baseOptions };
+        expect(compileAccountSchemaWithErrorMessages(optionsSchema)(options)).toBe(true);
+        expect(options).toEqual(baseOptions);
+      });
+
+      it('rejects every reserved extra token parameter name, regardless of case', () => {
+        const validate = compileAccountSchemaWithErrorMessages(optionsSchema);
+        const reservedKeys = [
+          'client_id',
+          'client_secret',
+          'code',
+          'code_challenge',
+          'code_challenge_method',
+          'code_verifier',
+          'grant_type',
+          'redirect_uri',
+          'refresh_token',
+          'response_type',
+          'scope',
+          'state',
+        ];
+        reservedKeys.forEach((key) => {
+          [`${key}=x`, `audience=x&${key.toUpperCase()}=y`].forEach((params) => {
+            expect(validate({ ...baseOptions, extraTokenParams: params })).toBe(false);
+            expect(validate.errors?.[0]?.message).toBe(
+              'Extra token parameters cannot use reserved OAuth parameter names (for example, scope or client_id)',
+            );
+          });
+        });
+        expect(validate({ ...baseOptions, extraTokenParams: 'audience=x&client%5Fid=y' })).toBe(
+          false,
+        );
+        expect(validate.errors?.[0]?.message).toBe(
+          'Extra token parameters cannot use reserved OAuth parameter names (for example, scope or client_id)',
+        );
+        expect(validate({ ...baseOptions, extraTokenParams: '?scope=x' })).toBe(false);
+      });
+
+      it('accepts reserved words in values and enforces the 2,000-character limit', () => {
+        const validate = compileAccountSchemaWithErrorMessages(optionsSchema);
+        expect(
+          validate({ ...baseOptions, extraTokenParams: 'audience=scope&resource=client_secret' }),
+        ).toBe(true);
+        expect(validate({ ...baseOptions, extraTokenParams: 'audience=%73cope' })).toBe(true);
+        expect(validate({ ...baseOptions, extraTokenParams: 'x'.repeat(2000) })).toBe(true);
+        expect(validate({ ...baseOptions, extraTokenParams: 'x'.repeat(2001) })).toBe(false);
+        expect(validate.errors?.[0]?.message).toBe('Enter token parameters up to 2000 characters');
+      });
+
+      it('rejects a whitespace-only client secret', () => {
+        const validate = compileAccountSchemaWithErrorMessages(secretSchema);
+        expect(validate({ clientSecret: 'secret value' })).toBe(true);
+        expect(validate({ clientSecret: ' \t ' })).toBe(false);
+        expect(validate.errors?.[0]?.message).toBe(
+          'Enter a client secret between 1 and 500 characters that is not only whitespace',
+        );
+      });
+    },
+  );
+
   // The `combinedSchema` if/then/else is the only thing binding an auth branch to the
   // credential it needs: the standalone `secretSchema` of these warehouse source accounts
   // accepts any object, and `scripts/validate_account_definitions.py` only walks
