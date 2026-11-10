@@ -163,7 +163,7 @@ def is_field_present_in_default_config(field, dbConfig, schema_field_name):
     Returns:
         boolean: True if field is in defaultConfig else False.
     """
-    if not dbConfig:
+    if not dbConfig or schema_field_name not in field:
         return False
     if (
         "destConfig" in dbConfig

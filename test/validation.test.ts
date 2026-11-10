@@ -258,6 +258,12 @@ const isFieldVisible = (
     : checks.every(Boolean);
 };
 
+// Compile the complete configuration registry once for tests that exercise validateConfig.
+// This can take longer than Jest's default five-second hook timeout on CI workers.
+beforeAll(async () => {
+  await init();
+}, 30_000);
+
 describe('Core Tests', () => {
   it('If invalid integration name is provide, throw error', () => {
     expect(() => {
@@ -265,18 +271,14 @@ describe('Core Tests', () => {
     }).toThrow('Missing definitionName');
   });
 
-  it('If unknown integration name is provided, throw error', async () => {
-    await init();
-
+  it('If unknown integration name is provided, throw error', () => {
     const invalidIntg = 'INVALID_INTEGRATION_NAME';
     expect(() => {
       validateConfig(invalidIntg, {}, 'destinations', true);
     }).toThrow(`No validation method found for definition ${invalidIntg}`);
   });
 
-  it('If unknown integration name is provided and throw errors flag is disabled, no error should be thrown', async () => {
-    await init();
-
+  it('If unknown integration name is provided and throw errors flag is disabled, no error should be thrown', () => {
     const invalidIntg = 'INVALID_INTEGRATION_NAME';
     expect(() => {
       validateConfig(invalidIntg, {}, 'destinations');
@@ -285,8 +287,66 @@ describe('Core Tests', () => {
 });
 
 describe('Validation Tests', () => {
-  beforeAll(async () => {
-    await init();
+  describe('HTTP versioned destination', () => {
+    const directory = path.resolve('src/configurations/destinations/http');
+    const rootDefinition = JSON.parse(
+      fs.readFileSync(path.join(directory, 'db-config.json'), 'utf-8'),
+    );
+    const rootUi = JSON.parse(fs.readFileSync(path.join(directory, 'ui-config.json'), 'utf-8'));
+
+    it('root v2 uses native dispatch and a closed gate', () => {
+      expect(rootDefinition.version).toBe('2.0');
+      expect(rootDefinition.config.cdkV2Enabled).toBeUndefined();
+      expect(rootDefinition.config.destConfig.defaultConfig).toEqual(
+        expect.arrayContaining(['requestBodyTemplate', 'supportedMessageTypes', 'maxBatchSize']),
+      );
+      expect(rootDefinition.config.destConfig.defaultConfig).not.toContain('propertiesMapping');
+      expect(rootDefinition.config.destConfig.defaultConfig).not.toContain('isDefaultMapping');
+      expect(rootDefinition.options.hidden.gate.flags).toEqual([
+        { name: 'AMP_enable-http-v2-destination', value: false },
+      ]);
+      expect(rootUi.uiConfig.baseTemplate[1].sections[0].groups[0].fields).toEqual([
+        { type: 'httpRequestBuilder' },
+      ]);
+      const { fields } = rootUi.uiConfig.baseTemplate[2].sections[0].groups[0];
+      // Capability fields are always shown; only the catalogue gate is flagged.
+      // maxBatchSize is format-gated (JSON/XML) and lives beside the body format.
+      ['supportedMessageTypes'].forEach((configKey) => {
+        expect(
+          fields.find((field: { configKey: string }) => field.configKey === configKey)
+            .preRequisites,
+        ).toBeUndefined();
+      });
+    });
+
+    it('v1 is archived as supported', () => {
+      const v1 = JSON.parse(
+        fs.readFileSync(path.join(directory, 'versions/1/db-config.json'), 'utf-8'),
+      );
+      expect(v1).toMatchObject({ version: '1.0', status: 'supported' });
+    });
+
+    it('validates against the current schema when its own major is passed', () => {
+      // requestBodyTemplate is required only by the v2 schema.
+      expect(() => validateConfig('http', {}, 'destinations', true, 2)).toThrow(
+        "must have required property 'requestBodyTemplate'",
+      );
+      expect(() => validateConfig('http', {}, 'destinations', true, 9)).toThrow(
+        'No validation method found for definition http version 9',
+      );
+    });
+
+    getIntegrationData('http-v1', 'versions').forEach((td: Record<string, unknown>) => {
+      it(`v1 - ${td.testTitle}`, () => {
+        const validateV1 = () =>
+          validateConfig('http', td.config as Record<string, unknown>, 'destinations', true, 1);
+        if (td.result === true) {
+          expect(validateV1()).toBeUndefined();
+        } else {
+          expect(validateV1).toThrow(JSON.stringify(td.err));
+        }
+      });
+    });
   });
 
   // Destination tests
@@ -327,6 +387,7 @@ describe('Validation Tests', () => {
     'clickhouse',
     'deltalake',
     'gcs_datalake',
+    'maxcompute',
     'microsoft_fabric',
     'mssql',
     'postgres',
@@ -361,7 +422,9 @@ describe('Validation Tests', () => {
     const backwardCompatibilityFlags = ['allowUsersContextTraits', 'underscoreDivideNumbers'];
     // Every destination declaring the flags, not just those with a sync frequency.
     const backwardCompatibilityDestinationNames = [
-      ...warehouseDestinationNames.filter((dest) => dest !== 'microsoft_fabric'),
+      ...warehouseDestinationNames.filter(
+        (dest) => !['maxcompute', 'microsoft_fabric'].includes(dest),
+      ),
       'bqstream_all_events',
       'snowpipe_streaming',
     ];
@@ -1417,6 +1480,83 @@ describe('Account Definition validation tests', () => {
       await expect(validateAccountDefinitions(accDefConfig)).resolves.toEqual(true);
     });
   });
+
+  describe.each(['custom_audience_client_credentials', 'custom_audience_oauth_auth_code'])(
+    '%s account schema',
+    (accountName) => {
+      const { optionsSchema, secretSchema } = getAccountDefinitionSchema(
+        'custom_audience',
+        accountName,
+        'destinations',
+      );
+      const baseOptions = {
+        ...(accountName === 'custom_audience_oauth_auth_code' && {
+          authorizationUrl: 'https://auth.example.com/authorize',
+        }),
+        tokenUrl: 'https://auth.example.com/token',
+        clientId: 'client-id',
+      };
+
+      it('does not add defaults to an options PATCH', () => {
+        const options = { ...baseOptions };
+        expect(compileAccountSchemaWithErrorMessages(optionsSchema)(options)).toBe(true);
+        expect(options).toEqual(baseOptions);
+      });
+
+      it('rejects every reserved extra token parameter name, regardless of case', () => {
+        const validate = compileAccountSchemaWithErrorMessages(optionsSchema);
+        const reservedKeys = [
+          'client_id',
+          'client_secret',
+          'code',
+          'code_challenge',
+          'code_challenge_method',
+          'code_verifier',
+          'grant_type',
+          'redirect_uri',
+          'refresh_token',
+          'response_type',
+          'scope',
+          'state',
+        ];
+        reservedKeys.forEach((key) => {
+          [`${key}=x`, `audience=x&${key.toUpperCase()}=y`].forEach((params) => {
+            expect(validate({ ...baseOptions, extraTokenParams: params })).toBe(false);
+            expect(validate.errors?.[0]?.message).toBe(
+              'Extra token parameters cannot use reserved OAuth parameter names (for example, scope or client_id)',
+            );
+          });
+        });
+        expect(validate({ ...baseOptions, extraTokenParams: 'audience=x&client%5Fid=y' })).toBe(
+          false,
+        );
+        expect(validate.errors?.[0]?.message).toBe(
+          'Extra token parameters cannot use reserved OAuth parameter names (for example, scope or client_id)',
+        );
+        expect(validate({ ...baseOptions, extraTokenParams: '?scope=x' })).toBe(false);
+      });
+
+      it('accepts reserved words in values and enforces the 2,000-character limit', () => {
+        const validate = compileAccountSchemaWithErrorMessages(optionsSchema);
+        expect(
+          validate({ ...baseOptions, extraTokenParams: 'audience=scope&resource=client_secret' }),
+        ).toBe(true);
+        expect(validate({ ...baseOptions, extraTokenParams: 'audience=%73cope' })).toBe(true);
+        expect(validate({ ...baseOptions, extraTokenParams: 'x'.repeat(2000) })).toBe(true);
+        expect(validate({ ...baseOptions, extraTokenParams: 'x'.repeat(2001) })).toBe(false);
+        expect(validate.errors?.[0]?.message).toBe('Enter token parameters up to 2000 characters');
+      });
+
+      it('rejects a whitespace-only client secret', () => {
+        const validate = compileAccountSchemaWithErrorMessages(secretSchema);
+        expect(validate({ clientSecret: 'secret value' })).toBe(true);
+        expect(validate({ clientSecret: ' \t ' })).toBe(false);
+        expect(validate.errors?.[0]?.message).toBe(
+          'Enter a client secret between 1 and 500 characters that is not only whitespace',
+        );
+      });
+    },
+  );
 
   // The `combinedSchema` if/then/else is the only thing binding an auth branch to the
   // credential it needs: the standalone `secretSchema` of these warehouse source accounts

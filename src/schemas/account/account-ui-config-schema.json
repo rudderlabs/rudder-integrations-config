@@ -38,15 +38,15 @@
             },
             "fields": {
               "type": "array",
-              "description": "Form fields. First field must always be the 'Account name' textField with key 'name'. For OAuth, only include account name and option fields — secret credential fields are handled by the OAuth flow. For non-OAuth, include account name followed by secret credential fields and any option fields.",
+              "description": "Form fields. First field must always be the 'Account name' textField with key 'name'. OAuth forms may also include a display-only copyField without a key. Other fields use account options or secrets.",
               "items": {
                 "type": "object",
-                "required": ["component", "label", "key"],
+                "required": ["component", "label"],
                 "properties": {
                   "component": {
                     "type": "string",
-                    "enum": ["textField", "selectField"],
-                    "description": "Use 'textField' for free-text inputs (credentials, account name). Use 'selectField' for enumerated option fields (e.g. environment, region)."
+                    "enum": ["textField", "selectField", "tagField", "copyField"],
+                    "description": "Use 'textField' for free-text inputs, 'selectField' for enumerated options, 'tagField' for lists of values, and 'copyField' for display-only values."
                   },
                   "label": {
                     "type": "string",
@@ -57,7 +57,7 @@
                     "description": "Example value shown as placeholder text."
                   },
                   "key": {
-                    "description": "Storage path. Use string 'name' for the account name field. Use array ['options', '<fieldKey>'] for all other fields.",
+                    "description": "Storage path. Use string 'name' for the account name field. Use array ['options', '<fieldKey>'] for other inputs. Optional for copyField.",
                     "oneOf": [
                       { "type": "string", "const": "name" },
                       {
@@ -81,6 +81,10 @@
                     "type": "string",
                     "description": "Help text shown below the field."
                   },
+                  "info": {
+                    "type": "string",
+                    "description": "Help text shown with the field."
+                  },
                   "options": {
                     "type": "array",
                     "description": "Required for selectField. Each entry has label and value.",
@@ -95,9 +99,25 @@
                   },
                   "default": {
                     "description": "Default value for selectField components."
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Display-only value required for copyField."
                   }
                 },
                 "allOf": [
+                  {
+                    "if": {
+                      "properties": { "component": { "const": "copyField" } },
+                      "required": ["component"]
+                    },
+                    "then": {
+                      "required": ["value"]
+                    },
+                    "else": {
+                      "required": ["key"]
+                    }
+                  },
                   {
                     "if": {
                       "properties": { "component": { "const": "selectField" } },

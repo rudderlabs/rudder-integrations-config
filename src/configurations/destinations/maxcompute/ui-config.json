@@ -1,0 +1,389 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "MaxCompute connection",
+                "note": "Connect to your Alibaba Cloud MaxCompute project and OSS staging bucket.",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "accountManagementInput",
+                    "label": "MaxCompute account",
+                    "configKey": "rudderAccountId",
+                    "regex": "^.{1,100}$"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Project",
+                    "configKey": "project",
+                    "regex": "^[A-Za-z][A-Za-z0-9_]{2,27}$",
+                    "regexErrorMessage": "Enter a project name of 3 to 28 characters",
+                    "placeholder": "e.g: analytics_project",
+                    "required": true,
+                    "note": "MaxCompute project where RudderStack creates tables."
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Region",
+                    "configKey": "region",
+                    "regex": "^[a-z]{2}(?:-[a-z0-9]+)+$",
+                    "regexErrorMessage": "Enter a valid Alibaba Cloud region",
+                    "placeholder": "e.g: cn-hangzhou",
+                    "required": true,
+                    "note": "Choose the region of your MaxCompute project and OSS bucket."
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "MaxCompute endpoint",
+                    "configKey": "endpoint",
+                    "regex": "^https://service\\.[a-z]{2}(?:-[a-z0-9]+)+\\.maxcompute\\.aliyun\\.com/api$",
+                    "regexErrorMessage": "Enter a MaxCompute HTTPS API endpoint",
+                    "placeholder": "e.g: https://service.cn-hangzhou.maxcompute.aliyun.com/api",
+                    "required": true,
+                    "note": "Use the API endpoint in the same region as your project."
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "OSS directory path",
+                    "configKey": "directoryPath",
+                    "regex": "^[a-z0-9][a-z0-9-]{1,61}[a-z0-9](?:/[^\\x00-\\x1F\\x7F-\\x9F'\\\\]{0,100})?$",
+                    "regexErrorMessage": "Enter a valid OSS directory path: a bucket name, optionally followed by a directory prefix, without apostrophes, backslashes or control characters",
+                    "placeholder": "e.g: rudder-staging or rudder-staging/rudder/events",
+                    "required": true,
+                    "note": "Enter an existing OSS bucket name, optionally followed by a directory prefix, for staging files in the same region as the MaxCompute project. (e.g: rudder-staging/rudder/events)"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Clean up staged files after successful sync",
+                    "configKey": "cleanupObjectStorageFiles",
+                    "note": "Delete staged OSS files after a successful sync. When enabled, the OSS policy must allow deleting objects; the connection test checks this.",
+                    "default": true,
+                    "required": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          },
+          {
+            "title": "Warehouse settings",
+            "note": "Configure the schema and partitioning used for warehouse tables",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Table setup",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Namespace",
+                    "configKey": "namespace",
+                    "regex": "^(?=.{1,127}$)[a-z]+(?:_(?:[a-z]+|[0-9]+))*$",
+                    "regexErrorMessage": "Use lowercase letters, numbers and single underscores, starting with a letter; separate numbers with underscores (e.g. rudder_events_2)",
+                    "placeholder": "e.g: rudder_events",
+                    "required": true,
+                    "note": "Name of the schema for MaxCompute tables; cannot be changed later.",
+                    "immutable": true
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Skip views creation",
+                    "configKey": "skipViews",
+                    "note": "Skip creating views over partitioned tables. This cannot be changed later.",
+                    "default": false,
+                    "required": true,
+                    "immutable": true
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Partition column",
+                    "configKey": "partitionColumn",
+                    "note": "Choose the timestamp used to partition tables. This cannot be changed later.",
+                    "options": [
+                      {
+                        "label": "Ingestion time",
+                        "value": "_PARTITIONTIME"
+                      },
+                      {
+                        "label": "Loaded at",
+                        "value": "loaded_at"
+                      },
+                      {
+                        "label": "Received at",
+                        "value": "received_at"
+                      },
+                      {
+                        "label": "Timestamp",
+                        "value": "timestamp"
+                      },
+                      {
+                        "label": "Sent at",
+                        "value": "sent_at"
+                      },
+                      {
+                        "label": "Original timestamp",
+                        "value": "original_timestamp"
+                      }
+                    ],
+                    "default": "_PARTITIONTIME",
+                    "required": true,
+                    "immutable": true
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Partition type",
+                    "configKey": "partitionType",
+                    "note": "Choose the granularity for partitions. This cannot be changed later.",
+                    "options": [
+                      {
+                        "label": "Hour",
+                        "value": "hour"
+                      },
+                      {
+                        "label": "Day",
+                        "value": "day"
+                      }
+                    ],
+                    "default": "day",
+                    "required": true,
+                    "immutable": true
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Sync settings",
+            "note": "Configure the warehouse sync schedule",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Schedule",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Sync frequency",
+                    "configKey": "syncFrequency",
+                    "options": [
+                      {
+                        "label": "Every 5 minutes",
+                        "value": "5",
+                        "featureFlag": "AMP_enable-high-granularity-wh-syncs"
+                      },
+                      {
+                        "label": "Every 10 minutes",
+                        "value": "10",
+                        "featureFlag": "AMP_enable-high-granularity-wh-syncs"
+                      },
+                      {
+                        "label": "Every 15 minutes",
+                        "value": "15",
+                        "featureFlag": "AMP_enable-high-granularity-wh-syncs"
+                      },
+                      {
+                        "label": "Every 30 minutes",
+                        "value": "30"
+                      },
+                      {
+                        "label": "Every 1 hour",
+                        "value": "60"
+                      },
+                      {
+                        "label": "Every 3 hours",
+                        "value": "180"
+                      },
+                      {
+                        "label": "Every 6 hours",
+                        "value": "360"
+                      },
+                      {
+                        "label": "Every 12 hours",
+                        "value": "720"
+                      },
+                      {
+                        "label": "Every 24 hours",
+                        "value": "1440"
+                      }
+                    ],
+                    "default": "180"
+                  },
+                  {
+                    "type": "timePicker",
+                    "label": "Sync starting at (Optional)",
+                    "configKey": "syncStartAt",
+                    "options": {
+                      "omitSeconds": true,
+                      "minuteStep": 15
+                    },
+                    "required": false,
+                    "note": "Specify the time in UTC."
+                  },
+                  {
+                    "type": "timeRangePicker",
+                    "label": "Exclude window (Optional)",
+                    "configKey": "excludeWindow",
+                    "startTime": {
+                      "label": "Start time",
+                      "value": "excludeWindowStartTime"
+                    },
+                    "endTime": {
+                      "label": "End time",
+                      "value": "excludeWindowEndTime"
+                    },
+                    "options": {
+                      "omitSeconds": true,
+                      "minuteStep": 1
+                    },
+                    "required": false,
+                    "note": "Specify the time range in UTC."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Warehouse settings",
+            "note": "Configure load behavior and table creation",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Load behavior",
+                "fields": [
+                  {
+                    "type": "checkbox",
+                    "label": "Skip Users table",
+                    "configKey": "skipUsersTable",
+                    "note": "Disable the creation of a Users table. Its carry-forward queries can significantly increase warehouse operation time.",
+                    "default": true
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Skip Tracks table",
+                    "configKey": "skipTracksTable",
+                    "note": "Enable to skip sending event data to the tracks table.",
+                    "default": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "Web SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    },
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
+      "fields": [
+        {
+          "type": "dynamicCustomForm",
+          "configKey": "consentManagement",
+          "default": [],
+          "rowFields": [
+            {
+              "type": "singleSelect",
+              "label": "Consent management provider",
+              "configKey": "provider",
+              "options": [
+                {
+                  "label": "Custom",
+                  "value": "custom"
+                },
+                {
+                  "label": "iubenda",
+                  "value": "iubenda"
+                },
+                {
+                  "label": "Ketch",
+                  "value": "ketch"
+                },
+                {
+                  "label": "OneTrust",
+                  "value": "oneTrust"
+                }
+              ],
+              "required": true
+            },
+            {
+              "type": "singleSelect",
+              "label": "the required consent logic",
+              "configKey": "resolutionStrategy",
+              "options": [
+                {
+                  "label": "AND",
+                  "value": "and"
+                },
+                {
+                  "label": "OR",
+                  "value": "or"
+                }
+              ],
+              "required": true,
+              "variant": "badge",
+              "preRequisites": {
+                "fields": [
+                  {
+                    "configKey": "provider",
+                    "value": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "tagInput",
+              "label": "Enter consent category IDs",
+              "note": "Input your consent category IDs by pressing 'Enter' after each entry. We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [
+                {
+                  "consent": ""
+                }
+              ],
+              "regex": "^(.{0,100})$"
+            }
+          ],
+          "uniqueRowFields": ["provider"]
+        }
+      ]
+    }
+  }
+}

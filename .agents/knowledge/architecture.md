@@ -140,6 +140,25 @@
 - When `authenticationEnabled` is explicitly `true`, `schema.json` requires a non-empty linked `rudderAccountId`; `false` does not require an account reference.
 - Custom Activation follows the mirrored account-field pattern (fields declared in defaultConfig/secretKeys, like FB Custom Audience); its transformer reads credentials from deliveryAccount, which the preview also relies on.
 
+## INT-7453 — HTTP Destination Version and Builder Boundary
+
+- HTTP v2 is the current triplet at `src/configurations/destinations/http/`; the former root v1 triplet is preserved under `versions/1/` with `status: supported`. `scripts/deployToDB.py` reads root files as current and `versions/*` as archives, so placing v2 only under `versions/2/` would leave v1 current.
+- HTTP v2's `ui-config.json` uses an `httpRequestBuilder` custom field for the JSONata body, URL, headers, query parameters, and preview. The persisted `schema.json` hand-maintains builder-owned request-field validation because `scripts/schemaGenerator.py` cannot traverse custom builder fields; JSONata syntax validation belongs to the parse endpoint, not JSON Schema.
+- HTTP v2 supports JSON body format only, retaining the JSON default and the existing API URL, authentication, method, consent, and request-field keys. Archived v1 preserves XML/FORM and `xmlRootKey` for existing destinations.
+- HTTP v2 validates any supplied `maxBatchSize` at the top level of `configSchema.properties` against the 1–5000 range, while `allOf.then.required` requires it only when `isBatchingEnabled` is true. This rejects out-of-range dormant values at save time without duplicating the property schema inside the conditional.
+- In HTTP v2 `ui-config.json`, both `isBatchingEnabled` and the 1–5000 `maxBatchSize` field are gated by `enable-http-v2-batch-size`; the size field additionally depends on the batching toggle. Gate both controls together so users cannot enable batching while the required size field is hidden.
+
 ## INT-7462 — Archived Major Options in Deployment
 
 - `scripts/deployToDB.py::build_versions_archive` copies the full `options` object from an archived major's `versions/<major>/db-config.json` into its deploy-payload archive entry only when that archived file declares `options`. It neither inherits root `options` nor synthesizes an empty object: an ungated archived major must remain available when the current major is gated, and authored metadata such as `isBeta` must survive alongside `hidden`.
+
+## INT-7507 — MaxCompute Event-Stream Source Boundary
+
+- `src/configurations/destinations/maxcompute/` uses Microsoft Fabric's 13 event-stream source types in cloud mode, rather than the bootstrap warehouse source type. `warehouse` denotes the destination category here, not reverse-ETL source support; consent-management metadata covers each supported event-stream source.
+
+## INT-7424 — Custom Activation OAuth Account Boundary
+
+- Custom Activation links two additional account definitions through `src/configurations/destinations/custom_audience/db-config.json` `config.supportedAccountDefinitions.rudderAccountId`: `DESTINATION_CUSTOM_AUDIENCE_OAUTH_CLIENT_CREDENTIALS` uses `authenticationType: "machine_oauth"`, `refreshOAuthToken: true`, and no `uiConfig.isOAuth`; `DESTINATION_CUSTOM_AUDIENCE_OAUTH_AUTH_CODE` uses `authenticationType: "oauth"`, `refreshOAuthToken: true`, and `uiConfig.isOAuth`. Each has its own account-definition Flagsmith visibility gate.
+- Both flows keep OAuth options and user-supplied `clientSecret` in their account definitions rather than mirroring credentials into destination `config.destConfig.defaultConfig`, `config.secretKeys`, or persisted destination `schema.json`. The client secret is a required account `secretFields`/`secretSchema` field; tokens are platform-written.
+- In both new account `schema.json` files, keep options and secret schemas open so rudder-auth can distinguish and reject `clientSecret` supplied in options. Account form order is controlled by each account `ui-config.json` `uiConfig.form.fields` array, not destination `ui-config.json`.
+- The keyless `audienceDeliveryApiBuilder` in the destination's Initial setup is a display/composite field; its `baseUrl`/actions/headers persisted schema is maintained in the destination `schema.json`, not generated as one property from the UI control.

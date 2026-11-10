@@ -153,6 +153,12 @@
 - `npm run check:schema:destination custom_audience` cannot complete because `scripts/schemaGenerator.py::generate_schema_properties` encounters the bespoke `audienceDeliveryApiBuilder` field without a `configKey`, reports that no generator exists, and then raises `KeyError: 'configKey'` while checking default-config presence.
 - Until the shared generator supports that field shape, use destination validation fixtures to cover Custom Activation schema changes rather than treating this generator failure as a schema regression.
 
+## INT-7507 — MaxCompute Region/Endpoint Pair Is Not Enforced
+
+- MaxCompute `ui-config.json` and generated `schema.json` validate `region` and `endpoint` shapes independently, but do not require their region labels to agree; for example, a `cn-hangzhou` region with a `cn-beijing` endpoint passes schema validation. JSON Schema draft-07 cannot compare arbitrary captured string fragments, and no verified finite MaxCompute region list was available to encode as conditional choices. Matched-pair enforcement needs a verified declarative region contract or downstream runtime/backend validation before release; do not invent a finite allowlist or destination-specific shared-generator exception.
+- `src/configurations/destinations/maxcompute/schema.json` retains authored top-level `additionalProperties: false` to reject prohibited legacy warehouse keys; `scripts/schemaGenerator.py` excludes this property from its generated diffs, so regeneration alone does not establish the closed-object contract.
+- The MaxCompute definition declares the hide-when-false `AMP_enable-maxcompute-destination` gate in `options.hidden.gate.flags`, but this repository does not provision a workspace-writable Flagsmith flag. Flag creation and downstream rollout require external confirmation.
+
 ## INT-7520 — HTTP V2 Schema Generator Baseline Drift
 
 - HTTP v2's auth-specific Initial setup UI fields are UI-required but only conditionally required in `schema.json`, so `scripts/run-schema-validation.sh` reports a required-field warning for HTTP that is not caused by schema changes.

@@ -86,3 +86,8 @@
 
 - Interpreting “similar to other destinations” as merely removing Custom Activation's custom `rudderAccountId` error message left the looser `^.+$` pattern in place.
 - The closest account-backed destination precedent uses `^.{1,100}$`; use that bounded pattern for Custom Activation instead of preserving an integration-specific unbounded variant.
+
+## INT-7453 — Reuse AJV Initialization Across Validation Suites
+
+- `test/validation.test.ts` rebuilt the full AJV destination/source registry in three separate `init()` calls with Jest's default five-second hook timeout. In CI, initialization took roughly 5–6 seconds and the Validation Tests `beforeAll` timed out, cascading into thousands of cases failing before their assertions ran.
+- Initialize the registry once in a file-level `beforeAll` with a realistic 30-second hook timeout; retain the schema assertions rather than treating the timeout cascade as validation failures.

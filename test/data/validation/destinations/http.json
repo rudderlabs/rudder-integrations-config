@@ -26,7 +26,7 @@
       ],
       "supportedMessageTypes": ["track", "identify"],
       "connectionMode": {
-        "warehouse": "cloud"
+        "cloud": "cloud"
       },
       "maxBatchSize": "1"
     },
@@ -304,6 +304,42 @@
     },
     "result": false,
     "err": ["queryParams.0.to must match pattern \"^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- ]{1,100}$\""]
+  },
+  {
+    "testTitle": "Reject a header without a key",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "auth": "noAuth",
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "headers": [
+        {
+          "from": "$$.message.userId"
+        }
+      ],
+      "maxBatchSize": "1"
+    },
+    "result": false,
+    "err": ["headers.0 must have required property 'to'"]
+  },
+  {
+    "testTitle": "Reject a query parameter without a key",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "auth": "noAuth",
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "queryParams": [
+        {
+          "from": "$$.message.userId"
+        }
+      ],
+      "maxBatchSize": "1"
+    },
+    "result": false,
+    "err": ["queryParams.0 must have required property 'to'"]
   },
   {
     "testTitle": "FORM without a batch size",
