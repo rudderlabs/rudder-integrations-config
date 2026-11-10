@@ -258,6 +258,12 @@ const isFieldVisible = (
     : checks.every(Boolean);
 };
 
+// Compile the complete configuration registry once for tests that exercise validateConfig.
+// This can take longer than Jest's default five-second hook timeout on CI workers.
+beforeAll(async () => {
+  await init();
+}, 30_000);
+
 describe('Core Tests', () => {
   it('If invalid integration name is provide, throw error', () => {
     expect(() => {
@@ -265,18 +271,14 @@ describe('Core Tests', () => {
     }).toThrow('Missing definitionName');
   });
 
-  it('If unknown integration name is provided, throw error', async () => {
-    await init();
-
+  it('If unknown integration name is provided, throw error', () => {
     const invalidIntg = 'INVALID_INTEGRATION_NAME';
     expect(() => {
       validateConfig(invalidIntg, {}, 'destinations', true);
     }).toThrow(`No validation method found for definition ${invalidIntg}`);
   });
 
-  it('If unknown integration name is provided and throw errors flag is disabled, no error should be thrown', async () => {
-    await init();
-
+  it('If unknown integration name is provided and throw errors flag is disabled, no error should be thrown', () => {
     const invalidIntg = 'INVALID_INTEGRATION_NAME';
     expect(() => {
       validateConfig(invalidIntg, {}, 'destinations');
@@ -285,10 +287,6 @@ describe('Core Tests', () => {
 });
 
 describe('Validation Tests', () => {
-  beforeAll(async () => {
-    await init();
-  });
-
   describe('HTTP versioned destination', () => {
     const directory = path.resolve('src/configurations/destinations/http');
     const rootDefinition = JSON.parse(
