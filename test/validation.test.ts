@@ -49,6 +49,8 @@ function getAccountNames(type: string) {
   return accounts;
 }
 
+const readJson = (file: string) => JSON.parse(fs.readFileSync(path.resolve(file), 'utf-8'));
+
 function getIntegrationData(name: string, type: string): Record<string, unknown>[] {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let intgData: any;
@@ -478,6 +480,45 @@ describe('Validation Tests', () => {
       });
     });
   });
+});
+
+describe('HTTP versioned authentication definitions', () => {
+  const base = path.resolve('src/configurations/destinations/http');
+
+  it('keeps the v1 inline credential definition and gated, account-linked v2', () => {
+    const root = readJson(path.join(base, 'db-config.json'));
+    const previous = readJson(path.join(base, 'versions/1/db-config.json'));
+    expect(previous.version).toBe('1.0');
+    expect(previous.status).toBe('supported');
+    expect(previous.config.destConfig.defaultConfig).toContain('password');
+    expect(previous.config.secretKeys).toEqual(['password', 'bearerToken', 'apiKeyValue']);
+    expect(root.version).toBe('2.0');
+    // Non-OAuth account fields are merged into the destination config and filtered by defaultConfig.
+    expect(root.config.secretKeys).toEqual(['password', 'bearerToken', 'apiKeyValue']);
+    expect(root.config.destConfig.defaultConfig).toEqual(
+      expect.arrayContaining(['rudderAccountId', 'username', 'password', 'apiKeyName']),
+    );
+    expect(root.options.hidden.gate.flags).toEqual([
+      { name: 'AMP_enable-http-v2-destination', value: false },
+    ]);
+  });
+
+  it.each([
+    ['http_basic_auth', 'optionsSchema', 'username', 'user', ['', 'u'.repeat(101)]],
+    ['http_basic_auth', 'secretSchema', 'password', '', ['p'.repeat(101)]],
+    ['http_bearer_token', 'secretSchema', 'bearerToken', 't'.repeat(2048), ['', 't'.repeat(2049)]],
+    ['http_api_key', 'optionsSchema', 'apiKeyName', 'x-api-key', ['', 'my key']],
+    ['http_api_key', 'secretSchema', 'apiKeyValue', 'key', ['', 'k'.repeat(101)]],
+  ])(
+    'validates %s %s credential bounds',
+    (account, schemaKey, field, validValue, invalidValues) => {
+      const schema = readJson(path.join(base, `accounts/${account}/schema.json`))[schemaKey];
+      const validate = compileAccountSchema(schema);
+      expect(validate({ [field]: validValue })).toBe(true);
+      invalidValues.forEach((value: string) => expect(validate({ [field]: value })).toBe(false));
+      expect(validate({})).toBe(field === 'password');
+    },
+  );
 });
 
 describe('Google Ads Offline Conversions UI config', () => {
@@ -3406,7 +3447,6 @@ const MARKETO_AUDIENCE_GATE = {
 
 // Read from disk: the definition validators run AJV with useDefaults and mutate what they are
 // given, so a cached import would carry defaults into the next assertion.
-const readJson = (file: string) => JSON.parse(fs.readFileSync(path.resolve(file), 'utf-8'));
 
 const loadMarketoAudienceAccount = () => readJson(`${MARKETO_AUDIENCE_ACCOUNT_DIR}/db-config.json`);
 

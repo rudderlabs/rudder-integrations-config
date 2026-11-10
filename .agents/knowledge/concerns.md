@@ -161,4 +161,4 @@
 
 ## INT-7520 — HTTP V2 Schema Generator Baseline Drift
 
-- HTTP v2's auth-specific Initial setup UI fields and the format-gated `maxBatchSize` are UI-required but only conditionally required in `schema.json`, so `scripts/run-schema-validation.sh` reports a required-field warning for HTTP that is not caused by schema changes.
+- HTTP v2's format-gated `maxBatchSize` is UI-required (hidden for FORM) but only conditionally required in `schema.json` for JSON and XML, so `scripts/run-schema-validation.sh` reports an expected required-field warning for HTTP. Do not make it top-level required to silence the warning; that would reject FORM configurations without a batch size.
