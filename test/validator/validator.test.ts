@@ -91,7 +91,8 @@ describe('Validator Utils', () => {
         readFile: jest
           .fn()
           .mockResolvedValueOnce(JSON.stringify(mockSchemaContent1))
-          .mockResolvedValueOnce(JSON.stringify(mockSchemaContent2)),
+          .mockResolvedValueOnce(JSON.stringify(mockSchemaContent2))
+          .mockResolvedValue(JSON.stringify({ version: '1.0' })),
       } as any;
 
       await init();
@@ -216,7 +217,8 @@ describe('Validator Utils', () => {
         readFile: jest
           .fn()
           .mockResolvedValueOnce(JSON.stringify(validSchema))
-          .mockResolvedValueOnce(JSON.stringify(invalidSchema)),
+          .mockResolvedValueOnce(JSON.stringify(invalidSchema))
+          .mockResolvedValue(JSON.stringify({ version: '1.0' })),
       } as any;
 
       await init();

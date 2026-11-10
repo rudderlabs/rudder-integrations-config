@@ -328,13 +328,9 @@ describe('Validation Tests', () => {
     });
 
     it('validates against the current schema when its own major is passed', () => {
-      const validateV2 = () =>
-        validateConfig('http', { apiUrl: 'not-a-url' }, 'destinations', true, 2);
-      expect(validateV2).toThrow();
-      expect(validateV2).toThrow(
-        expect.objectContaining({
-          message: expect.not.stringContaining('No validation method found'),
-        }),
+      // requestBodyTemplate is required only by the v2 schema.
+      expect(() => validateConfig('http', {}, 'destinations', true, 2)).toThrow(
+        "must have required property 'requestBodyTemplate'",
       );
       expect(() => validateConfig('http', {}, 'destinations', true, 9)).toThrow(
         'No validation method found for definition http version 9',
