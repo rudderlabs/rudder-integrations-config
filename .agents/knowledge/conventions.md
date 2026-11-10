@@ -385,6 +385,6 @@
 
 ## INT-7520 — HTTP V2 XML and FORM Definition Rules
 
-- HTTP v2 is cloud-only: `src/configurations/destinations/http/db-config.json` lists `format` in `config.destConfig.defaultConfig`, not `config.includeKeys`. Put `xmlRootKey` beside `format` in `defaultConfig` to preserve persisted configuration; do not introduce device-mode `includeKeys` solely for these fields.
-- Keep HTTP v2 `xmlRootKey` as an optional top-level `schema.json` property with pattern `^(.{0,100})$`, even though its `ui-config.json` field is visible only for XML. The schema generator derives the top-level property from the UI field; an XML-only conditional property creates generator drift, and validating a stale root key for another format does not change its wire behavior.
-- Keep HTTP v2 `maxBatchSize` required in the UI only when `format` is JSON or XML, with no UI or schema default. Hand-author a `schema.json` `allOf` conditional requiring `maxBatchSize` when `format` is JSON or XML; do not make it top-level required, so FORM without a batch size remains valid. `scripts/schemaGenerator.py` derives the field property but not this conditional requirement.
+- HTTP v2 `xmlRootKey` goes beside `format` in `destConfig.defaultConfig`; no `includeKeys`.
+- Keep HTTP v2 `xmlRootKey` an unconditional top-level `schema.json` property (`^(.{0,100})$`) even though the UI shows it only for XML; a conditional property drifts from `scripts/schemaGenerator.py` output.
+- HTTP v2 `maxBatchSize` is visible in the UI only when `format` is JSON or XML (UI `required: false`, no UI or schema default). Only the hand-authored `schema.json` `allOf` conditional requires it for those formats; do not make it top-level required, so FORM without a batch size remains valid. `scripts/schemaGenerator.py` derives the field property but not this conditional requirement.
