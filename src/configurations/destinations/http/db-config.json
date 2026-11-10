@@ -1,9 +1,8 @@
 {
   "name": "HTTP",
   "displayName": "HTTP Webhook",
-  "version": "1.0",
+  "version": "2.0",
   "config": {
-    "cdkV2Enabled": true,
     "transformAtV1": "router",
     "saveDestinationResponse": true,
     "supportedSourceTypes": [
@@ -15,7 +14,6 @@
       "unity",
       "amp",
       "cloud",
-      "warehouse",
       "reactnative",
       "flutter",
       "cordova",
@@ -30,7 +28,6 @@
       "unity": ["cloud"],
       "amp": ["cloud"],
       "cloud": ["cloud"],
-      "warehouse": ["cloud"],
       "reactnative": ["cloud"],
       "flutter": ["cloud"],
       "cordova": ["cloud"],
@@ -45,19 +42,14 @@
         "bearerToken",
         "apiKeyName",
         "apiKeyValue",
-        "xmlRootKey",
         "method",
         "format",
-        "propertiesMapping",
+        "requestBodyTemplate",
+        "supportedMessageTypes",
         "queryParams",
         "headers",
         "pathParams",
-        "isBatchingEnabled",
-        "maxBatchSize",
-        "blacklistedEvents",
-        "whitelistedEvents",
-        "eventFilteringOption",
-        "isDefaultMapping"
+        "maxBatchSize"
       ],
       "android": [
         "connectionMode",
@@ -97,12 +89,6 @@
         "oneTrustCookieCategories",
         "ketchConsentPurposes"
       ],
-      "warehouse": [
-        "connectionMode",
-        "consentManagement",
-        "oneTrustCookieCategories",
-        "ketchConsentPurposes"
-      ],
       "reactnative": [
         "connectionMode",
         "consentManagement",
@@ -131,6 +117,11 @@
     "secretKeys": ["password", "bearerToken", "apiKeyValue"]
   },
   "options": {
-    "icon": "http"
+    "icon": "http",
+    "hidden": {
+      "gate": {
+        "flags": [{ "name": "AMP_enable-http-v2-destination", "value": false }]
+      }
+    }
   }
 }

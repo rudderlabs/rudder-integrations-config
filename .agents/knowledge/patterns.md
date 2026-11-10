@@ -123,6 +123,10 @@
 
 - OpenAI Ads `eventMapping` is hand-maintained schema for `uiConfig.redirectGroups`, which `scripts/schemaGenerator.py` does not traverse. A force schema update attempts to delete that contract; use the destination update's skip-deletions flow so generated fields such as `isHashRequired` can be added without removing `eventMapping`.
 
+## INT-7453 — Archived Major Validation
+
+- `src/validator` registers each `<type>/<name>/versions/<major>/schema.json` under `<type>___<name>___<major>`; validate against it with `validateConfig(name, config, type, true, major)`. Keep archived-major fixtures in `test/data/validation/versions/<name>-v<major>.json`, not in `test/data/validation/destinations/`, whose files are discovered as root destination names.
+
 ## INT-7462 — Archived Definition Validation Without Loosening Root Schema
 
 - In `test/validation.test.ts`, validate each archived destination `versions/<major>/db-config.json` through `validateDestinationDefinitions` after removing only archive-only lifecycle fields `status`, `retirementDate`, and `migrationDocsUrl`. Root definitions continue through the unmodified strict schema, while deployment validates archive status separately. Do not add archive-only fields to the root schema or introduce a production validator mode solely for this test adaptation.

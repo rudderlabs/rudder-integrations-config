@@ -258,6 +258,12 @@ const isFieldVisible = (
     : checks.every(Boolean);
 };
 
+// Compile the complete configuration registry once for tests that exercise validateConfig.
+// This can take longer than Jest's default five-second hook timeout on CI workers.
+beforeAll(async () => {
+  await init();
+}, 30_000);
+
 describe('Core Tests', () => {
   it('If invalid integration name is provide, throw error', () => {
     expect(() => {
@@ -265,18 +271,14 @@ describe('Core Tests', () => {
     }).toThrow('Missing definitionName');
   });
 
-  it('If unknown integration name is provided, throw error', async () => {
-    await init();
-
+  it('If unknown integration name is provided, throw error', () => {
     const invalidIntg = 'INVALID_INTEGRATION_NAME';
     expect(() => {
       validateConfig(invalidIntg, {}, 'destinations', true);
     }).toThrow(`No validation method found for definition ${invalidIntg}`);
   });
 
-  it('If unknown integration name is provided and throw errors flag is disabled, no error should be thrown', async () => {
-    await init();
-
+  it('If unknown integration name is provided and throw errors flag is disabled, no error should be thrown', () => {
     const invalidIntg = 'INVALID_INTEGRATION_NAME';
     expect(() => {
       validateConfig(invalidIntg, {}, 'destinations');
@@ -285,8 +287,65 @@ describe('Core Tests', () => {
 });
 
 describe('Validation Tests', () => {
-  beforeAll(async () => {
-    await init();
+  describe('HTTP versioned destination', () => {
+    const directory = path.resolve('src/configurations/destinations/http');
+    const rootDefinition = JSON.parse(
+      fs.readFileSync(path.join(directory, 'db-config.json'), 'utf-8'),
+    );
+    const rootUi = JSON.parse(fs.readFileSync(path.join(directory, 'ui-config.json'), 'utf-8'));
+
+    it('root v2 uses native dispatch and a closed gate', () => {
+      expect(rootDefinition.version).toBe('2.0');
+      expect(rootDefinition.config.cdkV2Enabled).toBeUndefined();
+      expect(rootDefinition.config.destConfig.defaultConfig).toEqual(
+        expect.arrayContaining(['requestBodyTemplate', 'supportedMessageTypes', 'maxBatchSize']),
+      );
+      expect(rootDefinition.config.destConfig.defaultConfig).not.toContain('propertiesMapping');
+      expect(rootDefinition.config.destConfig.defaultConfig).not.toContain('isDefaultMapping');
+      expect(rootDefinition.options.hidden.gate.flags).toEqual([
+        { name: 'AMP_enable-http-v2-destination', value: false },
+      ]);
+      expect(rootUi.uiConfig.baseTemplate[1].sections[0].groups[0].fields).toEqual([
+        { type: 'httpRequestBuilder' },
+      ]);
+      const { fields } = rootUi.uiConfig.baseTemplate[2].sections[0].groups[0];
+      // Capability fields are always shown; only the catalogue gate is flagged.
+      ['maxBatchSize', 'supportedMessageTypes'].forEach((configKey) => {
+        expect(
+          fields.find((field: { configKey: string }) => field.configKey === configKey)
+            .preRequisites,
+        ).toBeUndefined();
+      });
+    });
+
+    it('v1 is archived as supported', () => {
+      const v1 = JSON.parse(
+        fs.readFileSync(path.join(directory, 'versions/1/db-config.json'), 'utf-8'),
+      );
+      expect(v1).toMatchObject({ version: '1.0', status: 'supported' });
+    });
+
+    it('validates against the current schema when its own major is passed', () => {
+      // requestBodyTemplate is required only by the v2 schema.
+      expect(() => validateConfig('http', {}, 'destinations', true, 2)).toThrow(
+        "must have required property 'requestBodyTemplate'",
+      );
+      expect(() => validateConfig('http', {}, 'destinations', true, 9)).toThrow(
+        'No validation method found for definition http version 9',
+      );
+    });
+
+    getIntegrationData('http-v1', 'versions').forEach((td: Record<string, unknown>) => {
+      it(`v1 - ${td.testTitle}`, () => {
+        const validateV1 = () =>
+          validateConfig('http', td.config as Record<string, unknown>, 'destinations', true, 1);
+        if (td.result === true) {
+          expect(validateV1()).toBeUndefined();
+        } else {
+          expect(validateV1).toThrow(JSON.stringify(td.err));
+        }
+      });
+    });
   });
 
   // Destination tests
