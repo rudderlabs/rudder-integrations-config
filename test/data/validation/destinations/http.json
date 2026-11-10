@@ -58,15 +58,16 @@
     "result": true
   },
   {
-    "testTitle": "Batch size is optional",
+    "testTitle": "Reject JSON without a batch size",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
-      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}"
+      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
+      "authenticationEnabled": false
     },
-    "result": true
+    "result": false,
+    "err": [" must have required property 'maxBatchSize'", " must match \"then\" schema"]
   },
   {
     "testTitle": "Reject batch size 0",
@@ -140,7 +141,8 @@
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
-      "requestBodyTemplate": ""
+      "requestBodyTemplate": "",
+      "maxBatchSize": "1"
     },
     "result": false,
     "err": ["requestBodyTemplate must match pattern \"^[\\s\\S]{1,}$\""]
@@ -153,7 +155,8 @@
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
-      "supportedMessageTypes": ["track", "bogus"]
+      "supportedMessageTypes": ["track", "bogus"],
+      "maxBatchSize": "1"
     },
     "result": false,
     "err": ["supportedMessageTypes.1 must be equal to one of the allowed values"]
@@ -166,7 +169,8 @@
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
-      "supportedMessageTypes": []
+      "supportedMessageTypes": [],
+      "maxBatchSize": "1"
     },
     "result": false,
     "err": ["supportedMessageTypes must NOT have fewer than 1 items"]
@@ -179,22 +183,23 @@
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
-      "supportedMessageTypes": ["track", "record"]
+      "supportedMessageTypes": ["track", "record"],
+      "maxBatchSize": "1"
     },
     "result": false,
     "err": ["supportedMessageTypes.1 must be equal to one of the allowed values"]
   },
   {
-    "testTitle": "Reject non-JSON format",
+    "testTitle": "XML with a single root key",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "authenticationEnabled": false,
       "method": "POST",
       "format": "XML",
-      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}"
+      "requestBodyTemplate": "{\"Envelope\": {\"events\": $$.events.{\"event\": event}}}",
+      "maxBatchSize": "1",
+      "authenticationEnabled": false
     },
-    "result": false,
-    "err": ["format must be equal to constant"]
+    "result": true
   },
   {
     "testTitle": "Reject an empty header key",
@@ -209,7 +214,8 @@
           "to": "",
           "from": "$$.message.userId"
         }
-      ]
+      ],
+      "maxBatchSize": "1"
     },
     "result": false,
     "err": ["headers.0.to must match pattern \"^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{1,100}$\""]
@@ -227,7 +233,8 @@
           "to": "",
           "from": "$$.message.userId"
         }
-      ]
+      ],
+      "maxBatchSize": "1"
     },
     "result": false,
     "err": ["queryParams.0.to must match pattern \"^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- ]{1,100}$\""]
@@ -244,7 +251,8 @@
         {
           "from": "$$.message.userId"
         }
-      ]
+      ],
+      "maxBatchSize": "1"
     },
     "result": false,
     "err": ["headers.0 must have required property 'to'"]
@@ -261,7 +269,8 @@
         {
           "from": "$$.message.userId"
         }
-      ]
+      ],
+      "maxBatchSize": "1"
     },
     "result": false,
     "err": ["queryParams.0 must have required property 'to'"]
@@ -577,5 +586,53 @@
     },
     "result": false,
     "err": [" must NOT be valid"]
+  },
+  {
+    "testTitle": "FORM without a batch size",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "method": "POST",
+      "requestBodyTemplate": "[$$.events][0]",
+      "format": "FORM",
+      "authenticationEnabled": false
+    },
+    "result": true
+  },
+  {
+    "testTitle": "FORM accepts a stored batch size",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "method": "POST",
+      "requestBodyTemplate": "[$$.events][0]",
+      "format": "FORM",
+      "maxBatchSize": "5000",
+      "authenticationEnabled": false
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Reject XML without a batch size",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "method": "POST",
+      "requestBodyTemplate": "[$$.events][0]",
+      "format": "XML",
+      "authenticationEnabled": false
+    },
+    "result": false,
+    "err": [" must have required property 'maxBatchSize'", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "Reject unsupported body format",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "method": "POST",
+      "requestBodyTemplate": "[$$.events][0]",
+      "format": "SOAP",
+      "maxBatchSize": "1",
+      "authenticationEnabled": false
+    },
+    "result": false,
+    "err": ["format must be equal to one of the allowed values"]
   }
 ]

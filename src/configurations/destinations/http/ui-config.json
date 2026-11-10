@@ -68,6 +68,49 @@
                       }
                     ],
                     "default": "POST"
+                  },
+                  {
+                    "type": "singleSelect",
+                    "label": "Body format",
+                    "configKey": "format",
+                    "options": [
+                      {
+                        "label": "JSON",
+                        "value": "JSON"
+                      },
+                      {
+                        "label": "XML",
+                        "value": "XML"
+                      },
+                      {
+                        "label": "FORM",
+                        "value": "FORM"
+                      }
+                    ],
+                    "default": "JSON"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Maximum batch size",
+                    "note": "Choose 1 to 5,000 events per HTTP request",
+                    "configKey": "maxBatchSize",
+                    "required": true,
+                    "regex": "^([1-9][0-9]{0,2}|[1-4][0-9]{3}|5000)$",
+                    "regexErrorMessage": "Enter a batch size from 1 to 5,000",
+                    "placeholder": "e.g. 10",
+                    "preRequisites": {
+                      "fields": [
+                        {
+                          "configKey": "format",
+                          "value": "JSON"
+                        },
+                        {
+                          "configKey": "format",
+                          "value": "XML"
+                        }
+                      ],
+                      "condition": "or"
+                    }
                   }
                 ]
               }
@@ -93,7 +136,7 @@
       },
       {
         "title": "Request configuration",
-        "note": "Build and verify your JSONata request over $$.events",
+        "note": "Build and verify your JSONata request over $$.events. For XML and FORM, the template must produce one object. For XML, that object must have exactly one top-level key, which becomes the root element. For FORM, its top-level keys are sent as form fields.",
         "sections": [
           {
             "groups": [
@@ -122,16 +165,6 @@
               {
                 "title": "HTTP configuration settings",
                 "fields": [
-                  {
-                    "type": "textInput",
-                    "label": "Maximum Batch Size",
-                    "note": "Choose 1 to 5,000 events per HTTP request",
-                    "configKey": "maxBatchSize",
-                    "default": "5000",
-                    "regex": "^([1-9][0-9]{0,2}|[1-4][0-9]{3}|5000)$",
-                    "regexErrorMessage": "Enter a batch size from 1 to 5,000",
-                    "placeholder": "e.g. 10"
-                  },
                   {
                     "type": "multiSelect",
                     "label": "Supported message types",

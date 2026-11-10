@@ -312,7 +312,8 @@ describe('Validation Tests', () => {
       ]);
       const { fields } = rootUi.uiConfig.baseTemplate[2].sections[0].groups[0];
       // Capability fields are always shown; only the catalogue gate is flagged.
-      ['maxBatchSize', 'supportedMessageTypes'].forEach((configKey) => {
+      // maxBatchSize is format-gated (JSON/XML) and lives beside the body format.
+      ['supportedMessageTypes'].forEach((configKey) => {
         expect(
           fields.find((field: { configKey: string }) => field.configKey === configKey)
             .preRequisites,
