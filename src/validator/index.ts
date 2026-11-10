@@ -218,14 +218,31 @@ async function importJsonFromFile(file: string) {
 
 async function initAjvValidators() {
   const files = await glob(path.join(__dirname, '../configurations/**/schema.json'));
-  const filePromises = files.map(importJsonFromFile);
-  const contents = await Promise.all(filePromises);
+  const [contents, dbConfigs] = await Promise.all([
+    Promise.all(files.map(importJsonFromFile)),
+    Promise.all(
+      files.map((file) =>
+        importJsonFromFile(file.replace(/schema\.json$/, 'db-config.json')).catch((e) => {
+          if (e.code !== 'ENOENT') throw e;
+        }),
+      ),
+    ),
+  ]);
 
   files.forEach((file, i) => {
     const intgDir = path.dirname(file);
     const intgName = path.basename(intgDir);
     const intgType = path.basename(path.dirname(intgDir));
-    validators[`${intgType}___${intgName}`] = ajv.compile(contents[i].configSchema || {});
+    const archivedVersion = file.match(
+      /[/\\](destinations|sources)[/\\]([^/\\]+)[/\\]versions[/\\]([1-9]\d*)[/\\]schema\.json$/,
+    );
+    const key = archivedVersion
+      ? `${archivedVersion[1]}___${archivedVersion[2]}___${archivedVersion[3]}`
+      : `${intgType}___${intgName}`;
+    validators[key] = ajv.compile(contents[i].configSchema || {});
+    // The current definition is also its own major, so an explicit current version resolves too.
+    const currentMajor = !archivedVersion && dbConfigs[i]?.version?.split('.')[0];
+    if (currentMajor) validators[`${key}___${currentMajor}`] = validators[key];
   });
 }
 
@@ -234,14 +251,22 @@ export function validateConfig(
   config: Record<string, unknown>,
   intgType: string,
   throwErrorOnMissingValidations = false,
+  version: number | undefined = undefined,
 ) {
   if (!definitionName) {
     throw new Error('Missing definitionName');
   }
 
-  const validationMethod = validators[`${intgType}___${definitionName}`];
+  const validationKey = `${intgType}___${definitionName}${
+    version === undefined ? '' : `___${version}`
+  }`;
+  const validationMethod = validators[validationKey];
   if (!validationMethod && throwErrorOnMissingValidations) {
-    throw new Error(`No validation method found for definition ${definitionName}`);
+    throw new Error(
+      `No validation method found for definition ${definitionName}${
+        version === undefined ? '' : ` version ${version}`
+      }`,
+    );
   }
 
   if (validationMethod && !validationMethod(config) && validationMethod.errors) {

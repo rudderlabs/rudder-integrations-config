@@ -155,10 +155,7 @@ def validate_account_only_major(dest_dir, dest_config, account_fields, secret_fi
         return False
 
     current_fields = set(cfg.get("destConfig", {}).get("defaultConfig", []))
-    if (
-        "rudderAccountId" not in current_fields
-        or cfg.get("secretKeys") != []
-    ):
+    if "rudderAccountId" not in current_fields or cfg.get("secretKeys") != []:
         print(f"ERROR: Incomplete account-only metadata for '{dest_dir.name}'")
         return False
 
@@ -179,7 +176,7 @@ def validate_account_only_major(dest_dir, dest_config, account_fields, secret_fi
 
 def validate_account_field_coverage(dest_dir):
     """
-    Validate that for each non-oauth account definition, all fields are mirrored
+    Validate that for each non-OAuth account definition, all fields are mirrored
     in destConfig and secrets in secretKeys; alternatively, a versioned account-only
     root has no credential fields and preserves them in the archived predecessor.
 
@@ -187,8 +184,8 @@ def validate_account_field_coverage(dest_dir):
     Mirrored account fields are necessary for existing destinations, while an
     account-only major receives credentials through its linked delivery account.
 
-    OAuth accounts are excluded because their secrets are managed by the OAuth flow,
-    not through destConfig.
+    Interactive OAuth and machine OAuth accounts are excluded because their credentials
+    stay on the account and are not merged into destination config.
 
     Args:
         dest_dir: Path to the destination directory.
@@ -217,7 +214,7 @@ def validate_account_field_coverage(dest_dir):
         account_config = load_json_file(account_dir / "db-config.json")
         if account_config is None:
             return False
-        if account_config.get("authenticationType") != "oauth":
+        if account_config.get("authenticationType") not in ("oauth", "machine_oauth"):
             accounts.append(account_config)
             account_cfg = account_config.get("config", {})
             account_fields.update(account_cfg.get("secretFields", []))

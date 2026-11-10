@@ -1,7 +1,7 @@
 {
   "configSchema": {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["apiUrl", "authenticationEnabled", "method", "format"],
+    "required": ["apiUrl", "authenticationEnabled", "method", "format", "requestBodyTemplate"],
     "type": "object",
     "properties": {
       "apiUrl": {
@@ -23,16 +23,8 @@
       },
       "format": {
         "type": "string",
-        "enum": ["JSON", "XML", "FORM"],
+        "const": "JSON",
         "default": "JSON"
-      },
-      "isBatchingEnabled": {
-        "type": "boolean",
-        "default": false
-      },
-      "isDefaultMapping": {
-        "type": "boolean",
-        "default": true
       },
       "pathParams": {
         "type": "array",
@@ -40,8 +32,7 @@
           "type": "object",
           "properties": {
             "path": {
-              "type": "string",
-              "pattern": "^\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)\\/?$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{0,100}\\/?$"
+              "type": "string"
             }
           }
         }
@@ -53,13 +44,13 @@
           "properties": {
             "to": {
               "type": "string",
-              "pattern": "^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- ]{0,100}$"
+              "pattern": "^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- ]{1,100}$"
             },
             "from": {
-              "type": "string",
-              "pattern": "^\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- ]{0,100}$"
+              "type": "string"
             }
-          }
+          },
+          "required": ["to"]
         }
       },
       "headers": {
@@ -69,13 +60,13 @@
           "properties": {
             "to": {
               "type": "string",
-              "pattern": "^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{0,100}$"
+              "pattern": "^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{1,100}$"
             },
             "from": {
-              "type": "string",
-              "pattern": "^\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- /\\\\]{0,100}$"
+              "type": "string"
             }
-          }
+          },
+          "required": ["to"]
         }
       },
       "oneTrustCookieCategories": {
@@ -142,18 +133,6 @@
             }
           },
           "cloud": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "warehouse": {
             "type": "array",
             "items": {
               "type": "object",
@@ -250,10 +229,6 @@
             "type": "string",
             "enum": ["cloud"]
           },
-          "warehouse": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
           "reactnative": {
             "type": "string",
             "enum": ["cloud"]
@@ -272,88 +247,10 @@
           }
         }
       },
-      "eventFilteringOption": {
-        "type": "string",
-        "pattern": "(^env[.].+)|^(disable|whitelistedEvents|blacklistedEvents)$",
-        "default": "disable"
-      },
-      "whitelistedEvents": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "eventName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
-      "blacklistedEvents": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "eventName": {
-              "type": "string",
-              "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-            }
-          }
-        }
-      },
       "consentManagement": {
         "type": "object",
         "properties": {
           "cloud": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "string",
-                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
-                },
-                "consents": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "consent": {
-                        "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                      }
-                    }
-                  }
-                }
-              },
-              "allOf": [
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
-                    "required": ["provider"]
-                  },
-                  "then": {
-                    "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
-                    },
-                    "required": ["resolutionStrategy"]
-                  }
-                }
-              ]
-            },
-            "uniqueItemProperties": ["provider"],
-            "errorMessage": {
-              "uniqueItemProperties": "Only one consent management block can be configured per provider."
-            }
-          },
-          "warehouse": {
             "type": "array",
             "items": {
               "type": "object",
@@ -1018,18 +915,6 @@
               }
             }
           },
-          "warehouse": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
           "reactnative": {
             "type": "array",
             "items": {
@@ -1079,6 +964,24 @@
             }
           }
         }
+      },
+      "requestBodyTemplate": {
+        "type": "string",
+        "pattern": "^[\\s\\S]{1,}$"
+      },
+      "supportedMessageTypes": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": ["identify", "track", "page", "screen", "group", "alias"]
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      },
+      "maxBatchSize": {
+        "type": "string",
+        "pattern": "^([1-9][0-9]{0,2}|[1-4][0-9]{3}|5000)$",
+        "default": "5000"
       }
     },
     "allOf": [
@@ -1117,73 +1020,6 @@
               "required": ["apiKeyValue"]
             }
           ]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "isBatchingEnabled": {
-              "const": true
-            }
-          },
-          "required": ["isBatchingEnabled"]
-        },
-        "then": {
-          "properties": {
-            "maxBatchSize": {
-              "type": "string",
-              "pattern": "^([1-9][0-9]{0,1}|100)$"
-            }
-          },
-          "required": ["maxBatchSize"]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "format": {
-              "const": "XML"
-            }
-          },
-          "required": ["format"]
-        },
-        "then": {
-          "properties": {
-            "xmlRootKey": {
-              "type": "string",
-              "pattern": "^(.{0,100})$"
-            }
-          }
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "isDefaultMapping": {
-              "const": false
-            }
-          },
-          "required": ["isDefaultMapping"]
-        },
-        "then": {
-          "properties": {
-            "propertiesMapping": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "to": {
-                    "type": "string",
-                    "pattern": "^(?:$|\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('[^\\s']+'|\"[^\\s\"]+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$)"
-                  },
-                  "from": {
-                    "type": "string",
-                    "pattern": "^\\$(?:\\.|(\\.(\\w+|\\*)|\\[\\d+\\]|\\[('\\w+'|\"\\w+\")\\]|\\[\\*\\]|\\.\\w+\\(\\))*)$|^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~-]{0,100}$"
-                  }
-                }
-              }
-            }
-          }
         }
       }
     ]
