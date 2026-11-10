@@ -183,23 +183,6 @@
                   },
                   {
                     "type": "textInput",
-                    "label": "XML root key",
-                    "note": "Root element that wraps the template output",
-                    "configKey": "xmlRootKey",
-                    "regex": "^(.{0,100})$",
-                    "regexErrorMessage": "Root key must be 100 characters or less",
-                    "placeholder": "e.g. root",
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "format",
-                          "value": "XML"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type": "textInput",
                     "label": "Maximum batch size",
                     "note": "Choose 1 to 5,000 events per HTTP request",
                     "configKey": "maxBatchSize",
@@ -245,7 +228,7 @@
       },
       {
         "title": "Request configuration",
-        "note": "Build and verify your JSONata request over $$.events. For XML and FORM, the template must produce one object. XML wraps it in the root key, and FORM sends its top-level keys as form fields.",
+        "note": "Build and verify your JSONata request over $$.events. For XML and FORM, the template must produce one object. For XML, that object must have exactly one top-level key, which becomes the root element. For FORM, its top-level keys are sent as form fields.",
         "sections": [
           {
             "groups": [

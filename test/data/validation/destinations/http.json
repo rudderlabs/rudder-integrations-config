@@ -189,14 +189,13 @@
     "err": ["supportedMessageTypes.1 must be equal to one of the allowed values"]
   },
   {
-    "testTitle": "XML with a custom root key",
+    "testTitle": "XML with a single root key",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
       "auth": "noAuth",
       "method": "POST",
       "format": "XML",
-      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
-      "xmlRootKey": "Envelope",
+      "requestBodyTemplate": "{\"Envelope\": {\"events\": $$.events.{\"event\": event}}}",
       "maxBatchSize": "1"
     },
     "result": true
@@ -365,19 +364,6 @@
     "result": true
   },
   {
-    "testTitle": "XML accepts an empty root key",
-    "config": {
-      "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
-      "method": "POST",
-      "requestBodyTemplate": "[$$.events][0]",
-      "format": "XML",
-      "maxBatchSize": "1",
-      "xmlRootKey": ""
-    },
-    "result": true
-  },
-  {
     "testTitle": "Reject XML without a batch size",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
@@ -401,19 +387,5 @@
     },
     "result": false,
     "err": ["format must be equal to one of the allowed values"]
-  },
-  {
-    "testTitle": "Reject XML root key longer than 100 characters",
-    "config": {
-      "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
-      "method": "POST",
-      "requestBodyTemplate": "[$$.events][0]",
-      "format": "XML",
-      "maxBatchSize": "1",
-      "xmlRootKey": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-    },
-    "result": false,
-    "err": ["xmlRootKey must match pattern \"^(.{0,100})$\""]
   }
 ]

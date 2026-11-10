@@ -392,6 +392,5 @@
 
 ## INT-7520 — HTTP V2 XML and FORM Definition Rules
 
-- HTTP v2 `xmlRootKey` goes beside `format` in `destConfig.defaultConfig`; no `includeKeys`.
-- Keep HTTP v2 `xmlRootKey` an unconditional top-level `schema.json` property (`^(.{0,100})$`) even though the UI shows it only for XML; a conditional property drifts from `scripts/schemaGenerator.py` output.
+- HTTP v2 has no `xmlRootKey`: for XML the template's single top-level key is the root element, so the template alone defines the request shape. Do not add a root-key field back; v1 keeps its `xmlRootKey`, and v1→v2 migration must fold it into the generated template. Its one-key rule cannot be expressed in `schema.json` (the template is JSONata), so the transformer enforces it.
 - HTTP v2 `maxBatchSize` is visible in the UI only when `format` is JSON or XML (UI `required: true`, no UI or schema default); the prerequisite hides it for FORM, so the webapp skips its required check there. In `schema.json`, only the hand-authored `allOf` conditional requires it for JSON and XML; do not make it top-level required, so FORM without a batch size remains valid. `scripts/schemaGenerator.py` derives the field property but not this conditional requirement.
