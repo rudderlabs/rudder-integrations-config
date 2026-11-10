@@ -161,4 +161,4 @@
 
 ## INT-7520 — HTTP V2 Schema Generator Baseline Drift
 
-- HTTP v2's auth-specific Initial setup UI fields are UI-required but only conditionally required in `schema.json`, so `scripts/run-schema-validation.sh` reports a required-field warning for HTTP that is not caused by schema changes.
+- HTTP v2's auth-specific Initial setup UI fields and the format-gated `maxBatchSize` are UI-required but only conditionally required in `schema.json`, so `scripts/run-schema-validation.sh` reports a required-field warning for HTTP that is not caused by schema changes.

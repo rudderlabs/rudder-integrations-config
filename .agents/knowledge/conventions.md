@@ -394,4 +394,4 @@
 
 - HTTP v2 `xmlRootKey` goes beside `format` in `destConfig.defaultConfig`; no `includeKeys`.
 - Keep HTTP v2 `xmlRootKey` an unconditional top-level `schema.json` property (`^(.{0,100})$`) even though the UI shows it only for XML; a conditional property drifts from `scripts/schemaGenerator.py` output.
-- HTTP v2 `maxBatchSize` is visible in the UI only when `format` is JSON or XML (UI `required: false`, no UI or schema default). Only the hand-authored `schema.json` `allOf` conditional requires it for those formats; do not make it top-level required, so FORM without a batch size remains valid. `scripts/schemaGenerator.py` derives the field property but not this conditional requirement.
+- HTTP v2 `maxBatchSize` is visible in the UI only when `format` is JSON or XML (UI `required: true`, no UI or schema default); the prerequisite hides it for FORM, so the webapp skips its required check there. In `schema.json`, only the hand-authored `allOf` conditional requires it for JSON and XML; do not make it top-level required, so FORM without a batch size remains valid. `scripts/schemaGenerator.py` derives the field property but not this conditional requirement.
