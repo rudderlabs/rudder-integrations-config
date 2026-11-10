@@ -216,6 +216,14 @@ async function getDestinationDefinitionConfig(destName: string) {
   return config.default;
 }
 
+function withoutArchiveLifecycleFields(dbConfig: Record<string, unknown>) {
+  const definition = { ...dbConfig };
+  delete definition.status;
+  delete definition.retirementDate;
+  delete definition.migrationDocsUrl;
+  return definition;
+}
+
 const dests = getIntegrationNames('destinations');
 const sources = getIntegrationNames('sources');
 
@@ -370,6 +378,7 @@ describe('Validation Tests', () => {
     'clickhouse',
     'deltalake',
     'gcs_datalake',
+    'maxcompute',
     'microsoft_fabric',
     'mssql',
     'postgres',
@@ -404,7 +413,9 @@ describe('Validation Tests', () => {
     const backwardCompatibilityFlags = ['allowUsersContextTraits', 'underscoreDivideNumbers'];
     // Every destination declaring the flags, not just those with a sync frequency.
     const backwardCompatibilityDestinationNames = [
-      ...warehouseDestinationNames.filter((dest) => dest !== 'microsoft_fabric'),
+      ...warehouseDestinationNames.filter(
+        (dest) => !['maxcompute', 'microsoft_fabric'].includes(dest),
+      ),
       'bqstream_all_events',
       'snowpipe_streaming',
     ];
@@ -787,6 +798,23 @@ describe('Destination Definition validation tests', () => {
       const destDefConfig = await getDestinationDefinitionConfig(dest);
       await expect(validateDestinationDefinitions(destDefConfig)).resolves.toEqual(true);
     });
+
+    const versionsPath = path.resolve(`src/configurations/destinations/${dest}/versions`);
+    if (fs.existsSync(versionsPath)) {
+      fs.readdirSync(versionsPath).forEach((major) => {
+        const archivePath = path.join(versionsPath, major, 'db-config.json');
+        if (fs.existsSync(archivePath)) {
+          it(`${dest} - archived major ${major} definition test`, async () => {
+            const archived = JSON.parse(fs.readFileSync(archivePath, 'utf-8'));
+            // Lifecycle fields are archive-only; root definitions must remain strict.
+            expect(['supported', 'retired']).toContain(archived.status);
+            await expect(
+              validateDestinationDefinitions(withoutArchiveLifecycleFields(archived)),
+            ).resolves.toEqual(true);
+          });
+        }
+      });
+    }
   });
 
   const malformedDestDefConfigs = [
@@ -1443,6 +1471,83 @@ describe('Account Definition validation tests', () => {
       await expect(validateAccountDefinitions(accDefConfig)).resolves.toEqual(true);
     });
   });
+
+  describe.each(['custom_audience_client_credentials', 'custom_audience_oauth_auth_code'])(
+    '%s account schema',
+    (accountName) => {
+      const { optionsSchema, secretSchema } = getAccountDefinitionSchema(
+        'custom_audience',
+        accountName,
+        'destinations',
+      );
+      const baseOptions = {
+        ...(accountName === 'custom_audience_oauth_auth_code' && {
+          authorizationUrl: 'https://auth.example.com/authorize',
+        }),
+        tokenUrl: 'https://auth.example.com/token',
+        clientId: 'client-id',
+      };
+
+      it('does not add defaults to an options PATCH', () => {
+        const options = { ...baseOptions };
+        expect(compileAccountSchemaWithErrorMessages(optionsSchema)(options)).toBe(true);
+        expect(options).toEqual(baseOptions);
+      });
+
+      it('rejects every reserved extra token parameter name, regardless of case', () => {
+        const validate = compileAccountSchemaWithErrorMessages(optionsSchema);
+        const reservedKeys = [
+          'client_id',
+          'client_secret',
+          'code',
+          'code_challenge',
+          'code_challenge_method',
+          'code_verifier',
+          'grant_type',
+          'redirect_uri',
+          'refresh_token',
+          'response_type',
+          'scope',
+          'state',
+        ];
+        reservedKeys.forEach((key) => {
+          [`${key}=x`, `audience=x&${key.toUpperCase()}=y`].forEach((params) => {
+            expect(validate({ ...baseOptions, extraTokenParams: params })).toBe(false);
+            expect(validate.errors?.[0]?.message).toBe(
+              'Extra token parameters cannot use reserved OAuth parameter names (for example, scope or client_id)',
+            );
+          });
+        });
+        expect(validate({ ...baseOptions, extraTokenParams: 'audience=x&client%5Fid=y' })).toBe(
+          false,
+        );
+        expect(validate.errors?.[0]?.message).toBe(
+          'Extra token parameters cannot use reserved OAuth parameter names (for example, scope or client_id)',
+        );
+        expect(validate({ ...baseOptions, extraTokenParams: '?scope=x' })).toBe(false);
+      });
+
+      it('accepts reserved words in values and enforces the 2,000-character limit', () => {
+        const validate = compileAccountSchemaWithErrorMessages(optionsSchema);
+        expect(
+          validate({ ...baseOptions, extraTokenParams: 'audience=scope&resource=client_secret' }),
+        ).toBe(true);
+        expect(validate({ ...baseOptions, extraTokenParams: 'audience=%73cope' })).toBe(true);
+        expect(validate({ ...baseOptions, extraTokenParams: 'x'.repeat(2000) })).toBe(true);
+        expect(validate({ ...baseOptions, extraTokenParams: 'x'.repeat(2001) })).toBe(false);
+        expect(validate.errors?.[0]?.message).toBe('Enter token parameters up to 2000 characters');
+      });
+
+      it('rejects a whitespace-only client secret', () => {
+        const validate = compileAccountSchemaWithErrorMessages(secretSchema);
+        expect(validate({ clientSecret: 'secret value' })).toBe(true);
+        expect(validate({ clientSecret: ' \t ' })).toBe(false);
+        expect(validate.errors?.[0]?.message).toBe(
+          'Enter a client secret between 1 and 500 characters that is not only whitespace',
+        );
+      });
+    },
+  );
 
   // The `combinedSchema` if/then/else is the only thing binding an auth branch to the
   // credential it needs: the standalone `secretSchema` of these warehouse source accounts

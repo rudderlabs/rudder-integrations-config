@@ -98,6 +98,45 @@ class TestVersionsArchive(unittest.TestCase):
                 archive["1"]["migrationDocsUrl"], "https://example.com/versions"
             )
 
+    def test_update_payload_uses_each_archived_majors_own_options(self):
+        with tempfile.TemporaryDirectory() as workspace:
+            directory = os.path.join(workspace, "destinations", "gate_example")
+            os.makedirs(directory)
+            current_options = {
+                "hidden": {"gate": {"flags": [{"name": "AMP_ROLLOUT", "value": False}]}}
+            }
+            with open(os.path.join(directory, "db-config.json"), "w") as handle:
+                json.dump(
+                    {
+                        "name": "GATE_EXAMPLE",
+                        "version": "2.0",
+                        "options": current_options,
+                    },
+                    handle,
+                )
+            archived_options = {
+                "isBeta": True,
+                "hidden": {
+                    "gate": {"flags": [{"name": "ENTERPRISE_PLAN", "value": False}]}
+                },
+            }
+            self._write_major(directory, 1, options=archived_options)
+            self._write_major(directory, 3)
+            with mock.patch.object(
+                deployToDB, "CONFIG_DIR", os.path.relpath(workspace)
+            ), mock.patch.object(
+                deployToDB, "update_config_definition", return_value=(200, {})
+            ) as update:
+                report = deployToDB.update_diff_db(
+                    "destination", {"GATE_EXAMPLE": {}}, item_name="gate_example"
+                )
+
+            self.assertEqual(report[0]["action"], "update")
+            payload = update.call_args.args[3]
+            self.assertEqual(payload["options"], current_options)
+            self.assertEqual(payload["versions"]["1"]["options"], archived_options)
+            self.assertNotIn("options", payload["versions"]["3"])
+
     def test_omits_advisory_fields_the_major_does_not_declare(self):
         # Absence is meaningful downstream: no retirement date means none is scheduled yet, which is
         # different from one the deploy quietly dropped.
@@ -108,6 +147,7 @@ class TestVersionsArchive(unittest.TestCase):
 
             self.assertNotIn("retirementDate", archive["2"])
             self.assertNotIn("migrationDocsUrl", archive["2"])
+            self.assertNotIn("options", archive["2"])
 
     def test_rejects_a_status_outside_the_lifecycle(self):
         with tempfile.TemporaryDirectory() as root:

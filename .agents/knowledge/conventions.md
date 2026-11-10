@@ -26,7 +26,7 @@
 <!-- RUD-2776 -->
 
 - Pre-commit flow expects preprocessing and tests before staged-linting (`package.json:30`).
-- Commit messages must follow Conventional Commits (`commitlint.config.js` extends `@commitlint/config-conventional`); the `commitlint` CI check lints the latest commit (`commitDepth: 1` in `.github/workflows/commitlint.yml`), so any auto-generated commit (e.g. Copilot Autofix `Potential fix for pull request finding`) must be reworded to `type: subject` before push. Record future occurrences in `mistakes.md`.
+- Commit messages must follow Conventional Commits (`commitlint.config.js` extends `@commitlint/config-conventional`); the local `commit-msg` hook runs commitlint. CI checks only the PR title (`.github/workflows/check-pr-title.yml`), and the squash merge uses that title as the commit title (SEC-784 removed the commitlint workflow). Record future occurrences in `mistakes.md`.
 - Schema lifecycle is CLI-driven with separate check/update scripts for sources and destinations (`package.json:33`, `package.json:37`, `scripts/schemaGenerator.py`).
 - Display-name integrity is guarded by dedicated scripts, including staged-only mode (`package.json:45`, `package.json:46`).
 
@@ -362,3 +362,30 @@
 
 - BigQuery Stream (All Events) is generally available: keep `src/configurations/destinations/bqstream_all_events/db-config.json` without `options.isBeta` and without adding a hidden gate, while retaining `options.disableLiveEvents: true` and `options.icon: "bigquery"`.
 - Tier availability, documentation labels, and GA announcements are owned outside this repository; do not encode speculative rollout metadata or alter destination behavior for those follow-up concerns.
+
+## RUD-3426 — Microsoft Fabric Public Beta Visibility
+
+- Microsoft Fabric is a public beta: keep `src/configurations/destinations/microsoft_fabric/db-config.json` `options.isBeta: true` and its `options.icon`, but omit `options.hidden` entirely so the catalog does not require a workspace feature flag. Do not remove the Beta badge as if this were GA.
+- This visibility change belongs only in the destination definition; the service-principal account and Fabric UI/persisted schema do not need changes for the public-beta promotion.
+
+## RUD-3444 — Pushwoosh General Availability Metadata
+
+- For Pushwoosh GA, `src/configurations/destinations/pushwoosh/db-config.json` retains `options.icon: "pushwoosh"`, sets `options.isBeta: false` explicitly, and omits `options.hidden` entirely. Follow this task's explicit `false` metadata contract rather than the omit-`isBeta` convention used for some other GA destinations; do not invert the old `AMP_enable-pushwoosh-destination` gate.
+- The GA visibility change is confined to destination `options`; leave the Pushwoosh `config` object unchanged.
+
+## RUD-3450 — Rokt Public Beta Visibility
+
+- Rokt is a public beta: keep `src/configurations/destinations/rokt/db-config.json` `options.isBeta: true` and `options.icon: "rokt"`, but omit `options.hidden` so all workspaces can see the destination without `AMP_enable-rokt-destination`. Do not treat OpenAI Ads' later GA state (no `isBeta`) as the public-beta template.
+- This visibility promotion changes only the root destination `options`; Rokt has no archived major definitions, and its account credentials and connection capabilities do not change.
+
+## RUD-3456 — Everflow Public Beta Visibility
+
+- Everflow public beta uses `src/configurations/destinations/everflow/db-config.json` `options` with `isBeta: true` and `icon: "everflow"`, but no `hidden` gate. Keep the Beta badge while making the destination available without `AMP_enable-everflow-destination`; do not copy OpenAI Ads' later GA shape, which omits `isBeta`.
+- Confine this visibility change to the root destination `options`; the persisted schema, account metadata, generated constants, and other destinations do not need changes.
+
+## INT-7424 — Custom Activation OAuth Account Form Contract
+
+- Both account forms put user-supplied `clientSecret` immediately after `clientId` and render optional `scopes` as a `tagField`, backed by an array of at most 50 strings matching `^[^\s,]{1,200}$`. Place `scopeSeparator` immediately after scopes, with space as the initial form selection and comma as the alternative. Only the Authorization Code form shows a display-only, keyless Redirect URI `copyField` after Authorization URL, with `value: "{{oauthRedirectUri}}"`; the account UI meta-schema requires `value` and forbids `key` on `copyField`, and requires `key` on other components.
+- Optional account option schemas (`scopes`, `scopeSeparator`, `extraTokenParams`, `tokenAuthMethod`) must not carry JSON Schema defaults: AJV `useDefaults` during account Edit PATCH can insert omitted options and overwrite stored values when the patch is merged. Put initial selections in account `ui-config.json`; explicit empty scope arrays remain valid.
+- Token URL hostname validation must reject localhost, its subdomains, and nested `ngrok.io` subdomains, without rejecting path text such as `/x.localhost`; Authorization URL is HTTPS-only, and Token URL rejects query strings and fragments. Customer-facing form copy should avoid naming individual OAuth providers. Flagsmith gates are metadata pointing at externally provisioned flags, not flags created by this repository.
+- Keep destination-specific Custom Activation acceptance/rejection cases in `test/data/validation/destinations/custom_audience.json`, not bespoke blocks in shared `test/validation.test.ts`. Keep existing legacy destination schema fields until the separate account-management migration prerequisite is complete.

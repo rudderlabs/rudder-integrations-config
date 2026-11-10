@@ -126,3 +126,18 @@
 ## INT-7453 — Archived Major Validation
 
 - `src/validator` registers each `<type>/<name>/versions/<major>/schema.json` under `<type>___<name>___<major>`; validate against it with `validateConfig(name, config, type, true, major)`. Keep archived-major fixtures in `test/data/validation/versions/<name>-v<major>.json`, not in `test/data/validation/destinations/`, whose files are discovered as root destination names.
+
+## INT-7462 — Archived Definition Validation Without Loosening Root Schema
+
+- In `test/validation.test.ts`, validate each archived destination `versions/<major>/db-config.json` through `validateDestinationDefinitions` after removing only archive-only lifecycle fields `status`, `retirementDate`, and `migrationDocsUrl`. Root definitions continue through the unmodified strict schema, while deployment validates archive status separately. Do not add archive-only fields to the root schema or introduce a production validator mode solely for this test adaptation.
+
+## INT-7507 — MaxCompute Schema Without Shared-Generator Changes
+
+- `scripts/schemaGenerator.py` does not generate a `pattern` for `accountManagementInput`, so the bounded MaxCompute `rudderAccountId` pattern (`^.{1,100}$`) is maintained by hand in `schema.json`; `npm run check:schema:destination maxcompute` reports that drift as a warning and still passes. Keep the UI `regex` and schema `pattern` in sync manually.
+- The generator marks every v2 Initial setup field present in `defaultConfig` without `preRequisites` as required and ignores `required: false`. MaxCompute's immutable `skipViews`, `partitionColumn` and `partitionType` are therefore `required: true` with defaults (`false`, `_PARTITIONTIME`, `day`), so the creation-time connection test always receives them. MaxCompute has no separate OSS `prefix`: the Initial setup field `directoryPath` takes the bucket name with an optional directory prefix (`bucket/path`), and rudder-server splits it into bucket and prefix, so the connection test already stages under that prefix. `cleanupObjectStorageFiles` is also in Initial setup (required, default `true`) because the connection test checks OSS delete permission when it is enabled.
+- `test/validation.test.ts` includes MaxCompute in `warehouseDestinationNames` for shared sync-frequency coverage, but excludes it from legacy compatibility-flag cases: its closed schema rejects `allowUsersContextTraits` and `underscoreDivideNumbers`.
+
+## INT-7424 — Account-Only Credentials and Keyless UI Controls
+
+- `scripts/validate_account_definitions.py` treats `authenticationType: "oauth"` and `"machine_oauth"` as account-only credential types; neither flow requires account option/secret keys mirrored into destination `defaultConfig` or `secretKeys`.
+- `scripts/schemaGenerator.py` must skip destination `baseTemplate` fields with no `configKey`, such as Custom Activation's `audienceDeliveryApiBuilder`, rather than generating a persisted property or looking the field up in `defaultConfig` for requiredness. The destination's legacy authentication keys remain in `defaultConfig` despite being absent from the persisted schema's properties, so avoid making the schema a closed top-level object merely to silence a generic generator recommendation.

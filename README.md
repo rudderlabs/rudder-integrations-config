@@ -74,7 +74,9 @@ For a single flag, `condition` is optional. For two or more flags, include `cond
 }
 ```
 
-The gate uses hide-when semantics: the integration is hidden when the flag reduction matches the configured values. Flag names must match exactly what the webapp resolves. Flagsmith beta flags keep their `AMP_` prefix, and GA billing features are authored as-is. The `value` field is mandatory on every flag item.
+The gate uses hide-when semantics: the integration is hidden when the flag reduction matches the configured values. Flagsmith flags use `AMP_<flagsmith-key>`; billing plan features use their raw boolean feature name. A bare Flagsmith key resolves to false. The `value` field is mandatory on every flag item.
+
+For versioned destinations each major's `db-config.json` gates only that major — see [per-major destination visibility gates](CONVENTIONS.md#per-major-destination-visibility-gates).
 
 Use `hidden.gate` for beta-to-GA or billing-feature exposure. Keep `hidden: true` only for definitions that should be hidden from all customers.
 
