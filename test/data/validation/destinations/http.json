@@ -1,9 +1,10 @@
 [
   {
-    "testTitle": "Nested JSONata body and all request fields",
+    "testTitle": "Nested JSONata body and all request fields with a linked account",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
+      "authenticationEnabled": true,
+      "rudderAccountId": "sample-account-id",
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
@@ -36,7 +37,7 @@
     "testTitle": "Maximum batch size",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
+      "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
@@ -48,7 +49,7 @@
     "testTitle": "Batch size just above old cap",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
+      "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
@@ -60,7 +61,7 @@
     "testTitle": "Batch size is optional",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
+      "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}"
@@ -71,7 +72,7 @@
     "testTitle": "Reject batch size 0",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
+      "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
@@ -84,7 +85,7 @@
     "testTitle": "Reject batch size 5001",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
+      "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
@@ -97,7 +98,7 @@
     "testTitle": "Reject batch size 10000",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
+      "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
@@ -110,7 +111,7 @@
     "testTitle": "Reject batch size 01",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
+      "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
@@ -123,7 +124,7 @@
     "testTitle": "Reject numeric batch size",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
+      "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
@@ -136,7 +137,7 @@
     "testTitle": "Reject empty body template",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
+      "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": ""
@@ -148,7 +149,7 @@
     "testTitle": "Reject unsupported message type",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
+      "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
@@ -161,7 +162,7 @@
     "testTitle": "Reject empty supported message types",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
+      "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
@@ -174,7 +175,7 @@
     "testTitle": "Reject record message type",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
+      "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
@@ -187,7 +188,7 @@
     "testTitle": "Reject non-JSON format",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
+      "authenticationEnabled": false,
       "method": "POST",
       "format": "XML",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}"
@@ -196,71 +197,10 @@
     "err": ["format must be equal to constant"]
   },
   {
-    "testTitle": "Basic auth with an empty password",
-    "config": {
-      "apiUrl": "https://api.example.com/v1/events",
-      "method": "POST",
-      "format": "JSON",
-      "requestBodyTemplate": "$$.events",
-      "auth": "basicAuth",
-      "username": "user"
-    },
-    "result": true
-  },
-  {
-    "testTitle": "Reject basic auth without a username",
-    "config": {
-      "apiUrl": "https://api.example.com/v1/events",
-      "method": "POST",
-      "format": "JSON",
-      "requestBodyTemplate": "$$.events",
-      "auth": "basicAuth"
-    },
-    "result": false,
-    "err": [" must have required property 'username'", " must match \"then\" schema"]
-  },
-  {
-    "testTitle": "Bearer token auth",
-    "config": {
-      "apiUrl": "https://api.example.com/v1/events",
-      "method": "POST",
-      "format": "JSON",
-      "requestBodyTemplate": "$$.events",
-      "auth": "bearerTokenAuth",
-      "bearerToken": "sample-token"
-    },
-    "result": true
-  },
-  {
-    "testTitle": "Reject bearer token auth without a token",
-    "config": {
-      "apiUrl": "https://api.example.com/v1/events",
-      "method": "POST",
-      "format": "JSON",
-      "requestBodyTemplate": "$$.events",
-      "auth": "bearerTokenAuth"
-    },
-    "result": false,
-    "err": [" must have required property 'bearerToken'", " must match \"then\" schema"]
-  },
-  {
-    "testTitle": "Reject API key auth without a key value",
-    "config": {
-      "apiUrl": "https://api.example.com/v1/events",
-      "method": "POST",
-      "format": "JSON",
-      "requestBodyTemplate": "$$.events",
-      "auth": "apiKeyAuth",
-      "apiKeyName": "x-api-key"
-    },
-    "result": false,
-    "err": [" must have required property 'apiKeyValue'", " must match \"then\" schema"]
-  },
-  {
     "testTitle": "Reject an empty header key",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
+      "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events",
@@ -278,7 +218,7 @@
     "testTitle": "Reject an empty query parameter key",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
+      "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events",
@@ -296,7 +236,7 @@
     "testTitle": "Reject a header without a key",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
+      "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events",
@@ -313,7 +253,7 @@
     "testTitle": "Reject a query parameter without a key",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
-      "auth": "noAuth",
+      "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events",
@@ -325,5 +265,317 @@
     },
     "result": false,
     "err": ["queryParams.0 must have required property 'to'"]
+  },
+  {
+    "testTitle": "Authentication requires an account",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": true,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
+      "pathParams": [
+        {
+          "path": "$$.events[0].userId"
+        }
+      ],
+      "headers": [
+        {
+          "to": "Authorization",
+          "from": "$string($$.events[0].properties.token)"
+        }
+      ],
+      "queryParams": [
+        {
+          "to": "source",
+          "from": "$$.events[0].context.library.name"
+        }
+      ],
+      "supportedMessageTypes": ["track", "identify"],
+      "connectionMode": {
+        "cloud": "cloud"
+      },
+      "maxBatchSize": "1"
+    },
+    "result": false,
+    "err": [" must have required property 'rudderAccountId'", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "No authentication needs no account",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
+      "pathParams": [
+        {
+          "path": "$$.events[0].userId"
+        }
+      ],
+      "headers": [
+        {
+          "to": "Authorization",
+          "from": "$string($$.events[0].properties.token)"
+        }
+      ],
+      "queryParams": [
+        {
+          "to": "source",
+          "from": "$$.events[0].context.library.name"
+        }
+      ],
+      "supportedMessageTypes": ["track", "identify"],
+      "connectionMode": {
+        "cloud": "cloud"
+      },
+      "maxBatchSize": "1"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Account reference cannot be empty",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": true,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
+      "pathParams": [
+        {
+          "path": "$$.events[0].userId"
+        }
+      ],
+      "headers": [
+        {
+          "to": "Authorization",
+          "from": "$string($$.events[0].properties.token)"
+        }
+      ],
+      "queryParams": [
+        {
+          "to": "source",
+          "from": "$$.events[0].context.library.name"
+        }
+      ],
+      "supportedMessageTypes": ["track", "identify"],
+      "connectionMode": {
+        "cloud": "cloud"
+      },
+      "maxBatchSize": "1",
+      "rudderAccountId": ""
+    },
+    "result": false,
+    "err": ["rudderAccountId must match pattern \"^.{1,100}$\""]
+  },
+  {
+    "testTitle": "Inline auth rejected in v2",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
+      "pathParams": [
+        {
+          "path": "$$.events[0].userId"
+        }
+      ],
+      "headers": [
+        {
+          "to": "Authorization",
+          "from": "$string($$.events[0].properties.token)"
+        }
+      ],
+      "queryParams": [
+        {
+          "to": "source",
+          "from": "$$.events[0].context.library.name"
+        }
+      ],
+      "supportedMessageTypes": ["track", "identify"],
+      "connectionMode": {
+        "cloud": "cloud"
+      },
+      "maxBatchSize": "1",
+      "auth": "basicAuth"
+    },
+    "result": false,
+    "err": [" must NOT be valid"]
+  },
+  {
+    "testTitle": "Inline username rejected in v2",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
+      "pathParams": [
+        {
+          "path": "$$.events[0].userId"
+        }
+      ],
+      "headers": [
+        {
+          "to": "Authorization",
+          "from": "$string($$.events[0].properties.token)"
+        }
+      ],
+      "queryParams": [
+        {
+          "to": "source",
+          "from": "$$.events[0].context.library.name"
+        }
+      ],
+      "supportedMessageTypes": ["track", "identify"],
+      "connectionMode": {
+        "cloud": "cloud"
+      },
+      "maxBatchSize": "1",
+      "username": "sample-user"
+    },
+    "result": false,
+    "err": [" must NOT be valid"]
+  },
+  {
+    "testTitle": "Inline password rejected in v2",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
+      "pathParams": [
+        {
+          "path": "$$.events[0].userId"
+        }
+      ],
+      "headers": [
+        {
+          "to": "Authorization",
+          "from": "$string($$.events[0].properties.token)"
+        }
+      ],
+      "queryParams": [
+        {
+          "to": "source",
+          "from": "$$.events[0].context.library.name"
+        }
+      ],
+      "supportedMessageTypes": ["track", "identify"],
+      "connectionMode": {
+        "cloud": "cloud"
+      },
+      "maxBatchSize": "1",
+      "password": "sample-password"
+    },
+    "result": false,
+    "err": [" must NOT be valid"]
+  },
+  {
+    "testTitle": "Inline bearerToken rejected in v2",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
+      "pathParams": [
+        {
+          "path": "$$.events[0].userId"
+        }
+      ],
+      "headers": [
+        {
+          "to": "Authorization",
+          "from": "$string($$.events[0].properties.token)"
+        }
+      ],
+      "queryParams": [
+        {
+          "to": "source",
+          "from": "$$.events[0].context.library.name"
+        }
+      ],
+      "supportedMessageTypes": ["track", "identify"],
+      "connectionMode": {
+        "cloud": "cloud"
+      },
+      "maxBatchSize": "1",
+      "bearerToken": "sample-token"
+    },
+    "result": false,
+    "err": [" must NOT be valid"]
+  },
+  {
+    "testTitle": "Inline apiKeyName rejected in v2",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
+      "pathParams": [
+        {
+          "path": "$$.events[0].userId"
+        }
+      ],
+      "headers": [
+        {
+          "to": "Authorization",
+          "from": "$string($$.events[0].properties.token)"
+        }
+      ],
+      "queryParams": [
+        {
+          "to": "source",
+          "from": "$$.events[0].context.library.name"
+        }
+      ],
+      "supportedMessageTypes": ["track", "identify"],
+      "connectionMode": {
+        "cloud": "cloud"
+      },
+      "maxBatchSize": "1",
+      "apiKeyName": "x-api-key"
+    },
+    "result": false,
+    "err": [" must NOT be valid"]
+  },
+  {
+    "testTitle": "Inline apiKeyValue rejected in v2",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
+      "pathParams": [
+        {
+          "path": "$$.events[0].userId"
+        }
+      ],
+      "headers": [
+        {
+          "to": "Authorization",
+          "from": "$string($$.events[0].properties.token)"
+        }
+      ],
+      "queryParams": [
+        {
+          "to": "source",
+          "from": "$$.events[0].context.library.name"
+        }
+      ],
+      "supportedMessageTypes": ["track", "identify"],
+      "connectionMode": {
+        "cloud": "cloud"
+      },
+      "maxBatchSize": "1",
+      "apiKeyValue": "sample-value"
+    },
+    "result": false,
+    "err": [" must NOT be valid"]
   }
 ]

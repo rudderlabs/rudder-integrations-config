@@ -23,112 +23,20 @@
                     "placeholder": "e.g. http://www.abcd.com"
                   },
                   {
-                    "type": "singleSelect",
-                    "label": "Authentication",
-                    "configKey": "auth",
-                    "options": [
-                      {
-                        "label": "No Auth",
-                        "value": "noAuth"
-                      },
-                      {
-                        "label": "Basic Auth",
-                        "value": "basicAuth"
-                      },
-                      {
-                        "label": "Bearer Token",
-                        "value": "bearerTokenAuth"
-                      },
-                      {
-                        "label": "API Key",
-                        "value": "apiKeyAuth"
-                      }
-                    ],
-                    "default": "noAuth"
+                    "type": "checkbox",
+                    "label": "Enable authentication",
+                    "configKey": "authenticationEnabled",
+                    "default": false
                   },
                   {
-                    "type": "textInput",
-                    "label": "Username",
-                    "configKey": "username",
-                    "required": true,
-                    "regex": "^(.{1,100})$",
-                    "regexErrorMessage": "Invalid Username",
-                    "placeholder": "e.g. test username",
+                    "type": "accountManagementInput",
+                    "label": "Account",
+                    "configKey": "rudderAccountId",
                     "preRequisites": {
                       "fields": [
                         {
-                          "configKey": "auth",
-                          "value": "basicAuth"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "Password",
-                    "configKey": "password",
-                    "regex": "^(.{0,100})$",
-                    "regexErrorMessage": "Invalid Password",
-                    "placeholder": "e.g. test password",
-                    "secret": true,
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "auth",
-                          "value": "basicAuth"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "Token",
-                    "configKey": "bearerToken",
-                    "required": true,
-                    "regex": "^(.{1,2048})$",
-                    "regexErrorMessage": "Invalid Token",
-                    "placeholder": "e.g. test token",
-                    "secret": true,
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "auth",
-                          "value": "bearerTokenAuth"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "Key",
-                    "configKey": "apiKeyName",
-                    "required": true,
-                    "regex": "^(\\S{1,100})$",
-                    "regexErrorMessage": "Invalid Key Name",
-                    "default": "x-api-key",
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "auth",
-                          "value": "apiKeyAuth"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type": "textInput",
-                    "label": "Value",
-                    "configKey": "apiKeyValue",
-                    "required": true,
-                    "regex": "^(.{1,100})$",
-                    "regexErrorMessage": "Invalid Value",
-                    "placeholder": "e.g. test value",
-                    "secret": true,
-                    "preRequisites": {
-                      "fields": [
-                        {
-                          "configKey": "auth",
-                          "value": "apiKeyAuth"
+                          "configKey": "authenticationEnabled",
+                          "value": true
                         }
                       ]
                     }
