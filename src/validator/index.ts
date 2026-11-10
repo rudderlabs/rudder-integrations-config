@@ -220,6 +220,7 @@ async function initAjvValidators() {
   const files = await glob(path.join(__dirname, '../configurations/**/schema.json'));
   const filePromises = files.map(importJsonFromFile);
   const contents = await Promise.all(filePromises);
+  const currentDefinitions: [string, string][] = [];
 
   files.forEach((file, i) => {
     const intgDir = path.dirname(file);
@@ -232,7 +233,21 @@ async function initAjvValidators() {
       ? `${archivedVersion[1]}___${archivedVersion[2]}___${archivedVersion[3]}`
       : `${intgType}___${intgName}`;
     validators[key] = ajv.compile(contents[i].configSchema || {});
+    if (!archivedVersion) currentDefinitions.push([key, intgDir]);
   });
+
+  // The current definition is also its own major, so an explicit current version resolves too.
+  await Promise.all(
+    currentDefinitions.map(([key, intgDir]) =>
+      importJsonFromFile(path.join(intgDir, 'db-config.json')).then(
+        (dbConfig) => {
+          const major = dbConfig.version?.split('.')[0];
+          if (major) validators[`${key}___${major}`] = validators[key];
+        },
+        () => undefined,
+      ),
+    ),
+  );
 }
 
 export function validateConfig(
@@ -251,7 +266,11 @@ export function validateConfig(
   }`;
   const validationMethod = validators[validationKey];
   if (!validationMethod && throwErrorOnMissingValidations) {
-    throw new Error(`No validation method found for definition ${definitionName}`);
+    throw new Error(
+      `No validation method found for definition ${definitionName}${
+        version === undefined ? '' : ` version ${version}`
+      }`,
+    );
   }
 
   if (validationMethod && !validationMethod(config) && validationMethod.errors) {

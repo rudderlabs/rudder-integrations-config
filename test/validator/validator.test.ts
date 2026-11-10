@@ -97,7 +97,7 @@ describe('Validator Utils', () => {
       await init();
 
       expect(mockedGlob).toHaveBeenCalledWith('/path/to/configurations/**/schema.json');
-      expect(mockedFs.promises.readFile).toHaveBeenCalledTimes(2);
+      expect(mockedFs.promises.readFile).toHaveBeenCalledTimes(4);
     });
 
     it('should handle empty schema files', async () => {

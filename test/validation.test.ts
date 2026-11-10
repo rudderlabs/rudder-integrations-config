@@ -327,6 +327,20 @@ describe('Validation Tests', () => {
       expect(v1).toMatchObject({ version: '1.0', status: 'supported' });
     });
 
+    it('validates against the current schema when its own major is passed', () => {
+      const validateV2 = () =>
+        validateConfig('http', { apiUrl: 'not-a-url' }, 'destinations', true, 2);
+      expect(validateV2).toThrow();
+      expect(validateV2).toThrow(
+        expect.objectContaining({
+          message: expect.not.stringContaining('No validation method found'),
+        }),
+      );
+      expect(() => validateConfig('http', {}, 'destinations', true, 9)).toThrow(
+        'No validation method found for definition http version 9',
+      );
+    });
+
     getIntegrationData('http-v1', 'versions').forEach((td: Record<string, unknown>) => {
       it(`v1 - ${td.testTitle}`, () => {
         const validateV1 = () =>

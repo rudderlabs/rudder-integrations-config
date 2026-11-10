@@ -46,7 +46,8 @@
             "from": {
               "type": "string"
             }
-          }
+          },
+          "required": ["to"]
         }
       },
       "headers": {
@@ -61,7 +62,8 @@
             "from": {
               "type": "string"
             }
-          }
+          },
+          "required": ["to"]
         }
       },
       "oneTrustCookieCategories": {
@@ -128,18 +130,6 @@
             }
           },
           "cloud": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "oneTrustCookieCategory": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "warehouse": {
             "type": "array",
             "items": {
               "type": "object",
@@ -236,10 +226,6 @@
             "type": "string",
             "enum": ["cloud"]
           },
-          "warehouse": {
-            "type": "string",
-            "enum": ["cloud"]
-          },
           "reactnative": {
             "type": "string",
             "enum": ["cloud"]
@@ -262,55 +248,6 @@
         "type": "object",
         "properties": {
           "cloud": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "string",
-                  "enum": ["custom", "iubenda", "ketch", "oneTrust"]
-                },
-                "consents": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "consent": {
-                        "type": "string",
-                        "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                      }
-                    }
-                  }
-                }
-              },
-              "allOf": [
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "custom"
-                      }
-                    },
-                    "required": ["provider"]
-                  },
-                  "then": {
-                    "properties": {
-                      "resolutionStrategy": {
-                        "type": "string",
-                        "enum": ["and", "or"]
-                      }
-                    },
-                    "required": ["resolutionStrategy"]
-                  }
-                }
-              ]
-            },
-            "uniqueItemProperties": ["provider"],
-            "errorMessage": {
-              "uniqueItemProperties": "Only one consent management block can be configured per provider."
-            }
-          },
-          "warehouse": {
             "type": "array",
             "items": {
               "type": "object",
@@ -964,18 +901,6 @@
             }
           },
           "cloud": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "purpose": {
-                  "type": "string",
-                  "pattern": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
-                }
-              }
-            }
-          },
-          "warehouse": {
             "type": "array",
             "items": {
               "type": "object",
