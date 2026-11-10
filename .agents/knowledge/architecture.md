@@ -145,6 +145,8 @@
 - HTTP v2 is the current triplet at `src/configurations/destinations/http/`; the former root v1 triplet is preserved under `versions/1/` with `status: supported`. `scripts/deployToDB.py` reads root files as current and `versions/*` as archives, so placing v2 only under `versions/2/` would leave v1 current.
 - HTTP v2's `ui-config.json` uses an `httpRequestBuilder` custom field for the JSONata body, URL, headers, query parameters, and preview. The persisted `schema.json` hand-maintains builder-owned request-field validation because `scripts/schemaGenerator.py` cannot traverse custom builder fields; JSONata syntax validation belongs to the parse endpoint, not JSON Schema.
 - HTTP v2 supports JSON body format only, retaining the JSON default and the existing API URL, authentication, method, consent, and request-field keys. Archived v1 preserves XML/FORM and `xmlRootKey` for existing destinations.
+- HTTP v2 validates any supplied `maxBatchSize` at the top level of `configSchema.properties` against the 1–5000 range, while `allOf.then.required` requires it only when `isBatchingEnabled` is true. This rejects out-of-range dormant values at save time without duplicating the property schema inside the conditional.
+- In HTTP v2 `ui-config.json`, both `isBatchingEnabled` and the 1–5000 `maxBatchSize` field are gated by `enable-http-v2-batch-size`; the size field additionally depends on the batching toggle. Gate both controls together so users cannot enable batching while the required size field is hidden.
 
 ## INT-7462 — Archived Major Options in Deployment
 
