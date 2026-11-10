@@ -484,7 +484,7 @@ describe('Validation Tests', () => {
 describe('HTTP versioned authentication definitions', () => {
   const base = path.resolve('src/configurations/destinations/http');
 
-  it('keeps the v1 inline credential definition and gated, account-only v2', () => {
+  it('keeps the v1 inline credential definition and gated, account-linked v2', () => {
     const root = readJson(path.join(base, 'db-config.json'));
     const previous = readJson(path.join(base, 'versions/1/db-config.json'));
     expect(previous.version).toBe('1.0');
@@ -492,9 +492,11 @@ describe('HTTP versioned authentication definitions', () => {
     expect(previous.config.destConfig.defaultConfig).toContain('password');
     expect(previous.config.secretKeys).toEqual(['password', 'bearerToken', 'apiKeyValue']);
     expect(root.version).toBe('2.0');
-    expect(root.config.secretKeys).toEqual([]);
-    expect(root.config.destConfig.defaultConfig).toContain('rudderAccountId');
-    expect(root.config.destConfig.defaultConfig).not.toContain('password');
+    // Non-OAuth account fields are merged into the destination config and filtered by defaultConfig.
+    expect(root.config.secretKeys).toEqual(['password', 'bearerToken', 'apiKeyValue']);
+    expect(root.config.destConfig.defaultConfig).toEqual(
+      expect.arrayContaining(['rudderAccountId', 'username', 'password', 'apiKeyName']),
+    );
     expect(root.options.hidden.gate.flags).toEqual([
       { name: 'AMP_enable-http-v2-destination', value: false },
     ]);

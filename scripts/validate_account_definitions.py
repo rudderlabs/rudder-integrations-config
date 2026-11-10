@@ -140,49 +140,15 @@ def validate_destination_accounts(destination_name):
     return True
 
 
-def validate_account_only_major(dest_dir, dest_config, account_fields, secret_fields):
-    """Allow an account-only root only when the previous major retained every credential."""
-    cfg = dest_config.get("config", {})
-    try:
-        version = dest_config["version"].split(".")
-        major = int(version[0])
-        if major <= 1 or len(version) != 2 or not version[1].isdigit():
-            raise ValueError("invalid current major")
-    except (KeyError, ValueError, AttributeError):
-        print(
-            f"ERROR: Account-only destination '{dest_dir.name}' needs a version above 1"
-        )
-        return False
-
-    current_fields = set(cfg.get("destConfig", {}).get("defaultConfig", []))
-    if "rudderAccountId" not in current_fields or cfg.get("secretKeys") != []:
-        print(f"ERROR: Incomplete account-only metadata for '{dest_dir.name}'")
-        return False
-
-    archive = load_json_file(dest_dir / "versions" / str(major - 1) / "db-config.json")
-    if archive is None or archive.get("version", "").split(".")[0] != str(major - 1):
-        print(f"ERROR: Missing or mismatched predecessor for '{dest_dir.name}'")
-        return False
-    previous_cfg = archive.get("config", {})
-    previous_fields = set(previous_cfg.get("destConfig", {}).get("defaultConfig", []))
-    previous_secrets = set(previous_cfg.get("secretKeys", []))
-    if not account_fields <= previous_fields or not secret_fields <= previous_secrets:
-        print(
-            f"ERROR: Archived predecessor of '{dest_dir.name}' does not retain credentials"
-        )
-        return False
-    return True
-
-
 def validate_account_field_coverage(dest_dir):
     """
-    Validate that for each non-OAuth account definition, all fields are mirrored
-    in destConfig and secrets in secretKeys; alternatively, a versioned account-only
-    root has no credential fields and preserves them in the archived predecessor.
+    Validate that for each ordinary account definition:
+      1. All fields (secretFields + optionFields) are present in the destination's destConfig.
+      2. All secretFields are present in the destination's secretKeys.
 
-    The workspace config API (v1) filters its response based on destConfig.
-    Mirrored account fields are necessary for existing destinations, while an
-    account-only major receives credentials through its linked delivery account.
+    The workspace config API (v1) filters its response based on the fields declared
+    in the destination definition's destConfig. If an account field is missing from
+    destConfig, it will be silently dropped from the API response.
 
     Interactive OAuth and machine OAuth accounts are excluded because their credentials
     stay on the account and are not merged into destination config.
@@ -199,38 +165,21 @@ def validate_account_field_coverage(dest_dir):
         return True  # No accounts to validate
 
     dest_config = load_json_file(dest_dir / "db-config.json")
-    if dest_config is None:
-        return False
     cfg = dest_config.get("config", {})
     dest_secret_keys = set(cfg.get("secretKeys", []))
     dest_config_fields = set(cfg.get("destConfig", {}).get("defaultConfig", []))
 
-    accounts = []
-    account_fields = set()
-    account_secrets = set()
+    success = True
+
     for account_dir in accounts_dir.glob("*"):
         if not account_dir.is_dir():
             continue
+
         account_config = load_json_file(account_dir / "db-config.json")
-        if account_config is None:
-            return False
-        if account_config.get("authenticationType") not in ("oauth", "machine_oauth"):
-            accounts.append(account_config)
-            account_cfg = account_config.get("config", {})
-            account_fields.update(account_cfg.get("secretFields", []))
-            account_fields.update(account_cfg.get("optionFields", []))
-            account_secrets.update(account_cfg.get("secretFields", []))
 
-    # A newer major may move credentials entirely into deliveryAccount. Only accept
-    # this alternative when ALL account fields are absent from the current destination.
-    if account_fields and not (account_fields & dest_config_fields):
-        return validate_account_only_major(
-            dest_dir, dest_config, account_fields, account_secrets
-        )
+        if account_config.get("authenticationType") in ("oauth", "machine_oauth"):
+            continue
 
-    success = True
-
-    for account_config in accounts:
         account_name = account_config["name"]
         account_cfg = account_config.get("config", {})
         secret_fields = account_cfg.get("secretFields", [])

@@ -77,21 +77,17 @@ Add `supportedAccountDefinitions` and prepend `rudderAccountId` to `destConfig.d
 }
 ```
 
-**Ordinary account-backed migrations keep the account fields declared here too.** Moving a field
-to the account level does not remove it from destination metadata — the account owns its
-_definition_, the destination still declares it:
+**The account fields themselves stay declared here too.** Moving a field to the account level does
+not remove it from destination metadata — the account owns its _definition_, the destination still
+declares it:
 
 - every `secretFields` + `optionFields` entry from the account `db-config.json` → `config.destConfig.defaultConfig`
 - every `secretFields` entry → also `config.secretKeys`
 - device mode only: any account field the browser SDK needs → also `config.includeKeys`, but never `rudderAccountId`
 
-**For a new account-only major** (such as HTTP v2), keep `rudderAccountId` in `defaultConfig`,
-omit **all** non-OAuth account credential fields from `defaultConfig`, and set `secretKeys: []`.
-Archive the immediately previous major with its version, credential fields, and secret keys intact;
-do not apply this exception to an unversioned migration or partially mirror the fields. See
-[CONVENTIONS.md — where account credential fields live](../../../CONVENTIONS.md#where-account-credential-fields-live)
-for the exact qualification rules and why the ordinary contract still applies elsewhere.
-Step 7 verifies the appropriate contract.
+What each of these does, what breaks when one is missed, and why the validator takes no
+exemptions: [CONVENTIONS.md — where account credential fields live](../../../CONVENTIONS.md#where-account-credential-fields-live).
+Step 7 verifies them.
 
 ---
 

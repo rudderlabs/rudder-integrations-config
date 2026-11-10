@@ -397,25 +397,15 @@ same intent is not read by anything and will silently do nothing.
 ## Where account credential fields live
 
 An account definition under `src/configurations/destinations/<dest>/accounts/<account>/` owns the
-_definition_ of its credential fields. For ordinary account-backed destinations, the destination
-`db-config.json` still has to declare them in two places:
+_definition_ of its credential fields. The destination `db-config.json` still has to declare them,
+in two places:
 
 - Every `secretFields` + `optionFields` entry must appear in `config.destConfig.defaultConfig`.
   The workspace config API (v1) filters its response against `destConfig`; a field missing here is
   silently dropped from the API response rather than rejected.
 - Every `secretFields` entry must also appear in `config.secretKeys`.
 
-**Versioned account-only exception:** A new root major can instead obtain credentials exclusively
-from the linked delivery account. Its `defaultConfig` must contain `rudderAccountId` and **none** of
-the non-OAuth account credential fields; `secretKeys` must be explicitly `[]`. This is valid only
-when the root version is above 1 and the immediately previous major has an archived
-`versions/<previous-major>/db-config.json` with the matching version, all those credential fields
-in its `defaultConfig`, and all account secrets in its `secretKeys`. Preserve that archive's inline
-credential contract for existing destinations. Do not use this exception for an unversioned
-migration or mix mirrored and account-only metadata; the workspace config API's mirrored-field
-contract still applies to ordinary account-backed definitions. HTTP v2 is the account-only example.
-
-Both contracts are enforced by `validate_account_field_coverage` in
+Both are enforced by `validate_account_field_coverage` in
 [`scripts/validate_account_definitions.py`](scripts/validate_account_definitions.py), which skips
 `authenticationType: "oauth"` accounts because the OAuth flow manages those secrets outside
 `destConfig`. **CI enforces this**: the `Run account validation for changed files` step in
