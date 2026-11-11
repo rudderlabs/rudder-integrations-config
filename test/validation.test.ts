@@ -307,10 +307,11 @@ describe('Validation Tests', () => {
       expect(rootDefinition.options.hidden.gate.flags).toEqual([
         { name: 'AMP_enable-http-v2-destination', value: false },
       ]);
-      expect(rootUi.uiConfig.baseTemplate[1].sections[0].groups[0].fields).toEqual([
+      // The create flow renders only the initial-setup section, so the builder must live there.
+      expect(rootUi.uiConfig.baseTemplate[0].sections[0].groups[1].fields).toEqual([
         { type: 'httpRequestBuilder' },
       ]);
-      const { fields } = rootUi.uiConfig.baseTemplate[2].sections[0].groups[0];
+      const { fields } = rootUi.uiConfig.baseTemplate[1].sections[0].groups[0];
       // Capability fields are always shown; only the catalogue gate is flagged.
       // maxBatchSize is format-gated (JSON/XML) and lives beside the body format.
       ['supportedMessageTypes'].forEach((configKey) => {

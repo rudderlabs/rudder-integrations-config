@@ -1393,17 +1393,38 @@ def generate_schema_properties(
                                 print(
                                     f"No schema generator function found for field: {field['type']}"
                                 )
-                            if (
-                                template.get("title", "") == "Initial setup"
-                                and is_field_present_in_default_config(
-                                    field, dbConfig, "configKey"
-                                )
-                                and (
-                                    "preRequisites" not in field
-                                    or field.get("required")
+                            if template.get("title", "") != "Initial setup":
+                                continue
+                            # A field shown only for specific values of another field is not
+                            # always required, so it stays out of the top-level list.
+                            # shortcut: its conditional requirement must be hand-written as
+                            # allOf in schema.json; generate it once new-format allOf is supported.
+                            preRequisites = field.get("preRequisites", {})
+                            preRequisiteFields = (
+                                preRequisites
+                                if isinstance(preRequisites, list)
+                                else preRequisites.get("fields", [])
+                            )
+                            shownForSpecificValues = any(
+                                "value" in preRequisite
+                                for preRequisite in preRequisiteFields
+                            )
+                            if is_field_present_in_default_config(
+                                field, dbConfig, "configKey"
+                            ) and (
+                                "preRequisites" not in field
+                                or (
+                                    field.get("required") and not shownForSpecificValues
                                 )
                             ):
                                 add_required_key(schemaObject, field["configKey"])
+                            for key in CUSTOM_FIELD_REQUIRED_KEYS.get(
+                                field["type"], []
+                            ):
+                                if is_field_present_in_default_config(
+                                    {"configKey": key}, dbConfig, "configKey"
+                                ):
+                                    add_required_key(schemaObject, key)
 
             for field in sdkTemplate.get("fields", []):
                 generateFunction = uiTypetoSchemaFn.get(field["type"], None)
@@ -1701,6 +1722,10 @@ def generate_warnings_for_each_type(uiConfig, dbConfig, schema, curUiType):
                                 UserWarning,
                             )
 
+
+# Custom ui-config widgets have no configKey of their own; these are the keys they
+# write that must always be set.
+CUSTOM_FIELD_REQUIRED_KEYS = {"httpRequestBuilder": ["requestBodyTemplate"]}
 
 uiTypetoSchemaFn = {
     "defaultCheckbox": generate_schema_for_default_checkbox,

@@ -1,0 +1,31 @@
+{
+  "configSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["format", "accountName", "requestBodyTemplate"],
+    "type": "object",
+    "properties": {
+      "format": {
+        "type": "string",
+        "enum": ["JSON", "FORM"],
+        "default": "JSON"
+      },
+      "batchSize": {
+        "type": "string",
+        "pattern": "^([1-9][0-9]{0,2})$"
+      },
+      "accountName": {
+        "type": "string",
+        "pattern": "^(.{1,100})$"
+      },
+      "connectionMode": {
+        "type": "object",
+        "properties": {
+          "cloud": {
+            "type": "string",
+            "enum": ["cloud"]
+          }
+        }
+      }
+    }
+  }
+}

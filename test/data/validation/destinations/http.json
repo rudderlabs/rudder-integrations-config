@@ -634,5 +634,61 @@
     },
     "result": false,
     "err": ["format must be equal to one of the allowed values"]
+  },
+  {
+    "testTitle": "Consent management entry with a provider",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": true,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
+      "connectionMode": {
+        "cloud": "cloud"
+      },
+      "consentManagement": {
+        "cloud": [
+          {
+            "provider": "oneTrust",
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          }
+        ]
+      },
+      "rudderAccountId": "sample-account-id",
+      "maxBatchSize": "1"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Consent management entry without a provider",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": true,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
+      "connectionMode": {
+        "cloud": "cloud"
+      },
+      "consentManagement": {
+        "cloud": [
+          {
+            "consents": [
+              {
+                "consent": "Marketing"
+              }
+            ]
+          }
+        ]
+      },
+      "rudderAccountId": "sample-account-id",
+      "maxBatchSize": "1"
+    },
+    "result": false,
+    "err": ["consentManagement.cloud.0 must have required property 'provider'"]
   }
 ]

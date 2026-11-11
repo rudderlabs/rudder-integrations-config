@@ -81,6 +81,12 @@ describe('Schema Generator', () => {
         destName: 'duplicate_required_key_dest',
         expectedSchemaFile: 'duplicateRequiredKeyDest.json',
       },
+      {
+        description:
+          'required fields shown only for a specific value are left out of required; builder widgets add their keys',
+        destName: 'conditional_required_dest',
+        expectedSchemaFile: 'conditionalRequiredDest.json',
+      },
     ];
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

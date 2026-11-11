@@ -1,0 +1,64 @@
+{
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Settings",
+                "note": "",
+                "fields": [
+                  {
+                    "type": "singleSelect",
+                    "label": "Format",
+                    "configKey": "format",
+                    "options": [
+                      { "label": "JSON", "value": "JSON" },
+                      { "label": "FORM", "value": "FORM" }
+                    ],
+                    "default": "JSON"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Batch size",
+                    "configKey": "batchSize",
+                    "regex": "^([1-9][0-9]{0,2})$",
+                    "placeholder": "e.g. 10",
+                    "required": true,
+                    "preRequisites": {
+                      "fields": [{ "configKey": "format", "value": "JSON" }]
+                    }
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Account name",
+                    "configKey": "accountName",
+                    "regex": "^(.{1,100})$",
+                    "placeholder": "e.g. main",
+                    "required": true,
+                    "preRequisites": {
+                      "fields": [{ "configKey": "format", "exists": true }]
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "Request",
+                "note": "",
+                "fields": [{ "type": "httpRequestBuilder" }]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "title": "SDK settings",
+      "note": "not visible in the ui",
+      "fields": []
+    }
+  }
+}
