@@ -394,3 +394,7 @@
 
 - HTTP v2 has no `xmlRootKey`: for XML the template's single top-level key is the root element, so the template alone defines the request shape. Do not add a root-key field back; v1 keeps its `xmlRootKey`, and v1→v2 migration must fold it into the generated template. Its one-key rule cannot be expressed in `schema.json` (the template is JSONata), so the transformer enforces it.
 - HTTP v2 `maxBatchSize` is visible in the UI only when `format` is JSON or XML (UI `required: true`, no UI or schema default); the prerequisite hides it for FORM, so the webapp skips its required check there. In `schema.json`, only the hand-authored `allOf` conditional requires it for JSON and XML; do not make it top-level required, so FORM without a batch size remains valid. `scripts/schemaGenerator.py` derives the field property but not this conditional requirement.
+
+## INT-7539 — Custom Activation OAuth Account Visibility
+
+- Both Custom Activation OAuth accounts (`src/configurations/destinations/custom_audience/accounts/custom_audience_client_credentials/db-config.json` and `src/configurations/destinations/custom_audience/accounts/custom_audience_oauth_auth_code/db-config.json`) are available without workspace Flagsmith overrides. Keep their account definitions free of `displayOptions` visibility gates; removing the gates must not change authentication or credential metadata.
