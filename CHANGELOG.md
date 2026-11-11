@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.194.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.193.0...v1.194.0) (2026-11-10)
+
+
+### Features
+
+* **config:** add gated maxcompute destination and accounts ([#2887](https://github.com/rudderlabs/rudder-integrations-config/issues/2887)) ([8cf1bbf](https://github.com/rudderlabs/rudder-integrations-config/commit/8cf1bbfc7612190c2b681bdee2cf733454260e84))
+* **custom-audience:** add gated oauth accounts ([#2860](https://github.com/rudderlabs/rudder-integrations-config/issues/2860)) ([d8b76da](https://github.com/rudderlabs/rudder-integrations-config/commit/d8b76da83f62f9f54118e88923aefec418011b77))
+* **everflow:** make destination visible in public beta ([#2886](https://github.com/rudderlabs/rudder-integrations-config/issues/2886)) ([75e18bc](https://github.com/rudderlabs/rudder-integrations-config/commit/75e18bc3aa448d5917991d8eeab66dd18477f2ca))
+* **http:** add gated account-backed v2 definition ([#2891](https://github.com/rudderlabs/rudder-integrations-config/issues/2891)) ([f3e1106](https://github.com/rudderlabs/rudder-integrations-config/commit/f3e110664b1be31094a86c6e7889f563f3870b00))
+* **http:** add gated v2 definition and preserve supported v1 archive ([#2871](https://github.com/rudderlabs/rudder-integrations-config/issues/2871)) ([5af533b](https://github.com/rudderlabs/rudder-integrations-config/commit/5af533b3a3f63951b408fe447de9aa4c1f5ca19b))
+* **http:** expose xml and form body formats in v2 definition ([#2890](https://github.com/rudderlabs/rudder-integrations-config/issues/2890)) ([d4824c5](https://github.com/rudderlabs/rudder-integrations-config/commit/d4824c5476cafb85d3414b81f6ab7d38e6610052))
+* **rokt:** make destination public beta ([#2885](https://github.com/rudderlabs/rudder-integrations-config/issues/2885)) ([56e9eaf](https://github.com/rudderlabs/rudder-integrations-config/commit/56e9eafbdb2e3d298552522cb12762f496374c1f))
+
+
+### Miscellaneous
+
+* **ci:** remove the commitlint workflow ([#2883](https://github.com/rudderlabs/rudder-integrations-config/issues/2883)) ([2622c1d](https://github.com/rudderlabs/rudder-integrations-config/commit/2622c1daf1c3f9bf9635d77e54495fd8203d7166))
+* **deps:** bump glob from 12.0.0 to 14.0.2 ([#2882](https://github.com/rudderlabs/rudder-integrations-config/issues/2882)) ([0608136](https://github.com/rudderlabs/rudder-integrations-config/commit/06081364f8e252a44dbf52ca0dbe2103482510a5))
+* **deps:** bump slackapi/slack-github-action from 2.1.1 to 4.0.0 ([#2614](https://github.com/rudderlabs/rudder-integrations-config/issues/2614)) ([d33b0d2](https://github.com/rudderlabs/rudder-integrations-config/commit/d33b0d27465122e532d1e97f504ed3b4197747ef))
+* **deps:** bump step-security/harden-runner from 2.22.1 to 2.22.3 ([#2888](https://github.com/rudderlabs/rudder-integrations-config/issues/2888)) ([2bdd80d](https://github.com/rudderlabs/rudder-integrations-config/commit/2bdd80df9c44f86c89a33bf515723bfa3c32468e))
+
 ## [1.193.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.192.0...v1.193.0) (2026-11-02)
 
 
