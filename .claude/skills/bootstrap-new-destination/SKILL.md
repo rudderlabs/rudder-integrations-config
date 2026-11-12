@@ -105,7 +105,7 @@ Copy the template, then:
   introduced in 2021 precisely because GA's GIF response broke the DB write), or an arbitrary customer
   endpoint (`webhook`).
 - If category (Form 2) = `warehouse`: add top-level `"category": "warehouse"` (sibling of `name`), set `transformAtV1` to `processor` (above), and follow [Warehouse destinations](#warehouse-destinations).
-- `options.icon` — set it to the destination's kebab-case icon name from the RudderStack Integration Icons Figma library (published as `@rudderlabs/icons`). The template's `options` carries only `isBeta`, so this is easy to miss — and every definition but `test_destination` has one. Use the destination's own brand — don't borrow a neighbouring brand's icon.
+- `options.icon` — set it to the destination's kebab-case icon name, i.e. the file stem of `icons/<name>.svg` in rudderlabs/rudder-icons (published as `@rudderlabs/icons`). The template's `options` carries only `isBeta`, so this is easy to miss — and every definition but `test_destination` has one. Use the destination's own brand — don't borrow a neighbouring brand's icon. If the icon doesn't exist yet, add it with one rudder-icons PR: `make add-icon NAME=<name> SVG=<vendor svg>` (no Figma access needed; see that repo's `.claude/skills/add-icon/SKILL.md`). Either PR can merge first.
 - If gating visibility, follow [per-major destination visibility gates](../../../CONVENTIONS.md#per-major-destination-visibility-gates).
 - `supportedSourceTypes` ← Form 1.
 - `destConfig.defaultConfig` = `["placeholderKey"]` — a neutral placeholder field (also added to ui-config and schema, below) so the scaffold validates (`defaultConfig` can't be empty per the meta-schema). Replace it with the real config keys as fields are added.
