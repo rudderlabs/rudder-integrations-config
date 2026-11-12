@@ -315,11 +315,8 @@ describe('Validation Tests', () => {
       // The create flow renders only the initial-setup section, so the builder must live there.
       const initialGroups = rootUi.uiConfig.baseTemplate[0].sections[0].groups;
       expect(initialGroups[1].fields).toEqual([{ type: 'httpRequestBuilder' }]);
-      expect(initialGroups[2]).toMatchObject({
-        title: 'Event overrides',
-        fields: [{ type: 'httpEventOverrides' }],
-      });
-      expect(initialGroups[2].fields[0].configKey).toBeUndefined();
+      expect(initialGroups[2].title).toBe('Event overrides');
+      expect(initialGroups[2].fields).toEqual([{ type: 'httpEventOverrides' }]);
       const { fields } = rootUi.uiConfig.baseTemplate[1].sections[0].groups[0];
       // Capability fields are always shown; only the catalogue gate is flagged.
       // maxBatchSize is format-gated (JSON/XML) and lives beside the body format.
@@ -353,15 +350,14 @@ describe('Validation Tests', () => {
       expect(() => validateGroups(Array.from({ length: 21 }, (_, index) => group(index)))).toThrow(
         'eventOverrides must NOT have more than 20 items',
       );
-      const namedGroup = group(0);
       expect(() =>
         validateGroups([
-          { ...namedGroup, events: Array.from({ length: 100 }, (_, index) => `Event ${index}`) },
+          { ...group(0), events: Array.from({ length: 100 }, (_, index) => `Event ${index}`) },
         ]),
       ).not.toThrow();
       expect(() =>
         validateGroups([
-          { ...namedGroup, events: Array.from({ length: 101 }, (_, index) => `Event ${index}`) },
+          { ...group(0), events: Array.from({ length: 101 }, (_, index) => `Event ${index}`) },
         ]),
       ).toThrow('eventOverrides.0.events must NOT have more than 100 items');
     });
