@@ -403,3 +403,8 @@
 
 - On the current HTTP v2 `src/configurations/destinations/http/ui-config.json` `accountManagementInput` for `rudderAccountId`, keep the `authenticationEnabled` prerequisite and set `clearValueWhenHidden: true`. Visibility prerequisites alone do not remove saved values; the webapp owns omission of the hidden account ID and uses `hardUpdate` to unlink an existing account.
 - Do not relax HTTP's persisted `schema.json` to accept an empty account ID or change `db-config.json` or archived `versions/1/` for this UI-only behavior. The field property does not alter generated schema validation; HTTP account validation remains in the existing schema.
+
+## INT-7543 — HTTP V2 Conditional Account ID Validation
+
+- Supersedes INT-7540's no-blank-schema guidance: in current HTTP v2 `src/configurations/destinations/http/schema.json`, the root `rudderAccountId` property permits an empty string but remains a string capped at 100 characters (`^.{0,100}$`). When `authenticationEnabled` is true, the existing `allOf` branch both requires the key and enforces a non-empty, at-most-100-character string (`^.{1,100}$`) in `then.properties.rudderAccountId`. Keep `type: "string"` alongside that branch-local `pattern`: config-backend's strict Ajv rejects a bare pattern at schema compilation. Archived v1 remains unchanged.
+- A blank ID while authentication is off represents an unlinked account and overwrites the stored ID during config-backend's normal deep-merge update; omitting the key instead leaves the old ID in place. Keep validation coverage for auth-on blank rejection and auth-off blank acceptance.
