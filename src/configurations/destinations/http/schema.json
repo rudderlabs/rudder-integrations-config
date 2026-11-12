@@ -27,31 +27,10 @@
         "default": "JSON"
       },
       "pathParams": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "path": {
-              "type": "string"
-            }
-          }
-        }
+        "$ref": "#/definitions/pathParams"
       },
       "queryParams": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "to": {
-              "type": "string",
-              "pattern": "^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- ]{1,100}$"
-            },
-            "from": {
-              "type": "string"
-            }
-          },
-          "required": ["to"]
-        }
+        "$ref": "#/definitions/queryParams"
       },
       "headers": {
         "type": "array",
@@ -989,6 +968,79 @@
         },
         "minItems": 1,
         "uniqueItems": true
+      },
+      "maxBatchSize": {
+        "$ref": "#/definitions/maxBatchSize"
+      },
+      "eventOverrides": {
+        "type": "array",
+        "maxItems": 20,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "events"],
+          "anyOf": [
+            { "required": ["pathParams"] },
+            { "required": ["queryParams"] },
+            { "required": ["requestBodyTemplate"] },
+            { "required": ["maxBatchSize"] }
+          ],
+          "errorMessage": {
+            "anyOf": "must override at least one of pathParams, queryParams, requestBodyTemplate, maxBatchSize"
+          },
+          "properties": {
+            "name": {
+              "type": "string",
+              "pattern": "^(?=.{1,100}$).*\\S.*$"
+            },
+            "events": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 100,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^.*\\S.*$"
+              }
+            },
+            "pathParams": { "$ref": "#/definitions/pathParams" },
+            "queryParams": { "$ref": "#/definitions/queryParams" },
+            "requestBodyTemplate": {
+              "type": "string",
+              "pattern": "^[\\s\\S]{1,}$"
+            },
+            "maxBatchSize": { "$ref": "#/definitions/maxBatchSize" }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "pathParams": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "queryParams": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "to": {
+              "type": "string",
+              "pattern": "^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- ]{1,100}$"
+            },
+            "from": {
+              "type": "string"
+            }
+          },
+          "required": ["to"]
+        }
       },
       "maxBatchSize": {
         "type": "string",

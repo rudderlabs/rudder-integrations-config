@@ -300,7 +300,12 @@ describe('Validation Tests', () => {
       expect(rootDefinition.version).toBe('2.0');
       expect(rootDefinition.config.cdkV2Enabled).toBeUndefined();
       expect(rootDefinition.config.destConfig.defaultConfig).toEqual(
-        expect.arrayContaining(['requestBodyTemplate', 'supportedMessageTypes', 'maxBatchSize']),
+        expect.arrayContaining([
+          'requestBodyTemplate',
+          'supportedMessageTypes',
+          'maxBatchSize',
+          'eventOverrides',
+        ]),
       );
       expect(rootDefinition.config.destConfig.defaultConfig).not.toContain('propertiesMapping');
       expect(rootDefinition.config.destConfig.defaultConfig).not.toContain('isDefaultMapping');
@@ -308,9 +313,13 @@ describe('Validation Tests', () => {
         { name: 'AMP_enable-http-v2-destination', value: false },
       ]);
       // The create flow renders only the initial-setup section, so the builder must live there.
-      expect(rootUi.uiConfig.baseTemplate[0].sections[0].groups[1].fields).toEqual([
-        { type: 'httpRequestBuilder' },
-      ]);
+      const initialGroups = rootUi.uiConfig.baseTemplate[0].sections[0].groups;
+      expect(initialGroups[1].fields).toEqual([{ type: 'httpRequestBuilder' }]);
+      expect(initialGroups[2]).toMatchObject({
+        title: 'Event overrides',
+        fields: [{ type: 'httpEventOverrides' }],
+      });
+      expect(initialGroups[2].fields[0].configKey).toBeUndefined();
       const { fields } = rootUi.uiConfig.baseTemplate[1].sections[0].groups[0];
       // Capability fields are always shown; only the catalogue gate is flagged.
       // maxBatchSize is format-gated (JSON/XML) and lives beside the body format.
@@ -320,6 +329,41 @@ describe('Validation Tests', () => {
             .preRequisites,
         ).toBeUndefined();
       });
+    });
+
+    it('enforces event override group and event-name boundaries', () => {
+      const baseConfig = {
+        apiUrl: 'https://api.example.com/v1/events',
+        authenticationEnabled: false,
+        method: 'POST',
+        format: 'JSON',
+        requestBodyTemplate: '$$.events',
+        maxBatchSize: '50',
+      };
+      const group = (index: number) => ({
+        name: `Group ${index}`,
+        events: [`Event ${index}`],
+        queryParams: [],
+      });
+      const validateGroups = (eventOverrides: Record<string, unknown>[]) =>
+        validateConfig('http', { ...baseConfig, eventOverrides }, 'destinations', true);
+      expect(() =>
+        validateGroups(Array.from({ length: 20 }, (_, index) => group(index))),
+      ).not.toThrow();
+      expect(() => validateGroups(Array.from({ length: 21 }, (_, index) => group(index)))).toThrow(
+        'eventOverrides must NOT have more than 20 items',
+      );
+      const namedGroup = group(0);
+      expect(() =>
+        validateGroups([
+          { ...namedGroup, events: Array.from({ length: 100 }, (_, index) => `Event ${index}`) },
+        ]),
+      ).not.toThrow();
+      expect(() =>
+        validateGroups([
+          { ...namedGroup, events: Array.from({ length: 101 }, (_, index) => `Event ${index}`) },
+        ]),
+      ).toThrow('eventOverrides.0.events must NOT have more than 100 items');
     });
 
     it('v1 is archived as supported', () => {

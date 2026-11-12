@@ -141,3 +141,9 @@
 
 - `scripts/validate_account_definitions.py` treats `authenticationType: "oauth"` and `"machine_oauth"` as account-only credential types; neither flow requires account option/secret keys mirrored into destination `defaultConfig` or `secretKeys`.
 - `scripts/schemaGenerator.py` must skip destination `baseTemplate` fields with no `configKey`, such as Custom Activation's `audienceDeliveryApiBuilder`, rather than generating a persisted property or looking the field up in `defaultConfig` for requiredness. The destination's legacy authentication keys remain in `defaultConfig` despite being absent from the persisted schema's properties, so avoid making the schema a closed top-level object merely to silence a generic generator recommendation.
+
+## INT-7542 — HTTP V2 Override Schema and Fixture Patterns
+
+- In `src/configurations/destinations/http/schema.json`, reuse the existing `pathParams`, `queryParams`, and `maxBatchSize` schema shapes through `#/definitions` references for override-group values. Do not tighten nested path/query entries only for groups; preserve the same request validation contract as destination defaults.
+- For the HTTP override-group `anyOf` that requires at least one actual override, AJV with `allErrors` and `ajv-errors` emits four required-branch errors plus the keyword-level readable `anyOf` error. Keep the keyword-level `errorMessage` rather than suppressing other group errors with an object-level message; assert the full emitted error array in the HTTP validation fixture.
+- Put representative HTTP v2 override configs in `test/data/validation/destinations/http.json`. Cover the 20/21-group and 100/101-event-name boundaries with parameterized cases in `test/validation.test.ts` through `validateConfig('http', …)`, rather than duplicating hundreds of literal JSON fixture lines.

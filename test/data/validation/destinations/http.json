@@ -690,5 +690,367 @@
     },
     "result": false,
     "err": ["consentManagement.cloud.0 must have required property 'provider'"]
+  },
+  {
+    "testTitle": "Empty event overrides use the default request",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "50",
+      "eventOverrides": []
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Body-only event override",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "50",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "events": ["Lead Submitted"],
+          "requestBodyTemplate": "$$.events"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Empty query parameters override the defaults",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "50",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "events": ["Lead Submitted"],
+          "queryParams": []
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Path-only event override",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "50",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "events": ["Lead Submitted"],
+          "pathParams": [
+            {
+              "path": "leads"
+            }
+          ]
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Batch-only event override",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "50",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "events": ["Lead Submitted"],
+          "maxBatchSize": "1"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Event override with all request fields",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "50",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "events": ["Lead Submitted"],
+          "pathParams": [
+            {
+              "path": "leads"
+            }
+          ],
+          "queryParams": [
+            {
+              "to": "source",
+              "from": "'checkout'"
+            }
+          ],
+          "requestBodyTemplate": "$$.events",
+          "maxBatchSize": "5000"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Reject group without an override",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "50",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "events": ["Lead Submitted"]
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventOverrides.0 must have required property 'pathParams'",
+      "eventOverrides.0 must have required property 'queryParams'",
+      "eventOverrides.0 must have required property 'requestBodyTemplate'",
+      "eventOverrides.0 must have required property 'maxBatchSize'",
+      "eventOverrides.0 must override at least one of pathParams, queryParams, requestBodyTemplate, maxBatchSize"
+    ]
+  },
+  {
+    "testTitle": "Reject group without events",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "50",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "queryParams": []
+        }
+      ]
+    },
+    "result": false,
+    "err": ["eventOverrides.0 must have required property 'events'"]
+  },
+  {
+    "testTitle": "Reject empty group event list",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "50",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "events": [],
+          "queryParams": []
+        }
+      ]
+    },
+    "result": false,
+    "err": ["eventOverrides.0.events must NOT have fewer than 1 items"]
+  },
+  {
+    "testTitle": "Reject duplicate events in a group",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "50",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "events": ["Lead Submitted", "Lead Submitted"],
+          "queryParams": []
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventOverrides.0.events must NOT have duplicate items (items ## 1 and 0 are identical)"
+    ]
+  },
+  {
+    "testTitle": "Reject blank event name",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "50",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "events": ["   "],
+          "queryParams": []
+        }
+      ]
+    },
+    "result": false,
+    "err": ["eventOverrides.0.events.0 must match pattern \"^.*\\S.*$\""]
+  },
+  {
+    "testTitle": "Reject blank group name",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "50",
+      "eventOverrides": [
+        {
+          "name": "  ",
+          "events": ["Lead Submitted"],
+          "queryParams": []
+        }
+      ]
+    },
+    "result": false,
+    "err": ["eventOverrides.0.name must match pattern \"^(?=.{1,100}$).*\\S.*$\""]
+  },
+  {
+    "testTitle": "Reject unknown group property",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "50",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "events": ["Lead Submitted"],
+          "method": "GET",
+          "queryParams": []
+        }
+      ]
+    },
+    "result": false,
+    "err": ["eventOverrides.0 must NOT have additional properties"]
+  },
+  {
+    "testTitle": "Reject invalid override query parameter",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "50",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "events": ["Lead Submitted"],
+          "queryParams": [
+            {
+              "to": "",
+              "from": "$$.events"
+            }
+          ]
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventOverrides.0.queryParams.0.to must match pattern \"^(?!\\$)[A-Za-z0-9!#$%&'*+.^_`|~\\- ]{1,100}$\""
+    ]
+  },
+  {
+    "testTitle": "Reject empty override body template",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "50",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "events": ["Lead Submitted"],
+          "requestBodyTemplate": ""
+        }
+      ]
+    },
+    "result": false,
+    "err": ["eventOverrides.0.requestBodyTemplate must match pattern \"^[\\s\\S]{1,}$\""]
+  },
+  {
+    "testTitle": "Reject oversized override batch size",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "50",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "events": ["Lead Submitted"],
+          "maxBatchSize": "5001"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventOverrides.0.maxBatchSize must match pattern \"^([1-9][0-9]{0,2}|[1-4][0-9]{3}|5000)$\""
+    ]
+  },
+  {
+    "testTitle": "Reject empty override batch size",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "50",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "events": ["Lead Submitted"],
+          "maxBatchSize": ""
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventOverrides.0.maxBatchSize must match pattern \"^([1-9][0-9]{0,2}|[1-4][0-9]{3}|5000)$\""
+    ]
   }
 ]
