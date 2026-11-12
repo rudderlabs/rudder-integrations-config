@@ -398,3 +398,8 @@
 ## INT-7539 — Custom Activation OAuth Account Visibility
 
 - Both Custom Activation OAuth accounts (`src/configurations/destinations/custom_audience/accounts/custom_audience_client_credentials/db-config.json` and `src/configurations/destinations/custom_audience/accounts/custom_audience_oauth_auth_code/db-config.json`) are available without workspace Flagsmith overrides. Keep their account definitions free of `displayOptions` visibility gates; removing the gates must not change authentication or credential metadata.
+
+## INT-7540 — HTTP V2 Hidden Account Clearing
+
+- On the current HTTP v2 `src/configurations/destinations/http/ui-config.json` `accountManagementInput` for `rudderAccountId`, keep the `authenticationEnabled` prerequisite and set `clearValueWhenHidden: true`. Visibility prerequisites alone do not remove saved values; the webapp owns omission of the hidden account ID and uses `hardUpdate` to unlink an existing account.
+- Do not relax HTTP's persisted `schema.json` to accept an empty account ID or change `db-config.json` or archived `versions/1/` for this UI-only behavior. The field property does not alter generated schema validation; HTTP account validation remains in the existing schema.
