@@ -343,7 +343,7 @@
     "result": true
   },
   {
-    "testTitle": "Account reference cannot be empty",
+    "testTitle": "Authentication requires a non-empty account reference",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
       "authenticationEnabled": true,
@@ -375,7 +375,20 @@
       "rudderAccountId": ""
     },
     "result": false,
-    "err": ["rudderAccountId must match pattern \"^.{1,100}$\""]
+    "err": ["rudderAccountId must match pattern \"^.{1,100}$\"", " must match \"then\" schema"]
+  },
+  {
+    "testTitle": "Authentication disabled accepts a blank account reference",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "rudderAccountId": "",
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "1"
+    },
+    "result": true
   },
   {
     "testTitle": "Inline auth rejected in v2",
