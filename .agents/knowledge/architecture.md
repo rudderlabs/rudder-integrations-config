@@ -169,3 +169,8 @@
 - Both flows keep OAuth options and user-supplied `clientSecret` in their account definitions rather than mirroring credentials into destination `config.destConfig.defaultConfig`, `config.secretKeys`, or persisted destination `schema.json`. The client secret is a required account `secretFields`/`secretSchema` field; tokens are platform-written.
 - In both new account `schema.json` files, keep options and secret schemas open so rudder-auth can distinguish and reject `clientSecret` supplied in options. Account form order is controlled by each account `ui-config.json` `uiConfig.form.fields` array, not destination `ui-config.json`.
 - The keyless `audienceDeliveryApiBuilder` in the destination's Initial setup is a display/composite field; its `baseUrl`/actions/headers persisted schema is maintained in the destination `schema.json`, not generated as one property from the UI control.
+
+## INT-7542 — HTTP V2 Override Validation Ownership
+
+- HTTP v2 `eventOverrides` in `src/configurations/destinations/http/schema.json` has an array-level `maxItems: 20` group cap; group-aware cross-group duplicate-event errors belong to config-backend's HTTP custom validator, not a destination-specific branch of the shared integrations-config validator. Do not manufacture group-specific errors for the array cap in this repository.
+- Keep the HTTP v2 top-level config schema open to existing request and mapping keys when adding override validation; closing it to enforce the override shape would reject valid saved configurations.
