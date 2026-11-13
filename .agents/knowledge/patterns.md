@@ -147,3 +147,8 @@
 - In `src/configurations/destinations/http/schema.json`, reuse the existing `pathParams`, `queryParams`, `requestBodyTemplate`, and `maxBatchSize` schema shapes through `#/definitions` references for override-group values. Do not tighten nested path/query entries only for groups; preserve the same request validation contract as destination defaults.
 - For the HTTP override-group `anyOf` that requires at least one actual override, AJV with `allErrors` and `ajv-errors` emits four required-branch errors plus the keyword-level readable `anyOf` error. Keep the keyword-level `errorMessage` rather than suppressing other group errors with an object-level message; assert the full emitted error array in the HTTP validation fixture.
 - Put representative HTTP v2 override configs in `test/data/validation/destinations/http.json`. Cover the 20/21-group and 100/101-event-name boundaries with a single boundary test in `test/validation.test.ts` through `validateConfig('http', …)`, rather than duplicating hundreds of literal JSON fixture lines.
+
+## INT-7546 — Format-Dependent HTTP Override Batch Size
+
+- Array-item schemas cannot reference the root `format`, so HTTP v2's FORM-only rejection of `eventOverrides[].maxBatchSize` lives in a root `configSchema.allOf` if/then in `src/configurations/destinations/http/schema.json`. A persisted top-level FORM `maxBatchSize` stays accepted for compatibility.
+- The `httpEventOverrides` UI widget is keyless, so there is no nested `maxBatchSize` field to gate with `preRequisites`; keep the widget available for FORM and enforce in the schema.
