@@ -103,60 +103,19 @@
           "value": "syncFrequency",
           "options": [
             {
-              "name": "Every 30 minutes",
-              "value": "30"
-            },
-            {
-              "name": "Every 1 hour",
-              "value": "60"
-            },
-            {
-              "name": "Every 3 hours",
-              "value": "180"
-            },
-            {
-              "name": "Every 6 hours",
-              "value": "360"
-            },
-            {
-              "name": "Every 12 hours",
-              "value": "720"
-            },
-            {
-              "name": "Every 24 hours",
-              "value": "1440"
-            }
-          ],
-          "defaultOption": {
-            "name": "Every 3 hours",
-            "value": "180"
-          },
-          "required": false,
-          "preRequisites": {
-            "featureFlags": [
-              {
-                "configKey": "HIGH_GRANULARITY_WH_SYNC",
-                "value": false
-              }
-            ]
-          }
-        },
-        {
-          "type": "singleSelect",
-          "label": "Sync Frequency",
-          "value": "syncFrequency",
-          "options": [
-            {
               "name": "Every 5 minutes",
-              "value": "5"
+              "value": "5",
+              "featureFlag": "HIGH_GRANULARITY_WH_SYNC"
             },
             {
               "name": "Every 10 minutes",
-              "value": "10"
+              "value": "10",
+              "featureFlag": "HIGH_GRANULARITY_WH_SYNC"
             },
             {
               "name": "Every 15 minutes",
-              "value": "15"
+              "value": "15",
+              "featureFlag": "HIGH_GRANULARITY_WH_SYNC"
             },
             {
               "name": "Every 30 minutes",
@@ -188,15 +147,7 @@
             "value": "180"
           },
           "required": false,
-          "footerNote": "For 5, 10 or 15-minute syncs, keep Skip User Table enabled. The Users table adds time to every sync; when a sync runs past the interval, the next one is skipped and data arrives later.",
-          "preRequisites": {
-            "featureFlags": [
-              {
-                "configKey": "HIGH_GRANULARITY_WH_SYNC",
-                "value": true
-              }
-            ]
-          }
+          "footerNote": "Skip User Table keeps syncs fast. With the Users table enabled, a sync can run past the sync frequency, and the next one is skipped until it finishes."
         },
         {
           "type": "timePicker",
