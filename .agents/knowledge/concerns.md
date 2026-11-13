@@ -162,7 +162,3 @@
 ## INT-7520 — HTTP V2 Schema Generator Baseline Drift
 
 - HTTP v2's format-gated `maxBatchSize` is UI-required (hidden for FORM) but only conditionally required in `schema.json` for JSON and XML, so `scripts/run-schema-validation.sh` reports an expected required-field warning for HTTP. Do not make it top-level required to silence the warning; that would reject FORM configurations without a batch size.
-
-## INT-7546 — HTTP Override Widget Cannot Clear FORM Batch Size
-
-- HTTP v2's keyless `httpEventOverrides` widget has no per-override `maxBatchSize` field in `src/configurations/destinations/http/ui-config.json` on which to configure visibility or clearing. The root schema rejects FORM with stored `eventOverrides[].maxBatchSize`, so deploy the coordinated rudder-webapp editor that hides and clears stale values before enforcing the schema. Transformer behavior for such stale values remains unconfirmed from this repository; do not infer runtime severity from schema validation alone.

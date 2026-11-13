@@ -150,5 +150,5 @@
 
 ## INT-7546 — Format-Dependent HTTP Override Batch Size
 
-- HTTP v2 `src/configurations/destinations/http/schema.json` rejects `eventOverrides[].maxBatchSize` for FORM with a root-level `configSchema.allOf` conditional: `if` root `format` is FORM, `then.properties.eventOverrides.items.not.required` excludes `maxBatchSize`. Array-item validation alone cannot reference the root format; retain the group's existing override-required `anyOf` and continue accepting a persisted top-level FORM `maxBatchSize` for compatibility.
-- The HTTP v2 `src/configurations/destinations/http/ui-config.json` event-overrides control is a keyless `httpEventOverrides` custom widget, not individually declared override fields. Keep the widget available for FORM's other overrides; its note can describe JSON/XML-only batch size, but adding a field-level `preRequisites` to a nonexistent nested field or gating the whole widget is not a valid substitute for schema enforcement.
+- Array-item schemas cannot reference the root `format`, so HTTP v2's FORM-only rejection of `eventOverrides[].maxBatchSize` lives in a root `configSchema.allOf` if/then in `src/configurations/destinations/http/schema.json`. A persisted top-level FORM `maxBatchSize` stays accepted for compatibility.
+- The `httpEventOverrides` UI widget is keyless, so there is no nested `maxBatchSize` field to gate with `preRequisites`; keep the widget available for FORM and enforce in the schema.
