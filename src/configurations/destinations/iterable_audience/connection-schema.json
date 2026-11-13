@@ -1,0 +1,22 @@
+{
+  "connectionConfigSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "ITERABLE_AUDIENCE rETL connection config",
+    "description": "Per-connection destination config for a VDM v2 rETL connection, as accepted in `destinationConfig` on POST /v2/retl-connections. Mirrors IterableConnectionConfigSchema in rudder-transformer (src/v0/destinations/iterable_audience/types.ts), minus identifierMappings, which config-backend writes from the request's `identifiers`. This destination declares no audienceId in its own configSchema, so the connection is the only place it lives. Keys the dashboard writes but nothing reads are not accepted: a caller copying a dashboard-made connection has to drop them, and config-backend has to strip them on read so an import does not carry them into a spec that then fails validation. For this destination that key is `audienceListType`, which the webapp writes and the transformer never reads.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["audienceId"],
+    "properties": {
+      "audienceId": {
+        "type": ["integer", "string"],
+        "minimum": 1,
+        "pattern": "^[1-9][0-9]*$",
+        "description": "The Iterable list this connection delivers to. A string is accepted because the dashboard stores the id as one, but it must spell a positive integer: routerTransform does `Number(audienceId)` because Iterable's API expects a numeric listId, so \"\" becomes 0 and \"abc\" becomes NaN, which serialises to `listId: null` and fails at sync time instead of at create time. `minimum` constrains the integer form and `pattern` the string form, which keeps one bad value to one error message."
+      },
+      "updateExistingUsersOnly": {
+        "type": "boolean",
+        "description": "Forwarded into the Iterable subscribe request. Iterable defaults to false when omitted, and it is only respected for userID-based and hybrid projects."
+      }
+    }
+  }
+}
