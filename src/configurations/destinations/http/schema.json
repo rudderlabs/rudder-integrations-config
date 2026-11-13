@@ -1064,6 +1064,30 @@
       {
         "if": {
           "properties": {
+            "format": { "const": "FORM" }
+          },
+          "required": ["format"]
+        },
+        "then": {
+          "properties": {
+            "eventOverrides": {
+              "type": "array",
+              "items": {
+                "not": { "type": "object", "required": ["maxBatchSize"] },
+                "errorMessage": {
+                  "not": "Remove the event override batch size; FORM supports one event per request."
+                }
+              }
+            }
+          }
+        },
+        "errorMessage": {
+          "if": "FORM destinations cannot use event override batch sizes."
+        }
+      },
+      {
+        "if": {
+          "properties": {
             "authenticationEnabled": {
               "const": true
             }

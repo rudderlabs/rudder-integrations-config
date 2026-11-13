@@ -798,6 +798,94 @@
     "result": true
   },
   {
+    "testTitle": "XML with a batch-only event override",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "XML",
+      "requestBodyTemplate": "{\"Envelope\": {\"events\": $$.events}}",
+      "maxBatchSize": "50",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "events": ["Lead Submitted"],
+          "maxBatchSize": "1"
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "FORM with a query parameter event override",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "FORM",
+      "requestBodyTemplate": "[$$.events][0]",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "events": ["Lead Submitted"],
+          "queryParams": [
+            {
+              "to": "source",
+              "from": "'signup'"
+            }
+          ]
+        }
+      ]
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Reject batch-only event override for FORM",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "FORM",
+      "requestBodyTemplate": "[$$.events][0]",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "events": ["Lead Submitted"],
+          "maxBatchSize": "1"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventOverrides.0 Remove the event override batch size; FORM supports one event per request.",
+      " FORM destinations cannot use event override batch sizes."
+    ]
+  },
+  {
+    "testTitle": "Reject stale batch size in FORM event override after switching from JSON",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "FORM",
+      "requestBodyTemplate": "[$$.events][0]",
+      "maxBatchSize": "50",
+      "eventOverrides": [
+        {
+          "name": "Lead events",
+          "events": ["Lead Submitted"],
+          "queryParams": [],
+          "maxBatchSize": "1"
+        }
+      ]
+    },
+    "result": false,
+    "err": [
+      "eventOverrides.0 Remove the event override batch size; FORM supports one event per request.",
+      " FORM destinations cannot use event override batch sizes."
+    ]
+  },
+  {
     "testTitle": "Event override with all request fields",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
