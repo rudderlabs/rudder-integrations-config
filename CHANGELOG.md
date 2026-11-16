@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.195.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.194.0...v1.195.0) (2026-11-13)
+
+
+### Features
+
+* enterprise-only 5/10/15-min warehouse syncs via HIGH_GRANULARITY_WH_SYNC ([#2904](https://github.com/rudderlabs/rudder-integrations-config/issues/2904)) ([7195c56](https://github.com/rudderlabs/rudder-integrations-config/commit/7195c5617cb87a79e14095729b3e2cbc8125610b))
+* **http:** add v2 event override group definition ([#2901](https://github.com/rudderlabs/rudder-integrations-config/issues/2901)) ([46cadb0](https://github.com/rudderlabs/rudder-integrations-config/commit/46cadb0a6adfac276b4a7342939eb0153bb57dbe))
+
+
+### Bug Fixes
+
+* **custom-audience:** remove GA OAuth account visibility gates ([#2896](https://github.com/rudderlabs/rudder-integrations-config/issues/2896)) ([885eba3](https://github.com/rudderlabs/rudder-integrations-config/commit/885eba3ffcd5257564948644640d3116cdc70a3d))
+* **http:** allow blank account id when authentication is disabled ([#2900](https://github.com/rudderlabs/rudder-integrations-config/issues/2900)) ([2cb6065](https://github.com/rudderlabs/rudder-integrations-config/commit/2cb6065f016576e1a1df185a349669d1affbb770))
+* **http:** clear account selection when authentication is hidden ([#2899](https://github.com/rudderlabs/rudder-integrations-config/issues/2899)) ([b06f078](https://github.com/rudderlabs/rudder-integrations-config/commit/b06f078b7c03c0362ab59a8952f735201ccda195))
+* **http:** default v2 maxBatchSize to 5000 ([#2895](https://github.com/rudderlabs/rudder-integrations-config/issues/2895)) ([5f67e60](https://github.com/rudderlabs/rudder-integrations-config/commit/5f67e6088409e6f4d6594e2e6447eb00cee43ac8))
+* **http:** reject FORM event-override batch sizes ([#2903](https://github.com/rudderlabs/rudder-integrations-config/issues/2903)) ([7edb9bf](https://github.com/rudderlabs/rudder-integrations-config/commit/7edb9bfe6d423e98b7cbb91eaa0b5d12a42c5241))
+* **http:** render the v2 request builder in initial setup ([#2893](https://github.com/rudderlabs/rudder-integrations-config/issues/2893)) ([c03f123](https://github.com/rudderlabs/rudder-integrations-config/commit/c03f123eafc8c59318e1d6faf3d20f3feb03b812))
+
+
+### Documentation
+
+* add new integration icons in rudder-icons, not Figma ([#2902](https://github.com/rudderlabs/rudder-integrations-config/issues/2902)) ([56c1cad](https://github.com/rudderlabs/rudder-integrations-config/commit/56c1cadffbed5f6a89cb7b71dcd381747807932b))
+
 ## [1.194.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.193.0...v1.194.0) (2026-11-10)
 
 
