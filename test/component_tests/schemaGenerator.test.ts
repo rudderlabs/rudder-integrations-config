@@ -87,6 +87,12 @@ describe('Schema Generator', () => {
         destName: 'conditional_required_dest',
         expectedSchemaFile: 'conditionalRequiredDest.json',
       },
+      {
+        description:
+          'accountManagementInput carries its regex as pattern, and stays a bare string without one',
+        destName: 'account_picker_regex_dest',
+        expectedSchemaFile: 'accountPickerRegexDest.json',
+      },
     ];
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

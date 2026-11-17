@@ -312,8 +312,15 @@ def generate_schema_for_dynamic_data_select(field, dbConfig, schema_field_name):
 
 
 def generate_schema_for_account_management_input(field, dbConfig, schema_field_name):
-    """Creates a schema object for an accountManagementInput field."""
-    return {"type": FieldTypeEnum.STRING.value}
+    """Creates a schema object for an accountManagementInput field.
+
+    The value is an account ID. A field that declares a `regex` gets it as the schema `pattern`, so
+    config-backend can refuse an empty or oversized ID on save; without one the field is a bare string.
+    """
+    accountManagementInputObj = {"type": FieldTypeEnum.STRING.value}
+    if "regex" in field:
+        accountManagementInputObj["pattern"] = generalize_regex_pattern(field)
+    return accountManagementInputObj
 
 
 def generate_schema_for_textarea_input(field, dbConfig, schema_field_name):
