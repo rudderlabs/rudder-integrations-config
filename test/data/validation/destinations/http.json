@@ -34,9 +34,23 @@
     "result": true
   },
   {
+    "testTitle": "Reject missing supported message types",
+    "config": {
+      "apiUrl": "https://api.example.com/v1/events",
+      "authenticationEnabled": false,
+      "method": "POST",
+      "format": "JSON",
+      "requestBodyTemplate": "$$.events",
+      "maxBatchSize": "1"
+    },
+    "result": false,
+    "err": [" must have required property 'supportedMessageTypes'"]
+  },
+  {
     "testTitle": "Maximum batch size",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -49,6 +63,7 @@
     "testTitle": "Batch size just above old cap",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -61,6 +76,7 @@
     "testTitle": "Reject JSON without a batch size",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "method": "POST",
       "format": "JSON",
       "requestBodyTemplate": "$$.events.{\"event\": event, \"user\": {\"id\": userId}}",
@@ -73,6 +89,7 @@
     "testTitle": "Reject batch size 0",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -86,6 +103,7 @@
     "testTitle": "Reject batch size 5001",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -99,6 +117,7 @@
     "testTitle": "Reject batch size 10000",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -112,6 +131,7 @@
     "testTitle": "Reject batch size 01",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -125,6 +145,7 @@
     "testTitle": "Reject numeric batch size",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -138,6 +159,7 @@
     "testTitle": "Reject empty body template",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -193,6 +215,7 @@
     "testTitle": "XML with a single root key",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "method": "POST",
       "format": "XML",
       "requestBodyTemplate": "{\"Envelope\": {\"events\": $$.events.{\"event\": event}}}",
@@ -205,6 +228,7 @@
     "testTitle": "Reject an empty header key",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -224,6 +248,7 @@
     "testTitle": "Reject an empty query parameter key",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -243,6 +268,7 @@
     "testTitle": "Reject a header without a key",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -261,6 +287,7 @@
     "testTitle": "Reject a query parameter without a key",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -381,6 +408,7 @@
     "testTitle": "Authentication disabled accepts a blank account reference",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "rudderAccountId": "",
       "method": "POST",
@@ -604,6 +632,7 @@
     "testTitle": "FORM without a batch size",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "method": "POST",
       "requestBodyTemplate": "[$$.events][0]",
       "format": "FORM",
@@ -615,6 +644,7 @@
     "testTitle": "FORM accepts a stored batch size",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "method": "POST",
       "requestBodyTemplate": "[$$.events][0]",
       "format": "FORM",
@@ -627,6 +657,7 @@
     "testTitle": "Reject XML without a batch size",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "method": "POST",
       "requestBodyTemplate": "[$$.events][0]",
       "format": "XML",
@@ -639,6 +670,7 @@
     "testTitle": "Reject unsupported body format",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "method": "POST",
       "requestBodyTemplate": "[$$.events][0]",
       "format": "SOAP",
@@ -652,6 +684,7 @@
     "testTitle": "Consent management entry with a provider",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": true,
       "method": "POST",
       "format": "JSON",
@@ -680,6 +713,7 @@
     "testTitle": "Consent management entry without a provider",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": true,
       "method": "POST",
       "format": "JSON",
@@ -708,6 +742,7 @@
     "testTitle": "Empty event overrides use the default request",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -721,6 +756,7 @@
     "testTitle": "Body-only event override",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -740,6 +776,7 @@
     "testTitle": "Empty query parameters override the defaults",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -759,6 +796,7 @@
     "testTitle": "Path-only event override",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -782,6 +820,7 @@
     "testTitle": "Batch-only event override",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -801,6 +840,7 @@
     "testTitle": "XML with a batch-only event override",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "XML",
@@ -820,6 +860,7 @@
     "testTitle": "FORM with a query parameter event override",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "FORM",
@@ -843,6 +884,7 @@
     "testTitle": "Reject stale batch size in FORM event override after switching from JSON",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "FORM",
@@ -867,6 +909,7 @@
     "testTitle": "Event override with all request fields",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -898,6 +941,7 @@
     "testTitle": "Reject group without an override",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -923,6 +967,7 @@
     "testTitle": "Reject group without events",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -942,6 +987,7 @@
     "testTitle": "Reject empty group event list",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -962,6 +1008,7 @@
     "testTitle": "Reject duplicate events in a group",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -984,6 +1031,7 @@
     "testTitle": "Reject blank event name",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -1004,6 +1052,7 @@
     "testTitle": "Reject blank group name",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -1024,6 +1073,7 @@
     "testTitle": "Reject unknown group property",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -1045,6 +1095,7 @@
     "testTitle": "Reject invalid override query parameter",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -1072,6 +1123,7 @@
     "testTitle": "Reject empty override body template",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -1092,6 +1144,7 @@
     "testTitle": "Reject oversized override batch size",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
@@ -1114,6 +1167,7 @@
     "testTitle": "Reject empty override batch size",
     "config": {
       "apiUrl": "https://api.example.com/v1/events",
+      "supportedMessageTypes": ["identify", "track", "page", "screen", "group", "alias"],
       "authenticationEnabled": false,
       "method": "POST",
       "format": "JSON",
