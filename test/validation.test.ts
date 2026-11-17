@@ -312,20 +312,23 @@ describe('Validation Tests', () => {
       expect(rootDefinition.options.hidden.gate.flags).toEqual([
         { name: 'AMP_enable-http-v2-destination', value: false },
       ]);
-      // The create flow renders only the initial-setup section, so the builder must live there.
+      // The create flow renders only Initial setup, including supported message types.
       const initialGroups = rootUi.uiConfig.baseTemplate[0].sections[0].groups;
+      const { fields } = initialGroups[0];
+      const supportedTypes = fields.find(
+        (field: { configKey: string }) => field.configKey === 'supportedMessageTypes',
+      );
+      expect(supportedTypes).toMatchObject({ type: 'multiSelect', required: true });
+      expect(supportedTypes.default).toEqual(
+        supportedTypes.options.map((option: { value: string }) => option.value),
+      );
+      expect(supportedTypes.preRequisites).toBeUndefined();
       expect(initialGroups[1].fields).toEqual([{ type: 'httpRequestBuilder' }]);
       expect(initialGroups[2].title).toBe('Event overrides');
       expect(initialGroups[2].fields).toEqual([{ type: 'httpEventOverrides' }]);
-      const { fields } = rootUi.uiConfig.baseTemplate[1].sections[0].groups[0];
-      // Capability fields are always shown; only the catalogue gate is flagged.
-      // maxBatchSize is format-gated (JSON/XML) and lives beside the body format.
-      ['supportedMessageTypes'].forEach((configKey) => {
-        expect(
-          fields.find((field: { configKey: string }) => field.configKey === configKey)
-            .preRequisites,
-        ).toBeUndefined();
-      });
+      expect(
+        rootUi.uiConfig.baseTemplate[1].sections.map((section: { id: string }) => section.id),
+      ).toEqual(['consentSettings']);
     });
 
     it('enforces event override group and event-name boundaries', () => {
@@ -336,6 +339,7 @@ describe('Validation Tests', () => {
         format: 'JSON',
         requestBodyTemplate: '$$.events',
         maxBatchSize: '50',
+        supportedMessageTypes: ['identify', 'track', 'page', 'screen', 'group', 'alias'],
       };
       const group = (index: number) => ({
         name: `Group ${index}`,
