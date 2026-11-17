@@ -3285,14 +3285,6 @@ describe('clickhouse ui-config', () => {
   });
 });
 
-const HS_AUDIENCE_GATE = {
-  gate: { flags: [{ name: 'AMP_enable-hs-audience-destination', value: false }] },
-};
-
-function expectHsAudienceGate(hidden: unknown): void {
-  expect(hidden).toEqual(HS_AUDIENCE_GATE);
-}
-
 describe('HS_AUDIENCE destination definition', () => {
   // Read from disk: validateDestinationDefinitions uses AJV useDefaults and mutates imported
   // modules (e.g. supportsBlankAudienceCreation), so a second validation of the cached import fails.
@@ -3335,8 +3327,8 @@ describe('HS_AUDIENCE destination definition', () => {
     });
   });
 
-  it('options.hidden is the temporary destination creation gate', () => {
-    expectHsAudienceGate(loadDestination().options.hidden);
+  it('is available to every workspace: options.hidden carries no creation gate (ACT2-1537)', () => {
+    expect(loadDestination().options.hidden).toBeUndefined();
   });
 });
 
