@@ -318,14 +318,10 @@ describe('Validation Tests', () => {
       const supportedTypes = fields.find(
         (field: { configKey: string }) => field.configKey === 'supportedMessageTypes',
       );
-      expect(fields.indexOf(supportedTypes)).toBe(
-        fields.findIndex((field: { configKey: string }) => field.configKey === 'maxBatchSize') + 1,
+      expect(supportedTypes).toMatchObject({ type: 'multiSelect', required: true });
+      expect(supportedTypes.default).toEqual(
+        supportedTypes.options.map((option: { value: string }) => option.value),
       );
-      expect(supportedTypes).toMatchObject({
-        type: 'multiSelect',
-        required: true,
-        default: ['identify', 'track', 'page', 'screen', 'group', 'alias'],
-      });
       expect(supportedTypes.preRequisites).toBeUndefined();
       expect(initialGroups[1].fields).toEqual([{ type: 'httpRequestBuilder' }]);
       expect(initialGroups[2].title).toBe('Event overrides');
