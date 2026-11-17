@@ -3782,11 +3782,18 @@ describe('DESTINATION_BRAZE_AUDIENCE_API_KEY trackEndpoint', () => {
     expect(validate({ dataCenter: 'US-01', trackEndpoint: 'users_track' })).toBe(false);
   });
 
-  it('offers the same values in the UI and defaults new accounts to standard', () => {
+  it('offers the same values in the UI with no preselected default', () => {
+    // No UI default: the field is required in both UIs, so create and edit start blank and the
+    // admin must choose. A default would be applied on edit too (webapp antd initialValue) and
+    // silently switch an older bulk account to standard on its next save.
     const field = loadJson('ui-config.json').uiConfig.form.fields.find(
       (f: { key: unknown }) => JSON.stringify(f.key) === '["options","trackEndpoint"]',
     );
-    expect(field).toMatchObject({ component: 'selectField', default: 'standard' });
+    expect(field).toMatchObject({ component: 'selectField' });
+    expect(field).not.toHaveProperty('default');
+    expect(field).not.toHaveProperty('optional');
+    // The webapp form shows `info`, Lookout shows `note`; both must carry the guidance.
+    expect(field.info).toBe(field.note);
     expect(field.options.map((o: { value: string }) => o.value)).toEqual(
       accountSchema().optionsSchema.properties.trackEndpoint.enum,
     );
