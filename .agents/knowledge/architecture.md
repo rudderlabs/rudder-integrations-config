@@ -129,6 +129,15 @@
 - `src/configurations/sources/clickhouse/db-config.json` sets `options.syncBehaviours` to `["mirror"]` and sets `options.isSqlModelSupported`, `options.isAudienceSupported` and `options.isDataGraphSupported` to `false`.
 - The current form fields in `src/configurations/sources/clickhouse/ui-config.json` (`uiConfig[].fields[].value`) are `host`, `port`, `database`, `user` and `password`. The sync keeps its working tables in a `_rudderstack` database the customer creates (owner decision D33), so the form has no field for it. The form has no `secure`, `skipVerify` or `caCertificate` input.
 
+## ACT2-1534 — MaxCompute Reverse ETL Source Behind A Flag
+
+<!-- session: 2026-11-18 -->
+
+- The MaxCompute reverse ETL source is two definitions, like ClickHouse's: the source in `src/configurations/sources/maxcompute/` and the account in `src/configurations/sources/maxcompute/accounts/SOURCE_MAXCOMPUTE/`. The source links the account through `config.supportedAccountDefinitions.rudderAccountId: ["SOURCE_MAXCOMPUTE"]` and stores only a `rudderAccountId` reference.
+- Both definitions hide behind `AMP_enable-maxcompute-retl-source`: the source at `options.hidden.gate`, the account at `displayOptions.hidden.gate`. Keep both on the same flag name.
+- v1 is upsert over SQL models: `options.syncBehaviours: ["upsert"]`, `isSqlModelSupported: true`, `supportsSyncSettings: true`. The account is AccessKey only (`endpoint`, `project`, `accessKeyId`, optional `rudderSchema`; secret `accessKeySecret`). The destination accounts are not reused because they require `ossRoleArn`; the AccessKey patterns match `destination_maxcompute_access_key`.
+- `SOURCE_MAXCOMPUTE/schema.json` has no `combinedSchema` on purpose: config-backend stamps a single-mode account only when its definition has none (`secretStamp.ts` fails closed otherwise).
+
 ## SecretKeys Synchronization Boundary
 
 - Secret-key change detection compares only canonical root files at `src/configurations/destinations/<destination>/db-config.json`. Nested account definitions are excluded because their secrets are mirrored into root `config.secretKeys`, and archived `versions/*/db-config.json` files belong to a separate deploy-payload contract.
