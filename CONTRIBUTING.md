@@ -5,19 +5,52 @@ Thanks for taking the time and for your help in improving this project!
 ## Table of contents
 
 - [**RudderStack Contributor Agreement**](#rudderstack-contributor-agreement)
-- [**Conventions**](#conventions)
+- [**Before you start**](#before-you-start)
+- [**Adding a new destination**](#adding-a-new-destination)
+- [**Verify before opening a pull request**](#verify-before-opening-a-pull-request)
 - [**Merge and release policy**](#merge-and-release-policy)
-- [**UI Configuration Development Requirements**](#ui-configuration-development-requirements)
-- [**How you can contribute to RudderStack**](#how-you-can-contribute-to-rudderstack)
+- [**Source and destination visibility gating**](#source-and-destination-visibility-gating)
 - [**Getting help**](#getting-help)
 
 ## RudderStack Contributor Agreement
 
 To contribute to this project, we need you to sign the [**Contributor License Agreement ("CLA")**][CLA] for the first commit you make. By agreeing to the [**CLA**][CLA], we can add you to list of approved contributors and review the changes proposed by you.
 
-## Conventions
+## Before you start
 
-Before adding new configurations, please review the repository [**conventions**](/CONVENTIONS.md). In particular, account definition names (`accountDefinitionName`) must follow the documented `SCREAMING_SNAKE_CASE` `{CATEGORY}_{TYPE}[_{AUTH_QUALIFIER}]` naming pattern.
+This repository holds the integration _definitions_: the JSON that describes each source, destination and account to the RudderStack dashboard and the SDKs. A new integration usually also needs transformer code; see the [rudder-transformer contributing guide][transformer-contributing] for that half.
+
+- **Read [`CONVENTIONS.md`](/CONVENTIONS.md) first.** It is the single source of truth for naming and structure, for example the `SCREAMING_SNAKE_CASE` `{CATEGORY}_{TYPE}[_{AUTH_QUALIFIER}]` pattern for `accountDefinitionName`. Where an existing file and `CONVENTIONS.md` disagree, `CONVENTIONS.md` is current.
+- **Don't copy an existing destination as a template.** Nearly every definition in the tree predates the current conventions, so copying one reproduces deprecated patterns, most often in [string `pattern` and `regex`](/CONVENTIONS.md#string-pattern-and-regex). Copy the _shape_ of a neighbouring destination; take the rules from `CONVENTIONS.md`.
+- **Use the repo's skills** in [`.claude/skills/`](/.claude/skills/). AI coding agents such as Claude Code load them automatically; point other agents at them, or read them yourself.
+
+| Task                                               | Skill                                    |
+| -------------------------------------------------- | ---------------------------------------- |
+| New cloud / device / hybrid / warehouse definition | `bootstrap-new-destination`              |
+| New Visual Data Mapper destination                 | `vdm-next-integration`                   |
+| Move a destination onto the accounts framework     | `migrate-to-accounts-framework`          |
+| Move a destination onto form builder v2            | `migrate-destination-to-form-builder-v2` |
+
+## Adding a new destination
+
+The [`bootstrap-new-destination`](/.claude/skills/bootstrap-new-destination/SKILL.md) skill walks through every step below. A new destination is:
+
+- **A folder `src/configurations/destinations/<dir>/`** with three files:
+  - `db-config.json`, started from [`scripts/template-db-config.json`](/scripts/template-db-config.json). For a destination built on the transformer's batching framework, keep the template's `transformAtV1: "router"`.
+  - `ui-config.json`, started from [`scripts/template-ui-config.json`](/scripts/template-ui-config.json). Give every text input field an explicit `regex`.
+  - `schema.json`, written by hand so that its `required` and `properties` mirror the ui-config fields. Keep it in step with `ui-config.json` whenever you change a field; `npm run check:schema:destination <dir>` reports drift, except for event mapping fields (`redirectGroups`), whose schema the generator never produces — see [the schema entry is hand-maintained](/CONVENTIONS.md#the-schema-entry-is-hand-maintained).
+- **Validation test data** in `test/data/validation/destinations/<dir>.json`.
+- **An icon**, referenced by `options.icon` in `db-config.json`. Icons live in the `@rudderlabs/icons` package; if yours doesn't exist yet, share the SVG with the RudderStack team in your pull request.
+
+## Verify before opening a pull request
+
+```bash
+npm run check:schema:destination <dir>   # generated schema matches ui-config (no `--`)
+npx jest test/validation.test.ts         # definition + validation test data
+npm run format                           # prettier; CI runs `git diff --exit-code` after
+```
+
+A destination with an `accounts/` directory has one more check, which CI runs; see [where account credential fields live](/CONVENTIONS.md#where-account-credential-fields-live).
 
 ## Merge and release policy
 
@@ -38,92 +71,6 @@ release-please maintains a standing `chore: release X.Y.Z` pull request. Before 
 Hotfixes follow the same path: merge an ordinary `fix:` pull request to `main`, then merge the updated release pull request.
 
 For rollback, dispatch the rollback workflow from the known-good `vX.Y.Z` tag (or from `main` when explicitly intended).
-
-## UI Configuration Development Requirements
-
-### **UI Configuration Structure**
-
-**Important**: All new `ui-config.json` files must follow the required structure.
-
-#### **What Each Element Means**
-
-- **`baseTemplate`**: The main configuration sections that users will see and interact with
-- **`sections`**: Groups of related settings (like connection settings, configuration settings)
-- **`groups`**: Visual containers that organize fields within a section
-- **`fields`**: Individual form inputs that users fill out
-- **`sdkTemplate`**: Settings specific to web SDK integration (hidden from UI)
-- **`consentSettingsTemplate`**: Consent management configuration (hidden from UI)
-
-#### **Required Structure**
-
-```json
-{
-  "uiConfig": {
-    "baseTemplate": [
-      {
-        "title": "Initial setup",
-        "note": "Review how this destination is set up",
-        "sections": [
-          {
-            "groups": [
-              {
-                "title": "Connection settings",
-                "icon": "settings",
-                "fields": [
-                  // Your form fields here
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    "sdkTemplate": {
-      "title": "Web SDK settings",
-      "note": "not visible in the ui",
-      "fields": []
-    },
-    "consentSettingsTemplate": {
-      "title": "Consent settings",
-      "note": "not visible in the ui",
-      "fields": []
-    }
-  }
-}
-```
-
-#### **Field Properties Explained**
-
-- **`type`**: Determines the input field type (textInput, checkbox, singleSelect, etc.)
-- **`label`**: The text displayed above the field
-- **`configKey`**: The key used to store the field value in the database
-- **`required`**: Whether the field must be filled out
-- **`secret`**: Whether the field value should be hidden (like passwords)
-- **`placeholder`**: Hint text shown inside the field
-- **`regex`**: Validation pattern for the field value
-- **`options`**: Available choices for select fields
-
-#### **Field Type Examples**
-
-```json
-{
-  "type": "textInput",
-  "label": "API Key",
-  "configKey": "apiKey",
-  "required": true,
-  "secret": true
-}
-```
-
-#### **Examples**
-
-See `src/configurations/destinations/http/ui-config.json` for a complete example.
-
-**Reference**: For a comprehensive example, see `src/configurations/destinations/fullstory/ui-config.json`.
-
-## How you can contribute a destination to this project
-
-To contribute a destination, you need to provide all the required data for all the fields you want as the settings to configure the destination.
 
 ## Source and destination visibility gating
 
@@ -161,49 +108,12 @@ Beta-to-GA lifecycle:
 - Only if GA access is genuinely **plan-gated** should `hidden.gate` move to the billing feature (or combine the beta flag and the billing feature with an explicit `condition` during the transition). Don't reach for a billing feature just because the integration is leaving beta.
 - Keep `hidden: true` only for blanket hiding from all customers.
 
-## How you can provide your destination connection setting details
-
-You can checkout the sample input file [**here**](/test/configData/inputData.json):
-
-For the above input data, the UI will look like as shown below:
-
-<img width="1303" alt="connectionSettings" src="https://github.com/rudderlabs/rudder-integrations-config/assets/63387036/ee28b3fe-5a81-4289-9f6a-54cf5abe0f4c">
-<img width="1292" alt="configurationSettings" src="https://github.com/rudderlabs/rudder-integrations-config/assets/63387036/ce765f0f-b680-46ca-b46d-ed58e39a7667">
-
-In the input file, you need to provide the destination name you want to display in the UI in the displayName field.
-
-Each json object inside the formFields represents a field you want to add as a connection/configuration settings to the destination.
-
-Description of Keys inside each JSON object:
-
-| Property      | Description                                                                            |
-| ------------- | -------------------------------------------------------------------------------------- |
-| type          | This is the input field type you want to add                                           |
-| label         | This is the display name for your field                                                |
-| configKey     | This is the key to which the value for this field will be stored in the db             |
-| required      | You can provide true as a value to make this field as required or false                |
-| placeholder   | This is the the placeholder for this field                                             |
-| secret        | You can provide true as a value to make this field as secret or false                  |
-| preRequisites | You can add the configKey and value if you there is a preRequiste field for this field |
-
-The input field types that you can add are:
-
-| type         | Description                                                               |
-| ------------ | ------------------------------------------------------------------------- |
-| textInput    | This is a simple field for adding text inputs                             |
-| checkbox     | This is used for boolean values (true or false)                           |
-| singleSelect | This is used for choosing one of the option from a set of defined options |
-| multiSelect  | This is used for choosing multiple options from a set of defined options  |
-| tagInput     | This can be used to add multiple text inputs for a field                  |
-
-You can also contribute to any open-source RudderStack project. View our [**GitHub page**](https://github.com/rudderlabs) to see all the different projects.
-
 ## Getting help
 
-For any questions, concerns, or queries, you can start by asking a question in our [**Slack**](https://rudderstack.com/join-rudderstack-slack-community/) community.
-
+For any questions, concerns, or queries, open an [issue][issue] or ask in our [**Slack**](https://rudderstack.com/join-rudderstack-slack-community/) community. You can also contribute to any open-source RudderStack project; see our [**GitHub page**](https://github.com/rudderlabs).
 
 <!----variables---->
 
-[issue]: https://github.com/rudderlabs/rudder-config-schema/issues/new
-[CLA]: https://forms.gle/845JRGVZaC6kPZy68
+[issue]: https://github.com/rudderlabs/rudder-integrations-config/issues/new
+[CLA]: https://contributor.rudderlabs.com/
+[transformer-contributing]: https://github.com/rudderlabs/rudder-transformer/blob/develop/CONTRIBUTING.md
