@@ -133,7 +133,7 @@
 
 <!-- session: 2026-11-18 -->
 
-- The MaxCompute reverse ETL source is two definitions, like ClickHouse's: the source in `src/configurations/sources/maxcompute/` and the account in `src/configurations/sources/maxcompute/accounts/SOURCE_MAXCOMPUTE/`. The source links the account through `config.supportedAccountDefinitions.rudderAccountId: ["SOURCE_MAXCOMPUTE"]` and stores only a `rudderAccountId` reference.
+- The MaxCompute reverse ETL source is two definitions, like ClickHouse's: the source in `src/configurations/sources/maxcompute/` and the account in `src/configurations/sources/maxcompute/accounts/SOURCE_MAXCOMPUTE/`. The source links the account through `config.supportedAccountDefinitions.rudderAccountId: ["SOURCE_MAXCOMPUTE"]` and normally references it through `rudderAccountId`. `src/configurations/sources/maxcompute/schema.json` still accepts a configuration without that reference, as ClickHouse's does, but refuses `accessKeySecret` or `config` beside it.
 - Both definitions hide behind `AMP_enable-maxcompute-retl-source`: the source at `options.hidden.gate`, the account at `displayOptions.hidden.gate`. Keep both on the same flag name.
 - v1 is upsert over SQL models: `options.syncBehaviours: ["upsert"]`, `isSqlModelSupported: true`, `supportsSyncSettings: true`. The account is AccessKey only (`endpoint`, `project`, `accessKeyId`, optional `rudderSchema`; secret `accessKeySecret`). The destination accounts are not reused because they require `ossRoleArn`; the AccessKey patterns match `destination_maxcompute_access_key`.
 - `SOURCE_MAXCOMPUTE/schema.json` has no `combinedSchema` on purpose: config-backend stamps a single-mode account only when its definition has none (`secretStamp.ts` fails closed otherwise).
