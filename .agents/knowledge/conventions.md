@@ -419,3 +419,7 @@
 
 - In the current HTTP v2 definition under `src/configurations/destinations/http/`, keep `supportedMessageTypes` required in both the Initial setup UI field and `configSchema.required`, with the existing `minItems: 1` constraint. An omitted key must fail validation rather than silently mean no filtering; leave the archived `versions/1/` definition unchanged.
 - Keep the six HTTP v2 message types (`identify`, `track`, `page`, `screen`, `group`, `alias`) explicit in compatible validation fixtures and include a dedicated missing-key rejection case. A v1-to-v2 migration must supply all six to preserve the prior no-filter delivery behavior; that migration and form preselection are owned outside this repository. Do not add a schema default here, because it would silently populate persisted configs instead of requiring explicit selection.
+
+## INT-7571 — Conditional Schema Error Wording
+
+- For conditional destination validation (`if`/`then`), author an `errorMessage` on each branch that can fail (`then`, and `else` if present); `errorMessage.if` is not needed. The customer should see only the failing branch's message, never a raw `must match "then" schema` failure.

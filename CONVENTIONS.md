@@ -753,10 +753,7 @@ supports fewer events than its server API — express it as **conditional valida
       "to": { "not": { "enum": ["app_installed", "app_opened"] } } } } } },
     "errorMessage": { "properties": { "eventsMapping":
       "app_installed and app_opened are not supported by the browser SDK. Map them on a cloud-mode connection instead." } }
-  },
-  // Required. Without this, ajv also emits a bare `must match "then" schema` alongside the
-  // message above, and config-backend returns both to the customer. See below.
-  "errorMessage": { "if": "This value is not valid for the selected connection mode." }
+  }
 }]
 ```
 
@@ -764,12 +761,9 @@ Draft-07 `if`/`then` is available and already used by 242 destination schemas; `
 comes from `ajv-errors`, so the customer gets a readable reason rather than a raw schema
 failure (see `src/validator/index.ts`).
 
-**Both `errorMessage`s are needed.** A failing `if`/`then` produces two ajv errors: one from
-the keyword that actually failed (inside `then`) and one for the `if` keyword itself
-(`must match "then" schema`, with an empty `instancePath`). The `errorMessage` inside `then`
-only replaces the first. config-backend maps _every_ error into the response with no
-filtering, so omitting the outer `errorMessage` gets the customer a readable sentence followed
-by a raw, field-less schema failure.
+**Put an `errorMessage` on each branch that can fail — `then`, and `else` if present;
+`errorMessage.if` is not needed.** The customer should see only the failing branch's message,
+never a raw `must match "then" schema` failure.
 
 ### Where this is actually enforced — know what the customer sees
 
@@ -777,15 +771,15 @@ by a raw, field-less schema failure.
 
 - **config-backend** compiles the destination's `configSchema` with ajv, configured the same
   way as here — `allErrors`, `ajv-errors`, `ajv-keywords`. Conditionals **are** enforced and
-  the `errorMessage` **does** surface — every ajv error is mapped into the response, which is
-  why the `if` needs its own `errorMessage` too (above).
+  the `errorMessage` **does** surface, on save and in the `/migrate` preview.
 - **rudder-webapp** renders the destination config form from `ui-config.json`, not
   `schema.json`. The destination configuration components contain no reference to
   `configSchema` or ajv at all. Its client-side validation is limited to what `ui-config.json`
   expresses: `required`, `regex` / `regexErrorMessage`, and `preRequisites`.
 
 So the customer picks the disallowed value, fills in the rest of the form, hits **Save**, and
-gets the `errorMessage` back from the API. Correctness is guaranteed; discoverability is not.
+gets the authored `errorMessage` back from the API. Correctness is guaranteed; discoverability
+is not.
 
 **Pair the conditional with a plain-language `note` (or `callout`) on the field** stating the
 restriction, so it is visible before the save round-trip. That is the cheap half of the UX;
