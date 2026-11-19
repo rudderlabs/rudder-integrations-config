@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.196.1](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.196.0...v1.196.1) (2026-11-19)
+
+
+### Bug Fixes
+
+* **rokt:** promote destination to GA ([#2915](https://github.com/rudderlabs/rudder-integrations-config/issues/2915)) ([145f51d](https://github.com/rudderlabs/rudder-integrations-config/commit/145f51d7d4b73ab0eebc685c15d815c1d928dfa4))
+
 ## [1.196.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.195.0...v1.196.0) (2026-11-19)
 
 
