@@ -3738,3 +3738,56 @@ describe('marketo_audience destination ui-config', () => {
     });
   });
 });
+
+describe('DESTINATION_BRAZE_AUDIENCE_API_KEY trackEndpoint', () => {
+  const accountDir =
+    'src/configurations/destinations/braze_audience/accounts/braze_audience_api_key';
+  const accountSchema = () =>
+    getAccountDefinitionSchema('braze_audience', 'braze_audience_api_key', 'destinations');
+  const loadJson = (file: string) =>
+    JSON.parse(fs.readFileSync(path.resolve(accountDir, file), 'utf-8'));
+
+  it('db-config option and secret fields match its schema properties', () => {
+    const accountConfig = loadJson('db-config.json');
+    expect([...accountConfig.config.optionFields].sort()).toEqual(
+      Object.keys(accountSchema().optionsSchema.properties).sort(),
+    );
+    expect([...accountConfig.config.secretFields].sort()).toEqual(
+      Object.keys(accountSchema().secretSchema.properties).sort(),
+    );
+  });
+
+  it('leaves trackEndpoint unset on an account saved before the option existed', () => {
+    // config-backend validates account options with useDefaults and persists the result, so a
+    // schema default here would rewrite pre-existing bulk accounts to the new default on their
+    // next edit. Absent means bulk to the transformer; only the UI form supplies `standard`.
+    const options: Record<string, unknown> = { dataCenter: 'US-03' };
+    expect(compileAccountSchema(accountSchema().optionsSchema)(options)).toBe(true);
+    expect(options).toEqual({ dataCenter: 'US-03' });
+  });
+
+  it('accepts standard and bulk and rejects anything else', () => {
+    const validate = compileAccountSchema(accountSchema().optionsSchema);
+    expect(validate({ dataCenter: 'US-01', trackEndpoint: 'standard' })).toBe(true);
+    expect(validate({ dataCenter: 'US-01', trackEndpoint: 'bulk' })).toBe(true);
+    expect(validate({ dataCenter: 'US-01', trackEndpoint: '' })).toBe(false);
+    expect(validate({ dataCenter: 'US-01', trackEndpoint: 'users_track' })).toBe(false);
+  });
+
+  it('offers the same values in the UI with no preselected default', () => {
+    // No UI default: the field is required in both UIs, so create and edit start blank and the
+    // admin must choose. A default would be applied on edit too (webapp antd initialValue) and
+    // silently switch an older bulk account to standard on its next save.
+    const field = loadJson('ui-config.json').uiConfig.form.fields.find(
+      (f: { key: unknown }) => JSON.stringify(f.key) === '["options","trackEndpoint"]',
+    );
+    expect(field).toMatchObject({ component: 'selectField' });
+    expect(field).not.toHaveProperty('default');
+    expect(field).not.toHaveProperty('optional');
+    // The webapp form shows `info`, Lookout shows `note`; both must carry the guidance.
+    expect(field.info).toBe(field.note);
+    expect(field.options.map((o: { value: string }) => o.value)).toEqual(
+      accountSchema().optionsSchema.properties.trackEndpoint.enum,
+    );
+  });
+});

@@ -19,7 +19,8 @@
           "placeholder": "e.g: a1b2c3d4-e5f6-...",
           "key": ["options", "restApiKey"],
           "secret": true,
-          "note": "Server-side REST API key from Braze (Settings → APIs and Identifiers). Requires the users.track.bulk permission; the /users/track/bulk endpoint may need early access enabled on your Braze workspace."
+          "note": "Server-side REST API key from Braze (Settings → APIs and Identifiers). Needs the users.track permission for the Standard sync endpoint, or users.track.bulk for Bulk.",
+          "info": "Server-side REST API key from Braze (Settings → APIs and Identifiers). Needs the users.track permission for the Standard sync endpoint, or users.track.bulk for Bulk."
         },
         {
           "component": "selectField",
@@ -41,6 +42,17 @@
           ],
           "default": "US-01",
           "note": "Find your REST Endpoint under Settings → APIs and Identifiers (e.g. rest.iad-03.braze.com → US-03)."
+        },
+        {
+          "component": "selectField",
+          "label": "Sync endpoint",
+          "key": ["options", "trackEndpoint"],
+          "options": [
+            { "label": "Standard (recommended)", "value": "standard" },
+            { "label": "Bulk (beta)", "value": "bulk" }
+          ],
+          "note": "Standard works on every Braze workspace. Choose Bulk only if Braze has enabled its /users/track/bulk beta for your workspace. Editing an account created before this option? Choose Bulk to keep it syncing as before.",
+          "info": "Standard works on every Braze workspace. Choose Bulk only if Braze has enabled its /users/track/bulk beta for your workspace. Editing an account created before this option? Choose Bulk to keep it syncing as before."
         }
       ]
     }
