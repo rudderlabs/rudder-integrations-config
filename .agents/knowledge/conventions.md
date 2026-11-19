@@ -378,6 +378,10 @@
 - Rokt is a public beta: keep `src/configurations/destinations/rokt/db-config.json` `options.isBeta: true` and `options.icon: "rokt"`, but omit `options.hidden` so all workspaces can see the destination without `AMP_enable-rokt-destination`. Do not treat OpenAI Ads' later GA state (no `isBeta`) as the public-beta template.
 - This visibility promotion changes only the root destination `options`; Rokt has no archived major definitions, and its account credentials and connection capabilities do not change.
 
+## RUD-3495 — Rokt General Availability Metadata
+
+- Supersedes RUD-3450's Rokt public-beta metadata: keep `src/configurations/destinations/rokt/db-config.json` `options.icon: "rokt"`, but omit `options.isBeta` rather than setting it to `false`; continue to omit `options.hidden`. This GA change is limited to the root destination options and does not change Rokt account credentials or cloud-mode configuration.
+
 ## RUD-3456 — Everflow Public Beta Visibility
 
 - Everflow public beta uses `src/configurations/destinations/everflow/db-config.json` `options` with `isBeta: true` and `icon: "everflow"`, but no `hidden` gate. Keep the Beta badge while making the destination available without `AMP_enable-everflow-destination`; do not copy OpenAI Ads' later GA shape, which omits `isBeta`.
