@@ -422,5 +422,4 @@
 
 ## INT-7571 — Conditional Schema Error Wording
 
-- When authoring conditional destination validation, do not delete an existing `errorMessage.if` merely to suppress duplicate upgrade-preview errors: save-time validation still uses the authored schema message. For the proposed migration-preview contract, a bare AJV `if` wrapper is dropped; an authored `errorMessage.if` is dropped only when the failed branch also has an authored message, otherwise it is retained and associated with the branch field. This preview mapping belongs in config-backend, not a destination-specific schema workaround.
-- Destination-definition guidance in `CONVENTIONS.md` and `.claude/skills/bootstrap-new-destination/SKILL.md` should keep the preview-only treatment distinct from the unchanged save-time path; do not assume the cross-repository preview behavior is already deployed.
+- For conditional destination validation (`if`/`then`), author the `errorMessage` on the `then` branch only; `errorMessage.if` is not needed. config-backend maps ajv errors through one function for both the save-time 400 and the `/migrate` preview: bare `if` wrappers are dropped, and an authored `errorMessage.if` is used only when the failed branch has no message of its own, attached to the branch field. Do not add per-schema workarounds for the wrapper.

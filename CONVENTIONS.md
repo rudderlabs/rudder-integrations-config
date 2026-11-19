@@ -753,10 +753,7 @@ supports fewer events than its server API — express it as **conditional valida
       "to": { "not": { "enum": ["app_installed", "app_opened"] } } } } } },
     "errorMessage": { "properties": { "eventsMapping":
       "app_installed and app_opened are not supported by the browser SDK. Map them on a cloud-mode connection instead." } }
-  },
-  // Optional: keep authored wording for save-time validation. See below for how
-  // the migration preview handles this when the branch also has authored wording.
-  "errorMessage": { "if": "This value is not valid for the selected connection mode." }
+  }
 }]
 ```
 
@@ -764,17 +761,13 @@ Draft-07 `if`/`then` is available and already used by 242 destination schemas; `
 comes from `ajv-errors`, so the customer gets a readable reason rather than a raw schema
 failure (see `src/validator/index.ts`).
 
-A failed `if`/`then` rule can produce both a branch error and a wrapper error for the `if`
-keyword (`must match "then" schema`, with an empty `instancePath`). Give the branch its own
-plain-language `errorMessage` where the schema needs to explain a restriction. **Do not add
-`errorMessage.if` solely to hide the raw wrapper in a migration preview.** Under the
-INT-7571 upgrade-preview design, config-backend's `/migrate` response drops bare `if`
-wrappers. When `errorMessage.if` is authored, the preview suppresses it only if the branch
-error also has authored wording;
-otherwise it keeps that authored message and attaches it to the branch error's config key.
-The preview uses the field's ui-config label for readable wording when no schema message is
-authored, and the upgrade banner displays the resulting `message`, not the machine `field`
-key. This is preview behavior, not a change to schema validation or the save response.
+**Put the `errorMessage` on the `then` branch; `errorMessage.if` is not needed.** A failing
+`if`/`then` also produces a wrapper error for the `if` keyword itself (`must match "then"
+schema`, with an empty `instancePath`). config-backend drops that wrapper on both the save
+response and the `/migrate` upgrade preview, so the customer sees only the branch message. If
+a schema does author `errorMessage.if`, it is used only when the branch has no message of its
+own, attached to the branch's field. Branch errors with no authored message fall back to the
+field's ui-config label.
 
 ### Where this is actually enforced — know what the customer sees
 
@@ -782,10 +775,8 @@ key. This is preview behavior, not a change to schema validation or the save res
 
 - **config-backend** compiles the destination's `configSchema` with ajv, configured the same
   way as here — `allErrors`, `ajv-errors`, `ajv-keywords`. Conditionals **are** enforced and
-  the `errorMessage` **does** surface. Unlike the `/migrate` preview, the save-time
-  `validateConfig` 400 path is unchanged; it can still expose a bare `if` wrapper when the
-  schema does not supply `errorMessage.if`. Keep or author `errorMessage.if` when readable
-  save-time feedback is needed; do not remove it from existing schemas just for the preview.
+  the `errorMessage` **does** surface — on save and in the `/migrate` preview alike, through
+  the same error mapping (above).
 - **rudder-webapp** renders the destination config form from `ui-config.json`, not
   `schema.json`. The destination configuration components contain no reference to
   `configSchema` or ajv at all. Its client-side validation is limited to what `ui-config.json`
