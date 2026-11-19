@@ -754,8 +754,8 @@ supports fewer events than its server API — express it as **conditional valida
     "errorMessage": { "properties": { "eventsMapping":
       "app_installed and app_opened are not supported by the browser SDK. Map them on a cloud-mode connection instead." } }
   },
-  // Required. Without this, ajv also emits a bare `must match "then" schema` alongside the
-  // message above, and config-backend returns both to the customer. See below.
+  // Optional: keep authored wording for save-time validation. See below for how
+  // the migration preview handles this when the branch also has authored wording.
   "errorMessage": { "if": "This value is not valid for the selected connection mode." }
 }]
 ```
@@ -764,12 +764,17 @@ Draft-07 `if`/`then` is available and already used by 242 destination schemas; `
 comes from `ajv-errors`, so the customer gets a readable reason rather than a raw schema
 failure (see `src/validator/index.ts`).
 
-**Both `errorMessage`s are needed.** A failing `if`/`then` produces two ajv errors: one from
-the keyword that actually failed (inside `then`) and one for the `if` keyword itself
-(`must match "then" schema`, with an empty `instancePath`). The `errorMessage` inside `then`
-only replaces the first. config-backend maps _every_ error into the response with no
-filtering, so omitting the outer `errorMessage` gets the customer a readable sentence followed
-by a raw, field-less schema failure.
+A failed `if`/`then` rule can produce both a branch error and a wrapper error for the `if`
+keyword (`must match "then" schema`, with an empty `instancePath`). Give the branch its own
+plain-language `errorMessage` where the schema needs to explain a restriction. **Do not add
+`errorMessage.if` solely to hide the raw wrapper in a migration preview.** Under the
+INT-7571 upgrade-preview design, config-backend's `/migrate` response drops bare `if`
+wrappers. When `errorMessage.if` is authored, the preview suppresses it only if the branch
+error also has authored wording;
+otherwise it keeps that authored message and attaches it to the branch error's config key.
+The preview uses the field's ui-config label for readable wording when no schema message is
+authored, and the upgrade banner displays the resulting `message`, not the machine `field`
+key. This is preview behavior, not a change to schema validation or the save response.
 
 ### Where this is actually enforced — know what the customer sees
 
@@ -777,15 +782,18 @@ by a raw, field-less schema failure.
 
 - **config-backend** compiles the destination's `configSchema` with ajv, configured the same
   way as here — `allErrors`, `ajv-errors`, `ajv-keywords`. Conditionals **are** enforced and
-  the `errorMessage` **does** surface — every ajv error is mapped into the response, which is
-  why the `if` needs its own `errorMessage` too (above).
+  the `errorMessage` **does** surface. Unlike the `/migrate` preview, the save-time
+  `validateConfig` 400 path is unchanged; it can still expose a bare `if` wrapper when the
+  schema does not supply `errorMessage.if`. Keep or author `errorMessage.if` when readable
+  save-time feedback is needed; do not remove it from existing schemas just for the preview.
 - **rudder-webapp** renders the destination config form from `ui-config.json`, not
   `schema.json`. The destination configuration components contain no reference to
   `configSchema` or ajv at all. Its client-side validation is limited to what `ui-config.json`
   expresses: `required`, `regex` / `regexErrorMessage`, and `preRequisites`.
 
 So the customer picks the disallowed value, fills in the rest of the form, hits **Save**, and
-gets the `errorMessage` back from the API. Correctness is guaranteed; discoverability is not.
+gets the authored `errorMessage` back from the API. Correctness is guaranteed; discoverability
+is not.
 
 **Pair the conditional with a plain-language `note` (or `callout`) on the field** stating the
 restriction, so it is visible before the save round-trip. That is the cheap half of the UX;

@@ -419,3 +419,8 @@
 
 - In the current HTTP v2 definition under `src/configurations/destinations/http/`, keep `supportedMessageTypes` required in both the Initial setup UI field and `configSchema.required`, with the existing `minItems: 1` constraint. An omitted key must fail validation rather than silently mean no filtering; leave the archived `versions/1/` definition unchanged.
 - Keep the six HTTP v2 message types (`identify`, `track`, `page`, `screen`, `group`, `alias`) explicit in compatible validation fixtures and include a dedicated missing-key rejection case. A v1-to-v2 migration must supply all six to preserve the prior no-filter delivery behavior; that migration and form preselection are owned outside this repository. Do not add a schema default here, because it would silently populate persisted configs instead of requiring explicit selection.
+
+## INT-7571 — Conditional Schema Error Wording
+
+- When authoring conditional destination validation, do not delete an existing `errorMessage.if` merely to suppress duplicate upgrade-preview errors: save-time validation still uses the authored schema message. For the proposed migration-preview contract, a bare AJV `if` wrapper is dropped; an authored `errorMessage.if` is dropped only when the failed branch also has an authored message, otherwise it is retained and associated with the branch field. This preview mapping belongs in config-backend, not a destination-specific schema workaround.
+- Destination-definition guidance in `CONVENTIONS.md` and `.claude/skills/bootstrap-new-destination/SKILL.md` should keep the preview-only treatment distinct from the unchanged save-time path; do not assume the cross-repository preview behavior is already deployed.
