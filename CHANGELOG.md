@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.196.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.195.0...v1.196.0) (2026-11-19)
+
+
+### Features
+
+* **braze_audience:** let accounts choose the standard /users/track endpoint ([#2910](https://github.com/rudderlabs/rudder-integrations-config/issues/2910)) ([0ec71d2](https://github.com/rudderlabs/rudder-integrations-config/commit/0ec71d2184336d51002dcfec6a749bab92a06249))
+
+
+### Bug Fixes
+
+* **http:** require supported message types for v2 ([#2908](https://github.com/rudderlabs/rudder-integrations-config/issues/2908)) ([979fe4f](https://github.com/rudderlabs/rudder-integrations-config/commit/979fe4f462cca0481ba5db712a03fe495a0bd7a6))
+* **openai-ads:** label account key field as Conversions API key ([#2906](https://github.com/rudderlabs/rudder-integrations-config/issues/2906)) ([85cff79](https://github.com/rudderlabs/rudder-integrations-config/commit/85cff793ec771a6fd2b790058936abe514549f6c))
+
+
+### Miscellaneous
+
+* **audience-destinations:** ungate HubSpot Audience and Gainsight PX Audience ([#2909](https://github.com/rudderlabs/rudder-integrations-config/issues/2909)) ([5b509f4](https://github.com/rudderlabs/rudder-integrations-config/commit/5b509f46a739c555f16c2678cf0aeecd5480f98d))
+
+
+### Documentation
+
+* single errorMessage rule for conditional validation ([#2914](https://github.com/rudderlabs/rudder-integrations-config/issues/2914)) ([cfd0b0d](https://github.com/rudderlabs/rudder-integrations-config/commit/cfd0b0d6770536676d157652fcb040665e9142e3))
+* sync contributing guide with current conventions and skills ([#2905](https://github.com/rudderlabs/rudder-integrations-config/issues/2905)) ([21d2a8c](https://github.com/rudderlabs/rudder-integrations-config/commit/21d2a8c8f3ee2aa7517da6a07f2dc27335676dd1))
+
 ## [1.195.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.194.0...v1.195.0) (2026-11-13)
 
 
