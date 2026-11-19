@@ -761,13 +761,8 @@ Draft-07 `if`/`then` is available and already used by 242 destination schemas; `
 comes from `ajv-errors`, so the customer gets a readable reason rather than a raw schema
 failure (see `src/validator/index.ts`).
 
-**Put the `errorMessage` on the `then` branch; `errorMessage.if` is not needed.** A failing
-`if`/`then` also produces a wrapper error for the `if` keyword itself (`must match "then"
-schema`, with an empty `instancePath`). config-backend drops that wrapper on both the save
-response and the `/migrate` upgrade preview, so the customer sees only the branch message. If
-a schema does author `errorMessage.if`, it is used only when the branch has no message of its
-own, attached to the branch's field. Branch errors with no authored message fall back to the
-field's ui-config label.
+**Put the `errorMessage` on the `then` branch; `errorMessage.if` is not needed.** The
+customer should see only that message, never a raw `must match "then" schema` failure.
 
 ### Where this is actually enforced — know what the customer sees
 
@@ -775,8 +770,7 @@ field's ui-config label.
 
 - **config-backend** compiles the destination's `configSchema` with ajv, configured the same
   way as here — `allErrors`, `ajv-errors`, `ajv-keywords`. Conditionals **are** enforced and
-  the `errorMessage` **does** surface — on save and in the `/migrate` preview alike, through
-  the same error mapping (above).
+  the `errorMessage` **does** surface, on save and in the `/migrate` preview.
 - **rudder-webapp** renders the destination config form from `ui-config.json`, not
   `schema.json`. The destination configuration components contain no reference to
   `configSchema` or ajv at all. Its client-side validation is limited to what `ui-config.json`

@@ -422,4 +422,4 @@
 
 ## INT-7571 — Conditional Schema Error Wording
 
-- For conditional destination validation (`if`/`then`), author the `errorMessage` on the `then` branch only; `errorMessage.if` is not needed. config-backend maps ajv errors through one function for both the save-time 400 and the `/migrate` preview: bare `if` wrappers are dropped, and an authored `errorMessage.if` is used only when the failed branch has no message of its own, attached to the branch field. Do not add per-schema workarounds for the wrapper.
+- For conditional destination validation (`if`/`then`), author the `errorMessage` on the `then` branch only; `errorMessage.if` is not needed. The customer should see only the branch message, never a raw `must match "then" schema` failure.
