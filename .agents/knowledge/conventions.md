@@ -422,4 +422,4 @@
 
 ## INT-7571 — Conditional Schema Error Wording
 
-- For conditional destination validation (`if`/`then`), author the `errorMessage` on the `then` branch only; `errorMessage.if` is not needed. The customer should see only the branch message, never a raw `must match "then" schema` failure.
+- For conditional destination validation (`if`/`then`), author an `errorMessage` on each branch that can fail (`then`, and `else` if present); `errorMessage.if` is not needed. The customer should see only the failing branch's message, never a raw `must match "then" schema` failure.

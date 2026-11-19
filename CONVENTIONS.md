@@ -761,8 +761,9 @@ Draft-07 `if`/`then` is available and already used by 242 destination schemas; `
 comes from `ajv-errors`, so the customer gets a readable reason rather than a raw schema
 failure (see `src/validator/index.ts`).
 
-**Put the `errorMessage` on the `then` branch; `errorMessage.if` is not needed.** The
-customer should see only that message, never a raw `must match "then" schema` failure.
+**Put an `errorMessage` on each branch that can fail — `then`, and `else` if present;
+`errorMessage.if` is not needed.** The customer should see only the failing branch's message,
+never a raw `must match "then" schema` failure.
 
 ### Where this is actually enforced — know what the customer sees
 
