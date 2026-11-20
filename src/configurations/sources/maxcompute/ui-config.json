@@ -1,0 +1,59 @@
+{
+  "uiConfig": [
+    {
+      "title": "Connection Credentials",
+      "secretFields": ["accessKeySecret"],
+      "schemaAlias": "Schema",
+      "docLinks": {
+        "grantPermissions": "https://docs.rudderstack.com/reverse-etl/maxcompute/#granting-permissions",
+        "verifyingCredentials": "https://docs.rudderstack.com/reverse-etl/maxcompute/#verifying-credentials",
+        "jsonMapperUseInstructions": "https://docs.rudderstack.com/reverse-etl/maxcompute/#specifying-the-data-to-import",
+        "setupInstructions": "https://docs.rudderstack.com/reverse-etl/maxcompute"
+      },
+      "nameField": "accessKeyId",
+      "fields": [
+        {
+          "type": "textInput",
+          "label": "Endpoint",
+          "value": "endpoint",
+          "regex": "^https://service\\.[a-z]{2}(?:-[a-z0-9]+)+\\.maxcompute\\.aliyun\\.com/api$",
+          "regexErrorMessage": "Public endpoint of your project's region, including /api",
+          "placeholder": "e.g: https://service.me-east-1.maxcompute.aliyun.com/api",
+          "footerNote": "The public endpoint of your project's region, for example https://service.me-east-1.maxcompute.aliyun.com/api. Include /api.",
+          "required": true,
+          "addInAccountSummary": true,
+          "trim": true
+        },
+        {
+          "type": "textInput",
+          "label": "Project",
+          "value": "project",
+          "regex": "^[A-Za-z][A-Za-z0-9_]{2,27}$",
+          "regexErrorMessage": "3 to 28 letters, digits, underscores; starts with a letter",
+          "required": true,
+          "addInAccountSummary": true,
+          "trim": true
+        },
+        {
+          "type": "textInput",
+          "label": "AccessKey ID",
+          "value": "accessKeyId",
+          "regex": "^[A-Za-z0-9]{1,128}$",
+          "regexErrorMessage": "Letters and digits only, up to 128 characters",
+          "required": true,
+          "trim": true
+        },
+        {
+          "type": "textInput",
+          "label": "AccessKey secret",
+          "value": "accessKeySecret",
+          "inputFieldType": "password",
+          "regex": "^.{1,500}$",
+          "regexErrorMessage": "Up to 500 characters",
+          "required": true,
+          "secret": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+[
+  {
+    "testTitle": "Account reference only",
+    "config": {
+      "rudderAccountId": "acc123"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Account reference with non-secret connection fields",
+    "config": {
+      "rudderAccountId": "acc123",
+      "endpoint": "https://service.me-east-1.maxcompute.aliyun.com/api",
+      "project": "analytics",
+      "accessKeyId": "LTAI5tExample"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Inline config without an account reference",
+    "config": {
+      "endpoint": "https://service.me-east-1.maxcompute.aliyun.com/api",
+      "project": "analytics",
+      "accessKeyId": "LTAI5tExample",
+      "accessKeySecret": "secret"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Account reference with an inline access key secret",
+    "config": {
+      "rudderAccountId": "acc123",
+      "accessKeySecret": "secret"
+    },
+    "result": false,
+    "err": [" must NOT be valid", " must NOT be valid", " must match exactly one schema in oneOf"]
+  },
+  {
+    "testTitle": "Account reference with a nested config object",
+    "config": {
+      "rudderAccountId": "acc123",
+      "config": {
+        "accessKeySecret": "secret"
+      }
+    },
+    "result": false,
+    "err": [" must NOT be valid", " must NOT be valid", " must match exactly one schema in oneOf"]
+  },
+  {
+    "testTitle": "Empty account reference",
+    "config": {
+      "rudderAccountId": ""
+    },
+    "result": false,
+    "err": ["rudderAccountId must match pattern \"^.{1,100}$\""]
+  },
+  {
+    "testTitle": "Numeric account reference",
+    "config": {
+      "rudderAccountId": 123
+    },
+    "result": false,
+    "err": ["rudderAccountId must be string"]
+  }
+]

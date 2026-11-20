@@ -1,0 +1,41 @@
+{
+  "optionsSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["endpoint", "project", "accessKeyId"],
+    "properties": {
+      "endpoint": {
+        "type": "string",
+        "pattern": "^https://service\\.[a-z]{2}(?:-[a-z0-9]+)+\\.maxcompute\\.aliyun\\.com/api$",
+        "errorMessage": "Enter the public endpoint of your project's region, for example https://service.me-east-1.maxcompute.aliyun.com/api."
+      },
+      "project": {
+        "type": "string",
+        "pattern": "^[A-Za-z][A-Za-z0-9_]{2,27}$",
+        "errorMessage": "Use 3 to 28 letters, digits and underscores, starting with a letter."
+      },
+      "accessKeyId": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9]{1,128}$",
+        "errorMessage": "Enter an access key ID of up to 128 characters"
+      },
+      "rudderSchema": {
+        "type": "string",
+        "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,127}$",
+        "errorMessage": "Use letters, digits and underscores, start with a letter or underscore, at most 128 characters."
+      }
+    }
+  },
+  "secretSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["accessKeySecret"],
+    "properties": {
+      "accessKeySecret": {
+        "type": "string",
+        "pattern": "^.{1,500}$",
+        "errorMessage": "Enter an access key secret of up to 500 characters"
+      }
+    }
+  }
+}

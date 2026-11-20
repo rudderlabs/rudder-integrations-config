@@ -3791,3 +3791,272 @@ describe('DESTINATION_BRAZE_AUDIENCE_API_KEY trackEndpoint', () => {
     );
   });
 });
+
+// MaxCompute reverse ETL source (ACT2-1534). The source and the SOURCE_MAXCOMPUTE account share one
+// gate, as ClickHouse's do. v1 is AccessKey only, SQL models and upsert.
+const MAXCOMPUTE_GATE = {
+  gate: { flags: [{ name: 'AMP_enable-maxcompute-retl-source', value: false }] },
+};
+
+type MaxComputeFieldCase = {
+  id: string;
+  field: 'endpoint' | 'project' | 'accessKeyId' | 'rudderSchema';
+  input: string;
+  verdict: 'pass' | 'fail';
+};
+
+function maxComputeFieldCases(): MaxComputeFieldCase[] {
+  return readJson('test/data/validation/accounts/maxcompute-fields.json').cases;
+}
+
+const maxComputeAccountSchema = () =>
+  getAccountDefinitionSchema('maxcompute', 'SOURCE_MAXCOMPUTE', 'sources');
+
+const maxComputeOptions = (): Record<string, unknown> => ({
+  endpoint: 'https://service.me-east-1.maxcompute.aliyun.com/api',
+  project: 'analytics',
+  accessKeyId: 'LTAI5tExample',
+});
+
+describe('maxcompute source definition', () => {
+  const loadSource = async () => (await getSourceDefinitionConfig('maxcompute')).default;
+
+  it('links SOURCE_MAXCOMPUTE and declares upsert over SQL models only', async () => {
+    const srcDefConfig = await loadSource();
+    await expect(validateSourceDefinitions(srcDefConfig)).resolves.toEqual(true);
+    expect(srcDefConfig).toMatchObject({
+      name: 'maxcompute',
+      category: 'warehouse',
+      type: 'warehouse',
+      displayName: 'MaxCompute',
+    });
+    expect(srcDefConfig.config.supportedAccountDefinitions.rudderAccountId).toEqual([
+      'SOURCE_MAXCOMPUTE',
+    ]);
+    expect(srcDefConfig.options).toMatchObject({
+      hidden: MAXCOMPUTE_GATE,
+      syncBehaviours: ['upsert'],
+      isSqlModelSupported: true,
+      isAudienceSupported: false,
+      isDataGraphSupported: false,
+      supportsSyncSettings: true,
+      icon: 'maxcompute',
+    });
+  });
+
+  it('validateSourceDefinitions refuses the legacy feature-flag hidden object on maxcompute', async () => {
+    const srcDefConfig = await loadSource();
+    await expect(
+      validateSourceDefinitions({
+        ...srcDefConfig,
+        options: {
+          ...srcDefConfig.options,
+          hidden: { featureFlagName: 'x', featureFlagValue: false },
+        },
+      }),
+    ).rejects.toThrow();
+  });
+
+  it('the fixture file refuses inline credentials beside an account reference', () => {
+    const entries = getIntegrationData('maxcompute', 'sources');
+    expect(entries.filter((e) => e.result === false).map((e) => e.testTitle)).toEqual(
+      expect.arrayContaining([
+        'Account reference with an inline access key secret',
+        'Account reference with a nested config object',
+      ]),
+    );
+  });
+});
+
+describe('SOURCE_MAXCOMPUTE account definition', () => {
+  const loadAccount = () =>
+    getAccountDefinitionConfig('maxcompute', 'SOURCE_MAXCOMPUTE', 'sources');
+
+  it('declares an access_key source account of type maxcompute that passes the account meta-schema', async () => {
+    const accountConfig = await loadAccount();
+    await expect(validateAccountDefinitions(accountConfig)).resolves.toEqual(true);
+    expect(accountConfig).toMatchObject({
+      name: 'SOURCE_MAXCOMPUTE',
+      type: 'maxcompute',
+      category: 'source',
+      authenticationType: 'access_key',
+    });
+  });
+
+  it('has the four options and the one secret, with no OSS role from the destination', async () => {
+    const accountConfig = await loadAccount();
+    expect(accountConfig.config.optionFields).toEqual([
+      'endpoint',
+      'project',
+      'accessKeyId',
+      'rudderSchema',
+    ]);
+    expect(accountConfig.config.secretFields).toEqual(['accessKeySecret']);
+    expect(accountConfig.config.optionFields).not.toContain('ossRoleArn');
+  });
+
+  it('displayOptions.hidden is the same gate as the source', async () => {
+    expect((await loadAccount()).displayOptions.hidden).toEqual(MAXCOMPUTE_GATE);
+    expect((await getSourceDefinitionConfig('maxcompute')).default.options.hidden).toEqual(
+      MAXCOMPUTE_GATE,
+    );
+  });
+});
+
+describe('SOURCE_MAXCOMPUTE account schema', () => {
+  const validateOptions = () =>
+    compileAccountSchemaWithErrorMessages(maxComputeAccountSchema().optionsSchema);
+  const validateSecret = () =>
+    compileAccountSchemaWithErrorMessages(maxComputeAccountSchema().secretSchema);
+
+  it('is valid against the account meta-schema and has no combinedSchema', () => {
+    const validate = compileAccountSchema(
+      readJson('src/schemas/account/account-schema-schema.json'),
+    );
+    const accountSchema = maxComputeAccountSchema();
+    const valid = validate(accountSchema);
+    expect(validate.errors ?? []).toEqual([]);
+    expect(valid).toBe(true);
+    expect(accountSchema.combinedSchema).toBeUndefined();
+  });
+
+  it('optionFields and secretFields equal the schema property names', async () => {
+    const accountConfig = await getAccountDefinitionConfig(
+      'maxcompute',
+      'SOURCE_MAXCOMPUTE',
+      'sources',
+    );
+    const { optionsSchema, secretSchema } = maxComputeAccountSchema();
+    expect(accountConfig.config.optionFields).toEqual(Object.keys(optionsSchema.properties));
+    expect(accountConfig.config.secretFields).toEqual(Object.keys(secretSchema.properties));
+  });
+
+  it('requires endpoint, project and accessKeyId; rudderSchema is optional', () => {
+    const validate = validateOptions();
+    expect(maxComputeAccountSchema().optionsSchema.required).toEqual([
+      'endpoint',
+      'project',
+      'accessKeyId',
+    ]);
+    expect(validate(maxComputeOptions())).toBe(true);
+    ['endpoint', 'project', 'accessKeyId'].forEach((key) => {
+      const options = maxComputeOptions();
+      delete options[key];
+      expect({ key, valid: validate(options) }).toEqual({ key, valid: false });
+    });
+  });
+
+  it('the shared field fixtures hold unique ids and every case gets its verdict', () => {
+    const cases = maxComputeFieldCases();
+    expect(new Set(cases.map((c) => c.id)).size).toBe(cases.length);
+    const validate = validateOptions();
+    const { properties } = maxComputeAccountSchema().optionsSchema;
+    cases.forEach((c) => {
+      const valid = validate({ ...maxComputeOptions(), [c.field]: c.input });
+      expect({ id: c.id, verdict: valid ? 'pass' : 'fail' }).toEqual({
+        id: c.id,
+        verdict: c.verdict,
+      });
+      if (!valid) {
+        expect({ id: c.id, messages: (validate.errors ?? []).map((e) => e.message) }).toEqual({
+          id: c.id,
+          messages: [properties[c.field].errorMessage],
+        });
+      }
+    });
+  });
+
+  it('the endpoint fixtures cover the forms the LLD names', () => {
+    const failing = maxComputeFieldCases()
+      .filter((c) => c.field === 'endpoint' && c.verdict === 'fail')
+      .map((c) => c.input);
+    expect(failing).toEqual(
+      expect.arrayContaining([
+        'https://service.me-east-1.maxcompute.aliyun.com',
+        'https://service.me-east-1.maxcompute.aliyun.com/api/',
+        'http://service.me-east-1.maxcompute.aliyun.com/api',
+        'https://service.me-east-1-vpc.maxcompute.aliyun-inc.com/api',
+      ]),
+    );
+  });
+
+  it('the access key secret takes 1 to 500 characters', () => {
+    const validate = validateSecret();
+    expect(validate({ accessKeySecret: 'x' })).toBe(true);
+    expect(validate({ accessKeySecret: 'x'.repeat(500) })).toBe(true);
+    [
+      {},
+      { accessKeySecret: '' },
+      { accessKeySecret: 'x'.repeat(501) },
+      { accessKeySecret: 5 },
+    ].forEach((secret) =>
+      expect({ secret, valid: validate(secret) }).toEqual({ secret, valid: false }),
+    );
+  });
+
+  it('the AccessKey rules are the MaxCompute destination account rules', () => {
+    const destination = getAccountDefinitionSchema(
+      'maxcompute',
+      'destination_maxcompute_access_key',
+      'destinations',
+    );
+    const source = maxComputeAccountSchema();
+    expect(source.optionsSchema.properties.accessKeyId.pattern).toBe(
+      destination.optionsSchema.properties.accessKeyId.pattern,
+    );
+    expect(source.secretSchema.properties.accessKeySecret.pattern).toBe(
+      destination.secretSchema.properties.accessKeySecret.pattern,
+    );
+  });
+
+  it('option patterns use no lookaround, \\s or \\p{}', () => {
+    const { properties } = maxComputeAccountSchema().optionsSchema;
+    Object.entries(properties).forEach(([key, prop]) => {
+      expect({
+        key,
+        unsafe: RE2_UNSAFE_PATTERN.test((prop as { pattern: string }).pattern),
+      }).toEqual({ key, unsafe: false });
+    });
+  });
+});
+
+describe('maxcompute ui-config', () => {
+  const loadUiConfig = () =>
+    readJson('src/configurations/sources/maxcompute/ui-config.json').uiConfig[0];
+  const field = (value: string) =>
+    loadUiConfig().fields.find((f: { value: string }) => f.value === value);
+
+  it('renders endpoint, project, AccessKey ID and secret in order, with no working-schema input', () => {
+    expect(loadUiConfig().fields.map((f: { value: string }) => f.value)).toEqual([
+      'endpoint',
+      'project',
+      'accessKeyId',
+      'accessKeySecret',
+    ]);
+    expect(loadUiConfig()).toMatchObject({
+      secretFields: ['accessKeySecret'],
+      nameField: 'accessKeyId',
+      schemaAlias: 'Schema',
+    });
+    expect(field('accessKeySecret')).toMatchObject({ secret: true, inputFieldType: 'password' });
+  });
+
+  it('ui-config regexes equal the account schema patterns', () => {
+    const { optionsSchema, secretSchema } = maxComputeAccountSchema();
+    ['endpoint', 'project', 'accessKeyId'].forEach((key) => {
+      expect({ key, regex: field(key).regex }).toEqual({
+        key,
+        regex: optionsSchema.properties[key].pattern,
+      });
+    });
+    expect(field('accessKeySecret').regex).toBe(secretSchema.properties.accessKeySecret.pattern);
+  });
+
+  it('every doc link points at the maxcompute reverse ETL page', () => {
+    Object.values(loadUiConfig().docLinks).forEach((link) => {
+      expect(link).toMatch(
+        /^https:\/\/docs\.rudderstack\.com\/reverse-etl\/maxcompute(\/#[a-z-]+)?$/,
+      );
+    });
+  });
+});
