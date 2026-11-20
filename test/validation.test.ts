@@ -3844,7 +3844,7 @@ describe('maxcompute source definition', () => {
     });
   });
 
-  it('validateSourceDefinitions refuses a bare boolean hidden on maxcompute', async () => {
+  it('validateSourceDefinitions refuses the legacy feature-flag hidden object on maxcompute', async () => {
     const srcDefConfig = await loadSource();
     await expect(
       validateSourceDefinitions({
