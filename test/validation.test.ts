@@ -3909,13 +3909,15 @@ describe('SOURCE_MAXCOMPUTE account schema', () => {
   const validateSecret = () =>
     compileAccountSchemaWithErrorMessages(maxComputeAccountSchema().secretSchema);
 
-  it('is valid against the account meta-schema', () => {
+  it('is valid against the account meta-schema and has no combinedSchema', () => {
     const validate = compileAccountSchema(
       readJson('src/schemas/account/account-schema-schema.json'),
     );
-    const valid = validate(maxComputeAccountSchema());
+    const accountSchema = maxComputeAccountSchema();
+    const valid = validate(accountSchema);
     expect(validate.errors ?? []).toEqual([]);
     expect(valid).toBe(true);
+    expect(accountSchema.combinedSchema).toBeUndefined();
   });
 
   it('optionFields and secretFields equal the schema property names', async () => {
