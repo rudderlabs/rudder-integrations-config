@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.197.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.196.1...v1.197.0) (2026-11-20)
+
+
+### Features
+
+* **maxcompute:** add the gated MaxCompute rETL source and SOURCE_MAXCOMPUTE account ([#2913](https://github.com/rudderlabs/rudder-integrations-config/issues/2913)) ([4517c7f](https://github.com/rudderlabs/rudder-integrations-config/commit/4517c7f32b1fc6f2ff0e9404b9fb307b482f0015))
+
 ## [1.196.1](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.196.0...v1.196.1) (2026-11-19)
 
 
