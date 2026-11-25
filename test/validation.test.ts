@@ -3821,7 +3821,7 @@ const maxComputeOptions = (): Record<string, unknown> => ({
 describe('maxcompute source definition', () => {
   const loadSource = async () => (await getSourceDefinitionConfig('maxcompute')).default;
 
-  it('links SOURCE_MAXCOMPUTE and declares upsert over SQL models only', async () => {
+  it('links SOURCE_MAXCOMPUTE and declares upsert, mirror and full over SQL models only', async () => {
     const srcDefConfig = await loadSource();
     await expect(validateSourceDefinitions(srcDefConfig)).resolves.toEqual(true);
     expect(srcDefConfig).toMatchObject({
@@ -3835,7 +3835,7 @@ describe('maxcompute source definition', () => {
     ]);
     expect(srcDefConfig.options).toMatchObject({
       hidden: MAXCOMPUTE_GATE,
-      syncBehaviours: ['upsert'],
+      syncBehaviours: ['upsert', 'mirror', 'full'],
       isSqlModelSupported: true,
       isAudienceSupported: false,
       isDataGraphSupported: false,
