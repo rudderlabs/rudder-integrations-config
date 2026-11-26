@@ -427,3 +427,9 @@
 ## INT-7571 — Conditional Schema Error Wording
 
 - For conditional destination validation (`if`/`then`), author an `errorMessage` on each branch that can fail (`then`, and `else` if present); `errorMessage.if` is not needed. The customer should see only the failing branch's message, never a raw `must match "then" schema` failure.
+
+## INT-7748 — Zendesk V1 Form-Builder Compatibility
+
+- Keep Zendesk v1's required `email`, secret `apiToken`, and `domain` in form-builder Initial setup. Place optional `sourceName` and the four default-false checkboxes in Configuration settings / Destination settings: the V2 schema generator makes unconditioned Initial setup keys in `defaultConfig` required even when their UI field says `required: false`.
+- Preserve the legacy string regexes for Zendesk persisted fields and its cloud-only connection modes when migrating the form. Zendesk v1 retains destination-form token credentials; do not introduce account-picker fields into this version.
+- In `ui-config.json` `consentSettingsTemplate`, represent `consents` with a `tagInput` using `tagKey: "consent"` to retain the saved array-of-`{consent: string}` shape; keep provider required in the UI as in the legacy form. In `schema.json`, omit `items.required` for legacy rows without a provider, but exclude the empty string from every provider enum so an explicitly blank provider is invalid.

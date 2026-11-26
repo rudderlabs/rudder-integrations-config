@@ -1,149 +1,188 @@
 {
-  "uiConfig": [
-    {
-      "title": "Connection Settings",
-      "fields": [
-        {
-          "type": "textInput",
-          "label": "Email",
-          "value": "email",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "regexErrorMessage": "Invalid Email Address",
-          "required": true,
-          "placeholder": "e.g: abc@xyz.com"
-        },
-        {
-          "type": "textInput",
-          "label": "API Token",
-          "value": "apiToken",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "regexErrorMessage": "Invalid API Token",
-          "required": true,
-          "placeholder": "API Token for Zendesk login",
-          "secret": true
-        },
-        {
-          "type": "textInput",
-          "label": "Zendesk Subdomain",
-          "value": "domain",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
-          "regexErrorMessage": "Invalid Zendesk Subdomain",
-          "required": true,
-          "placeholder": "Subdomain only not including .zendesk.com"
-        },
-        {
-          "type": "textInput",
-          "label": "Source Name",
-          "value": "sourceName",
-          "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-          "regexErrorMessage": "Invalid Source",
-          "required": false,
-          "placeholder": "e.g: Rudder",
-          "footerNote": "Specify the source for the events. If not specified, the source is set to `Rudder` by default."
-        },
-        {
-          "type": "checkbox",
-          "label": "Create users as verified",
-          "value": "createUsersAsVerified",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Send Group Calls without User ID",
-          "value": "sendGroupCallsWithoutUserId",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Enable Removing Users from Organizations",
-          "value": "removeUsersFromOrganization",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Update user's primary email",
-          "value": "searchByExternalId",
-          "default": false,
-          "footerNote": "If enabled, RudderStack sets the email in the event as the user's primary email in Zendesk, replacing the previous primary email. Otherwise, it is set as the secondary email, if any primary email exists."
-        }
-      ]
+  "uiConfig": {
+    "baseTemplate": [
+      {
+        "title": "Initial setup",
+        "note": "Review how this destination is set up",
+        "sections": [
+          {
+            "groups": [
+              {
+                "title": "Connection settings",
+                "note": "Configure your Zendesk connection",
+                "icon": "settings",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Email",
+                    "configKey": "email",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Enter an email address of 100 characters or less",
+                    "required": true,
+                    "placeholder": "e.g: abc@xyz.com",
+                    "note": "Enter the email address for your Zendesk account"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "API Token",
+                    "configKey": "apiToken",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Enter an API token of 100 characters or less",
+                    "required": true,
+                    "placeholder": "API Token for Zendesk login",
+                    "secret": true,
+                    "note": "Enter the API token for your Zendesk account"
+                  },
+                  {
+                    "type": "textInput",
+                    "label": "Zendesk Subdomain",
+                    "configKey": "domain",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$",
+                    "regexErrorMessage": "Enter a subdomain of 100 characters or less",
+                    "required": true,
+                    "placeholder": "Subdomain only not including .zendesk.com",
+                    "note": "Enter your Zendesk subdomain without .zendesk.com"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "groups": [
+              {
+                "title": "Connection mode",
+                "note": [
+                  "Update how you want to route events from your source to destination. ",
+                  {
+                    "text": "Get help deciding",
+                    "link": "https://www.rudderstack.com/docs/destinations/rudderstack-connection-modes/"
+                  }
+                ],
+                "icon": "sliders",
+                "fields": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Configuration settings",
+        "note": "Manage the settings for your destination",
+        "sections": [
+          {
+            "title": "Destination settings",
+            "note": "Configure how Zendesk receives and updates users",
+            "icon": "settings",
+            "groups": [
+              {
+                "title": "Zendesk settings",
+                "note": "Choose how Zendesk creates and updates users from events",
+                "fields": [
+                  {
+                    "type": "textInput",
+                    "label": "Source Name",
+                    "configKey": "sourceName",
+                    "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
+                    "regexErrorMessage": "Enter a source name of 100 characters or less",
+                    "required": false,
+                    "placeholder": "e.g: Rudder",
+                    "note": "Specify the source for the events. If not specified, the source is set to `Rudder` by default."
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Create users as verified",
+                    "configKey": "createUsersAsVerified",
+                    "default": false,
+                    "note": "Mark users created in Zendesk as verified"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Send Group Calls without User ID",
+                    "configKey": "sendGroupCallsWithoutUserId",
+                    "default": false,
+                    "note": "Send group calls even if they do not include a user ID"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Enable Removing Users from Organizations",
+                    "configKey": "removeUsersFromOrganization",
+                    "default": false,
+                    "note": "Allow group calls to remove users from Zendesk organizations"
+                  },
+                  {
+                    "type": "checkbox",
+                    "label": "Update user's primary email",
+                    "configKey": "searchByExternalId",
+                    "default": false,
+                    "note": "If enabled, RudderStack sets the email in the event as the user's primary email in Zendesk, replacing the previous primary email. Otherwise, it is set as the secondary email, if any primary email exists."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "consentSettings",
+            "title": "Consent settings",
+            "note": "Configure consent settings for each provider here",
+            "icon": "settings",
+            "groups": []
+          }
+        ]
+      }
+    ],
+    "sdkTemplate": {
+      "fields": []
     },
-    {
-      "title": "Consent Settings",
+    "consentSettingsTemplate": {
+      "title": "Consent settings",
+      "note": "not visible in the ui",
       "fields": [
         {
           "type": "dynamicCustomForm",
-          "value": "consentManagement",
+          "configKey": "consentManagement",
           "label": "Consent management settings",
-          "footerNote": "We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
-          "customFields": [
+          "note": "We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+          "rowFields": [
             {
               "type": "singleSelect",
               "label": "Consent management provider",
-              "value": "provider",
+              "configKey": "provider",
               "options": [
-                {
-                  "name": "Custom",
-                  "value": "custom"
-                },
-                {
-                  "name": "iubenda",
-                  "value": "iubenda"
-                },
-                {
-                  "name": "Ketch",
-                  "value": "ketch"
-                },
-                {
-                  "name": "OneTrust",
-                  "value": "oneTrust"
-                }
+                { "label": "Custom", "value": "custom" },
+                { "label": "iubenda", "value": "iubenda" },
+                { "label": "Ketch", "value": "ketch" },
+                { "label": "OneTrust", "value": "oneTrust" }
               ],
               "required": true
             },
             {
               "type": "singleSelect",
               "label": "the required consent logic",
-              "value": "resolutionStrategy",
+              "configKey": "resolutionStrategy",
               "options": [
-                {
-                  "name": "AND",
-                  "value": "and"
-                },
-                {
-                  "name": "OR",
-                  "value": "or"
-                }
+                { "label": "AND", "value": "and" },
+                { "label": "OR", "value": "or" }
               ],
               "required": true,
               "variant": "badge",
               "preRequisites": {
-                "fields": [
-                  {
-                    "configKey": "provider",
-                    "value": "custom"
-                  }
-                ]
+                "fields": [{ "configKey": "provider", "value": "custom" }]
               }
             },
             {
-              "type": "dynamicCustomForm",
-              "value": "consents",
+              "type": "tagInput",
               "label": "Enter consent category IDs",
-              "customFields": [
-                {
-                  "type": "textInput",
-                  "placeholder": "Marketing",
-                  "value": "consent",
-                  "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$",
-                  "required": false
-                }
-              ]
+              "note": "Input your consent category IDs by pressing 'Enter' after each entry. We recommend using IDs instead of names as IDs are unique and less likely to change over time, making them a more reliable choice.",
+              "configKey": "consents",
+              "tagKey": "consent",
+              "placeholder": "e.g: Marketing",
+              "default": [{ "consent": "" }],
+              "regex": "(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{0,100})$"
             }
           ],
           "uniqueRowFields": ["provider"]
         }
       ]
     }
-  ]
+  }
 }

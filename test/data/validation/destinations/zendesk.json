@@ -36,6 +36,47 @@
     "err": ["createUsersAsVerified must be boolean"]
   },
   {
+    "testTitle": "Connection credentials are required without optional destination settings",
+    "config": {
+      "email": "test@email.com",
+      "apiToken": "sample-api-token",
+      "domain": "sampledomain0000.zendesk.com"
+    },
+    "result": true
+  },
+  {
+    "testTitle": "Missing API token cannot be saved",
+    "config": {
+      "email": "test@email.com",
+      "domain": "sampledomain0000.zendesk.com"
+    },
+    "result": false,
+    "err": [" must have required property 'apiToken'"]
+  },
+  {
+    "testTitle": "Empty API token cannot be saved",
+    "config": {
+      "email": "test@email.com",
+      "apiToken": "",
+      "domain": "sampledomain0000.zendesk.com"
+    },
+    "result": false,
+    "err": ["apiToken must match pattern \"(^\\{\\{.*\\|\\|(.*)\\}\\}$)|(^env[.].+)|^(.{1,100})$\""]
+  },
+  {
+    "testTitle": "Legacy consent rows without provider remain valid",
+    "config": {
+      "email": "test@email.com",
+      "apiToken": "sample-api-token",
+      "domain": "sampledomain0000.zendesk.com",
+      "consentManagement": {
+        "web": [{ "consents": [{ "consent": "Marketing" }] }],
+        "iosSwift": [{ "consents": [] }]
+      }
+    },
+    "result": true
+  },
+  {
     "config": {
       "email": "test@email.com",
       "apiToken": 110022993388447760,
