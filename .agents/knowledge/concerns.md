@@ -162,3 +162,7 @@
 ## INT-7520 — HTTP V2 Schema Generator Baseline Drift
 
 - HTTP v2's format-gated `maxBatchSize` is UI-required (hidden for FORM) but only conditionally required in `schema.json` for JSON and XML, so `scripts/run-schema-validation.sh` reports an expected required-field warning for HTTP. Do not make it top-level required to silence the warning; that would reject FORM configurations without a batch size.
+
+## INT-7748 — Zendesk V1 Consent Schema Baseline Drift
+
+- Zendesk v1 `src/configurations/destinations/zendesk/schema.json` intentionally leaves `consentManagement.<source>.items` without `required: ["provider"]`, allowing previously saved consent rows lacking a provider. The UI still requires provider as before. Schema generation recommends adding the nested requirement, but applying it would break saved-config validation; treat the pre-existing warning as baseline drift rather than changing the persisted contract or making the UI field optional.
