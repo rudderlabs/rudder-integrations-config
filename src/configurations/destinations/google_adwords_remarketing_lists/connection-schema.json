@@ -1,0 +1,36 @@
+{
+  "connectionConfigSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "GOOGLE_ADWORDS_REMARKETING_LISTS rETL connection config",
+    "description": "Per-connection destination config for a VDM v2 rETL connection, as accepted in `destinationConfig` on POST /v2/retl-connections. Keys match what the transformer reads off connection.config.destination in processVDMV2RecordEvents. syncMode, schemaVersion, eventType, identifierMappings and fieldMappings are written by config-backend and are not caller-settable; createAudience belongs to the integrations-info /setup flow, which this connection flow does not use. Keys the dashboard writes but nothing reads are not accepted: a caller copying a dashboard-made connection has to drop them, and config-backend has to strip them on read so an import does not carry them into a spec that then fails validation. For this destination that key is `appId`, which the dashboard writes for user lists it creates itself and which the transformer never reads. No default is declared anywhere in this file: config-backend applies none, and a default here would become a written-out field in a generated IaC spec and then a permanent diff.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["audienceId", "isHashRequired", "typeOfList"],
+    "properties": {
+      "audienceId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$",
+        "description": "The Google Ads user list this connection delivers to. Required: the transformer rejects a record batch without it. A user list id is a numeric string, so the pattern refuses an empty or whitespace-only value and a list name typed in by mistake, which would otherwise pass create and fail every record at the first sync."
+      },
+      "typeOfList": {
+        "type": "string",
+        "enum": ["General", "userID", "mobileDeviceID"],
+        "description": "Which identifier the records are matched on. Required, although the transformer tolerates its absence: an unset or unrecognised value falls through to the contact-info path, which sends hashed email, phone and address attributes instead of the id the author had in mind. 'General' takes that same contact-info path by design, so stating it is the way to ask for it on purpose."
+      },
+      "isHashRequired": {
+        "type": "boolean",
+        "description": "Required, and no default: an omitted value is read as `false`, and `processAudienceRecord` then throws a hashing-consistency error on raw warehouse values. The destination's own configSchema defaults it to true, but nothing applies that default to the per-connection block, so the caller has to say which it wants. Warehouse columns are normally raw, which makes `true` the usual answer."
+      },
+      "userDataConsent": {
+        "type": "string",
+        "enum": ["UNSPECIFIED", "UNKNOWN", "GRANTED", "DENIED"],
+        "description": "Google Ads consent signal for data collection. Sent as UNSPECIFIED when omitted."
+      },
+      "personalizationConsent": {
+        "type": "string",
+        "enum": ["UNSPECIFIED", "UNKNOWN", "GRANTED", "DENIED"],
+        "description": "Google Ads consent signal for ad personalization. Sent as UNSPECIFIED when omitted."
+      }
+    }
+  }
+}
