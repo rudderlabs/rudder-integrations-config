@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file by release-please based on conventional commits.
 
+## [1.198.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.197.0...v1.198.0) (2026-11-26)
+
+
+### Features
+
+* **maxcompute:** allow mirror and full sync modes on the MaxCompute source ([#2918](https://github.com/rudderlabs/rudder-integrations-config/issues/2918)) ([e798b11](https://github.com/rudderlabs/rudder-integrations-config/commit/e798b1150a714547d77b232d98f62d736dc71b28))
+* **zendesk:** migrate v1 destination to form builder ([#2922](https://github.com/rudderlabs/rudder-integrations-config/issues/2922)) ([c0efb7e](https://github.com/rudderlabs/rudder-integrations-config/commit/c0efb7ea755acb82c82980c02c70182864c042d5))
+
 ## [1.197.0](https://github.com/rudderlabs/rudder-integrations-config/compare/v1.196.1...v1.197.0) (2026-11-20)
 
 
