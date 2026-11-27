@@ -943,5 +943,53 @@
     "err": [
       "eventTemplateSettings.0.eventName must match pattern \"^(?!.*\\([^()]*(?:[*+{]|\\|)[^()]*\\)\\s*[*+{?])(.{0,100})$\""
     ]
+  },
+  {
+    "testTitle": "Event template rejects a number",
+    "config": { "webhookUrl": "", "eventTemplateSettings": [{ "eventTemplate": 123 }] },
+    "result": false,
+    "err": ["eventTemplateSettings.0.eventTemplate must be string"]
+  },
+  {
+    "testTitle": "Event template rejects an object",
+    "config": { "webhookUrl": "", "eventTemplateSettings": [{ "eventTemplate": {} }] },
+    "result": false,
+    "err": ["eventTemplateSettings.0.eventTemplate must be string"]
+  },
+  {
+    "testTitle": "Event template rejects an array",
+    "config": { "webhookUrl": "", "eventTemplateSettings": [{ "eventTemplate": ["template"] }] },
+    "result": false,
+    "err": ["eventTemplateSettings.0.eventTemplate must be string"]
+  },
+  {
+    "testTitle": "Template event name rejects a number",
+    "config": { "webhookUrl": "", "eventTemplateSettings": [{ "eventName": 123 }] },
+    "result": false,
+    "err": ["eventTemplateSettings.0.eventName must be string"]
+  },
+  {
+    "testTitle": "Template event name rejects an object",
+    "config": { "webhookUrl": "", "eventTemplateSettings": [{ "eventName": {} }] },
+    "result": false,
+    "err": ["eventTemplateSettings.0.eventName must be string"]
+  },
+  {
+    "testTitle": "Template event name rejects an array",
+    "config": { "webhookUrl": "", "eventTemplateSettings": [{ "eventName": ["track"] }] },
+    "result": false,
+    "err": ["eventTemplateSettings.0.eventName must be string"]
+  },
+  {
+    "testTitle": "Channel event name rejects a non-string value",
+    "config": { "webhookUrl": "", "eventChannelSettings": [{ "eventName": 123 }] },
+    "result": false,
+    "err": ["eventChannelSettings.0.eventName must be string"]
+  },
+  {
+    "testTitle": "Event channel rejects a non-string value",
+    "config": { "webhookUrl": "", "eventChannelSettings": [{ "eventChannel": {} }] },
+    "result": false,
+    "err": ["eventChannelSettings.0.eventChannel must be string"]
   }
 ]

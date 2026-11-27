@@ -433,3 +433,8 @@
 - Keep Zendesk v1's required `email`, secret `apiToken`, and `domain` in form-builder Initial setup. Place optional `sourceName` and the four default-false checkboxes in Configuration settings / Destination settings: the V2 schema generator makes unconditioned Initial setup keys in `defaultConfig` required even when their UI field says `required: false`.
 - Preserve the legacy string regexes for Zendesk persisted fields and its cloud-only connection modes when migrating the form. Zendesk v1 retains destination-form token credentials; do not introduce account-picker fields into this version.
 - In `ui-config.json` `consentSettingsTemplate`, represent `consents` with a `tagInput` using `tagKey: "consent"` to retain the saved array-of-`{consent: string}` shape; keep provider required in the UI as in the legacy form. In `schema.json`, omit `items.required` for legacy rows without a provider, but exclude the empty string from every provider enum so an explicitly blank provider is invalid.
+
+## INT-7764 — Slack Template Field Type Contract
+
+- Slack `eventTemplate`, `eventName`, and `eventChannel` configuration values must remain strings. Keep `src/configurations/destinations/slack/schema.json`, `ui-config.json`, and `db-config.json` on the existing string contract; cover non-string values with negative cases in `test/data/validation/destinations/slack.json` rather than coercing or widening the schema.
+- A 500-to-400 classification for malformed stored Slack config requires a runtime guard in `rudder-transformer`; destination definition fixtures can reject bad config at validation time but cannot turn a transformer `TypeError` into a `ConfigurationError`.
